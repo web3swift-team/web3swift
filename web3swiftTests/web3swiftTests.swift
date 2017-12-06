@@ -10,7 +10,6 @@
 import XCTest
 import Sodium
 import CryptoSwift
-import SECP256K1
 
 @testable import web3swift
 

@@ -26,6 +26,7 @@
 		8113D31C1FD7F8980074282C /* ABIRecordParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D31B1FD7F8980074282C /* ABIRecordParser.swift */; };
 		8113DE7C1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */; };
 		813FFF8D1FD82EEB006379A2 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2FF1FD7F30F0074282C /* StringExtension.swift */; };
+		81ABBC641FD8B13000D9D501 /* secp256k1.framework in Headers */ = {isa = PBXBuildFile; fileRef = 8113D2BF1FD7E1590074282C /* secp256k1.framework */; settings = {ATTRIBUTES = (Public, ); }; };
 		E82DD6EACF6933D0D3978EA0 /* Pods_web3swiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -262,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8113D2C91FD7E1590074282C /* KeystoreManager.h in Headers */,
+				81ABBC641FD8B13000D9D501 /* secp256k1.framework in Headers */,
 				1CD91B011FD76910007BFB45 /* web3swift.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
