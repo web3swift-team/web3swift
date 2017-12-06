@@ -83,6 +83,7 @@
 		1CD91AFE1FD76910007BFB45 /* web3swift */ = {
 			isa = PBXGroup;
 			children = (
+				1CD91B3A1FD76C91007BFB45 /* 3rdParty */,
 				1CD91AFF1FD76910007BFB45 /* web3swift.h */,
 				1CD91B001FD76910007BFB45 /* Info.plist */,
 			);
@@ -96,6 +97,21 @@
 				1CD91B331FD769A6007BFB45 /* Info.plist */,
 			);
 			path = web3swiftTests;
+			sourceTree = "<group>";
+		};
+		1CD91B3A1FD76C91007BFB45 /* 3rdParty */ = {
+			isa = PBXGroup;
+			children = (
+				1CD91B3B1FD76C91007BFB45 /* CKSecp256k1 */,
+			);
+			path = 3rdParty;
+			sourceTree = SOURCE_ROOT;
+		};
+		1CD91B3B1FD76C91007BFB45 /* CKSecp256k1 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CKSecp256k1;
 			sourceTree = "<group>";
 		};
 		78D101CC419F27D142F6E9AE /* Frameworks */ = {
