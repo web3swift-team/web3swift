@@ -22,6 +22,10 @@
 		8113D2CC1FD7E1590074282C /* ABIDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2BC1FD7E1590074282C /* ABIDecoder.swift */; };
 		8113D2CD1FD7E1590074282C /* secp256k1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8113D2BF1FD7E1590074282C /* secp256k1.framework */; };
 		8113D2CE1FD7E1590074282C /* EthereumTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2C31FD7E1590074282C /* EthereumTransaction.swift */; };
+		8113D31A1FD7F4C80074282C /* ABITypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D3191FD7F4C80074282C /* ABITypes.swift */; };
+		8113D31C1FD7F8980074282C /* ABIRecordParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D31B1FD7F8980074282C /* ABIRecordParser.swift */; };
+		8113DE7C1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */; };
+		813FFF8D1FD82EEB006379A2 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2FF1FD7F30F0074282C /* StringExtension.swift */; };
 		E82DD6EACF6933D0D3978EA0 /* Pods_web3swiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +60,15 @@
 		8113D2BF1FD7E1590074282C /* secp256k1.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = secp256k1.framework; sourceTree = "<group>"; };
 		8113D2C01FD7E1590074282C /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		8113D2C31FD7E1590074282C /* EthereumTransaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EthereumTransaction.swift; sourceTree = "<group>"; };
+		8113D2FC1FD7F30F0074282C /* ParameterParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterParser.swift; sourceTree = "<group>"; };
+		8113D2FD1FD7F30F0074282C /* Contract.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contract.swift; sourceTree = "<group>"; };
+		8113D2FE1FD7F30F0074282C /* JsonKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonKey.swift; sourceTree = "<group>"; };
+		8113D2FF1FD7F30F0074282C /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		8113D3001FD7F30F0074282C /* ElementJsonParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElementJsonParser.swift; sourceTree = "<group>"; };
+		8113D3011FD7F30F0074282C /* ParsingError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParsingError.swift; sourceTree = "<group>"; };
+		8113D3191FD7F4C80074282C /* ABITypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABITypes.swift; sourceTree = "<group>"; };
+		8113D31B1FD7F8980074282C /* ABIRecordParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABIRecordParser.swift; sourceTree = "<group>"; };
+		8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRegularExpressionExtension.swift; sourceTree = "<group>"; };
 		8C8900D87850714C2DB85DFC /* Pods-web3swiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swiftTests/Pods-web3swiftTests.release.xcconfig"; sourceTree = "<group>"; };
 		B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D11D741983B37E59DB6A65E1 /* Pods-web3swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift/Pods-web3swift.debug.xcconfig"; sourceTree = "<group>"; };
@@ -107,9 +120,10 @@
 		1CD91AFE1FD76910007BFB45 /* web3swift */ = {
 			isa = PBXGroup;
 			children = (
+				8113D2BD1FD7E1590074282C /* secp256k1 */,
+				8113D2E61FD7F2EC0074282C /* 3rdparty */,
 				8113D2B91FD7E1590074282C /* ABI */,
 				8113D2B51FD7E1590074282C /* KeystoreManager */,
-				8113D2BD1FD7E1590074282C /* secp256k1 */,
 				8113D2C11FD7E1590074282C /* Transaction */,
 				8113D2AE1FD7E1590074282C /* Utils */,
 				1CD91AFF1FD76910007BFB45 /* web3swift.h */,
@@ -147,11 +161,13 @@
 		8113D2AF1FD7E1590074282C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8113D2FF1FD7F30F0074282C /* StringExtension.swift */,
 				8113D2B01FD7E1590074282C /* SodiumExtensions.swift */,
 				8113D2B11FD7E1590074282C /* Scrypt.swift */,
 				8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */,
 				8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */,
 				8113D2B41FD7E1590074282C /* PrivateKeyHelpers.swift */,
+				8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -186,6 +202,8 @@
 			children = (
 				8113D2BB1FD7E1590074282C /* ABIEncoder.swift */,
 				8113D2BC1FD7E1590074282C /* ABIDecoder.swift */,
+				8113D3191FD7F4C80074282C /* ABITypes.swift */,
+				8113D31B1FD7F8980074282C /* ABIRecordParser.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -193,8 +211,8 @@
 		8113D2BD1FD7E1590074282C /* secp256k1 */ = {
 			isa = PBXGroup;
 			children = (
-				8113D2BE1FD7E1590074282C /* framework */,
 				8113D2C01FD7E1590074282C /* module.modulemap */,
+				8113D2BE1FD7E1590074282C /* framework */,
 			);
 			path = secp256k1;
 			sourceTree = "<group>";
@@ -221,6 +239,34 @@
 				8113D2C31FD7E1590074282C /* EthereumTransaction.swift */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		8113D2E61FD7F2EC0074282C /* 3rdparty */ = {
+			isa = PBXGroup;
+			children = (
+				8113D2E71FD7F30F0074282C /* BivrostKit */,
+			);
+			path = 3rdparty;
+			sourceTree = "<group>";
+		};
+		8113D2E71FD7F30F0074282C /* BivrostKit */ = {
+			isa = PBXGroup;
+			children = (
+				8113D2F91FD7F30F0074282C /* Parsing */,
+			);
+			path = BivrostKit;
+			sourceTree = "<group>";
+		};
+		8113D2F91FD7F30F0074282C /* Parsing */ = {
+			isa = PBXGroup;
+			children = (
+				8113D2FC1FD7F30F0074282C /* ParameterParser.swift */,
+				8113D2FD1FD7F30F0074282C /* Contract.swift */,
+				8113D2FE1FD7F30F0074282C /* JsonKey.swift */,
+				8113D3001FD7F30F0074282C /* ElementJsonParser.swift */,
+				8113D3011FD7F30F0074282C /* ParsingError.swift */,
+			);
+			path = Parsing;
 			sourceTree = "<group>";
 		};
 		868F9682FE77A7BADF675F92 /* Pods */ = {
@@ -459,8 +505,12 @@
 				8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */,
 				8113D2C41FD7E1590074282C /* SodiumExtensions.swift in Sources */,
 				8113D2CC1FD7E1590074282C /* ABIDecoder.swift in Sources */,
+				8113DE7C1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift in Sources */,
 				8113D2C81FD7E1590074282C /* PrivateKeyHelpers.swift in Sources */,
 				8113D2C71FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift in Sources */,
+				813FFF8D1FD82EEB006379A2 /* StringExtension.swift in Sources */,
+				8113D31A1FD7F4C80074282C /* ABITypes.swift in Sources */,
+				8113D31C1FD7F8980074282C /* ABIRecordParser.swift in Sources */,
 				8113D2CE1FD7E1590074282C /* EthereumTransaction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -614,7 +664,7 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(PODS_ROOT)/libsodium/src/libsodium/include/sodium\"",
 					"\"$(PODS_ROOT)/libsodium/src/libsodium/include\"",
-					"\"$(SRCROOT)/web3swift/secp256k1\"/**",
+					"\"$(SRCROOT)/web3swift/secp256k1\"",
 				);
 				INFOPLIST_FILE = web3swift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -624,7 +674,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/web3swift/secp256k1\"/**";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -645,7 +695,7 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(PODS_ROOT)/libsodium/src/libsodium/include/sodium\"",
 					"\"$(PODS_ROOT)/libsodium/src/libsodium/include\"",
-					"\"$(SRCROOT)/web3swift/secp256k1\"/**",
+					"\"$(SRCROOT)/web3swift/secp256k1\"",
 				);
 				INFOPLIST_FILE = web3swift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -655,7 +705,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/web3swift/secp256k1\"/**";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};
@@ -668,6 +718,11 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
+				HEADER_SEARCH_PATHS = (
+					"\"$(PODS_ROOT)/libsodium/src/libsodium/include/sodium\"",
+					"\"$(PODS_ROOT)/libsodium/src/libsodium/include\"",
+					"\"$(SRCROOT)/web3swift/secp256k1\"",
+				);
 				INFOPLIST_FILE = web3swiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = BF.web3swiftTests;
@@ -675,6 +730,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -687,6 +743,11 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
+				HEADER_SEARCH_PATHS = (
+					"\"$(PODS_ROOT)/libsodium/src/libsodium/include/sodium\"",
+					"\"$(PODS_ROOT)/libsodium/src/libsodium/include\"",
+					"\"$(SRCROOT)/web3swift/secp256k1\"",
+				);
 				INFOPLIST_FILE = web3swiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = BF.web3swiftTests;
@@ -694,6 +755,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};

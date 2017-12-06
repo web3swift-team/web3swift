@@ -87,7 +87,7 @@ struct unmarshaledSignature{
     var s = [UInt8](repeating: 0, count: 32)
 }
 
-func SECP256K1signForRecovery(hash: Data, privateKey: Data, Nonce: Int) -> (compressed:Data?, uncompressed: Data?) {
+func SECP256K1signForRecovery(hash: Data, privateKey: Data) -> (compressed:Data?, uncompressed: Data?) {
     if (hash.count != 32 || privateKey.count != 32) {return (nil, nil)}
     let context = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_SIGN));
     defer {secp256k1_context_destroy(context!)}
@@ -121,13 +121,23 @@ func SECP256K1privateToPublic(privateKey: Data, compressed: Bool = false) -> Dat
     if (privateKey.count != 32) {return nil}
     let context = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_SIGN));
     var publicKey = secp256k1_pubkey()
-    let result = privateKey.withUnsafeBytes { (privateKeyPointer:UnsafePointer<UInt8>) -> Int32 in
+    var result = privateKey.withUnsafeBytes { (privateKeyPointer:UnsafePointer<UInt8>) -> Int32 in
             let res = secp256k1_ec_pubkey_create(context!, UnsafeMutablePointer<secp256k1_pubkey>(&publicKey), privateKeyPointer)
             return res
         }
     if result == 0 {
         return nil
     }
-    let pubkeyData = Data(toByteArray(publicKey))
-    return pubkeyData
+    var signatureLength = compressed ? 33 : 65
+    var serializedPubkey = Data(count: signatureLength)
+    result = serializedPubkey.withUnsafeMutableBytes { (serializedPubkeyPointer:UnsafeMutablePointer<UInt8>) -> Int32 in
+        let res = secp256k1_ec_pubkey_serialize(context!,
+                                                serializedPubkeyPointer,
+                                                UnsafeMutablePointer<Int>(&signatureLength),
+                                                UnsafeMutablePointer<secp256k1_pubkey>(&publicKey),
+                                                UInt32(compressed ? SECP256K1_EC_COMPRESSED : SECP256K1_EC_UNCOMPRESSED))
+        return res
+    }
+//    let pubkeyData = Data(toByteArray(publicKey))
+    return serializedPubkey
 }

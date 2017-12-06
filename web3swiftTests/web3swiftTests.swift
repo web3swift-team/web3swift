@@ -10,8 +10,9 @@
 import XCTest
 import Sodium
 import CryptoSwift
+import SECP256K1
 
-//@testable import web3swift
+@testable import web3swift
 
 class web3swiftTests: XCTestCase {
     
@@ -177,6 +178,25 @@ class web3swiftTests: XCTestCase {
             let encrypted = try aesCipher.encrypt(plaintext!.bytes);
             XCTAssert(Data(bytes:decrypted) == plaintext, "AES128 CBC decryption is wrong")
             XCTAssert(Data(bytes:encrypted) == ciphertext, "AES128 CBC encryption is wrong")
+        } catch {
+            print(error)
+        }
+    }
+    
+    func testABIdecoding() {
+        let jsonString = "[{\"type\":\"constructor\",\"payable\":false,\"stateMutability\":\"nonpayable\",\"inputs\":[{\"name\":\"testInt\",\"type\":\"uint256\"}]},{\"type\":\"function\",\"name\":\"foo\",\"constant\":false,\"payable\":false,\"stateMutability\":\"nonpayable\",\"inputs\":[{\"name\":\"b\",\"type\":\"uint256\"},{\"name\":\"c\",\"type\":\"bytes32\"}],\"outputs\":[{\"name\":\"\",\"type\":\"address\"}]},{\"type\":\"event\",\"name\":\"Event\",\"inputs\":[{\"indexed\":true,\"name\":\"b\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"c\",\"type\":\"bytes32\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Event2\",\"inputs\":[{\"indexed\":true,\"name\":\"b\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"c\",\"type\":\"bytes32\"}],\"anonymous\":false}]"
+        do {
+            let jsonData = jsonString.data(using: .utf8)
+            let abi = try JSONDecoder().decode([ABIRecord].self, from: jsonData!)
+//            let abi0 = try abi[0].parse()
+//            let abi1 = try abi[1].parse()
+//            let abi2 = try abi[2].parse()
+//            let abi3 = try abi[3].parse()
+            let abiNative = try abi.map({ (record) -> ABIElement in
+                return try record.parse()
+            })
+            print(abiNative)
+            XCTAssert(true, "Failed to parse ABI")
         } catch {
             print(error)
         }
