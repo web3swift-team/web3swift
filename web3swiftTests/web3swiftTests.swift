@@ -2,8 +2,8 @@
 //  web3swiftTests.swift
 //  web3swiftTests
 //
-//  Created by Petr Korolev on 06/12/2017.
-//  Copyright © 2017 Bankex Foundation. All rights reserved.
+//  Created by Alexander Vlasov on 04.12.2017.
+//  Copyright © 2017 Alexander Vlasov. All rights reserved.
 //
 
 
@@ -30,90 +30,90 @@ class web3swiftTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
-//    func testReadKeystoreV3Scrypt() {
-//        do {
-//            let ks = try EthereumKeystoreV3("{\"address\":\"008aeeda4d805471df9b2a5b0f38a0c3bcba786b\",\"Crypto\":{\"cipher\":\"aes-128-ctr\",\"ciphertext\":\"d172bf743a674da9cdad04534d56926ef8358534d458fffccd4e6ad2fbde479c\",\"cipherparams\":{\"iv\":\"83dbcc02d8ccb40e466191a123791e0e\"},\"mac\":\"2103ac29920d71da29f15d75b4a16dbe95cfd7ff8faea1056c33131d846e3097\",\"kdf\":\"scrypt\",\"kdfparams\":{\"n\":262144,\"r\":1,\"p\":8,\"dklen\":32,\"prf\":\"hmac-sha256\",\"salt\":\"ab0c7876052600dd703518d6fc3fe8984592145b591fc8fb5c6d43190334ba19\"}},\"id\":\"e13b209c-3b2f-4327-bab0-3bef2e51630d\",\"version\":3}")
-//            XCTAssert(ks != nil, "Can't read keystore JSON file")
-//            let sodium = Sodium()
-//            let key = try ks?.getKeyData("testpassword")
-//            let pk = sodium.utils.bin2hex(key!)
-//            XCTAssert(pk == "7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d", "Key decryption failed")
-//            let pubKey = privateToPublic(key!)
-//            let address = sodium.utils.bin2hex(publicToAddress(pubKey!)!)
-//            XCTAssert(address == ks!.keystoreParams!.address! , "Address derivation failed")
-//        } catch{
-//            print(error);
-//            XCTAssert(false, "Key decryption failed")
-//        }
-//    }
-//
-//    func testReadKeystoreV3PBKDF2() {
-//        do {
-//            let ks = try EthereumKeystoreV3("{\"address\":\"008aeeda4d805471df9b2a5b0f38a0c3bcba786b\",\"Crypto\":{\"cipher\":\"aes-128-ctr\",\"ciphertext\":\"5318b4d5bcd28de64ee5559e671353e16f075ecae9f99c7a79a38af5f869aa46\",\"cipherparams\":{\"iv\":\"6087dab2f9fdbbfaddc31a909735c1e6\"},\"mac\":\"517ead924a9d0dc3124507e3393d175ce3ff7c1e96529c6c555ce9e51205e9b2\",\"kdf\":\"pbkdf2\",\"kdfparams\":{\"c\":262144,\"dklen\":32,\"prf\":\"hmac-sha256\",\"salt\":\"ae3cd4e7013836a3df6bd7241b12db061dbe2c6785853cce422d148a624ce0bd\"}},\"id\":\"e13b209c-3b2f-4327-bab0-3bef2e51630d\",\"version\":3}")
-//            XCTAssert(ks != nil, "Can't read keystore JSON file")
-//            let sodium = Sodium()
-//            let key = try ks?.getKeyData("testpassword")
-//            let pk = sodium.utils.bin2hex(key!)
-//            XCTAssert(pk == "7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d", "Key decryption failed")
-//            let pubKey = privateToPublic(key!)
-//            let address = sodium.utils.bin2hex(publicToAddress(pubKey!)!)
-//            XCTAssert(address == ks!.keystoreParams!.address! , "Address derivation failed")
-//        } catch{
-//            print(error);
-//            XCTAssert(false, "Key decryption failed")
-//        }
-//    }
+    func testReadKeystoreV3Scrypt() {
+        do {
+            let ks = try EthereumKeystoreV3("{\"address\":\"008aeeda4d805471df9b2a5b0f38a0c3bcba786b\",\"Crypto\":{\"cipher\":\"aes-128-ctr\",\"ciphertext\":\"d172bf743a674da9cdad04534d56926ef8358534d458fffccd4e6ad2fbde479c\",\"cipherparams\":{\"iv\":\"83dbcc02d8ccb40e466191a123791e0e\"},\"mac\":\"2103ac29920d71da29f15d75b4a16dbe95cfd7ff8faea1056c33131d846e3097\",\"kdf\":\"scrypt\",\"kdfparams\":{\"n\":262144,\"r\":1,\"p\":8,\"dklen\":32,\"prf\":\"hmac-sha256\",\"salt\":\"ab0c7876052600dd703518d6fc3fe8984592145b591fc8fb5c6d43190334ba19\"}},\"id\":\"e13b209c-3b2f-4327-bab0-3bef2e51630d\",\"version\":3}")
+            XCTAssert(ks != nil, "Can't read keystore JSON file")
+            let sodium = Sodium()
+            let key = try ks?.getKeyData("testpassword")
+            let pk = sodium.utils.bin2hex(key!)
+            XCTAssert(pk == "7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d", "Key decryption failed")
+            let pubKey = privateToPublic(key!)
+            let address = sodium.utils.bin2hex(publicToAddress(pubKey!)!)
+            XCTAssert(address == ks!.keystoreParams!.address! , "Address derivation failed")
+        } catch{
+            print(error);
+            XCTAssert(false, "Key decryption failed")
+        }
+    }
     
-//    func testNewKeystoreV3(){
-//        let sodium = Sodium()
-//        do {
-//            var keystore = try EthereumKeystoreV3("{\"address\":\"008aeeda4d805471df9b2a5b0f38a0c3bcba786b\",\"Crypto\":{\"cipher\":\"aes-128-ctr\",\"ciphertext\":\"d172bf743a674da9cdad04534d56926ef8358534d458fffccd4e6ad2fbde479c\",\"cipherparams\":{\"iv\":\"83dbcc02d8ccb40e466191a123791e0e\"},\"mac\":\"2103ac29920d71da29f15d75b4a16dbe95cfd7ff8faea1056c33131d846e3097\",\"kdf\":\"scrypt\",\"kdfparams\":{\"n\":262144,\"r\":1,\"p\":8,\"dklen\":32,\"prf\":\"hmac-sha256\",\"salt\":\"ab0c7876052600dd703518d6fc3fe8984592145b591fc8fb5c6d43190334ba19\"}},\"id\":\"e13b209c-3b2f-4327-bab0-3bef2e51630d\",\"version\":3}")
-//            XCTAssert(keystore != nil , "Can't create keystore form private key")
-//            try keystore!.regenerate(oldPassword: "testpassword", newPassword: "testpassword2")
-//            let data = try! JSONEncoder().encode(keystore?.keystoreParams!)
-//            let ksString = String(data: data, encoding: .utf8)
-//            let newKeystore = try EthereumKeystoreV3(ksString!)
-//            let pk = try newKeystore?.getKeyData("testpassword2")
-//            let pkString = sodium.utils.bin2hex(pk!)
-//            XCTAssert(pkString == "7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d", "Keystore creating failed")
-//        }
-//        catch {
-//            print(error)
-//        }
-//    }
-//
-//    func testSignature(){
-//        let sodium = Sodium()
-//        do {
-//            let ks = try EthereumKeystoreV3("{\"address\":\"008aeeda4d805471df9b2a5b0f38a0c3bcba786b\",\"Crypto\":{\"cipher\":\"aes-128-ctr\",\"ciphertext\":\"d172bf743a674da9cdad04534d56926ef8358534d458fffccd4e6ad2fbde479c\",\"cipherparams\":{\"iv\":\"83dbcc02d8ccb40e466191a123791e0e\"},\"mac\":\"2103ac29920d71da29f15d75b4a16dbe95cfd7ff8faea1056c33131d846e3097\",\"kdf\":\"scrypt\",\"kdfparams\":{\"n\":262144,\"r\":1,\"p\":8,\"dklen\":32,\"prf\":\"hmac-sha256\",\"salt\":\"ab0c7876052600dd703518d6fc3fe8984592145b591fc8fb5c6d43190334ba19\"}},\"id\":\"e13b209c-3b2f-4327-bab0-3bef2e51630d\",\"version\":3}")
-//            XCTAssert(ks != nil , "Can't read keystore")
-//            let key = try ks?.getKeyData("testpassword")
-//            let signature = try EthereumKeystoreV3.signHashWithPrivateKey(hash: "test".data(using: .utf8)!.sha3(.keccak256), privateKey: key!)
-//            XCTAssert(signature != nil, "Keystore creating failed")
-//        }
-//        catch {
-//            print(error)
-//        }
-//    }
+    //    func testReadKeystoreV3PBKDF2() {
+    //        do {
+    //            let ks = try EthereumKeystoreV3("{\"address\":\"008aeeda4d805471df9b2a5b0f38a0c3bcba786b\",\"Crypto\":{\"cipher\":\"aes-128-ctr\",\"ciphertext\":\"5318b4d5bcd28de64ee5559e671353e16f075ecae9f99c7a79a38af5f869aa46\",\"cipherparams\":{\"iv\":\"6087dab2f9fdbbfaddc31a909735c1e6\"},\"mac\":\"517ead924a9d0dc3124507e3393d175ce3ff7c1e96529c6c555ce9e51205e9b2\",\"kdf\":\"pbkdf2\",\"kdfparams\":{\"c\":262144,\"dklen\":32,\"prf\":\"hmac-sha256\",\"salt\":\"ae3cd4e7013836a3df6bd7241b12db061dbe2c6785853cce422d148a624ce0bd\"}},\"id\":\"e13b209c-3b2f-4327-bab0-3bef2e51630d\",\"version\":3}")
+    //            XCTAssert(ks != nil, "Can't read keystore JSON file")
+    //            let sodium = Sodium()
+    //            let key = try ks?.getKeyData("testpassword")
+    //            let pk = sodium.utils.bin2hex(key!)
+    //            XCTAssert(pk == "7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d", "Key decryption failed")
+    //            let pubKey = privateToPublic(key!)
+    //            let address = sodium.utils.bin2hex(publicToAddress(pubKey!)!)
+    //            XCTAssert(address == ks!.keystoreParams!.address! , "Address derivation failed")
+    //        } catch{
+    //            print(error);
+    //            XCTAssert(false, "Key decryption failed")
+    //        }
+    //    }
     
-//    func testScrypt() {
-//        let sodium = Sodium()
-//        let data = sodium.utils.hex2bin("""
-//            fd ba be 1c 9d 34 72 00 78 56 e7 19 0d 01 e9 fe
-//            7c 6a d7 cb c8 23 78 30 e7 73 76 63 4b 37 31 62
-//            2e af 30 d9 2e 22 a3 88 6f f1 09 27 9d 98 30 da
-//            c7 27 af b9 4a 83 ee 6d 83 60 cb df a2 cc 06 40
-//            """
-//            , ignore: " \t\n\r")
-//        let password = "password"
-//        let salt = "NaCl".data(using: .utf8)!
-//        let r = 8
-//        let n = 1024
-//        let p = 16
-//        let dklen = 64
-//        let hash = sodium.keyDerivation.scrypt(password: password, salt: salt, length: dklen, N: n, R: r, P: p)
-//        XCTAssert(data == hash, "Scrypt hash is wrong")
-//    }
+    func testNewKeystoreV3(){
+        let sodium = Sodium()
+        do {
+            var keystore = try EthereumKeystoreV3("{\"address\":\"008aeeda4d805471df9b2a5b0f38a0c3bcba786b\",\"Crypto\":{\"cipher\":\"aes-128-ctr\",\"ciphertext\":\"d172bf743a674da9cdad04534d56926ef8358534d458fffccd4e6ad2fbde479c\",\"cipherparams\":{\"iv\":\"83dbcc02d8ccb40e466191a123791e0e\"},\"mac\":\"2103ac29920d71da29f15d75b4a16dbe95cfd7ff8faea1056c33131d846e3097\",\"kdf\":\"scrypt\",\"kdfparams\":{\"n\":262144,\"r\":1,\"p\":8,\"dklen\":32,\"prf\":\"hmac-sha256\",\"salt\":\"ab0c7876052600dd703518d6fc3fe8984592145b591fc8fb5c6d43190334ba19\"}},\"id\":\"e13b209c-3b2f-4327-bab0-3bef2e51630d\",\"version\":3}")
+            XCTAssert(keystore != nil , "Can't create keystore form private key")
+            try keystore!.regenerate(oldPassword: "testpassword", newPassword: "testpassword2")
+            let data = try! JSONEncoder().encode(keystore?.keystoreParams!)
+            let ksString = String(data: data, encoding: .utf8)
+            let newKeystore = try EthereumKeystoreV3(ksString!)
+            let pk = try newKeystore?.getKeyData("testpassword2")
+            let pkString = sodium.utils.bin2hex(pk!)
+            XCTAssert(pkString == "7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d", "Keystore creating failed")
+        }
+        catch {
+            print(error)
+        }
+    }
+    
+    func testSignature(){
+        let sodium = Sodium()
+        do {
+            let ks = try EthereumKeystoreV3("{\"address\":\"008aeeda4d805471df9b2a5b0f38a0c3bcba786b\",\"Crypto\":{\"cipher\":\"aes-128-ctr\",\"ciphertext\":\"d172bf743a674da9cdad04534d56926ef8358534d458fffccd4e6ad2fbde479c\",\"cipherparams\":{\"iv\":\"83dbcc02d8ccb40e466191a123791e0e\"},\"mac\":\"2103ac29920d71da29f15d75b4a16dbe95cfd7ff8faea1056c33131d846e3097\",\"kdf\":\"scrypt\",\"kdfparams\":{\"n\":262144,\"r\":1,\"p\":8,\"dklen\":32,\"prf\":\"hmac-sha256\",\"salt\":\"ab0c7876052600dd703518d6fc3fe8984592145b591fc8fb5c6d43190334ba19\"}},\"id\":\"e13b209c-3b2f-4327-bab0-3bef2e51630d\",\"version\":3}")
+            XCTAssert(ks != nil , "Can't read keystore")
+            let key = try ks?.getKeyData("testpassword")
+            let signature = try EthereumKeystoreV3.signHashWithPrivateKey(hash: "test".data(using: .utf8)!.sha3(.keccak256), privateKey: key!)
+            XCTAssert(signature != nil, "Keystore creating failed")
+        }
+        catch {
+            print(error)
+        }
+    }
+    
+    func testScrypt() {
+        let sodium = Sodium()
+        let data = sodium.utils.hex2bin("""
+            fd ba be 1c 9d 34 72 00 78 56 e7 19 0d 01 e9 fe
+            7c 6a d7 cb c8 23 78 30 e7 73 76 63 4b 37 31 62
+            2e af 30 d9 2e 22 a3 88 6f f1 09 27 9d 98 30 da
+            c7 27 af b9 4a 83 ee 6d 83 60 cb df a2 cc 06 40
+            """
+            , ignore: " \t\n\r")
+        let password = "password"
+        let salt = "NaCl".data(using: .utf8)!
+        let r = 8
+        let n = 1024
+        let p = 16
+        let dklen = 64
+        let hash = sodium.keyDerivation.scrypt(password: password, salt: salt, length: dklen, N: n, R: r, P: p)
+        XCTAssert(data == hash, "Scrypt hash is wrong")
+    }
     
     func testSHA3() {
         let data = "abc".data(using: .utf8)
@@ -135,11 +135,11 @@ class web3swiftTests: XCTestCase {
     }
     
     func testAES128CBC() {
-//        COUNT = 22
-//        KEY = fffffe00000000000000000000000000
-//        IV = 00000000000000000000000000000000
-//        PLAINTEXT = 00000000000000000000000000000000
-//        CIPHERTEXT = 95b1703fc57ba09fe0c3580febdd7ed4
+        //        COUNT = 22
+        //        KEY = fffffe00000000000000000000000000
+        //        IV = 00000000000000000000000000000000
+        //        PLAINTEXT = 00000000000000000000000000000000
+        //        CIPHERTEXT = 95b1703fc57ba09fe0c3580febdd7ed4
         let sodium = Sodium()
         let key = sodium.utils.hex2bin("fffffe00000000000000000000000000")
         let iv = sodium.utils.hex2bin("00000000000000000000000000000000")
@@ -182,4 +182,12 @@ class web3swiftTests: XCTestCase {
         }
     }
     
+    func testPerformanceExample() {
+        // This is an example of a performance test case.
+        self.measure {
+            // Put the code you want to measure the time of here.
+        }
+    }
+    
 }
+

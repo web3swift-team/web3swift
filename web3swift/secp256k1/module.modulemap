@@ -1,0 +1,5 @@
+module SECP256K1 {
+    header "framework/secp256k1.framework/Headers/secp256k1_recovery.h"
+    header "framework/secp256k1.framework/Headers/secp256k1.h"
+    export *
+}
