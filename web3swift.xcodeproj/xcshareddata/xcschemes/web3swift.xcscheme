@@ -29,7 +29,26 @@
       language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1CD91B2E1FD769A6007BFB45"
+               BuildableName = "web3swiftTests.xctest"
+               BlueprintName = "web3swiftTests"
+               ReferencedContainer = "container:web3swift.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "1CD91AFB1FD76910007BFB45"
+            BuildableName = "web3swift.framework"
+            BlueprintName = "web3swift"
+            ReferencedContainer = "container:web3swift.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
