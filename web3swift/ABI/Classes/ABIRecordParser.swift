@@ -86,7 +86,8 @@ fileprivate func parseFunction(abiRecord:ABIRecord) throws -> ABIElement.Functio
     })
     let abiOutputs = outputs != nil ? outputs! : [ABIElement.Function.Output]()
     let name = abiRecord.name != nil ? abiRecord.name! : ""
-    let payable = (abiRecord.stateMutability == "payable" || abiRecord.payable!)
+    let payable = abiRecord.stateMutability != nil ?
+        (abiRecord.stateMutability == "payable" || abiRecord.payable!) : false
     let constant = (abiRecord.constant! || abiRecord.stateMutability == "view" || abiRecord.stateMutability == "pure")
     let functionElement = ABIElement.Function(name: name, inputs: abiInputs, outputs: abiOutputs, constant: constant, payable: payable)
     return functionElement
@@ -195,6 +196,9 @@ fileprivate func exactMatchType(from string: String, length:Int? = nil, staticAr
         guard let arrayLen = staticArrayLength else {return nil}
         guard let baseType = exactMatchType(from: string, length: length) else {return nil}
         guard case .staticType(let unwrappedType) = baseType else {return nil}
+        if (staticArrayLength == 0) {
+            return .dynamicType(.array(unwrappedType))
+        }
         return .staticType(.array(unwrappedType, length: arrayLen))
     }
 }
@@ -202,8 +206,8 @@ fileprivate func exactMatchType(from string: String, length:Int? = nil, staticAr
 fileprivate func typeMatch(from string: String) throws -> ABIElement.ParameterType?{
     let matcher = try NSRegularExpression(pattern: TypeMatchingExpressions.typeRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
     let match = matcher.captureGroups(string: string, options: NSRegularExpression.MatchingOptions.anchored)
-    guard let typeString = match["type"] else {throw ParsingError.parameterTypeInvalid}
-    guard let type = exactMatchType(from: typeString) else {throw ParsingError.parameterTypeInvalid}
+    guard let typeString = match["type"] else {return nil}
+    guard let type = exactMatchType(from: typeString) else {return nil}
     if (match.keys.contains("typeLength")) {
         guard let typeLength = Int(match["typeLength"]!) else {throw ParsingError.parameterTypeInvalid}
         guard let canonicalType = exactMatchType(from: typeString, length: typeLength) else {throw ParsingError.parameterTypeInvalid}
@@ -216,10 +220,10 @@ fileprivate func arrayMatch(from string: String) throws -> ABIElement.ParameterT
     let matcher = try NSRegularExpression(pattern: TypeMatchingExpressions.arrayRegex, options: [])
     let match = matcher.captureGroups(string: string, options: NSRegularExpression.MatchingOptions.anchored)
     if match.keys.contains("arrayLength") {
-        guard let typeString = match["type"] else {throw ParsingError.parameterTypeInvalid}
+        guard let typeString = match["type"] else {return nil}
         guard let arrayLength = Int(match["arrayLength"]!) else {throw ParsingError.parameterTypeInvalid}
-        guard var type = exactMatchType(from: typeString, staticArrayLength: arrayLength) else {throw ParsingError.parameterTypeInvalid}
-        guard case .staticType(let _) = type else {throw ParsingError.parameterTypeInvalid}
+        guard var type = exactMatchType(from: typeString, staticArrayLength: arrayLength) else {return nil}
+        guard case .staticType(_) = type else {throw ParsingError.parameterTypeInvalid}
         if (match.keys.contains("typeLength")) {
             guard let typeLength = Int(match["typeLength"]!) else {throw ParsingError.parameterTypeInvalid}
             guard let canonicalType = exactMatchType(from: typeString, length: typeLength, staticArrayLength: arrayLength) else {throw ParsingError.parameterTypeInvalid}
@@ -227,17 +231,17 @@ fileprivate func arrayMatch(from string: String) throws -> ABIElement.ParameterT
         }
         return type
     } else {
-        guard let typeString = match["type"] else {throw ParsingError.parameterTypeInvalid}
-        guard var type = exactMatchType(from: typeString) else {throw ParsingError.parameterTypeInvalid}
-        guard case .dynamicType(let _) = type else {throw ParsingError.parameterTypeInvalid}
+        guard let typeString = match["type"] else {return nil}
+        guard var type = exactMatchType(from: typeString, staticArrayLength: 0) else {throw ParsingError.parameterTypeInvalid}
+        guard case .staticType(_) = type else {return nil}
         if (match.keys.contains("typeLength")) {
             guard let typeLength = Int(match["typeLength"]!) else {throw ParsingError.parameterTypeInvalid}
-            guard let canonicalType = exactMatchType(from: typeString, length: typeLength) else {throw ParsingError.parameterTypeInvalid}
+            guard let canonicalType = exactMatchType(from: typeString, length: typeLength, staticArrayLength: 0) else {throw ParsingError.parameterTypeInvalid}
             type = canonicalType
         }
         return type
     }
-    throw ParsingError.parameterTypeInvalid
+    return nil
 }
 
 //fileprivate func numberSuffixMatch(from string: String) throws -> ParameterType? {
