@@ -23,11 +23,8 @@ enum ParsingError: Error {
 }
 
 enum TypeMatchingExpressions {
-    static var numberSuffixRegex = "^(.*?)([1-9][0-9]*)$"
-    static var dynamicArrayRegex = "^(.*?[1-9][0-9]*)\\[\\]$"
-    static var staticArrayRegex = "^(.*?[1-9][0-9]*)\\[([1-9][0-9]*)\\]$"
-    static var typeRegex = "^(?<type>[^0-9]*?)(?<typeLength>[1-9][0-9]*)?$"
-    static var arrayRegex = "^(?<type>[^0-9]*?)(?<typeLength>[1-9][0-9]*)?\\[(?<arrayLength>[1-9][0-9]*)?\\]$"
+    static var typeRegex = "^(?<type>[^0-9\\s]*?)(?<typeLength>[1-9][0-9]*)?$"
+    static var arrayRegex = "^(?<type>[^0-9\\s]*?)(?<typeLength>[1-9][0-9]*)?\\[(?<arrayLength>[1-9][0-9]*)?\\]$"
 }
 
 
@@ -243,99 +240,4 @@ fileprivate func arrayMatch(from string: String) throws -> ABIElement.ParameterT
     }
     return nil
 }
-
-//fileprivate func numberSuffixMatch(from string: String) throws -> ParameterType? {
-//    let numberSuffixMatcher = try NSRegularExpression(pattern: TypeMatchingExpressions.numberSuffixRegex, options: [])
-//    let matches = numberSuffixMatcher.matches(in: string, options: [], range: string.fullNSRange)
-//    guard let firstMatch = matches.first,
-//        firstMatch.numberOfRanges == 3,
-//        let remainderRange = Range(firstMatch.range(at: 1), in: string),
-//        let lengthRange = Range(firstMatch.range(at: 2), in: string) else {
-//            return nil
-//    }
-//    guard let length = Int(string[lengthRange]) else {
-//        throw ParsingError.parameterTypeInvalid
-//    }
-//
-//    let remainderString = String(string[remainderRange])
-//    let type = try parameterType(from: remainderString)
-//    switch type {
-//    case .staticType(.int(bits: 256)):
-//        return .staticType(.int(bits: length))
-//    case .staticType(.uint(bits: 256)):
-//        return .staticType(.uint(bits: length))
-//    case .dynamicType(.bytes):
-//        return .staticType(.bytes(length: length))
-//    default:
-//        throw ParsingError.parameterTypeInvalid
-//    }
-//}
-//
-///// Parses the string (backwards) and returns the dynamic array defined by the string.
-/////
-///// - Parameter string: The type string to match.
-///// - Returns: nil if not a match for dynamic array suffix.
-///// - Throws: Throws if it's a match, but the wrapped type cannot be parsed or wrapped.
-//fileprivate func matchDynamicArray(from string: String) throws -> ParameterType? {
-//    // if we have [] at the end,
-//    //      split [] off from rest of string
-//    //      get type for rest of string
-//    //         add our dynamic array to the remainder type, if possible
-//    //         possible types: <fixed>[]
-//
-//    guard string.hasSuffix("[]") else {
-//        return nil
-//    }
-//    // String ends with []. We now cut off the remainder string and parse the type for that
-//    let endOfStringIndex = string.endIndex
-//    let endOfRemainderIndex = string.index(endOfStringIndex, offsetBy: -2)
-//    let remainderString = String(string[string.startIndex..<endOfRemainderIndex])
-//
-//    let type = try parameterType(from: remainderString)
-//    // Right now dynamic arrays cannot contain dynamic types, so make sure
-//    // this does not happen
-//    guard case .staticType(let unwrappedType) = type else {
-//        throw ParsingError.parameterTypeInvalid
-//    }
-//    return .dynamicType(.array(unwrappedType))
-//}
-//
-//fileprivate func matchFixedArray(from string: String) throws -> ParameterType? {
-//    //  if we have ] at the end (that is not covered above)
-//    //      reverse search for next [
-//    //      parse substring between into number
-//    //         get type for rest of string
-//    //         add our fixed length array to the remainder type, if possible
-//    //      possible types: <fixed>[<M>]
-//
-//    // If the string does not end with ] or does not include an opening bracket
-//    // abort and return nil (does not match)
-//    guard string.hasSuffix("]"),
-//        let indexOfOpeningBracket = string.lastIndex(of: "[") else {
-//            return nil
-//    }
-//    // We want to get the contents between the two brackets, but without the brackets
-//    let indexOfClosingBracket = string.index(string.endIndex, offsetBy: -1)
-//    let lengthSubstring = string[string.index(indexOfOpeningBracket, offsetBy: 1) ..< indexOfClosingBracket]
-//    // Check that we actually have a length between the brackets
-//    guard !lengthSubstring.isEmpty else {
-//        return nil
-//    }
-//    // If the contents of the brackets cannot be parsed to int, we throw
-//    guard let length = Int(lengthSubstring) else {
-//        throw ParsingError.parameterTypeInvalid
-//    }
-//
-//    // We cut off brackets and get the base type for the remainderString
-//    let remainderString = String(string[string.startIndex..<indexOfOpeningBracket])
-//    let type = try parameterType(from: remainderString)
-//
-//    // Right now fixed length arrays can only contain static types, so make sure
-//    // we have one of those
-//    guard case .staticType(let unwrappedType) = type else {
-//        throw ParsingError.parameterTypeInvalid
-//    }
-//
-//    return ParameterType.staticType(.array(unwrappedType, length: length))
-//}
 

@@ -45,6 +45,7 @@ class web3swiftTests: XCTestCase {
         } catch{
             print(error);
             XCTAssert(false, "Key decryption failed")
+            XCTFail()
         }
     }
     
@@ -80,6 +81,7 @@ class web3swiftTests: XCTestCase {
         }
         catch {
             print(error)
+            XCTFail()
         }
     }
     
@@ -94,6 +96,7 @@ class web3swiftTests: XCTestCase {
         }
         catch {
             print(error)
+            XCTFail()
         }
     }
     
@@ -131,6 +134,7 @@ class web3swiftTests: XCTestCase {
             hex2 = Sodium().utils.bin2hex(Data(bytes: result))!
             XCTAssert(hex2 == "3a985da74fe225b2045c172d6bd390bd855f086e3e9d525b46bfe24511431532", "SHA3 hash is wrong")
         } catch {
+            XCTFail()
             print(error)
         }
     }
@@ -153,24 +157,24 @@ class web3swiftTests: XCTestCase {
             XCTAssert(Data(bytes:decrypted) == plaintext, "AES128 CBC decryption is wrong")
             XCTAssert(Data(bytes:encrypted) == ciphertext, "AES128 CBC encryption is wrong")
         } catch {
+            XCTFail()
             print(error)
         }
     }
     
     func testAES128CTR() {
-        //        KEY = AE 68 52 F8 12 10 67 CC 4B F7 A5 76 55 77 F3 9E
-        //        IV = 00 00 00 00 00 00 00 00
-        //        NONCE = 00 00 00 30
-        //        PLAINTEXT = 53 69 6E 67 6C 65 20 62 6C 6F 63 6B 20 6D 73 67
-        //        CIPHERTEXT = E4 09 5D 4F B7 A7 B3 79 2D 61 75 A3 26 13 11 B8
+//        CTR-AES128.Encrypt
+//        Key 2b7e151628aed2a6abf7158809cf4f3c
+//        Init. Counter f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff
+//        Plaintext 6bc1bee22e409f96e93d7e117393172a
+//        Ciphertext 874d6191b620e3261bef6864990db6ce
+
         let sodium = Sodium()
-        let key = sodium.utils.hex2bin("AE 68 52 F8 12 10 67 CC 4B F7 A5 76 55 77 F3 9E", ignore: " ")
-        let iv = sodium.utils.hex2bin("00 00 00 00 00 00 00 00", ignore: " ")
-        let nonce = sodium.utils.hex2bin("00 00 00 30", ignore: " ")
-        let plaintext = sodium.utils.hex2bin("53 69 6E 67 6C 65 20 62 6C 6F 63 6B 20 6D 73 67", ignore: " ")
-        let ciphertext = sodium.utils.hex2bin("E4 09 5D 4F B7 A7 B3 79 2D 61 75 A3 26 13 11 B8", ignore: " ")
+        let key = sodium.utils.hex2bin("2b7e151628aed2a6abf7158809cf4f3c", ignore: " ")
+        let iv = sodium.utils.hex2bin("f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff", ignore: " ")
+        let plaintext = sodium.utils.hex2bin("6bc1bee22e409f96e93d7e117393172a", ignore: " ")
+        let ciphertext = sodium.utils.hex2bin("874d6191b620e3261bef6864990db6ce", ignore: " ")
         var fullIV = Data()
-        fullIV.append(nonce!)
         fullIV.append(iv!)
         do {
             let aesCipher = try AES(key: key!.bytes, blockMode: .CTR(iv: fullIV.bytes), padding: .noPadding)
@@ -179,6 +183,7 @@ class web3swiftTests: XCTestCase {
             XCTAssert(Data(bytes:decrypted) == plaintext, "AES128 CBC decryption is wrong")
             XCTAssert(Data(bytes:encrypted) == ciphertext, "AES128 CBC encryption is wrong")
         } catch {
+            XCTFail()
             print(error)
         }
     }
