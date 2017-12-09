@@ -72,7 +72,9 @@ struct RLP {
             let len = BigUInt(UInt(encodedLength.count))
             guard let prefix = lengthToBinary(len) else {return nil}
             let lengthPrefix = prefix + offset + UInt8(55)
-            return Data([lengthPrefix])
+            var encoded = Data([lengthPrefix])
+            encoded.append(encodedLength)
+            return encoded
         }
         return nil
     }
@@ -84,10 +86,17 @@ struct RLP {
         let divisor = BigUInt(256)
         var encoded = Data()
         guard let prefix = lengthToBinary(length/divisor) else {return nil}
-        let suffix = (length % divisor).serialize()
-        encoded.append(prefix)
-        encoded.append(suffix)
-        guard encoded.bytes.count == 1 else {return nil}
+        let suffix = length % divisor
+        
+        var prefixData = Data([prefix])
+        if (prefix == UInt8(0)) {
+            prefixData = Data()
+        }
+        let suffixData = suffix.serialize()
+        
+        encoded.append(prefixData)
+        encoded.append(suffixData)
+        guard encoded.count == 1 else {return nil}
         return encoded.bytes[0]
     }
     
