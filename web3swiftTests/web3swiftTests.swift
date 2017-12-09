@@ -247,8 +247,6 @@ class web3swiftTests: XCTestCase {
     
     func testRLPencodeLongString() {
         let bigUint = BigUInt(UInt(1024))
-        let enc = bigUint.serialize()
-        let len = bigUint.bitWidth;
         let testInput = "Lorem ipsum dolor sit amet, consectetur adipisicing elit"
         let encoded = RLP.encode(testInput)
         var expected = Data()

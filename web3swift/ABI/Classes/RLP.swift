@@ -121,6 +121,17 @@ struct RLP {
         encodedLength.append(encodedData)
         return encodedLength
     }
+    
+    static func encode(_ biguintArray: [BigUInt]) -> Data? {
+        var encodedData = Data()
+        for biguint in biguintArray {
+            guard let encoded = encode(biguint) else {return nil}
+            encodedData.append(encoded)
+        }
+        guard var encodedLength = encodeLength(encodedData.count, offset: UInt8(0xc0)) else {return nil}
+        encodedLength.append(encodedData)
+        return encodedLength
+    }
 }
 
 
