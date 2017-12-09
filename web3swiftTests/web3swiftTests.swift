@@ -10,7 +10,7 @@
 import XCTest
 import Sodium
 import CryptoSwift
-
+import BigInt
 @testable import web3swift
 
 class web3swiftTests: XCTestCase {
@@ -223,6 +223,58 @@ class web3swiftTests: XCTestCase {
         } catch {
             print(error)
         }
+    }
+    
+    func testRLPencodeShortString() {
+        let testString = "dog"
+        let encoded = RLP.encode(testString)
+        var expected = Data([UInt8(0x83)])
+        expected.append(testString.data(using: .ascii)!)
+        XCTAssert(encoded == expected, "Failed to RLP encode short string")
+    }
+    
+    func testRLPencodeListOfShortStrings() {
+        let testInput = ["cat","dog"]
+        let encoded = RLP.encode(testInput)
+        var expected = Data()
+        expected.append(Data([UInt8(0xc8)]))
+        expected.append(Data([UInt8(0x83)]))
+        expected.append("cat".data(using: .ascii)!)
+        expected.append(Data([UInt8(0x83)]))
+        expected.append("dog".data(using: .ascii)!)
+        XCTAssert(encoded == expected, "Failed to RLP encode list of short strings")
+    }
+    
+    func testRLPencodeLongString() {
+        let bigUint = BigUInt(UInt(1024))
+        let enc = bigUint.serialize()
+        let len = bigUint.bitWidth;
+        let testInput = "Lorem ipsum dolor sit amet, consectetur adipisicing elit"
+        let encoded = RLP.encode(testInput)
+        var expected = Data()
+        expected.append(Data([UInt8(0xb8)]))
+        expected.append(Data([UInt8(0x38)]))
+        expected.append("Lorem ipsum dolor sit amet, consectetur adipisicing elit".data(using: .ascii)!)
+        XCTAssert(encoded == expected, "Failed to RLP encode long string")
+    }
+    
+    
+    
+    func testRLPencodeShortInt() {
+        let testInput = 15
+        let encoded = RLP.encode(testInput)
+        let expected = Data([UInt8(0x0f)])
+        XCTAssert(encoded == expected, "Failed to RLP encode short int")
+    }
+    
+    func testRLPencodeLargeInt() {
+        let testInput = 1024
+        let encoded = RLP.encode(testInput)
+        var expected = Data()
+        expected.append(Data([UInt8(0x82)]))
+        expected.append(Data([UInt8(0x04)]))
+        expected.append(Data([UInt8(0x00)]))
+        XCTAssert(encoded == expected, "Failed to RLP encode large int")
     }
     
     func testPerformanceExample() {
