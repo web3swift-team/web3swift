@@ -15,7 +15,6 @@
 		1CD91B491FD76F62007BFB45 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CD91B471FD76F62007BFB45 /* Main.storyboard */; };
 		1CD91B4B1FD76F62007BFB45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CD91B4A1FD76F62007BFB45 /* Assets.xcassets */; };
 		1CD91B4E1FD76F62007BFB45 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CD91B4C1FD76F62007BFB45 /* LaunchScreen.storyboard */; };
-		1CD91B531FD76FB3007BFB45 /* web3swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift.framework */; };
 		1CD91B541FD76FB3007BFB45 /* web3swift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		596FE0DC120FD38AFF91C915 /* Pods_web3swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E81592D2802B9F4E200823 /* Pods_web3swift.framework */; };
 		8113D2C41FD7E1590074282C /* SodiumExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B01FD7E1590074282C /* SodiumExtensions.swift */; };
@@ -133,7 +132,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1CD91B531FD76FB3007BFB45 /* web3swift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,7 +165,6 @@
 			children = (
 				818EABD71FDC9A3800E013FC /* Contract */,
 				8113D2BD1FD7E1590074282C /* secp256k1 */,
-				8113D2E61FD7F2EC0074282C /* 3rdparty */,
 				8113D2B91FD7E1590074282C /* ABI */,
 				8113D2B51FD7E1590074282C /* KeystoreManager */,
 				8113D2C11FD7E1590074282C /* Transaction */,
@@ -185,21 +182,6 @@
 				1CD91B331FD769A6007BFB45 /* Info.plist */,
 			);
 			path = web3swiftTests;
-			sourceTree = "<group>";
-		};
-		1CD91B3A1FD76C91007BFB45 /* 3rdParty */ = {
-			isa = PBXGroup;
-			children = (
-				1CD91B3B1FD76C91007BFB45 /* CKSecp256k1 */,
-			);
-			path = 3rdParty;
-			sourceTree = SOURCE_ROOT;
-		};
-		1CD91B3B1FD76C91007BFB45 /* CKSecp256k1 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = CKSecp256k1;
 			sourceTree = "<group>";
 		};
 		1CD91B421FD76F62007BFB45 /* Demo */ = {
@@ -314,13 +296,6 @@
 				8113D2C31FD7E1590074282C /* EthereumTransaction.swift */,
 			);
 			path = Classes;
-			sourceTree = "<group>";
-		};
-		8113D2E61FD7F2EC0074282C /* 3rdparty */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = 3rdparty;
 			sourceTree = "<group>";
 		};
 		818EABD71FDC9A3800E013FC /* Contract */ = {
