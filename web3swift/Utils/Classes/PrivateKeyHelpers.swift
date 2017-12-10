@@ -9,11 +9,12 @@
 import Foundation
 import Sodium
 import CryptoSwift
+import SECP256K1
 
-//func privateToPublic(_ privateKey: Data, compressed: Bool = false) -> Data? {
-//    guard let publicKey = CKSecp256k1.generatePublicKey(withPrivateKey: privateKey, compression: compressed) else {return nil}
-//    return publicKey
-//}
+func privateToPublic(_ privateKey: Data, compressed: Bool = false) -> Data? {
+    guard let publicKey = SECP256K1.SECP256K1privateToPublic(privateKey:  privateKey, compressed: compressed) else {return nil}
+    return publicKey
+}
 
 func publicToAddress(_ publicKey: Data) -> Data? {
     var stipped = publicKey

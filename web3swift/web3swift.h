@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-
 //! Project version number for web3swift.
 FOUNDATION_EXPORT double web3swiftVersionNumber;
 
