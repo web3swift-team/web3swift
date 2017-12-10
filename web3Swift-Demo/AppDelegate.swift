@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  Demo
+//  web3Swift-Demo
 //
-//  Created by Petr Korolev on 06/12/2017.
+//  Created by Petr Korolev on 11/12/2017.
 //  Copyright © 2017 Bankex Foundation. All rights reserved.
 //
 

@@ -10,12 +10,12 @@
 		1CD91B011FD76910007BFB45 /* web3swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CD91AFF1FD76910007BFB45 /* web3swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1CD91B321FD769A6007BFB45 /* web3swiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */; };
 		1CD91B341FD769A6007BFB45 /* web3swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift.framework */; };
-		1CD91B441FD76F62007BFB45 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD91B431FD76F62007BFB45 /* AppDelegate.swift */; };
-		1CD91B461FD76F62007BFB45 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD91B451FD76F62007BFB45 /* ViewController.swift */; };
-		1CD91B491FD76F62007BFB45 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CD91B471FD76F62007BFB45 /* Main.storyboard */; };
-		1CD91B4B1FD76F62007BFB45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CD91B4A1FD76F62007BFB45 /* Assets.xcassets */; };
-		1CD91B4E1FD76F62007BFB45 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CD91B4C1FD76F62007BFB45 /* LaunchScreen.storyboard */; };
-		1CD91B541FD76FB3007BFB45 /* web3swift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1CDA65C11FDDFE0F0025DE71 /* web3swift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1CE976B81FDDF9F40005D4B0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE976B71FDDF9F40005D4B0 /* AppDelegate.swift */; };
+		1CE976BA1FDDF9F40005D4B0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE976B91FDDF9F40005D4B0 /* ViewController.swift */; };
+		1CE976BD1FDDF9F40005D4B0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CE976BB1FDDF9F40005D4B0 /* Main.storyboard */; };
+		1CE976BF1FDDF9F40005D4B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CE976BE1FDDF9F40005D4B0 /* Assets.xcassets */; };
+		1CE976C21FDDF9F40005D4B0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CE976C01FDDF9F40005D4B0 /* LaunchScreen.storyboard */; };
 		596FE0DC120FD38AFF91C915 /* Pods_web3swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E81592D2802B9F4E200823 /* Pods_web3swift.framework */; };
 		8113D2C41FD7E1590074282C /* SodiumExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B01FD7E1590074282C /* SodiumExtensions.swift */; };
 		8113D2C51FD7E1590074282C /* Scrypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B11FD7E1590074282C /* Scrypt.swift */; };
@@ -46,7 +46,7 @@
 			remoteGlobalIDString = 1CD91AFB1FD76910007BFB45;
 			remoteInfo = web3swift;
 		};
-		1CD91B551FD76FB3007BFB45 /* PBXContainerItemProxy */ = {
+		1CDA65C21FDDFE0F0025DE71 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1CD91AF31FD76910007BFB45 /* Project object */;
 			proxyType = 1;
@@ -56,13 +56,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		1CD91B571FD76FB3007BFB45 /* Embed Frameworks */ = {
+		1CDA65C41FDDFE0F0025DE71 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1CD91B541FD76FB3007BFB45 /* web3swift.framework in Embed Frameworks */,
+				1CDA65C11FDDFE0F0025DE71 /* web3swift.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,13 +77,13 @@
 		1CD91B2F1FD769A6007BFB45 /* web3swiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = web3swiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftTests.swift; sourceTree = "<group>"; };
 		1CD91B331FD769A6007BFB45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1CD91B411FD76F62007BFB45 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1CD91B431FD76F62007BFB45 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1CD91B451FD76F62007BFB45 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		1CD91B481FD76F62007BFB45 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		1CD91B4A1FD76F62007BFB45 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		1CD91B4D1FD76F62007BFB45 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		1CD91B4F1FD76F62007BFB45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1CE976B51FDDF9F40005D4B0 /* web3Swift-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "web3Swift-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1CE976B71FDDF9F40005D4B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1CE976B91FDDF9F40005D4B0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1CE976BC1FDDF9F40005D4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1CE976BE1FDDF9F40005D4B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1CE976C11FDDF9F40005D4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1CE976C31FDDF9F40005D4B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D07F714D1FF1408DBC01EBB /* Pods-web3swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift/Pods-web3swift.release.xcconfig"; sourceTree = "<group>"; };
 		8113D2B01FD7E1590074282C /* SodiumExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SodiumExtensions.swift; sourceTree = "<group>"; };
 		8113D2B11FD7E1590074282C /* Scrypt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scrypt.swift; sourceTree = "<group>"; };
@@ -128,7 +128,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1CD91B3E1FD76F62007BFB45 /* Frameworks */ = {
+		1CE976B21FDDF9F40005D4B0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -143,7 +143,7 @@
 			children = (
 				1CD91AFE1FD76910007BFB45 /* web3swift */,
 				1CD91B301FD769A6007BFB45 /* web3swiftTests */,
-				1CD91B421FD76F62007BFB45 /* Demo */,
+				1CE976B61FDDF9F40005D4B0 /* web3Swift-Demo */,
 				1CD91AFD1FD76910007BFB45 /* Products */,
 				868F9682FE77A7BADF675F92 /* Pods */,
 				78D101CC419F27D142F6E9AE /* Frameworks */,
@@ -155,7 +155,7 @@
 			children = (
 				1CD91AFC1FD76910007BFB45 /* web3swift.framework */,
 				1CD91B2F1FD769A6007BFB45 /* web3swiftTests.xctest */,
-				1CD91B411FD76F62007BFB45 /* Demo.app */,
+				1CE976B51FDDF9F40005D4B0 /* web3Swift-Demo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -184,17 +184,17 @@
 			path = web3swiftTests;
 			sourceTree = "<group>";
 		};
-		1CD91B421FD76F62007BFB45 /* Demo */ = {
+		1CE976B61FDDF9F40005D4B0 /* web3Swift-Demo */ = {
 			isa = PBXGroup;
 			children = (
-				1CD91B431FD76F62007BFB45 /* AppDelegate.swift */,
-				1CD91B451FD76F62007BFB45 /* ViewController.swift */,
-				1CD91B471FD76F62007BFB45 /* Main.storyboard */,
-				1CD91B4A1FD76F62007BFB45 /* Assets.xcassets */,
-				1CD91B4C1FD76F62007BFB45 /* LaunchScreen.storyboard */,
-				1CD91B4F1FD76F62007BFB45 /* Info.plist */,
+				1CE976B71FDDF9F40005D4B0 /* AppDelegate.swift */,
+				1CE976B91FDDF9F40005D4B0 /* ViewController.swift */,
+				1CE976BB1FDDF9F40005D4B0 /* Main.storyboard */,
+				1CE976BE1FDDF9F40005D4B0 /* Assets.xcassets */,
+				1CE976C01FDDF9F40005D4B0 /* LaunchScreen.storyboard */,
+				1CE976C31FDDF9F40005D4B0 /* Info.plist */,
 			);
-			path = Demo;
+			path = "web3Swift-Demo";
 			sourceTree = "<group>";
 		};
 		78D101CC419F27D142F6E9AE /* Frameworks */ = {
@@ -382,23 +382,23 @@
 			productReference = 1CD91B2F1FD769A6007BFB45 /* web3swiftTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		1CD91B401FD76F62007BFB45 /* Demo */ = {
+		1CE976B41FDDF9F40005D4B0 /* web3Swift-Demo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1CD91B521FD76F62007BFB45 /* Build configuration list for PBXNativeTarget "Demo" */;
+			buildConfigurationList = 1CE976C41FDDF9F40005D4B0 /* Build configuration list for PBXNativeTarget "web3Swift-Demo" */;
 			buildPhases = (
-				1CD91B3D1FD76F62007BFB45 /* Sources */,
-				1CD91B3E1FD76F62007BFB45 /* Frameworks */,
-				1CD91B3F1FD76F62007BFB45 /* Resources */,
-				1CD91B571FD76FB3007BFB45 /* Embed Frameworks */,
+				1CE976B11FDDF9F40005D4B0 /* Sources */,
+				1CE976B21FDDF9F40005D4B0 /* Frameworks */,
+				1CE976B31FDDF9F40005D4B0 /* Resources */,
+				1CDA65C41FDDFE0F0025DE71 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				1CD91B561FD76FB3007BFB45 /* PBXTargetDependency */,
+				1CDA65C31FDDFE0F0025DE71 /* PBXTargetDependency */,
 			);
-			name = Demo;
-			productName = Demo;
-			productReference = 1CD91B411FD76F62007BFB45 /* Demo.app */;
+			name = "web3Swift-Demo";
+			productName = "web3Swift-Demo";
+			productReference = 1CE976B51FDDF9F40005D4B0 /* web3Swift-Demo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -419,7 +419,7 @@
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
 					};
-					1CD91B401FD76F62007BFB45 = {
+					1CE976B41FDDF9F40005D4B0 = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
 					};
@@ -440,7 +440,7 @@
 			targets = (
 				1CD91AFB1FD76910007BFB45 /* web3swift */,
 				1CD91B2E1FD769A6007BFB45 /* web3swiftTests */,
-				1CD91B401FD76F62007BFB45 /* Demo */,
+				1CE976B41FDDF9F40005D4B0 /* web3Swift-Demo */,
 			);
 		};
 /* End PBXProject section */
@@ -460,13 +460,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1CD91B3F1FD76F62007BFB45 /* Resources */ = {
+		1CE976B31FDDF9F40005D4B0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1CD91B4E1FD76F62007BFB45 /* LaunchScreen.storyboard in Resources */,
-				1CD91B4B1FD76F62007BFB45 /* Assets.xcassets in Resources */,
-				1CD91B491FD76F62007BFB45 /* Main.storyboard in Resources */,
+				1CE976C21FDDF9F40005D4B0 /* LaunchScreen.storyboard in Resources */,
+				1CE976BF1FDDF9F40005D4B0 /* Assets.xcassets in Resources */,
+				1CE976BD1FDDF9F40005D4B0 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -606,12 +606,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1CD91B3D1FD76F62007BFB45 /* Sources */ = {
+		1CE976B11FDDF9F40005D4B0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1CD91B461FD76F62007BFB45 /* ViewController.swift in Sources */,
-				1CD91B441FD76F62007BFB45 /* AppDelegate.swift in Sources */,
+				1CE976BA1FDDF9F40005D4B0 /* ViewController.swift in Sources */,
+				1CE976B81FDDF9F40005D4B0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -623,26 +623,26 @@
 			target = 1CD91AFB1FD76910007BFB45 /* web3swift */;
 			targetProxy = 1CD91B351FD769A6007BFB45 /* PBXContainerItemProxy */;
 		};
-		1CD91B561FD76FB3007BFB45 /* PBXTargetDependency */ = {
+		1CDA65C31FDDFE0F0025DE71 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 1CD91AFB1FD76910007BFB45 /* web3swift */;
-			targetProxy = 1CD91B551FD76FB3007BFB45 /* PBXContainerItemProxy */;
+			targetProxy = 1CDA65C21FDDFE0F0025DE71 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		1CD91B471FD76F62007BFB45 /* Main.storyboard */ = {
+		1CE976BB1FDDF9F40005D4B0 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1CD91B481FD76F62007BFB45 /* Base */,
+				1CE976BC1FDDF9F40005D4B0 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		1CD91B4C1FD76F62007BFB45 /* LaunchScreen.storyboard */ = {
+		1CE976C01FDDF9F40005D4B0 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1CD91B4D1FD76F62007BFB45 /* Base */,
+				1CE976C11FDDF9F40005D4B0 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -879,17 +879,22 @@
 			};
 			name = Release;
 		};
-		1CD91B501FD76F62007BFB45 /* Debug */ = {
+		1CE976C51FDDF9F40005D4B0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = Demo/Info.plist;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/web3swift/secp256k1/framework",
+				);
+				INFOPLIST_FILE = "web3Swift-Demo/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = BF.Demo;
+				PRODUCT_BUNDLE_IDENTIFIER = "BF.web3Swift-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -897,17 +902,22 @@
 			};
 			name = Debug;
 		};
-		1CD91B511FD76F62007BFB45 /* Release */ = {
+		1CE976C61FDDF9F40005D4B0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = Demo/Info.plist;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/web3swift/secp256k1/framework",
+				);
+				INFOPLIST_FILE = "web3Swift-Demo/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = BF.Demo;
+				PRODUCT_BUNDLE_IDENTIFIER = "BF.web3Swift-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -945,11 +955,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1CD91B521FD76F62007BFB45 /* Build configuration list for PBXNativeTarget "Demo" */ = {
+		1CE976C41FDDF9F40005D4B0 /* Build configuration list for PBXNativeTarget "web3Swift-Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1CD91B501FD76F62007BFB45 /* Debug */,
-				1CD91B511FD76F62007BFB45 /* Release */,
+				1CE976C51FDDF9F40005D4B0 /* Debug */,
+				1CE976C61FDDF9F40005D4B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
