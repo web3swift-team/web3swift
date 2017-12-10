@@ -10,8 +10,8 @@ import Foundation
 import BigInt
 
 struct Contract {
-    var chainID : BigUInt = BigUInt(1)
-    var address : EthereumAddress
-    var abi : [ABIElement]
-    var methods : [String: ABIElement]
+    var chainID: BigUInt = BigUInt(1)
+    var address: EthereumAddress
+    var abi: [ABIElement]
+    var methods: [String: ABIElement]
 }
