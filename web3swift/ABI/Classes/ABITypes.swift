@@ -191,7 +191,7 @@ extension ABIElement.ParameterType.DynamicType: AbiValidating {
 // MARK: - Method ID for Contract
 extension ABIElement.Function {
     var signature: String {
-        return "\(name)(\(inputs.map { $0.type.abiRepresentation }.joined(separator: ",")))"
+        return "\(name ?? "")(\(inputs.map { $0.type.abiRepresentation }.joined(separator: ",")))"
     }
     
     var methodId: String {

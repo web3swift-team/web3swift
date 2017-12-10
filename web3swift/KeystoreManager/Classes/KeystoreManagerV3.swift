@@ -68,12 +68,12 @@ public struct EthereumKeystoreV3 {
         try encryptDataToStorage(password, keyData: newPrivateKey)
     }
     
-    static func signTXWithPrivateKey(transaction: Data, privateKey: Data) throws -> Data? {
+    func signTXWithPrivateKey(transaction:EthereumTransaction, privateKey: Data) throws -> Data? {
         return Data()
     }
     
-    static func signHashWithPrivateKey(hash: Data, privateKey: Data) throws -> Data? {
-        let (compressedSignature, _) = SECP256K1signForRecovery(hash: hash, privateKey: privateKey)
+    func signHashWithPrivateKey(hash: Data, privateKey: Data) throws -> Data? {
+        let (compressedSignature, _) = SECP256K1.SECP256K1signForRecovery(hash: hash, privateKey: privateKey)
         return compressedSignature
     }
     

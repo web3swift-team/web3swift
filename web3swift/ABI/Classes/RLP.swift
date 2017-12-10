@@ -10,9 +10,25 @@ import Foundation
 import Sodium
 import BigInt
 
+protocol ArrayType {}
+extension Array : ArrayType {}
+
 struct RLP {
     static var length56 = BigUInt(UInt(56))
     static var lengthMax = (BigUInt(UInt(1)) << 256)
+    
+    static func encode(_ element: AnyObject) -> Data? {
+        if let string = element as? String {
+            return encode(string)
+            
+        } else if let data = element as? Data {
+            return encode(data)
+        }
+        else if let biguint = element as? BigUInt {
+            return encode(biguint)
+        }
+        return nil;
+    }
     
     static func encode(_ string: String) -> Data? {
         let sodium = Sodium()
@@ -39,12 +55,6 @@ struct RLP {
         return encode(encoded)
     }
     
-    static func encodeHex(_ hexString: String) -> Data? {
-        let sodium = Sodium()
-        guard let data = sodium.utils.hex2bin(hexString) else {return nil}
-        return encode(data)
-    }
-    
     static func encode(_ data: Data) -> Data? {
         if (data.count == 1 && data.bytes[0] < UInt8(0x80)) {
             return data
@@ -58,6 +68,9 @@ struct RLP {
     }
     
     static func encodeLength(_ length: Int, offset: UInt8) -> Data? {
+        if (length < 0) {
+            return nil;
+        }
         let bigintLength = BigUInt(UInt(length))
         return encodeLength(bigintLength, offset: offset)
     }
@@ -100,38 +113,67 @@ struct RLP {
         return encoded.bytes[0]
     }
     
-    static func encode(_ dataArray: [Data]) -> Data? {
+    static func encode(_ elements: Array<AnyObject>) -> Data? {
         var encodedData = Data()
-        for d in dataArray {
-            guard let encoded = encode(d) else {return nil}
+        for e in elements {
+            guard let encoded = encode(e) else {return nil}
             encodedData.append(encoded)
         }
         guard var encodedLength = encodeLength(encodedData.count, offset: UInt8(0xc0)) else {return nil}
-        encodedLength.append(encodedData)
+        if (encodedLength != Data()) {
+            encodedLength.append(encodedData)
+        }
         return encodedLength
     }
     
-    static func encode(_ stringArray: [String]) -> Data? {
+    static func encode(_ elements: [Any]) -> Data? {
         var encodedData = Data()
-        for s in stringArray {
-            guard let encoded = encode(s) else {return nil}
+        for el in elements {
+            let e = el as AnyObject
+            guard let encoded = encode(e) else {return nil}
             encodedData.append(encoded)
         }
         guard var encodedLength = encodeLength(encodedData.count, offset: UInt8(0xc0)) else {return nil}
-        encodedLength.append(encodedData)
+        if (encodedLength != Data()) {
+            encodedLength.append(encodedData)
+        }
         return encodedLength
     }
     
-    static func encode(_ biguintArray: [BigUInt]) -> Data? {
-        var encodedData = Data()
-        for biguint in biguintArray {
-            guard let encoded = encode(biguint) else {return nil}
-            encodedData.append(encoded)
-        }
-        guard var encodedLength = encodeLength(encodedData.count, offset: UInt8(0xc0)) else {return nil}
-        encodedLength.append(encodedData)
-        return encodedLength
-    }
+//    static func encode(_ dataArray: [Data]) -> Data? {
+//        var encodedData = Data()
+//        for d in dataArray {
+//            guard let encoded = encode(d) else {return nil}
+//            encodedData.append(encoded)
+//        }
+//        guard var encodedLength = encodeLength(encodedData.count, offset: UInt8(0xc0)) else {return nil}
+//        if (encodedLength != Data()) {
+//            encodedLength.append(encodedData)
+//        }
+//        return encodedLength
+//    }
+//    
+//    static func encode(_ stringArray: [String]) -> Data? {
+//        var encodedData = Data()
+//        for s in stringArray {
+//            guard let encoded = encode(s) else {return nil}
+//            encodedData.append(encoded)
+//        }
+//        guard var encodedLength = encodeLength(encodedData.count, offset: UInt8(0xc0)) else {return nil}
+//        encodedLength.append(encodedData)
+//        return encodedLength
+//    }
+//    
+//    static func encode(_ biguintArray: [BigUInt]) -> Data? {
+//        var encodedData = Data()
+//        for biguint in biguintArray {
+//            guard let encoded = encode(biguint) else {return nil}
+//            encodedData.append(encoded)
+//        }
+//        guard var encodedLength = encodeLength(encodedData.count, offset: UInt8(0xc0)) else {return nil}
+//        encodedLength.append(encodedData)
+//        return encodedLength
+//    }
 }
 
 

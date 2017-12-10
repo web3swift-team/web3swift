@@ -90,7 +90,7 @@ class web3swiftTests: XCTestCase {
             let ks = try EthereumKeystoreV3("{\"address\":\"008aeeda4d805471df9b2a5b0f38a0c3bcba786b\",\"Crypto\":{\"cipher\":\"aes-128-ctr\",\"ciphertext\":\"d172bf743a674da9cdad04534d56926ef8358534d458fffccd4e6ad2fbde479c\",\"cipherparams\":{\"iv\":\"83dbcc02d8ccb40e466191a123791e0e\"},\"mac\":\"2103ac29920d71da29f15d75b4a16dbe95cfd7ff8faea1056c33131d846e3097\",\"kdf\":\"scrypt\",\"kdfparams\":{\"n\":262144,\"r\":1,\"p\":8,\"dklen\":32,\"prf\":\"hmac-sha256\",\"salt\":\"ab0c7876052600dd703518d6fc3fe8984592145b591fc8fb5c6d43190334ba19\"}},\"id\":\"e13b209c-3b2f-4327-bab0-3bef2e51630d\",\"version\":3}")
             XCTAssert(ks != nil , "Can't read keystore")
             let key = try ks?.getKeyData("testpassword")
-            let signature = try EthereumKeystoreV3.signHashWithPrivateKey(hash: "test".data(using: .utf8)!.sha3(.keccak256), privateKey: key!)
+            let signature = try ks!.signHashWithPrivateKey(hash: "test".data(using: .utf8)!.sha3(.keccak256), privateKey: key!)
             XCTAssert(signature != nil, "Keystore creating failed")
         }
         catch {
@@ -246,7 +246,6 @@ class web3swiftTests: XCTestCase {
     }
     
     func testRLPencodeLongString() {
-        let bigUint = BigUInt(UInt(1024))
         let testInput = "Lorem ipsum dolor sit amet, consectetur adipisicing elit"
         let encoded = RLP.encode(testInput)
         var expected = Data()
@@ -256,7 +255,21 @@ class web3swiftTests: XCTestCase {
         XCTAssert(encoded == expected, "Failed to RLP encode long string")
     }
     
+    func testRLPencodeEmptyString() {
+        let testInput = ""
+        let encoded = RLP.encode(testInput)
+        var expected = Data()
+        expected.append(Data([UInt8(0x80)]))
+        XCTAssert(encoded == expected, "Failed to RLP encode empty string")
+    }
     
+    func testRLPencodeEmptyArray() {
+        let testInput = [Data]()
+        let encoded = RLP.encode(testInput)
+        var expected = Data()
+        expected.append(Data([UInt8(0xc0)]))
+        XCTAssert(encoded == expected, "Failed to RLP encode empty array")
+    }
     
     func testRLPencodeShortInt() {
         let testInput = 15
@@ -273,6 +286,33 @@ class web3swiftTests: XCTestCase {
         expected.append(Data([UInt8(0x04)]))
         expected.append(Data([UInt8(0x00)]))
         XCTAssert(encoded == expected, "Failed to RLP encode large int")
+    }
+    
+    func testChecksubAddress() {
+        let input = "0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359"
+        let output = EthereumAddress.toChecksumAddress(input);
+        XCTAssert(output == "0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359", "Failed to checksum address")
+    }
+    
+    func testTransaction1() {
+        var transaction = EthereumTransaction(nonce: BigUInt(9),
+                                              gasprice: BigUInt(20000000000),
+                                              startgas: BigUInt(21000),
+                                              to: EthereumAddress("0x3535353535353535353535353535353535353535"),
+                                              value: BigUInt("1000000000000000000")!,
+                                              data: Data(),
+                                              v: BigUInt(0),
+                                              r: BigUInt(0),
+                                              s: BigUInt(0))
+        let privateKeyData = Data(Array<UInt8>(hex: "0x4646464646464646464646464646464646464646464646464646464646464646"))
+        let hash = transaction.hash(forSignature: true, chainID: BigUInt(1))
+        let expectedHash = "0xdaf5a779ae972f972197303d7b574746c7ef83eadac0f2791ad23db92e4c8e53".stripHexPrefix()
+        XCTAssert(hash!.toHexString() == expectedHash, "Transaction signature failed")
+        let success = transaction.sign(privateKey: privateKeyData, chainID: BigUInt(1))
+        XCTAssert(success)
+        XCTAssert(transaction.v == UInt8(37), "Transaction signature failed")
+        XCTAssert(transaction.r == BigUInt("18515461264373351373200002665853028612451056578545711640558177340181847433846"), "Transaction signature failed")
+        XCTAssert(transaction.s == BigUInt("46948507304638947509940763649030358759909902576025900602547168820602576006531"), "Transaction signature failed")
     }
     
     func testPerformanceExample() {
