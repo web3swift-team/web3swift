@@ -8,4 +8,13 @@
 
 import Foundation
 
+import BigInt
+
+struct Web3Options {
+    var to: EthereumAddress? = nil
+    var from: EthereumAddress? = nil
+    var gas: BigUInt = BigUInt(21000)
+    var gasPrice: BigUInt = BigUInt(5000000000)
+    var value: BigUInt = BigUInt(0)
+}
 

@@ -9,7 +9,7 @@ target 'web3swift' do
   pod 'PromiseKit/Alamofire', '~> 4.0'
   pod 'CryptoSwift'
   pod 'Sodium'
-  pod 'NAChloride'
+  pod 'libsodium'
   target 'web3swiftTests' do
     inherit! :search_paths
   end

@@ -59,21 +59,6 @@ extension ABIElement.ParameterType {
             return type.encode(values)
         }
     }
-    
-//    static func abiEncode(_ value: BigUInt, bits: Int) -> Data? {
-//        let data = value.serialize()
-//        let paddedLength = Int(ceil((Double(bits)/8.0)))
-//        let padded = data.padLeft(paddedLength)
-//        return padded
-//    }
-//
-//    static func abiEncode(_ value: BigInt, bits: Int) -> Data? {
-//        let isNegative = value >= (BigInt(0))
-//        let data = value.toTwosComplement()
-//        let paddedLength = Int(ceil((Double(bits)/8.0)))
-//        let padded = data.padLeft(paddedLength, isNegative: isNegative)
-//        return padded
-//    }
 }
 
 extension BigUInt {
@@ -228,8 +213,6 @@ extension ABIElement.ParameterType.DynamicType {
         }
     }
 }
-
-
 
 extension ABIElement {
     func encodeParameters(_ parameters: [AnyObject]) -> Data? {
