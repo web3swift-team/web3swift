@@ -8,12 +8,14 @@
 
 import UIKit
 import Foundation
+//import web3swift
 
 class ViewController: UIViewController {
 
     @IBOutlet var addressTextField: UITextField!
     @IBOutlet var resultTextView: UITextView!
     @IBAction func request(_ sender: Any) {
+//        resultTextView.text = ABIManager.getABI(address: self.addressTextField)
     }
     
     

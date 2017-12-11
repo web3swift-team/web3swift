@@ -8,13 +8,13 @@
 
 import Foundation
 
-class ABIManager {
-    func getABI(address: String) -> String? {
+public class ABIManager {
+    public class func getABI(address: String) -> String? {
 
-        return nil
+        return self.getAPIKey()
     }
 
-    func getAPIKey() -> String? {
+    static func getAPIKey() -> String? {
         let keys: NSDictionary?
         if let path = Bundle.main.path(forResource: "API_keys", ofType: "plist") {
             keys = NSDictionary(contentsOfFile: path)
