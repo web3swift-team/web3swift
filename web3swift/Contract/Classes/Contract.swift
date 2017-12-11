@@ -15,5 +15,4 @@ struct Contract {
     var abi: [ABIElement]
     var methods: [String: ABIElement]
     var options: [String: AnyObject]
-    
 }

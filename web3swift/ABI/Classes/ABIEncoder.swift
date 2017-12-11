@@ -60,16 +60,35 @@ extension ABIElement.ParameterType {
         }
     }
     
-    static func abiEncode(_ value: BigUInt, bits: Int) -> Data? {
-        let data = value.serialize()
+//    static func abiEncode(_ value: BigUInt, bits: Int) -> Data? {
+//        let data = value.serialize()
+//        let paddedLength = Int(ceil((Double(bits)/8.0)))
+//        let padded = data.padLeft(paddedLength)
+//        return padded
+//    }
+//
+//    static func abiEncode(_ value: BigInt, bits: Int) -> Data? {
+//        let isNegative = value >= (BigInt(0))
+//        let data = value.toTwosComplement()
+//        let paddedLength = Int(ceil((Double(bits)/8.0)))
+//        let padded = data.padLeft(paddedLength, isNegative: isNegative)
+//        return padded
+//    }
+}
+
+extension BigUInt {
+    func abiEncode(bits: Int) -> Data? {
+        let data = self.serialize()
         let paddedLength = Int(ceil((Double(bits)/8.0)))
         let padded = data.padLeft(paddedLength)
         return padded
     }
-    
-    static func abiEncode(_ value: BigInt, bits: Int) -> Data? {
-        let isNegative = value >= (BigInt(0))
-        let data = value.toTwosComplement()
+}
+
+extension BigInt {
+    func abiEncode(bits: Int) -> Data? {
+        let isNegative = self >= (BigInt(0))
+        let data = self.toTwosComplement()
         let paddedLength = Int(ceil((Double(bits)/8.0)))
         let padded = data.padLeft(paddedLength, isNegative: isNegative)
         return padded
@@ -83,18 +102,18 @@ extension ABIElement.ParameterType.StaticType {
         switch self {
         case .uint(let bits):
             if let biguint = value as? BigUInt {
-                return ABIElement.ParameterType.abiEncode(biguint, bits: bits);
+                return biguint.abiEncode(bits: bits);
             }
             if let bigint = value as? BigInt {
-                return ABIElement.ParameterType.abiEncode(bigint, bits: bits);
+                return bigint.abiEncode(bits: bits);
             }
             return nil;
         case .int(let bits):
             if let biguint = value as? BigUInt {
-                return ABIElement.ParameterType.abiEncode(biguint, bits: bits);
+                return biguint.abiEncode(bits: bits);
             }
             if let bigint = value as? BigInt {
-                return ABIElement.ParameterType.abiEncode(bigint, bits: bits);
+                return bigint.abiEncode(bits: bits);
             }
         case .address:
             if let string = value as? String {
@@ -111,9 +130,9 @@ extension ABIElement.ParameterType.StaticType {
         case .bool:
             if let bool = value as? Bool {
                 if (bool) {
-                    return ABIElement.ParameterType.abiEncode(BigUInt(1), bits: 256);
+                    return BigUInt(1).abiEncode(bits: 256)
                 } else {
-                    return ABIElement.ParameterType.abiEncode(BigUInt(0), bits: 256);
+                    return  BigUInt(0).abiEncode(bits: 256)
                 }
             }
             return nil
@@ -121,9 +140,9 @@ extension ABIElement.ParameterType.StaticType {
             if let string = value as? String {
                 guard let data = sodium.utils.hex2bin(string.lowercased().stripHexPrefix()) else {return nil}
                 return data.padLeft(length)
-            } else if let address = value as? EthereumAddress {
-                guard address.isValid else {return nil}
-                let data = address.addressData
+            } else if let addr = value as? EthereumAddress {
+                guard addr.isValid else {return nil}
+                let data = addr.addressData
                 return data.padLeft(length)
             } else if let data = value as? Data {
                 return data.padLeft(length)
@@ -163,12 +182,12 @@ extension ABIElement.ParameterType.DynamicType {
             if let string = value as? String {
                 guard let data = string.data(using: .utf8) else {return nil}
                 let length = data.count
-                guard var prefix = ABIElement.ParameterType.abiEncode(BigUInt(length), bits: 256) else {return nil}
+                guard var prefix = BigUInt(length).abiEncode(bits: 256) else {return nil}
                 prefix.append(data)
                 return prefix
             } else if let data = value as? Data {
                 let length = data.count
-                guard var prefix = ABIElement.ParameterType.abiEncode(BigUInt(length), bits: 256) else {return nil}
+                guard var prefix = BigUInt(length).abiEncode(bits: 256) else {return nil}
                 prefix.append(data)
                 return prefix
             }
@@ -177,12 +196,12 @@ extension ABIElement.ParameterType.DynamicType {
             if let string = value as? String {
                 guard let data = sodium.utils.hex2bin(string.lowercased().stripHexPrefix()) else {return nil}
                 let length = data.count
-                guard var prefix = ABIElement.ParameterType.abiEncode(BigUInt(length), bits: 256) else {return nil}
+                guard var prefix = BigUInt(length).abiEncode(bits: 256) else {return nil}
                 prefix.append(data)
                 return prefix
             } else if let data = value as? Data {
                 let length = data.count
-                guard var prefix = ABIElement.ParameterType.abiEncode(BigUInt(length), bits: 256) else {return nil}
+                guard var prefix = BigUInt(length).abiEncode(bits: 256) else {return nil}
                 prefix.append(data)
                 return prefix
             }
@@ -201,7 +220,7 @@ extension ABIElement.ParameterType.DynamicType {
                 data.append(encoded)
             }
             let length = data.count
-            guard var prefix = ABIElement.ParameterType.abiEncode(BigUInt(length), bits: 256) else {return nil}
+            guard var prefix = BigUInt(length).abiEncode(bits: 256) else {return nil}
             prefix.append(data)
             return prefix
         default:

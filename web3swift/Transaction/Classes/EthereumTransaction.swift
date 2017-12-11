@@ -72,8 +72,8 @@ struct EthereumAddress {
 
 struct EthereumTransaction {
     var nonce: BigUInt
-    var gasprice: BigUInt
-    var startgas: BigUInt
+    var gasprice: BigUInt = BigUInt(3000000000)
+    var startgas: BigUInt = BigUInt(0)
     var to: EthereumAddress
     var value: BigUInt
     var data: Data
@@ -106,9 +106,23 @@ struct EthereumTransaction {
                 return RLP.encode(fields)
             }
         } else {
-            let fields = [self.nonce, self.gasprice, self.startgas, self.to.addressData, self.value, self.data, chainID!, BigUInt(0), BigUInt(0)] as [AnyObject]
+            let fields = [self.nonce, self.gasprice, self.startgas, self.to.addressData, self.value, self.data, self.v, self.r, self.s] as [AnyObject]
             return RLP.encode(fields)
         }
+    }
+    
+    func encodeAsDictionary(from: EthereumAddress) -> [String: String]? {
+        var returnDictionary = [String:String]()
+        if (!from.isValid) {
+            return nil
+        }
+        returnDictionary["from"] = from.address
+        returnDictionary["to"] = self.to.address.lowercased()
+        returnDictionary["gas"] = self.startgas.abiEncode(bits: 256)?.toHexString()
+        returnDictionary["gasPrice"] = self.gasprice.abiEncode(bits: 256)?.toHexString()
+        returnDictionary["value"] = self.value.abiEncode(bits: 256)?.toHexString()
+        returnDictionary["data"] = self.data.toHexString()
+        return returnDictionary
     }
     
     func hash(forSignature:Bool = false, chainID: BigUInt? = nil) -> Data? {
