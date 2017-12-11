@@ -19,7 +19,6 @@
 		1CE976C21FDDF9F40005D4B0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CE976C01FDDF9F40005D4B0 /* LaunchScreen.storyboard */; };
 		596FE0DC120FD38AFF91C915 /* Pods_web3swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E81592D2802B9F4E200823 /* Pods_web3swift.framework */; };
 		8113D2C41FD7E1590074282C /* SodiumExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B01FD7E1590074282C /* SodiumExtensions.swift */; };
-		8113D2C51FD7E1590074282C /* Scrypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B11FD7E1590074282C /* Scrypt.swift */; };
 		8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */; };
 		8113D2C71FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */; };
 		8113D2C81FD7E1590074282C /* PrivateKeyHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B41FD7E1590074282C /* PrivateKeyHelpers.swift */; };
@@ -90,7 +89,6 @@
 		1CE976C31FDDF9F40005D4B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D07F714D1FF1408DBC01EBB /* Pods-web3swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift/Pods-web3swift.release.xcconfig"; sourceTree = "<group>"; };
 		8113D2B01FD7E1590074282C /* SodiumExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SodiumExtensions.swift; sourceTree = "<group>"; };
-		8113D2B11FD7E1590074282C /* Scrypt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scrypt.swift; sourceTree = "<group>"; };
 		8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibSecp256k1Extension.swift; sourceTree = "<group>"; };
 		8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryLiteralJSONSerializer.swift; sourceTree = "<group>"; };
 		8113D2B41FD7E1590074282C /* PrivateKeyHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateKeyHelpers.swift; sourceTree = "<group>"; };
@@ -225,7 +223,6 @@
 			children = (
 				8113D2FF1FD7F30F0074282C /* StringExtension.swift */,
 				8113D2B01FD7E1590074282C /* SodiumExtensions.swift */,
-				8113D2B11FD7E1590074282C /* Scrypt.swift */,
 				8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */,
 				8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */,
 				8113D2B41FD7E1590074282C /* PrivateKeyHelpers.swift */,
@@ -590,7 +587,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8113D2CA1FD7E1590074282C /* KeystoreManagerV3.swift in Sources */,
-				8113D2C51FD7E1590074282C /* Scrypt.swift in Sources */,
 				1CDA65CA1FDE0D3F0025DE71 /* ABIManager.swift in Sources */,
 				8113D2CB1FD7E1590074282C /* ABIEncoder.swift in Sources */,
 				818EABDA1FDC9A5C00E013FC /* Contract.swift in Sources */,

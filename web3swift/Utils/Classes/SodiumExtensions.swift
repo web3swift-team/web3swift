@@ -20,12 +20,6 @@ public extension KeyDerivation {
         guard let passwordData = password.data(using: .utf8) else {return nil}
         let passwordLen = passwordData.count
         let saltLen = salt.count
-        
-//        int crypto_pwhash_scryptsalsa208sha256_ll(const uint8_t * passwd, size_t passwdlen,
-//            const uint8_t * salt, size_t saltlen,
-//            uint64_t N, uint32_t r, uint32_t p,
-//            uint8_t * buf, size_t buflen)
-        
         let result = output.withUnsafeMutableBytes { (outputPtr:UnsafeMutablePointer<UInt8>) -> Int32 in
             salt.withUnsafeBytes { (saltPointer:UnsafePointer<UInt8>) -> Int32 in
                 passwordData.withUnsafeBytes{ (passwordPointer:UnsafePointer<UInt8>) -> Int32 in

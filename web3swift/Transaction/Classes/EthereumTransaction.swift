@@ -10,20 +10,6 @@ import Foundation
 import BigInt
 import SECP256K1
 
-//fields = [
-//    ('nonce', big_endian_int),
-//    ('gasprice', big_endian_int),
-//    ('startgas', big_endian_int),
-//    ('to', utils.address),
-//    ('value', big_endian_int),
-//    ('data', binary),
-//    ('v', big_endian_int),
-//    ('r', big_endian_int),
-//    ('s', big_endian_int),
-//]
-
-
-
 struct EthereumAddress {
     var isValid: Bool {
         get {

@@ -250,6 +250,5 @@ fileprivate func arrayMatch(from string: String) throws -> ABIElement.ParameterT
         }
         return type
     }
-    return nil
 }
 

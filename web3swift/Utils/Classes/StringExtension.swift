@@ -1,10 +1,3 @@
-//
-//  StringExtension.swift
-//  BivrostPackageDescription
-//
-//  Created by Luis Reisewitz on 13.10.17.
-//
-
 import Foundation
 
 // MARK: - Range Helpers
