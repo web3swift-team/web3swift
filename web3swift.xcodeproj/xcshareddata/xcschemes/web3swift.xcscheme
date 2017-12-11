@@ -43,9 +43,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1CD91AFB1FD76910007BFB45"
-            BuildableName = "web3swift.framework"
-            BlueprintName = "web3swift"
+            BlueprintIdentifier = "1CE976B41FDDF9F40005D4B0"
+            BuildableName = "web3Swift-Demo.app"
+            BlueprintName = "web3Swift-Demo"
             ReferencedContainer = "container:web3swift.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,15 +63,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1CD91AFB1FD76910007BFB45"
-            BuildableName = "web3swift.framework"
-            BlueprintName = "web3swift"
+            BlueprintIdentifier = "1CE976B41FDDF9F40005D4B0"
+            BuildableName = "web3Swift-Demo.app"
+            BlueprintName = "web3Swift-Demo"
             ReferencedContainer = "container:web3swift.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
