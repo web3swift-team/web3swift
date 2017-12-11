@@ -194,14 +194,19 @@ extension ABIElement.Function {
         return "\(name ?? "")(\(inputs.map { $0.type.abiRepresentation }.joined(separator: ",")))"
     }
     
-    var methodId: String {
+    var methodString: String {
         return String(signature.sha3(.keccak256).prefix(8))
+    }
+    
+    var methodEncoding: Data {
+        return signature.data(using: .ascii)!.sha3(.keccak256)[0...3]
     }
 }
 
 protocol AbiEncoding {
     var abiRepresentation: String { get }
 }
+
 
 extension ABIElement.ParameterType: AbiEncoding {
     var abiRepresentation: String {
