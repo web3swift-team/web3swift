@@ -8,7 +8,3 @@
 
 import Foundation
 
-struct Web3Parameters {
-    var from: EthereumAddress
-    
-}
