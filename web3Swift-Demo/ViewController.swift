@@ -7,9 +7,21 @@
 //
 
 import UIKit
+import Foundation
 
 class ViewController: UIViewController {
 
+    @IBOutlet var addressTV: UITextField!
+    @IBOutlet var resultTF: UITextView!
+    @IBAction func request(_ sender: Any) {
+    }
+    
+    
+    @IBAction func paste() {
+        let pb: UIPasteboard = UIPasteboard.general
+        resultTF.text = pb.string
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
