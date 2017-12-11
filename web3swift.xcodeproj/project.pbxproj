@@ -36,6 +36,8 @@
 		818D810E1FDC1A2000663CE3 /* RLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818D810D1FDC1A2000663CE3 /* RLP.swift */; };
 		818EABDA1FDC9A5C00E013FC /* Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EABD91FDC9A5C00E013FC /* Contract.swift */; };
 		81ABBC641FD8B13000D9D501 /* secp256k1.framework in Headers */ = {isa = PBXBuildFile; fileRef = 8113D2BF1FD7E1590074282C /* secp256k1.framework */; settings = {ATTRIBUTES = (Public, ); }; };
+		81DDECCF1FDF004E0063684A /* Web3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECCE1FDF004E0063684A /* Web3.swift */; };
+		81DDECD11FDF008A0063684A /* Web3Parameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECD01FDF008A0063684A /* Web3Parameters.swift */; };
 		E82DD6EACF6933D0D3978EA0 /* Pods_web3swiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -105,6 +107,8 @@
 		8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRegularExpressionExtension.swift; sourceTree = "<group>"; };
 		818D810D1FDC1A2000663CE3 /* RLP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RLP.swift; sourceTree = "<group>"; };
 		818EABD91FDC9A5C00E013FC /* Contract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contract.swift; sourceTree = "<group>"; };
+		81DDECCE1FDF004E0063684A /* Web3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3.swift; sourceTree = "<group>"; };
+		81DDECD01FDF008A0063684A /* Web3Parameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3Parameters.swift; sourceTree = "<group>"; };
 		8C8900D87850714C2DB85DFC /* Pods-web3swiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swiftTests/Pods-web3swiftTests.release.xcconfig"; sourceTree = "<group>"; };
 		B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D11D741983B37E59DB6A65E1 /* Pods-web3swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift/Pods-web3swift.debug.xcconfig"; sourceTree = "<group>"; };
@@ -313,6 +317,8 @@
 			children = (
 				1CDA65C91FDE0D3F0025DE71 /* ABIManager.swift */,
 				818EABD91FDC9A5C00E013FC /* Contract.swift */,
+				81DDECCE1FDF004E0063684A /* Web3.swift */,
+				81DDECD01FDF008A0063684A /* Web3Parameters.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -594,8 +600,10 @@
 				8113DE7C1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift in Sources */,
 				8113D2C81FD7E1590074282C /* PrivateKeyHelpers.swift in Sources */,
 				818D810E1FDC1A2000663CE3 /* RLP.swift in Sources */,
+				81DDECCF1FDF004E0063684A /* Web3.swift in Sources */,
 				8113D2C71FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift in Sources */,
 				813FFF8D1FD82EEB006379A2 /* StringExtension.swift in Sources */,
+				81DDECD11FDF008A0063684A /* Web3Parameters.swift in Sources */,
 				8113D31A1FD7F4C80074282C /* ABITypes.swift in Sources */,
 				8113D31C1FD7F8980074282C /* ABIRecordParser.swift in Sources */,
 				8113D2CE1FD7E1590074282C /* EthereumTransaction.swift in Sources */,

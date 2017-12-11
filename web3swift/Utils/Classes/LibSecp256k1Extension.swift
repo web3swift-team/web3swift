@@ -91,7 +91,7 @@ struct SECP256K1 {
 }
 
 extension SECP256K1 {
-    static func SECP256K1signForRecovery(hash: Data, privateKey: Data) -> (compressed:Data?, uncompressed: Data?) {
+    static func signForRecovery(hash: Data, privateKey: Data) -> (compressed:Data?, uncompressed: Data?) {
         if (hash.count != 32 || privateKey.count != 32) {return (nil, nil)}
         let context = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_SIGN));
         defer {secp256k1_context_destroy(context!)}
@@ -121,7 +121,7 @@ extension SECP256K1 {
         return (compressedSignature, uncompressedSignature)
     }
     
-    static func SECP256K1privateToPublic(privateKey: Data, compressed: Bool = false) -> Data? {
+    static func privateToPublic(privateKey: Data, compressed: Bool = false) -> Data? {
         if (privateKey.count != 32) {return nil}
         let context = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_SIGN));
         var publicKey = secp256k1_pubkey()
@@ -143,6 +143,31 @@ extension SECP256K1 {
             return res
         }
         return serializedPubkey
+    }
+    
+    static func verifyPrivateKey(privateKey: Data) -> Bool {
+        if (privateKey.count != 32) {return false}
+        let context = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_SIGN|SECP256K1_CONTEXT_VERIFY));
+        let result = privateKey.withUnsafeBytes { (privateKeyPointer:UnsafePointer<UInt8>) -> Int32 in
+            let res = secp256k1_ec_seckey_verify(context!, privateKeyPointer)
+            return res
+        }
+        return result == 1
+    }
+    
+    static func generatePrivateKey() -> Data? {
+        var keyData = Data(count: 32)
+        for _ in 0...15 {
+            let result = keyData.withUnsafeMutableBytes {
+                SecRandomCopyBytes(kSecRandomDefault, keyData.count, $0)
+            }
+            if result == errSecSuccess {
+                if (verifyPrivateKey(privateKey: keyData)) {
+                    return keyData
+                }
+            }
+        }
+        return nil
     }
     
     static func unmarshalSignature(signatureData:Data) -> UnmarshaledSignature? {

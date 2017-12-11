@@ -14,4 +14,6 @@ struct Contract {
     var address: EthereumAddress
     var abi: [ABIElement]
     var methods: [String: ABIElement]
+    var options: [String: AnyObject]
+    
 }

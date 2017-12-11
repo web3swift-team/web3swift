@@ -345,6 +345,12 @@ class web3swiftTests: XCTestCase {
         }
     }
     
+    func testMakePrivateKey()
+    {
+        let privKey = SECP256K1.generatePrivateKey()
+        XCTAssert(privKey != nil, "Failed to create new private key")
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

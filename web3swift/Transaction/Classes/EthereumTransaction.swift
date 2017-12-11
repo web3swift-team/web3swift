@@ -118,7 +118,7 @@ struct EthereumTransaction {
     
     mutating func sign(privateKey: Data, chainID: BigUInt? = nil) -> Bool {
         guard let hash = self.hash(forSignature: true, chainID: chainID) else {return false}
-        let signature  = SECP256K1.SECP256K1signForRecovery(hash: hash, privateKey: privateKey)
+        let signature  = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
         guard let compressedSignature = signature.compressed else {return false}
         guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: compressedSignature) else {return false}
         if (chainID != nil) {

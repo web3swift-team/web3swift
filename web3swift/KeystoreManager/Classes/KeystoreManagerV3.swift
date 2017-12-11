@@ -60,12 +60,14 @@ public struct EthereumKeystoreV3 {
         self.keystoreParams = keystoreParams
     }
     
-    init? (password: String = "BANKEX") throws {
-        let sodium = Sodium()
-        guard let newPrivateKey = sodium.randomBytes.buf(length: 32) else {return nil}
-        guard let pubKey = privateToPublic(newPrivateKey) else {return nil}
-        if (pubKey.count != 65) {return nil}
+    init? (password: String = "BANKEXFOUNDATION") throws {
+        guard let newPrivateKey = SECP256K1.generatePrivateKey() else {return nil}
         try encryptDataToStorage(password, keyData: newPrivateKey)
+    }
+    
+    init? (privateKey: Data, password: String = "BANKEXFOUNDATION") throws {
+        guard privateKey.count == 32 else {return nil}
+        try encryptDataToStorage(password, keyData: privateKey)
     }
     
     func signTXWithPrivateKey(transaction:EthereumTransaction, privateKey: Data) throws -> Data? {
@@ -73,7 +75,7 @@ public struct EthereumKeystoreV3 {
     }
     
     func signHashWithPrivateKey(hash: Data, privateKey: Data) throws -> Data? {
-        let (compressedSignature, _) = SECP256K1.SECP256K1signForRecovery(hash: hash, privateKey: privateKey)
+        let (compressedSignature, _) = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
         return compressedSignature
     }
     
