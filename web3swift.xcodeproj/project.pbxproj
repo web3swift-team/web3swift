@@ -11,6 +11,7 @@
 		1CD91B321FD769A6007BFB45 /* web3swiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */; };
 		1CD91B341FD769A6007BFB45 /* web3swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift.framework */; };
 		1CDA65C11FDDFE0F0025DE71 /* web3swift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1CDA65CA1FDE0D3F0025DE71 /* ABIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CDA65C91FDE0D3F0025DE71 /* ABIManager.swift */; };
 		1CE976B81FDDF9F40005D4B0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE976B71FDDF9F40005D4B0 /* AppDelegate.swift */; };
 		1CE976BA1FDDF9F40005D4B0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE976B91FDDF9F40005D4B0 /* ViewController.swift */; };
 		1CE976BD1FDDF9F40005D4B0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CE976BB1FDDF9F40005D4B0 /* Main.storyboard */; };
@@ -77,6 +78,7 @@
 		1CD91B2F1FD769A6007BFB45 /* web3swiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = web3swiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftTests.swift; sourceTree = "<group>"; };
 		1CD91B331FD769A6007BFB45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1CDA65C91FDE0D3F0025DE71 /* ABIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABIManager.swift; sourceTree = "<group>"; };
 		1CE976B51FDDF9F40005D4B0 /* web3Swift-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "web3Swift-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CE976B71FDDF9F40005D4B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1CE976B91FDDF9F40005D4B0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -309,6 +311,7 @@
 		818EABD81FDC9A4800E013FC /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				1CDA65C91FDE0D3F0025DE71 /* ABIManager.swift */,
 				818EABD91FDC9A5C00E013FC /* Contract.swift */,
 			);
 			path = Classes;
@@ -582,6 +585,7 @@
 			files = (
 				8113D2CA1FD7E1590074282C /* KeystoreManagerV3.swift in Sources */,
 				8113D2C51FD7E1590074282C /* Scrypt.swift in Sources */,
+				1CDA65CA1FDE0D3F0025DE71 /* ABIManager.swift in Sources */,
 				8113D2CB1FD7E1590074282C /* ABIEncoder.swift in Sources */,
 				818EABDA1FDC9A5C00E013FC /* Contract.swift in Sources */,
 				8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */,

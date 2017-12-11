@@ -11,15 +11,15 @@ import Foundation
 
 class ViewController: UIViewController {
 
-    @IBOutlet var addressTV: UITextField!
-    @IBOutlet var resultTF: UITextView!
+    @IBOutlet var addressTextField: UITextField!
+    @IBOutlet var resultTextView: UITextView!
     @IBAction func request(_ sender: Any) {
     }
     
     
     @IBAction func paste() {
         let pb: UIPasteboard = UIPasteboard.general
-        resultTF.text = pb.string
+        addressTextField.text = pb.string
     }
     
     override func viewDidLoad() {
