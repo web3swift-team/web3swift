@@ -1,6 +1,0 @@
-framework module NAChloride {
-  umbrella header "NAChloride-umbrella.h"
-
-  export *
-  module * { export * }
-}
