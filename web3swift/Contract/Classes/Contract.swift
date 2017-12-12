@@ -10,17 +10,38 @@ import Foundation
 import BigInt
 
 struct Contract {
-    var chainID: BigUInt = BigUInt(1)
-    var address: EthereumAddress?
-    var abi: [ABIElement]
-    var methods: [String: ABIElement]
+    var address: EthereumAddress? = nil
+    var _abi: [ABIElement]
+    var methods: [String: ABIElement] {
+        var toReturn = [String: ABIElement]()
+        for m in self._abi {
+            switch m {
+            case .function(let function):
+                guard let name = function.name else {continue}
+                toReturn[name] = m
+            default:
+                continue
+            }
+        }
+        return toReturn
+    }
     var options: Web3Options = Web3Options()
+    var chainID: BigUInt = BigUInt(1)
     
-    func send(method:String = "fallback", parameters: [AnyObject], nonce: BigUInt, extraData:Data = Data(), options: Web3Options?) -> EthereumTransaction? {
+    init(abi: [ABIElement]) {
+        _abi = abi
+    }
+    
+    init(abi: [ABIElement], at: EthereumAddress) {
+        _abi = abi
+        address = at
+    }
+    
+    func send(method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData:Data = Data(), options: Web3Options?, toAddress:EthereumAddress? = nil) -> EthereumTransaction? {
         var to:EthereumAddress
-        if let toInOptions = options?.to, toInOptions.isValid {
+        if let toInOptions = toAddress, toInOptions.isValid {
             to = toInOptions
-        } else if let toInDefaults = self.options.to, toInDefaults.isValid {
+        } else if let toInDefaults = self.address, toInDefaults.isValid {
             to = toInDefaults
         } else {
             return nil
@@ -29,8 +50,8 @@ struct Contract {
         var gas:BigUInt
         if let gasInOptions = options?.gas, gasInOptions > BigUInt(0) {
             gas = gasInOptions
-        } else if self.options.gas > BigUInt(0) {
-            gas = self.options.gas
+        } else if let gasInDefaults = self.options.gas, gasInDefaults > BigUInt(0) {
+            gas = gasInDefaults
         } else {
             return nil
         }
@@ -38,17 +59,19 @@ struct Contract {
         var gasPrice:BigUInt
         if let gasPriceInOptions = options?.gasPrice, gasPriceInOptions > BigUInt(0) {
             gasPrice = gasPriceInOptions
-        } else if self.options.gas > BigUInt(0) {
-            gasPrice = self.options.gasPrice
+        } else if let gasPriceInDefaults = self.options.gasPrice, gasPriceInDefaults > BigUInt(0) {
+            gasPrice = gasPriceInDefaults
         } else {
             return nil
         }
         
         var value:BigUInt
-        if let valueInOptions = options?.gasPrice {
+        if let valueInOptions = options?.value {
             value = valueInOptions
+        } else if let valueInDefaults = self.options.value {
+            value = valueInDefaults
         } else {
-            value = self.options.value
+            value = BigUInt(0)
         }
         
         if (method == "fallback") {

@@ -104,10 +104,12 @@ struct EthereumTransaction {
         }
         returnDictionary["from"] = from.address
         returnDictionary["to"] = self.to.address.lowercased()
-        returnDictionary["gas"] = self.startgas.abiEncode(bits: 256)?.toHexString()
-        returnDictionary["gasPrice"] = self.gasprice.abiEncode(bits: 256)?.toHexString()
-        returnDictionary["value"] = self.value.abiEncode(bits: 256)?.toHexString()
-        returnDictionary["data"] = self.data.toHexString()
+        returnDictionary["gas"] = self.startgas.abiEncode(bits: 256)?.toHexString().addHexPrefix().stripLeadingZeroes()
+        returnDictionary["gasPrice"] = self.gasprice.abiEncode(bits: 256)?.toHexString().addHexPrefix().stripLeadingZeroes()
+        returnDictionary["value"] = self.value.abiEncode(bits: 256)?.toHexString().addHexPrefix().stripLeadingZeroes()
+        if (self.data != Data()) {
+            returnDictionary["data"] = self.data.toHexString().addHexPrefix()
+        }
         return returnDictionary
     }
     

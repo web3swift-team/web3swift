@@ -36,4 +36,24 @@ extension String {
         }
         return self
     }
+    
+    func addHexPrefix() -> String {
+        if !self.hasPrefix("0x") {
+            return "0x" + self
+        }
+        return self
+    }
+    
+    func stripLeadingZeroes() -> String? {
+        let hex = self.addHexPrefix()
+        guard let matcher = try? NSRegularExpression(pattern: "^(?<prefix>0x)0*(?<end>[0-9a-fA-F]*)$", options: NSRegularExpression.Options.dotMatchesLineSeparators) else {return nil}
+        let match = matcher.captureGroups(string: hex, options: NSRegularExpression.MatchingOptions.anchored)
+        guard let prefix = match["prefix"] else {return nil}
+        guard let end = match["end"] else {return nil}
+        if (end != "") {
+            return prefix + end
+        }
+        return "0x0"
+        
+    }
 }
