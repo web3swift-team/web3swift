@@ -55,6 +55,15 @@ struct RLP {
         return encode(encoded)
     }
     
+//    internal static func encode(_ unstrippedData: Data) -> Data? {
+//        var startIndex = 0;
+//        for i in 0..<unstrippedData.count{
+//            if unstrippedData[i] != 0x00 {
+//                startIndex = i
+//                break
+//            }
+//        }
+//        let data = unstrippedData[startIndex ..< unstrippedData.count]
     internal static func encode(_ data: Data) -> Data? {
         if (data.count == 1 && data.bytes[0] < UInt8(0x80)) {
             return data
