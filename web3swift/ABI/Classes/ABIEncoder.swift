@@ -11,7 +11,7 @@ import Sodium
 import BigInt
 
 extension Data {
-    fileprivate func setLenfthLeft(_ toBytes: Int, isNegative:Bool = false ) -> Data? {
+    func setLenfthLeft(_ toBytes: Int, isNegative:Bool = false ) -> Data? {
         let existingLength = self.count;
         if (existingLength == toBytes) {
             return Data(self)
@@ -28,7 +28,7 @@ extension Data {
         return data
     }
     
-    fileprivate func setLengthRight(_ toBytes: Int, isNegative:Bool = false ) -> Data? {
+    func setLengthRight(_ toBytes: Int, isNegative:Bool = false ) -> Data? {
         let existingLength = self.count;
         if (existingLength == toBytes) {
             return Data(self)
@@ -262,6 +262,7 @@ extension ABIElement {
         case .fallback(_):
             return nil
         case .function(let function):
+            var signature = function.methodEncoding
             var heads = Data()
             var tails = Data()
 //            var tailsPointer = BigUInt(32)*BigUInt(function.inputs.count)
@@ -280,14 +281,16 @@ extension ABIElement {
                     guard let h = pointer.head, let _ = pointer.tail else {return nil}
                     guard h != Data() else {return nil}
                     heads.append(h)
+                    tailsPointer = tailsPointer + BigUInt(h.count)
                     tails.append(tail)
-                    tailsPointer = tailsPointer + BigUInt(tail.count) + BigUInt(h.count)
+                    tailsPointer = tailsPointer + BigUInt(tail.count)
                 } else {
                     return nil
                 }
             }
             heads.append(tails)
-            return heads
+            signature.append(heads)
+            return signature
         }
     }
 }

@@ -21,7 +21,7 @@ struct EthereumAddress {
     var addressData: Data {
         get {
             let dataArray = Array<UInt8>(hex: _address.lowercased().stripHexPrefix())
-            guard let d = Data(dataArray).padLeft(20)
+            guard let d = Data(dataArray).setLenfthLeft(20)
                 else {
                     return Data()
             }
