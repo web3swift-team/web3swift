@@ -8,6 +8,32 @@
 
 import Foundation
 
+// JSON Decoding
+struct ABIInput: Decodable {
+    var name: String?
+    var type: String
+    var indexed: Bool?
+}
+
+struct ABIOutput: Decodable {
+    var name: String?
+    var type: String
+}
+
+struct ABIRecord: Decodable {
+    var name: String?
+    var type: String?
+    var payable: Bool?
+    var constant: Bool?
+    var stateMutability: String?
+    var inputs: [ABIInput]?
+    var outputs: [ABIOutput]?
+    var anonymous: Bool?
+}
+
+
+// Native parsing
+
 protocol AbiValidating {
     var isValid: Bool { get }
 }
@@ -93,7 +119,9 @@ enum ABIElement {
             /// string: dynamic sized unicode string assumed to be UTF-8 encoded.
             case string
             /// <type>[]: a variable-length array of the given fixed-length type.
-            case array(StaticType)
+            case dynamicArray(StaticType)
+            /// fixed length array of dynamic types is considered as dynamic type.
+            indirect case arrayOfDynamicTypes(DynamicType, length: Int)
         }
     }
 }
@@ -106,8 +134,10 @@ extension ABIElement.ParameterType.DynamicType: Equatable {
             return true
         case (.string, .string):
             return true
-        case (.array(let value1), .array(let value2)):
+        case (.dynamicArray(let value1), .dynamicArray(let value2)):
             return value1 == value2
+        case (.arrayOfDynamicTypes(let type1, let len1), .arrayOfDynamicTypes(let type2, let len2)):
+            return type1 == type2 && len1 == len2
         default:
             return false
         }
@@ -247,8 +277,10 @@ extension ABIElement.ParameterType.DynamicType: AbiEncoding {
             return "bytes"
         case .string:
             return "string"
-        case .array(let type):
+        case .dynamicArray(let type):
             return "\(type.abiRepresentation)[]"
+        case .arrayOfDynamicTypes(let type, let length):
+            return "\(type.abiRepresentation)[\(length)]"
         }
     }
 }

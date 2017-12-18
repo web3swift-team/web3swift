@@ -204,11 +204,18 @@ fileprivate func exactMatchType(from string: String, length:Int? = nil, staticAr
     default:
         guard let arrayLen = staticArrayLength else {return nil}
         guard let baseType = exactMatchType(from: string, length: length) else {return nil}
-        guard case .staticType(let unwrappedType) = baseType else {return nil}
-        if (staticArrayLength == 0) {
-            return .dynamicType(.array(unwrappedType))
+        switch baseType{
+        case .staticType(let unwrappedType):
+            if (staticArrayLength == 0) {
+                return .dynamicType(.dynamicArray(unwrappedType))
+            }
+            return .staticType(.array(unwrappedType, length: arrayLen))
+        case .dynamicType(let unwrappedType):
+            if (staticArrayLength == 0) {
+                return .dynamicType(.arrayOfDynamicTypes(unwrappedType, length: arrayLen))
+            }
+            return nil
         }
-        return .staticType(.array(unwrappedType, length: arrayLen))
     }
 }
 

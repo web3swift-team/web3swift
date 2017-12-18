@@ -137,8 +137,14 @@ extension ABIElement.ParameterType.StaticType {
             }
         case .bytes(let length):
             if let string = value as? String {
-                guard let data = sodium.utils.hex2bin(string.lowercased().stripHexPrefix()) else {return (nil, nil)}
-                return (data.setLengthRight(length), Data())
+                if string.hasHexPrefix() {
+                    guard let data = sodium.utils.hex2bin(string.lowercased().stripHexPrefix()) else {return (nil, nil)}
+                    return (data.setLengthRight(length), Data())
+                } else {
+                    guard let data = string.data(using: .utf8) else {return (nil, nil)}
+                    if data.count > length {return (nil, nil)}
+                    return (data.setLengthRight(length), Data())
+                }
             } else if let addr = value as? EthereumAddress {
                 guard addr.isValid else {return (nil, nil)}
                 let data = addr.addressData
@@ -158,13 +164,15 @@ extension ABIElement.ParameterType.StaticType {
             if (values.count != length) {
                 return (nil, nil)
             }
-            var data = Data()
+            var heads = Data()
+            var tails = Data()
             for value in values {
                 let encoded = type.encode(value)
-                guard let head = encoded.head, let _ = encoded.tail else {return (nil, nil) }
-                data.append(head)
+                guard let head = encoded.head, let tail = encoded.tail else {return (nil, nil) }
+                heads.append(head)
+                tails.append(tail)
             }
-            return (data, Data())
+            return (heads, tails)
         default:
             return (nil, nil)
         }
@@ -232,7 +240,7 @@ extension ABIElement.ParameterType.DynamicType {
     
     func encode(_ values: [AnyObject]) -> (head:Data?, tail: Data?) {
         switch self {
-        case let .array(type):
+        case let .dynamicArray(type):
             var data = Data()
             for value in values {
                 let encoded = type.encode(value)

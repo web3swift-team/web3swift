@@ -29,6 +29,10 @@ extension String {
 }
 
 extension String {
+    func hasHexPrefix() -> Bool {
+        return self.hasPrefix("0x")
+    }
+    
     func stripHexPrefix() -> String {
         if self.hasPrefix("0x") {
             let indexStart = self.index(self.startIndex, offsetBy: 2)

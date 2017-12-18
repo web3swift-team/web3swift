@@ -339,7 +339,15 @@ class web3swiftTests: XCTestCase {
             print(abiNative)
             let hex = sodium.utils.bin2hex(result!)
             print(hex)
-            XCTAssert(result != nil, "Failed to encode ERC20")
+            XCTAssert(hex == "a9059cbb000000000000000000000000e6877a4d8806e9a9f12eb2e8561ea6c1db19978d0000000000000000000000000000000000000000000000000de0b6b3a7640000", "Failed to encode ERC20")
+            let dummyTrue = BigUInt(1).abiEncode(bits: 256)
+            let data = dummyTrue.head!
+            let decoded = method[0].decodeReturnData(data)
+            print(decoded)
+            let ret1 = decoded!["0"] as? Bool
+            let ret2 = decoded!["success"] as? Bool
+            XCTAssert(ret1 == true, "Failed to encode ERC20")
+            XCTAssert(ret2 == true, "Failed to encode ERC20")
         } catch {
             print(error)
         }
