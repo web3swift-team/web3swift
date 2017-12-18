@@ -35,6 +35,8 @@
 		81531AA01FE7C07A002192CC /* EthereumKeystoreV3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81531A9F1FE7C07A002192CC /* EthereumKeystoreV3.swift */; };
 		81531AA41FE7CD74002192CC /* ERC20abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA31FE7CD74002192CC /* ERC20abi.json */; };
 		81531AA61FE7D2CE002192CC /* keystore.ks in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA51FE7D2CE002192CC /* keystore.ks */; };
+		81531AA71FE7D8DB002192CC /* ERC20abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA31FE7CD74002192CC /* ERC20abi.json */; };
+		81531AA81FE7D8DB002192CC /* keystore.ks in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA51FE7D2CE002192CC /* keystore.ks */; };
 		818D810E1FDC1A2000663CE3 /* RLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818D810D1FDC1A2000663CE3 /* RLP.swift */; };
 		818EABDA1FDC9A5C00E013FC /* Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EABD91FDC9A5C00E013FC /* Contract.swift */; };
 		81ABBC641FD8B13000D9D501 /* secp256k1.framework in Headers */ = {isa = PBXBuildFile; fileRef = 8113D2BF1FD7E1590074282C /* secp256k1.framework */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -472,6 +474,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81531AA71FE7D8DB002192CC /* ERC20abi.json in Resources */,
+				81531AA81FE7D8DB002192CC /* keystore.ks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

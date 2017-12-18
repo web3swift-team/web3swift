@@ -407,12 +407,9 @@ class web3swiftTests: XCTestCase {
     func testKeystoreManager(){
         let testBundle = Bundle(for: type(of: self))
         let testResourcePath = testBundle.url(forResource:"keystore", withExtension: "ks")
-        print(testResourcePath)
         let testDirPath = testResourcePath?.deletingLastPathComponent()
-        let documentPath = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).last
-        print(documentPath)
         let keystoreManager = KeystoreManagerV3(testDirPath!, suffix: "ks")
-        print(keystoreManager)
+        print(keystoreManager?.wallets)
         XCTAssert(keystoreManager != nil, "Can't create keystore manager")
     }
     
