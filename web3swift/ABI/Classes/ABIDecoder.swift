@@ -100,6 +100,47 @@ extension ABIElement.ParameterType.DynamicType {
             guard let length = Int(String(BigUInt(lengthData))) else {break}
             let realData = Data(data[sliceStart+32 ..< sliceStart+32+length])
             return (totalConsumed, String(data: realData, encoding: .utf8))
+        case .dynamicArray(let type):
+            var totalConsumed = 0
+            let pointer = Data(data[0..<32])
+            totalConsumed = totalConsumed + 32
+            let originalTail = BigUInt(pointer)
+            let realTail = originalTail - tailPointer
+            guard realTail >= BigUInt(32) else {break}
+            guard let sliceStart = Int(String(realTail)) else {break}
+            let lengthData = Data(data[sliceStart ..< sliceStart+32])
+            guard let length = Int(String(BigUInt(lengthData))) else {break}
+            var returnArray = [Any]()
+            var len = 0
+            for i in 0..<length {
+                let dataSlice = data[i*32 ..< (i+1)*32]
+                let decoded = type.decode(expectedType: type, data: dataSlice, tailPointer: BigUInt(0))
+                guard let value = decoded.value, let consumed = decoded.bytesConsumed else {break}
+                len = len + consumed
+                returnArray.append(value)
+            }
+            return (totalConsumed, returnArray)
+        case .arrayOfDynamicTypes(let type, let length):
+            return (nil, nil)
+            var totalConsumed = 0
+            let pointer = Data(data[0..<32])
+            totalConsumed = totalConsumed + 32
+            let originalTail = BigUInt(pointer)
+            let realTail = originalTail - tailPointer
+            guard realTail >= BigUInt(32) else {break}
+            guard let sliceStart = Int(String(realTail)) else {break}
+            let lengthData = Data(data[sliceStart ..< sliceStart+32])
+            guard let length = Int(String(BigUInt(lengthData))) else {break}
+            var returnArray = [Any]()
+            var len = 0
+            for i in 0..<length {
+                let dataSlice = data[i*32 ..< (i+1)*32]
+                let decoded = type.decode(expectedType: type, data: dataSlice, tailPointer: BigUInt(0))
+                guard let value = decoded.value, let consumed = decoded.bytesConsumed else {break}
+                len = len + consumed
+                returnArray.append(value)
+            }
+            return (totalConsumed, returnArray)
         default:
             return (nil, nil)
         }
