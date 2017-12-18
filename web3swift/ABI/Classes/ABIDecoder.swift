@@ -27,45 +27,83 @@ extension BigInt {
 }
 
 extension ABIElement.ParameterType.StaticType {
-    func decode(expectedType: ABIElement.ParameterType.StaticType, data: Data, tailPointer: BigUInt) -> Any? {
+    func decode(expectedType: ABIElement.ParameterType.StaticType, data: Data, tailPointer: BigUInt) -> (bytesConsumed: Int?, value: Any?) {
         let sodium = Sodium()
         switch self {
         case .uint(let bits):
             let dataSlice = Data(data[0..<32])
             let biguint = BigUInt(dataSlice)
-            guard biguint.bitWidth <= bits else {return nil}
-            return biguint
+            guard biguint.bitWidth <= bits else {break}
+            return (32, biguint)
         case .int(let bits):
             let dataSlice = Data(data[0..<32])
             let bigint = BigInt.fromTwosComplement(data: dataSlice)
-            guard bigint.bitWidth <= bits else {return nil}
-            return bigint
+            guard bigint.bitWidth <= bits else {break}
+            return (32, bigint)
         case .address:
             let dataSlice = Data(data[0..<32])
-            guard Data(dataSlice[0..<12]) == Data(count: 12) else {return nil}
-            guard let hexAddress = sodium.utils.bin2hex(Data(dataSlice[12..<32])) else {return nil}
-            return EthereumAddress(hexAddress)
+            guard Data(dataSlice[0..<12]) == Data(count: 12) else {break}
+            guard let hexAddress = sodium.utils.bin2hex(Data(dataSlice[12..<32])) else {break}
+            return (32, EthereumAddress(hexAddress))
         case .bool:
             let dataSlice = Data(data[0..<32])
             let biguint = BigUInt(dataSlice)
-            guard biguint.bitWidth == 1 else {return nil}
-            return biguint == BigUInt(1)
+            guard biguint.bitWidth == 1 else {break}
+            return (32, biguint == BigUInt(1))
         case .bytes(let length):
-            guard data.count <= length / 8 else {return nil}
-            return data
+            guard data.count <= length / 8 else {break}
+            return (32, data)
         case .array(let type, let length):
-            guard data.count <= length*32 else {return nil}
+            guard data.count <= length*32 else {break}
             var returnArray = [Any]()
+            var len = 0
             for i in 0..<length {
                 let dataSlice = data[i*32 ..< (i+1)*32]
-                guard let value = type.decode(expectedType: type, data: dataSlice, tailPointer: BigUInt(0)) else {return nil}
+                let decoded = type.decode(expectedType: type, data: dataSlice, tailPointer: BigUInt(0))
+                guard let value = decoded.value, let consumed = decoded.bytesConsumed else {break}
+                len = len + consumed
                 returnArray.append(value)
             }
-            return returnArray
+            return (len, returnArray)
         default:
-            return nil
+            return (nil, nil)
         }
-        return nil
+        return (nil, nil)
+    }
+}
+
+extension ABIElement.ParameterType.DynamicType {
+    func decode(expectedType: ABIElement.ParameterType.DynamicType, data: Data, tailPointer: BigUInt) -> (bytesConsumed: Int?, value: Any?) {
+        let sodium = Sodium()
+        switch self {
+        case .bytes:
+            var totalConsumed = 0
+            let pointer = Data(data[0..<32])
+            totalConsumed = totalConsumed + 32
+            let originalTail = BigUInt(pointer)
+            let realTail = originalTail - tailPointer
+            guard realTail >= BigUInt(32) else {break}
+            guard let sliceStart = Int(String(realTail)) else {break}
+            let lengthData = Data(data[sliceStart ..< sliceStart+32])
+            guard let length = Int(String(BigUInt(lengthData))) else {break}
+            let realData = Data(data[sliceStart+32 ..< sliceStart+32+length])
+            return (totalConsumed, realData)
+        case .string:
+            var totalConsumed = 0
+            let pointer = Data(data[0..<32])
+            totalConsumed = totalConsumed + 32
+            let originalTail = BigUInt(pointer)
+            let realTail = originalTail - tailPointer
+            guard realTail >= BigUInt(32) else {break}
+            guard let sliceStart = Int(String(realTail)) else {break}
+            let lengthData = Data(data[sliceStart ..< sliceStart+32])
+            guard let length = Int(String(BigUInt(lengthData))) else {break}
+            let realData = Data(data[sliceStart+32 ..< sliceStart+32+length])
+            return (totalConsumed, String(data: realData, encoding: .utf8))
+        default:
+            return (nil, nil)
+        }
+        return (nil, nil)
     }
 }
 
@@ -80,28 +118,35 @@ extension ABIElement {
             return nil
         case .function(let function):
             guard function.outputs.count*32 <= data.count else {return nil}
-            let tailPointer = BigUInt(function.outputs.count*32)
+            var dataForProcessing = data
+            var tailPointer = BigUInt(0)
             var returnArray = [String:Any]()
             var i = 0;
             for output in function.outputs{
                 let expectedType = output.type
                 switch expectedType {
                 case .staticType(let type):
-                    guard let value = type.decode(expectedType: type, data: data, tailPointer: tailPointer) else {return nil}
+                    let decoded = type.decode(expectedType: type, data: dataForProcessing, tailPointer: BigUInt(0))
+                    guard let value = decoded.value, let consumed = decoded.bytesConsumed else {break}
                     let name = "\(i)"
                     returnArray[name] = value
                     if output.name != "" {
                         returnArray[output.name] = value
                     }
                     i = i + 1
+                    dataForProcessing = Data(dataForProcessing[consumed...])
+                    tailPointer = tailPointer + BigUInt(consumed)
                 case .dynamicType(let type):
+                    let decoded = type.decode(expectedType: type, data: dataForProcessing, tailPointer: tailPointer)
+                    guard let value = decoded.value, let consumed = decoded.bytesConsumed else {break}
                     let name = "\(i)"
-                    returnArray[name] = nil
+                    returnArray[name] = value
                     if output.name != "" {
-                        returnArray[output.name] = nil
+                        returnArray[output.name] = value
                     }
                     i = i + 1
-                    break
+                    dataForProcessing = Data(dataForProcessing[consumed...])
+                    tailPointer = tailPointer + BigUInt(consumed)
                 }
             }
             return returnArray
