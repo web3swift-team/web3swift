@@ -11,6 +11,7 @@ import XCTest
 import Sodium
 import CryptoSwift
 import BigInt
+
 @testable import web3swift
 
 class web3swiftTests: XCTestCase {

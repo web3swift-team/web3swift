@@ -1,6 +1,6 @@
 
 import Foundation
-import SECP256K1
+import secp256k1
 
 func toByteArray<T>(_ value: T) -> [UInt8] {
     var value = value

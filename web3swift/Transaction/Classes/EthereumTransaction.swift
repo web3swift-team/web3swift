@@ -8,7 +8,6 @@
 
 import Foundation
 import BigInt
-import SECP256K1
 
 struct EthereumAddress {
     var isValid: Bool {

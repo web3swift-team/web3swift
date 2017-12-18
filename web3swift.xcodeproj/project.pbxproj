@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1CD91B011FD76910007BFB45 /* web3swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CD91AFF1FD76910007BFB45 /* web3swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1CD91B321FD769A6007BFB45 /* web3swiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */; };
 		1CD91B341FD769A6007BFB45 /* web3swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift.framework */; };
 		1CDA65C11FDDFE0F0025DE71 /* web3swift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -18,15 +17,14 @@
 		1CE976BF1FDDF9F40005D4B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CE976BE1FDDF9F40005D4B0 /* Assets.xcassets */; };
 		1CE976C21FDDF9F40005D4B0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CE976C01FDDF9F40005D4B0 /* LaunchScreen.storyboard */; };
 		596FE0DC120FD38AFF91C915 /* Pods_web3swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E81592D2802B9F4E200823 /* Pods_web3swift.framework */; };
+		8104E2261FE8240300F952CB /* secp256k1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8104E2251FE8240300F952CB /* secp256k1.framework */; };
 		8113D2C41FD7E1590074282C /* SodiumExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B01FD7E1590074282C /* SodiumExtensions.swift */; };
 		8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */; };
 		8113D2C71FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */; };
 		8113D2C81FD7E1590074282C /* PrivateKeyHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B41FD7E1590074282C /* PrivateKeyHelpers.swift */; };
-		8113D2C91FD7E1590074282C /* KeystoreManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8113D2B61FD7E1590074282C /* KeystoreManager.h */; };
 		8113D2CA1FD7E1590074282C /* KeystoreManagerV3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B81FD7E1590074282C /* KeystoreManagerV3.swift */; };
 		8113D2CB1FD7E1590074282C /* ABIEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2BB1FD7E1590074282C /* ABIEncoder.swift */; };
 		8113D2CC1FD7E1590074282C /* ABIDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2BC1FD7E1590074282C /* ABIDecoder.swift */; };
-		8113D2CD1FD7E1590074282C /* secp256k1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8113D2BF1FD7E1590074282C /* secp256k1.framework */; };
 		8113D2CE1FD7E1590074282C /* EthereumTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2C31FD7E1590074282C /* EthereumTransaction.swift */; };
 		8113D31A1FD7F4C80074282C /* ABITypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D3191FD7F4C80074282C /* ABITypes.swift */; };
 		8113D31C1FD7F8980074282C /* ABIRecordParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D31B1FD7F8980074282C /* ABIRecordParser.swift */; };
@@ -37,9 +35,10 @@
 		81531AA61FE7D2CE002192CC /* keystore.ks in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA51FE7D2CE002192CC /* keystore.ks */; };
 		81531AA71FE7D8DB002192CC /* ERC20abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA31FE7CD74002192CC /* ERC20abi.json */; };
 		81531AA81FE7D8DB002192CC /* keystore.ks in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA51FE7D2CE002192CC /* keystore.ks */; };
+		81531AAF1FE82292002192CC /* module.modulemap in Headers */ = {isa = PBXBuildFile; fileRef = 8113D2C01FD7E1590074282C /* module.modulemap */; settings = {ATTRIBUTES = (Private, ); }; };
+		81531AB01FE822A6002192CC /* web3swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CD91AFF1FD76910007BFB45 /* web3swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		818D810E1FDC1A2000663CE3 /* RLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818D810D1FDC1A2000663CE3 /* RLP.swift */; };
 		818EABDA1FDC9A5C00E013FC /* Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EABD91FDC9A5C00E013FC /* Contract.swift */; };
-		81ABBC641FD8B13000D9D501 /* secp256k1.framework in Headers */ = {isa = PBXBuildFile; fileRef = 8113D2BF1FD7E1590074282C /* secp256k1.framework */; settings = {ATTRIBUTES = (Public, ); }; };
 		81DDECCF1FDF004E0063684A /* Web3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECCE1FDF004E0063684A /* Web3.swift */; };
 		D66F51D37CD9A4CE6B054621 /* ChooseFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F55C8F02BEEE0F7638898 /* ChooseFilesViewController.swift */; };
 		E82DD6EACF6933D0D3978EA0 /* Pods_web3swiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */; };
@@ -93,15 +92,14 @@
 		1CE976C11FDDF9F40005D4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1CE976C31FDDF9F40005D4B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D07F714D1FF1408DBC01EBB /* Pods-web3swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift/Pods-web3swift.release.xcconfig"; sourceTree = "<group>"; };
+		8104E2251FE8240300F952CB /* secp256k1.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = secp256k1.framework; sourceTree = "<group>"; };
 		8113D2B01FD7E1590074282C /* SodiumExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SodiumExtensions.swift; sourceTree = "<group>"; };
 		8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibSecp256k1Extension.swift; sourceTree = "<group>"; };
 		8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryLiteralJSONSerializer.swift; sourceTree = "<group>"; };
 		8113D2B41FD7E1590074282C /* PrivateKeyHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateKeyHelpers.swift; sourceTree = "<group>"; };
-		8113D2B61FD7E1590074282C /* KeystoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeystoreManager.h; sourceTree = "<group>"; };
 		8113D2B81FD7E1590074282C /* KeystoreManagerV3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeystoreManagerV3.swift; sourceTree = "<group>"; };
 		8113D2BB1FD7E1590074282C /* ABIEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ABIEncoder.swift; sourceTree = "<group>"; };
 		8113D2BC1FD7E1590074282C /* ABIDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ABIDecoder.swift; sourceTree = "<group>"; };
-		8113D2BF1FD7E1590074282C /* secp256k1.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = secp256k1.framework; sourceTree = "<group>"; };
 		8113D2C01FD7E1590074282C /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		8113D2C31FD7E1590074282C /* EthereumTransaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EthereumTransaction.swift; sourceTree = "<group>"; };
 		8113D2FF1FD7F30F0074282C /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
@@ -127,7 +125,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				596FE0DC120FD38AFF91C915 /* Pods_web3swift.framework in Frameworks */,
-				8113D2CD1FD7E1590074282C /* secp256k1.framework in Frameworks */,
+				8104E2261FE8240300F952CB /* secp256k1.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,7 +243,6 @@
 		8113D2B51FD7E1590074282C /* KeystoreManager */ = {
 			isa = PBXGroup;
 			children = (
-				8113D2B61FD7E1590074282C /* KeystoreManager.h */,
 				8113D2B71FD7E1590074282C /* Classes */,
 			);
 			path = KeystoreManager;
@@ -283,18 +280,10 @@
 		8113D2BD1FD7E1590074282C /* secp256k1 */ = {
 			isa = PBXGroup;
 			children = (
+				8104E2251FE8240300F952CB /* secp256k1.framework */,
 				8113D2C01FD7E1590074282C /* module.modulemap */,
-				8113D2BE1FD7E1590074282C /* framework */,
 			);
 			path = secp256k1;
-			sourceTree = "<group>";
-		};
-		8113D2BE1FD7E1590074282C /* framework */ = {
-			isa = PBXGroup;
-			children = (
-				8113D2BF1FD7E1590074282C /* secp256k1.framework */,
-			);
-			path = framework;
 			sourceTree = "<group>";
 		};
 		8113D2C11FD7E1590074282C /* Transaction */ = {
@@ -349,9 +338,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8113D2C91FD7E1590074282C /* KeystoreManager.h in Headers */,
-				81ABBC641FD8B13000D9D501 /* secp256k1.framework in Headers */,
-				1CD91B011FD76910007BFB45 /* web3swift.h in Headers */,
+				81531AB01FE822A6002192CC /* web3swift.h in Headers */,
+				81531AAF1FE82292002192CC /* module.modulemap in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -802,6 +790,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/web3swift/secp256k1/framework",
+					"$(PROJECT_DIR)/web3swift/secp256k1",
 				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(PODS_ROOT)/libsodium/src/libsodium/include/sodium\"",
@@ -836,6 +825,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/web3swift/secp256k1/framework",
+					"$(PROJECT_DIR)/web3swift/secp256k1",
 				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(PODS_ROOT)/libsodium/src/libsodium/include/sodium\"",
@@ -914,10 +904,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/web3swift/secp256k1/framework",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "web3Swift-Demo/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "BF.web3Swift-Demo";
@@ -937,10 +924,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/web3swift/secp256k1/framework",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "web3Swift-Demo/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "BF.web3Swift-Demo";

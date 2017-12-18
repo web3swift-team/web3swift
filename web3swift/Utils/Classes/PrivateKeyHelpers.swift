@@ -9,7 +9,7 @@
 import Foundation
 import Sodium
 import CryptoSwift
-import SECP256K1
+import secp256k1
 
 func privateToPublic(_ privateKey: Data, compressed: Bool = false) -> Data? {
     guard let publicKey = SECP256K1.privateToPublic(privateKey:  privateKey, compressed: compressed) else {return nil}

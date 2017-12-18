@@ -7,7 +7,7 @@
 //
 
 import UIKit
-//import web3swift
+import web3swift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
