@@ -45,6 +45,13 @@ class ViewController: UIViewController {
                     let intermediate = contract?.method("name", parameters:parameters,  options: options)
                     let result = try await((intermediate?.call(options: options))!)
                     print(result)
+                    
+                    // Sending pseudo-example:
+//                    let ks = EthereumKeystoreV3()
+//                    var tx = intermediate?.transaction
+//                    try ks.signTXWithPrivateKey(transaction:tx, password: "BANKEXFOUNDATION")
+//                    let res = try await((intermediate?.send())!)
+//                    print(res)
                 }
                 catch{
                     print(error)

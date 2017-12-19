@@ -44,10 +44,10 @@ extension web3 {
         }
         
         public struct transactionIntermediate{
-            var transaction:EthereumTransaction
-            var provider: Web3Provider
-            var contract: Contract
-            var method: String
+            public var transaction:EthereumTransaction
+            public var provider: Web3Provider
+            public var contract: Contract
+            public var method: String
             
             public func send(network: Networks = .Mainnet) -> Promise<[String:Any]?> {
                 return async {
