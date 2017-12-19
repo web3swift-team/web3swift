@@ -11,7 +11,7 @@ import Sodium
 import CryptoSwift
 import Foundation
 
-public struct KdfParamsV3: Decodable, Encodable {
+struct KdfParamsV3: Decodable, Encodable {
     var salt: String
     var dklen: Int
     var n: Int?
@@ -21,11 +21,11 @@ public struct KdfParamsV3: Decodable, Encodable {
     var prf: String?
 }
 
-public struct CipherParamsV3: Decodable, Encodable {
+struct CipherParamsV3: Decodable, Encodable {
     var iv: String
 }
 
-public struct CryptoParamsV3: Decodable, Encodable {
+struct CryptoParamsV3: Decodable, Encodable {
     var ciphertext: String
     var cipher: String
     var cipherparams: CipherParamsV3
@@ -35,7 +35,7 @@ public struct CryptoParamsV3: Decodable, Encodable {
     var version: String?
 }
 
-public struct KeystoreParamsV3: Decodable, Encodable {
+struct KeystoreParamsV3: Decodable, Encodable {
     var address: String?
     var crypto: CryptoParamsV3
     var id: String?
@@ -51,9 +51,9 @@ enum EthereumKeystoreV3Error: Error {
 
 public struct EthereumKeystoreV3 {
     var keystoreParams: KeystoreParamsV3?
-    var address: EthereumAddress?
+    public var address: EthereumAddress?
     
-    init?(_ jsonString: String) throws {
+    public init?(_ jsonString: String) throws {
         let lowercaseJSON = jsonString.lowercased()
         guard let jsonData = lowercaseJSON.data(using: .utf8) else {return nil}
         guard let keystoreParams = try? JSONDecoder().decode(KeystoreParamsV3.self, from: jsonData) else {return nil}
@@ -65,17 +65,27 @@ public struct EthereumKeystoreV3 {
         }
     }
     
-    init? (password: String = "BANKEXFOUNDATION") throws {
+    public init?(_ jsonData: Data) throws {
+        guard let keystoreParams = try? JSONDecoder().decode(KeystoreParamsV3.self, from: jsonData) else {return nil}
+        if (keystoreParams.version != 3) {return nil}
+        if (keystoreParams.crypto.version != nil && keystoreParams.crypto.version != "1") {return nil}
+        self.keystoreParams = keystoreParams
+        if keystoreParams.address != nil {
+            self.address = EthereumAddress(keystoreParams.address!)
+        }
+    }
+    
+    public init? (password: String = "BANKEXFOUNDATION") throws {
         guard let newPrivateKey = SECP256K1.generatePrivateKey() else {return nil}
         try encryptDataToStorage(password, keyData: newPrivateKey)
     }
     
-    init? (privateKey: Data, password: String = "BANKEXFOUNDATION") throws {
+    public init? (privateKey: Data, password: String = "BANKEXFOUNDATION") throws {
         guard privateKey.count == 32 else {return nil}
         try encryptDataToStorage(password, keyData: privateKey)
     }
     
-    func signTXWithPrivateKey(transaction:EthereumTransaction, password: String) throws -> EthereumTransaction? {
+    public func signTXWithPrivateKey(transaction:EthereumTransaction, password: String) throws -> EthereumTransaction? {
         guard let pk = try? self.getKeyData(password) else {return nil}
         guard var privateKey = pk else {return nil}
         let sodium = Sodium()
@@ -85,7 +95,7 @@ public struct EthereumKeystoreV3 {
         return tx
     }
     
-    func signHashWithPrivateKey(hash: Data, password: String) throws -> Data? {
+    public func signHashWithPrivateKey(hash: Data, password: String) throws -> Data? {
         guard let pk = try? self.getKeyData(password) else {return nil}
         guard var privateKey = pk else {return nil}
         let sodium = Sodium()
@@ -94,7 +104,7 @@ public struct EthereumKeystoreV3 {
         return compressedSignature
     }
     
-//    func signDataWithPrivateKey(data: Data, password: String) throws -> Data? {
+//    public func signDataWithPrivateKey(data: Data, password: String) throws -> Data? {
 //        guard let pk = try? self.getKeyData(password) else {return nil}
 //        guard var privateKey = pk else {return nil}
 //        let sodium = Sodium()
@@ -103,7 +113,7 @@ public struct EthereumKeystoreV3 {
 //        return compressedSignature
 //    }
     
-    mutating func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int=32, N: Int = 262144, R: Int = 8, P: Int = 1) throws {
+    public mutating func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int=32, N: Int = 262144, R: Int = 8, P: Int = 1) throws {
         if (keyData == nil) {
             throw EthereumKeystoreV3Error.encryptionError("Encryption without key data")
         }
@@ -130,14 +140,14 @@ public struct EthereumKeystoreV3 {
         self.keystoreParams = keystoreparams
     }
     
-    mutating func regenerate(oldPassword: String, newPassword: String, dkLen: Int=32, N: Int = 262144, R: Int = 8, P: Int = 1) throws {
+    public mutating func regenerate(oldPassword: String, newPassword: String, dkLen: Int=32, N: Int = 262144, R: Int = 8, P: Int = 1) throws {
         let sodium = Sodium()
         var keyData = try self.getKeyData(oldPassword)
         defer {sodium.utils.zero(&keyData!)}
         try self.encryptDataToStorage(newPassword, keyData: keyData!)
     }
     
-    func getKeyData(_ password: String? = nil) throws -> Data? {
+    fileprivate func getKeyData(_ password: String? = nil) throws -> Data? {
         if (password == nil) {
             return nil
         }

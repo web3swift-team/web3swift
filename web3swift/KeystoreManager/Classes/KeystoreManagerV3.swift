@@ -8,9 +8,8 @@
 
 import Foundation
 
-
 public struct KeystoreManagerV3{
-    var wallets:[String:EthereumKeystoreV3] {
+    public var wallets:[String:EthereumKeystoreV3] {
         get {
             var toReturn = [String:EthereumKeystoreV3]()
             for keystore in _keystores {
@@ -24,7 +23,7 @@ public struct KeystoreManagerV3{
     }
     var _keystores:[EthereumKeystoreV3] = [EthereumKeystoreV3]()
     
-    init?(_ path: URL, suffix: String?) {
+    public init?(_ path: URL, suffix: String?) {
         let fileManager = FileManager.default
         var isDir : ObjCBool = true
         let err = fileManager.fileExists(atPath: path.absoluteString, isDirectory: &isDir)

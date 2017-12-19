@@ -15,12 +15,12 @@ extension Web3 {
 
 extension Web3.Utils {
     
-    static func privateToPublic(_ privateKey: Data, compressed: Bool = false) -> Data? {
+    public static func privateToPublic(_ privateKey: Data, compressed: Bool = false) -> Data? {
         guard let publicKey = SECP256K1.privateToPublic(privateKey:  privateKey, compressed: compressed) else {return nil}
         return publicKey
     }
     
-    static func publicToAddressData(_ publicKey: Data) -> Data? {
+    public static func publicToAddressData(_ publicKey: Data) -> Data? {
         var stipped = publicKey
         if (stipped.count == 65) {
             if (stipped[0] != 4) {
@@ -36,19 +36,19 @@ extension Web3.Utils {
         return addressData
     }
     
-    static func publicToAddress(_ publicKey: Data) -> EthereumAddress? {
+    public static func publicToAddress(_ publicKey: Data) -> EthereumAddress? {
         guard let addressData = Web3.Utils.publicToAddressData(publicKey) else {return nil}
         let address = addressData.toHexString().addHexPrefix().lowercased()
         return EthereumAddress(address)
     }
     
-    static func publicToAddressString(_ publicKey: Data) -> String? {
+    public static func publicToAddressString(_ publicKey: Data) -> String? {
         guard let addressData = Web3.Utils.publicToAddressData(publicKey) else {return nil}
         let address = addressData.toHexString().addHexPrefix().lowercased()
         return address
     }
     
-    static func addressDataToString(_ addressData: Data) -> String {
+    public static func addressDataToString(_ addressData: Data) -> String {
         return addressData.toHexString().addHexPrefix().lowercased()
     }
 }
