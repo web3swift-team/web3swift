@@ -11,7 +11,7 @@ import Sodium
 import BigInt
 
 extension Data {
-    func setLenfthLeft(_ toBytes: Int, isNegative:Bool = false ) -> Data? {
+    func setLengthLeft(_ toBytes: Int, isNegative:Bool = false ) -> Data? {
         let existingLength = self.count;
         if (existingLength == toBytes) {
             return Data(self)
@@ -82,7 +82,7 @@ extension BigUInt {
     func abiEncode(bits: Int) -> (head:Data?, tail: Data?) {
         let data = self.serialize()
         let paddedLength = Int(ceil((Double(bits)/8.0)))
-        let padded = data.setLenfthLeft(paddedLength)
+        let padded = data.setLengthLeft(paddedLength)
         return (padded, Data())
     }
 }
@@ -92,7 +92,7 @@ extension BigInt {
         let isNegative = self >= (BigInt(0))
         let data = self.toTwosComplement()
         let paddedLength = Int(ceil((Double(bits)/8.0)))
-        let padded = data.setLenfthLeft(paddedLength, isNegative: isNegative)
+        let padded = data.setLengthLeft(paddedLength, isNegative: isNegative)
         return (padded, Data())
     }
 }
@@ -119,13 +119,13 @@ extension ABIElement.ParameterType.StaticType {
         case .address:
             if let string = value as? String {
                 guard let data = sodium.utils.hex2bin(string.lowercased().stripHexPrefix()) else {return (nil, nil)}
-                return (data.setLenfthLeft(32), Data())
+                return (data.setLengthLeft(32), Data())
             } else if let address = value as? EthereumAddress {
                 guard address.isValid else {return (nil, nil)}
                 let data = address.addressData
-                return (data.setLenfthLeft(32), Data())
+                return (data.setLengthLeft(32), Data())
             } else if let data = value as? Data {
-                return (data.setLenfthLeft(32), Data())
+                return (data.setLengthLeft(32), Data())
             }
         case .bool:
             if let bool = value as? Bool {

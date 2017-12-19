@@ -10,7 +10,7 @@ import Foundation
 
 //fileprivate typealias ParameterType = ABIElement.ParameterType
 
-enum ParsingError: Error {
+public enum ParsingError: Error {
     case invalidJsonFile
     case elementTypeInvalid
     case elementNameInvalid
@@ -38,7 +38,7 @@ fileprivate enum ElementType: String {
 
 
 extension ABIRecord {
-    func parse() throws -> ABIElement {
+    public func parse() throws -> ABIElement {
         let typeString = self.type != nil ? self.type! : "function"
         guard let type = ElementType(rawValue: typeString) else {
             throw ParsingError.elementTypeInvalid

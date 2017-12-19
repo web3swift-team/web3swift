@@ -9,31 +9,31 @@
 import Foundation
 import BigInt
 
-struct EthereumAddress {
-    var isValid: Bool {
+public struct EthereumAddress {
+    public var isValid: Bool {
         get {
             return (self.addressData.count == 20);
         }
     }
     var _address: String
     
-    var addressData: Data {
+    public var addressData: Data {
         get {
             let dataArray = Array<UInt8>(hex: _address.lowercased().stripHexPrefix())
-            guard let d = Data(dataArray).setLenfthLeft(20)
+            guard let d = Data(dataArray).setLengthLeft(20)
                 else {
                     return Data()
             }
             return d
         }
     }
-    var address:String {
+    public var address:String {
         get {
             return EthereumAddress.toChecksumAddress(_address)!
         }
     }
     
-    static func toChecksumAddress(_ addr:String) -> String? {
+    public static func toChecksumAddress(_ addr:String) -> String? {
         let address = addr.lowercased().stripHexPrefix()
         guard let hash = address.data(using: .ascii)?.sha3(.keccak256).toHexString().stripHexPrefix() else {return nil}
         var ret = "0x"
@@ -53,22 +53,23 @@ struct EthereumAddress {
         return ret
     }
     
-    init(_ addressString:String) {
+    public init(_ addressString:String) {
         _address = addressString
     }
 }
 
 
-struct EthereumTransaction {
+public struct EthereumTransaction {
     var nonce: BigUInt
     var gasprice: BigUInt = BigUInt(3000000000)
-    var startgas: BigUInt = BigUInt(0)
+    var gasLimit: BigUInt = BigUInt(0)
     var to: EthereumAddress
     var value: BigUInt
     var data: Data
     var v: BigUInt = BigUInt(1)
     var r: BigUInt = BigUInt(0)
     var s: BigUInt = BigUInt(0)
+    
     var chainID: BigUInt? {
         get{
             if (self.r == BigUInt(0) && self.s == BigUInt(0)) {
@@ -83,40 +84,74 @@ struct EthereumTransaction {
             self.chainID = newChainID
         }
     }
+    var sender: EthereumAddress? {
+        get {
+            if (self.r == BigUInt(0) && self.s == BigUInt(0)) {
+                return nil
+            }
+            var normalizedV:BigUInt = BigUInt(0)
+            if (chainID != nil && chainID != BigUInt(0)) {
+                normalizedV = v - BigUInt(35) - chainID! - chainID!
+            } else {
+                normalizedV = v - BigUInt(25)
+            }
+            guard let vData = normalizedV.serialize().setLengthLeft(1) else {return nil}
+            guard let rData = r.serialize().setLengthLeft(32) else {return nil}
+            guard let sData = s.serialize().setLengthLeft(32) else {return nil}
+            guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else {return nil}
+            guard let hash = self.hash(forSignature: true, chainID: self.chainID) else {return nil}
+            guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
+            return Web3.Utils.publicToAddress(publicKey)
+        }
+    }
+    var txhash: String? {
+        get{
+            guard self.sender != nil else {return nil}
+            guard let hash = self.hash(forSignature: false, chainID: self.chainID) else {return nil}
+            let txid = hash.toHexString().addHexPrefix().lowercased()
+            return txid
+        }
+    }
+    
+    var txid: String? {
+        get {
+            return self.txhash
+        }
+    }
     
     func encode(forSignature:Bool = false, chainID: BigUInt? = nil) -> Data? {
         if (forSignature) {
             if chainID != nil {
-                let fields = [self.nonce, self.gasprice, self.startgas, self.to.addressData, self.value, self.data, chainID!, BigUInt(0), BigUInt(0)] as [AnyObject]
+                let fields = [self.nonce, self.gasprice, self.gasLimit, self.to.addressData, self.value, self.data, chainID!, BigUInt(0), BigUInt(0)] as [AnyObject]
                 return RLP.encode(fields)
             }
             else {
-                let fields = [self.nonce, self.gasprice, self.startgas, self.to.addressData, self.value, self.data] as [AnyObject]
+                let fields = [self.nonce, self.gasprice, self.gasLimit, self.to.addressData, self.value, self.data] as [AnyObject]
                 return RLP.encode(fields)
             }
         } else {
-            let fields = [self.nonce, self.gasprice, self.startgas, self.to.addressData, self.value, self.data, self.v, self.r, self.s] as [AnyObject]
+            let fields = [self.nonce, self.gasprice, self.gasLimit, self.to.addressData, self.value, self.data, self.v, self.r, self.s] as [AnyObject]
             return RLP.encode(fields)
         }
     }
     
-    func encodeAsDictionary(from: EthereumAddress) -> [String: String]? {
-        var returnDictionary = [String:String]()
+    func encodeAsDictionary(from: EthereumAddress) -> TransactionParameters? {
         if (!from.isValid) {
             return nil
         }
-        returnDictionary["from"] = from.address
-        returnDictionary["to"] = self.to.address.lowercased()
-        let gasEncoding = self.startgas.abiEncode(bits: 256)
-        returnDictionary["gas"] = gasEncoding.head?.toHexString().addHexPrefix().stripLeadingZeroes()
+        
+        var params = TransactionParameters(from: from.address.lowercased(),
+                                           to: self.to.address.lowercased())
+        let gasEncoding = self.gasLimit.abiEncode(bits: 256)
+        params.gas = gasEncoding.head?.toHexString().addHexPrefix().stripLeadingZeroes()
         let gasPriceEncoding = self.gasprice.abiEncode(bits: 256)
-        returnDictionary["gasPrice"] = gasPriceEncoding.head?.toHexString().addHexPrefix().stripLeadingZeroes()
+        params.gasPrice = gasPriceEncoding.head?.toHexString().addHexPrefix().stripLeadingZeroes()
         let valueEncoding = self.value.abiEncode(bits: 256)
-        returnDictionary["value"] = valueEncoding.head?.toHexString().addHexPrefix().stripLeadingZeroes()
+        params.value = valueEncoding.head?.toHexString().addHexPrefix().stripLeadingZeroes()
         if (self.data != Data()) {
-            returnDictionary["data"] = self.data.toHexString().addHexPrefix()
+            params.data = self.data.toHexString().addHexPrefix()
         }
-        return returnDictionary
+        return params
     }
     
     func hash(forSignature:Bool = false, chainID: BigUInt? = nil) -> Data? {
@@ -137,5 +172,33 @@ struct EthereumTransaction {
         self.r = BigUInt(Data(unmarshalledSignature.r))
         self.s = BigUInt(Data(unmarshalledSignature.s))
         return true
+    }
+    
+    static func createRequest(method: String, transaction: EthereumTransaction, onBlock: String = "latest", options: Web3Options?) -> JSONRPCrequest? {
+        var request = JSONRPCrequest()
+        request.method = method
+        guard let from = options?.from else {return nil}
+        guard let txParams = transaction.encodeAsDictionary(from: from) else {return nil}
+        let params = [txParams, onBlock] as Array<Encodable>
+        let pars = JSONRPCparams(params: params)
+        guard let encoded = try? JSONEncoder().encode(pars) else {return nil}
+        guard let serialized = String(data: encoded, encoding: .utf8) else {return nil}
+        request.params = serialized
+        return request
+    }
+    
+    static func createRawTransaction(transaction: EthereumTransaction) -> JSONRPCrequest? {
+        guard transaction.sender != nil else {return nil}
+        guard let encodedData = transaction.encode() else {return nil}
+        let hex = encodedData.toHexString().addHexPrefix().lowercased()
+        var request = JSONRPCrequest()
+        request.method = "eth_sendRawTransaction"
+        let params = [hex] as Array<Encodable>
+        let pars = JSONRPCparams(params: params)
+        guard let encoded = try? JSONEncoder().encode(pars) else {return nil}
+        guard let serialized = String(data: encoded, encoding: .utf8) else {return nil}
+        print(serialized)
+        request.params = serialized
+        return request
     }
 }

@@ -74,7 +74,7 @@ extension ABIElement.ParameterType.StaticType {
 
 extension ABIElement.ParameterType.DynamicType {
     func decode(expectedType: ABIElement.ParameterType.DynamicType, data: Data, tailPointer: BigUInt) -> (bytesConsumed: Int?, value: Any?) {
-        let sodium = Sodium()
+//        let sodium = Sodium()
         switch self {
         case .bytes:
             var totalConsumed = 0
@@ -94,7 +94,10 @@ extension ABIElement.ParameterType.DynamicType {
             totalConsumed = totalConsumed + 32
             let originalTail = BigUInt(pointer)
             let realTail = originalTail - tailPointer
-            guard realTail >= BigUInt(32) else {break}
+            if realTail == BigUInt(0) {
+                return (32, "")
+            }
+//            guard realTail >= BigUInt(32) else {break}
             guard let sliceStart = Int(String(realTail)) else {break}
             let lengthData = Data(data[sliceStart ..< sliceStart+32])
             guard let length = Int(String(BigUInt(lengthData))) else {break}

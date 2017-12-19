@@ -76,6 +76,42 @@ extension SECP256K1 {
         return serializedPubkey
     }
     
+    static func recoverPublicKey(hash: Data, signature: Data) -> Data? {
+        guard hash.count == 32, signature.count == 65 else {return nil}
+        let context = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_VERIFY));
+        defer {secp256k1_context_destroy(context!)}
+        var uncompressed: secp256k1_ecdsa_recoverable_signature = secp256k1_ecdsa_recoverable_signature();
+        let compactSignature = Data(signature[0..<64])
+        let v = Int32(signature[64])
+        var result = compactSignature.withUnsafeBytes { (compactPointer:UnsafePointer<UInt8>) -> Int32 in
+                    let res = secp256k1_ecdsa_recoverable_signature_parse_compact( context!, UnsafeMutablePointer<secp256k1_ecdsa_recoverable_signature>(&uncompressed), compactPointer, v)
+                    return res
+                }
+        if result == 0 {
+            return nil
+        }
+        var pubKey: secp256k1_pubkey = secp256k1_pubkey()
+        result =  hash.withUnsafeBytes { (hashPointer:UnsafePointer<UInt8>) -> Int32 in
+            withUnsafePointer(to: &uncompressed) { (sigPointer:UnsafePointer<secp256k1_ecdsa_recoverable_signature>) -> Int32 in
+                let res =  secp256k1_ecdsa_recover(context!, UnsafeMutablePointer<secp256k1_pubkey>(&pubKey),
+                    sigPointer, hashPointer)
+                return res
+            }
+        }
+        if result == 0 {
+            return nil
+        }
+        let buffer = toByteArray(pubKey)
+        let pubKeyData = Data(buffer)
+        return pubKeyData
+    }
+    
+    static func recoverSender(hash: Data, signature: Data) -> EthereumAddress? {
+        guard let pubKey = SECP256K1.recoverPublicKey(hash:hash, signature:signature) else {return nil}
+        let addressString = pubKey.toHexString().addHexPrefix().lowercased()
+        return EthereumAddress(addressString)
+    }
+    
     static func verifyPrivateKey(privateKey: Data) -> Bool {
         if (privateKey.count != 32) {return false}
         let context = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_SIGN|SECP256K1_CONTEXT_VERIFY));
@@ -107,6 +143,22 @@ extension SECP256K1 {
         let r = Array(bytes[0...31])
         let s = Array(bytes[32...63])
         return UnmarshaledSignature(v: bytes[64], r: r, s: s)
+    }
+    
+    static func marshalSignature(v: UInt8, r: [UInt8] = [UInt8](repeating: 0, count: 32), s: [UInt8] = [UInt8](repeating: 0, count: 32)) -> Data? {
+        guard r.count == 32, s.count == 32 else {return nil}
+        var completeSignature = Data(bytes: r)
+        completeSignature.append(Data(bytes: s))
+        completeSignature.append(Data(bytes: [v]))
+        return completeSignature
+    }
+    
+    static func marshalSignature(v: Data, r: Data, s: Data) -> Data? {
+        guard r.count == 32, s.count == 32 else {return nil}
+        var completeSignature = Data(r)
+        completeSignature.append(s)
+        completeSignature.append(v)
+        return completeSignature
     }
 }
 

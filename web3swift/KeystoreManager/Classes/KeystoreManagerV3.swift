@@ -9,7 +9,7 @@
 import Foundation
 
 
-struct KeystoreManagerV3{
+public struct KeystoreManagerV3{
     var wallets:[String:EthereumKeystoreV3] {
         get {
             var toReturn = [String:EthereumKeystoreV3]()

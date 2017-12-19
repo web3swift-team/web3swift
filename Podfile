@@ -13,4 +13,8 @@ target 'web3swift' do
   target 'web3swiftTests' do
     inherit! :search_paths
   end
+  target 'web3Swift-Demo' do
+    inherit! :search_paths
+  end
+
 end

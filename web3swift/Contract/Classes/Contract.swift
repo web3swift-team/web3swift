@@ -9,7 +9,7 @@
 import Foundation
 import BigInt
 
-struct Contract {
+public struct Contract {
     var address: EthereumAddress? = nil
     var _abi: [ABIElement]
     var methods: [String: ABIElement] {
@@ -28,16 +28,17 @@ struct Contract {
     var options: Web3Options = Web3Options()
     var chainID: BigUInt = BigUInt(1)
     
-    init(abi: [ABIElement]) {
+    public init(abi: [ABIElement]) {
         _abi = abi
     }
     
-    init(abi: [ABIElement], at: EthereumAddress) {
+    public init(abi: [ABIElement], at: EthereumAddress) {
         _abi = abi
         address = at
     }
     
-    func send(method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData:Data = Data(), options: Web3Options?, toAddress:EthereumAddress? = nil) -> EthereumTransaction? {
+    
+    public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData: Data = Data(), options: Web3Options?, toAddress:EthereumAddress? = nil) -> EthereumTransaction? {
         var to:EthereumAddress
         if let toInOptions = toAddress, toInOptions.isValid {
             to = toInOptions
@@ -75,7 +76,7 @@ struct Contract {
         }
         
         if (method == "fallback") {
-            let transaction = EthereumTransaction(nonce: nonce, gasprice: gasPrice, startgas: gas, to: to, value: value, data: extraData, v: chainID, r: BigUInt(0), s: BigUInt(0))
+            let transaction = EthereumTransaction(nonce: nonce, gasprice: gasPrice, gasLimit: gas, to: to, value: value, data: extraData, v: chainID, r: BigUInt(0), s: BigUInt(0))
             return transaction
         }
         let foundMethod = self.methods.filter { (key, value) -> Bool in
@@ -84,7 +85,10 @@ struct Contract {
         guard foundMethod.count == 1 else {return nil}
         let abiMethod = foundMethod[method]
         guard let encodedData = abiMethod?.encodeParameters(parameters) else {return nil}
-        let transaction = EthereumTransaction(nonce: nonce, gasprice: gasPrice, startgas: gas, to: to, value: value, data: encodedData, v: chainID, r: BigUInt(0), s: BigUInt(0))
+        let transaction = EthereumTransaction(nonce: nonce, gasprice: gasPrice, gasLimit: gas, to: to, value: value, data: encodedData, v: chainID, r: BigUInt(0), s: BigUInt(0))
         return transaction
     }
+    
+    
+    
 }

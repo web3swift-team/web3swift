@@ -75,14 +75,33 @@ public struct EthereumKeystoreV3 {
         try encryptDataToStorage(password, keyData: privateKey)
     }
     
-    func signTXWithPrivateKey(transaction:EthereumTransaction, privateKey: Data) throws -> Data? {
-        return Data()
+    func signTXWithPrivateKey(transaction:EthereumTransaction, password: String) throws -> EthereumTransaction? {
+        guard let pk = try? self.getKeyData(password) else {return nil}
+        guard var privateKey = pk else {return nil}
+        let sodium = Sodium()
+        defer {sodium.utils.zero(&privateKey)}
+        var tx = transaction
+        guard tx.sign(privateKey: privateKey) else {return nil}
+        return tx
     }
     
-    func signHashWithPrivateKey(hash: Data, privateKey: Data) throws -> Data? {
+    func signHashWithPrivateKey(hash: Data, password: String) throws -> Data? {
+        guard let pk = try? self.getKeyData(password) else {return nil}
+        guard var privateKey = pk else {return nil}
+        let sodium = Sodium()
+        defer {sodium.utils.zero(&privateKey)}
         let (compressedSignature, _) = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
         return compressedSignature
     }
+    
+//    func signDataWithPrivateKey(data: Data, password: String) throws -> Data? {
+//        guard let pk = try? self.getKeyData(password) else {return nil}
+//        guard var privateKey = pk else {return nil}
+//        let sodium = Sodium()
+//        defer {sodium.utils.zero(&privateKey)}
+//        let (compressedSignature, _) = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
+//        return compressedSignature
+//    }
     
     mutating func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int=32, N: Int = 262144, R: Int = 8, P: Int = 1) throws {
         if (keyData == nil) {
@@ -105,8 +124,8 @@ public struct EthereumKeystoreV3 {
         let kdfparams = KdfParamsV3(salt: sodium.utils.bin2hex(saltData)!, dklen: dkLen, n: N, p: P, r: R, c: nil, prf: nil)
         let cipherparams = CipherParamsV3(iv: sodium.utils.bin2hex(IV)!)
         let crypto = CryptoParamsV3(ciphertext: sodium.utils.bin2hex(encryptedKeyData)!, cipher: "aes-128-cbc", cipherparams: cipherparams, kdf: "scrypt", kdfparams: kdfparams, mac: sodium.utils.bin2hex(mac)!, version: nil)
-        let pubKey = privateToPublic(keyData!)
-        let address = sodium.utils.bin2hex(publicToAddress(pubKey!)!)
+        let pubKey = Web3.Utils.privateToPublic(keyData!)
+        let address = Web3.Utils.publicToAddress(pubKey!)?.address.lowercased()
         let keystoreparams = KeystoreParamsV3(address: address, crypto: crypto, id: UUID().uuidString.lowercased(), version: 3)
         self.keystoreParams = keystoreparams
     }

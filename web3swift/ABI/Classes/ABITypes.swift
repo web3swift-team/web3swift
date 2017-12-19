@@ -9,18 +9,18 @@
 import Foundation
 
 // JSON Decoding
-struct ABIInput: Decodable {
+public struct ABIInput: Decodable {
     var name: String?
     var type: String
     var indexed: Bool?
 }
 
-struct ABIOutput: Decodable {
+public struct ABIOutput: Decodable {
     var name: String?
     var type: String
 }
 
-struct ABIRecord: Decodable {
+public struct ABIRecord: Decodable {
     var name: String?
     var type: String?
     var payable: Bool?
@@ -38,13 +38,13 @@ protocol AbiValidating {
     var isValid: Bool { get }
 }
 
-enum ABIElement {
+public enum ABIElement {
     case function(Function)
     case constructor(Constructor)
     case fallback(Fallback)
     case event(Event)
 
-    struct Function {
+    public struct Function {
         let name: String?
         let inputs: [Input]
         let outputs: [Output]
@@ -61,18 +61,18 @@ enum ABIElement {
         }
     }
 
-    struct Constructor {
+    public struct Constructor {
         let inputs: [Function.Input]
         let constant: Bool
         let payable: Bool
     }
     
-    struct Fallback {
+    public struct Fallback {
         let constant: Bool
         let payable: Bool
     }
     
-    struct Event {
+    public struct Event {
         let name: String
         let inputs: [Input]
         let anonymous: Bool
@@ -85,12 +85,12 @@ enum ABIElement {
     }
     
     /// Specifies the type that parameters in a contract have.
-    enum ParameterType {
+    public enum ParameterType {
         case dynamicType(DynamicType)
         case staticType(StaticType)
         
         /// Denotes any type that has a fixed length.
-        enum StaticType {
+        public enum StaticType {
             /// uint<M>: unsigned integer type of M bits, 0 < M <= 256, M % 8 == 0. e.g. uint32, uint8, uint256.
             case uint(bits: Int)
             /// int<M>: two's complement signed integer type of M bits, 0 < M <= 256, M % 8 == 0.
@@ -113,7 +113,7 @@ enum ABIElement {
         }
         
         /// Denotes any type that has a variable length.
-        enum DynamicType {
+        public enum DynamicType {
             /// bytes: dynamic sized byte sequence.
             case bytes
             /// string: dynamic sized unicode string assumed to be UTF-8 encoded.
@@ -128,7 +128,7 @@ enum ABIElement {
 
 // MARK: - DynamicType Equatable
 extension ABIElement.ParameterType.DynamicType: Equatable {
-    static func ==(lhs: ABIElement.ParameterType.DynamicType, rhs: ABIElement.ParameterType.DynamicType) -> Bool {
+    public static func ==(lhs: ABIElement.ParameterType.DynamicType, rhs: ABIElement.ParameterType.DynamicType) -> Bool {
         switch (lhs, rhs) {
         case (.bytes, .bytes):
             return true
@@ -146,7 +146,7 @@ extension ABIElement.ParameterType.DynamicType: Equatable {
 
 // MARK: - ParameterType Equatable
 extension ABIElement.ParameterType: Equatable {
-    static func ==(lhs: ABIElement.ParameterType, rhs: ABIElement.ParameterType) -> Bool {
+    public static func ==(lhs: ABIElement.ParameterType, rhs: ABIElement.ParameterType) -> Bool {
         switch (lhs, rhs) {
         case (.dynamicType(let value1), .dynamicType(let value2)):
             return value1 == value2
@@ -160,7 +160,7 @@ extension ABIElement.ParameterType: Equatable {
 
 // MARK: - StaticType Equatable
 extension ABIElement.ParameterType.StaticType: Equatable {
-    static func ==(lhs: ABIElement.ParameterType.StaticType, rhs: ABIElement.ParameterType.StaticType) -> Bool {
+    public static func ==(lhs: ABIElement.ParameterType.StaticType, rhs: ABIElement.ParameterType.StaticType) -> Bool {
         switch (lhs, rhs) {
         case let (.uint(length1), .uint(length2)):
             return length1 == length2
@@ -184,7 +184,7 @@ extension ABIElement.ParameterType.StaticType: Equatable {
 
 // MARK: - ParameterType Validity
 extension ABIElement.ParameterType: AbiValidating {
-    var isValid: Bool {
+    public var isValid: Bool {
         switch self {
         case .staticType(let type):
             return type.isValid
@@ -196,7 +196,7 @@ extension ABIElement.ParameterType: AbiValidating {
 
 // MARK: - ParameterType.StaticType Validity
 extension ABIElement.ParameterType.StaticType: AbiValidating {
-    var isValid: Bool {
+    public var isValid: Bool {
         switch self {
         case .uint(let bits), .int(let bits):
             return bits > 0 && bits <= 256 && bits % 8 == 0
@@ -212,7 +212,7 @@ extension ABIElement.ParameterType.StaticType: AbiValidating {
 
 // MARK: - ParameterType.DynamicType Validity
 extension ABIElement.ParameterType.DynamicType: AbiValidating {
-    var isValid: Bool {
+    public var isValid: Bool {
         // Right now we cannot create invalid dynamic types.
         return true
     }
@@ -220,15 +220,15 @@ extension ABIElement.ParameterType.DynamicType: AbiValidating {
 
 // MARK: - Method ID for Contract
 extension ABIElement.Function {
-    var signature: String {
+    public var signature: String {
         return "\(name ?? "")(\(inputs.map { $0.type.abiRepresentation }.joined(separator: ",")))"
     }
     
-    var methodString: String {
+    public var methodString: String {
         return String(signature.sha3(.keccak256).prefix(8))
     }
     
-    var methodEncoding: Data {
+    public var methodEncoding: Data {
         return signature.data(using: .ascii)!.sha3(.keccak256)[0...3]
     }
 }
@@ -239,7 +239,7 @@ protocol AbiEncoding {
 
 
 extension ABIElement.ParameterType: AbiEncoding {
-    var abiRepresentation: String {
+    public var abiRepresentation: String {
         switch self {
         case .staticType(let type):
             return type.abiRepresentation
@@ -250,7 +250,7 @@ extension ABIElement.ParameterType: AbiEncoding {
 }
 
 extension ABIElement.ParameterType.StaticType: AbiEncoding {
-    var abiRepresentation: String {
+    public var abiRepresentation: String {
         switch self {
         case .uint(let bits):
             return "uint\(bits)"
@@ -271,7 +271,7 @@ extension ABIElement.ParameterType.StaticType: AbiEncoding {
 }
 
 extension ABIElement.ParameterType.DynamicType: AbiEncoding {
-    var abiRepresentation: String {
+    public var abiRepresentation: String {
         switch self {
         case .bytes:
             return "bytes"

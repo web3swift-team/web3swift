@@ -21,7 +21,7 @@ PODS:
   - PromiseKit/UIKit (4.5.0):
     - PromiseKit/CorePromise
   - SipHash (1.2.0)
-  - Sodium (0.5)
+  - Sodium (0.6)
 
 DEPENDENCIES:
   - Alamofire (~> 4.5)
@@ -41,8 +41,8 @@ SPEC CHECKSUMS:
   libsodium: 9a8faa5ef2fa0d2d57bd7f7d79bf8fb7c1a9f0ea
   PromiseKit: 9c1d9f6d7b65e3951a90bea7f407c56972be5d8e
   SipHash: c6e9e43e9c531b5bc6602545130c26194a6d31ce
-  Sodium: a3a17f2ba2dc1b83547e13db0075e7c5d426fc55
+  Sodium: bf524b0a3d5ad6870dcf343205cca7e659c15ad5
 
-PODFILE CHECKSUM: a78a0d9b5ec45a3b7151a0111b104aa26a516891
+PODFILE CHECKSUM: 646d35c61c427c6244540da82e9a244e99954006
 
 COCOAPODS: 1.3.1
