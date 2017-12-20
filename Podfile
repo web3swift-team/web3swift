@@ -10,6 +10,7 @@ target 'web3swift' do
   pod 'CryptoSwift'
   pod 'Sodium'
   pod 'libsodium'
+  pod 'secp256k1_ios'
   target 'web3swiftTests' do
     inherit! :search_paths
   end

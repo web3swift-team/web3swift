@@ -20,6 +20,7 @@ PODS:
     - PromiseKit/CorePromise
   - PromiseKit/UIKit (4.5.0):
     - PromiseKit/CorePromise
+  - secp256k1_ios (0.0.4)
   - SipHash (1.2.0)
   - Sodium (0.6)
 
@@ -31,6 +32,7 @@ DEPENDENCIES:
   - libsodium
   - PromiseKit (~> 4.4)
   - PromiseKit/Alamofire (~> 4.0)
+  - secp256k1_ios
   - Sodium
 
 SPEC CHECKSUMS:
@@ -40,9 +42,10 @@ SPEC CHECKSUMS:
   CryptoSwift: f81907430ebbe38b8404b4f6fb40f3c576a8755f
   libsodium: 9a8faa5ef2fa0d2d57bd7f7d79bf8fb7c1a9f0ea
   PromiseKit: 9c1d9f6d7b65e3951a90bea7f407c56972be5d8e
+  secp256k1_ios: e41c69ba611925984d183bffb70109eb48162ff4
   SipHash: c6e9e43e9c531b5bc6602545130c26194a6d31ce
   Sodium: bf524b0a3d5ad6870dcf343205cca7e659c15ad5
 
-PODFILE CHECKSUM: 646d35c61c427c6244540da82e9a244e99954006
+PODFILE CHECKSUM: b7e3342b3886fb758c9969fb39a7970d47f8d515
 
 COCOAPODS: 1.3.1
