@@ -55,10 +55,50 @@ public enum Networks {
 public struct Web3Options {
     public var to: EthereumAddress? = nil
     public var from: EthereumAddress? = nil
-    public var gas: BigUInt? = BigUInt(21000)
-    public var gasPrice: BigUInt? = BigUInt(5000000000)
-    public var value: BigUInt? = BigUInt(0)
+    public var gas: BigUInt? = nil
+    public var gasPrice: BigUInt? = nil
+    public var value: BigUInt? = nil
     public init() {
+    }
+    public static func defaultOptions() -> Web3Options{
+        var options = Web3Options()
+        options.gas = BigUInt(21000)
+        options.gasPrice = BigUInt(5000000000)
+        options.value = BigUInt(0)
+        return options
+    }
+    
+    public static func merge(_ options:Web3Options?, with other:Web3Options?) -> Web3Options? {
+        if (other == nil && options == nil) {
+            return Web3Options.defaultOptions()
+        }
+        var newOptions = Web3Options.defaultOptions()
+        if (other?.to != nil) {
+            newOptions.to = other?.to
+        } else {
+            newOptions.to = options?.to
+        }
+        if (other?.from != nil) {
+            newOptions.from = other?.from
+        } else {
+            newOptions.from = options?.from
+        }
+        if (other?.gas != nil) {
+            newOptions.gas = other?.gas
+        } else {
+            newOptions.gas = options?.gas
+        }
+        if (other?.gasPrice != nil) {
+            newOptions.gasPrice = other?.gasPrice
+        } else {
+            newOptions.gasPrice = options?.gasPrice
+        }
+        if (other?.value != nil) {
+            newOptions.value = other?.value
+        } else {
+            newOptions.value = options?.value
+        }
+        return newOptions
     }
 }
 

@@ -54,9 +54,13 @@ public struct InfuraProvider:Web3Provider {
     
     public func estimateGas(transaction: EthereumTransaction, options: Web3Options?, network: Networks) -> Promise<BigUInt?> {
         return async {
-            guard let req = EthereumTransaction.createRequest(method: "eth_estimageGas", transaction: transaction, onBlock: "latest", options: options) else {return nil}
-            let response = try await(self.postToInfura(req, network: network)!)
-//            print(response)
+            guard let req = EthereumTransaction.createRequest(method: "eth_estimateGas", transaction: transaction, onBlock: "latest", options: options) else {return nil}
+            var infuraReq = req
+            let params = [req.params?.params[0]] as Array<Encodable>
+            let pars = JSONRPCparams(params: params)
+            infuraReq.params = pars
+            let response = try await(self.postToInfura(infuraReq, network: network)!)
+            print(response)
             guard let res = response as? [String: Any], let resultString = res["result"] as? String else {return nil}
             guard let biguint = BigUInt(resultString.stripHexPrefix(), radix: 16) else {return nil}
             return biguint
@@ -74,7 +78,7 @@ public struct InfuraProvider:Web3Provider {
             req.serializedParams = serialized
             req.params = pars
             let response = try await(self.postToInfura(req, network: network)!)
-//            print(response)
+            print(response)
             guard let res = response as? [String: Any], let resultString = res["result"] as? String else {return nil}
             guard let biguint = BigUInt(resultString.stripHexPrefix(), radix: 16) else {return nil}
             return biguint
@@ -98,7 +102,9 @@ public struct InfuraProvider:Web3Provider {
         if self.accessToken != nil {
             requestURL = requestURL + self.accessToken!
         }
-        guard let _ = try? JSONEncoder().encode(request) else {return nil}
+        var cleanedRequest = request
+        cleanedRequest.serializedParams = nil
+        guard let _ = try? JSONEncoder().encode(cleanedRequest) else {return nil}
 //        print(String(data: requestJSON, encoding: .utf8))
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",

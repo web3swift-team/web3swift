@@ -25,7 +25,7 @@ public struct Contract {
         }
         return toReturn
     }
-    var options: Web3Options = Web3Options()
+    var options: Web3Options? = Web3Options.defaultOptions()
     var chainID: BigUInt = BigUInt(1)
     
     public init(abi: [ABIElement]) {
@@ -40,37 +40,32 @@ public struct Contract {
     
     public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData: Data = Data(), options: Web3Options?, toAddress:EthereumAddress? = nil) -> EthereumTransaction? {
         var to:EthereumAddress
-        if let toInOptions = toAddress, toInOptions.isValid {
-            to = toInOptions
-        } else if let toInDefaults = self.address, toInDefaults.isValid {
-            to = toInDefaults
+        let mergedOptions = Web3Options.merge(self.options, with: options)
+        if let toFound = toAddress, toFound.isValid {
+            to = toFound
+        } else if let toFound = mergedOptions?.to, toFound.isValid {
+            to = toFound
         } else {
             return nil
         }
         
         var gas:BigUInt
-        if let gasInOptions = options?.gas, gasInOptions > BigUInt(0) {
+        if let gasInOptions = mergedOptions?.gas, gasInOptions > BigUInt(0) {
             gas = gasInOptions
-        } else if let gasInDefaults = self.options.gas, gasInDefaults > BigUInt(0) {
-            gas = gasInDefaults
         } else {
             return nil
         }
         
         var gasPrice:BigUInt
-        if let gasPriceInOptions = options?.gasPrice, gasPriceInOptions > BigUInt(0) {
+        if let gasPriceInOptions = mergedOptions?.gasPrice, gasPriceInOptions > BigUInt(0) {
             gasPrice = gasPriceInOptions
-        } else if let gasPriceInDefaults = self.options.gasPrice, gasPriceInDefaults > BigUInt(0) {
-            gasPrice = gasPriceInDefaults
         } else {
             return nil
         }
         
         var value:BigUInt
-        if let valueInOptions = options?.value {
+        if let valueInOptions = mergedOptions?.value {
             value = valueInOptions
-        } else if let valueInDefaults = self.options.value {
-            value = valueInDefaults
         } else {
             value = BigUInt(0)
         }

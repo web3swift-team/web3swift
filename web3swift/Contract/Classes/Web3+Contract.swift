@@ -1,4 +1,4 @@
-//
+
 //  Web3+Contract.swift
 //  web3swift
 //
@@ -21,20 +21,27 @@ extension web3 {
     public struct web3contract {
         var contract: Contract
         var provider: Web3Provider
-        public init?(_ prov: Web3Provider, abiString: String, at: EthereumAddress? = nil, options: Web3Options? = nil){
+        public var options: Web3Options? = Web3Options.defaultOptions()
+        
+        public init?(_ provider: Web3Provider, abiString: String, at: EthereumAddress? = nil, options: Web3Options? = nil) {
             do {
-                provider = prov
+                self.provider = provider
                 let jsonData = abiString.data(using: .utf8)
                 let abi = try JSONDecoder().decode([ABIRecord].self, from: jsonData!)
                 let abiNative = try abi.map({ (record) -> ABIElement in
                     return try record.parse()
                 })
+                var mergedOptions = Web3Options.merge(self.options, with: options)
                 contract = Contract(abi: abiNative)
                 if at != nil {
                     contract.address = at
+                    mergedOptions?.to = at
+                } else if let addr = mergedOptions?.to {
+                    contract.address = addr
                 }
-                if options != nil {
-                    contract.options = options!
+                self.options = mergedOptions
+                if contract.address == nil {
+                    return nil
                 }
             }
             catch{
@@ -48,6 +55,16 @@ extension web3 {
             public var provider: Web3Provider
             public var contract: Contract
             public var method: String
+            public var options: Web3Options? = Web3Options.defaultOptions()
+            
+            public init (transaction: EthereumTransaction, provider: Web3Provider, contract: Contract, method: String, options: Web3Options?) {
+                self.transaction = transaction
+                self.provider = provider
+                self.contract = contract
+                self.contract.options = options
+                self.method = method
+                self.options = options
+            }
             
             public mutating func setNonce(_ nonce: BigUInt, network: Networks? = nil) throws {
                 self.transaction.nonce = nonce
@@ -77,7 +94,8 @@ extension web3 {
             }
             public func call(options: Web3Options?, network: Networks = .Mainnet) -> Promise<[String:Any]?> {
                 return async {
-                    let res = try await(self.provider.call(transaction: self.transaction, options: options, network: network))
+                    let mergedOptions = Web3Options.merge(self.options, with: options)
+                    let res = try await(self.provider.call(transaction: self.transaction, options: mergedOptions, network: network))
                     if res == nil {
                         return nil
                     }
@@ -96,7 +114,8 @@ extension web3 {
             }
             public func estimateGas(options: Web3Options?, network: Networks = .Mainnet) -> Promise<BigUInt?> {
                 return async {
-                    let res = try await(self.provider.estimateGas(transaction: self.transaction, options: options, network: network))
+                    let mergedOptions = Web3Options.merge(self.options, with: options)
+                    let res = try await(self.provider.estimateGas(transaction: self.transaction, options: mergedOptions, network: network))
                     if res == nil {
                         return nil
                     }
@@ -104,11 +123,15 @@ extension web3 {
                     return gas
                 }
             }
-            
         }
-        public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData:Data = Data(), options: Web3Options?, toAddress:EthereumAddress? = nil) -> transactionIntermediate? {
-            guard let tx = self.contract.method(method, parameters: parameters, nonce: nonce, extraData:extraData, options: options, toAddress:toAddress) else {return nil}
-            return transactionIntermediate(transaction: tx, provider: self.provider, contract: self.contract, method: method)
+        
+        public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData:Data = Data(), options: Web3Options?) -> transactionIntermediate? {
+            
+            let mergedOptions = Web3Options.merge(self.options, with: options)
+            
+            guard let tx = self.contract.method(method, parameters: parameters, nonce: nonce, extraData:extraData, options: mergedOptions, toAddress:self.contract.address) else {return nil}
+            let intermediate = transactionIntermediate(transaction: tx, provider: self.provider, contract: self.contract, method: method, options: mergedOptions)
+            return intermediate
         }
     }
 }

@@ -206,6 +206,8 @@ public struct EthereumTransaction: CustomStringConvertible {
         params.value = valueEncoding.head?.toHexString().addHexPrefix().stripLeadingZeroes()
         if (self.data != Data()) {
             params.data = self.data.toHexString().addHexPrefix()
+        } else {
+            params.data = "0x"
         }
         return params
     }

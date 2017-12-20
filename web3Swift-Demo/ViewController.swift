@@ -43,7 +43,7 @@ class ViewController: UIViewController {
                     guard let web3 = Web3.newWeb3() else {return}
                     let contract = web3.contract(jsonString, at: constractAddress)
                     let intermediate = contract?.method("name", parameters:parameters,  options: options)
-                    let result = try await((intermediate?.call(options: options))!)
+                    let result = try await((intermediate?.call(options: options, network: .Mainnet))!)
                     print(result)
                     let userDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                     let keystoreManager = try KeystoreManagerV3(userDir + "/keystore")
@@ -56,20 +56,39 @@ class ViewController: UIViewController {
                         ks = keystoreManager?.wallets[(keystoreManager?.knownAddresses[0])!]
                     }
                     guard let sender = ks?.address else {return}
+//                    let coldWalletABI = "[{\"payable\":true,\"type\":\"fallback\"}]"
+//                    let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+//                    let coldWalletContract = web3.contract(coldWalletABI, at: coldWalletAddress)
+//                    options = Web3Options.defaultOptions()
+//                    options.gas = BigUInt(21000)
+//                    options.from = ks?.address!
+//                    options.value = BigUInt(1000000000000000)
+//                    options.to = coldWalletAddress
+//                    var intermediateSend = coldWalletContract?.method(options: options)
+//                    let nonce = try await(web3.getNonce(sender, network: .Rinkeby))
+//                    try intermediateSend?.setNonce(nonce!, network: .Rinkeby)
+//                    let gasPrice = try await((intermediateSend?.estimateGas(options, network: .Rinkeby))!)
+//                    print(gasPrice)
+//                    intermediateSend = try ks!.signIntermediate(intermediate: intermediateSend!, password: "BANKEXFOUNDATION", network: .Rinkeby)
+//                    let derivedSender = intermediateSend?.transaction.sender
+//                    if (derivedSender?.address != sender.address) {
+//                        print(derivedSender!.address)
+//                        print(sender.address)
+//                        print("Address mismatch")
+////                        return
+//                    }
+//                    let res = try await((intermediateSend?.send(network: .Rinkeby))!)
+//                    print(res)
+                    
                     let coldWalletABI = "[{\"payable\":true,\"type\":\"fallback\"}]"
                     let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
-                    let addressSanity = ks?.address
-                    if addressSanity!.address != sender.address {
-                        print("Addresses mismatch")
-                    }
-                    let coldWalletContract = web3.contract(coldWalletABI, at: coldWalletAddress)
-                    options = Web3Options()
+                    options = Web3Options.defaultOptions()
                     options.gas = BigUInt(21000)
                     options.from = ks?.address!
                     options.value = BigUInt(1000000000000000)
-                    
-                    var intermediateSend = coldWalletContract?.method(options: options)
+                    let gasPrice = try await((web3.contract(coldWalletABI, at: coldWalletAddress)?.method(options: options)?.estimateGas(options: nil, network: .Rinkeby))!)
                     let nonce = try await(web3.getNonce(sender, network: .Rinkeby))
+                    var intermediateSend = web3.contract(coldWalletABI, at: coldWalletAddress)?.method(options: options)
                     try intermediateSend?.setNonce(nonce!, network: .Rinkeby)
                     intermediateSend = try ks!.signIntermediate(intermediate: intermediateSend!, password: "BANKEXFOUNDATION", network: .Rinkeby)
                     let derivedSender = intermediateSend?.transaction.sender
@@ -77,10 +96,12 @@ class ViewController: UIViewController {
                         print(derivedSender!.address)
                         print(sender.address)
                         print("Address mismatch")
-//                        return
+                        //                        return
                     }
                     let res = try await((intermediateSend?.send(network: .Rinkeby))!)
                     print(res)
+                    
+                    
                 }
                 catch{
                     print(error)
