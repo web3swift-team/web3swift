@@ -73,9 +73,6 @@ public struct InfuraProvider:Web3Provider {
             req.method = "eth_getTransactionCount"
             let params = [address.address.lowercased(), "latest"] as Array<Encodable>
             let pars = JSONRPCparams(params: params)
-            guard let encoded = try? JSONEncoder().encode(pars) else {return nil}
-            guard let serialized = String(data: encoded, encoding: .utf8) else {return nil}
-            req.serializedParams = serialized
             req.params = pars
             let response = try await(self.postToInfura(req, network: network)!)
             print(response)
@@ -88,8 +85,10 @@ public struct InfuraProvider:Web3Provider {
     internal func getToInfura(_ request: JSONRPCrequest, network: Networks = .Mainnet) -> Promise<Any>? {
         guard let method = request.method else {return nil}
         let requestURL = "https://api.infura.io/v1/jsonrpc/"+network.name+"/"+method
-        guard let params = request.serializedParams else {return nil}
-        var requestParameters = ["params" : params as Any]
+        guard let pars = request.params else {return nil}
+        guard let encoded = try? JSONEncoder().encode(pars) else {return nil}
+        guard let serialized = String(data: encoded, encoding: .utf8) else {return nil}
+        var requestParameters = ["params" : serialized as Any]
         if self.accessToken != nil {
             requestParameters["token"] = self.accessToken!
         }
@@ -102,9 +101,7 @@ public struct InfuraProvider:Web3Provider {
         if self.accessToken != nil {
             requestURL = requestURL + self.accessToken!
         }
-        var cleanedRequest = request
-        cleanedRequest.serializedParams = nil
-        guard let _ = try? JSONEncoder().encode(cleanedRequest) else {return nil}
+        guard let _ = try? JSONEncoder().encode(request) else {return nil}
 //        print(String(data: requestJSON, encoding: .utf8))
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",

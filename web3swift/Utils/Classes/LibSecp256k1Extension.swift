@@ -163,6 +163,10 @@ extension SECP256K1 {
         let bytes = signatureData.bytes
         let r = Array(bytes[0...31])
         let s = Array(bytes[32...63])
+        let S = BigUInt(Data(bytes: s))
+        if S > secp256k1_halfN {
+            return nil
+        }
         return UnmarshaledSignature(v: bytes[64], r: r, s: s)
     }
     
@@ -170,10 +174,6 @@ extension SECP256K1 {
         guard r.count == 32, s.count == 32 else {return nil}
         var completeSignature = Data(bytes: r)
         completeSignature.append(Data(bytes: s))
-        let S = BigUInt(Data(bytes: s))
-        if S > secp256k1_halfN {
-            return nil
-        }
         completeSignature.append(Data(bytes: [v]))
         return completeSignature
     }

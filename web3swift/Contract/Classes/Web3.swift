@@ -106,7 +106,7 @@ struct JSONRPCrequest: Encodable, ParameterEncoding  {
     var jsonrpc: String = "2.0"
     var method: String?
     var params: JSONRPCparams?
-    var id: Int = 1
+    var id: Int = Int(floor(Date().timeIntervalSince1970))
     var serializedParams: String? = nil
     
     public func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {

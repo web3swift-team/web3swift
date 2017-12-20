@@ -222,7 +222,11 @@ public struct EthereumTransaction: CustomStringConvertible {
         guard let hash = self.hash(forSignature: true, chainID: chainID) else {return false}
         let signature  = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
         guard let compressedSignature = signature.compressed else {return false}
-        guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: compressedSignature) else {return false}
+        guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: compressedSignature) else {
+            print("Unlucky nonce, making new signature")
+            self.gasPrice = self.gasPrice + BigUInt(1)
+            return self.sign(privateKey:privateKey, chainID: chainID)
+        }
         if (chainID != nil ) {
             self.v = BigUInt(unmarshalledSignature.v) + BigUInt(35) + chainID! + chainID!
         } else if (self.chainID != nil ) {
@@ -249,9 +253,6 @@ public struct EthereumTransaction: CustomStringConvertible {
         guard let txParams = transaction.encodeAsDictionary(from: from) else {return nil}
         let params = [txParams, onBlock] as Array<Encodable>
         let pars = JSONRPCparams(params: params)
-        guard let encoded = try? JSONEncoder().encode(pars) else {return nil}
-        guard let serialized = String(data: encoded, encoding: .utf8) else {return nil}
-        request.serializedParams = serialized
         request.params = pars
         return request
     }
@@ -264,9 +265,6 @@ public struct EthereumTransaction: CustomStringConvertible {
         request.method = "eth_sendRawTransaction"
         let params = [hex] as Array<Encodable>
         let pars = JSONRPCparams(params: params)
-        guard let encoded = try? JSONEncoder().encode(pars) else {return nil}
-        guard let serialized = String(data: encoded, encoding: .utf8) else {return nil}
-        request.serializedParams = serialized
         request.params = pars
         return request
     }
