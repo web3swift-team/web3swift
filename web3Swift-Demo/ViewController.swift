@@ -37,7 +37,7 @@ class ViewController: UIViewController {
                     let constractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
                     var options = Web3Options()
                     options.gas = BigUInt(250000)
-                    options.gasPrice = BigUInt(0)
+                    options.gasPrice = BigUInt(25000000000)
                     options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
                     let parameters = [] as [AnyObject]
                     guard let web3 = Web3.newWeb3() else {return}
@@ -45,13 +45,42 @@ class ViewController: UIViewController {
                     let intermediate = contract?.method("name", parameters:parameters,  options: options)
                     let result = try await((intermediate?.call(options: options))!)
                     print(result)
+                    let userDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+                    let keystoreManager = try KeystoreManagerV3(userDir + "/keystore")
+                    var ks: EthereumKeystoreV3?
+                    if (keystoreManager?.wallets.keys.count == 0) {
+                        ks = try EthereumKeystoreV3(password: "BANKEXFOUNDATION")
+                        let keydata = try JSONEncoder().encode(ks!.keystoreParams)
+                        try FileManager.default.createFile(atPath: userDir + "/keystore"+"/key.json", contents: keydata, attributes: nil)
+                    } else {
+                        ks = keystoreManager?.wallets[(keystoreManager?.knownAddresses[0])!]
+                    }
+                    guard let sender = ks?.address else {return}
+                    let coldWalletABI = "[{\"payable\":true,\"type\":\"fallback\"}]"
+                    let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+                    let addressSanity = ks?.address
+                    if addressSanity!.address != sender.address {
+                        print("Addresses mismatch")
+                    }
+                    let coldWalletContract = web3.contract(coldWalletABI, at: coldWalletAddress)
+                    options = Web3Options()
+                    options.gas = BigUInt(21000)
+                    options.from = ks?.address!
+                    options.value = BigUInt(1000000000000000)
                     
-                    // Sending pseudo-example:
-//                    let ks = EthereumKeystoreV3()
-//                    var tx = intermediate?.transaction
-//                    try ks.signTXWithPrivateKey(transaction:tx, password: "BANKEXFOUNDATION")
-//                    let res = try await((intermediate?.send())!)
-//                    print(res)
+                    var intermediateSend = coldWalletContract?.method(options: options)
+                    let nonce = try await(web3.getNonce(sender, network: .Rinkeby))
+                    try intermediateSend?.setNonce(nonce!, network: .Rinkeby)
+                    intermediateSend = try ks!.signIntermediate(intermediate: intermediateSend!, password: "BANKEXFOUNDATION", network: .Rinkeby)
+                    let derivedSender = intermediateSend?.transaction.sender
+                    if (derivedSender?.address != sender.address) {
+                        print(derivedSender!.address)
+                        print(sender.address)
+                        print("Address mismatch")
+//                        return
+                    }
+                    let res = try await((intermediateSend?.send(network: .Rinkeby))!)
+                    print(res)
                 }
                 catch{
                     print(error)

@@ -27,14 +27,28 @@ public struct Web3 {
 public protocol Web3Provider{
     func send(transaction: EthereumTransaction, network: Networks) -> Promise<Data?>
     func call(transaction: EthereumTransaction, options: Web3Options?, network: Networks) -> Promise<Data?>
-    func estimateGas(transaction: EthereumTransaction, options: Web3Options?, network: Networks) -> Promise<Data?>
+    func estimateGas(transaction: EthereumTransaction, options: Web3Options?, network: Networks) -> Promise<BigUInt?>
+    func getNonce(_ address:EthereumAddress, network: Networks) -> Promise<BigUInt?>
 }
 
-
-
-public enum Networks : String {
-    case Rinkeby = "rinkeby", Mainnet = "mainnet"
+public enum Networks {
+    case Rinkeby
+    case Mainnet
     
+    var name: String {
+        switch self {
+        case .Rinkeby: return "rinkeby"
+        case .Mainnet: return "mainnet"
+        }
+    }
+    
+    var chainID: BigUInt {
+        switch self {
+        case .Rinkeby: return BigUInt(4)
+        case .Mainnet: return BigUInt(1)
+        }
+    }
+
     static let allValues = [Mainnet, Rinkeby]
 }
 
@@ -48,14 +62,16 @@ public struct Web3Options {
     }
 }
 
-struct JSONRPCrequest: Codable, ParameterEncoding  {
+struct JSONRPCrequest: Encodable, ParameterEncoding  {
     var jsonrpc: String = "2.0"
     var method: String?
-    var params: String = ""
+    var params: JSONRPCparams?
     var id: Int = 1
+    var serializedParams: String? = nil
     
     public func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
         let jsonSerialization = try JSONEncoder().encode(self)
+//        print(String(data: jsonSerialization, encoding: .utf8))
         var request = try urlRequest.asURLRequest()
         request.httpBody = jsonSerialization
         return request
@@ -76,7 +92,7 @@ struct TransactionParameters: Codable {
     }
 }
 
-struct JSONRPCparams:Encodable{
+struct JSONRPCparams: Encodable{
     var params = [Any]()
     
     func encode(to encoder: Encoder) throws {

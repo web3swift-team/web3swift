@@ -1,0 +1,4 @@
+framework module web3swift {
+    header "web3swift-Swift.h"
+    requires objc
+}

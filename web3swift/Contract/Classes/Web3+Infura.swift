@@ -14,6 +14,10 @@ import Sodium
 import BigInt
 
 public struct InfuraProvider:Web3Provider {
+    public var accessToken:String? = nil
+    public init(){
+        
+    }
     enum supportedPostMethods: String {
         case eth_estimateGas = "eth_estimateGas"
         case eth_sendRawTransaction = "eth_sendRawTransaction"
@@ -26,16 +30,8 @@ public struct InfuraProvider:Web3Provider {
     
     public func send(transaction: EthereumTransaction, network: Networks) -> Promise<Data?> {
         return async {
-            var tx = transaction
-            guard let sender = transaction.sender else {return nil}
-            let nonce = try await(self.getNonce(sender, network: network))
-            if nonce == nil {
-                return nil
-            }
-            tx.nonce = nonce!
-            guard let request = EthereumTransaction.createRawTransaction(transaction: tx) else {return nil}
-            print(request)
-            let response = try await(InfuraProvider.postToInfura(request, network: network)!)
+            guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {return nil}
+            let response = try await(self.postToInfura(request, network: network)!)
             print(response)
             guard let res = response as? [String: Any], let resultString = res["result"] as? String else {return nil}
             let sodium = Sodium()
@@ -47,8 +43,8 @@ public struct InfuraProvider:Web3Provider {
     public func call(transaction: EthereumTransaction, options: Web3Options?, network: Networks) -> Promise<Data?> {
         return async {
             guard let req = EthereumTransaction.createRequest(method: "eth_call", transaction: transaction, onBlock: "latest", options: options) else {return nil}
-            let response = try await(InfuraProvider.getToInfura(req, network: network)!)
-            print(response)
+            let response = try await(self.postToInfura(req, network: network)!)
+//            print(response)
             guard let res = response as? [String: Any], let resultString = res["result"] as? String else {return nil}
             let sodium = Sodium()
             guard let returnedData = sodium.utils.hex2bin(resultString.stripHexPrefix().lowercased()) else {return nil}
@@ -56,15 +52,14 @@ public struct InfuraProvider:Web3Provider {
         }
     }
     
-    public func estimateGas(transaction: EthereumTransaction, options: Web3Options?, network: Networks) -> Promise<Data?> {
+    public func estimateGas(transaction: EthereumTransaction, options: Web3Options?, network: Networks) -> Promise<BigUInt?> {
         return async {
             guard let req = EthereumTransaction.createRequest(method: "eth_estimageGas", transaction: transaction, onBlock: "latest", options: options) else {return nil}
-            let response = try await(InfuraProvider.postToInfura(req, network: network)!)
-            print(response)
+            let response = try await(self.postToInfura(req, network: network)!)
+//            print(response)
             guard let res = response as? [String: Any], let resultString = res["result"] as? String else {return nil}
-            let sodium = Sodium()
-            guard let returnedData = sodium.utils.hex2bin(resultString.stripHexPrefix().lowercased()) else {return nil}
-            return returnedData
+            guard let biguint = BigUInt(resultString.stripHexPrefix(), radix: 16) else {return nil}
+            return biguint
         }
     }
     
@@ -76,25 +71,35 @@ public struct InfuraProvider:Web3Provider {
             let pars = JSONRPCparams(params: params)
             guard let encoded = try? JSONEncoder().encode(pars) else {return nil}
             guard let serialized = String(data: encoded, encoding: .utf8) else {return nil}
-            req.params = serialized
-            let response = try await(InfuraProvider.getToInfura(req, network: network)!)
-            print(response)
+            req.serializedParams = serialized
+            req.params = pars
+            let response = try await(self.postToInfura(req, network: network)!)
+//            print(response)
             guard let res = response as? [String: Any], let resultString = res["result"] as? String else {return nil}
-            guard let biguint = BigUInt(resultString, radix: 16) else {return nil}
+            guard let biguint = BigUInt(resultString.stripHexPrefix(), radix: 16) else {return nil}
             return biguint
         }
     }
     
-    internal static func getToInfura(_ request: JSONRPCrequest, network: Networks = .Mainnet) -> Promise<Any>? {
+    internal func getToInfura(_ request: JSONRPCrequest, network: Networks = .Mainnet) -> Promise<Any>? {
         guard let method = request.method else {return nil}
-        let requestURL = "https://api.infura.io/v1/jsonrpc/"+network.rawValue+"/"+method
-        let requestParameters = ["params" : request.params]
+        let requestURL = "https://api.infura.io/v1/jsonrpc/"+network.name+"/"+method
+        guard let params = request.serializedParams else {return nil}
+        var requestParameters = ["params" : params as Any]
+        if self.accessToken != nil {
+            requestParameters["token"] = self.accessToken!
+        }
         return Alamofire.request(requestURL, parameters: requestParameters, encoding: URLEncoding.default).responseJSON()
     }
     
-    internal static func postToInfura(_ request: JSONRPCrequest, network: Networks) -> Promise<Any>? {
-        let requestURL = "https://api.infura.io/v1/jsonrpc/"+network.rawValue+"/"
-        guard let requestJSON = try? JSONEncoder().encode(request) else {return nil}
+    internal func postToInfura(_ request: JSONRPCrequest, network: Networks) -> Promise<Any>? {
+//        let requestURL = "https://api.infura.io/v1/jsonrpc/"+network.name
+        var requestURL = "https://"+network.name + ".infura.io/"
+        if self.accessToken != nil {
+            requestURL = requestURL + self.accessToken!
+        }
+        guard let _ = try? JSONEncoder().encode(request) else {return nil}
+//        print(String(data: requestJSON, encoding: .utf8))
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
             "Accept": "application/json"

@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "secp256k1.framework/Headers/secp256k1.h"
-//#import "secp256k1.framework/Headers/secp256k1_recovery.h"
 //! Project version number for web3swift.
 FOUNDATION_EXPORT double web3swiftVersionNumber;
 

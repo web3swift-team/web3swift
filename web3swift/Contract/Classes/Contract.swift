@@ -76,7 +76,7 @@ public struct Contract {
         }
         
         if (method == "fallback") {
-            let transaction = EthereumTransaction(nonce: nonce, gasprice: gasPrice, gasLimit: gas, to: to, value: value, data: extraData, v: chainID, r: BigUInt(0), s: BigUInt(0))
+            let transaction = EthereumTransaction(nonce: nonce, gasPrice: gasPrice, gasLimit: gas, to: to, value: value, data: extraData, v: chainID, r: BigUInt(0), s: BigUInt(0))
             return transaction
         }
         let foundMethod = self.methods.filter { (key, value) -> Bool in
@@ -85,7 +85,7 @@ public struct Contract {
         guard foundMethod.count == 1 else {return nil}
         let abiMethod = foundMethod[method]
         guard let encodedData = abiMethod?.encodeParameters(parameters) else {return nil}
-        let transaction = EthereumTransaction(nonce: nonce, gasprice: gasPrice, gasLimit: gas, to: to, value: value, data: encodedData, v: chainID, r: BigUInt(0), s: BigUInt(0))
+        let transaction = EthereumTransaction(nonce: nonce, gasPrice: gasPrice, gasLimit: gas, to: to, value: value, data: encodedData, v: chainID, r: BigUInt(0), s: BigUInt(0))
         return transaction
     }
     

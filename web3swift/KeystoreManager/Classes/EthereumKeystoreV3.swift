@@ -11,7 +11,9 @@ import Sodium
 import CryptoSwift
 import Foundation
 
-struct KdfParamsV3: Decodable, Encodable {
+public typealias TransactionIntermediate = web3.web3contract.transactionIntermediate
+
+public struct KdfParamsV3: Decodable, Encodable {
     var salt: String
     var dklen: Int
     var n: Int?
@@ -21,11 +23,11 @@ struct KdfParamsV3: Decodable, Encodable {
     var prf: String?
 }
 
-struct CipherParamsV3: Decodable, Encodable {
+public struct CipherParamsV3: Decodable, Encodable {
     var iv: String
 }
 
-struct CryptoParamsV3: Decodable, Encodable {
+public struct CryptoParamsV3: Decodable, Encodable {
     var ciphertext: String
     var cipher: String
     var cipherparams: CipherParamsV3
@@ -35,7 +37,7 @@ struct CryptoParamsV3: Decodable, Encodable {
     var version: String?
 }
 
-struct KeystoreParamsV3: Decodable, Encodable {
+public struct KeystoreParamsV3: Decodable, Encodable {
     var address: String?
     var crypto: CryptoParamsV3
     var id: String?
@@ -50,7 +52,7 @@ enum EthereumKeystoreV3Error: Error {
 }
 
 public struct EthereumKeystoreV3 {
-    var keystoreParams: KeystoreParamsV3?
+    public var keystoreParams: KeystoreParamsV3?
     public var address: EthereumAddress?
     
     public init?(_ jsonString: String) throws {
@@ -86,13 +88,21 @@ public struct EthereumKeystoreV3 {
     }
     
     public func signTXWithPrivateKey(transaction:EthereumTransaction, password: String) throws -> EthereumTransaction? {
-        guard let pk = try? self.getKeyData(password) else {return nil}
-        guard var privateKey = pk else {return nil}
+        guard var privateKey = try self.getKeyData(password) else {return nil}
         let sodium = Sodium()
         defer {sodium.utils.zero(&privateKey)}
         var tx = transaction
         guard tx.sign(privateKey: privateKey) else {return nil}
         return tx
+    }
+    
+    public func signIntermediate(intermediate: TransactionIntermediate, password: String, network: Networks? = nil) throws -> TransactionIntermediate? {
+        guard var privateKey = try self.getKeyData(password) else {return nil}
+        let sodium = Sodium()
+        defer {sodium.utils.zero(&privateKey)}
+        var newIntermediate = intermediate
+        try newIntermediate.sign(privateKey, network: network)
+        return newIntermediate
     }
     
     public func signHashWithPrivateKey(hash: Data, password: String) throws -> Data? {
@@ -113,7 +123,7 @@ public struct EthereumKeystoreV3 {
 //        return compressedSignature
 //    }
     
-    public mutating func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int=32, N: Int = 262144, R: Int = 8, P: Int = 1) throws {
+    public mutating func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int=32, N: Int = 4096, R: Int = 6, P: Int = 1) throws {
         if (keyData == nil) {
             throw EthereumKeystoreV3Error.encryptionError("Encryption without key data")
         }

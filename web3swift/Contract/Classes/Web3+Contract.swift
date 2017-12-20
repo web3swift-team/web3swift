@@ -49,16 +49,30 @@ extension web3 {
             public var contract: Contract
             public var method: String
             
+            public mutating func setNonce(_ nonce: BigUInt, network: Networks? = nil) throws {
+                self.transaction.nonce = nonce
+                if (network != nil) {
+                    self.transaction.chainID = network?.chainID
+                }
+            }
+            
+            public mutating func sign(_ privateKey: Data, network: Networks? = nil) throws {
+                if (network != nil) {
+                    self.transaction.chainID = network?.chainID
+                }
+                let _ = self.transaction.sign(privateKey: privateKey)
+            }
+            
             public func send(network: Networks = .Mainnet) -> Promise<[String:Any]?> {
                 return async {
+                    print(self.transaction)
                     let res = try await(self.provider.send(transaction: self.transaction, network: network))
                     if res == nil {
                         return nil
                     }
-                    let hash = String(data: res!, encoding: .utf8)
-                    print(hash)
-                    print(self.transaction.txhash)
-                    return ["txhash": hash as Any]
+                    let hash = res?.toHexString().addHexPrefix().lowercased()
+                    return ["txhash": hash as Any, "txhashCalculated" : self.transaction.txhash as Any]
+                    
                 }
             }
             public func call(options: Web3Options?, network: Networks = .Mainnet) -> Promise<[String:Any]?> {
