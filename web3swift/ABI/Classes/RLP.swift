@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Sodium
 import BigInt
 
 protocol ArrayType {}
@@ -31,8 +30,7 @@ struct RLP {
     }
     
     internal static func encode(_ string: String) -> Data? {
-        let sodium = Sodium()
-        if let hexData = sodium.utils.hex2bin(string) {
+        if let hexData = hex2bin(string) {
             return encode(hexData)
         }
         guard let data = string.data(using: .utf8) else {return nil}

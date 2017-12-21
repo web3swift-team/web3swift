@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Sodium
 import CryptoSwift
 import BigInt
 import AwaitKit

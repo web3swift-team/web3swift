@@ -8,7 +8,6 @@
 
 
 import XCTest
-import Sodium
 import CryptoSwift
 import BigInt
 import AwaitKit
@@ -39,7 +38,7 @@ class web3swiftTests: XCTestCase {
             XCTAssert(ks != nil, "Can't read keystore JSON file")
             let sodium = Sodium()
             let key = try ks?.getKeyData("testpassword")
-            let pk = sodium.utils.bin2hex(key!)
+            let pk = bin2hex(key!)
             XCTAssert(pk == "7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d", "Key decryption failed")
             let pubKey = Web3.Utils.privateToPublic(key!)
             let address = Web3.Utils.publicToAddressString(pubKey!)!
@@ -57,10 +56,10 @@ class web3swiftTests: XCTestCase {
     //            XCTAssert(ks != nil, "Can't read keystore JSON file")
     //            let sodium = Sodium()
     //            let key = try ks?.getKeyData("testpassword")
-    //            let pk = sodium.utils.bin2hex(key!)
+    //            let pk = bin2hex(key!)
     //            XCTAssert(pk == "7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d", "Key decryption failed")
     //            let pubKey = privateToPublic(key!)
-    //            let address = sodium.utils.bin2hex(publicToAddress(pubKey!)!)
+    //            let address = bin2hex(publicToAddress(pubKey!)!)
     //            XCTAssert(address == ks!.keystoreParams!.address! , "Address derivation failed")
     //        } catch{
     //            print(error);
@@ -78,7 +77,7 @@ class web3swiftTests: XCTestCase {
             let ksString = String(data: data, encoding: .utf8)
             let newKeystore = try EthereumKeystoreV3(ksString!)
             let pk = try newKeystore?.getKeyData("testpassword2")
-            let pkString = sodium.utils.bin2hex(pk!)
+            let pkString = bin2hex(pk!)
             XCTAssert(pkString == "7a28b5ba57c53603b0b07b56bba752f7784bf506fa95edc395f5cf6c7514fe9d", "Keystore creating failed")
         }
         catch {
@@ -104,7 +103,7 @@ class web3swiftTests: XCTestCase {
     
     func testScrypt() {
         let sodium = Sodium()
-        let data = sodium.utils.hex2bin("""
+        let data = hex2bin("""
             fd ba be 1c 9d 34 72 00 78 56 e7 19 0d 01 e9 fe
             7c 6a d7 cb c8 23 78 30 e7 73 76 63 4b 37 31 62
             2e af 30 d9 2e 22 a3 88 6f f1 09 27 9d 98 30 da
@@ -148,10 +147,10 @@ class web3swiftTests: XCTestCase {
         //        PLAINTEXT = 00000000000000000000000000000000
         //        CIPHERTEXT = 95b1703fc57ba09fe0c3580febdd7ed4
         let sodium = Sodium()
-        let key = sodium.utils.hex2bin("fffffe00000000000000000000000000")
-        let iv = sodium.utils.hex2bin("00000000000000000000000000000000")
-        let plaintext = sodium.utils.hex2bin("00000000000000000000000000000000")
-        let ciphertext = sodium.utils.hex2bin("95b1703fc57ba09fe0c3580febdd7ed4")
+        let key = hex2bin("fffffe00000000000000000000000000")
+        let iv = hex2bin("00000000000000000000000000000000")
+        let plaintext = hex2bin("00000000000000000000000000000000")
+        let ciphertext = hex2bin("95b1703fc57ba09fe0c3580febdd7ed4")
         do {
             let aesCipher = try AES(key: key!.bytes, blockMode: .CBC(iv: iv!.bytes), padding: .noPadding)
             let decrypted = try aesCipher.decrypt(ciphertext!.bytes)
@@ -172,10 +171,10 @@ class web3swiftTests: XCTestCase {
 //        Ciphertext 874d6191b620e3261bef6864990db6ce
 
         let sodium = Sodium()
-        let key = sodium.utils.hex2bin("2b7e151628aed2a6abf7158809cf4f3c", ignore: " ")
-        let iv = sodium.utils.hex2bin("f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff", ignore: " ")
-        let plaintext = sodium.utils.hex2bin("6bc1bee22e409f96e93d7e117393172a", ignore: " ")
-        let ciphertext = sodium.utils.hex2bin("874d6191b620e3261bef6864990db6ce", ignore: " ")
+        let key = hex2bin("2b7e151628aed2a6abf7158809cf4f3c", ignore: " ")
+        let iv = hex2bin("f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff", ignore: " ")
+        let plaintext = hex2bin("6bc1bee22e409f96e93d7e117393172a", ignore: " ")
+        let ciphertext = hex2bin("874d6191b620e3261bef6864990db6ce", ignore: " ")
         var fullIV = Data()
         fullIV.append(iv!)
         do {
@@ -340,7 +339,7 @@ class web3swiftTests: XCTestCase {
             let parameters = [address, amount] as [AnyObject]
             let result = method[0].encodeParameters(parameters)
             print(abiNative)
-            let hex = sodium.utils.bin2hex(result!)
+            let hex = bin2hex(result!)
             print(hex)
             XCTAssert(hex == "a9059cbb000000000000000000000000e6877a4d8806e9a9f12eb2e8561ea6c1db19978d0000000000000000000000000000000000000000000000000de0b6b3a7640000", "Failed to encode ERC20")
             let dummyTrue = BigUInt(1).abiEncode(bits: 256)
@@ -428,7 +427,7 @@ class web3swiftTests: XCTestCase {
             let requestDictionary = transaction!.encodeAsDictionary(from: EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d"))
             print(requestDictionary)
             XCTAssert(requestDictionary != nil, "Failed to create ERC20 name transaction")
-            let resultData  = sodium.utils.hex2bin("0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000a534f4e4d20546f6b656e00000000000000000000000000000000000000000000".stripHexPrefix())
+            let resultData  = hex2bin("0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000a534f4e4d20546f6b656e00000000000000000000000000000000000000000000".stripHexPrefix())
             let method = contract.methods["name"]
             let result = method!.decodeReturnData(resultData!)
             print(result)

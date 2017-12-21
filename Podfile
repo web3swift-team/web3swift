@@ -1,4 +1,4 @@
-platform :ios, '11.1'
+platform :ios, '11.2'
 
 target 'web3swift' do
   use_frameworks!
@@ -8,13 +8,9 @@ target 'web3swift' do
   pod 'AwaitKit', '~> 3.0.1'
   pod 'PromiseKit/Alamofire', '~> 4.0'
   pod 'CryptoSwift'
-  pod 'Sodium'
   pod 'libsodium'
   pod 'secp256k1_ios', :git => 'https://github.com/shamatar/secp256k1_ios.git'
   target 'web3swiftTests' do
-    inherit! :search_paths
-  end
-  target 'web3Swift-Demo' do
     inherit! :search_paths
   end
 

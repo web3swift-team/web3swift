@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Sodium
 import BigInt
 
 
@@ -28,7 +27,6 @@ extension BigInt {
 
 extension ABIElement.ParameterType.StaticType {
     func decode(expectedType: ABIElement.ParameterType.StaticType, data: Data, tailPointer: BigUInt) -> (bytesConsumed: Int?, value: Any?) {
-        let sodium = Sodium()
         switch self {
         case .uint(let bits):
             let dataSlice = Data(data[0..<32])
@@ -43,7 +41,8 @@ extension ABIElement.ParameterType.StaticType {
         case .address:
             let dataSlice = Data(data[0..<32])
             guard Data(dataSlice[0..<12]) == Data(count: 12) else {break}
-            guard let hexAddress = sodium.utils.bin2hex(Data(dataSlice[12..<32])) else {break}
+            let addressData = Data(dataSlice[12..<32])
+            let hexAddress = addressData.toHexString().addHexPrefix().lowercased()
             return (32, EthereumAddress(hexAddress))
         case .bool:
             let dataSlice = Data(data[0..<32])
@@ -74,7 +73,6 @@ extension ABIElement.ParameterType.StaticType {
 
 extension ABIElement.ParameterType.DynamicType {
     func decode(expectedType: ABIElement.ParameterType.DynamicType, data: Data, tailPointer: BigUInt) -> (bytesConsumed: Int?, value: Any?) {
-//        let sodium = Sodium()
         switch self {
         case .bytes:
             var totalConsumed = 0

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Sodium
 import CryptoSwift
 import Foundation
 
@@ -89,8 +88,7 @@ public struct EthereumKeystoreV3 {
     
     public func signTXWithPrivateKey(transaction:EthereumTransaction, password: String) throws -> EthereumTransaction? {
         guard var privateKey = try self.getKeyData(password) else {return nil}
-        let sodium = Sodium()
-        defer {sodium.utils.zero(&privateKey)}
+        defer {Data.zero(&privateKey)}
         var tx = transaction
         guard tx.sign(privateKey: privateKey) else {return nil}
         return tx
@@ -98,8 +96,7 @@ public struct EthereumKeystoreV3 {
     
     public func signIntermediate(intermediate: TransactionIntermediate, password: String, network: Networks? = nil) throws -> TransactionIntermediate? {
         guard var privateKey = try self.getKeyData(password) else {return nil}
-        let sodium = Sodium()
-        defer {sodium.utils.zero(&privateKey)}
+        defer {Data.zero(&privateKey)}
         var newIntermediate = intermediate
         try newIntermediate.sign(privateKey, network: network)
         return newIntermediate
@@ -108,8 +105,7 @@ public struct EthereumKeystoreV3 {
     public func signHashWithPrivateKey(hash: Data, password: String) throws -> Data? {
         guard let pk = try? self.getKeyData(password) else {return nil}
         guard var privateKey = pk else {return nil}
-        let sodium = Sodium()
-        defer {sodium.utils.zero(&privateKey)}
+        defer {Data.zero(&privateKey)}
         let (compressedSignature, _) = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
         return compressedSignature
     }
@@ -117,8 +113,7 @@ public struct EthereumKeystoreV3 {
 //    public func signDataWithPrivateKey(data: Data, password: String) throws -> Data? {
 //        guard let pk = try? self.getKeyData(password) else {return nil}
 //        guard var privateKey = pk else {return nil}
-//        let sodium = Sodium()
-//        defer {sodium.utils.zero(&privateKey)}
+//        defer {Data.zero(&privateKey)}
 //        let (compressedSignature, _) = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
 //        return compressedSignature
 //    }
@@ -127,13 +122,12 @@ public struct EthereumKeystoreV3 {
         if (keyData == nil) {
             throw EthereumKeystoreV3Error.encryptionError("Encryption without key data")
         }
-        let sodium = Sodium()
         let saltLen = 32;
-        guard let saltData = sodium.randomBytes.buf(length: saltLen) else {throw EthereumKeystoreV3Error.noEntropyError}
-        guard let derivedKey = sodium.keyDerivation.scrypt(password: password, salt: saltData, length: dkLen, N: N, R: R, P: P) else {throw EthereumKeystoreV3Error.keyDerivationError}
+        guard let saltData = Data.randomBytes(length: saltLen) else {throw EthereumKeystoreV3Error.noEntropyError}
+        guard let derivedKey = scrypt(password: password, salt: saltData, length: dkLen, N: N, R: R, P: P) else {throw EthereumKeystoreV3Error.keyDerivationError}
         let last16bytes = derivedKey[(derivedKey.count - 16)...(derivedKey.count-1)]
         let encryptionKey = derivedKey[0...15]
-        guard let IV = sodium.randomBytes.buf(length: 16) else {throw EthereumKeystoreV3Error.noEntropyError}
+        guard let IV = Data.randomBytes(length: 16) else {throw EthereumKeystoreV3Error.noEntropyError}
         let aecCipher = try? AES(key: encryptionKey.bytes, blockMode: .CBC(iv: IV.bytes), padding: .noPadding)
         guard let encryptedKey = try aecCipher?.encrypt(keyData!.bytes) else {throw EthereumKeystoreV3Error.aesError}
         let encryptedKeyData = Data(bytes:encryptedKey)
@@ -141,9 +135,9 @@ public struct EthereumKeystoreV3 {
         dataForMAC.append(last16bytes)
         dataForMAC.append(encryptedKeyData)
         let mac = dataForMAC.sha3(.keccak256)
-        let kdfparams = KdfParamsV3(salt: sodium.utils.bin2hex(saltData)!, dklen: dkLen, n: N, p: P, r: R, c: nil, prf: nil)
-        let cipherparams = CipherParamsV3(iv: sodium.utils.bin2hex(IV)!)
-        let crypto = CryptoParamsV3(ciphertext: sodium.utils.bin2hex(encryptedKeyData)!, cipher: "aes-128-cbc", cipherparams: cipherparams, kdf: "scrypt", kdfparams: kdfparams, mac: sodium.utils.bin2hex(mac)!, version: nil)
+        let kdfparams = KdfParamsV3(salt: saltData.toHexString(), dklen: dkLen, n: N, p: P, r: R, c: nil, prf: nil)
+        let cipherparams = CipherParamsV3(iv: IV.toHexString())
+        let crypto = CryptoParamsV3(ciphertext: encryptedKeyData.toHexString(), cipher: "aes-128-cbc", cipherparams: cipherparams, kdf: "scrypt", kdfparams: kdfparams, mac: mac.toHexString(), version: nil)
         let pubKey = Web3.Utils.privateToPublic(keyData!)
         let address = Web3.Utils.publicToAddress(pubKey!)?.address.lowercased()
         let keystoreparams = KeystoreParamsV3(address: address, crypto: crypto, id: UUID().uuidString.lowercased(), version: 3)
@@ -151,9 +145,8 @@ public struct EthereumKeystoreV3 {
     }
     
     public mutating func regenerate(oldPassword: String, newPassword: String, dkLen: Int=32, N: Int = 262144, R: Int = 8, P: Int = 1) throws {
-        let sodium = Sodium()
         var keyData = try self.getKeyData(oldPassword)
-        defer {sodium.utils.zero(&keyData!)}
+        defer {Data.zero(&keyData!)}
         try self.encryptDataToStorage(newPassword, keyData: keyData!)
     }
     
@@ -162,8 +155,7 @@ public struct EthereumKeystoreV3 {
             return nil
         }
         guard let keystoreParams = self.keystoreParams else {return nil}
-        let sodium = Sodium()
-        guard let saltData = sodium.utils.hex2bin(keystoreParams.crypto.kdfparams.salt) else {return nil}
+        guard let saltData = hex2bin(keystoreParams.crypto.kdfparams.salt) else {return nil}
         let derivedLen = keystoreParams.crypto.kdfparams.dklen
         var passwordDerivedKey:Data?
         switch keystoreParams.crypto.kdf {
@@ -171,7 +163,7 @@ public struct EthereumKeystoreV3 {
             guard let N = keystoreParams.crypto.kdfparams.n else {return nil}
             guard let P = keystoreParams.crypto.kdfparams.p else {return nil}
             guard let R = keystoreParams.crypto.kdfparams.r else {return nil}
-            passwordDerivedKey = sodium.keyDerivation.scrypt(password: password!, salt: saltData, length: derivedLen, N: N, R: R, P: P)
+            passwordDerivedKey = scrypt(password: password!, salt: saltData, length: derivedLen, N: N, R: R, P: P)
         case "pbkdf2":
             guard let algo = keystoreParams.crypto.kdfparams.prf else {return nil}
             var hashVariant:HMAC.Variant?;
@@ -197,14 +189,14 @@ public struct EthereumKeystoreV3 {
         var dataForMAC = Data()
         let derivedKeyLast16bytes = passwordDerivedKey![(derivedKey.count - 16)...(derivedKey.count - 1)]
         dataForMAC.append(derivedKeyLast16bytes)
-        guard let cipherText = sodium.utils.hex2bin(keystoreParams.crypto.ciphertext) else {return nil}
+        guard let cipherText = hex2bin(keystoreParams.crypto.ciphertext) else {return nil}
         if (cipherText.count != 32) {return nil}
         dataForMAC.append(cipherText)
         let mac = dataForMAC.sha3(.keccak256)
-        if (!sodium.utils.equals(mac, sodium.utils.hex2bin(keystoreParams.crypto.mac)!)) {return nil}
+        if (mac != hex2bin(keystoreParams.crypto.mac)!) {return nil}
         let cipher = keystoreParams.crypto.cipher
         let decryptionKey = derivedKey[0...15]
-        guard let IV = sodium.utils.hex2bin(keystoreParams.crypto.cipherparams.iv) else {return nil}
+        guard let IV = hex2bin(keystoreParams.crypto.cipherparams.iv) else {return nil}
         var decryptedPK:Array<UInt8>?
         switch cipher {
         case "aes-128-ctr":

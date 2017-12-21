@@ -1,28 +1,31 @@
 Pod::Spec.new do |s|
-s.name             = "secp256k1_ios"
+s.name             = "web3swift"
 s.version          = "0.0.5"
-s.summary          = "Reference sepc256k1 implementation as pod"
+s.summary          = "Web3 implementation in vanilla Swift"
 
 s.description      = <<-DESC
-secp256k1 libraty portable pod
+Web3 implementation in vanilla Swift, intended for mobile developers of wallets, dapps and Web3.0
 DESC
 
-s.homepage         = "https://github.com/shamatar/secp256k1_ios"
+s.homepage         = "https://github.com/bankex/web3swift"
 s.license          = 'MIT'
-s.author           = { "Alex Vlasov" => "alex.m.vlasov@gmail.com" }
-s.source           = { :git => 'https://github.com/shamatar/secp256k1_ios.git', :tag => s.version.to_s }
+s.author           = { "Alex Vlasov" => "av@bankexfoundation.org" }
+s.source           = { :git => 'https://github.com/bankex/web3swift.git', :tag => s.version.to_s }
 s.social_media_url = 'https://twitter.com/shamatar'
-
-s.module_name      = 'secp256k1_ios'
-s.ios.deployment_target = "9.0"
-s.osx.deployment_target = "10.10"
 s.pod_target_xcconfig = {
-	'OTHER_CFLAGS' => '-DHAVE_CONFIG_H=1',
-    'HEADER_SEARCH_PATHS' => '"${PODS_ROOT}/secp256k1_ios/secp256k1_ios/"'
+    'SWIFT_VERSION' => '4.0'
 }
-s.source_files = "secp256k1_ios/**/*.{h,c}", 
-s.private_header_files = "secp256k1_ios/*.h", "secp256k1_ios/**/*.h"
-s.public_header_files = "secp256k1_ios/include/secp256k1.h", "secp256k1_ios/include/secp256k1_recovery.h", "secp256k1_ios/include/secp256k1_ecdh.h"
-
+s.module_name      = 'web3swift'
+s.ios.deployment_target = "11.0"
+s.source_files = "web3swift/**/*.{h,swift}", 
+s.public_header_files = "web3swift/**/*.{h}"
+s.dependency 'Alamofire', '~> 4.5'
+s.dependency 'BigInt', '~> 3.0.1'
+s.dependency 'PromiseKit', '~> 4.4'
+s.dependency 'AwaitKit', '~> 3.0.1'
+s.dependency 'PromiseKit/Alamofire', '~> 4.0'
+s.dependency 'CryptoSwift'
+s.dependency 'libsodium'
+s.dependency 'secp256k1_ios', '~> 0.0.6'
 
 end

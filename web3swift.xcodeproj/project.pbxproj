@@ -22,7 +22,7 @@
 		810B0F9A1FEC446B00CF0DA2 /* Web3+JSONRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F991FEC446B00CF0DA2 /* Web3+JSONRPC.swift */; };
 		810B0F9C1FEC520500CF0DA2 /* Web3+Methods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */; };
 		810B0F9E1FEC5B9C00CF0DA2 /* Web3+Eth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F9D1FEC5B9C00CF0DA2 /* Web3+Eth.swift */; };
-		8113D2C41FD7E1590074282C /* SodiumExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B01FD7E1590074282C /* SodiumExtensions.swift */; };
+		8113D2C41FD7E1590074282C /* CryptoExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B01FD7E1590074282C /* CryptoExtensions.swift */; };
 		8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */; };
 		8113D2C71FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */; };
 		8113D2CA1FD7E1590074282C /* KeystoreManagerV3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B81FD7E1590074282C /* KeystoreManagerV3.swift */; };
@@ -103,7 +103,7 @@
 		810B0F991FEC446B00CF0DA2 /* Web3+JSONRPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+JSONRPC.swift"; sourceTree = "<group>"; };
 		810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Methods.swift"; sourceTree = "<group>"; };
 		810B0F9D1FEC5B9C00CF0DA2 /* Web3+Eth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Eth.swift"; sourceTree = "<group>"; };
-		8113D2B01FD7E1590074282C /* SodiumExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SodiumExtensions.swift; sourceTree = "<group>"; };
+		8113D2B01FD7E1590074282C /* CryptoExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoExtensions.swift; sourceTree = "<group>"; };
 		8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibSecp256k1Extension.swift; sourceTree = "<group>"; };
 		8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryLiteralJSONSerializer.swift; sourceTree = "<group>"; };
 		8113D2B81FD7E1590074282C /* KeystoreManagerV3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeystoreManagerV3.swift; sourceTree = "<group>"; };
@@ -242,7 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				8113D2FF1FD7F30F0074282C /* StringExtension.swift */,
-				8113D2B01FD7E1590074282C /* SodiumExtensions.swift */,
+				8113D2B01FD7E1590074282C /* CryptoExtensions.swift */,
 				8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */,
 				8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */,
 				8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */,
@@ -587,7 +587,6 @@
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SipHash/SipHash.framework",
-				"${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework",
 				"${BUILT_PRODUCTS_DIR}/libsodium/libsodium.framework",
 				"${BUILT_PRODUCTS_DIR}/secp256k1_ios/secp256k1_ios.framework",
 			);
@@ -599,7 +598,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SipHash.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sodium.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libsodium.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1_ios.framework",
 			);
@@ -639,7 +637,6 @@
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SipHash/SipHash.framework",
-				"${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework",
 				"${BUILT_PRODUCTS_DIR}/libsodium/libsodium.framework",
 				"${BUILT_PRODUCTS_DIR}/secp256k1_ios/secp256k1_ios.framework",
 			);
@@ -651,7 +648,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SipHash.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sodium.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libsodium.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1_ios.framework",
 			);
@@ -675,7 +671,7 @@
 				818ABD591FE95558002657BB /* Web3+Infura.swift in Sources */,
 				810B0F9A1FEC446B00CF0DA2 /* Web3+JSONRPC.swift in Sources */,
 				8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */,
-				8113D2C41FD7E1590074282C /* SodiumExtensions.swift in Sources */,
+				8113D2C41FD7E1590074282C /* CryptoExtensions.swift in Sources */,
 				818ABD5B1FE95F8F002657BB /* Web3+Instance.swift in Sources */,
 				8113D2CC1FD7E1590074282C /* ABIDecoder.swift in Sources */,
 				810B0F9C1FEC520500CF0DA2 /* Web3+Methods.swift in Sources */,
@@ -899,8 +895,6 @@
 					"-framework",
 					"\"SipHash\"",
 					"-framework",
-					"\"Sodium\"",
-					"-framework",
 					"\"libsodium\"",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
@@ -952,8 +946,6 @@
 					"\"PromiseKit\"",
 					"-framework",
 					"\"SipHash\"",
-					"-framework",
-					"\"Sodium\"",
 					"-framework",
 					"\"libsodium\"",
 				);

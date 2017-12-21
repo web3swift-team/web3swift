@@ -1,17 +1,12 @@
 //
 //  AppDelegate.swift
-//  web3Swift-Demo
+//  web3swiftExample
 //
-//  Created by Petr Korolev on 11/12/2017.
-//  Copyright © 2017 Bankex Foundation. All rights reserved.
+//  Created by Alexander Vlasov on 22.12.2017.
+//  Copyright © 2017 Alexander Vlasov. All rights reserved.
 //
 
 import UIKit
-import CryptoSwift
-import BigInt
-import AwaitKit
-import PromiseKit
-import web3swift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,7 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {        
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // Override point for customization after application launch.
         return true
     }
 

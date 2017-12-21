@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Sodium
 import BigInt
 
 extension Data {
@@ -100,7 +99,6 @@ extension BigInt {
 extension ABIElement.ParameterType.StaticType {
     
     func encode(_ value: AnyObject) -> (head:Data?, tail: Data?) {
-        let sodium = Sodium()
         switch self {
         case .uint(let bits):
             if let biguint = value as? BigUInt {
@@ -118,7 +116,7 @@ extension ABIElement.ParameterType.StaticType {
             }
         case .address:
             if let string = value as? String {
-                guard let data = sodium.utils.hex2bin(string.lowercased().stripHexPrefix()) else {return (nil, nil)}
+                guard let data = hex2bin(string.lowercased().stripHexPrefix()) else {return (nil, nil)}
                 return (data.setLengthLeft(32), Data())
             } else if let address = value as? EthereumAddress {
                 guard address.isValid else {return (nil, nil)}
@@ -138,7 +136,7 @@ extension ABIElement.ParameterType.StaticType {
         case .bytes(let length):
             if let string = value as? String {
                 if string.hasHexPrefix() {
-                    guard let data = sodium.utils.hex2bin(string.lowercased().stripHexPrefix()) else {return (nil, nil)}
+                    guard let data = hex2bin(string.lowercased().stripHexPrefix()) else {return (nil, nil)}
                     return (data.setLengthRight(length), Data())
                 } else {
                     guard let data = string.data(using: .utf8) else {return (nil, nil)}
@@ -183,7 +181,6 @@ extension ABIElement.ParameterType.StaticType {
 
 extension ABIElement.ParameterType.DynamicType {
     func encode(_ value: AnyObject) -> (head:Data?, tail: Data?) {
-        let sodium = Sodium()
         switch self {
         case .string:
             if let string = value as? String {
@@ -211,7 +208,7 @@ extension ABIElement.ParameterType.DynamicType {
             return (nil, nil)
         case .bytes:
             if let string = value as? String {
-                guard let data = sodium.utils.hex2bin(string.lowercased().stripHexPrefix()) else {return (nil, nil) }
+                guard let data = hex2bin(string.lowercased().stripHexPrefix()) else {return (nil, nil) }
                 let length = data.count
                 let lengthToPad = Int(ceil(Double(data.count) / 32.0)) * 32
                 var tail = Data()

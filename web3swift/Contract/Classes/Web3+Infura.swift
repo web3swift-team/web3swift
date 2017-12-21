@@ -10,7 +10,6 @@ import Foundation
 import AwaitKit
 import PromiseKit
 import Alamofire
-import Sodium
 import BigInt
 
 public struct InfuraProvider: Web3Provider {
