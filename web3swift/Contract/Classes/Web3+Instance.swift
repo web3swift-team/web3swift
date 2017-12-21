@@ -12,16 +12,22 @@ import BigInt
 
 public struct web3 {
     var provider:Web3Provider
-    public func send(transaction: EthereumTransaction, network: Networks = .Mainnet) -> Promise<Data?> {
-        return provider.send(transaction: transaction, network: network)
+    public func send(request: JSONRPCrequest) -> Promise<[String: Any]?> {
+        return self.provider.send(request: request)
     }
-    public func call(transaction: EthereumTransaction, options: Web3Options?, network: Networks = .Mainnet) -> Promise<Data?> {
-        return provider.call(transaction: transaction, options: options, network: network)
+    public init(provider prov: Web3Provider) {
+        provider = prov
     }
-    public func estimateGas(transaction: EthereumTransaction, options: Web3Options?, network: Networks = .Mainnet) -> Promise<BigUInt?> {
-        return provider.estimateGas(transaction: transaction, options: options, network: network)
+    public var eth: web3.Eth {
+        let ethInstance = web3.Eth(provider : self.provider)
+        return ethInstance
     }
-    public func getNonce(_ address:EthereumAddress, network: Networks = .Mainnet) -> Promise<BigUInt?> {
-        return provider.getNonce(address, network: network)
+    
+    public struct Eth {
+        var provider:Web3Provider
+        public init(provider prov: Web3Provider) {
+            provider = prov
+        }
     }
+
 }

@@ -19,6 +19,9 @@
 		1CE976C21FDDF9F40005D4B0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CE976C01FDDF9F40005D4B0 /* LaunchScreen.storyboard */; };
 		596FE0DC120FD38AFF91C915 /* Pods_web3swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E81592D2802B9F4E200823 /* Pods_web3swift.framework */; };
 		8104E2281FE82BDC00F952CB /* Web3+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8104E2271FE82BDC00F952CB /* Web3+Utils.swift */; };
+		810B0F9A1FEC446B00CF0DA2 /* Web3+JSONRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F991FEC446B00CF0DA2 /* Web3+JSONRPC.swift */; };
+		810B0F9C1FEC520500CF0DA2 /* Web3+Methods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */; };
+		810B0F9E1FEC5B9C00CF0DA2 /* Web3+Eth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F9D1FEC5B9C00CF0DA2 /* Web3+Eth.swift */; };
 		8113D2C41FD7E1590074282C /* SodiumExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B01FD7E1590074282C /* SodiumExtensions.swift */; };
 		8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */; };
 		8113D2C71FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */; };
@@ -97,6 +100,9 @@
 		45EF5FB62CEF5D014C559D8E /* Pods-web3Swift-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3Swift-Demo.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3Swift-Demo/Pods-web3Swift-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		5EF0EBFF98DF0E56B960D7FF /* Pods-web3Swift-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3Swift-Demo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3Swift-Demo/Pods-web3Swift-Demo.debug.xcconfig"; sourceTree = "<group>"; };
 		8104E2271FE82BDC00F952CB /* Web3+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Utils.swift"; sourceTree = "<group>"; };
+		810B0F991FEC446B00CF0DA2 /* Web3+JSONRPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+JSONRPC.swift"; sourceTree = "<group>"; };
+		810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Methods.swift"; sourceTree = "<group>"; };
+		810B0F9D1FEC5B9C00CF0DA2 /* Web3+Eth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Eth.swift"; sourceTree = "<group>"; };
 		8113D2B01FD7E1590074282C /* SodiumExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SodiumExtensions.swift; sourceTree = "<group>"; };
 		8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibSecp256k1Extension.swift; sourceTree = "<group>"; };
 		8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryLiteralJSONSerializer.swift; sourceTree = "<group>"; };
@@ -315,6 +321,9 @@
 				818ABD5C1FE95FC9002657BB /* Web3+Contract.swift */,
 				8104E2271FE82BDC00F952CB /* Web3+Utils.swift */,
 				818ABD581FE95558002657BB /* Web3+Infura.swift */,
+				810B0F991FEC446B00CF0DA2 /* Web3+JSONRPC.swift */,
+				810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */,
+				810B0F9D1FEC5B9C00CF0DA2 /* Web3+Eth.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -664,12 +673,15 @@
 				8113D2CB1FD7E1590074282C /* ABIEncoder.swift in Sources */,
 				818EABDA1FDC9A5C00E013FC /* Contract.swift in Sources */,
 				818ABD591FE95558002657BB /* Web3+Infura.swift in Sources */,
+				810B0F9A1FEC446B00CF0DA2 /* Web3+JSONRPC.swift in Sources */,
 				8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */,
 				8113D2C41FD7E1590074282C /* SodiumExtensions.swift in Sources */,
 				818ABD5B1FE95F8F002657BB /* Web3+Instance.swift in Sources */,
 				8113D2CC1FD7E1590074282C /* ABIDecoder.swift in Sources */,
+				810B0F9C1FEC520500CF0DA2 /* Web3+Methods.swift in Sources */,
 				8113DE7C1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift in Sources */,
 				8104E2281FE82BDC00F952CB /* Web3+Utils.swift in Sources */,
+				810B0F9E1FEC5B9C00CF0DA2 /* Web3+Eth.swift in Sources */,
 				818D810E1FDC1A2000663CE3 /* RLP.swift in Sources */,
 				81531AA01FE7C07A002192CC /* EthereumKeystoreV3.swift in Sources */,
 				81DDECCF1FDF004E0063684A /* Web3.swift in Sources */,

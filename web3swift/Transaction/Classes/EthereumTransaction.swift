@@ -246,12 +246,15 @@ public struct EthereumTransaction: CustomStringConvertible {
         return true
     }
     
-    static func createRequest(method: String, transaction: EthereumTransaction, onBlock: String = "latest", options: Web3Options?) -> JSONRPCrequest? {
+    static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, onBlock: String? = nil, options: Web3Options?) -> JSONRPCrequest? {
         var request = JSONRPCrequest()
         request.method = method
         guard let from = options?.from else {return nil}
         guard let txParams = transaction.encodeAsDictionary(from: from) else {return nil}
-        let params = [txParams, onBlock] as Array<Encodable>
+        var params = [txParams] as Array<Encodable>
+        if onBlock != nil {
+            params.append(onBlock as Encodable)
+        }
         let pars = JSONRPCparams(params: params)
         request.params = pars
         return request
@@ -262,7 +265,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         guard let encodedData = transaction.encode() else {return nil}
         let hex = encodedData.toHexString().addHexPrefix().lowercased()
         var request = JSONRPCrequest()
-        request.method = "eth_sendRawTransaction"
+        request.method = JSONRPCmethod.sendRawTransaction
         let params = [hex] as Array<Encodable>
         let pars = JSONRPCparams(params: params)
         request.params = pars

@@ -13,9 +13,10 @@ import Alamofire
 import Sodium
 import BigInt
 
-public struct InfuraProvider:Web3Provider {
+public struct InfuraProvider: Web3Provider {
     public var accessToken:String? = nil
-    public init(){
+    public var network: Networks? = .Rinkeby
+    public init() {
         
     }
     enum supportedPostMethods: String {
@@ -27,64 +28,19 @@ public struct InfuraProvider:Web3Provider {
         case eth_call = "eth_call"
         case eth_getTransactionCount = "eth_getTransactionCount"
     }
-    
-    public func send(transaction: EthereumTransaction, network: Networks) -> Promise<Data?> {
+    public func send(request: JSONRPCrequest) -> Promise<[String: Any]?> {
         return async {
-            guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {return nil}
-            let response = try await(self.postToInfura(request, network: network)!)
-            print(response)
-            guard let res = response as? [String: Any], let resultString = res["result"] as? String else {return nil}
-            let sodium = Sodium()
-            guard let returnedData = sodium.utils.hex2bin(resultString.stripHexPrefix().lowercased()) else {return nil}
-            return returnedData
+            let response = try await(self.postToInfura(request)!)
+            guard let res = response as? [String: Any] else {return nil}
+            print(res)
+            return res
         }
     }
     
-    public func call(transaction: EthereumTransaction, options: Web3Options?, network: Networks) -> Promise<Data?> {
-        return async {
-            guard let req = EthereumTransaction.createRequest(method: "eth_call", transaction: transaction, onBlock: "latest", options: options) else {return nil}
-            let response = try await(self.postToInfura(req, network: network)!)
-//            print(response)
-            guard let res = response as? [String: Any], let resultString = res["result"] as? String else {return nil}
-            let sodium = Sodium()
-            guard let returnedData = sodium.utils.hex2bin(resultString.stripHexPrefix().lowercased()) else {return nil}
-            return returnedData
-        }
-    }
-    
-    public func estimateGas(transaction: EthereumTransaction, options: Web3Options?, network: Networks) -> Promise<BigUInt?> {
-        return async {
-            guard let req = EthereumTransaction.createRequest(method: "eth_estimateGas", transaction: transaction, onBlock: "latest", options: options) else {return nil}
-            var infuraReq = req
-            let params = [req.params?.params[0]] as Array<Encodable>
-            let pars = JSONRPCparams(params: params)
-            infuraReq.params = pars
-            let response = try await(self.postToInfura(infuraReq, network: network)!)
-            print(response)
-            guard let res = response as? [String: Any], let resultString = res["result"] as? String else {return nil}
-            guard let biguint = BigUInt(resultString.stripHexPrefix(), radix: 16) else {return nil}
-            return biguint
-        }
-    }
-    
-    public func getNonce(_ address:EthereumAddress, network: Networks = .Mainnet) -> Promise<BigUInt?> {
-        return async {
-            var req = JSONRPCrequest()
-            req.method = "eth_getTransactionCount"
-            let params = [address.address.lowercased(), "latest"] as Array<Encodable>
-            let pars = JSONRPCparams(params: params)
-            req.params = pars
-            let response = try await(self.postToInfura(req, network: network)!)
-            print(response)
-            guard let res = response as? [String: Any], let resultString = res["result"] as? String else {return nil}
-            guard let biguint = BigUInt(resultString.stripHexPrefix(), radix: 16) else {return nil}
-            return biguint
-        }
-    }
-    
-    internal func getToInfura(_ request: JSONRPCrequest, network: Networks = .Mainnet) -> Promise<Any>? {
+    internal func getToInfura(_ request: JSONRPCrequest) -> Promise<Any>? {
+        guard request.isValid else {return nil}
         guard let method = request.method else {return nil}
-        let requestURL = "https://api.infura.io/v1/jsonrpc/"+network.name+"/"+method
+        let requestURL = "https://api.infura.io/v1/jsonrpc/"+(self.network?.name)!+"/"+method.rawValue
         guard let pars = request.params else {return nil}
         guard let encoded = try? JSONEncoder().encode(pars) else {return nil}
         guard let serialized = String(data: encoded, encoding: .utf8) else {return nil}
@@ -95,9 +51,9 @@ public struct InfuraProvider:Web3Provider {
         return Alamofire.request(requestURL, parameters: requestParameters, encoding: URLEncoding.default).responseJSON()
     }
     
-    internal func postToInfura(_ request: JSONRPCrequest, network: Networks) -> Promise<Any>? {
+    internal func postToInfura(_ request: JSONRPCrequest) -> Promise<Any>? {
 //        let requestURL = "https://api.infura.io/v1/jsonrpc/"+network.name
-        var requestURL = "https://"+network.name + ".infura.io/"
+        var requestURL = "https://"+(self.network?.name)! + ".infura.io/"
         if self.accessToken != nil {
             requestURL = requestURL + self.accessToken!
         }

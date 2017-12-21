@@ -83,7 +83,4 @@ public struct Contract {
         let transaction = EthereumTransaction(nonce: nonce, gasPrice: gasPrice, gasLimit: gas, to: to, value: value, data: encodedData, v: chainID, r: BigUInt(0), s: BigUInt(0))
         return transaction
     }
-    
-    
-    
 }

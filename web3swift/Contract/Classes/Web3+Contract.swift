@@ -70,37 +70,55 @@ extension web3 {
                 self.transaction.nonce = nonce
                 if (network != nil) {
                     self.transaction.chainID = network?.chainID
+                } else if (self.provider.network != nil) {
+                    self.transaction.chainID = self.provider.network?.chainID
                 }
             }
             
             public mutating func sign(_ privateKey: Data, network: Networks? = nil) throws {
                 if (network != nil) {
                     self.transaction.chainID = network?.chainID
+                } else if (self.provider.network != nil) {
+                    self.transaction.chainID = self.provider.network?.chainID
                 }
                 let _ = self.transaction.sign(privateKey: privateKey)
             }
             
-            public func send(network: Networks = .Mainnet) -> Promise<[String:Any]?> {
+            public func send() -> Promise<[String:Any]?> {
                 return async {
                     print(self.transaction)
-                    let res = try await(self.provider.send(transaction: self.transaction, network: network))
-                    if res == nil {
+                    guard let request = EthereumTransaction.createRawTransaction(transaction: self.transaction) else {return nil}
+                    let response = try await(self.provider.send(request: request))
+                    if response == nil {
                         return nil
                     }
-                    let hash = res?.toHexString().addHexPrefix().lowercased()
+                    guard let res = response else {return nil}
+                    if let error = res["error"] as? String {
+                        print(error as String)
+                        return nil
+                    }
+                    guard let resultString = res["result"] as? String else {return nil}
+                    let hash = resultString.addHexPrefix().lowercased()
                     return ["txhash": hash as Any, "txhashCalculated" : self.transaction.txhash as Any]
                     
                 }
             }
-            public func call(options: Web3Options?, network: Networks = .Mainnet) -> Promise<[String:Any]?> {
+            public func call(options: Web3Options?) -> Promise<[String:Any]?> {
                 return async {
                     let mergedOptions = Web3Options.merge(self.options, with: options)
-                    let res = try await(self.provider.call(transaction: self.transaction, options: mergedOptions, network: network))
-                    if res == nil {
+                    guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: self.transaction, onBlock: "latest", options: mergedOptions) else {return nil}
+                    let response = try await(self.provider.send(request: request))
+                    if response == nil {
                         return nil
                     }
+                    guard let res = response else {return nil}
+                    if let error = res["error"] as? String {
+                        print(error as String)
+                        return nil
+                    }
+                    guard let resultString = res["result"] as? String else {return nil}
                     if (self.method == "fallback") {
-                        let resultAsBigUInt = BigUInt(res!)
+                        let resultAsBigUInt = BigUInt(resultString.stripHexPrefix(), radix : 16)
                         return ["result": resultAsBigUInt as Any]
                     }
                     let foundMethod = self.contract.methods.filter { (key, value) -> Bool in
@@ -108,18 +126,29 @@ extension web3 {
                     }
                     guard foundMethod.count == 1 else {return nil}
                     let abiMethod = foundMethod[self.method]
-                    guard let decodedData = abiMethod?.decodeReturnData(res!) else {return nil}
+                    let responseData = Data(Array<UInt8>(hex: resultString.lowercased().stripHexPrefix()))
+                    guard responseData != Data() else {return nil}
+                    guard let decodedData = abiMethod?.decodeReturnData(responseData) else {return nil}
                     return decodedData
                 }
             }
-            public func estimateGas(options: Web3Options?, network: Networks = .Mainnet) -> Promise<BigUInt?> {
+            public func estimateGas(options: Web3Options?) -> Promise<BigUInt?> {
                 return async {
                     let mergedOptions = Web3Options.merge(self.options, with: options)
-                    let res = try await(self.provider.estimateGas(transaction: self.transaction, options: mergedOptions, network: network))
-                    if res == nil {
+                    guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: self.transaction, onBlock: "latest", options: mergedOptions) else {return nil}
+                    let response = try await(self.provider.send(request: request))
+                    if response == nil {
                         return nil
                     }
-                    let gas = BigUInt(res!)
+                    guard let res = response else {return nil}
+                    if let error = res["error"] as? String {
+                        print(error as String)
+                        return nil
+                    }
+                    guard let resultString = res["result"] as? String else {return nil}
+                    let responseData = Data(Array<UInt8>(hex: resultString.lowercased().stripHexPrefix()))
+                    guard responseData != Data() else {return nil}
+                    let gas = BigUInt(responseData)
                     return gas
                 }
             }
@@ -128,7 +157,6 @@ extension web3 {
         public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData:Data = Data(), options: Web3Options?) -> transactionIntermediate? {
             
             let mergedOptions = Web3Options.merge(self.options, with: options)
-            
             guard let tx = self.contract.method(method, parameters: parameters, nonce: nonce, extraData:extraData, options: mergedOptions, toAddress:self.contract.address) else {return nil}
             let intermediate = transactionIntermediate(transaction: tx, provider: self.provider, contract: self.contract, method: method, options: mergedOptions)
             return intermediate

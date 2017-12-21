@@ -15,20 +15,30 @@ import PromiseKit
 public struct Web3 {
     public static func newWeb3(_ providerURL: URL? = nil) -> web3? {
         if providerURL == nil {
-            let provider = InfuraProvider()
-            return web3(provider: provider)
+            var infura = InfuraProvider()
+            infura.network = .Rinkeby
+            return web3(provider: infura)
         }
         else {
             return nil
         }
     }
+    
+    public static func InfuraRinkebyWeb3() -> web3 {
+        var infura = InfuraProvider()
+        infura.network = .Rinkeby
+        return web3(provider: infura)
+    }
+    public static func InfuraMainnetWeb3() -> web3 {
+        var infura = InfuraProvider()
+        infura.network = .Mainnet
+        return web3(provider: infura)
+    }
 }
 
 public protocol Web3Provider{
-    func send(transaction: EthereumTransaction, network: Networks) -> Promise<Data?>
-    func call(transaction: EthereumTransaction, options: Web3Options?, network: Networks) -> Promise<Data?>
-    func estimateGas(transaction: EthereumTransaction, options: Web3Options?, network: Networks) -> Promise<BigUInt?>
-    func getNonce(_ address:EthereumAddress, network: Networks) -> Promise<BigUInt?>
+    func send(request: JSONRPCrequest) -> Promise<[String: Any]?>
+    var network: Networks? {get}
 }
 
 public enum Networks {
@@ -102,49 +112,6 @@ public struct Web3Options {
     }
 }
 
-struct JSONRPCrequest: Encodable, ParameterEncoding  {
-    var jsonrpc: String = "2.0"
-    var method: String?
-    var params: JSONRPCparams?
-    var id: Int = Int(floor(Date().timeIntervalSince1970))
-    var serializedParams: String? = nil
-    
-    public func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
-        let jsonSerialization = try JSONEncoder().encode(self)
-//        print(String(data: jsonSerialization, encoding: .utf8))
-        var request = try urlRequest.asURLRequest()
-        request.httpBody = jsonSerialization
-        return request
-    }
-}
 
-struct TransactionParameters: Codable {
-    var data: String?
-    var from: String
-    var gas: String?
-    var gasPrice: String?
-    var to: String
-    var value: String? = "0x0"
-    
-    init(from _from:String, to _to:String) {
-        from = _from
-        to = _to
-    }
-}
-
-struct JSONRPCparams: Encodable{
-    var params = [Any]()
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.unkeyedContainer()
-        for par in params {
-            if let p = par as? TransactionParameters {
-                try container.encode(p)
-            } else if let p = par as? String {
-                try container.encode(p)
-            }
-        }
-    }
-}
 
 
