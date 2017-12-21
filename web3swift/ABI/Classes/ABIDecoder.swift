@@ -144,8 +144,6 @@ extension ABIElement.ParameterType.DynamicType {
                 returnArray.append(value)
             }
             return (totalConsumed, returnArray)
-        default:
-            return (nil, nil)
         }
         return (nil, nil)
     }

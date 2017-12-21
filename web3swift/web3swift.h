@@ -5,7 +5,6 @@
 //  Created by Petr Korolev on 06/12/2017.
 //  Copyright © 2017 Bankex Foundation. All rights reserved.
 //
-
 #import <UIKit/UIKit.h>
 //! Project version number for web3swift.
 FOUNDATION_EXPORT double web3swiftVersionNumber;

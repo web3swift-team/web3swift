@@ -61,10 +61,7 @@ fileprivate func parseToElement(from abiRecord: ABIRecord, type: ElementType) th
         case .event:
             let event = try parseEvent(abiRecord: abiRecord)
             return ABIElement.event(event)
-        default:
-            throw ParsingError.elementTypeInvalid
     }
-    throw ParsingError.elementTypeInvalid
 }
 
 fileprivate func parseFunction(abiRecord:ABIRecord) throws -> ABIElement.Function {

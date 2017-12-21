@@ -100,8 +100,6 @@ class ViewController: UIViewController {
                     }
                     let res = try await((intermediateSend?.send(network: .Rinkeby))!)
                     print(res)
-                    
-                    
                 }
                 catch{
                     print(error)
