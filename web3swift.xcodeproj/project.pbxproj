@@ -7,16 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0B5DD16578686DA1826A7A2C /* Pods_web3Swift_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10C02100CDF7C2D5C79A52B9 /* Pods_web3Swift_Demo.framework */; };
 		1CD91B321FD769A6007BFB45 /* web3swiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */; };
 		1CD91B341FD769A6007BFB45 /* web3swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift.framework */; };
-		1CDA65C11FDDFE0F0025DE71 /* web3swift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1CDA65CA1FDE0D3F0025DE71 /* ABIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CDA65C91FDE0D3F0025DE71 /* ABIManager.swift */; };
-		1CE976B81FDDF9F40005D4B0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE976B71FDDF9F40005D4B0 /* AppDelegate.swift */; };
-		1CE976BA1FDDF9F40005D4B0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CE976B91FDDF9F40005D4B0 /* ViewController.swift */; };
-		1CE976BD1FDDF9F40005D4B0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CE976BB1FDDF9F40005D4B0 /* Main.storyboard */; };
-		1CE976BF1FDDF9F40005D4B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CE976BE1FDDF9F40005D4B0 /* Assets.xcassets */; };
-		1CE976C21FDDF9F40005D4B0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1CE976C01FDDF9F40005D4B0 /* LaunchScreen.storyboard */; };
 		596FE0DC120FD38AFF91C915 /* Pods_web3swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18E81592D2802B9F4E200823 /* Pods_web3swift.framework */; };
 		8104E2281FE82BDC00F952CB /* Web3+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8104E2271FE82BDC00F952CB /* Web3+Utils.swift */; };
 		810B0F9A1FEC446B00CF0DA2 /* Web3+JSONRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F991FEC446B00CF0DA2 /* Web3+JSONRPC.swift */; };
@@ -34,8 +27,6 @@
 		8113DE7C1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */; };
 		813FFF8D1FD82EEB006379A2 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2FF1FD7F30F0074282C /* StringExtension.swift */; };
 		81531AA01FE7C07A002192CC /* EthereumKeystoreV3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81531A9F1FE7C07A002192CC /* EthereumKeystoreV3.swift */; };
-		81531AA41FE7CD74002192CC /* ERC20abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA31FE7CD74002192CC /* ERC20abi.json */; };
-		81531AA61FE7D2CE002192CC /* keystore.ks in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA51FE7D2CE002192CC /* keystore.ks */; };
 		81531AA71FE7D8DB002192CC /* ERC20abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA31FE7CD74002192CC /* ERC20abi.json */; };
 		81531AA81FE7D8DB002192CC /* keystore.ks in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA51FE7D2CE002192CC /* keystore.ks */; };
 		818ABD591FE95558002657BB /* Web3+Infura.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818ABD581FE95558002657BB /* Web3+Infura.swift */; };
@@ -44,7 +35,6 @@
 		818D810E1FDC1A2000663CE3 /* RLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818D810D1FDC1A2000663CE3 /* RLP.swift */; };
 		818EABDA1FDC9A5C00E013FC /* Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EABD91FDC9A5C00E013FC /* Contract.swift */; };
 		81DDECCF1FDF004E0063684A /* Web3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECCE1FDF004E0063684A /* Web3.swift */; };
-		D66F51D37CD9A4CE6B054621 /* ChooseFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F55C8F02BEEE0F7638898 /* ChooseFilesViewController.swift */; };
 		E82DD6EACF6933D0D3978EA0 /* Pods_web3swiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -56,28 +46,7 @@
 			remoteGlobalIDString = 1CD91AFB1FD76910007BFB45;
 			remoteInfo = web3swift;
 		};
-		1CDA65C21FDDFE0F0025DE71 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1CD91AF31FD76910007BFB45 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1CD91AFB1FD76910007BFB45;
-			remoteInfo = web3swift;
-		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		1CDA65C41FDDFE0F0025DE71 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				1CDA65C11FDDFE0F0025DE71 /* web3swift.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		10C02100CDF7C2D5C79A52B9 /* Pods_web3Swift_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3Swift_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,13 +58,6 @@
 		1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftTests.swift; sourceTree = "<group>"; };
 		1CD91B331FD769A6007BFB45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1CDA65C91FDE0D3F0025DE71 /* ABIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABIManager.swift; sourceTree = "<group>"; };
-		1CE976B51FDDF9F40005D4B0 /* web3Swift-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "web3Swift-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1CE976B71FDDF9F40005D4B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1CE976B91FDDF9F40005D4B0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		1CE976BC1FDDF9F40005D4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		1CE976BE1FDDF9F40005D4B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		1CE976C11FDDF9F40005D4B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		1CE976C31FDDF9F40005D4B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D07F714D1FF1408DBC01EBB /* Pods-web3swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift/Pods-web3swift.release.xcconfig"; sourceTree = "<group>"; };
 		45EF5FB62CEF5D014C559D8E /* Pods-web3Swift-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3Swift-Demo.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3Swift-Demo/Pods-web3Swift-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		5EF0EBFF98DF0E56B960D7FF /* Pods-web3Swift-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3Swift-Demo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3Swift-Demo/Pods-web3Swift-Demo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -126,7 +88,6 @@
 		8C8900D87850714C2DB85DFC /* Pods-web3swiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swiftTests/Pods-web3swiftTests.release.xcconfig"; sourceTree = "<group>"; };
 		B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D11D741983B37E59DB6A65E1 /* Pods-web3swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift/Pods-web3swift.debug.xcconfig"; sourceTree = "<group>"; };
-		D66F55C8F02BEEE0F7638898 /* ChooseFilesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseFilesViewController.swift; sourceTree = "<group>"; };
 		E826BA1AF7696BFC43A392A0 /* Pods-web3swiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swiftTests/Pods-web3swiftTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -148,14 +109,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1CE976B21FDDF9F40005D4B0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0B5DD16578686DA1826A7A2C /* Pods_web3Swift_Demo.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -164,7 +117,6 @@
 			children = (
 				1CD91AFE1FD76910007BFB45 /* web3swift */,
 				1CD91B301FD769A6007BFB45 /* web3swiftTests */,
-				1CE976B61FDDF9F40005D4B0 /* web3Swift-Demo */,
 				1CD91AFD1FD76910007BFB45 /* Products */,
 				868F9682FE77A7BADF675F92 /* Pods */,
 				78D101CC419F27D142F6E9AE /* Frameworks */,
@@ -176,7 +128,6 @@
 			children = (
 				1CD91AFC1FD76910007BFB45 /* web3swift.framework */,
 				1CD91B2F1FD769A6007BFB45 /* web3swiftTests.xctest */,
-				1CE976B51FDDF9F40005D4B0 /* web3Swift-Demo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -204,20 +155,6 @@
 				1CD91B331FD769A6007BFB45 /* Info.plist */,
 			);
 			path = web3swiftTests;
-			sourceTree = "<group>";
-		};
-		1CE976B61FDDF9F40005D4B0 /* web3Swift-Demo */ = {
-			isa = PBXGroup;
-			children = (
-				1CE976B71FDDF9F40005D4B0 /* AppDelegate.swift */,
-				1CE976B91FDDF9F40005D4B0 /* ViewController.swift */,
-				1CE976BB1FDDF9F40005D4B0 /* Main.storyboard */,
-				1CE976BE1FDDF9F40005D4B0 /* Assets.xcassets */,
-				1CE976C01FDDF9F40005D4B0 /* LaunchScreen.storyboard */,
-				1CE976C31FDDF9F40005D4B0 /* Info.plist */,
-				D66F55C8F02BEEE0F7638898 /* ChooseFilesViewController.swift */,
-			);
-			path = "web3Swift-Demo";
 			sourceTree = "<group>";
 		};
 		78D101CC419F27D142F6E9AE /* Frameworks */ = {
@@ -395,28 +332,6 @@
 			productReference = 1CD91B2F1FD769A6007BFB45 /* web3swiftTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		1CE976B41FDDF9F40005D4B0 /* web3Swift-Demo */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1CE976C41FDDF9F40005D4B0 /* Build configuration list for PBXNativeTarget "web3Swift-Demo" */;
-			buildPhases = (
-				0B69136CFCB3C8934CE6D39D /* [CP] Check Pods Manifest.lock */,
-				1CE976B11FDDF9F40005D4B0 /* Sources */,
-				1CE976B21FDDF9F40005D4B0 /* Frameworks */,
-				1CE976B31FDDF9F40005D4B0 /* Resources */,
-				1CDA65C41FDDFE0F0025DE71 /* Embed Frameworks */,
-				9725D8F14DB0EB28A2CED364 /* [CP] Embed Pods Frameworks */,
-				42526667D6820D1AF9F8E7BC /* [CP] Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				1CDA65C31FDDFE0F0025DE71 /* PBXTargetDependency */,
-			);
-			name = "web3Swift-Demo";
-			productName = "web3Swift-Demo";
-			productReference = 1CE976B51FDDF9F40005D4B0 /* web3Swift-Demo.app */;
-			productType = "com.apple.product-type.application";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -432,10 +347,6 @@
 						ProvisioningStyle = Automatic;
 					};
 					1CD91B2E1FD769A6007BFB45 = {
-						CreatedOnToolsVersion = 9.1;
-						ProvisioningStyle = Automatic;
-					};
-					1CE976B41FDDF9F40005D4B0 = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
 					};
@@ -456,7 +367,6 @@
 			targets = (
 				1CD91AFB1FD76910007BFB45 /* web3swift */,
 				1CD91B2E1FD769A6007BFB45 /* web3swiftTests */,
-				1CE976B41FDDF9F40005D4B0 /* web3Swift-Demo */,
 			);
 		};
 /* End PBXProject section */
@@ -478,18 +388,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1CE976B31FDDF9F40005D4B0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				81531AA61FE7D2CE002192CC /* keystore.ks in Resources */,
-				1CE976C21FDDF9F40005D4B0 /* LaunchScreen.storyboard in Resources */,
-				81531AA41FE7CD74002192CC /* ERC20abi.json in Resources */,
-				1CE976BF1FDDF9F40005D4B0 /* Assets.xcassets in Resources */,
-				1CE976BD1FDDF9F40005D4B0 /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -505,24 +403,6 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-web3swift-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		0B69136CFCB3C8934CE6D39D /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-web3Swift-Demo-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -557,21 +437,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-web3swift/Pods-web3swift-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		42526667D6820D1AF9F8E7BC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-web3Swift-Demo/Pods-web3Swift-Demo-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		48322606683D458C51615DF4 /* [CP] Embed Pods Frameworks */ = {
@@ -624,38 +489,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9725D8F14DB0EB28A2CED364 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-web3Swift-Demo/Pods-web3Swift-Demo-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/AwaitKit/AwaitKit.framework",
-				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
-				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SipHash/SipHash.framework",
-				"${BUILT_PRODUCTS_DIR}/libsodium/libsodium.framework",
-				"${BUILT_PRODUCTS_DIR}/secp256k1_ios/secp256k1_ios.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AwaitKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SipHash.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libsodium.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1_ios.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-web3Swift-Demo/Pods-web3Swift-Demo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -686,7 +519,6 @@
 				8113D31A1FD7F4C80074282C /* ABITypes.swift in Sources */,
 				8113D31C1FD7F8980074282C /* ABIRecordParser.swift in Sources */,
 				8113D2CE1FD7E1590074282C /* EthereumTransaction.swift in Sources */,
-				D66F51D37CD9A4CE6B054621 /* ChooseFilesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -698,15 +530,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1CE976B11FDDF9F40005D4B0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1CE976BA1FDDF9F40005D4B0 /* ViewController.swift in Sources */,
-				1CE976B81FDDF9F40005D4B0 /* AppDelegate.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -715,31 +538,7 @@
 			target = 1CD91AFB1FD76910007BFB45 /* web3swift */;
 			targetProxy = 1CD91B351FD769A6007BFB45 /* PBXContainerItemProxy */;
 		};
-		1CDA65C31FDDFE0F0025DE71 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1CD91AFB1FD76910007BFB45 /* web3swift */;
-			targetProxy = 1CDA65C21FDDFE0F0025DE71 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		1CE976BB1FDDF9F40005D4B0 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1CE976BC1FDDF9F40005D4B0 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		1CE976C01FDDF9F40005D4B0 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1CE976C11FDDF9F40005D4B0 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1CD91B021FD76910007BFB45 /* Debug */ = {
@@ -1003,50 +802,6 @@
 			};
 			name = Release;
 		};
-		1CE976C51FDDF9F40005D4B0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5EF0EBFF98DF0E56B960D7FF /* Pods-web3Swift-Demo.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 62V9CKQN89;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = "web3Swift-Demo/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "BF.web3Swift-Demo";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		1CE976C61FDDF9F40005D4B0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 45EF5FB62CEF5D014C559D8E /* Pods-web3Swift-Demo.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 62V9CKQN89;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = "web3Swift-Demo/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "BF.web3Swift-Demo";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1073,15 +828,6 @@
 			buildConfigurations = (
 				1CD91B381FD769A6007BFB45 /* Debug */,
 				1CD91B391FD769A6007BFB45 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		1CE976C41FDDF9F40005D4B0 /* Build configuration list for PBXNativeTarget "web3Swift-Demo" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1CE976C51FDDF9F40005D4B0 /* Debug */,
-				1CE976C61FDDF9F40005D4B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

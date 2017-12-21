@@ -1,0 +1,60 @@
+PODS:
+  - Alamofire (4.6.0)
+  - AwaitKit (3.0.1):
+    - PromiseKit (~> 4.2)
+  - BigInt (3.0.1):
+    - SipHash (~> 1.2)
+  - CryptoSwift (0.8.0)
+  - libsodium (1.0.12)
+  - PromiseKit (4.5.0):
+    - PromiseKit/Foundation (= 4.5.0)
+    - PromiseKit/QuartzCore (= 4.5.0)
+    - PromiseKit/UIKit (= 4.5.0)
+  - PromiseKit/Alamofire (4.5.0):
+    - Alamofire (~> 4.0)
+    - PromiseKit/CorePromise
+  - PromiseKit/CorePromise (4.5.0)
+  - PromiseKit/Foundation (4.5.0):
+    - PromiseKit/CorePromise
+  - PromiseKit/QuartzCore (4.5.0):
+    - PromiseKit/CorePromise
+  - PromiseKit/UIKit (4.5.0):
+    - PromiseKit/CorePromise
+  - secp256k1_ios (0.0.6)
+  - SipHash (1.2.0)
+  - web3swift (0.0.5):
+    - Alamofire (~> 4.5)
+    - AwaitKit (~> 3.0.1)
+    - BigInt (~> 3.0.1)
+    - CryptoSwift
+    - libsodium
+    - PromiseKit (~> 4.4)
+    - PromiseKit/Alamofire (~> 4.0)
+    - secp256k1_ios (~> 0.0.6)
+
+DEPENDENCIES:
+  - web3swift (from `https://github.com/bankex/web3swift.git`)
+
+EXTERNAL SOURCES:
+  web3swift:
+    :git: https://github.com/bankex/web3swift.git
+
+CHECKOUT OPTIONS:
+  web3swift:
+    :commit: 84565e3c1b0117d99f097e3d2134b2faadbaf22e
+    :git: https://github.com/bankex/web3swift.git
+
+SPEC CHECKSUMS:
+  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  AwaitKit: daf1af84544413a8dfadb4fc25d8b0f9706e5c83
+  BigInt: 8e8a52161c745cd3ab78e3dc346a9fbee51e6cf6
+  CryptoSwift: f81907430ebbe38b8404b4f6fb40f3c576a8755f
+  libsodium: 9a8faa5ef2fa0d2d57bd7f7d79bf8fb7c1a9f0ea
+  PromiseKit: 9c1d9f6d7b65e3951a90bea7f407c56972be5d8e
+  secp256k1_ios: fdff245a6dd1d46a8454cf02e6e136ddcf2050a6
+  SipHash: c6e9e43e9c531b5bc6602545130c26194a6d31ce
+  web3swift: 87b6e84af3ba005c21267eb797f284d9de23a49a
+
+PODFILE CHECKSUM: f1fd864b55ecba9a42a67504be4a56cfa7bfc07e
+
+COCOAPODS: 1.3.1
