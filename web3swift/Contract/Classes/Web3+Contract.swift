@@ -15,17 +15,17 @@ import AwaitKit
 extension web3 {
     
     public func contract(_ abiString: String, at: EthereumAddress? = nil) -> web3contract? {
-        return web3contract(self.provider, abiString: abiString, at: at)
+        return web3contract(web3: self, abiString: abiString, at: at)
     }
     
-    public struct web3contract {
+    public class web3contract {
         var contract: Contract
-        var provider: Web3Provider
+        var web3 : web3
         public var options: Web3Options? = Web3Options.defaultOptions()
         
-        public init?(_ provider: Web3Provider, abiString: String, at: EthereumAddress? = nil, options: Web3Options? = nil) {
+        public init?(web3 web3Instance:web3, abiString: String, at: EthereumAddress? = nil, options: Web3Options? = nil) {
             do {
-                self.provider = provider
+                self.web3 = web3Instance
                 let jsonData = abiString.data(using: .utf8)
                 let abi = try JSONDecoder().decode([ABIRecord].self, from: jsonData!)
                 let abiNative = try abi.map({ (record) -> ABIElement in
@@ -50,45 +50,75 @@ extension web3 {
             }
         }
         
-        public struct transactionIntermediate{
+        public class transactionIntermediate{
             public var transaction:EthereumTransaction
-            public var provider: Web3Provider
             public var contract: Contract
             public var method: String
             public var options: Web3Options? = Web3Options.defaultOptions()
-            
-            public init (transaction: EthereumTransaction, provider: Web3Provider, contract: Contract, method: String, options: Web3Options?) {
+            var web3: web3
+            public init (transaction: EthereumTransaction, web3 web3Instance: web3, contract: Contract, method: String, options: Web3Options?) {
                 self.transaction = transaction
-                self.provider = provider
+                self.web3 = web3Instance
                 self.contract = contract
                 self.contract.options = options
                 self.method = method
                 self.options = options
             }
             
-            public mutating func setNonce(_ nonce: BigUInt, network: Networks? = nil) throws {
+            public func setNonce(_ nonce: BigUInt, network: Networks? = nil) throws {
                 self.transaction.nonce = nonce
                 if (network != nil) {
                     self.transaction.chainID = network?.chainID
-                } else if (self.provider.network != nil) {
-                    self.transaction.chainID = self.provider.network?.chainID
+                } else if (self.web3.provider.network != nil) {
+                    self.transaction.chainID = self.web3.provider.network?.chainID
                 }
             }
             
-            public mutating func sign(_ privateKey: Data, network: Networks? = nil) throws {
+            public func sign(_ privateKey: Data, network: Networks? = nil) throws {
                 if (network != nil) {
                     self.transaction.chainID = network?.chainID
-                } else if (self.provider.network != nil) {
-                    self.transaction.chainID = self.provider.network?.chainID
+                } else if (self.web3.provider.network != nil) {
+                    self.transaction.chainID = self.web3.provider.network?.chainID
                 }
                 let _ = self.transaction.sign(privateKey: privateKey)
             }
             
-            public func send() -> Promise<[String:Any]?> {
+            public func send(password: String = "BANKEXFOUNDATION") -> Promise<[String:Any]?> {
+                return async {
+                    do {
+                        guard let address = self.contract.address else {return nil}
+                        guard let nonce = try await(self.web3.eth.getTransactionCount(address: address, onBlock: "latest")) else {return nil}
+                        try self.setNonce(nonce, network: self.web3.provider.network)
+                        guard let from = self.options?.from else {return nil}
+                        guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {return nil}
+                        guard let keystore = keystoreManager.wallets[from.address] else {return nil}
+                        try keystore.signIntermediate(intermediate: self, password: password)
+                        print(self.transaction)
+                        guard let request = EthereumTransaction.createRawTransaction(transaction: self.transaction) else {return nil}
+                        let response = try await(self.web3.provider.send(request: request))
+                        if response == nil {
+                            return nil
+                        }
+                        guard let res = response else {return nil}
+                        if let error = res["error"] as? String {
+                            print(error as String)
+                            return nil
+                        }
+                        guard let resultString = res["result"] as? String else {return nil}
+                        let hash = resultString.addHexPrefix().lowercased()
+                        return ["txhash": hash as Any, "txhashCalculated" : self.transaction.txhash as Any]
+                    }
+                    catch {
+                        return nil
+                    }
+                }
+            }
+            
+            public func sendSigned() -> Promise<[String:Any]?> {
                 return async {
                     print(self.transaction)
                     guard let request = EthereumTransaction.createRawTransaction(transaction: self.transaction) else {return nil}
-                    let response = try await(self.provider.send(request: request))
+                    let response = try await(self.web3.provider.send(request: request))
                     if response == nil {
                         return nil
                     }
@@ -103,11 +133,13 @@ extension web3 {
                     
                 }
             }
+            
+            
             public func call(options: Web3Options?) -> Promise<[String:Any]?> {
                 return async {
                     let mergedOptions = Web3Options.merge(self.options, with: options)
                     guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: self.transaction, onBlock: "latest", options: mergedOptions) else {return nil}
-                    let response = try await(self.provider.send(request: request))
+                    let response = try await(self.web3.provider.send(request: request))
                     if response == nil {
                         return nil
                     }
@@ -136,7 +168,7 @@ extension web3 {
                 return async {
                     let mergedOptions = Web3Options.merge(self.options, with: options)
                     guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: self.transaction, onBlock: "latest", options: mergedOptions) else {return nil}
-                    let response = try await(self.provider.send(request: request))
+                    let response = try await(self.web3.provider.send(request: request))
                     if response == nil {
                         return nil
                     }
@@ -158,7 +190,7 @@ extension web3 {
             
             let mergedOptions = Web3Options.merge(self.options, with: options)
             guard let tx = self.contract.method(method, parameters: parameters, nonce: nonce, extraData:extraData, options: mergedOptions, toAddress:self.contract.address) else {return nil}
-            let intermediate = transactionIntermediate(transaction: tx, provider: self.provider, contract: self.contract, method: method, options: mergedOptions)
+            let intermediate = transactionIntermediate(transaction: tx, web3: self.web3, contract: self.contract, method: method, options: mergedOptions)
             return intermediate
         }
     }

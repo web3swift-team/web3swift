@@ -25,20 +25,21 @@ public struct Web3 {
     }
     
     public static func InfuraRinkebyWeb3() -> web3 {
-        var infura = InfuraProvider()
+        let infura = InfuraProvider()
         infura.network = .Rinkeby
         return web3(provider: infura)
     }
     public static func InfuraMainnetWeb3() -> web3 {
-        var infura = InfuraProvider()
+        let infura = InfuraProvider()
         infura.network = .Mainnet
         return web3(provider: infura)
     }
 }
 
-public protocol Web3Provider{
+public protocol Web3Provider {
     func send(request: JSONRPCrequest) -> Promise<[String: Any]?>
     var network: Networks? {get}
+    var attachedKeystoreManager: KeystoreManagerV3? {get set}
 }
 
 public enum Networks {

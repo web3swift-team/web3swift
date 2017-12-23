@@ -10,7 +10,7 @@ import Foundation
 import PromiseKit
 import BigInt
 
-public struct web3 {
+public class web3 {
     var provider:Web3Provider
     public func send(request: JSONRPCrequest) -> Promise<[String: Any]?> {
         return self.provider.send(request: request)
@@ -18,12 +18,19 @@ public struct web3 {
     public init(provider prov: Web3Provider) {
         provider = prov
     }
+    public func addKeystoreManager(_ manager: KeystoreManagerV3?) {
+        self.provider.attachedKeystoreManager = manager
+    }
+    var ethInstance: web3.Eth?
     public var eth: web3.Eth {
-        let ethInstance = web3.Eth(provider : self.provider)
-        return ethInstance
+        if (self.ethInstance != nil) {
+            return self.ethInstance!
+        }
+        self.ethInstance = web3.Eth(provider : self.provider)
+        return self.ethInstance!
     }
     
-    public struct Eth {
+    public class Eth {
         var provider:Web3Provider
         public init(provider prov: Web3Provider) {
             provider = prov

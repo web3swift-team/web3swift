@@ -50,7 +50,7 @@ enum EthereumKeystoreV3Error: Error {
     case encryptionError(String)
 }
 
-public struct EthereumKeystoreV3 {
+public class EthereumKeystoreV3 {
     public var keystoreParams: KeystoreParamsV3?
     public var address: EthereumAddress?
     
@@ -94,12 +94,10 @@ public struct EthereumKeystoreV3 {
         return tx
     }
     
-    public func signIntermediate(intermediate: TransactionIntermediate, password: String, network: Networks? = nil) throws -> TransactionIntermediate? {
-        guard var privateKey = try self.getKeyData(password) else {return nil}
-        defer {Data.zero(&privateKey)}
-        var newIntermediate = intermediate
-        try newIntermediate.sign(privateKey, network: network)
-        return newIntermediate
+    public func signIntermediate(intermediate: TransactionIntermediate, password: String, network: Networks? = nil) throws {
+        var privateKey = try self.getKeyData(password)
+        defer {Data.zero(&privateKey!)}
+        try intermediate.sign(privateKey!, network: network)
     }
     
     public func signHashWithPrivateKey(hash: Data, password: String) throws -> Data? {
@@ -118,7 +116,7 @@ public struct EthereumKeystoreV3 {
 //        return compressedSignature
 //    }
     
-    public mutating func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int=32, N: Int = 4096, R: Int = 6, P: Int = 1) throws {
+    public func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int=32, N: Int = 4096, R: Int = 6, P: Int = 1) throws {
         if (keyData == nil) {
             throw EthereumKeystoreV3Error.encryptionError("Encryption without key data")
         }
@@ -144,7 +142,7 @@ public struct EthereumKeystoreV3 {
         self.keystoreParams = keystoreparams
     }
     
-    public mutating func regenerate(oldPassword: String, newPassword: String, dkLen: Int=32, N: Int = 262144, R: Int = 8, P: Int = 1) throws {
+    public func regenerate(oldPassword: String, newPassword: String, dkLen: Int=32, N: Int = 262144, R: Int = 8, P: Int = 1) throws {
         var keyData = try self.getKeyData(oldPassword)
         defer {Data.zero(&keyData!)}
         try self.encryptDataToStorage(newPassword, keyData: keyData!)

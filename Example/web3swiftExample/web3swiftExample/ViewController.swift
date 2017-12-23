@@ -33,7 +33,7 @@ class ViewController: UIViewController {
                 let result = try await((intermediate?.call(options: options))!)
                 print(result)
                 let userDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-                let keystoreManager = try KeystoreManagerV3(userDir + "/keystore")
+                let keystoreManager = KeystoreManagerV3.managerForPath(userDir + "/keystore")
                 var ks: EthereumKeystoreV3?
                 if (keystoreManager?.wallets.keys.count == 0) {
                     ks = try EthereumKeystoreV3(password: "BANKEXFOUNDATION")
@@ -43,18 +43,19 @@ class ViewController: UIViewController {
                     ks = keystoreManager?.wallets[(keystoreManager?.knownAddresses[0])!]
                 }
                 guard let sender = ks?.address else {return}
+                print(sender)
                 let web3 = Web3.InfuraRinkebyWeb3()
+                web3.addKeystoreManager(keystoreManager)
                 let coldWalletABI = "[{\"payable\":true,\"type\":\"fallback\"}]"
                 let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
                 options = Web3Options.defaultOptions()
                 options.gas = BigUInt(21000)
                 options.from = ks?.address!
                 options.value = BigUInt(1000000000000000)
+                options.from = sender
                 let gasPrice = try await((web3.contract(coldWalletABI, at: coldWalletAddress)?.method(options: options)?.estimateGas(options: nil))!)
-                let nonce = try await(web3.eth.getTransactionCount(address: sender))
                 var intermediateSend = web3.contract(coldWalletABI, at: coldWalletAddress)?.method(options: options)
-                try intermediateSend?.setNonce(nonce!)
-                intermediateSend = try ks!.signIntermediate(intermediate: intermediateSend!, password: "BANKEXFOUNDATION")
+                let res = try await((intermediateSend?.send(password: "BANKEXFOUNDATION"))!)
                 let derivedSender = intermediateSend?.transaction.sender
                 if (derivedSender?.address != sender.address) {
                     print(derivedSender!.address)
@@ -62,7 +63,6 @@ class ViewController: UIViewController {
                     print("Address mismatch")
                     //                        return
                 }
-                let res = try await((intermediateSend?.send())!)
                 print(res)
             }
             catch{

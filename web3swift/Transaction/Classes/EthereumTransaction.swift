@@ -218,14 +218,14 @@ public struct EthereumTransaction: CustomStringConvertible {
         return hash
     }
     
-    public mutating func sign(privateKey: Data, chainID: BigUInt? = nil) -> Bool {
-        guard let hash = self.hash(forSignature: true, chainID: chainID) else {return false}
+    private mutating func attemptSignature(privateKey: Data, chainID: BigUInt? = nil) -> Bool {
+        guard let hash = self.hash(forSignature: true, chainID: chainID) else {
+            return false
+        }
         let signature  = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
         guard let compressedSignature = signature.compressed else {return false}
         guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: compressedSignature) else {
-            print("Unlucky nonce, making new signature")
-            self.gasPrice = self.gasPrice + BigUInt(1)
-            return self.sign(privateKey:privateKey, chainID: chainID)
+            return false
         }
         if (chainID != nil ) {
             self.v = BigUInt(unmarshalledSignature.v) + BigUInt(35) + chainID! + chainID!
@@ -239,11 +239,20 @@ public struct EthereumTransaction: CustomStringConvertible {
         let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey)
         let recoveredPublicKey = self.recoverPublicKey()
         if (originalPublicKey != recoveredPublicKey) {
-            print("Unlucky nonce, making new signature")
-            self.gasPrice = self.gasPrice + BigUInt(1)
-            return self.sign(privateKey:privateKey, chainID: chainID)
+            return false
         }
         return true
+    }
+    
+    public mutating func sign(privateKey: Data, chainID: BigUInt? = nil) -> Bool {
+        for _ in 0..<128 {
+            let result = self.attemptSignature(privateKey: privateKey, chainID: chainID)
+            if (result) {
+                return true
+            }
+            self.gasPrice = self.gasPrice + BigUInt(1)
+        }
+        return false
     }
     
     static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, onBlock: String? = nil, options: Web3Options?) -> JSONRPCrequest? {

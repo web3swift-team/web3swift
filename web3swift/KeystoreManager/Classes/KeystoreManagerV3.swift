@@ -8,7 +8,36 @@
 
 import Foundation
 
-public struct KeystoreManagerV3{
+public class KeystoreManagerV3{
+    public static var allManagers = [KeystoreManagerV3]()
+    public static var defaultManager : KeystoreManagerV3? {
+        if KeystoreManagerV3.allManagers.count == 0 {
+            return nil
+        }
+        return KeystoreManagerV3.allManagers[0]
+    }
+    
+    public static func managerForPath(_ path: String, suffix: String? = nil) -> KeystoreManagerV3? {
+        if KeystoreManagerV3.allManagers.count == 0 {
+            guard let newManager = try? KeystoreManagerV3(path, suffix: suffix), let manager = newManager  else {return nil}
+            KeystoreManagerV3.allManagers.append(manager)
+            return manager
+        } else {
+            let foundManager = KeystoreManagerV3.allManagers.filter({ (manager:KeystoreManagerV3) -> Bool in
+                return manager.path == path
+            })
+            if foundManager.count == 0 {
+                guard let newManager = try? KeystoreManagerV3(path, suffix: suffix), let manager = newManager  else {return nil}
+                KeystoreManagerV3.allManagers.append(manager)
+                return manager
+            } else if (foundManager.count == 1) {
+                return foundManager[0]
+            }
+        }
+        return nil
+    }
+    
+    public var path: String
     public var wallets:[String:EthereumKeystoreV3] {
         get {
             var toReturn = [String:EthereumKeystoreV3]()
@@ -33,7 +62,8 @@ public struct KeystoreManagerV3{
     }
     var _keystores:[EthereumKeystoreV3] = [EthereumKeystoreV3]()
     
-    public init?(_ path: String, suffix: String? = nil) throws {
+    private init?(_ path: String, suffix: String? = nil) throws {
+        self.path = path
         let fileManager = FileManager.default
         var isDir : ObjCBool = false
         var exists = fileManager.fileExists(atPath: path, isDirectory: &isDir)

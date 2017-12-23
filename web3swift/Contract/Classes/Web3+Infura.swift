@@ -12,9 +12,10 @@ import PromiseKit
 import Alamofire
 import BigInt
 
-public struct InfuraProvider: Web3Provider {
+public class InfuraProvider: Web3Provider {
     public var accessToken:String? = nil
     public var network: Networks? = .Rinkeby
+    public var attachedKeystoreManager: KeystoreManagerV3? = nil
     public init() {
         
     }
