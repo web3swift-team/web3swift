@@ -18,7 +18,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-Internally depends from libsodium, CryptoSwift, Alamofire, PromiseKit and AwaitKit. Promise wrappers will be separated in further releases.
+Internally depends from libsodium, CryptoSwift, Alamofire, PromiseKit and AwaitKit. Promise wrappers will be separated in further releases. Special thanks for Gnosis team and their library [Bivrost-swift](https://github.com/gnosis/bivrost-swift) for inspiration for the ABI decoding approach.
 
 ## Installation
 
