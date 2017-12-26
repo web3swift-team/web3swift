@@ -88,6 +88,14 @@ class ViewController: UIViewController {
                 let balance = try await(web3Rinkeby.eth.getBalance(address: coldWalletAddress))
                 print("Balance of " + coldWalletAddress.address + " = " + String(balance!))
                 
+                
+                //get TX details
+                
+                let details = try await(web3Rinkeby.eth.getTransactionDetails("0x8ef43236af52e344353590c54089d5948e2182c231751ac1fb370409fdd0c76a"))
+                
+                print(details)
+                let receipt = try await(web3Rinkeby.eth.getTransactionReceipt("0x8ef43236af52e344353590c54089d5948e2182c231751ac1fb370409fdd0c76a"))
+                print(receipt)
             }
             catch{
                 print(error)

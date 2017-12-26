@@ -109,4 +109,48 @@ extension web3.Eth {
             return biguint
         }
     }
+    
+    public func getTransactionDetails(_ txhash: String) -> Promise<TransactionDetails?> {
+        return async {
+            var request = JSONRPCrequest()
+            request.method = JSONRPCmethod.getTransactionByHash
+            let params = [txhash] as Array<Encodable>
+            let pars = JSONRPCparams(params: params)
+            request.params = pars
+            let response = try await(self.provider.send(request: request))
+            if response == nil {
+                return nil
+            }
+            guard let res = response else {return nil}
+            if let error = res["error"] as? String {
+                print(error as String)
+                return nil
+            }
+            guard let resultJSON = res["result"] as? [String: Any] else {return nil}
+            let details = TransactionDetails(resultJSON)
+            return details
+        }
+    }
+    
+    public func getTransactionReceipt(_ txhash: String) -> Promise<TransactionReceipt?> {
+        return async {
+            var request = JSONRPCrequest()
+            request.method = JSONRPCmethod.getTransactionReceipt
+            let params = [txhash] as Array<Encodable>
+            let pars = JSONRPCparams(params: params)
+            request.params = pars
+            let response = try await(self.provider.send(request: request))
+            if response == nil {
+                return nil
+            }
+            guard let res = response else {return nil}
+            if let error = res["error"] as? String {
+                print(error as String)
+                return nil
+            }
+            guard let resultJSON = res["result"] as? [String: Any] else {return nil}
+            let details = TransactionReceipt(resultJSON)
+            return details
+        }
+    }
 }

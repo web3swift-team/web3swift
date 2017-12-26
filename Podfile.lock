@@ -20,7 +20,7 @@ PODS:
     - PromiseKit/CorePromise
   - PromiseKit/UIKit (4.5.0):
     - PromiseKit/CorePromise
-  - secp256k1_ios (0.0.5)
+  - secp256k1_ios (0.0.7)
   - SipHash (1.2.0)
 
 DEPENDENCIES:
@@ -39,7 +39,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   secp256k1_ios:
-    :commit: 5485b37b8bf56ab7d24fb09a9d5d7089c5b355e3
+    :commit: 141ea2087a34409f205a5891620ee5ca98f490c9
     :git: https://github.com/shamatar/secp256k1_ios.git
 
 SPEC CHECKSUMS:
@@ -49,9 +49,9 @@ SPEC CHECKSUMS:
   CryptoSwift: f81907430ebbe38b8404b4f6fb40f3c576a8755f
   libsodium: 9a8faa5ef2fa0d2d57bd7f7d79bf8fb7c1a9f0ea
   PromiseKit: 9c1d9f6d7b65e3951a90bea7f407c56972be5d8e
-  secp256k1_ios: 2e15efd87e31d9f7cd5a24c41fdf3b06165dfa68
+  secp256k1_ios: 12a9bddc3d7aa723efbb32b42413f041b11a7765
   SipHash: c6e9e43e9c531b5bc6602545130c26194a6d31ce
 
-PODFILE CHECKSUM: 4516c6f6490ec073da87fdb8ec10f8aa1aa3fe58
+PODFILE CHECKSUM: da2b9895c53905fb552c807356ab73196b0676d9
 
 COCOAPODS: 1.3.1

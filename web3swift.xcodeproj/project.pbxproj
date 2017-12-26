@@ -34,6 +34,7 @@
 		818ABD5D1FE95FC9002657BB /* Web3+Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818ABD5C1FE95FC9002657BB /* Web3+Contract.swift */; };
 		818D810E1FDC1A2000663CE3 /* RLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818D810D1FDC1A2000663CE3 /* RLP.swift */; };
 		818EABDA1FDC9A5C00E013FC /* Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EABD91FDC9A5C00E013FC /* Contract.swift */; };
+		81C146F71FF274B200AA943E /* Web3+Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C146F61FF274B200AA943E /* Web3+Structures.swift */; };
 		81DDECCF1FDF004E0063684A /* Web3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECCE1FDF004E0063684A /* Web3.swift */; };
 		E82DD6EACF6933D0D3978EA0 /* Pods_web3swiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */; };
 /* End PBXBuildFile section */
@@ -84,6 +85,7 @@
 		818ABD5C1FE95FC9002657BB /* Web3+Contract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Contract.swift"; sourceTree = "<group>"; };
 		818D810D1FDC1A2000663CE3 /* RLP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RLP.swift; sourceTree = "<group>"; };
 		818EABD91FDC9A5C00E013FC /* Contract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contract.swift; sourceTree = "<group>"; };
+		81C146F61FF274B200AA943E /* Web3+Structures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+Structures.swift"; sourceTree = "<group>"; };
 		81DDECCE1FDF004E0063684A /* Web3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3.swift; sourceTree = "<group>"; };
 		8C8900D87850714C2DB85DFC /* Pods-web3swiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swiftTests/Pods-web3swiftTests.release.xcconfig"; sourceTree = "<group>"; };
 		B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -259,6 +261,7 @@
 				8104E2271FE82BDC00F952CB /* Web3+Utils.swift */,
 				818ABD581FE95558002657BB /* Web3+Infura.swift */,
 				810B0F991FEC446B00CF0DA2 /* Web3+JSONRPC.swift */,
+				81C146F61FF274B200AA943E /* Web3+Structures.swift */,
 				810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */,
 				810B0F9D1FEC5B9C00CF0DA2 /* Web3+Eth.swift */,
 			);
@@ -496,6 +499,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81C146F71FF274B200AA943E /* Web3+Structures.swift in Sources */,
 				818ABD5D1FE95FC9002657BB /* Web3+Contract.swift in Sources */,
 				8113D2CA1FD7E1590074282C /* KeystoreManagerV3.swift in Sources */,
 				1CDA65CA1FDE0D3F0025DE71 /* ABIManager.swift in Sources */,

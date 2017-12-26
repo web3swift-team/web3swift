@@ -254,7 +254,7 @@
 		8101EDCBF0515FE2355097B75EACF81B /* Data Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE0C21EAD69609DB93439A7BB0BC64B /* Data Conversion.swift */; };
 		811E0C8A7497C3FFA507A63FF5C1284E /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = E5F6CED7026C146296F89A274669FD0A /* utils.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		81686E423E0CE59A1D6D0796798387A4 /* lax_der_privatekey_parsing.h in Headers */ = {isa = PBXBuildFile; fileRef = 80D264A1DAF7435DE284DC41E2CECBEA /* lax_der_privatekey_parsing.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		8169C6501FF26CA900794260 /* Web3+Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8169C64F1FF26CA900794260 /* Web3+Structures.swift */; };
+		81C146F81FF2758700AA943E /* Web3+Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8169C64F1FF26CA900794260 /* Web3+Structures.swift */; };
 		82946661F808189BBA5924D1E51CD8E5 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29E12BFCE353B720B2E844587DC9A235 /* Alamofire.framework */; };
 		8384778844A8C59A9650E2C94D3D4270 /* NSNotificationCenter+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = FB262E35C457025DF4F8F41A90CAE86B /* NSNotificationCenter+AnyPromise.m */; };
 		83AC0B1406FDCB6740F11DA1E7EB6C02 /* libsodium-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = CD3FB9DD8382733404D4A9D456C74FA1 /* libsodium-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2804,7 +2804,6 @@
 				A9EEEA7477981DEEBC72432DE9990A4B /* Alamofire-dummy.m in Sources */,
 				F8B3D3092ED0417E8CDF32033F6122F5 /* Alamofire.swift in Sources */,
 				61200D01A1855D7920CEF835C8BE00B0 /* DispatchQueue+Alamofire.swift in Sources */,
-				8169C6501FF26CA900794260 /* Web3+Structures.swift in Sources */,
 				B65FCF589DA398C3EFE0128064E510EC /* MultipartFormData.swift in Sources */,
 				A2A6F71B727312BD45CC7A4AAD7B0AB7 /* NetworkReachabilityManager.swift in Sources */,
 				EFD264FC408EBF3BA2528E70B08DDD94 /* Notifications.swift in Sources */,
@@ -2861,6 +2860,7 @@
 				38AFD06A30DB363F8AE9EB6BDF5A3624 /* Web3+Utils.swift in Sources */,
 				671FEBECAB902D3E1101A7D80E0A43E5 /* Web3.swift in Sources */,
 				06D994D48F65B52387DBF07DEC549054 /* web3swift-dummy.m in Sources */,
+				81C146F81FF2758700AA943E /* Web3+Structures.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
