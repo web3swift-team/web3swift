@@ -12,12 +12,12 @@ import PromiseKit
 import AwaitKit
 
 extension web3.Eth {
-    public func getTransactionCount(address: EthereumAddress, onBlock: String? = nil) -> Promise<BigUInt?> {
+    public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest") -> Promise<BigUInt?> {
         return async {
             guard address.isValid else {return nil}
             var request = JSONRPCrequest()
             request.method = JSONRPCmethod.getTransactionCount
-            let params = [address.address.lowercased(), "latest"] as Array<Encodable>
+            let params = [address.address.lowercased(), onBlock] as Array<Encodable>
             let pars = JSONRPCparams(params: params)
             request.params = pars
             let response = try await(self.provider.send(request: request))
@@ -32,9 +32,81 @@ extension web3.Eth {
             guard let resultString = res["result"] as? String else {return nil}
             let responseData = Data(Array<UInt8>(hex: resultString.lowercased().stripHexPrefix()))
             guard responseData != Data() else {return nil}
-            let txcount = BigUInt(responseData)
-            return txcount
+            let biguint = BigUInt(responseData)
+            return biguint
         }
     }
-
+    
+    public func getBalance(address: EthereumAddress, onBlock: String = "latest") -> Promise<BigUInt?> {
+        return async {
+            guard address.isValid else {return nil}
+            var request = JSONRPCrequest()
+            request.method = JSONRPCmethod.getBalance
+            let params = [address.address.lowercased(), onBlock] as Array<Encodable>
+            let pars = JSONRPCparams(params: params)
+            request.params = pars
+            let response = try await(self.provider.send(request: request))
+            if response == nil {
+                return nil
+            }
+            guard let res = response else {return nil}
+            if let error = res["error"] as? String {
+                print(error as String)
+                return nil
+            }
+            guard let resultString = res["result"] as? String else {return nil}
+            let responseData = Data(Array<UInt8>(hex: resultString.lowercased().stripHexPrefix()))
+            guard responseData != Data() else {return nil}
+            let biguint = BigUInt(responseData)
+            return biguint
+        }
+    }
+    
+    public func getBlockNumber() -> Promise<BigUInt?> {
+        return async {
+            var request = JSONRPCrequest()
+            request.method = JSONRPCmethod.blockNumber
+            let params = [] as Array<Encodable>
+            let pars = JSONRPCparams(params: params)
+            request.params = pars
+            let response = try await(self.provider.send(request: request))
+            if response == nil {
+                return nil
+            }
+            guard let res = response else {return nil}
+            if let error = res["error"] as? String {
+                print(error as String)
+                return nil
+            }
+            guard let resultString = res["result"] as? String else {return nil}
+            let responseData = Data(Array<UInt8>(hex: resultString.lowercased().stripHexPrefix()))
+            guard responseData != Data() else {return nil}
+            let biguint = BigUInt(responseData)
+            return biguint
+        }
+    }
+    
+    public func getGasPrice() -> Promise<BigUInt?> {
+        return async {
+            var request = JSONRPCrequest()
+            request.method = JSONRPCmethod.gasPrice
+            let params = [] as Array<Encodable>
+            let pars = JSONRPCparams(params: params)
+            request.params = pars
+            let response = try await(self.provider.send(request: request))
+            if response == nil {
+                return nil
+            }
+            guard let res = response else {return nil}
+            if let error = res["error"] as? String {
+                print(error as String)
+                return nil
+            }
+            guard let resultString = res["result"] as? String else {return nil}
+            let responseData = Data(Array<UInt8>(hex: resultString.lowercased().stripHexPrefix()))
+            guard responseData != Data() else {return nil}
+            let biguint = BigUInt(responseData)
+            return biguint
+        }
+    }
 }

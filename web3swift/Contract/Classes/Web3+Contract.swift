@@ -86,10 +86,9 @@ extension web3 {
             public func send(password: String = "BANKEXFOUNDATION") -> Promise<[String:Any]?> {
                 return async {
                     do {
-                        guard let address = self.contract.address else {return nil}
-                        guard let nonce = try await(self.web3.eth.getTransactionCount(address: address, onBlock: "latest")) else {return nil}
-                        try self.setNonce(nonce, network: self.web3.provider.network)
                         guard let from = self.options?.from else {return nil}
+                        guard let nonce = try await(self.web3.eth.getTransactionCount(address: from, onBlock: "pending")) else {return nil}
+                        try self.setNonce(nonce, network: self.web3.provider.network)
                         guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {return nil}
                         guard let keystore = keystoreManager.wallets[from.address] else {return nil}
                         try keystore.signIntermediate(intermediate: self, password: password)

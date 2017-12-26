@@ -24,14 +24,16 @@ public struct Web3 {
         }
     }
     
-    public static func InfuraRinkebyWeb3() -> web3 {
+    public static func InfuraRinkebyWeb3(accessToken: String? = nil) -> web3 {
         let infura = InfuraProvider()
         infura.network = .Rinkeby
+        infura.accessToken = accessToken
         return web3(provider: infura)
     }
-    public static func InfuraMainnetWeb3() -> web3 {
+    public static func InfuraMainnetWeb3(accessToken: String? = nil) -> web3 {
         let infura = InfuraProvider()
         infura.network = .Mainnet
+        infura.accessToken = accessToken
         return web3(provider: infura)
     }
 }

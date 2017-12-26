@@ -30,6 +30,16 @@ public class InfuraProvider: Web3Provider {
     }
     public func send(request: JSONRPCrequest) -> Promise<[String: Any]?> {
         return async {
+            if request.method == nil {
+                return nil
+            }
+//            var response:Any?
+//            switch request.method! {
+//                case .getTransactionCount:
+//                    response = try await(self.getToInfura(request)!)
+//                default:
+//                    response = try await(self.postToInfura(request)!)
+//            }
             let response = try await(self.postToInfura(request)!)
             guard let res = response as? [String: Any] else {return nil}
             print(res)
