@@ -192,5 +192,9 @@ extension web3 {
             let intermediate = transactionIntermediate(transaction: tx, web3: self.web3, contract: self.contract, method: method, options: mergedOptions)
             return intermediate
         }
+        
+        public func parseEvent(_ eventLog: EventLog) -> (eventName:String?, eventData:[String:Any]?) {
+            return self.contract.parseEvent(eventLog)
+        }
     }
 }

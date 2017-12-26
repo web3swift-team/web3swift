@@ -49,7 +49,13 @@ class ViewController: UIViewController {
                 let result = try await((intermediate?.call(options: options))!)
                 print("BKX token name = " + (result!["0"] as! String))
                 
-                
+                let erc20receipt = try await(web3Main.eth.getTransactionReceipt("0x76bb19c0b7e2590f724871960599d28db99cd587506fdfea94062f9c8d61eb30"))
+                for l in (erc20receipt?.logs)! {
+                    guard let result = contract?.parseEvent(l), let name = result.eventName, let data = result.eventData else {continue}
+                    print("Parsed event " + name)
+                    print("Parsed content")
+                    print(data)
+                }
                 // Block number on Main
                 
                 let blockNumber = try await(web3Main.eth.getBlockNumber())

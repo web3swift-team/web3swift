@@ -31,6 +31,9 @@ public struct ABIRecord: Decodable {
     var anonymous: Bool?
 }
 
+public struct EventLogJSON {
+    
+}
 
 // Native parsing
 
@@ -233,6 +236,17 @@ extension ABIElement.Function {
     }
 }
 
+// MARK: - Event topic
+extension ABIElement.Event {
+    public var signature: String {
+        return "\(name)(\(inputs.map { $0.type.abiRepresentation }.joined(separator: ",")))"
+    }
+    
+    public var topic: Data {
+        return signature.data(using: .ascii)!.sha3(.keccak256)
+    }
+}
+
 protocol AbiEncoding {
     var abiRepresentation: String { get }
 }
@@ -284,3 +298,4 @@ extension ABIElement.ParameterType.DynamicType: AbiEncoding {
         }
     }
 }
+

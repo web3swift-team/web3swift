@@ -25,6 +25,20 @@ public struct Contract {
         }
         return toReturn
     }
+    var events: [String: ABIElement] {
+        var toReturn = [String: ABIElement]()
+        for m in self._abi {
+            switch m {
+            case .event(let event):
+                let name = event.name
+                toReturn[name] = m
+            default:
+                continue
+            }
+        }
+        return toReturn
+    }
+    
     var options: Web3Options? = Web3Options.defaultOptions()
     var chainID: BigUInt = BigUInt(1)
     
@@ -82,5 +96,15 @@ public struct Contract {
         guard let encodedData = abiMethod?.encodeParameters(parameters) else {return nil}
         let transaction = EthereumTransaction(nonce: nonce, gasPrice: gasPrice, gasLimit: gas, to: to, value: value, data: encodedData, v: chainID, r: BigUInt(0), s: BigUInt(0))
         return transaction
+    }
+    
+    public func parseEvent(_ eventLog: EventLog) -> (eventName:String?, eventData:[String:Any]?) {
+        for (eName, ev) in self.events {
+            let parsed = ev.decodeReturnedLogs(eventLog)
+            if parsed != nil {
+                return (eName, parsed!)
+            }
+        }
+        return (nil, nil)
     }
 }

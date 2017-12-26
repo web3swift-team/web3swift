@@ -65,7 +65,7 @@ public struct TransactionReceipt {
     public var contractAddress: EthereumAddress?
     public var cumulativeGasUsed: BigUInt
     public var gasUsed: BigUInt
-    public var logs: [Data] = [Data]()
+    public var logs: [EventLog]
     public var status: TXStatus
     
     public enum TXStatus {
@@ -81,7 +81,7 @@ public struct TransactionReceipt {
         let ca = json["contractAddress"] as? String
         guard let cgu = json["cumulativeGasUsed"] as? String else {return nil}
         guard let gu = json["gasUsed"] as? String else {return nil}
-//        guard let ls = json["logs"] as? [String] else {return nil}
+        guard let ls = json["logs"] as? Array<[String:Any]> else {return nil}
         guard let st = json["status"] as? String else {return nil}
         
         transactionHash = h
@@ -97,17 +97,45 @@ public struct TransactionReceipt {
         cumulativeGasUsed = cguUnwrapped
         guard let guUnwrapped = BigUInt(gu.stripHexPrefix(), radix: 16) else {return nil}
         gasUsed = guUnwrapped
-        var allLogs = [Data]()
-//        for l in ls {
-//            let logData = Data(Array<UInt8>(hex: l.lowercased().stripHexPrefix()))
-//            allLogs.append(logData)
-//        }
+        var allLogs = [EventLog]()
+        for l in ls {
+            guard let log = EventLog(l) else {return nil}
+            allLogs.append(log)
+        }
         logs = allLogs
         if st == "0x1" {
             status = TXStatus.ok
         } else {
             status = TXStatus.failed
         }
+    }
+}
+
+public struct EventLog {
+    public var address: EthereumAddress
+    public var data: Data
+    public var logIndex: BigUInt
+    public var removed: Bool
+    public var topics: [Data]
+    
+    public init? (_ json: [String: Any]) {
+        guard let ad = json["address"] as? String else {return nil}
+        guard let d = json["data"] as? String else {return nil}
+        guard let li = json["logIndex"] as? String else {return nil}
+        guard let rm = json["removed"] as? Int else {return nil}
+        guard let tpc = json["topics"] as? [String] else {return nil}
+        address = EthereumAddress(ad)
+        data = Data(Array<UInt8>(hex: d.lowercased().stripHexPrefix()))
+        
+        guard let liUnwrapped = BigUInt(li.stripHexPrefix(), radix: 16) else {return nil}
+        logIndex = liUnwrapped
+        removed = rm == 1 ? true : false
+        var tops = [Data]()
+        for t in tpc {
+            let topic = Data(Array<UInt8>(hex: t.lowercased().stripHexPrefix()))
+            tops.append(topic)
+        }
+        topics = tops
     }
 }
 

@@ -193,3 +193,78 @@ extension ABIElement {
         }
     }
 }
+
+extension ABIElement {
+    func decodeReturnedLogs(_ eventLog: EventLog) -> [String:Any]? {
+        switch self {
+        case .constructor(_):
+            return nil
+        case .event(let event):
+            if event.anonymous {return nil}
+            if eventLog.topics[0] != event.topic {
+                return nil
+            }
+            var eventContent = [String: Any]()
+            eventContent["name"]=event.name
+            let logs = eventLog.topics
+            var j = 1
+            for i in 0 ..< event.inputs.count {
+                let el = event.inputs[i]
+                if el.indexed {
+                    let elementData = logs[j]
+                    j = j + 1
+                    let expectedType = el.type
+                    switch expectedType {
+                    case .staticType(let type):
+                        let decoded = type.decode(expectedType: type, data: elementData, tailPointer: BigUInt(0))
+                        guard let value = decoded.value, let _ = decoded.bytesConsumed else {break}
+                        let name = "\(i)"
+                        eventContent[name] = value
+                        if el.name != "" {
+                            eventContent[el.name] = value
+                        }
+                    case .dynamicType(let type):
+                        let decoded = type.decode(expectedType: type, data: elementData, tailPointer: BigUInt(0))
+                        guard let value = decoded.value, let _ = decoded.bytesConsumed else {break}
+                        let name = "\(i)"
+                        eventContent[name] = value
+                        if el.name != "" {
+                            eventContent[el.name] = value
+                        }
+                    }
+                } else {
+                    var dataForProcessing = eventLog.data
+                    var tailPointer = BigUInt(0)
+                    let expectedType = el.type
+                    switch expectedType {
+                    case .staticType(let type):
+                        let decoded = type.decode(expectedType: type, data: dataForProcessing, tailPointer: BigUInt(0))
+                        guard let value = decoded.value, let consumed = decoded.bytesConsumed else {break}
+                        let name = "\(i)"
+                        eventContent[name] = value
+                        if el.name != "" {
+                            eventContent[el.name] = value
+                        }
+                        dataForProcessing = Data(dataForProcessing[consumed...])
+                        tailPointer = tailPointer + BigUInt(consumed)
+                    case .dynamicType(let type):
+                        let decoded = type.decode(expectedType: type, data: dataForProcessing, tailPointer: tailPointer)
+                        guard let value = decoded.value, let consumed = decoded.bytesConsumed else {break}
+                        let name = "\(i)"
+                        eventContent[name] = value
+                        if el.name != "" {
+                            eventContent[el.name] = value
+                        }
+                        dataForProcessing = Data(dataForProcessing[consumed...])
+                        tailPointer = tailPointer + BigUInt(consumed)
+                    }
+                }
+            }
+            return eventContent
+        case .fallback(_):
+            return nil
+        case .function(_):
+            return nil
+        }
+    }
+}

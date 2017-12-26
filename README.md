@@ -10,7 +10,7 @@
 - Serialize and deserialize transactions and results to native Swift types
 - Convenience functions for chain state: block number, gas price
 - Check transaction results and get receipt
-- WIP: Parse event logs for transaction
+- Parse event logs for transaction
 
 ## Example
 
