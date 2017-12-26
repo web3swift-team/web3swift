@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name             = "web3swift"
-s.version          = "0.0.5"
+s.version          = "0.1.0"
 s.summary          = "Web3 implementation in vanilla Swift"
 
 s.description      = <<-DESC
@@ -26,6 +26,6 @@ s.dependency 'AwaitKit', '~> 3.0.1'
 s.dependency 'PromiseKit/Alamofire', '~> 4.0'
 s.dependency 'CryptoSwift'
 s.dependency 'libsodium'
-s.dependency 'secp256k1_ios', '~> 0.0.6'
+s.dependency 'secp256k1_ios', '~> 0.0.7'
 
 end
