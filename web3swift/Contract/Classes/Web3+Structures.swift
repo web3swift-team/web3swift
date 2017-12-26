@@ -81,7 +81,7 @@ public struct TransactionReceipt {
         let ca = json["contractAddress"] as? String
         guard let cgu = json["cumulativeGasUsed"] as? String else {return nil}
         guard let gu = json["gasUsed"] as? String else {return nil}
-        guard let ls = json["logs"] as? [String] else {return nil}
+//        guard let ls = json["logs"] as? [String] else {return nil}
         guard let st = json["status"] as? String else {return nil}
         
         transactionHash = h
@@ -98,10 +98,10 @@ public struct TransactionReceipt {
         guard let guUnwrapped = BigUInt(gu.stripHexPrefix(), radix: 16) else {return nil}
         gasUsed = guUnwrapped
         var allLogs = [Data]()
-        for l in ls {
-            let logData = Data(Array<UInt8>(hex: l.lowercased().stripHexPrefix()))
-            allLogs.append(logData)
-        }
+//        for l in ls {
+//            let logData = Data(Array<UInt8>(hex: l.lowercased().stripHexPrefix()))
+//            allLogs.append(logData)
+//        }
         logs = allLogs
         if st == "0x1" {
             status = TXStatus.ok

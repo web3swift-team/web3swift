@@ -94,8 +94,11 @@ class ViewController: UIViewController {
                 let details = try await(web3Rinkeby.eth.getTransactionDetails("0x8ef43236af52e344353590c54089d5948e2182c231751ac1fb370409fdd0c76a"))
                 
                 print(details)
-                let receipt = try await(web3Rinkeby.eth.getTransactionReceipt("0x8ef43236af52e344353590c54089d5948e2182c231751ac1fb370409fdd0c76a"))
+                var receipt = try await(web3Rinkeby.eth.getTransactionReceipt("0x8ef43236af52e344353590c54089d5948e2182c231751ac1fb370409fdd0c76a"))
                 print(receipt)
+                receipt = try await(web3Rinkeby.eth.getTransactionReceipt("0x5f36355eae23e164003753f6e794567f963a658effab922620bb64459f130e1e"))
+                print(receipt)
+                
             }
             catch{
                 print(error)

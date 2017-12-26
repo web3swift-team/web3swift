@@ -4,6 +4,14 @@
 [![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 
+# Functionality
+
+- Send transactions, call functions of smart-contracts, estimate gas costs
+- Serialize and deserialize transactions and results to native Swift types
+- Convenience functions for chain state: block number, gas price
+- Check transaction results and get receipt
+- WIP: Parse event logs for transaction
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example/web3swiftExample directory first.
