@@ -174,8 +174,12 @@ extension ABIElement {
                         returnArray[output.name] = value
                     }
                     i = i + 1
-                    dataForProcessing = Data(dataForProcessing[consumed...])
-                    tailPointer = tailPointer + BigUInt(consumed)
+                    if dataForProcessing.count >= consumed {
+                        dataForProcessing = Data(dataForProcessing[consumed...])
+                        tailPointer = tailPointer + BigUInt(consumed)
+                    } else {
+                        return nil
+                    }
                 case .dynamicType(let type):
                     let decoded = type.decode(expectedType: type, data: dataForProcessing, tailPointer: tailPointer)
                     guard let value = decoded.value, let consumed = decoded.bytesConsumed else {break}
@@ -185,8 +189,12 @@ extension ABIElement {
                         returnArray[output.name] = value
                     }
                     i = i + 1
-                    dataForProcessing = Data(dataForProcessing[consumed...])
-                    tailPointer = tailPointer + BigUInt(consumed)
+                    if dataForProcessing.count >= consumed {
+                        dataForProcessing = Data(dataForProcessing[consumed...])
+                        tailPointer = tailPointer + BigUInt(consumed)
+                    } else {
+                        return nil
+                    }
                 }
             }
             return returnArray
@@ -207,6 +215,8 @@ extension ABIElement {
             var eventContent = [String: Any]()
             eventContent["name"]=event.name
             let logs = eventLog.topics
+            var dataForProcessing = eventLog.data
+            var tailPointer = BigUInt(0)
             var j = 1
             for i in 0 ..< event.inputs.count {
                 let el = event.inputs[i]
@@ -233,8 +243,6 @@ extension ABIElement {
                         }
                     }
                 } else {
-                    var dataForProcessing = eventLog.data
-                    var tailPointer = BigUInt(0)
                     let expectedType = el.type
                     switch expectedType {
                     case .staticType(let type):
@@ -245,8 +253,12 @@ extension ABIElement {
                         if el.name != "" {
                             eventContent[el.name] = value
                         }
-                        dataForProcessing = Data(dataForProcessing[consumed...])
-                        tailPointer = tailPointer + BigUInt(consumed)
+                        if dataForProcessing.count >= consumed {
+                            dataForProcessing = Data(dataForProcessing[consumed...])
+                            tailPointer = tailPointer + BigUInt(consumed)
+                        } else {
+                            return nil
+                        }
                     case .dynamicType(let type):
                         let decoded = type.decode(expectedType: type, data: dataForProcessing, tailPointer: tailPointer)
                         guard let value = decoded.value, let consumed = decoded.bytesConsumed else {break}
@@ -255,8 +267,12 @@ extension ABIElement {
                         if el.name != "" {
                             eventContent[el.name] = value
                         }
-                        dataForProcessing = Data(dataForProcessing[consumed...])
-                        tailPointer = tailPointer + BigUInt(consumed)
+                        if dataForProcessing.count >= consumed {
+                            dataForProcessing = Data(dataForProcessing[consumed...])
+                            tailPointer = tailPointer + BigUInt(consumed)
+                        } else {
+                            return nil
+                        }
                     }
                 }
             }
