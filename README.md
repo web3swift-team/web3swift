@@ -18,6 +18,8 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
+Web3swift requires Swift 4.0 and internally depends from pods that require Swift 4.0 (CryptoSwift).
+
 Internally depends from libsodium, CryptoSwift, Alamofire, PromiseKit and AwaitKit. Promise wrappers will be separated in further releases. Special thanks for Gnosis team and their library [Bivrost-swift](https://github.com/gnosis/bivrost-swift) for inspiration for the ABI decoding approach.
 
 ## Installation
@@ -36,8 +38,9 @@ When using this pod references to this repo, [Bankex](http://bankex.com) and [Ba
 ## Author
 
 Alex Vlasov, @shamatar,  av@bankexfoundation.org
+
 Petr Korolev, @skywinder, pk@bankexfoundation.org
 
 ## License
 
-web3swift is available under the MIT license. See the LICENSE file for more info.
+web3swift is available under the Apache License 2.0 license. See the LICENSE file for more info.

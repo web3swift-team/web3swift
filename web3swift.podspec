@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name             = "web3swift"
-s.version          = "0.1.1"
+s.version          = "0.1.2"
 s.summary          = "Web3 implementation in vanilla Swift"
 
 s.description      = <<-DESC
@@ -8,7 +8,7 @@ Web3 implementation in vanilla Swift, intended for mobile developers of wallets,
 DESC
 
 s.homepage         = "https://github.com/bankex/web3swift"
-s.license          = 'MIT'
+s.license          = 'Apache License 2.0'
 s.author           = { "Alex Vlasov" => "av@bankexfoundation.org" }
 s.source           = { :git => 'https://github.com/bankex/web3swift.git', :tag => s.version.to_s }
 s.social_media_url = 'https://twitter.com/shamatar'
