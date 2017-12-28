@@ -6,10 +6,10 @@
 [![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 
-- Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality. 
-- Interaction with remote node via JSON RPC
-- Smart-contract ABI parsing
-- Interactions (read/write to Smart contracts)
+- Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
+- Interaction with remote node via JSON RPC :thought_balloon:
+- Smart-contract ABI parsing :book:
+- Interactions (read/write to Smart contracts) :arrows_counterclockwise:
 
 ## Check this out
 
