@@ -16,7 +16,12 @@
 
 ## Example
 
-To run the example project, clone the repo, and run `pod install` from the Example/web3swiftExample directory first.
+To run the example project:
+
+- Clone the repo
+- `cd Example/web3swiftExample`
+- run `pod install` from the `Example/web3swiftExample` directory.
+- `open ./web3swiftExample.xcworkspace`
 
 ## Requirements
 
