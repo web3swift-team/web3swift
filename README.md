@@ -16,7 +16,12 @@
 
 ## Example
 
-To run the example project, clone the repo, and run `pod install` from the Example/web3swiftExample directory first.
+To run the example project:
+
+- Clone the repo
+- `cd Example/web3swiftExample`
+- run `pod install` from the `Example/web3swiftExample` directory.
+- `open ./web3swiftExample.xcworkspace`
 
 ## Requirements
 
@@ -33,11 +38,15 @@ it, simply add the following line to your Podfile:
 pod 'web3swift'
 ```
 
+## Global plans
+- Full reference `web3js` functionality
+- Light Ethereum subprotocol (LES) integration
+
 ## Appreciation
 
 When using this pod references to this repo, [Bankex](http://bankex.com) and [Bankex Foundation](http://bankexfoundation.org) are appreciated.
 
-## Author
+## Authors
 
 Alex Vlasov, @shamatar,  av@bankexfoundation.org
 
