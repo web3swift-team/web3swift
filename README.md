@@ -33,11 +33,15 @@ it, simply add the following line to your Podfile:
 pod 'web3swift'
 ```
 
+## Global plans
+- Full reference `web3js` functionality
+- Light Ethereum subprotocol (LES) integration
+
 ## Appreciation
 
 When using this pod references to this repo, [Bankex](http://bankex.com) and [Bankex Foundation](http://bankexfoundation.org) are appreciated.
 
-## Author
+## Authors
 
 Alex Vlasov, @shamatar,  av@bankexfoundation.org
 
