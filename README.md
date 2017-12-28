@@ -14,9 +14,35 @@
 - Check transaction results and get receipt
 - Parse event logs for transaction
 
+## Check this out
+
+Private key and transaction were created directly on the iOS device and sent directly to [Infura](https://infura.io) node.
+
+### Here it is
+[https://rinkeby.etherscan.io/tx/0xc6eca60ecac004a1501a4323a10edb7fa4cd1a0896675f6b51704c84dedad056](https://rinkeby.etherscan.io/tx/0xc6eca60ecac004a1501a4323a10edb7fa4cd1a0896675f6b51704c84dedad056)
+
+```
+Transaction
+Nonce: 35
+Gas price: 5000000000
+Gas limit: 21000
+To: 0x6394b37Cf80A7358b38068f0CA4760ad49983a1B
+Value: 1000000000000000
+Data: 0x
+v: 43
+r: 73059897783840535708732471549376620878882680550447969052675399628060606060727
+s: 12280625377431973240236065453692843538037349746280474092545114784968542260859
+Intrinsic chainID: Optional(4)
+Infered chainID: Optional(4)
+sender: Optional(web3swift.EthereumAddress(_address: "0x855adf524273c14b7260a188af0ae30e82e91959"))
+
+["id": 1514485925, "result": 0xc6eca60ecac004a1501a4323a10edb7fa4cd1a0896675f6b51704c84dedad056, "jsonrpc": 2.0]
+On Rinkeby TXid = 0xc6eca60ecac004a1501a4323a10edb7fa4cd1a0896675f6b51704c84dedad056
+```
+
 ## Example
 
-To run the example project:
+You can try it by yourself by running the example project:
 
 - Clone the repo
 - `cd Example/web3swiftExample`
@@ -25,9 +51,8 @@ To run the example project:
 
 ## Requirements
 
-Web3swift requires Swift 4.0 and internally depends from pods that require Swift 4.0 (CryptoSwift).
+Web3swift requires Swift 4.0 and iOS 11.2 (always use the latest iOS version for your security).
 
-Internally depends from libsodium, CryptoSwift, Alamofire, PromiseKit and AwaitKit. Promise wrappers will be separated in further releases. Special thanks for Gnosis team and their library [Bivrost-swift](https://github.com/gnosis/bivrost-swift) for inspiration for the ABI decoding approach.
 
 ## Installation
 
@@ -42,16 +67,22 @@ pod 'web3swift'
 - Full reference `web3js` functionality
 - Light Ethereum subprotocol (LES) integration
 
+## Special thanks to 
+
+- Gnosis team and their library [Bivrost-swift](https://github.com/gnosis/bivrost-swift) for inspiration for the ABI decoding approach
+- [Trust iOS Wallet](https://github.com/TrustWallet/trust-wallet-ios) for collaboration and discussion for initial idea
+
+
 ## Appreciation
 
 When using this pod references to this repo, [Bankex](http://bankex.com) and [Bankex Foundation](http://bankexfoundation.org) are appreciated.
 
 ## Authors
 
-Alex Vlasov, @shamatar,  av@bankexfoundation.org
+Alex Vlasov, [@shamatar](https://github.com/shamatar),  av@bankexfoundation.org
 
-Petr Korolev, @skywinder, pk@bankexfoundation.org
+Petr Korolev, [@skywinder](https://github.com/skywinder), pk@bankexfoundation.org
 
 ## License
 
-web3swift is available under the Apache License 2.0 license. See the LICENSE file for more info.
+web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/BankEx/web3swift/blob/master/LICENSE) file for more info.
