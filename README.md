@@ -6,13 +6,10 @@
 [![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 
-# Functionality
-
-- Send transactions, call functions of smart-contracts, estimate gas costs
-- Serialize and deserialize transactions and results to native Swift types
-- Convenience functions for chain state: block number, gas price
-- Check transaction results and get receipt
-- Parse event logs for transaction
+- Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality. 
+- Interaction with remote node via JSON RPC
+- Smart-contract ABI parsing
+- Interactions (read/write to Smart contracts)
 
 ## Check this out
 
@@ -49,12 +46,12 @@ You can try it by yourself by running the example project:
 - run `pod install` from the `Example/web3swiftExample` directory.
 - `open ./web3swiftExample.xcworkspace`
 
-## Requirements
+### Requirements
 
 Web3swift requires Swift 4.0 and iOS 11.2 (always use the latest iOS version for your security).
 
 
-## Installation
+### Installation
 
 web3swift is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
@@ -62,8 +59,15 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod 'web3swift'
 ```
+### Current functionality
 
-## Global plans
+- Send transactions, call functions of smart-contracts, estimate gas costs
+- Serialize and deserialize transactions and results to native Swift types
+- Convenience functions for chain state: block number, gas price
+- Check transaction results and get receipt
+- Parse event logs for transaction
+
+### Global plans
 - Full reference `web3js` functionality
 - Light Ethereum subprotocol (LES) integration
 
