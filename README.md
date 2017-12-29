@@ -76,6 +76,15 @@ pod 'web3swift'
 - Gnosis team and their library [Bivrost-swift](https://github.com/gnosis/bivrost-swift) for inspiration for the ABI decoding approach
 - [Trust iOS Wallet](https://github.com/TrustWallet/trust-wallet-ios) for collaboration and discussion for initial idea
 
+## Contribution
+
+For the latest version, please check [develop](https://github.com/BANKEX/web3swift/tree/develop) branch. 
+Changes from this branch will be merged into the [master](https://github.com/BANKEX/web3swift/tree/master) branch at some point.
+
+- If you want to contribute, submit a [pull request](https://github.com/BANKEX/web3swift/pulls) against a development `develop` branch.
+- If you found a bug, [open an issue](https://github.com/BANKEX/web3swift/issues).
+- If you have a feature request, [open an issue](https://github.com/BANKEX/web3swift/issues).
+
 
 ## Appreciation
 
