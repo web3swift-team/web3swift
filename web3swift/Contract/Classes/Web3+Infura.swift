@@ -44,7 +44,7 @@ public class InfuraProvider: Web3Provider {
             if request.method == nil {
                 return nil
             }
-            let response = self.syncPostToInfura(request)!
+            guard let response = self.syncPostToInfura(request) else {return nil}
             guard let res = response as? [String: Any] else {return nil}
             print(res)
             return res

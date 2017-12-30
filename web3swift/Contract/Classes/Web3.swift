@@ -9,12 +9,11 @@
 import Foundation
 
 import BigInt
-import Alamofire
 
 public struct Web3 {
     public static func newWeb3(_ providerURL: URL? = nil) -> web3? {
         if providerURL == nil {
-            var infura = InfuraProvider()
+            let infura = InfuraProvider()
             infura.network = .Rinkeby
             return web3(provider: infura)
         }
