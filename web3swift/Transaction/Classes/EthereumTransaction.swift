@@ -67,7 +67,7 @@ public struct EthereumAddress: Equatable {
 
 public struct EthereumTransaction: CustomStringConvertible {
     public var nonce: BigUInt
-    public var gasPrice: BigUInt = BigUInt(3000000000)
+    public var gasPrice: BigUInt = BigUInt("3000000000", radix: 10)!
     public var gasLimit: BigUInt = BigUInt(0)
     public var to: EthereumAddress
     public var value: BigUInt
