@@ -13,7 +13,9 @@ s.author           = { "Alex Vlasov" => "av@bankexfoundation.org" }
 s.source           = { :git => 'https://github.com/bankex/web3swift.git', :tag => s.version.to_s }
 s.social_media_url = 'https://twitter.com/shamatar'
 s.pod_target_xcconfig = {
-    'SWIFT_VERSION' => '4.0'
+    'SWIFT_VERSION' => '4.0',
+	'ARCHS' => '${ARCHS_STANDARD_64_BIT}', 
+	'VALID_ARCHS' => '${ARCHS_STANDARD_64_BIT}'
 }
 s.module_name      = 'web3swift'
 s.ios.deployment_target = "9.0"
