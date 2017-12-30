@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CryptoSwift
 import BigInt
 import AwaitKit
 import PromiseKit
@@ -46,10 +45,11 @@ class ViewController: UIViewController {
                 web3Main.addKeystoreManager(keystoreManager)
                 let contract = web3Main.contract(jsonString, at: constractAddress)
                 let intermediate = contract?.method("name", parameters:parameters,  options: options)
-                let result = try await((intermediate?.call(options: options))!)
-                print("BKX token name = " + (result!["0"] as! String))
+                var res = intermediate?.call(options: options)
+                guard let result = res else {return}
+                print("BKX token name = " + (result["0"] as! String))
                 
-                let erc20receipt = try await(web3Main.eth.getTransactionReceipt("0x76bb19c0b7e2590f724871960599d28db99cd587506fdfea94062f9c8d61eb30"))
+                let erc20receipt = web3Main.eth.getTransactionReceipt("0x76bb19c0b7e2590f724871960599d28db99cd587506fdfea94062f9c8d61eb30")
                 for l in (erc20receipt?.logs)! {
                     guard let result = contract?.parseEvent(l), let name = result.eventName, let data = result.eventData else {continue}
                     print("Parsed event " + name)
@@ -58,11 +58,11 @@ class ViewController: UIViewController {
                 }
                 // Block number on Main
                 
-                let blockNumber = try await(web3Main.eth.getBlockNumber())
+                let blockNumber = web3Main.eth.getBlockNumber()
                 print("Block number = " + String(blockNumber!))
                 
                 
-                let gasPrice = try await(web3Main.eth.getGasPrice())
+                let gasPrice = web3Main.eth.getGasPrice()
                 print("Gas price = " + String(gasPrice!))
                 
                 
@@ -77,10 +77,10 @@ class ViewController: UIViewController {
                 options.from = ks?.address!
                 options.value = BigUInt(1000000000000000)
                 options.from = sender
-                let estimatedGas = try await((web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress)?.method(options: options)?.estimateGas(options: nil))!)
+                let estimatedGas = web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress)?.method(options: options)?.estimateGas(options: nil)
                 options.gas = estimatedGas
                 let intermediateSend = web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress)?.method(options: options)
-                let res = try await((intermediateSend?.send(password: "BANKEXFOUNDATION"))!)
+                res = intermediateSend?.send(password: "BANKEXFOUNDATION")
                 let derivedSender = intermediateSend?.transaction.sender
                 if (derivedSender?.address != sender.address) {
                     print(derivedSender!.address)
@@ -91,18 +91,18 @@ class ViewController: UIViewController {
                 print("On Rinkeby TXid = " + txid!)
                 
                 //Balance on Rinkeby
-                let balance = try await(web3Rinkeby.eth.getBalance(address: coldWalletAddress))
+                let balance = web3Rinkeby.eth.getBalance(address: coldWalletAddress)
                 print("Balance of " + coldWalletAddress.address + " = " + String(balance!))
                 
                 
                 //get TX details
                 
-                let details = try await(web3Rinkeby.eth.getTransactionDetails("0x8ef43236af52e344353590c54089d5948e2182c231751ac1fb370409fdd0c76a"))
+                let details = web3Rinkeby.eth.getTransactionDetails("0x8ef43236af52e344353590c54089d5948e2182c231751ac1fb370409fdd0c76a")
                 
                 print(details)
-                var receipt = try await(web3Rinkeby.eth.getTransactionReceipt("0x8ef43236af52e344353590c54089d5948e2182c231751ac1fb370409fdd0c76a"))
+                var receipt = web3Rinkeby.eth.getTransactionReceipt("0x8ef43236af52e344353590c54089d5948e2182c231751ac1fb370409fdd0c76a")
                 print(receipt)
-                receipt = try await(web3Rinkeby.eth.getTransactionReceipt("0x5f36355eae23e164003753f6e794567f963a658effab922620bb64459f130e1e"))
+                receipt =  web3Rinkeby.eth.getTransactionReceipt("0x5f36355eae23e164003753f6e794567f963a658effab922620bb64459f130e1e")
                 print(receipt)
                 
             }

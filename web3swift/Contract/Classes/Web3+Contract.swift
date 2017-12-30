@@ -7,10 +7,8 @@
 //
 
 import Foundation
-import PromiseKit
 import Alamofire
 import BigInt
-import AwaitKit
 
 extension web3 {
     
@@ -83,18 +81,17 @@ extension web3 {
                 let _ = self.transaction.sign(privateKey: privateKey)
             }
             
-            public func send(password: String = "BANKEXFOUNDATION") -> Promise<[String:Any]?> {
-                return async {
+            public func send(password: String = "BANKEXFOUNDATION") -> [String:Any]? {
                     do {
                         guard let from = self.options?.from else {return nil}
-                        guard let nonce = try await(self.web3.eth.getTransactionCount(address: from, onBlock: "pending")) else {return nil}
+                        guard let nonce = self.web3.eth.getTransactionCount(address: from, onBlock: "pending") else {return nil}
                         try self.setNonce(nonce, network: self.web3.provider.network)
                         guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {return nil}
                         guard let keystore = keystoreManager.wallets[from.address] else {return nil}
                         try keystore.signIntermediate(intermediate: self, password: password)
                         print(self.transaction)
                         guard let request = EthereumTransaction.createRawTransaction(transaction: self.transaction) else {return nil}
-                        let response = try await(self.web3.provider.send(request: request))
+                        let response = self.web3.provider.sendSync(request: request)
                         if response == nil {
                             return nil
                         }
@@ -110,14 +107,12 @@ extension web3 {
                     catch {
                         return nil
                     }
-                }
             }
             
-            public func sendSigned() -> Promise<[String:Any]?> {
-                return async {
+            public func sendSigned() -> [String:Any]? {
                     print(self.transaction)
                     guard let request = EthereumTransaction.createRawTransaction(transaction: self.transaction) else {return nil}
-                    let response = try await(self.web3.provider.send(request: request))
+                    let response = self.web3.provider.sendSync(request: request)
                     if response == nil {
                         return nil
                     }
@@ -129,16 +124,13 @@ extension web3 {
                     guard let resultString = res["result"] as? String else {return nil}
                     let hash = resultString.addHexPrefix().lowercased()
                     return ["txhash": hash as Any, "txhashCalculated" : self.transaction.txhash as Any]
-                    
-                }
             }
             
             
-            public func call(options: Web3Options?) -> Promise<[String:Any]?> {
-                return async {
+            public func call(options: Web3Options?, onBlock: String = "latest") -> [String:Any]? {
                     let mergedOptions = Web3Options.merge(self.options, with: options)
-                    guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: self.transaction, onBlock: "latest", options: mergedOptions) else {return nil}
-                    let response = try await(self.web3.provider.send(request: request))
+                    guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: self.transaction, onBlock: onBlock, options: mergedOptions) else {return nil}
+                    let response = self.web3.provider.sendSync(request: request)
                     if response == nil {
                         return nil
                     }
@@ -161,13 +153,12 @@ extension web3 {
                     guard responseData != Data() else {return nil}
                     guard let decodedData = abiMethod?.decodeReturnData(responseData) else {return nil}
                     return decodedData
-                }
             }
-            public func estimateGas(options: Web3Options?) -> Promise<BigUInt?> {
-                return async {
+        
+            public func estimateGas(options: Web3Options?, onBlock: String = "latest") -> BigUInt? {
                     let mergedOptions = Web3Options.merge(self.options, with: options)
-                    guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: self.transaction, onBlock: "latest", options: mergedOptions) else {return nil}
-                    let response = try await(self.web3.provider.send(request: request))
+                    guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: self.transaction, onBlock: onBlock, options: mergedOptions) else {return nil}
+                    let response = self.web3.provider.sendSync(request: request)
                     if response == nil {
                         return nil
                     }
@@ -182,7 +173,6 @@ extension web3 {
                     let gas = BigUInt(responseData)
                     return gas
                 }
-            }
         }
         
         public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData:Data = Data(), options: Web3Options?) -> transactionIntermediate? {

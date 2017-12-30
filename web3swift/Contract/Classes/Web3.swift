@@ -10,7 +10,6 @@ import Foundation
 
 import BigInt
 import Alamofire
-import PromiseKit
 
 public struct Web3 {
     public static func newWeb3(_ providerURL: URL? = nil) -> web3? {
@@ -39,7 +38,8 @@ public struct Web3 {
 }
 
 public protocol Web3Provider {
-    func send(request: JSONRPCrequest) -> Promise<[String: Any]?>
+//    func send(request: JSONRPCrequest) -> Promise<[String: Any]?>
+    func sendSync(request: JSONRPCrequest) -> [String:Any]?
     var network: Networks? {get}
     var attachedKeystoreManager: KeystoreManagerV3? {get set}
 }

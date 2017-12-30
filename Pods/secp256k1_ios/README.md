@@ -1,8 +1,8 @@
 # secp256k1_ios
 
-[![Version](https://img.shields.io/cocoapods/v/ios-secp256k1.svg?style=flat)](http://cocoapods.org/pods/secp256k1_ios)
-[![License](https://img.shields.io/cocoapods/l/ios-secp256k1.svg?style=flat)](http://cocoapods.org/pods/secp256k1_ios)
-[![Platform](https://img.shields.io/cocoapods/p/ios-secp256k1.svg?style=flat)](http://cocoapods.org/pods/secp256k1_ios)
+[![Version](https://img.shields.io/cocoapods/v/secp256k1_ios.svg?style=flat)](http://cocoapods.org/pods/secp256k1_ios)
+[![License](https://img.shields.io/cocoapods/l/secp256k1_ios.svg?style=flat)](http://cocoapods.org/pods/secp256k1_ios)
+[![Platform](https://img.shields.io/cocoapods/p/secp256k1_ios.svg?style=flat)](http://cocoapods.org/pods/secp256k1_ios)
 
 ## Example
 

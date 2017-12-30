@@ -1,0 +1,6 @@
+framework module Alamofire_Synchronous {
+  umbrella header "Alamofire-Synchronous-umbrella.h"
+
+  export *
+  module * { export * }
+}

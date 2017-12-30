@@ -7,14 +7,17 @@
 //
 
 import Foundation
-import PromiseKit
 import BigInt
 
 public class web3 {
     var provider:Web3Provider
-    public func send(request: JSONRPCrequest) -> Promise<[String: Any]?> {
-        return self.provider.send(request: request)
+//    public func send(request: JSONRPCrequest) -> Promise<[String: Any]?> {
+//        return self.provider.send(request: request)
+//    }
+    public func sendSync(request: JSONRPCrequest) -> [String: Any]? {
+        return self.provider.sendSync(request: request)
     }
+
     public init(provider prov: Web3Provider) {
         provider = prov
     }

@@ -8,19 +8,16 @@
 
 import Foundation
 import BigInt
-import PromiseKit
-import AwaitKit
 
 extension web3.Eth {
-    public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest") -> Promise<BigUInt?> {
-        return async {
+    public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest") -> BigUInt? {
             guard address.isValid else {return nil}
             var request = JSONRPCrequest()
             request.method = JSONRPCmethod.getTransactionCount
             let params = [address.address.lowercased(), onBlock] as Array<Encodable>
             let pars = JSONRPCparams(params: params)
             request.params = pars
-            let response = try await(self.provider.send(request: request))
+            let response = self.provider.sendSync(request: request)
             if response == nil {
                 return nil
             }
@@ -34,18 +31,16 @@ extension web3.Eth {
             guard responseData != Data() else {return nil}
             let biguint = BigUInt(responseData)
             return biguint
-        }
     }
     
-    public func getBalance(address: EthereumAddress, onBlock: String = "latest") -> Promise<BigUInt?> {
-        return async {
+    public func getBalance(address: EthereumAddress, onBlock: String = "latest") -> BigUInt? {
             guard address.isValid else {return nil}
             var request = JSONRPCrequest()
             request.method = JSONRPCmethod.getBalance
             let params = [address.address.lowercased(), onBlock] as Array<Encodable>
             let pars = JSONRPCparams(params: params)
             request.params = pars
-            let response = try await(self.provider.send(request: request))
+            let response = self.provider.sendSync(request: request)
             if response == nil {
                 return nil
             }
@@ -59,17 +54,15 @@ extension web3.Eth {
             guard responseData != Data() else {return nil}
             let biguint = BigUInt(responseData)
             return biguint
-        }
     }
     
-    public func getBlockNumber() -> Promise<BigUInt?> {
-        return async {
+    public func getBlockNumber() -> BigUInt? {
             var request = JSONRPCrequest()
             request.method = JSONRPCmethod.blockNumber
             let params = [] as Array<Encodable>
             let pars = JSONRPCparams(params: params)
             request.params = pars
-            let response = try await(self.provider.send(request: request))
+            let response = self.provider.sendSync(request: request)
             if response == nil {
                 return nil
             }
@@ -83,17 +76,15 @@ extension web3.Eth {
             guard responseData != Data() else {return nil}
             let biguint = BigUInt(responseData)
             return biguint
-        }
     }
     
-    public func getGasPrice() -> Promise<BigUInt?> {
-        return async {
+    public func getGasPrice() -> BigUInt? {
             var request = JSONRPCrequest()
             request.method = JSONRPCmethod.gasPrice
             let params = [] as Array<Encodable>
             let pars = JSONRPCparams(params: params)
             request.params = pars
-            let response = try await(self.provider.send(request: request))
+            let response = self.provider.sendSync(request: request)
             if response == nil {
                 return nil
             }
@@ -107,17 +98,15 @@ extension web3.Eth {
             guard responseData != Data() else {return nil}
             let biguint = BigUInt(responseData)
             return biguint
-        }
     }
     
-    public func getTransactionDetails(_ txhash: String) -> Promise<TransactionDetails?> {
-        return async {
+    public func getTransactionDetails(_ txhash: String) -> TransactionDetails? {
             var request = JSONRPCrequest()
             request.method = JSONRPCmethod.getTransactionByHash
             let params = [txhash] as Array<Encodable>
             let pars = JSONRPCparams(params: params)
             request.params = pars
-            let response = try await(self.provider.send(request: request))
+            let response = self.provider.sendSync(request: request)
             if response == nil {
                 return nil
             }
@@ -129,17 +118,15 @@ extension web3.Eth {
             guard let resultJSON = res["result"] as? [String: Any] else {return nil}
             let details = TransactionDetails(resultJSON)
             return details
-        }
     }
     
-    public func getTransactionReceipt(_ txhash: String) -> Promise<TransactionReceipt?> {
-        return async {
+    public func getTransactionReceipt(_ txhash: String) -> TransactionReceipt? {
             var request = JSONRPCrequest()
             request.method = JSONRPCmethod.getTransactionReceipt
             let params = [txhash] as Array<Encodable>
             let pars = JSONRPCparams(params: params)
             request.params = pars
-            let response = try await(self.provider.send(request: request))
+            let response = self.provider.sendSync(request: request)
             if response == nil {
                 return nil
             }
@@ -151,6 +138,5 @@ extension web3.Eth {
             guard let resultJSON = res["result"] as? [String: Any] else {return nil}
             let details = TransactionReceipt(resultJSON)
             return details
-        }
     }
 }
