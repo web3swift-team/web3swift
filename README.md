@@ -10,6 +10,8 @@
 - Interaction with remote node via JSON RPC :thought_balloon:
 - Smart-contract ABI parsing :book:
 - Interactions (read/write to Smart contracts) :arrows_counterclockwise:
+- Local keystore management (geth compatible)
+- BIP32 HD Wallet (WIP)
 
 ## Check this out
 
@@ -48,7 +50,7 @@ You can try it by yourself by running the example project:
 
 ### Requirements
 
-Web3swift requires Swift 4.0 and iOS 11.2 (always use the latest iOS version for your security).
+Web3swift requires Swift 4.0 and iOS 9.0 (although we strongly recommend to always use the latest iOS version for your security).
 
 
 ### Installation
