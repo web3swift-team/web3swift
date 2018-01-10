@@ -13,7 +13,7 @@ import BigInt
 extension web3 {
     
     public func contract(_ abiString: String, at: EthereumAddress? = nil) -> web3contract? {
-        return web3contract(web3: self, abiString: abiString, at: at)
+        return web3contract(web3: self, abiString: abiString, at: at, options: self.options)
     }
     
     public class web3contract {
@@ -157,7 +157,7 @@ extension web3 {
         
             public func estimateGas(options: Web3Options?, onBlock: String = "latest") -> BigUInt? {
                     let mergedOptions = Web3Options.merge(self.options, with: options)
-                    guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: self.transaction, onBlock: onBlock, options: mergedOptions) else {return nil}
+                    guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.estimateGas, transaction: self.transaction, onBlock: onBlock, options: mergedOptions) else {return nil}
                     let response = self.web3.provider.sendSync(request: request)
                     if response == nil {
                         return nil
@@ -168,9 +168,7 @@ extension web3 {
                         return nil
                     }
                     guard let resultString = res["result"] as? String else {return nil}
-                    let responseData = Data(Array<UInt8>(hex: resultString.lowercased().stripHexPrefix()))
-                    guard responseData != Data() else {return nil}
-                    let gas = BigUInt(responseData)
+                    let gas = BigUInt(resultString.stripHexPrefix().lowercased(), radix: 16)
                     return gas
                 }
         }

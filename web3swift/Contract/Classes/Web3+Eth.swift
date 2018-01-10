@@ -10,6 +10,23 @@ import Foundation
 import BigInt
 
 extension web3.Eth {
+    func sendRawTransaction(_ transaction: EthereumTransaction) -> [String:Any]? {
+        print(transaction)
+        guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {return nil}
+        let response = self.provider.sendSync(request: request)
+        if response == nil {
+            return nil
+        }
+        guard let res = response else {return nil}
+        if let error = res["error"] as? String {
+            print(error as String)
+            return nil
+        }
+        guard let resultString = res["result"] as? String else {return nil}
+        let hash = resultString.addHexPrefix().lowercased()
+        return ["txhash": hash as Any, "txhashCalculated" : transaction.txhash as Any]
+    }
+    
     public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest") -> BigUInt? {
             guard address.isValid else {return nil}
             var request = JSONRPCrequest()
@@ -27,9 +44,7 @@ extension web3.Eth {
                 return nil
             }
             guard let resultString = res["result"] as? String else {return nil}
-            let responseData = Data(Array<UInt8>(hex: resultString.lowercased().stripHexPrefix()))
-            guard responseData != Data() else {return nil}
-            let biguint = BigUInt(responseData)
+            let biguint = BigUInt(resultString.stripHexPrefix().lowercased(), radix: 16)
             return biguint
     }
     
@@ -50,9 +65,7 @@ extension web3.Eth {
                 return nil
             }
             guard let resultString = res["result"] as? String else {return nil}
-            let responseData = Data(Array<UInt8>(hex: resultString.lowercased().stripHexPrefix()))
-            guard responseData != Data() else {return nil}
-            let biguint = BigUInt(responseData)
+            let biguint = BigUInt(resultString.stripHexPrefix().lowercased(), radix: 16)
             return biguint
     }
     
@@ -72,9 +85,7 @@ extension web3.Eth {
                 return nil
             }
             guard let resultString = res["result"] as? String else {return nil}
-            let responseData = Data(Array<UInt8>(hex: resultString.lowercased().stripHexPrefix()))
-            guard responseData != Data() else {return nil}
-            let biguint = BigUInt(responseData)
+            let biguint = BigUInt(resultString.stripHexPrefix().lowercased(), radix: 16)
             return biguint
     }
     
@@ -94,9 +105,7 @@ extension web3.Eth {
                 return nil
             }
             guard let resultString = res["result"] as? String else {return nil}
-            let responseData = Data(Array<UInt8>(hex: resultString.lowercased().stripHexPrefix()))
-            guard responseData != Data() else {return nil}
-            let biguint = BigUInt(responseData)
+            let biguint = BigUInt(resultString.stripHexPrefix().lowercased(), radix: 16)
             return biguint
     }
     
@@ -138,5 +147,22 @@ extension web3.Eth {
             guard let resultJSON = res["result"] as? [String: Any] else {return nil}
             let details = TransactionReceipt(resultJSON)
             return details
+    }
+    
+    public func estimateGas(_ transaction: EthereumTransaction, options: Web3Options?) -> BigUInt? {
+        let mergedOptions = Web3Options.merge(Web3Options.defaultOptions(), with: options)
+        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.estimateGas, transaction: transaction, onBlock: nil, options: mergedOptions) else {return nil}
+        let response = self.provider.sendSync(request: request)
+        if response == nil {
+            return nil
+        }
+        guard let res = response else {return nil}
+        if let error = res["error"] as? String {
+            print(error as String)
+            return nil
+        }
+        guard let resultString = res["result"] as? String else {return nil}
+        let gas = BigUInt(resultString.stripHexPrefix().lowercased(), radix: 16)
+        return gas
     }
 }

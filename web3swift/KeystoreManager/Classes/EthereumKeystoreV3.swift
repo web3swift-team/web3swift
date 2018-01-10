@@ -86,12 +86,18 @@ public class EthereumKeystoreV3 {
         try encryptDataToStorage(password, keyData: privateKey)
     }
     
-    public func signTXWithPrivateKey(transaction:EthereumTransaction, password: String) throws -> EthereumTransaction? {
+    public func signedTX(transaction:EthereumTransaction, password: String) throws -> EthereumTransaction? {
         guard var privateKey = try self.getKeyData(password) else {return nil}
         defer {Data.zero(&privateKey)}
         var tx = transaction
         guard tx.sign(privateKey: privateKey) else {return nil}
         return tx
+    }
+    
+    public func signTX( transaction:inout EthereumTransaction, password: String) throws{
+        guard var privateKey = try self.getKeyData(password) else {throw EthereumKeystoreV3Error.keyDerivationError}
+        defer {Data.zero(&privateKey)}
+        guard transaction.sign(privateKey: privateKey) else {throw EthereumKeystoreV3Error.encryptionError("Failed to sign transaction")}
     }
     
     public func signIntermediate(intermediate: TransactionIntermediate, password: String, network: Networks? = nil) throws {
@@ -108,13 +114,21 @@ public class EthereumKeystoreV3 {
         return compressedSignature
     }
     
-//    public func signDataWithPrivateKey(data: Data, password: String) throws -> Data? {
-//        guard let pk = try? self.getKeyData(password) else {return nil}
-//        guard var privateKey = pk else {return nil}
-//        defer {Data.zero(&privateKey)}
-//        let (compressedSignature, _) = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
-//        return compressedSignature
-//    }
+    public func signPersonalMessage(_ personalMessage: Data, password: String) throws -> Data? {
+        var hash: Data
+        if personalMessage.count == 32 {
+            print("Most likely it's hash already, allow for now")
+            hash = personalMessage
+        } else {
+            guard let h = Web3.Utils.hashPersonalMessage(personalMessage) else {return nil}
+            hash = h
+        }
+        guard let pk = try? self.getKeyData(password) else {return nil}
+        guard var privateKey = pk else {return nil}
+        defer {Data.zero(&privateKey)}
+        let (compressedSignature, _) = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
+        return compressedSignature
+    }
     
     public func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int=32, N: Int = 4096, R: Int = 6, P: Int = 1) throws {
         if (keyData == nil) {

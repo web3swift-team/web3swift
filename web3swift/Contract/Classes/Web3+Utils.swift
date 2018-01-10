@@ -51,4 +51,19 @@ extension Web3.Utils {
     public static func addressDataToString(_ addressData: Data) -> String {
         return addressData.toHexString().addHexPrefix().lowercased()
     }
+    
+    public static func hashPersonalMessage(_ personalMessage: Data) -> Data? {
+        var prefix = "\u{19}Ethereum Signed Message:\n"
+        prefix += String(personalMessage.count)
+        guard let prefixData = prefix.data(using: .ascii) else {return nil}
+        var data = Data()
+        if personalMessage.count >= prefixData.count && prefixData == personalMessage[0 ..< prefixData.count] {
+            data.append(personalMessage)
+        } else {
+            data.append(prefixData)
+            data.append(personalMessage)
+        }
+        let hash = data.sha3(.keccak256)
+        return hash
+    }
 }

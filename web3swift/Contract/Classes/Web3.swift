@@ -13,8 +13,7 @@ import BigInt
 public struct Web3 {
     public static func newWeb3(_ providerURL: URL? = nil) -> web3? {
         if providerURL == nil {
-            let infura = InfuraProvider()
-            infura.network = .Rinkeby
+            let infura = InfuraProvider(Networks.Rinkeby)!
             return web3(provider: infura)
         }
         else {
@@ -23,15 +22,11 @@ public struct Web3 {
     }
     
     public static func InfuraRinkebyWeb3(accessToken: String? = nil) -> web3 {
-        let infura = InfuraProvider()
-        infura.network = .Rinkeby
-        infura.accessToken = accessToken
+        let infura = InfuraProvider(Networks.Rinkeby, accessToken: accessToken)!
         return web3(provider: infura)
     }
     public static func InfuraMainnetWeb3(accessToken: String? = nil) -> web3 {
-        let infura = InfuraProvider()
-        infura.network = .Mainnet
-        infura.accessToken = accessToken
+        let infura = InfuraProvider(Networks.Mainnet, accessToken: accessToken)!
         return web3(provider: infura)
     }
 }
@@ -41,27 +36,52 @@ public protocol Web3Provider {
     func sendSync(request: JSONRPCrequest) -> [String:Any]?
     var network: Networks? {get}
     var attachedKeystoreManager: KeystoreManagerV3? {get set}
+    var url: URL {get}
 }
 
 public enum Networks {
     case Rinkeby
     case Mainnet
+    case Ropsten
+    case Kovan
+    case Custom(networkID: BigUInt)
     
     var name: String {
         switch self {
         case .Rinkeby: return "rinkeby"
+        case .Ropsten: return "ropsten"
         case .Mainnet: return "mainnet"
+        case .Kovan: return "kovan"
+        case .Custom: return ""
         }
     }
     
     var chainID: BigUInt {
         switch self {
-        case .Rinkeby: return BigUInt(4)
+        case .Custom(let networkID): return networkID
         case .Mainnet: return BigUInt(1)
+        case .Ropsten: return BigUInt(3)
+        case .Rinkeby: return BigUInt(4)
+        case .Kovan: return BigUInt(42)
         }
     }
 
     static let allValues = [Mainnet, Rinkeby]
+    
+    static func fromInt(_ networkID:Int) -> Networks? {
+        switch networkID {
+        case 1:
+            return Networks.Mainnet
+        case 3:
+            return Networks.Ropsten
+        case 4:
+            return Networks.Rinkeby
+        case 42:
+            return Networks.Kovan
+        default:
+            return Networks.Custom(networkID: BigUInt(networkID))
+        }
+    }
 }
 
 public struct Web3Options {
@@ -74,9 +94,29 @@ public struct Web3Options {
     }
     public static func defaultOptions() -> Web3Options{
         var options = Web3Options()
-        options.gas = BigUInt("21000", radix: 10)!
+        options.gas = BigUInt("90000", radix: 10)!
         options.gasPrice = BigUInt("5000000000", radix:10)!
         options.value = BigUInt(0)
+        return options
+    }
+    
+    public static func fromJSON(_ json: [String: Any]) -> Web3Options? {
+        var options = Web3Options()
+        if let gas = json["gas"] as? String, let gasBiguint = BigUInt(gas.stripHexPrefix().lowercased(), radix: 16) {
+            options.gas = gasBiguint
+        }
+        if let gasPrice = json["gasPrice"] as? String, let gasPriceBiguint = BigUInt(gasPrice.stripHexPrefix().lowercased(), radix: 16) {
+            options.gas = gasPriceBiguint
+        }
+        if let value = json["value"] as? String, let valueBiguint = BigUInt(value.stripHexPrefix().lowercased(), radix: 16) {
+            options.value = valueBiguint
+        }
+        if let fromString = json["from"] as? String {
+            let addressFrom = EthereumAddress(fromString)
+            if addressFrom.isValid {
+                options.from = addressFrom
+            }
+        }
         return options
     }
     

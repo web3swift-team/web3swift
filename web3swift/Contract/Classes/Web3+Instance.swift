@@ -10,7 +10,8 @@ import Foundation
 import BigInt
 
 public class web3 {
-    var provider:Web3Provider
+    public var provider:Web3Provider
+    public var options : Web3Options = Web3Options.defaultOptions()
 //    public func send(request: JSONRPCrequest) -> Promise<[String: Any]?> {
 //        return self.provider.send(request: request)
 //    }
@@ -24,6 +25,7 @@ public class web3 {
     public func addKeystoreManager(_ manager: KeystoreManagerV3?) {
         self.provider.attachedKeystoreManager = manager
     }
+    
     var ethInstance: web3.Eth?
     public var eth: web3.Eth {
         if (self.ethInstance != nil) {
@@ -40,4 +42,22 @@ public class web3 {
         }
     }
 
+    var hookedFunctionsInstance: web3.HookedFunctions?
+    public var hookedFunctions: web3.HookedFunctions {
+        if (self.hookedFunctionsInstance != nil) {
+            return self.hookedFunctionsInstance!
+        }
+        self.hookedFunctionsInstance = web3.HookedFunctions(provider : self.provider, web3: self)
+        return self.hookedFunctionsInstance!
+    }
+    
+    public class HookedFunctions {
+        var provider:Web3Provider
+        weak var web3: web3?
+        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+            provider = prov
+            web3 = web3instance
+        }
+    }
+    
 }

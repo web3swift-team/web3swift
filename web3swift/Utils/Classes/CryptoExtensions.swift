@@ -9,7 +9,20 @@
 import Foundation
 import libsodium
 
+
 public extension Data {
+    
+    init<T>(fromArray values: [T]) {
+        var values = values
+        self.init(buffer: UnsafeBufferPointer(start: &values, count: values.count))
+    }
+    
+    func toArray<T>(type: T.Type) -> [T] {
+        return self.withUnsafeBytes {
+            [T](UnsafeBufferPointer(start: $0, count: self.count/MemoryLayout<T>.stride))
+        }
+    }
+    
     public static func zero(_ data: inout Data) {
         let count = data.count
         data.withUnsafeMutableBytes { (dataPtr: UnsafeMutablePointer<UInt8>) in
@@ -29,7 +42,32 @@ public extension Data {
         }
         return nil
     }
+    
+    public static func fromHex(_ hex: String) -> Data? {
+        let string = hex.lowercased().stripHexPrefix()
+        let array = Array<UInt8>(hex: string)
+        if (array.count == 0) {
+            if (hex == "0x" || hex == "") {
+                return Data()
+            } else {
+                return nil
+            }
+        }
+        return Data(array)
+    }
 }
+
+func toByteArray<T>(_ value: T) -> [UInt8] {
+    var value = value
+    return withUnsafeBytes(of: &value) { Array($0) }
+}
+
+func fromByteArray<T>(_ value: [UInt8], _: T.Type) -> T {
+    return value.withUnsafeBytes {
+        $0.baseAddress!.load(as: T.self)
+    }
+}
+
 
 public func scrypt (password: String, salt: Data, length: Int, N: Int, R: Int, P: Int) -> Data? {
     let BytesMin = Int(crypto_generichash_bytes_min())

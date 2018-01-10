@@ -4,7 +4,7 @@ s.version          = "0.2.0"
 s.summary          = "Web3 implementation in vanilla Swift"
 
 s.description      = <<-DESC
-Web3 implementation in vanilla Swift, intended for mobile developers of wallets, dapps and Web3.0
+Web3 implementation in vanilla Swift, intended for mobile developers of wallets, Dapps and Web3.0
 DESC
 
 s.homepage         = "https://github.com/bankex/web3swift"
@@ -26,6 +26,6 @@ s.dependency 'Alamofire-Synchronous', '~> 4.0'
 s.dependency 'BigInt', '~> 3.0.1'
 s.dependency 'CryptoSwift'
 s.dependency 'libsodium'
-s.dependency 'secp256k1_ios', '~> 0.0.7'
+s.dependency 'secp256k1_ios', '~> 0.1.1'
 
 end

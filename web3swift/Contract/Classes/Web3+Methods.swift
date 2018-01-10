@@ -12,7 +12,7 @@ public enum JSONRPCmethod: String, Encodable {
     
     case gasPrice = "eth_gasPrice"
     case blockNumber = "eth_blockNumber"
-    
+    case getNetwork = "net_version"
     
     case sendRawTransaction = "eth_sendRawTransaction"
     case estimateGas = "eth_estimateGas"
@@ -41,6 +41,8 @@ public enum JSONRPCmethod: String, Encodable {
             case .gasPrice:
                 return 0
             case .blockNumber:
+                return 0
+            case .getNetwork:
                 return 0
             default:
                 return 1

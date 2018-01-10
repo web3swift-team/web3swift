@@ -29,6 +29,11 @@
 		81531AA01FE7C07A002192CC /* EthereumKeystoreV3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81531A9F1FE7C07A002192CC /* EthereumKeystoreV3.swift */; };
 		81531AA71FE7D8DB002192CC /* ERC20abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA31FE7CD74002192CC /* ERC20abi.json */; };
 		81531AA81FE7D8DB002192CC /* keystore.ks in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA51FE7D2CE002192CC /* keystore.ks */; };
+		817EBB102004FE2800E02EAA /* EthereumAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */; };
+		817EBB122004FE2F00E02EAA /* BIP32HDwallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB112004FE2F00E02EAA /* BIP32HDwallet.swift */; };
+		817EBB162004FE4200E02EAA /* Web3+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */; };
+		817EBB1F2006265400E02EAA /* Base58.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB1E2006265400E02EAA /* Base58.swift */; };
+		817EBB23200649E000E02EAA /* RIPEMD160+StackOveflow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB22200649E000E02EAA /* RIPEMD160+StackOveflow.swift */; };
 		818ABD591FE95558002657BB /* Web3+Infura.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818ABD581FE95558002657BB /* Web3+Infura.swift */; };
 		818ABD5B1FE95F8F002657BB /* Web3+Instance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818ABD5A1FE95F8F002657BB /* Web3+Instance.swift */; };
 		818ABD5D1FE95FC9002657BB /* Web3+Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818ABD5C1FE95FC9002657BB /* Web3+Contract.swift */; };
@@ -80,6 +85,13 @@
 		81531A9F1FE7C07A002192CC /* EthereumKeystoreV3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumKeystoreV3.swift; sourceTree = "<group>"; };
 		81531AA31FE7CD74002192CC /* ERC20abi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ERC20abi.json; sourceTree = "<group>"; };
 		81531AA51FE7D2CE002192CC /* keystore.ks */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = keystore.ks; sourceTree = "<group>"; };
+		817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EthereumAddress.swift; sourceTree = "<group>"; };
+		817EBB112004FE2F00E02EAA /* BIP32HDwallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BIP32HDwallet.swift; sourceTree = "<group>"; };
+		817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+HttpProvider.swift"; sourceTree = "<group>"; };
+		817EBB172004FE7200E02EAA /* HMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HMAC.swift; sourceTree = "<group>"; };
+		817EBB1C20061BE400E02EAA /* RIPEMD160.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RIPEMD160.swift; sourceTree = "<group>"; };
+		817EBB1E2006265400E02EAA /* Base58.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base58.swift; sourceTree = "<group>"; };
+		817EBB22200649E000E02EAA /* RIPEMD160+StackOveflow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RIPEMD160+StackOveflow.swift"; sourceTree = "<group>"; };
 		818ABD581FE95558002657BB /* Web3+Infura.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Infura.swift"; sourceTree = "<group>"; };
 		818ABD5A1FE95F8F002657BB /* Web3+Instance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Instance.swift"; sourceTree = "<group>"; };
 		818ABD5C1FE95FC9002657BB /* Web3+Contract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Contract.swift"; sourceTree = "<group>"; };
@@ -180,11 +192,15 @@
 		8113D2AF1FD7E1590074282C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				817EBB172004FE7200E02EAA /* HMAC.swift */,
 				8113D2FF1FD7F30F0074282C /* StringExtension.swift */,
 				8113D2B01FD7E1590074282C /* CryptoExtensions.swift */,
 				8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */,
 				8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */,
 				8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */,
+				817EBB1C20061BE400E02EAA /* RIPEMD160.swift */,
+				817EBB1E2006265400E02EAA /* Base58.swift */,
+				817EBB22200649E000E02EAA /* RIPEMD160+StackOveflow.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -200,6 +216,8 @@
 		8113D2B71FD7E1590074282C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				817EBB112004FE2F00E02EAA /* BIP32HDwallet.swift */,
+				817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */,
 				8113D2B81FD7E1590074282C /* KeystoreManagerV3.swift */,
 				81531A9F1FE7C07A002192CC /* EthereumKeystoreV3.swift */,
 			);
@@ -253,6 +271,7 @@
 		818EABD81FDC9A4800E013FC /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */,
 				1CDA65C91FDE0D3F0025DE71 /* ABIManager.swift */,
 				818EABD91FDC9A5C00E013FC /* Contract.swift */,
 				81DDECCE1FDF004E0063684A /* Web3.swift */,
@@ -347,6 +366,7 @@
 				TargetAttributes = {
 					1CD91AFB1FD76910007BFB45 = {
 						CreatedOnToolsVersion = 9.1;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
 					1CD91B2E1FD769A6007BFB45 = {
@@ -502,12 +522,15 @@
 				8113D2CA1FD7E1590074282C /* KeystoreManagerV3.swift in Sources */,
 				1CDA65CA1FDE0D3F0025DE71 /* ABIManager.swift in Sources */,
 				8113D2CB1FD7E1590074282C /* ABIEncoder.swift in Sources */,
+				817EBB1F2006265400E02EAA /* Base58.swift in Sources */,
 				818EABDA1FDC9A5C00E013FC /* Contract.swift in Sources */,
 				818ABD591FE95558002657BB /* Web3+Infura.swift in Sources */,
 				810B0F9A1FEC446B00CF0DA2 /* Web3+JSONRPC.swift in Sources */,
 				8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */,
+				817EBB122004FE2F00E02EAA /* BIP32HDwallet.swift in Sources */,
 				8113D2C41FD7E1590074282C /* CryptoExtensions.swift in Sources */,
 				818ABD5B1FE95F8F002657BB /* Web3+Instance.swift in Sources */,
+				817EBB102004FE2800E02EAA /* EthereumAddress.swift in Sources */,
 				8113D2CC1FD7E1590074282C /* ABIDecoder.swift in Sources */,
 				810B0F9C1FEC520500CF0DA2 /* Web3+Methods.swift in Sources */,
 				8113DE7C1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift in Sources */,
@@ -515,10 +538,12 @@
 				810B0F9E1FEC5B9C00CF0DA2 /* Web3+Eth.swift in Sources */,
 				818D810E1FDC1A2000663CE3 /* RLP.swift in Sources */,
 				81531AA01FE7C07A002192CC /* EthereumKeystoreV3.swift in Sources */,
+				817EBB23200649E000E02EAA /* RIPEMD160+StackOveflow.swift in Sources */,
 				81DDECCF1FDF004E0063684A /* Web3.swift in Sources */,
 				8113D2C71FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift in Sources */,
 				813FFF8D1FD82EEB006379A2 /* StringExtension.swift in Sources */,
 				8113D31A1FD7F4C80074282C /* ABITypes.swift in Sources */,
+				817EBB162004FE4200E02EAA /* Web3+HttpProvider.swift in Sources */,
 				8113D31C1FD7F8980074282C /* ABIRecordParser.swift in Sources */,
 				8113D2CE1FD7E1590074282C /* EthereumTransaction.swift in Sources */,
 			);
@@ -664,9 +689,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				DEFINES_MODULE = NO;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -699,6 +725,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
 				SWIFT_INCLUDE_PATHS = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -712,9 +739,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				DEFINES_MODULE = NO;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

@@ -37,6 +37,8 @@ public class KeystoreManagerV3{
         return nil
     }
     
+    public var defaultAddress: String?
+    
     public var path: String
     public var wallets:[String:EthereumKeystoreV3] {
         get {
@@ -55,11 +57,40 @@ public class KeystoreManagerV3{
             var toReturn = [String]()
             for keystore in _keystores {
                 guard let key = keystore.address?.address else {continue}
-                toReturn.append(key)
+                if key.lowercased() == defaultAddress?.lowercased() {
+                    toReturn.append(key)
+                }
+            }
+            for keystore in _keystores {
+                guard let key = keystore.address?.address else {continue}
+                if key.lowercased() != defaultAddress?.lowercased() {
+                    toReturn.append(key)
+                }
             }
             return toReturn
         }
     }
+    
+    public func walletForAddress(_ address: String) -> EthereumKeystoreV3? {
+        for keystore in _keystores {
+            guard let key = keystore.address?.address else {continue}
+            if key.lowercased() == address.lowercased().addHexPrefix() {
+                return keystore
+            }
+        }
+        return nil
+    }
+    
+    public func walletForAddress(_ address: EthereumAddress) -> EthereumKeystoreV3? {
+        for keystore in _keystores {
+            guard let key = keystore.address?.address else {continue}
+            if key == address.address {
+                return keystore
+            }
+        }
+        return nil
+    }
+    
     var _keystores:[EthereumKeystoreV3] = [EthereumKeystoreV3]()
     
     private init?(_ path: String, suffix: String? = nil) throws {

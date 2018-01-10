@@ -11,13 +11,17 @@ import Alamofire
 import Alamofire_Synchronous
 import BigInt
 
-public class InfuraProvider: Web3Provider {
-    public var accessToken:String? = nil
-    public var network: Networks? = .Rinkeby
-    public var attachedKeystoreManager: KeystoreManagerV3? = nil
-    public init() {
-        
+public class InfuraProvider: Web3HttpProvider {
+//    public var accessToken:String? = nil
+    public init?(_ net:Networks, accessToken token: String? = nil, keystoreManager manager: KeystoreManagerV3? = nil) {
+        var requestURLstring = "https://" + net.name + ".infura.io/"
+        if token != nil {
+            requestURLstring = requestURLstring + token!
+        }
+        let providerURL = URL(string: requestURLstring)
+        super.init(providerURL!, network: net, keystoreManager: manager)
     }
+    
     enum supportedPostMethods: String {
         case eth_estimateGas = "eth_estimateGas"
         case eth_sendRawTransaction = "eth_sendRawTransaction"
@@ -40,36 +44,36 @@ public class InfuraProvider: Web3Provider {
 //        }
 //    }
     
-    public func sendSync(request: JSONRPCrequest) -> [String: Any]? {
-            if request.method == nil {
-                return nil
-            }
-            guard let response = self.syncPostToInfura(request) else {return nil}
-            guard let res = response as? [String: Any] else {return nil}
-            print(res)
-            return res
-    }
-    
-    internal func syncPostToInfura(_ request: JSONRPCrequest) -> Any? {
-        guard let network = self.network else {return nil}
-        var requestURL = "https://" + network.name + ".infura.io/"
-        if self.accessToken != nil {
-            requestURL = requestURL + self.accessToken!
-        }
-        guard let _ = try? JSONEncoder().encode(request) else {return nil}
-        let headers: HTTPHeaders = [
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        ]
-        let response = Alamofire.request(requestURL, method: .post, parameters: nil, encoding: request, headers: headers).responseJSON()
-        switch response.result {
-        case .success(let resp):
-            return resp
-        case .failure(let err):
-            print(err)
-            return nil
-        }
-    }
+//    public func sendSync(request: JSONRPCrequest) -> [String: Any]? {
+//            if request.method == nil {
+//                return nil
+//            }
+//            guard let response = self.syncPostToInfura(request) else {return nil}
+//            guard let res = response as? [String: Any] else {return nil}
+//            print(res)
+//            return res
+//    }
+//
+//    internal func syncPostToInfura(_ request: JSONRPCrequest) -> Any? {
+//        guard let network = self.network else {return nil}
+//        var requestURL = "https://" + network.name + ".infura.io/"
+//        if self.accessToken != nil {
+//            requestURL = requestURL + self.accessToken!
+//        }
+//        guard let _ = try? JSONEncoder().encode(request) else {return nil}
+//        let headers: HTTPHeaders = [
+//            "Content-Type": "application/json",
+//            "Accept": "application/json"
+//        ]
+//        let response = Alamofire.request(requestURL, method: .post, parameters: nil, encoding: request, headers: headers).responseJSON()
+//        switch response.result {
+//        case .success(let resp):
+//            return resp
+//        case .failure(let err):
+//            print(err)
+//            return nil
+//        }
+//    }
     
     
 //    internal func getToInfura(_ request: JSONRPCrequest) -> Promise<Any>? {
