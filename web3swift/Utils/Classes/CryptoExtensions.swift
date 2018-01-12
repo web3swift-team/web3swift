@@ -23,6 +23,16 @@ public extension Data {
         }
     }
     
+    public func constantTimeComparisonTo(_ other:Data?) -> Bool {
+        guard let rhs = other else {return false}
+        guard self.count == rhs.count else {return false}
+        var difference = UInt8(0x00)
+        for i in 0..<self.count { // compare full length
+            difference |= self[i] ^ rhs[i] //constant time
+        }
+        return difference == UInt8(0x00)
+    }
+    
     public static func zero(_ data: inout Data) {
         let count = data.count
         data.withUnsafeMutableBytes { (dataPtr: UnsafeMutablePointer<UInt8>) in
@@ -55,6 +65,30 @@ public extension Data {
         }
         return Data(array)
     }
+    
+    
+    func bitsInRange(_ startingBit:Int, _ length:Int) -> UInt64? { //return max of 8 bytes for simplicity, non-public
+        if startingBit + length / 8 > self.count, length > 64, startingBit > 0, length >= 1 {return nil}
+        let bytes = self[(startingBit/8) ..< (startingBit+length+7)/8]
+        let padding = Data(repeating: 0, count: 8 - bytes.count)
+        let padded = bytes + padding
+        guard padded.count == 8 else {return nil}
+        var uintRepresentation = UInt64(bigEndian: padded.withUnsafeBytes { $0.pointee })
+        uintRepresentation = uintRepresentation << (startingBit % 8)
+        uintRepresentation = uintRepresentation >> UInt64(64 - length)
+        return uintRepresentation
+    }
+}
+
+
+
+extension Array {
+    public func split(intoChunksOf chunkSize: Int) -> [[Element]] {
+        return stride(from: 0, to: self.count, by: chunkSize).map {
+            let endIndex = ($0.advanced(by: chunkSize) > self.count) ? self.count - $0 : chunkSize
+            return Array(self[$0..<$0.advanced(by: endIndex)])
+        }
+    }
 }
 
 func toByteArray<T>(_ value: T) -> [UInt8] {
@@ -67,7 +101,6 @@ func fromByteArray<T>(_ value: [UInt8], _: T.Type) -> T {
         $0.baseAddress!.load(as: T.self)
     }
 }
-
 
 public func scrypt (password: String, salt: Data, length: Int, N: Int, R: Int, P: Int) -> Data? {
     let BytesMin = Int(crypto_generichash_bytes_min())
@@ -95,14 +128,4 @@ public func scrypt (password: String, salt: Data, length: Int, N: Int, R: Int, P
         return nil
     }
     return output
-}
-
-public func hex2bin (_ string: String) -> Data? {
-    let str = string.lowercased().stripHexPrefix()
-    let data = Data(Array<UInt8>(hex:str))
-    if data.count == 0 {
-        return nil
-    }
-    return data
-    
 }

@@ -12,67 +12,68 @@ import Foundation
 
 public typealias TransactionIntermediate = web3.web3contract.transactionIntermediate
 
-public struct KdfParamsV3: Decodable, Encodable {
-    var salt: String
-    var dklen: Int
-    var n: Int?
-    var p: Int?
-    var r: Int?
-    var c: Int?
-    var prf: String?
-}
 
-public struct CipherParamsV3: Decodable, Encodable {
-    var iv: String
-}
-
-public struct CryptoParamsV3: Decodable, Encodable {
-    var ciphertext: String
-    var cipher: String
-    var cipherparams: CipherParamsV3
-    var kdf: String
-    var kdfparams: KdfParamsV3
-    var mac: String
-    var version: String?
-}
-
-public struct KeystoreParamsV3: Decodable, Encodable {
-    var address: String?
-    var crypto: CryptoParamsV3
-    var id: String?
-    var version: Int
-}
-
-enum EthereumKeystoreV3Error: Error {
-    case noEntropyError
-    case keyDerivationError
-    case aesError
-    case encryptionError(String)
-}
-
-public class EthereumKeystoreV3 {
-    public var keystoreParams: KeystoreParamsV3?
-    public var address: EthereumAddress?
+public class EthereumKeystoreV3: AbstractKeystore {
+    // Protocol
     
-    public init?(_ jsonString: String) throws {
-        let lowercaseJSON = jsonString.lowercased()
-        guard let jsonData = lowercaseJSON.data(using: .utf8) else {return nil}
-        guard let keystoreParams = try? JSONDecoder().decode(KeystoreParamsV3.self, from: jsonData) else {return nil}
-        if (keystoreParams.version != 3) {return nil}
-        if (keystoreParams.crypto.version != nil && keystoreParams.crypto.version != "1") {return nil}
-        self.keystoreParams = keystoreParams
-        if keystoreParams.address != nil {
-            self.address = EthereumAddress(keystoreParams.address!)
+    var addresses: [EthereumAddress]?
+    var isHDKeystore: Bool = false
+    
+    func signedTX(transaction: EthereumTransaction, password: String, account: EthereumAddress) throws -> EthereumTransaction? {
+        if self.addresses?.count == 1 && account == self.addresses?.last {
+            return try self.signedTX(transaction: transaction, password: password)
+        }
+        else {
+            throw AbstractKeystoreError.invalidAccountError
         }
     }
+
+    func signTX(transaction: inout EthereumTransaction, password: String, account: EthereumAddress) throws {
+        if self.addresses?.count == 1 && account == self.addresses?.last {
+            try self.signTX(transaction: &transaction, password: password)
+        }
+        else {
+            throw AbstractKeystoreError.invalidAccountError
+        }
+    }
+
+    func signIntermediate(intermediate: TransactionIntermediate, password: String, account: EthereumAddress) throws {
+        if self.addresses?.count == 1 && account == self.addresses?.last {
+            try self.signIntermediate(intermediate: intermediate, password: password)
+        }
+        else {
+            throw AbstractKeystoreError.invalidAccountError
+        }
+    }
+
+    func signPersonalMessage(_ personalMessage: Data, password: String, account: EthereumAddress) throws -> Data? {
+        if self.addresses?.count == 1 && account == self.addresses?.last {
+            return try self.signPersonalMessage(personalMessage, password: password)
+        }
+        else {
+            throw AbstractKeystoreError.invalidAccountError
+        }
+    }
+
+    // --------------
     
-    public init?(_ jsonData: Data) throws {
+    public var keystoreParams: KeystoreParamsV3?
+    
+    public convenience init?(_ jsonString: String) {
+        let lowercaseJSON = jsonString.lowercased()
+        guard let jsonData = lowercaseJSON.data(using: .utf8) else {return nil}
+        self.init(jsonData)
+    }
+    
+    public init?(_ jsonData: Data) {
         guard let keystoreParams = try? JSONDecoder().decode(KeystoreParamsV3.self, from: jsonData) else {return nil}
         if (keystoreParams.version != 3) {return nil}
         if (keystoreParams.crypto.version != nil && keystoreParams.crypto.version != "1") {return nil}
         self.keystoreParams = keystoreParams
         if keystoreParams.address != nil {
-            self.address = EthereumAddress(keystoreParams.address!)
+            self.addresses = [EthereumAddress(keystoreParams.address!)]
+        } else {
+            return nil
         }
     }
     
@@ -95,23 +96,15 @@ public class EthereumKeystoreV3 {
     }
     
     public func signTX( transaction:inout EthereumTransaction, password: String) throws{
-        guard var privateKey = try self.getKeyData(password) else {throw EthereumKeystoreV3Error.keyDerivationError}
+        guard var privateKey = try self.getKeyData(password) else {throw AbstractKeystoreError.keyDerivationError}
         defer {Data.zero(&privateKey)}
-        guard transaction.sign(privateKey: privateKey) else {throw EthereumKeystoreV3Error.encryptionError("Failed to sign transaction")}
+        guard transaction.sign(privateKey: privateKey) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
     }
     
-    public func signIntermediate(intermediate: TransactionIntermediate, password: String, network: Networks? = nil) throws {
+    public func signIntermediate(intermediate: TransactionIntermediate, password: String) throws {
         var privateKey = try self.getKeyData(password)
         defer {Data.zero(&privateKey!)}
-        try intermediate.sign(privateKey!, network: network)
-    }
-    
-    public func signHashWithPrivateKey(hash: Data, password: String) throws -> Data? {
-        guard let pk = try? self.getKeyData(password) else {return nil}
-        guard var privateKey = pk else {return nil}
-        defer {Data.zero(&privateKey)}
-        let (compressedSignature, _) = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
-        return compressedSignature
+        try intermediate.sign(privateKey!)
     }
     
     public func signPersonalMessage(_ personalMessage: Data, password: String) throws -> Data? {
@@ -130,18 +123,18 @@ public class EthereumKeystoreV3 {
         return compressedSignature
     }
     
-    public func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int=32, N: Int = 4096, R: Int = 6, P: Int = 1) throws {
+    fileprivate func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int=32, N: Int = 4096, R: Int = 6, P: Int = 1) throws {
         if (keyData == nil) {
-            throw EthereumKeystoreV3Error.encryptionError("Encryption without key data")
+            throw AbstractKeystoreError.encryptionError("Encryption without key data")
         }
         let saltLen = 32;
-        guard let saltData = Data.randomBytes(length: saltLen) else {throw EthereumKeystoreV3Error.noEntropyError}
-        guard let derivedKey = scrypt(password: password, salt: saltData, length: dkLen, N: N, R: R, P: P) else {throw EthereumKeystoreV3Error.keyDerivationError}
+        guard let saltData = Data.randomBytes(length: saltLen) else {throw AbstractKeystoreError.noEntropyError}
+        guard let derivedKey = scrypt(password: password, salt: saltData, length: dkLen, N: N, R: R, P: P) else {throw AbstractKeystoreError.keyDerivationError}
         let last16bytes = derivedKey[(derivedKey.count - 16)...(derivedKey.count-1)]
         let encryptionKey = derivedKey[0...15]
-        guard let IV = Data.randomBytes(length: 16) else {throw EthereumKeystoreV3Error.noEntropyError}
+        guard let IV = Data.randomBytes(length: 16) else {throw AbstractKeystoreError.noEntropyError}
         let aecCipher = try? AES(key: encryptionKey.bytes, blockMode: .CBC(iv: IV.bytes), padding: .noPadding)
-        guard let encryptedKey = try aecCipher?.encrypt(keyData!.bytes) else {throw EthereumKeystoreV3Error.aesError}
+        guard let encryptedKey = try aecCipher?.encrypt(keyData!.bytes) else {throw AbstractKeystoreError.aesError}
         let encryptedKeyData = Data(bytes:encryptedKey)
         var dataForMAC = Data()
         dataForMAC.append(last16bytes)
@@ -162,12 +155,9 @@ public class EthereumKeystoreV3 {
         try self.encryptDataToStorage(newPassword, keyData: keyData!)
     }
     
-    fileprivate func getKeyData(_ password: String? = nil) throws -> Data? {
-        if (password == nil) {
-            return nil
-        }
+    fileprivate func getKeyData(_ password: String) throws -> Data? {
         guard let keystoreParams = self.keystoreParams else {return nil}
-        guard let saltData = hex2bin(keystoreParams.crypto.kdfparams.salt) else {return nil}
+        guard let saltData = Data.fromHex(keystoreParams.crypto.kdfparams.salt) else {return nil}
         let derivedLen = keystoreParams.crypto.kdfparams.dklen
         var passwordDerivedKey:Data?
         switch keystoreParams.crypto.kdf {
@@ -175,7 +165,7 @@ public class EthereumKeystoreV3 {
             guard let N = keystoreParams.crypto.kdfparams.n else {return nil}
             guard let P = keystoreParams.crypto.kdfparams.p else {return nil}
             guard let R = keystoreParams.crypto.kdfparams.r else {return nil}
-            passwordDerivedKey = scrypt(password: password!, salt: saltData, length: derivedLen, N: N, R: R, P: P)
+            passwordDerivedKey = scrypt(password: password, salt: saltData, length: derivedLen, N: N, R: R, P: P)
         case "pbkdf2":
             guard let algo = keystoreParams.crypto.kdfparams.prf else {return nil}
             var hashVariant:HMAC.Variant?;
@@ -191,7 +181,7 @@ public class EthereumKeystoreV3 {
             }
             guard (hashVariant != nil) else {return nil}
             guard let c = keystoreParams.crypto.kdfparams.c else {return nil}
-            guard let passData = password!.data(using: .utf8) else {return nil}
+            guard let passData = password.data(using: .utf8) else {return nil}
             guard let derivedArray = try? PKCS5.PBKDF2(password: passData.bytes, salt: saltData.bytes, iterations: c, keyLength: derivedLen, variant: hashVariant!).calculate() else {return nil}
             passwordDerivedKey = Data(bytes:derivedArray)
         default:
@@ -199,16 +189,16 @@ public class EthereumKeystoreV3 {
         }
         guard let derivedKey = passwordDerivedKey else {return nil}
         var dataForMAC = Data()
-        let derivedKeyLast16bytes = passwordDerivedKey![(derivedKey.count - 16)...(derivedKey.count - 1)]
+        let derivedKeyLast16bytes = derivedKey[(derivedKey.count - 16)...(derivedKey.count - 1)]
         dataForMAC.append(derivedKeyLast16bytes)
-        guard let cipherText = hex2bin(keystoreParams.crypto.ciphertext) else {return nil}
+        guard let cipherText = Data.fromHex(keystoreParams.crypto.ciphertext) else {return nil}
         if (cipherText.count != 32) {return nil}
         dataForMAC.append(cipherText)
         let mac = dataForMAC.sha3(.keccak256)
-        if (mac != hex2bin(keystoreParams.crypto.mac)!) {return nil}
+        guard let calculatedMac = Data.fromHex(keystoreParams.crypto.mac), mac.constantTimeComparisonTo(calculatedMac) else {return nil}
         let cipher = keystoreParams.crypto.cipher
         let decryptionKey = derivedKey[0...15]
-        guard let IV = hex2bin(keystoreParams.crypto.cipherparams.iv) else {return nil}
+        guard let IV = Data.fromHex(keystoreParams.crypto.cipherparams.iv) else {return nil}
         var decryptedPK:Array<UInt8>?
         switch cipher {
         case "aes-128-ctr":

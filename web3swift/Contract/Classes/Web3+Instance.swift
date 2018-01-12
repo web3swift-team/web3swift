@@ -22,7 +22,7 @@ public class web3 {
     public init(provider prov: Web3Provider) {
         provider = prov
     }
-    public func addKeystoreManager(_ manager: KeystoreManagerV3?) {
+    public func addKeystoreManager(_ manager: KeystoreManager?) {
         self.provider.attachedKeystoreManager = manager
     }
     

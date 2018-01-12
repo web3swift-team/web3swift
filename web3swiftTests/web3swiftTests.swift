@@ -29,11 +29,40 @@ class web3swiftTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
+    
+    func testBitFunctions () {
+        let data = Data([0xf0, 0x02, 0x03])
+        let firstBit = data.bitsInRange(0,1)
+        XCTAssert(firstBit == 1)
+        let first4bits = data.bitsInRange(0,4)
+        XCTAssert(first4bits == 0x0f)
+    }
+    
+    func testBIP39 () {
+        var entropy = Data.fromHex("00000000000000000000000000000000")!
+        var phrase = BIP39.generateMnemonicsFromEntropy(entropy: entropy)
+        XCTAssert( phrase == "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about")
+        var seed = BIP39.seedFromMmemonics(phrase!, password: "TREZOR")
+        XCTAssert(seed?.toHexString() == "c55257c360c07c72029aebc1b53c05ed0362ada38ead3e3e9efa3708e53495531f09a6987599d18264c1e1c92f2cf141630c7a3c4ab7c81b2f001698e7463b04")
+        entropy = Data.fromHex("68a79eaca2324873eacc50cb9c6eca8cc68ea5d936f98787c60c7ebc74e6ce7c")!
+        phrase = BIP39.generateMnemonicsFromEntropy(entropy: entropy)
+        XCTAssert( phrase == "hamster diagram private dutch cause delay private meat slide toddler razor book happy fancy gospel tennis maple dilemma loan word shrug inflict delay length")
+        seed = BIP39.seedFromMmemonics(phrase!, password: "TREZOR")
+        XCTAssert(seed?.toHexString() == "64c87cde7e12ecf6704ab95bb1408bef047c22db4cc7491c4271d170a1b213d20b385bc1588d9c7b38f1b39d415665b8a9030c9ec653d75e65f847d8fc1fc440")
+    }
+    
     func testHMAC() {
         let seed = Data.fromHex("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b")!
         let data = Data.fromHex("4869205468657265")!
         let hmac = try! HMAC.init(key: seed.bytes, variant: HMAC.Variant.sha512).authenticate(data.bytes)
         XCTAssert(Data(hmac).toHexString() == "87aa7cdea5ef619d4ff0b4241a1d6cb02379f4e2ce4ec2787ad0b30545e17cdedaa833b7d6b8a702038b274eaea3f4e4be9d914eeb61f1702e696c203a126854")
+    }
+    
+    func testPBKDF2() {
+        let pass = "passDATAb00AB7YxDTTl".data(using: .utf8)!
+        let salt = "saltKEYbcTcXHCBxtjD2".data(using: .utf8)!
+        let dataArray = try? PKCS5.PBKDF2(password: pass.bytes, salt: salt.bytes, iterations: 100000, keyLength: 65, variant: HMAC.Variant.sha512).calculate()
+        XCTAssert(Data(dataArray!).toHexString().addHexPrefix().lowercased() == "0x594256B0BD4D6C9F21A87F7BA5772A791A10E6110694F44365CD94670E57F1AECD797EF1D1001938719044C7F018026697845EB9AD97D97DE36AB8786AAB5096E7".lowercased())
     }
     
     func testRIPEMD() {
@@ -44,7 +73,7 @@ class web3swiftTests: XCTestCase {
     
     func testHD32() {
         let seed = Data.fromHex("000102030405060708090a0b0c0d0e0f")!
-        var node = HDNode(seed: seed)!
+        let node = HDNode(seed: seed)!
         XCTAssert(node.chaincode == Data.fromHex("873dff81c02f525623fd1fe5167eac3a55a049de3d314bb42ee227ffed37d508"))
         let serialized = node.serialize()
         let serializedPriv = node.serialize(serializePublic: false)
@@ -67,6 +96,14 @@ class web3swiftTests: XCTestCase {
         XCTAssert(nextNodeHardened?.publicKey.toHexString() == "035a784662a4a20a65bf6aab9ae98a6c068a81c52e4b032c0fb5400c706cfccc56")
         XCTAssert(nextNodeHardened?.serialize() == "xpub68Gmy5EdvgibQVfPdqkBBCHxA5htiqg55crXYuXoQRKfDBFA1WEjWgP6LHhwBZeNK1VTsfTFUHCdrfp1bgwQ9xv5ski8PX9rL2dZXvgGDnw")
         XCTAssert(nextNodeHardened?.serialize(serializePublic: false) == "xprv9uHRZZhk6KAJC1avXpDAp4MDc3sQKNxDiPvvkX8Br5ngLNv1TxvUxt4cV1rGL5hj6KCesnDYUhd7oWgT11eZG7XnxHrnYeSvkzY7d2bhkJ7")
+        
+        let treeNode = node.derive(path: HDNode.defaultPath)
+        XCTAssert(treeNode != nil)
+        XCTAssert(treeNode?.depth == 4)
+        XCTAssert(treeNode?.serialize() == "xpub6DZ3xpo1ixWwwNDQ7KFTamRVM46FQtgcDxsmAyeBpTHEo79E1n1LuWiZSMSRhqMQmrHaqJpek2TbtTzbAdNWJm9AhGdv7iJUpDjA6oJD84b")
+        XCTAssert(treeNode?.serialize(serializePublic: false) == "xprv9zZhZKG7taxeit8w1HiTDdUko2Fm1RxkrjxANbEaG7kFvJp5UEh6MiQ5b5XvwWg8xdHMhueagettVG2AbfqSRDyNpxRDBLyMSbNq1KhZ8ai")
+        
+        
     }
     
 //    func testReadKeystoreV3Scrypt() {
@@ -501,7 +538,7 @@ class web3swiftTests: XCTestCase {
 //        let testBundle = Bundle(for: type(of: self))
 //        let testResourcePath = testBundle.url(forResource:"keystore", withExtension: "ks")
 //        let testDirPath = testResourcePath?.deletingLastPathComponent()
-//        let keystoreManager = KeystoreManagerV3(testDirPath!, suffix: "ks")
+//        let keystoreManager = KeystoreManager(testDirPath!, suffix: "ks")
 //        print(keystoreManager?.wallets)
 //        XCTAssert(keystoreManager != nil, "Can't create keystore manager")
 //    }

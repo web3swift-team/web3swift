@@ -30,7 +30,7 @@ struct RLP {
     }
     
     internal static func encode(_ string: String) -> Data? {
-        if let hexData = hex2bin(string) {
+        if let hexData = Data.fromHex(string) {
             return encode(hexData)
         }
         guard let data = string.data(using: .utf8) else {return nil}

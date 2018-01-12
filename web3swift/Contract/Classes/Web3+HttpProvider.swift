@@ -14,8 +14,8 @@ import BigInt
 public class Web3HttpProvider: Web3Provider {
     public var url: URL
     public var network: Networks?
-    public var attachedKeystoreManager: KeystoreManagerV3? = nil
-    public init?(_ httpProviderURL: URL, network net: Networks? = nil, keystoreManager manager: KeystoreManagerV3? = nil) {
+    public var attachedKeystoreManager: KeystoreManager? = nil
+    public init?(_ httpProviderURL: URL, network net: Networks? = nil, keystoreManager manager: KeystoreManager? = nil) {
         guard httpProviderURL.scheme == "http" || httpProviderURL.scheme == "https" else {return nil}
         url = httpProviderURL
         if net == nil {

@@ -35,7 +35,7 @@ public protocol Web3Provider {
 //    func send(request: JSONRPCrequest) -> Promise<[String: Any]?>
     func sendSync(request: JSONRPCrequest) -> [String:Any]?
     var network: Networks? {get}
-    var attachedKeystoreManager: KeystoreManagerV3? {get set}
+    var attachedKeystoreManager: KeystoreManager? {get set}
     var url: URL {get}
 }
 

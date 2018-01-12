@@ -116,7 +116,7 @@ extension ABIElement.ParameterType.StaticType {
             }
         case .address:
             if let string = value as? String {
-                guard let data = hex2bin(string.lowercased().stripHexPrefix()) else {return (nil, nil)}
+                guard let data = Data.fromHex(string.lowercased().stripHexPrefix()) else {return (nil, nil)}
                 return (data.setLengthLeft(32), Data())
             } else if let address = value as? EthereumAddress {
                 guard address.isValid else {return (nil, nil)}
@@ -136,7 +136,7 @@ extension ABIElement.ParameterType.StaticType {
         case .bytes(let length):
             if let string = value as? String {
                 if string.hasHexPrefix() {
-                    guard let data = hex2bin(string.lowercased().stripHexPrefix()) else {return (nil, nil)}
+                    guard let data = Data.fromHex(string.lowercased().stripHexPrefix()) else {return (nil, nil)}
                     return (data.setLengthRight(length), Data())
                 } else {
                     guard let data = string.data(using: .utf8) else {return (nil, nil)}
@@ -208,7 +208,7 @@ extension ABIElement.ParameterType.DynamicType {
             return (nil, nil)
         case .bytes:
             if let string = value as? String {
-                guard let data = hex2bin(string.lowercased().stripHexPrefix()) else {return (nil, nil) }
+                guard let data = Data.fromHex(string.lowercased().stripHexPrefix()) else {return (nil, nil) }
                 let length = data.count
                 let lengthToPad = Int(ceil(Double(data.count) / 32.0)) * 32
                 var tail = Data()
