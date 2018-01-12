@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         async {
             do {
                 let userDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-                let keystoreManager = KeystoreManagerV3.managerForPath(userDir + "/keystore")
+                let keystoreManager = KeystoreManager.managerForPath(userDir + "/keystore")
                 var ks: EthereumKeystoreV3?
                 if (keystoreManager?.wallets.keys.count == 0) {
                     ks = try EthereumKeystoreV3(password: "BANKEXFOUNDATION")
@@ -30,7 +30,7 @@ class ViewController: UIViewController {
                 } else {
                     ks = keystoreManager?.wallets[(keystoreManager?.knownAddresses[0])!]
                 }
-                guard let sender = ks?.address else {return}
+                guard let sender = ks?.addresses?.first else {return}
                 print(sender)
                 
                 // BKX TOKEN
@@ -74,7 +74,7 @@ class ViewController: UIViewController {
                 let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
                 options = Web3Options.defaultOptions()
                 options.gas = BigUInt(21000)
-                options.from = ks?.address!
+                options.from = ks?.addresses?.first!
                 options.value = BigUInt(1000000000000000)
                 options.from = sender
                 let estimatedGas = web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress)?.method(options: options)?.estimateGas(options: nil)

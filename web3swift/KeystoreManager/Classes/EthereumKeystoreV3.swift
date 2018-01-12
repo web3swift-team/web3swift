@@ -16,10 +16,10 @@ public typealias TransactionIntermediate = web3.web3contract.transactionIntermed
 public class EthereumKeystoreV3: AbstractKeystore {
     // Protocol
     
-    var addresses: [EthereumAddress]?
-    var isHDKeystore: Bool = false
+    public var addresses: [EthereumAddress]?
+    public var isHDKeystore: Bool = false
     
-    func signedTX(transaction: EthereumTransaction, password: String, account: EthereumAddress) throws -> EthereumTransaction? {
+    public func signedTX(transaction: EthereumTransaction, password: String, account: EthereumAddress) throws -> EthereumTransaction? {
         if self.addresses?.count == 1 && account == self.addresses?.last {
             return try self.signedTX(transaction: transaction, password: password)
         }
@@ -28,7 +28,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         }
     }
 
-    func signTX(transaction: inout EthereumTransaction, password: String, account: EthereumAddress) throws {
+    public func signTX(transaction: inout EthereumTransaction, password: String, account: EthereumAddress) throws {
         if self.addresses?.count == 1 && account == self.addresses?.last {
             try self.signTX(transaction: &transaction, password: password)
         }
@@ -37,7 +37,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         }
     }
 
-    func signIntermediate(intermediate: TransactionIntermediate, password: String, account: EthereumAddress) throws {
+    public func signIntermediate(intermediate: TransactionIntermediate, password: String, account: EthereumAddress) throws {
         if self.addresses?.count == 1 && account == self.addresses?.last {
             try self.signIntermediate(intermediate: intermediate, password: password)
         }
@@ -46,7 +46,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         }
     }
 
-    func signPersonalMessage(_ personalMessage: Data, password: String, account: EthereumAddress) throws -> Data? {
+    public func signPersonalMessage(_ personalMessage: Data, password: String, account: EthereumAddress) throws -> Data? {
         if self.addresses?.count == 1 && account == self.addresses?.last {
             return try self.signPersonalMessage(personalMessage, password: password)
         }
