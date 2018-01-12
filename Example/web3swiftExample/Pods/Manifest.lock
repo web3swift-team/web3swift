@@ -6,28 +6,28 @@ PODS:
     - PromiseKit (~> 4.2)
   - BigInt (3.0.1):
     - SipHash (~> 1.2)
-  - CryptoSwift (0.8.0)
+  - CryptoSwift (0.8.1)
   - libsodium (1.0.12)
-  - PromiseKit (4.5.0):
-    - PromiseKit/Foundation (= 4.5.0)
-    - PromiseKit/QuartzCore (= 4.5.0)
-    - PromiseKit/UIKit (= 4.5.0)
-  - PromiseKit/CorePromise (4.5.0)
-  - PromiseKit/Foundation (4.5.0):
+  - PromiseKit (4.5.1):
+    - PromiseKit/Foundation (= 4.5.1)
+    - PromiseKit/QuartzCore (= 4.5.1)
+    - PromiseKit/UIKit (= 4.5.1)
+  - PromiseKit/CorePromise (4.5.1)
+  - PromiseKit/Foundation (4.5.1):
     - PromiseKit/CorePromise
-  - PromiseKit/QuartzCore (4.5.0):
+  - PromiseKit/QuartzCore (4.5.1):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (4.5.0):
+  - PromiseKit/UIKit (4.5.1):
     - PromiseKit/CorePromise
-  - secp256k1_ios (0.0.7)
+  - secp256k1_ios (0.1.1)
   - SipHash (1.2.0)
-  - web3swift (0.2.0):
+  - web3swift (0.2.5):
     - Alamofire (~> 4.5)
     - Alamofire-Synchronous (~> 4.0)
     - BigInt (~> 3.0.1)
     - CryptoSwift
     - libsodium
-    - secp256k1_ios (~> 0.0.7)
+    - secp256k1_ios (~> 0.1.1)
 
 DEPENDENCIES:
   - AwaitKit (~> 3.0.1)
@@ -43,12 +43,12 @@ SPEC CHECKSUMS:
   Alamofire-Synchronous: eedf1e6e961c3795a63c74990b3f7d9fbfac7e50
   AwaitKit: daf1af84544413a8dfadb4fc25d8b0f9706e5c83
   BigInt: 8e8a52161c745cd3ab78e3dc346a9fbee51e6cf6
-  CryptoSwift: f81907430ebbe38b8404b4f6fb40f3c576a8755f
+  CryptoSwift: 4b07d5b508c1eb67bfa314a727b705f8048a85de
   libsodium: 9a8faa5ef2fa0d2d57bd7f7d79bf8fb7c1a9f0ea
-  PromiseKit: 9c1d9f6d7b65e3951a90bea7f407c56972be5d8e
-  secp256k1_ios: 12a9bddc3d7aa723efbb32b42413f041b11a7765
+  PromiseKit: 445dac9b2c3c3b4b31b5f842bc325700b848a8bd
+  secp256k1_ios: 3c94e6cce14ff03924cb6dc10c5017f17011b79d
   SipHash: c6e9e43e9c531b5bc6602545130c26194a6d31ce
-  web3swift: 3357094e3dcc22aa2b74496765ab1627b7eb0793
+  web3swift: d83e65898ea2c2967ab8235be8fa2e1251e83a9e
 
 PODFILE CHECKSUM: 4e5121a1dec0e978128609b48d54cc97e1079b04
 

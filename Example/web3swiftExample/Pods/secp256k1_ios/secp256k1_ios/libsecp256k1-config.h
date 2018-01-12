@@ -9,13 +9,29 @@
 #ifndef libsecp256k1_config_h
 #define libsecp256k1_config_h
 #undef USE_BASIC_CONFIG
+
 #define USE_NUM_NONE 1
 #define USE_FIELD_INV_BUILTIN 1
 #define USE_SCALAR_INV_BUILTIN 1
+
+#define HAVE_BUILTIN_EXPECT 1
+#define USE_ECMULT_STATIC_PRECOMPUTATION 1
 #define ENABLE_MODULE_RECOVERY 1
+
+#define STDC_HEADERS 1
+#define HAVE_SYS_TYPES_H 1
+#define HAVE_SYS_STAT_H 1
+#define HAVE_STDLIB_H 1
+#define HAVE_STRING_H 1
+#define HAVE_MEMORY_H 1
+#define HAVE_STRINGS_H 1
+#define HAVE_INTTYPES_H 1
+#define HAVE_STDINT_H 1
+#define HAVE_UNISTD_H 1
+#define HAVE_DLFCN_H 1
+
 #ifdef __LP64__
-typedef __int128 int128_t;
-typedef unsigned __int128 uint128_t;
+#define HAVE___INT128 1
 #define USE_FIELD_5X52 1
 #define USE_SCALAR_4X64 1
 #else

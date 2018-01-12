@@ -30,6 +30,9 @@ Good mood
 - Support for incremental updates (stream, ...)
 - iOS, macOS, AppleTV, watchOS, Linux support
 
+## Donation
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=92Z6U3LBHF9J4) to make the CryptoSwift awesome! Thank you.
+
 #### Hash (Digest)
 - [MD5](http://tools.ietf.org/html/rfc1321)
 - [SHA1](http://tools.ietf.org/html/rfc3174)
@@ -64,6 +67,7 @@ Good mood
 #### Password-Based Key Derivation Function
 - [PBKDF1](http://tools.ietf.org/html/rfc2898#section-5.1) (Password-Based Key Derivation Function 1)
 - [PBKDF2](http://tools.ietf.org/html/rfc2898#section-5.2) (Password-Based Key Derivation Function 2)
+- [HKDF](https://tools.ietf.org/html/rfc5869) (HMAC-based Extract-and-Expand Key Derivation Function)
 
 #### Data padding
 - PKCS#5
@@ -171,6 +175,7 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 * [Digest (MD5, SHA...)](#calculate-digest)
 * [Message authenticators (HMAC...)](#message-authenticators-1)
 * [Password-Based Key Derivation Function (PBKDF2, ...)](#password-based-key-derivation-functions)
+* [HMAC-based Key Derivation Function (HKDF)](#hmac-based-key-derivation-function)
 * [Data Padding](#data-padding)
 * [ChaCha20](#chacha20)
 * [Rabbit](#rabbit)
@@ -285,6 +290,15 @@ let password: Array<UInt8> = Array("s33krit".utf8)
 let salt: Array<UInt8> = Array("nacllcan".utf8)
 
 try PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha256).calculate()
+```
+
+##### HMAC-based Key Derivation Function
+
+```swift
+let password: Array<UInt8> = Array("s33krit".utf8)
+let salt: Array<UInt8> = Array("nacllcan".utf8)
+
+try HKDF(password: password, salt: salt, variant: .sha256).calculate()
 ```
 
 ##### Data Padding
