@@ -1,6 +1,6 @@
 {
   "name": "web3swift",
-  "version": "0.2.5",
+  "version": "0.2.7",
   "summary": "Web3 implementation in vanilla Swift",
   "description": "Web3 implementation in vanilla Swift, intended for mobile developers of wallets, Dapps and Web3.0",
   "homepage": "https://github.com/bankex/web3swift",
@@ -10,7 +10,7 @@
   },
   "source": {
     "git": "https://github.com/bankex/web3swift.git",
-    "tag": "0.2.5"
+    "tag": "0.2.7"
   },
   "social_media_url": "https://twitter.com/shamatar",
   "pod_target_xcconfig": {
@@ -27,7 +27,6 @@
     "web3swift/**/*.{h,swift}",
     "web3swift/**/*.{h}"
   ],
-  "exclude_files": "web3swift/Utils/Classes/{HMAC, RIPEMD160}.{swift}",
   "dependencies": {
     "Alamofire": [
       "~> 4.5"

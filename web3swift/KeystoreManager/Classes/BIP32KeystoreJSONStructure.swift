@@ -9,20 +9,18 @@
 import Foundation
 
 public struct KeystoreParamsBIP32: Decodable, Encodable {
-    var address: String?
     var crypto: CryptoParamsV3
     var id: String?
     var version: Int = 32
     var isHDWallet: Bool
-    var pathsToGenerate: [String]
+    var pathToAddress: [String:String]
     
-    public init(address ad: String?, crypto cr: CryptoParamsV3, id i: String, version ver: Int) {
-        address = ad
+    public init(crypto cr: CryptoParamsV3, id i: String, version ver: Int) {
         crypto = cr
         id = i
         version = ver
         isHDWallet = true
-        pathsToGenerate = [HDNode.defaultPath]
+        pathToAddress = [String:String]()
     }
     
 }

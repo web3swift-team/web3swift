@@ -34,7 +34,7 @@ public class HDNode {
             
         }
     }
-    
+    public var path: String? = "m"
     public var privateKey: Data? = nil
     public var publicKey: Data
     public var chaincode: Data
@@ -61,14 +61,42 @@ public class HDNode {
         }
     }
     
-    private init() {
+    init() {
         publicKey = Data()
         chaincode = Data()
         depth = UInt8(0)
     }
     
-    public init?(serializedString: String) {
-        return nil
+    public convenience init?(_ serializedString: String) {
+        let data = Data(Base58.bytesFromBase58(serializedString))
+        self.init(data)
+    }
+    
+    public init?(_ data: Data) {
+        guard data.count == 82 else {return nil}
+        let header = data[0..<4]
+        var serializePrivate = false
+        if header == HDNode.HDversion().privatePrefix {
+            serializePrivate = true
+        }
+        depth = data[4..<5].bytes[0]
+        parentFingerprint = data[5..<9]
+        let cNum = data[9..<13].bytes
+        childNumber = UnsafePointer(cNum).withMemoryRebound(to: UInt32.self, capacity: 1) {
+            $0.pointee
+        }
+        chaincode = data[13..<45]
+        if serializePrivate {
+            privateKey = data[46..<78]
+            guard let pubKey = Web3.Utils.privateToPublic(privateKey!, compressed: true) else {return nil}
+            if pubKey[0] != 0x02 && pubKey[0] != 0x03 {return nil}
+            publicKey = pubKey
+        } else {
+            publicKey = data[45..<78]
+        }
+        let hashedData = data[0..<78].sha256().sha256()
+        let checksum = hashedData[0..<4]
+        if checksum != data[78..<82] {return nil}
     }
     
     public init?(seed: Data) {
@@ -90,8 +118,10 @@ public class HDNode {
         childNumber = UInt32(0)
     }
     
-    static var defaultPath: String = "m/44'/60'/0'/0"
     private static var curveOrder = BigUInt("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", radix: 16)!
+    public static var defaultPath: String = "m/44'/60'/0'/0"
+    public static var defaultPathPrefix: String = "m/44'/60'/0'"
+    public static var hardenedIndexPrefix: UInt32 = (UInt32(1) << 31)
 }
 
 extension HDNode {
@@ -145,7 +175,7 @@ extension HDNode {
                 guard let pubKeyCandidate = SECP256K1.privateToPublic(privateKey: privKeyCandidate, compressed: true) else {return nil}
                 guard pubKeyCandidate.bytes[0] == 0x02 || pubKeyCandidate.bytes[0] == 0x03 else {return nil}
                 guard self.depth < UInt8.max else {return nil}
-                var newNode = HDNode()
+                let newNode = HDNode()
                 newNode.chaincode = cc
                 newNode.depth = self.depth + 1
                 newNode.publicKey = pubKeyCandidate
@@ -153,6 +183,14 @@ extension HDNode {
                 newNode.childNumber = trueIndex
                 let fprint = RIPEMD160.hash(message: self.publicKey.sha256())[0..<4]
                 newNode.parentFingerprint = fprint
+                var newPath = String()
+                if newNode.isHardened {
+                    newPath = self.path! + "/"
+                    newPath += String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
+                } else {
+                    newNode.path = self.path! + "/" + String(newNode.index)
+                }
+                newNode.path = newPath
                 return newNode
             } else {
                 return nil // derive private key when is itself extended public key (impossible)
@@ -188,13 +226,21 @@ extension HDNode {
             guard let newPublicKey = SECP256K1.combineSerializedPublicKeys(keys: [self.publicKey, pubKeyCandidate], outputCompressed: true) else {return nil}
             guard newPublicKey.bytes[0] == 0x02 || newPublicKey.bytes[0] == 0x03 else {return nil}
             guard self.depth < UInt8.max else {return nil}
-            var newNode = HDNode()
+            let newNode = HDNode()
             newNode.chaincode = cc
             newNode.depth = self.depth + 1
             newNode.publicKey = pubKeyCandidate
             newNode.childNumber = index
             let fprint = RIPEMD160.hash(message: self.publicKey.sha256())[0..<4]
             newNode.parentFingerprint = fprint
+            var newPath = String()
+            if newNode.isHardened {
+                newPath = self.path! + "/"
+                newPath += String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
+            } else {
+                newNode.path = self.path! + "/" + String(newNode.index)
+            }
+            newNode.path = newPath
             return newNode
         }
     }

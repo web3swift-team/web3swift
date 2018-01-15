@@ -79,6 +79,17 @@ class web3swiftTests: XCTestCase {
         let serializedPriv = node.serialize(serializePublic: false)
         XCTAssert(serialized == "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8")
         XCTAssert(serializedPriv == "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi")
+        
+        let deserializedNode = HDNode(serializedPriv!)
+        XCTAssert(deserializedNode != nil)
+        XCTAssert(deserializedNode?.depth == 0)
+        XCTAssert(deserializedNode?.index == UInt32(0))
+        XCTAssert(deserializedNode?.isHardened == false)
+        XCTAssert(deserializedNode?.parentFingerprint == Data.fromHex("00000000"))
+        XCTAssert(deserializedNode?.privateKey == node.privateKey)
+        XCTAssert(deserializedNode?.publicKey == node.publicKey)
+        XCTAssert(deserializedNode?.chaincode == node.chaincode)
+        
         let nextNode = node.derive(index: 0, derivePrivateKey: true)
         XCTAssert(nextNode?.depth == 1)
         XCTAssert(nextNode?.index == UInt32(0))

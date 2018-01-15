@@ -21,7 +21,7 @@ PODS:
     - PromiseKit/CorePromise
   - secp256k1_ios (0.1.1)
   - SipHash (1.2.0)
-  - web3swift (0.2.5):
+  - web3swift (0.2.7):
     - Alamofire (~> 4.5)
     - Alamofire-Synchronous (~> 4.0)
     - BigInt (~> 3.0.1)
@@ -48,7 +48,7 @@ SPEC CHECKSUMS:
   PromiseKit: 445dac9b2c3c3b4b31b5f842bc325700b848a8bd
   secp256k1_ios: 3c94e6cce14ff03924cb6dc10c5017f17011b79d
   SipHash: c6e9e43e9c531b5bc6602545130c26194a6d31ce
-  web3swift: d83e65898ea2c2967ab8235be8fa2e1251e83a9e
+  web3swift: cf6d76db53a57fc18ce40ce090bea3b15acc18f2
 
 PODFILE CHECKSUM: 4e5121a1dec0e978128609b48d54cc97e1079b04
 

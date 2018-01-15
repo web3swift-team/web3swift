@@ -88,7 +88,7 @@ extension web3 {
                         try self.setNonce(nonce, network: self.web3.provider.network)
                         guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {return nil}
                         guard let keystore = keystoreManager.wallets[from.address] else {return nil}
-                        try keystore.signIntermediate(intermediate: self, password: password)
+                        try keystore.signIntermediate(intermediate: self, password: password, account: from)
                         print(self.transaction)
                         guard let request = EthereumTransaction.createRawTransaction(transaction: self.transaction) else {return nil}
                         let response = self.web3.provider.sendSync(request: request)

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name             = "web3swift"
-s.version          = "0.2.5"
+s.version          = "0.2.7"
 s.summary          = "Web3 implementation in vanilla Swift"
 
 s.description      = <<-DESC
@@ -21,7 +21,7 @@ s.module_name      = 'web3swift'
 s.ios.deployment_target = "9.0"
 s.source_files = "web3swift/**/*.{h,swift}", 
 s.public_header_files = "web3swift/**/*.{h}"
-s.exclude_files = "web3swift/Utils/Classes/{HMAC, RIPEMD160}.{swift}"
+#s.exclude_files = ""
 s.dependency 'Alamofire', '~> 4.5'
 s.dependency 'Alamofire-Synchronous', '~> 4.0'
 s.dependency 'BigInt', '~> 3.0.1'
