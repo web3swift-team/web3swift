@@ -93,9 +93,7 @@
 		8113D3191FD7F4C80074282C /* ABITypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABITypes.swift; sourceTree = "<group>"; };
 		8113D31B1FD7F8980074282C /* ABIRecordParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABIRecordParser.swift; sourceTree = "<group>"; };
 		8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRegularExpressionExtension.swift; sourceTree = "<group>"; };
-		8123E1C0200C99CC00B6D3AB /* BIP32Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP32Key.swift; sourceTree = "<group>"; };
 		8123E1C2200CA0AE00B6D3AB /* Web3Swift+AbstractSigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3Swift+AbstractSigner.swift"; sourceTree = "<group>"; };
-		8123E1C4200CB34C00B6D3AB /* UnsafeBIP32Keystore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsafeBIP32Keystore.swift; sourceTree = "<group>"; };
 		8123E1C6200CBAC200B6D3AB /* Dictionary+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
 		8123E1C8200CBAF800B6D3AB /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		8123E1CA200CBB2200B6D3AB /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
@@ -109,8 +107,6 @@
 		817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EthereumAddress.swift; sourceTree = "<group>"; };
 		817EBB112004FE2F00E02EAA /* BIP32HDNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BIP32HDNode.swift; sourceTree = "<group>"; };
 		817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+HttpProvider.swift"; sourceTree = "<group>"; };
-		817EBB172004FE7200E02EAA /* HMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HMAC.swift; sourceTree = "<group>"; };
-		817EBB1C20061BE400E02EAA /* RIPEMD160.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RIPEMD160.swift; sourceTree = "<group>"; };
 		817EBB1E2006265400E02EAA /* Base58.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base58.swift; sourceTree = "<group>"; };
 		817EBB22200649E000E02EAA /* RIPEMD160+StackOveflow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RIPEMD160+StackOveflow.swift"; sourceTree = "<group>"; };
 		817EBB2420066E2B00E02EAA /* AbstractKeystore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractKeystore.swift; sourceTree = "<group>"; };
@@ -218,12 +214,10 @@
 		8113D2AF1FD7E1590074282C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				817EBB172004FE7200E02EAA /* HMAC.swift */,
 				8113D2B01FD7E1590074282C /* CryptoExtensions.swift */,
 				8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */,
 				8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */,
 				8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */,
-				817EBB1C20061BE400E02EAA /* RIPEMD160.swift */,
 				817EBB1E2006265400E02EAA /* Base58.swift */,
 				817EBB22200649E000E02EAA /* RIPEMD160+StackOveflow.swift */,
 				8123E1C8200CBAF800B6D3AB /* Data+Extension.swift */,
@@ -256,8 +250,6 @@
 				815630032007BC8F00A0EC2F /* BIP39+WordLists.swift */,
 				81531A9F1FE7C07A002192CC /* EthereumKeystoreV3.swift */,
 				817EBB26200673D100E02EAA /* KeystoreV3JSONStructure.swift */,
-				8123E1C4200CB34C00B6D3AB /* UnsafeBIP32Keystore.swift */,
-				8123E1C0200C99CC00B6D3AB /* BIP32Key.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";

@@ -109,17 +109,6 @@ public class BIP32Keystore: AbstractKeystore {
         try createNewAccount(parentNode: prefixNode, password: password)
     }
     
-    public convenience init? (bitsOfEntropy: Int = 128, password: String = "BANKEXFOUNDATION", mnemonicsPassword: String = "BANKEXFOUNDATION", language: BIP39Language = BIP39Language.english) throws {
-        guard let newBIP39phrase = try BIP39.generateMnemonics(bitsOfEntropy: bitsOfEntropy, language: language) else {throw AbstractKeystoreError.noEntropyError}
-        try self.init(mnemonics: newBIP39phrase, password: password, mnemonicsPassword: mnemonicsPassword, language: language)
-    }
-    
-    public convenience init? (entropy: Data, password: String = "BANKEXFOUNDATION", mnemonicsPassword: String = "BANKEXFOUNDATION", language: BIP39Language = BIP39Language.english) throws {
-        guard let newBIP39phrase = BIP39.generateMnemonicsFromEntropy(entropy: entropy) else {throw AbstractKeystoreError.noEntropyError}
-        try self.init(mnemonics: newBIP39phrase, password: password, mnemonicsPassword: mnemonicsPassword, language: language)
-    }
-    
-    
     public func createNewAccount(parentNode: HDNode, password: String = "BANKEXFOUNDATION") throws {
         var newIndex = UInt32(0)
         for (p, _) in paths {
