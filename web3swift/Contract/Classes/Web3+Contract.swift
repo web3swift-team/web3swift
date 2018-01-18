@@ -176,7 +176,7 @@ extension web3 {
         public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData:Data = Data(), options: Web3Options?) -> transactionIntermediate? {
             
             let mergedOptions = Web3Options.merge(self.options, with: options)
-            guard let tx = self.contract.method(method, parameters: parameters, nonce: nonce, extraData:extraData, options: mergedOptions, toAddress:self.contract.address) else {return nil}
+            guard let tx = self.contract.method(method, parameters: parameters, nonce: nonce, extraData:extraData, options: mergedOptions) else {return nil}
             let intermediate = transactionIntermediate(transaction: tx, web3: self.web3, contract: self.contract, method: method, options: mergedOptions)
             return intermediate
         }

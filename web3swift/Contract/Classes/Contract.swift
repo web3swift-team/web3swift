@@ -52,14 +52,14 @@ public struct Contract {
     }
     
     
-    public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData: Data = Data(), options: Web3Options?, toAddress:EthereumAddress? = nil) -> EthereumTransaction? {
+    public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData: Data = Data(), options: Web3Options?) -> EthereumTransaction? {
         var to:EthereumAddress
         let mergedOptions = Web3Options.merge(self.options, with: options)
-        if let toFound = toAddress, toFound.isValid {
-            to = toFound
+        if (self.address != nil) {
+            to = self.address!
         } else if let toFound = mergedOptions?.to, toFound.isValid {
             to = toFound
-        } else {
+        } else  {
             return nil
         }
         

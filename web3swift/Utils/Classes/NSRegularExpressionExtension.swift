@@ -9,30 +9,6 @@
 
 import Foundation
 
-extension String {
-    func matchingStrings(regex: String) -> [[String]] {
-        guard let regex = try? NSRegularExpression(pattern: regex, options: []) else { return [] }
-        let nsString = self as NSString
-        let results  = regex.matches(in: self, options: [], range: NSMakeRange(0, nsString.length))
-        return results.map { result in
-            (0..<result.numberOfRanges).map { result.range(at: $0).location != NSNotFound
-                ? nsString.substring(with: result.range(at: $0))
-                : ""
-            }
-        }
-    }
-    
-    func range(from nsRange: NSRange) -> Range<String.Index>? {
-        guard
-            let from16 = utf16.index(utf16.startIndex, offsetBy: nsRange.location, limitedBy: utf16.endIndex),
-            let to16 = utf16.index(utf16.startIndex, offsetBy: nsRange.location + nsRange.length, limitedBy: utf16.endIndex),
-            let from = from16.samePosition(in: self),
-            let to = to16.samePosition(in: self)
-            else { return nil }
-        return from ..< to
-    }
-    
-}
 
 extension NSRegularExpression {
     typealias GroupNamesSearchResult = (NSTextCheckingResult, NSTextCheckingResult, Int)

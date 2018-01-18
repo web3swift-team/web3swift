@@ -34,7 +34,7 @@ class ViewController: UIViewController {
                 print(sender)
                 
                 // BKX TOKEN
-                
+                let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
                 let constractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
                 var options = Web3Options()
                 options.gas = BigUInt(250000)
@@ -49,6 +49,9 @@ class ViewController: UIViewController {
                 guard let result = res else {return}
                 print("BKX token name = " + (result["0"] as! String))
                 
+                let bkxBalance = contract?.method("balanceOf", parameters: [coldWalletAddress] as [AnyObject], options: options)?.call(options: nil)
+                guard let bkx = bkxBalance, let bal = bkx["0"] as? BigUInt else {return}
+                print("BKX token balance = " + String(bal))
                 let erc20receipt = web3Main.eth.getTransactionReceipt("0x76bb19c0b7e2590f724871960599d28db99cd587506fdfea94062f9c8d61eb30")
                 for l in (erc20receipt?.logs)! {
                     guard let result = contract?.parseEvent(l), let name = result.eventName, let data = result.eventData else {continue}
@@ -71,7 +74,7 @@ class ViewController: UIViewController {
                 let web3Rinkeby = Web3.InfuraRinkebyWeb3()
                 web3Rinkeby.addKeystoreManager(keystoreManager)
                 let coldWalletABI = "[{\"payable\":true,\"type\":\"fallback\"}]"
-                let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+                
                 options = Web3Options.defaultOptions()
                 options.gas = BigUInt(21000)
                 options.from = ks?.addresses?.first!
