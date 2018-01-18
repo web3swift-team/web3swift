@@ -11,14 +11,9 @@ import Foundation
 import BigInt
 
 public struct Web3 {
-    public static func newWeb3(_ providerURL: URL? = nil) -> web3? {
-        if providerURL == nil {
-            let infura = InfuraProvider(Networks.Rinkeby)!
-            return web3(provider: infura)
-        }
-        else {
-            return nil
-        }
+    public static func newWeb3(_ providerURL: URL) -> web3? {
+        guard let provider = Web3HttpProvider(providerURL) else {return nil}
+        return web3(provider: provider)
     }
     
     public static func InfuraRinkebyWeb3(accessToken: String? = nil) -> web3 {
