@@ -514,6 +514,13 @@ class web3swiftTests: XCTestCase {
             print(error)
         }
     }
+    
+    func testBigUIntFromHex() {
+        let hexRepresentation = "0x1c31de57e49fc00".stripHexPrefix()
+        let biguint = BigUInt(hexRepresentation, radix: 16)!
+        XCTAssert(biguint == BigUInt("126978086000000000"))
+    }
+    
 //
 //    func testInfuraERC20name() {
 //        let sodium = Sodium()
