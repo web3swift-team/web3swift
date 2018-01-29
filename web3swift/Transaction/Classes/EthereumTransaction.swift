@@ -92,7 +92,7 @@ public struct EthereumTransaction: CustomStringConvertible {
             toReturn = toReturn + "Transaction" + "\n"
             toReturn = toReturn + "Nonce: " + String(self.nonce) + "\n"
             toReturn = toReturn + "Gas price: " + String(self.gasPrice) + "\n"
-            toReturn = toReturn + "Gas limit: " + String(self.gasLimit) + "\n"
+            toReturn = toReturn + "Gas limit: " + String(describing: self.gasLimit) + "\n"
             toReturn = toReturn + "To: " + self.to.address  + "\n"
             toReturn = toReturn + "Value: " + String(self.value) + "\n"
             toReturn = toReturn + "Data: " + self.data.toHexString().addHexPrefix().lowercased() + "\n"
@@ -225,7 +225,6 @@ public struct EthereumTransaction: CustomStringConvertible {
             if (result) {
                 return true
             }
-//            self.gasPrice = self.gasPrice + BigUInt(1)
         }
         return false
     }
@@ -247,7 +246,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         guard let from = options?.from else {return nil}
         guard let txParams = transaction.encodeAsDictionary(from: from) else {return nil}
         var params = [txParams] as Array<Encodable>
-        if onBlock != nil {
+        if method.requiredNumOfParameter == 2 && onBlock != nil {
             params.append(onBlock as Encodable)
         }
         let pars = JSONRPCparams(params: params)

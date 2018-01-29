@@ -165,4 +165,34 @@ extension web3.Eth {
         let gas = BigUInt(resultString.stripHexPrefix().lowercased(), radix: 16)
         return gas
     }
+    
+    public func getAccounts() -> [EthereumAddress]? {
+        if (self.provider.attachedKeystoreManager != nil) {
+            return self.provider.attachedKeystoreManager?.addresses
+        }
+        var request = JSONRPCrequest()
+        request.method = JSONRPCmethod.getAccounts
+        let params = [] as Array<Encodable>
+        let pars = JSONRPCparams(params: params)
+        request.params = pars
+        let response = self.provider.sendSync(request: request)
+        if response == nil {
+            return nil
+        }
+        guard let res = response else {return nil}
+        if let error = res["error"] as? String {
+            print(error as String)
+            return nil
+        }
+        guard let resultArray = res["result"] as? [String] else {return nil}
+        var toReturn = [EthereumAddress]()
+        for addrString in resultArray {
+            let addr = EthereumAddress(addrString)
+            if (addr.isValid) {
+                toReturn.append(addr)
+            }
+        }
+        return toReturn
+    }
+    
 }

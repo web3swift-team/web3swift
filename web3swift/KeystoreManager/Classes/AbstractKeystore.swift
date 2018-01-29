@@ -11,7 +11,7 @@ import Foundation
 public typealias TransactionIntermediate = web3.web3contract.transactionIntermediate
 
 
-protocol AbstractKeystore {
+public protocol AbstractKeystore {
     var addresses: [EthereumAddress]? {get}
     var isHDKeystore: Bool {get}
     func signedTX(transaction:EthereumTransaction, password: String, account: EthereumAddress) throws -> EthereumTransaction?

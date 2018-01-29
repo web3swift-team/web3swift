@@ -100,19 +100,19 @@ extension ABIElement.ParameterType.StaticType {
     
     func encode(_ value: AnyObject) -> (head:Data?, tail: Data?) {
         switch self {
-        case .uint(let bits):
+        case .uint(_):
             if let biguint = value as? BigUInt {
-                return biguint.abiEncode(bits: bits);
+                return biguint.abiEncode(bits: 256);
             }
             if let bigint = value as? BigInt {
-                return bigint.abiEncode(bits: bits);
+                return bigint.abiEncode(bits: 256);
             }
-        case .int(let bits):
+        case .int(_):
             if let biguint = value as? BigUInt {
-                return biguint.abiEncode(bits: bits);
+                return biguint.abiEncode(bits: 256);
             }
             if let bigint = value as? BigInt {
-                return bigint.abiEncode(bits: bits);
+                return bigint.abiEncode(bits: 256);
             }
         case .address:
             if let string = value as? String {

@@ -86,9 +86,12 @@ extension web3 {
                         guard let from = self.options?.from else {return nil}
                         guard let nonce = self.web3.eth.getTransactionCount(address: from, onBlock: "pending") else {return nil}
                         try self.setNonce(nonce, network: self.web3.provider.network)
+                        if self.options?.gas == nil {
+                            guard let estimatedGas = self.estimateGas(options: self.options) else {return nil}
+                            self.options?.gas = estimatedGas
+                        }
                         guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {return nil}
-                        guard let keystore = keystoreManager.wallets[from.address] else {return nil}
-                        try keystore.signIntermediate(intermediate: self, password: password, account: from)
+                        try keystoreManager.signIntermediate(intermediate: self, password: password, account: from)
                         print(self.transaction)
                         guard let request = EthereumTransaction.createRawTransaction(transaction: self.transaction) else {return nil}
                         let response = self.web3.provider.sendSync(request: request)
@@ -173,10 +176,10 @@ extension web3 {
                 }
         }
         
-        public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData:Data = Data(), options: Web3Options?) -> transactionIntermediate? {
+        public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData: Data = Data(), options: Web3Options?) -> transactionIntermediate? {
             
             let mergedOptions = Web3Options.merge(self.options, with: options)
-            guard let tx = self.contract.method(method, parameters: parameters, nonce: nonce, extraData:extraData, options: mergedOptions) else {return nil}
+            guard let tx = self.contract.method(method, parameters: parameters, nonce: nonce, extraData: extraData, options: mergedOptions) else {return nil}
             let intermediate = transactionIntermediate(transaction: tx, web3: self.web3, contract: self.contract, method: method, options: mergedOptions)
             return intermediate
         }

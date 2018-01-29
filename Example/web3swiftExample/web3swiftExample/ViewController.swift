@@ -23,12 +23,12 @@ class ViewController: UIViewController {
                 let userDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
                 let keystoreManager = KeystoreManager.managerForPath(userDir + "/keystore")
                 var ks: EthereumKeystoreV3?
-                if (keystoreManager?.wallets.keys.count == 0) {
+                if (keystoreManager?.addresses?.count == 0) {
                     ks = try EthereumKeystoreV3(password: "BANKEXFOUNDATION")
                     let keydata = try JSONEncoder().encode(ks!.keystoreParams)
                     FileManager.default.createFile(atPath: userDir + "/keystore"+"/key.json", contents: keydata, attributes: nil)
                 } else {
-                    ks = keystoreManager?.wallets[(keystoreManager?.knownAddresses[0])!]
+                    ks = keystoreManager?.walletForAddress((keystoreManager?.addresses![0])!) as! EthereumKeystoreV3
                 }
                 guard let sender = ks?.addresses?.first else {return}
                 print(sender)
@@ -80,9 +80,9 @@ class ViewController: UIViewController {
                 options.from = ks?.addresses?.first!
                 options.value = BigUInt(1000000000000000)
                 options.from = sender
-                let estimatedGas = web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress)?.method(options: options)?.estimateGas(options: nil)
+                var estimatedGas = web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress)?.method(options: options)?.estimateGas(options: nil)
                 options.gas = estimatedGas
-                let intermediateSend = web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress)?.method(options: options)
+                var intermediateSend = web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress)?.method(options: options)
                 res = intermediateSend?.send(password: "BANKEXFOUNDATION")
                 let derivedSender = intermediateSend?.transaction.sender
                 if (derivedSender?.address != sender.address) {
@@ -96,6 +96,22 @@ class ViewController: UIViewController {
                 //Balance on Rinkeby
                 let balance = web3Rinkeby.eth.getBalance(address: coldWalletAddress)
                 print("Balance of " + coldWalletAddress.address + " = " + String(balance!))
+
+                
+//                Send mutating transaction taking parameters
+                let testABIonRinkeby = "[{\"constant\":true,\"inputs\":[],\"name\":\"counter\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_value\",\"type\":\"uint8\"}],\"name\":\"increaseCounter\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
+                let deployedTestAddress = EthereumAddress("0x1e528b190b6acf2d7c044141df775c7a79d68eba")
+                options = Web3Options.defaultOptions()
+                options.gas = BigUInt(100000)
+                options.value = BigUInt(0)
+                options.from = ks?.addresses![0]
+                let testParameters = [BigUInt(1)] as [AnyObject]
+                estimatedGas = web3Rinkeby.contract(testABIonRinkeby, at: deployedTestAddress)?.method("increaseCounter", parameters: testParameters, options: options)?.estimateGas(options: nil)
+                options.gas = estimatedGas
+                let testMutationResult = web3Rinkeby.contract(testABIonRinkeby, at: deployedTestAddress)?.method("increaseCounter", parameters: testParameters, options: options)?.send(password: "BANKEXFOUNDATION")
+                
+                print(testMutationResult)
+                
                 
                 
                 //get TX details

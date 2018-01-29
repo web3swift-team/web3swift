@@ -25,6 +25,8 @@ public enum JSONRPCmethod: String, Encodable {
     case getTransactionByHash = "eth_getTransactionByHash"
     case getTransactionReceipt = "eth_getTransactionReceipt"
     
+    case getAccounts = "eth_getAccounts"
+    
     public var requiredNumOfParameter: Int {
         get {
             switch self {
@@ -43,6 +45,8 @@ public enum JSONRPCmethod: String, Encodable {
             case .blockNumber:
                 return 0
             case .getNetwork:
+                return 0
+            case .getAccounts:
                 return 0
             default:
                 return 1
