@@ -24,8 +24,6 @@ extension UInt32 {
     }
 }
 
-
-
 public class HDNode {
     public struct HDversion{
         public var privatePrefix: Data = Data.fromHex("0x0488ADE4")!
@@ -188,7 +186,7 @@ extension HDNode {
                     newPath = self.path! + "/"
                     newPath += String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
                 } else {
-                    newNode.path = self.path! + "/" + String(newNode.index)
+                    newPath = self.path! + "/" + String(newNode.index)
                 }
                 newNode.path = newPath
                 return newNode
@@ -238,7 +236,7 @@ extension HDNode {
                 newPath = self.path! + "/"
                 newPath += String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
             } else {
-                newNode.path = self.path! + "/" + String(newNode.index)
+                newPath = self.path! + "/" + String(newNode.index)
             }
             newNode.path = newPath
             return newNode

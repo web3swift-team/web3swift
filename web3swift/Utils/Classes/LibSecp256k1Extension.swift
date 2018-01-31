@@ -100,7 +100,7 @@ extension SECP256K1 {
     
     static func combineSerializedPublicKeys(keys: [Data], outputCompressed: Bool = false) -> Data? {
         let numToCombine = keys.count
-        guard numToCombine >= 2 else { return nil}
+        guard numToCombine >= 1 else { return nil}
         var publicKeys = [UnsafePointer<secp256k1_pubkey>?]()
         var result:Int32
         for i in 0..<numToCombine {

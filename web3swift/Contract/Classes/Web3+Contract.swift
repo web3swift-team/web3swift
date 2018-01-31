@@ -19,11 +19,12 @@ extension web3 {
     public class web3contract {
         var contract: Contract
         var web3 : web3
-        public var options: Web3Options? = Web3Options.defaultOptions()
+        public var options: Web3Options? = nil
         
         public init?(web3 web3Instance:web3, abiString: String, at: EthereumAddress? = nil, options: Web3Options? = nil) {
             do {
                 self.web3 = web3Instance
+                self.options = web3.options
                 let jsonData = abiString.data(using: .utf8)
                 let abi = try JSONDecoder().decode([ABIRecord].self, from: jsonData!)
                 let abiNative = try abi.map({ (record) -> ABIElement in
@@ -60,7 +61,7 @@ extension web3 {
                 self.contract = contract
                 self.contract.options = options
                 self.method = method
-                self.options = options
+                self.options = Web3Options.merge(web3.options, with: options)
             }
             
             public func setNonce(_ nonce: BigUInt, network: Networks? = nil) throws {
@@ -81,38 +82,19 @@ extension web3 {
                 let _ = self.transaction.sign(privateKey: privateKey)
             }
             
-            public func send(password: String = "BANKEXFOUNDATION") -> [String:Any]? {
-                    do {
-                        guard let from = self.options?.from else {return nil}
-                        guard let nonce = self.web3.eth.getTransactionCount(address: from, onBlock: "pending") else {return nil}
-                        try self.setNonce(nonce, network: self.web3.provider.network)
-                        if self.options?.gas == nil {
-                            guard let estimatedGas = self.estimateGas(options: self.options) else {return nil}
-                            self.options?.gas = estimatedGas
-                        }
-                        guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {return nil}
-                        try keystoreManager.signIntermediate(intermediate: self, password: password, account: from)
-                        print(self.transaction)
-                        guard let request = EthereumTransaction.createRawTransaction(transaction: self.transaction) else {return nil}
-                        let response = self.web3.provider.sendSync(request: request)
-                        if response == nil {
-                            return nil
-                        }
-                        guard let res = response else {return nil}
-                        if let error = res["error"] as? String {
-                            print(error as String)
-                            return nil
-                        }
-                        guard let resultString = res["result"] as? String else {return nil}
-                        let hash = resultString.addHexPrefix().lowercased()
-                        return ["txhash": hash as Any, "txhashCalculated" : self.transaction.txhash as Any]
+            public func send(password: String = "BANKEXFOUNDATION", options: Web3Options? = nil) -> [String:Any]? {
+                do {
+                    guard var mergedOptions = Web3Options.merge(self.options, with: options) else {return nil}
+                    guard let from = mergedOptions.from else {return nil}
+                    guard let nonce = self.web3.eth.getTransactionCount(address: from, onBlock: "pending") else {return nil}
+                    try self.setNonce(nonce, network: self.web3.provider.network)
+                    if options?.gas == nil {
+                        guard let estimatedGas = self.estimateGas(options: self.options) else {return nil}
+                        mergedOptions.gas = estimatedGas
                     }
-                    catch {
-                        return nil
-                    }
-            }
-            
-            public func sendSigned() -> [String:Any]? {
+                    self.options = mergedOptions
+                    guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {return nil}
+                    try keystoreManager.signIntermediate(intermediate: self, password: password, account: from)
                     print(self.transaction)
                     guard let request = EthereumTransaction.createRawTransaction(transaction: self.transaction) else {return nil}
                     let response = self.web3.provider.sendSync(request: request)
@@ -127,53 +109,74 @@ extension web3 {
                     guard let resultString = res["result"] as? String else {return nil}
                     let hash = resultString.addHexPrefix().lowercased()
                     return ["txhash": hash as Any, "txhashCalculated" : self.transaction.txhash as Any]
+                }
+                catch {
+                    return nil
+                }
+            }
+            
+            public func sendSigned() -> [String:Any]? {
+                print(self.transaction)
+                guard let request = EthereumTransaction.createRawTransaction(transaction: self.transaction) else {return nil}
+                let response = self.web3.provider.sendSync(request: request)
+                if response == nil {
+                    return nil
+                }
+                guard let res = response else {return nil}
+                if let error = res["error"] as? String {
+                    print(error as String)
+                    return nil
+                }
+                guard let resultString = res["result"] as? String else {return nil}
+                let hash = resultString.addHexPrefix().lowercased()
+                return ["txhash": hash as Any, "txhashCalculated" : self.transaction.txhash as Any]
             }
             
             
             public func call(options: Web3Options?, onBlock: String = "latest") -> [String:Any]? {
-                    let mergedOptions = Web3Options.merge(self.options, with: options)
-                    guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: self.transaction, onBlock: onBlock, options: mergedOptions) else {return nil}
-                    let response = self.web3.provider.sendSync(request: request)
-                    if response == nil {
-                        return nil
-                    }
-                    guard let res = response else {return nil}
-                    if let error = res["error"] as? String {
-                        print(error as String)
-                        return nil
-                    }
-                    guard let resultString = res["result"] as? String else {return nil}
-                    if (self.method == "fallback") {
-                        let resultAsBigUInt = BigUInt(resultString.stripHexPrefix(), radix : 16)
-                        return ["result": resultAsBigUInt as Any]
-                    }
-                    let foundMethod = self.contract.methods.filter { (key, value) -> Bool in
-                        return key == self.method
-                    }
-                    guard foundMethod.count == 1 else {return nil}
-                    let abiMethod = foundMethod[self.method]
-                    let responseData = Data(Array<UInt8>(hex: resultString.lowercased().stripHexPrefix()))
-                    guard responseData != Data() else {return nil}
-                    guard let decodedData = abiMethod?.decodeReturnData(responseData) else {return nil}
-                    return decodedData
+                let mergedOptions = Web3Options.merge(self.options, with: options)
+                guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: self.transaction, onBlock: onBlock, options: mergedOptions) else {return nil}
+                let response = self.web3.provider.sendSync(request: request)
+                if response == nil {
+                    return nil
+                }
+                guard let res = response else {return nil}
+                if let error = res["error"] as? String {
+                    print(error as String)
+                    return nil
+                }
+                guard let resultString = res["result"] as? String else {return nil}
+                if (self.method == "fallback") {
+                    let resultAsBigUInt = BigUInt(resultString.stripHexPrefix(), radix : 16)
+                    return ["result": resultAsBigUInt as Any]
+                }
+                let foundMethod = self.contract.methods.filter { (key, value) -> Bool in
+                    return key == self.method
+                }
+                guard foundMethod.count == 1 else {return nil}
+                let abiMethod = foundMethod[self.method]
+                let responseData = Data(Array<UInt8>(hex: resultString.lowercased().stripHexPrefix()))
+                guard responseData != Data() else {return nil}
+                guard let decodedData = abiMethod?.decodeReturnData(responseData) else {return nil}
+                return decodedData
             }
         
-            public func estimateGas(options: Web3Options?, onBlock: String = "latest") -> BigUInt? {
-                    let mergedOptions = Web3Options.merge(self.options, with: options)
-                    guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.estimateGas, transaction: self.transaction, onBlock: onBlock, options: mergedOptions) else {return nil}
-                    let response = self.web3.provider.sendSync(request: request)
-                    if response == nil {
-                        return nil
-                    }
-                    guard let res = response else {return nil}
-                    if let error = res["error"] as? String {
-                        print(error as String)
-                        return nil
-                    }
-                    guard let resultString = res["result"] as? String else {return nil}
-                    let gas = BigUInt(resultString.stripHexPrefix().lowercased(), radix: 16)
-                    return gas
+            public func estimateGas(options: Web3Options?) -> BigUInt? {
+                let mergedOptions = Web3Options.merge(self.options, with: options)
+                guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.estimateGas, transaction: self.transaction, onBlock: nil, options: mergedOptions) else {return nil}
+                let response = self.web3.provider.sendSync(request: request)
+                if response == nil {
+                    return nil
                 }
+                guard let res = response else {return nil}
+                if let error = res["error"] as? String {
+                    print(error as String)
+                    return nil
+                }
+                guard let resultString = res["result"] as? String else {return nil}
+                let gas = BigUInt(resultString.stripHexPrefix().lowercased(), radix: 16)
+                return gas
+            }
         }
         
         public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), nonce: BigUInt = BigUInt(0), extraData: Data = Data(), options: Web3Options?) -> transactionIntermediate? {

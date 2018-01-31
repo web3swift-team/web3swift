@@ -53,88 +53,27 @@ public class KeystoreManager: AbstractKeystore {
         return KeystoreManager.allManagers[0]
     }
     
-    public static func managerForPath(_ path: String, suffix: String? = nil) -> KeystoreManager? {
-        if KeystoreManager.allManagers.count == 0 {
-            guard let newManager = try? KeystoreManager(path, suffix: suffix), let manager = newManager  else {return nil}
-            KeystoreManager.allManagers.append(manager)
+    public static func managerForPath(_ path: String, scanForHDwallets: Bool = false, suffix: String? = nil) -> KeystoreManager? {
+//        if KeystoreManager.allManagers.count == 0 {
+            guard let newManager = try? KeystoreManager(path, scanForHDwallets: scanForHDwallets, suffix: suffix), let manager = newManager  else {return nil}
+//            KeystoreManager.allManagers.append(manager)
             return manager
-        } else {
-            let foundManager = KeystoreManager.allManagers.filter({ (manager:KeystoreManager) -> Bool in
-                return manager.path == path
-            })
-            if foundManager.count == 0 {
-                guard let newManager = try? KeystoreManager(path, suffix: suffix), let manager = newManager  else {return nil}
-                KeystoreManager.allManagers.append(manager)
-                return manager
-            } else if (foundManager.count == 1) {
-                return foundManager[0]
-            }
-        }
-        return nil
-    }
-    
-//    public var defaultAddress: EthereumAddress?
-    
-    public var path: String
-//    public var wallets:[String:EthereumKeystoreV3] {
-//        get {
-//            var toReturn = [String:EthereumKeystoreV3]()
-//            for keystore in _keystores {
-//                let key = keystore.addresses?.first?.address
-//                if key != nil {
-//                    toReturn[key!] = keystore
-//                }
-//            }
-//            return toReturn
-//        }
-//    }
-    
-//    public var addresses: [EthereumAddress]? {
-//        get {
-//            var toReturn = [EthereumAddress]()
-//            for keystore in _keystores {
-//                guard let key = keystore.addresses?.first else {continue}
-//                if key == defaultAddress && key.isValid {
-//                    toReturn.append(key)
-//                }
-//            }
-//            for keystore in _keystores {
-//                guard let key = keystore.addresses?.first else {continue}
-//                if key != defaultAddress && key.isValid {
-//                    toReturn.append(key)
-//                }
-//            }
-//            return toReturn
-//        }
-//    }
-//    public var knownAddresses:[String] {
-//        get {
-//            var toReturn = [String]()
-//            for keystore in _keystores {
-//                guard let key = keystore.addresses?.first?.address else {continue}
-//                if key.lowercased() == defaultAddress?.address.lowercased() {
-//                    toReturn.append(key)
-//                }
-//            }
-//            for keystore in _keystores {
-//                guard let key = keystore.addresses?.first?.address else {continue}
-//                if key.lowercased() != defaultAddress?.address.lowercased() {
-//                    toReturn.append(key)
-//                }
-//            }
-//            return toReturn
-//        }
-//    }
-    
-//    public func walletForAddress(_ address: String) -> EthereumKeystoreV3? {
-//        for keystore in _keystores {
-//            guard let key = keystore.addresses?.first?.address else {continue}
-//            if key.lowercased() == address.lowercased().addHexPrefix() {
-//                return keystore
+//        } else {
+//            let foundManager = KeystoreManager.allManagers.filter({ (manager:KeystoreManager) -> Bool in
+//                return manager.path == path && manager.isHDKeystore == scanForHDwallets
+//            })
+//            if foundManager.count == 0 {
+//                guard let newManager = try? KeystoreManager(path, scanForHDwallets: scanForHDwallets, suffix: suffix), let manager = newManager  else {return nil}
+//                KeystoreManager.allManagers.append(manager)
+//                return manager
+//            } else if (foundManager.count == 1) {
+//                return foundManager[0]
 //            }
 //        }
 //        return nil
-//    }
+    }
+    
+    public var path: String
     
     public func walletForAddress(_ address: EthereumAddress) -> AbstractKeystore? {
         for keystore in _keystores {
@@ -147,15 +86,24 @@ public class KeystoreManager: AbstractKeystore {
     }
     
     var _keystores:[EthereumKeystoreV3] = [EthereumKeystoreV3]()
+    var _bip32keystores: [BIP32Keystore] = [BIP32Keystore]()
     
-    public var keystores:[AbstractKeystore] {
+    public var keystores:[EthereumKeystoreV3] {
         get {
-            return self._keystores as [AbstractKeystore]
+            return self._keystores
         }
     }
     
+    public var bip32keystores:[BIP32Keystore] {
+        get {
+            return self._bip32keystores
+        }
+    }
     
-    private init?(_ path: String, suffix: String? = nil) throws {
+    private init?(_ path: String, scanForHDwallets: Bool = false, suffix: String? = nil) throws {
+        if (scanForHDwallets) {
+            self.isHDKeystore = true
+        }
         self.path = path
         let fileManager = FileManager.default
         var isDir : ObjCBool = false
@@ -176,10 +124,13 @@ public class KeystoreManager: AbstractKeystore {
                 }
                 filePath = filePath + file
                 guard let content = fileManager.contents(atPath: filePath) else {continue}
-                guard let keystore = EthereumKeystoreV3(content) else {continue}
-//                guard let string = String(data: content, encoding: .utf8) else {continue}
-//                guard let keystore = EthereumKeystoreV3(string) else {continue}
-                _keystores.append(keystore)
+                if (!scanForHDwallets) {
+                    guard let keystore = EthereumKeystoreV3(content) else {continue}
+                    _keystores.append(keystore)
+                } else {
+                    guard let bipkeystore = BIP32Keystore(content) else {continue}
+                    _bip32keystores.append(bipkeystore)
+                }
             }
         } else {
             for file in allFiles {
@@ -189,10 +140,13 @@ public class KeystoreManager: AbstractKeystore {
                 }
                 filePath = filePath + file
                 guard let content = fileManager.contents(atPath: filePath) else {continue}
-                guard let keystore = EthereumKeystoreV3(content) else {continue}
-//                guard let string = String(data: content, encoding: .utf8) else {continue}
-//                guard let keystore = EthereumKeystoreV3(string) else {continue}
-                _keystores.append(keystore)
+                if (!scanForHDwallets) {
+                    guard let keystore = EthereumKeystoreV3(content) else {continue}
+                    _keystores.append(keystore)
+                } else {
+                    guard let bipkeystore = BIP32Keystore(content) else {continue}
+                    _bip32keystores.append(bipkeystore)
+                }
             }
         }
 
