@@ -245,7 +245,11 @@ fileprivate func arrayMatch(from string: String) throws -> ABIElement.ParameterT
         return type
     } else {
         guard let typeString = match["type"] else {return nil}
-        guard var type = exactMatchType(from: typeString, staticArrayLength: 0) else {throw ParsingError.parameterTypeInvalid}
+        var typeLength: Int? = nil
+        if let typeLengthString = match["typeLength"] {
+            typeLength = Int(typeLengthString)
+        }
+        guard var type = exactMatchType(from: typeString, length: typeLength, staticArrayLength: 0) else {throw ParsingError.parameterTypeInvalid}
         guard case .staticType(_) = type else {return nil}
         if (match.keys.contains("typeLength")) {
             guard let typeLength = Int(match["typeLength"]!) else {throw ParsingError.parameterTypeInvalid}
