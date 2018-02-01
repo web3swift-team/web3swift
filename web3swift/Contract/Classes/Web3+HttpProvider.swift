@@ -33,8 +33,8 @@ public class Web3HttpProvider: Web3Provider {
                 print(error as String)
                 return nil
             }
-            guard let result = res["result"] as? Int else {return nil}
-            network = Networks.fromInt(result)
+            guard let result = res["result"] as? String, let intNetworkNumber = Int(result) else {return nil}
+            network = Networks.fromInt(intNetworkNumber)
             if network == nil {return nil}
         } else {
             network = net
