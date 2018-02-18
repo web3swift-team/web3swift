@@ -32,6 +32,9 @@ extension Web3.Utils {
             }
         }
     }
+    
+    public static var coldWalletABI = "[{\"payable\":true,\"type\":\"fallback\"}]"
+    public static var erc20ABI = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
 }
 
 extension Web3.Utils {
@@ -92,6 +95,23 @@ extension Web3.Utils {
         return hash
     }
     
+    public static func parseToBigUInt(_ amount: String, toUnits: Web3.Utils.Units = .eth) -> BigUInt? {
+        let separators = CharacterSet(charactersIn: ".,")
+        let components = amount.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: separators)
+        guard components.count == 1 || components.count == 2 else {return nil}
+        let unitDecimals = toUnits.decimals
+        guard let beforeDecPoint = BigUInt(components[0], radix: 10) else {return nil}
+        var mainPart = beforeDecPoint*BigUInt(10).power(unitDecimals)
+        if (components.count == 2) {
+            let numDigits = components[1].count
+            guard numDigits <= unitDecimals else {return nil}
+            guard let afterDecPoint = BigUInt(components[1], radix: 10) else {return nil}
+            let extraPart = afterDecPoint*BigUInt(10).power(unitDecimals-numDigits)
+            mainPart = mainPart + extraPart
+        }
+        return mainPart
+    }
+    
     public static func formatToEthereumUnits(_ bigNumber: BigInt, toUnits: Web3.Utils.Units = .eth, decimals: Int = 4) -> String? {
         let magnitude = bigNumber.magnitude
         guard let formatted = formatToEthereumUnits(magnitude, toUnits: toUnits, decimals: decimals) else {return nil}
@@ -112,6 +132,9 @@ extension Web3.Utils {
         let divisor = BigUInt(10).power(unitDecimals)
         let (quotient, remainder) = bigNumber.quotientAndRemainder(dividingBy: divisor)
         let remainderPadded = String(remainder).leftPadding(toLength: unitDecimals, withPad: "0")[0..<toDecimals]
+        if (decimals == 0) {
+            return String(quotient)
+        }
         return String(quotient) + "." + remainderPadded
     }
 }
