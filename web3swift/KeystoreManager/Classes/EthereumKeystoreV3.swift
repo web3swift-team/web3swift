@@ -19,8 +19,13 @@ public class EthereumKeystoreV3: AbstractKeystore {
         return self.address
     }
     
-    public func unlockAccount(_ password: String) throws {
-        let _ = try self.getKeyData(password)
+    public func unlockAccount(_ password: String) -> Bool!  {
+        do {
+            let keyData = try self.getKeyData(password)
+            return keyData != nil
+        } catch _ {
+            return false
+        }
     }
     
     // Protocol
