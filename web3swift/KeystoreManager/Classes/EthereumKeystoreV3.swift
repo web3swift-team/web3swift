@@ -13,6 +13,16 @@ import Foundation
 
 
 public class EthereumKeystoreV3: AbstractKeystore {
+    // Class
+    
+    public func getAddress() -> EthereumAddress? {
+        return self.address
+    }
+    
+    public func unlockAccount(_ password: String) throws {
+        let _ = try self.getKeyData(password
+    }
+    
     // Protocol
     
     public var addresses: [EthereumAddress]? {
