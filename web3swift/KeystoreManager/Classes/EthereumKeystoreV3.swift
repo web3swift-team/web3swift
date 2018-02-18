@@ -20,7 +20,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
     }
     
     public func unlockAccount(_ password: String) throws {
-        let _ = try self.getKeyData(password
+        let _ = try self.getKeyData(password)
     }
     
     // Protocol
