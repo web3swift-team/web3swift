@@ -8,7 +8,7 @@
 
 import Foundation
 
-public typealias TransactionIntermediate = web3.web3contract.transactionIntermediate
+public typealias TransactionIntermediate = web3.web3contract.TransactionIntermediate
 
 
 public protocol AbstractKeystore {
