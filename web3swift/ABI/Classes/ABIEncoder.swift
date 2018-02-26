@@ -270,8 +270,7 @@ extension ABIElement {
             var signature = function.methodEncoding
             var heads = Data()
             var tails = Data()
-//            var tailsPointer = BigUInt(32)*BigUInt(function.inputs.count)
-            var tailsPointer = BigUInt(0)
+            var tailsPointer = BigUInt(32)*BigUInt(function.inputs.count)
             guard parameters.count == function.inputs.count else {return nil}
             for index in 0..<function.inputs.count {
                 let input  = function.inputs[index]

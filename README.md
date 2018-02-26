@@ -59,7 +59,7 @@ You can try it by yourself by running the example project:
 
 ### Requirements
 
-Web3swift requires Swift 4.0 and iOS 9.0 (although we strongly recommend to always use the latest iOS version for your security).
+Web3swift requires Swift 4.0 and iOS 11.2 or macOS 10.13
 
 
 ### Installation
@@ -68,7 +68,7 @@ web3swift is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'web3swift'
+pod 'web3swift', git: 'https://github.com/Vaultie/web3swift.git'
 ```
 ### Current functionality
 
