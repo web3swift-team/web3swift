@@ -9,10 +9,9 @@
 import Foundation
 
 public struct Web3Signer {
-//    public func 
-    
     public static func signTX(transaction:inout EthereumTransaction, keystore: AbstractKeystore, account: EthereumAddress, password: String) throws {
-        let privateKey = try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
+        var privateKey = try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
+        defer {Data.zero(&privateKey)}
         if (transaction.chainID != nil) {
             let signer = EIP155Signer()
             try signer.sign(transaction: &transaction, privateKey: privateKey)
@@ -27,7 +26,8 @@ public struct Web3Signer {
         intermediate.transaction = tx
     }
     public static func signPersonalMessage(_ personalMessage: Data, keystore: AbstractKeystore, account: EthereumAddress, password: String) throws -> Data? {
-        let privateKey = try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
+        var privateKey = try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
+        defer {Data.zero(&privateKey)}
         guard let hash = Web3.Utils.hashPersonalMessage(personalMessage) else {return nil}
         let (compressedSignature, _) = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
         return compressedSignature

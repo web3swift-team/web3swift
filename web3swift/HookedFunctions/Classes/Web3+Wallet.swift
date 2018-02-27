@@ -7,70 +7,101 @@
 
 import Foundation
 import BigInt
+import Result
 
-extension web3.HookedFunctions {
+extension web3.Web3Wallet {
     
-    public func getAccounts() -> [String]? {
-        guard let keystoreManager = self.web3?.provider.attachedKeystoreManager else {return nil}
-        guard let ethAddresses = keystoreManager.addresses else {return nil}
-        return ethAddresses.flatMap({$0.address})
+    public func getAccounts() -> Result<[EthereumAddress], Web3Error> {
+        guard let keystoreManager = self.web3?.provider.attachedKeystoreManager else {
+            return Result.failure(Web3Error.walletError)
+        }
+        guard let ethAddresses = keystoreManager.addresses else {
+            return Result.failure(Web3Error.walletError)
+        }
+        return Result(ethAddresses)
     }
     
-    public func getCoinbase() -> String? {
-        guard let addresses = self.getAccounts() else {return nil}
-        guard addresses.count > 0 else {return nil}
-        return addresses[0]
+    public func getCoinbase() -> Result<EthereumAddress, Web3Error> {
+        let result = self.getAccounts()
+        switch result {
+        case .failure(let error):
+            return Result.failure(error)
+        case .success(let addresses):
+            guard addresses.count > 0 else {
+                return Result.failure(Web3Error.walletError)
+            }
+            return Result(addresses[0])
+        }
     }
     
-    public func personalSign(_ personalMessage: String, account: String, password: String = "BANKEXFOUNDATION") -> String? {
+//    public static func signTX(transaction:inout EthereumTransaction, account: EthereumAddress, password: String = "BANKEXFOUNDATION") -> Result<Bool, Web3Error>
+//        do {
+//            guard let keystoreManager = self.web3?.provider.attachedKeystoreManager else {
+//                return Result.failure(Web3Error.walletError)
+//            }
+//             var privateKey = try keystoreManager.UNSAFE
+//            if (network != nil) {
+//                let signer = EIP155Signer(network: network!)
+//                signer.sign(transaction: &newTX, privateKey: Data)
+//            }
+//            else if (newTX.chainID != nil) {
+//                let signer = EIP155Signer(Networks.Custom(networkID: newTX.chainID!))
+//                signer.sign(transaction: &newTX, privateKey: Data)
+//            } else {
+//                let signer = FallbackSigner()
+//                signer.sign(transaction: &newTX, privateKey: Data)
+//            }
+//        } catch {
+//
+//    }
+//    }
+//    public static func signIntermediate(intermediate:inout TransactionIntermediate, privateKey: Data, network: Networks?) throws {
+//        var tx = intermediate.transaction
+//        Web3AbstractSigner.signTX(transaction: &tx, privateKey: privateKey, network: network)
+//        try intermediate.sign(privateKey)
+//    }
+//
+//    public static func signPersonalMessage(_ personalMessage: Data, privateKey: Data) throws -> Data? {
+//        guard let hash = Web3.Utils.hashPersonalMessage(personalMessage) else {return nil}
+//        let (compressedSignature, _) = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
+//        return compressedSignature
+//    }
+    
+    public func signPersonalMessage(_ personalMessage: String, account: String, password: String = "BANKEXFOUNDATION") -> Result<Data, Web3Error> {
+        guard let data = Data.fromHex(personalMessage) else
+        {
+            return Result.failure(Web3Error.dataError)
+        }
         return self.sign(personalMessage, account: account, password: password)
     }
     
-    public func sign(_ personalMessage: String, account: String, password: String = "BANKEXFOUNDATION") -> String? {
-        guard let data = Data.fromHex(personalMessage) else {return nil}
-        return self.sign(data, account: account, password: password)
-    }
-    
-    public func sign(_ personalMessage: Data, account: String, password: String = "BANKEXFOUNDATION") -> String? {
+    public func signPersonalMessage(_ personalMessage: Data, account: String, password: String = "BANKEXFOUNDATION") -> Result<Data, Web3Error> {
         do {
-            guard let keystoreManager = self.web3?.provider.attachedKeystoreManager else {return nil}
-            guard let signature = try keystoreManager.signPersonalMessage(personalMessage, password: password, account: EthereumAddress(account)) else {return nil}
-            guard let sender = self.personalECRecover(personalMessage, signature: signature) else {return nil}
-            print(sender)
-            if sender.lowercased() != account.lowercased() {
-                print("Invalid sender")
+            guard let keystoreManager = self.web3?.provider.attachedKeystoreManager else
+            {
+                return Result.failure(Web3Error.walletError)
             }
-            return signature.toHexString().addHexPrefix()
+            guard let signature = try keystoreManager.signPersonalMessage(personalMessage, password: password, account: EthereumAddress(account)) else
+            {
+                Result.failure(Web3Error.walletError)
+            }
+            guard let sender = self.personalECRecover(personalMessage, signature: signature) else
+            {
+                Result.failure(Web3Error.walletError)
+            }
+            print(sender)
+            if sender.lowercased() != account.lowercased()
+            {
+                Result.failure(Web3Error.walletError)
+            }
+            return Result(signature)
         }
         catch{
-            print(error)
-            return nil
+            return Result(Web3Error.keystoreError(error))
         }
     }
     
-    public func personalECRecover(_ personalMessage: String, signature: String) -> String? {
-        guard let data = Data.fromHex(personalMessage) else {return nil}
-        guard let sig = Data.fromHex(signature) else {return nil}
-        return self.personalECRecover(data, signature:sig)
-    }
-    
-    public func personalECRecover(_ personalMessage: Data, signature: Data) -> String? {
-        if signature.count != 65 { return nil}
-        let rData = signature[0..<32].bytes
-        let sData = signature[32..<64].bytes
-        let vData = signature[64]
-        guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else {return nil}
-        var hash: Data
-        if personalMessage.count == 32 {
-            print("Most likely it's hash already, allow for now")
-            hash = personalMessage
-        } else {
-            guard let h = Web3.Utils.hashPersonalMessage(personalMessage) else {return nil}
-            hash = h
-        }
-        guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
-        return Web3.Utils.publicToAddressString(publicKey)
-    }
+
     
     
     public func sendTransaction(_ transactionJSON: [String: Any], password: String = "BANKEXFOUNDATION") -> [String:Any]? {
@@ -92,7 +123,7 @@ extension web3.HookedFunctions {
             try keystoreManager.signTX(transaction: &transaction, password: password, account: from)
             print(transaction)
             guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {return nil}
-            let response = self.web3?.provider.sendSync(request: request)
+            let response = self.web3?.provider.send(request: request)
             if response == nil {
                 return nil
             }
@@ -120,7 +151,6 @@ extension web3.HookedFunctions {
         return self.web3?.eth.estimateGas(transaction, options: options)
     }
     
-    
     public func prepareTxForApproval(_ transactionJSON: [String: Any]) -> (transaction: EthereumTransaction?, options: Web3Options?) {
         guard let transaction = EthereumTransaction.fromJSON(transactionJSON) else {return (nil, nil)}
         guard let options = Web3Options.fromJSON(transactionJSON) else {return (nil, nil)}
@@ -133,13 +163,12 @@ extension web3.HookedFunctions {
         guard let from = options.from else {return (nil, nil)}
         guard let keystoreManager = self.web3?.provider.attachedKeystoreManager else {return (nil, nil)}
         guard let _ = keystoreManager.walletForAddress(from) else {return (nil, nil)}
-        
         guard let gasPrice = self.web3?.eth.getGasPrice() else {return (nil, nil)}
         transaction.gasPrice = gasPrice
         options.gasPrice = gasPrice
         guard let gasEstimate = self.estimateGas(transaction, options: options) else {return (nil, nil)}
         transaction.gasLimit = gasEstimate
-        options.gas = gasEstimate
+        options.gasLimit = gasEstimate
         print(transaction)
         return (transaction, options)
     }
