@@ -64,6 +64,10 @@
 		8113D31A1FD7F4C80074282C /* ABITypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D3191FD7F4C80074282C /* ABITypes.swift */; };
 		8113D31C1FD7F8980074282C /* ABIRecordParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D31B1FD7F8980074282C /* ABIRecordParser.swift */; };
 		8113DE7C1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */; };
+		8116666320455E33008D8AD0 /* Web3+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCEF20440C3600D82FAF /* Web3+Wallet.swift */; };
+		8116666420455E33008D8AD0 /* Web3+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCEF20440C3600D82FAF /* Web3+Wallet.swift */; };
+		81166665204565AC008D8AD0 /* Web3+BrowserFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF8204456E600D82FAF /* Web3+BrowserFunctions.swift */; };
+		81166666204565AD008D8AD0 /* Web3+BrowserFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF8204456E600D82FAF /* Web3+BrowserFunctions.swift */; };
 		8123E1C3200CA0AE00B6D3AB /* Web3+AbstractSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C2200CA0AE00B6D3AB /* Web3+AbstractSigner.swift */; };
 		8123E1C7200CBAC200B6D3AB /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C6200CBAC200B6D3AB /* Dictionary+Extension.swift */; };
 		8123E1C9200CBAF800B6D3AB /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C8200CBAF800B6D3AB /* Data+Extension.swift */; };
@@ -191,7 +195,6 @@
 		81C0FCF320440F0900D82FAF /* Web3+Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Options.swift"; sourceTree = "<group>"; };
 		81C0FCF520440F9900D82FAF /* TransactionSigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSigner.swift; sourceTree = "<group>"; };
 		81C0FCF8204456E600D82FAF /* Web3+BrowserFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+BrowserFunctions.swift"; sourceTree = "<group>"; };
-		81C0FCFA20446C2C00D82FAF /* AbstractSigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractSigner.swift; sourceTree = "<group>"; };
 		81C0FCFC20449D1400D82FAF /* Web3+TransactionIntermediate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+TransactionIntermediate.swift"; sourceTree = "<group>"; };
 		81C0FD092044AB2400D82FAF /* Pods_web3swift_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_web3swift_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81C0FD0B2044AB4600D82FAF /* Pods_web3swift_iOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_web3swift_iOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -370,7 +373,6 @@
 				815630032007BC8F00A0EC2F /* BIP39+WordLists.swift */,
 				81531A9F1FE7C07A002192CC /* EthereumKeystoreV3.swift */,
 				817EBB26200673D100E02EAA /* KeystoreV3JSONStructure.swift */,
-				81C0FCFA20446C2C00D82FAF /* AbstractSigner.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -914,9 +916,11 @@
 				8104E2281FE82BDC00F952CB /* Web3+Utils.swift in Sources */,
 				810B0F9E1FEC5B9C00CF0DA2 /* Web3+Eth.swift in Sources */,
 				818D810E1FDC1A2000663CE3 /* RLP.swift in Sources */,
+				81166665204565AC008D8AD0 /* Web3+BrowserFunctions.swift in Sources */,
 				81531AA01FE7C07A002192CC /* EthereumKeystoreV3.swift in Sources */,
 				8123E1C9200CBAF800B6D3AB /* Data+Extension.swift in Sources */,
 				817EBB23200649E000E02EAA /* RIPEMD160+StackOveflow.swift in Sources */,
+				8116666320455E33008D8AD0 /* Web3+Wallet.swift in Sources */,
 				81DDECCF1FDF004E0063684A /* Web3.swift in Sources */,
 				8123E1C3200CA0AE00B6D3AB /* Web3+AbstractSigner.swift in Sources */,
 				815630002007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift in Sources */,
@@ -972,9 +976,11 @@
 				41948131203630530065A83B /* BIP32KeystoreJSONStructure.swift in Sources */,
 				41948132203630530065A83B /* BIP32HDNode.swift in Sources */,
 				41948133203630530065A83B /* BIP39.swift in Sources */,
+				81166666204565AD008D8AD0 /* Web3+BrowserFunctions.swift in Sources */,
 				41948134203630530065A83B /* BIP39+WordLists.swift in Sources */,
 				41948135203630530065A83B /* EthereumKeystoreV3.swift in Sources */,
 				41948136203630530065A83B /* KeystoreV3JSONStructure.swift in Sources */,
+				8116666420455E33008D8AD0 /* Web3+Wallet.swift in Sources */,
 				41948137203630530065A83B /* EthereumTransaction.swift in Sources */,
 				41948138203630530065A83B /* CryptoExtensions.swift in Sources */,
 				81C0FD052044A8AE00D82FAF /* Web3+Protocols.swift in Sources */,

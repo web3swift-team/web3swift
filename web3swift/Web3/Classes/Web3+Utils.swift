@@ -18,6 +18,11 @@ extension Web3.Utils {
     public enum Units {
         case eth
         case wei
+        case Kwei
+        case Mwei
+        case Gwei
+        case Microether
+        case Finney
         
         var decimals:Int {
             get {
@@ -26,8 +31,16 @@ extension Web3.Utils {
                     return 18
                 case .wei:
                     return 0
-                default:
-                    return 18
+                case .Kwei:
+                    return 3
+                case .Mwei:
+                    return 6
+                case .Gwei:
+                    return 9
+                case .Microether:
+                    return 12
+                case .Finney:
+                    return 15
                 }
             }
         }

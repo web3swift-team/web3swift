@@ -12,6 +12,64 @@ import Result
 
 extension web3.Eth {
     
+    func sendTransaction(_ transaction: EthereumTransaction, options: Web3Options, password:String = "BANKEXFOUNDATION") -> Result<[String: String], Web3Error> {
+        print(transaction)
+        guard let mergedOptions = Web3Options.merge(self.options, with: options) else {
+            return Result.failure(Web3Error.inputError("Check supplied options"))
+        }
+        guard let from = mergedOptions.from else {
+            return Result.failure(Web3Error.walletError)
+        }
+        if let keystoreManager = self.web3.provider.attachedKeystoreManager {
+            var tx = transaction
+            do {
+                try Web3Signer.signTX(transaction: &tx, keystore: keystoreManager, account: from, password: password)
+            }
+            catch {
+                if error is AbstractKeystoreError {
+                    return Result.failure(Web3Error.keystoreError(error as! AbstractKeystoreError))
+                }
+                return Result.failure(Web3Error.generalError(error))
+            }
+            print(tx)
+            return self.sendRawTransaction(tx)
+        }
+        guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {return Result.failure(Web3Error.transactionSerializationError)}
+        let response = self.provider.send(request: request)
+        let result = ResultUnwrapper.getResponse(response)
+        switch result {
+        case .failure(let error):
+            return Result.failure(error)
+        case .success(let payload):
+            guard let resultString = payload as? String else {
+                return Result.failure(Web3Error.dataError)
+            }
+            let hash = resultString.addHexPrefix().lowercased()
+            return Result(["txhash": hash, "txhashCalculated" : transaction.hash!.toHexString()] as [String: String])
+        }
+    }
+    
+    func call(_ transaction: EthereumTransaction, options: Web3Options, onBlock:String = "latest") -> Result<[String: String], Web3Error> {
+        print(transaction)
+        let mergedOptions = Web3Options.merge(self.web3.options, with: options)
+        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: transaction, onBlock: onBlock, options: mergedOptions) else
+        {
+            return Result.failure(Web3Error.inputError("Transaction or options are malformed"))
+        }
+        let response = self.web3.provider.send(request: request)
+        let result = ResultUnwrapper.getResponse(response)
+        switch result {
+        case .failure(let error):
+            return Result.failure(error)
+        case .success(let res):
+            if let dict = res as? [String:String] {
+                return Result(dict)
+            }
+            return Result.failure(Web3Error.dataError)
+        }
+    }
+    
+    
     func sendRawTransaction(_ transaction: EthereumTransaction) -> Result<[String: String], Web3Error> {
         print(transaction)
         guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {return Result.failure(Web3Error.transactionSerializationError)}
@@ -27,7 +85,6 @@ extension web3.Eth {
             let hash = resultString.addHexPrefix().lowercased()
             return Result(["txhash": hash, "txhashCalculated" : transaction.hash!.toHexString()] as [String: String])
         }
-        
     }
     
     public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest") -> Result<BigUInt, Web3Error> {
@@ -190,9 +247,9 @@ extension web3.Eth {
     }
     
     public func getAccounts() -> Result<[EthereumAddress],Web3Error> {
-//        if (self.provider.attachedKeystoreManager != nil) {
-//            return Result(self.provider.attachedKeystoreManager?.addresses)
-//        }
+        if (self.provider.attachedKeystoreManager != nil) {
+            return self.web3.wallet.getAccounts()
+        }
         var request = JSONRPCrequest()
         request.method = JSONRPCmethod.getAccounts
         let params = [] as Array<Encodable>

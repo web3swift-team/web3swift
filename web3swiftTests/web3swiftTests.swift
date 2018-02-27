@@ -417,7 +417,7 @@ class web3swiftTests: XCTestCase {
             XCTAssert(hash!.toHexString() == expectedHash, "Transaction signature failed")
             let signer = EIP155Signer()
             try signer.sign(transaction: &transaction, privateKey: privateKeyData)
-            print(transaction.encode(forSignature: false, chainID: BigUInt(1))?.toHexString())
+            print(transaction)
             XCTAssert(transaction.v == UInt8(37), "Transaction signature failed")
             XCTAssert(sender == transaction.sender)
         }

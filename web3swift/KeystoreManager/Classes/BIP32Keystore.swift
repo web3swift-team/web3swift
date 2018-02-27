@@ -42,55 +42,6 @@ public class BIP32Keystore: AbstractKeystore {
         throw AbstractKeystoreError.invalidAccountError
     }
     
-//    public func signedTX(transaction: EthereumTransaction, password: String, account: EthereumAddress) throws -> EthereumTransaction? {
-//        if let key = self.paths.keyForValue(value: account) {
-//            guard let decryptedRootNode = try? self.getPrefixNodeData(password), decryptedRootNode != nil else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard let rootNode = HDNode(decryptedRootNode!) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard rootNode.depth == HDNode.defaultPathPrefix.components(separatedBy: "/").count else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard let index = UInt32(key.components(separatedBy: "/").last!) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard let keyNode = rootNode.derive(index: index, derivePrivateKey: true) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            return try Web3AbstractSigner.signedTX(transaction: transaction, privateKey: keyNode.privateKey!)
-//        }
-//        throw AbstractKeystoreError.invalidAccountError
-//    }
-//    
-//    public func signTX(transaction: inout EthereumTransaction, password: String, account: EthereumAddress) throws {
-//        if let key = self.paths.keyForValue(value: account) {
-//            guard let decryptedRootNode = try? self.getPrefixNodeData(password), decryptedRootNode != nil else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard let rootNode = HDNode(decryptedRootNode!) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard rootNode.depth == HDNode.defaultPathPrefix.components(separatedBy: "/").count else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard let index = UInt32(key.components(separatedBy: "/").last!) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard let keyNode = rootNode.derive(index: index, derivePrivateKey: true) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            try Web3AbstractSigner.signTX(transaction: &transaction, privateKey: keyNode.privateKey!)
-//            return
-//        }
-//        throw AbstractKeystoreError.invalidAccountError
-//    }
-//    
-//    public func signIntermediate(intermediate: TransactionIntermediate, password: String, account: EthereumAddress) throws {
-//        if let key = self.paths.keyForValue(value: account) {
-//            guard let decryptedRootNode = try? self.getPrefixNodeData(password), decryptedRootNode != nil else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard let rootNode = HDNode(decryptedRootNode!) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard rootNode.depth == HDNode.defaultPathPrefix.components(separatedBy: "/").count else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard let index = UInt32(key.components(separatedBy: "/").last!) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard let keyNode = rootNode.derive(index: index, derivePrivateKey: true) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            try Web3AbstractSigner.signIntermediate(intermediate: intermediate, privateKey: keyNode.privateKey!)
-//        }
-//        throw AbstractKeystoreError.invalidAccountError
-//    }
-//    
-//    public func signPersonalMessage(_ personalMessage: Data, password: String, account: EthereumAddress) throws -> Data? {
-//        if let key = self.paths.keyForValue(value: account) {
-//            guard let decryptedRootNode = try? self.getPrefixNodeData(password), decryptedRootNode != nil else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard let rootNode = HDNode(decryptedRootNode!) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard rootNode.depth == HDNode.defaultPathPrefix.components(separatedBy: "/").count else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard let index = UInt32(key.components(separatedBy: "/").last!) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard let keyNode = rootNode.derive(index: index, derivePrivateKey: true) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            return try Web3AbstractSigner.signPersonalMessage(personalMessage, privateKey: keyNode.privateKey!)
-//        }
-//        throw AbstractKeystoreError.invalidAccountError
-//    }
-    
     // --------------
     
     public var keystoreParams: KeystoreParamsBIP32?

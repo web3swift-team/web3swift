@@ -28,14 +28,20 @@ public class web3: Web3OptionsInheritable {
         if (self.ethInstance != nil) {
             return self.ethInstance!
         }
-        self.ethInstance = web3.Eth(provider : self.provider)
+        self.ethInstance = web3.Eth(provider : self.provider, web3: self)
         return self.ethInstance!
     }
     
-    public class Eth {
+    public class Eth:Web3OptionsInheritable {
         var provider:Web3Provider
-        public init(provider prov: Web3Provider) {
+//        weak var web3: web3?
+        var web3: web3
+        public var options: Web3Options {
+            return self.web3.options
+        }
+        public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
+            web3 = web3instance
         }
     }
 
@@ -50,7 +56,8 @@ public class web3: Web3OptionsInheritable {
     
     public class Web3Wallet {
         var provider:Web3Provider
-        weak var web3: web3?
+//        weak var web3: web3?
+        var web3: web3
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -66,9 +73,13 @@ public class web3: Web3OptionsInheritable {
         return self.browserFunctionsInstance!
     }
     
-    public class BrowserFunctions {
+    public class BrowserFunctions:Web3OptionsInheritable {
         var provider:Web3Provider
-        weak var web3: web3?
+        //        weak var web3: web3?
+        var web3: web3
+        public var options: Web3Options {
+            return self.web3.options
+        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance

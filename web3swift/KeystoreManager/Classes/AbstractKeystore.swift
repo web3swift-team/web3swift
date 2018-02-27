@@ -15,10 +15,6 @@ public protocol AbstractKeystore {
     var addresses: [EthereumAddress]? {get}
     var isHDKeystore: Bool {get}
     func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data
-//    func signedTX(transaction:EthereumTransaction, password: String, account: EthereumAddress) throws -> EthereumTransaction?
-//    func signTX(transaction:inout EthereumTransaction, password: String, account: EthereumAddress) throws
-//    func signIntermediate(intermediate: TransactionIntermediate, password: String, account: EthereumAddress) throws
-//    func signPersonalMessage(_ personalMessage: Data, password: String, account: EthereumAddress) throws -> Data?
 }
 
 public enum AbstractKeystoreError: Error {

@@ -49,56 +49,6 @@ public class EthereumKeystoreV3: AbstractKeystore {
         throw AbstractKeystoreError.invalidAccountError
     }
     
-    
-//    public func signedTX(transaction: EthereumTransaction, password: String, account: EthereumAddress) throws -> EthereumTransaction? {
-//        if self.addresses?.count == 1 && account == self.addresses?.last {
-//            guard let pk = try? self.getKeyData(password) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard var privateKey = pk else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            defer {Data.zero(&privateKey)}
-//            let signedTX = try Web3AbstractSigner.signedTX(transaction: transaction, privateKey: privateKey)
-//            return signedTX
-//        }
-//        else {
-//            throw AbstractKeystoreError.invalidAccountError
-//        }
-//    }
-//
-//    public func signTX(transaction: inout EthereumTransaction, password: String, account: EthereumAddress) throws {
-//        if self.address == account {
-//            guard let pk = try? self.getKeyData(password) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard var privateKey = pk else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            defer {Data.zero(&privateKey)}
-//            try Web3AbstractSigner.signTX(transaction: &transaction, privateKey: privateKey)
-//        }
-//        else {
-//            throw AbstractKeystoreError.invalidAccountError
-//        }
-//    }
-//
-//    public func signIntermediate(intermediate: TransactionIntermediate, password: String, account: EthereumAddress) throws {
-//        if self.address == account {
-//            guard let pk = try? self.getKeyData(password) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard var privateKey = pk else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            defer {Data.zero(&privateKey)}
-//            try Web3AbstractSigner.signIntermediate(intermediate: intermediate, privateKey: privateKey)
-//        }
-//        else {
-//            throw AbstractKeystoreError.invalidAccountError
-//        }
-//    }
-//
-//    public func signPersonalMessage(_ personalMessage: Data, password: String, account: EthereumAddress) throws -> Data? {
-//        if self.address == account {
-//            guard let pk = try? self.getKeyData(password) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            guard var privateKey = pk else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-//            defer {Data.zero(&privateKey)}
-//            let signature = try Web3AbstractSigner.signPersonalMessage(personalMessage, privateKey: privateKey)
-//            return signature
-//        }
-//        else {
-//            throw AbstractKeystoreError.invalidAccountError
-//        }
-//    }
 
     // --------------
     private var address: EthereumAddress?

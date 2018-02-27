@@ -14,6 +14,7 @@ public enum JSONRPCmethod: String, Encodable {
     case blockNumber = "eth_blockNumber"
     case getNetwork = "net_version"
     case sendRawTransaction = "eth_sendRawTransaction"
+    case sendTransaction = "eth_sendTransaction"
     case estimateGas = "eth_estimateGas"
     case call = "eth_call"
     case getTransactionCount = "eth_getTransactionCount"

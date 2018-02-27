@@ -75,15 +75,15 @@ extension web3.web3contract {
                 self.options = mergedOptions
                 if let keystoreManager = self.web3.provider.attachedKeystoreManager {
                     try Web3Signer.signTX(transaction: &self.transaction, keystore: keystoreManager, account: from, password: password)
-//                    try keystoreManager.signIntermediate(intermediate: self, password: password, account: from)
                     print(self.transaction)
                     return self.web3.eth.sendRawTransaction(self.transaction)
+                } else {
+                    return self.web3.eth.sendTransaction(self.transaction, options: mergedOptions)
                 }
             }
             catch {
                 return Result.failure(Web3Error.generalError(error))
             }
-            return Result.failure(Web3Error.unknownError)
         }
         
         public func sendSigned() -> Result<[String:String], Web3Error> {
