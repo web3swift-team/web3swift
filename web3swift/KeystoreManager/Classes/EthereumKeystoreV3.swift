@@ -10,24 +10,13 @@ import Foundation
 import CryptoSwift
 import Foundation
 
-
-
 public class EthereumKeystoreV3: AbstractKeystore {
     // Class
     
     public func getAddress() -> EthereumAddress? {
         return self.address
     }
-    
-    public func unlockAccount(_ password: String) -> Bool!  {
-        do {
-            let keyData = try self.getKeyData(password)
-            return keyData != nil
-        } catch _ {
-            return false
-        }
-    }
-    
+        
     // Protocol
     
     public var addresses: [EthereumAddress]? {

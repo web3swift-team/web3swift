@@ -1,5 +1,10 @@
 ![bkx-foundation-github-swift](https://user-images.githubusercontent.com/3356474/34412791-5b58962c-ebf0-11e7-8460-5592b12e6e9d.png)
 
+## Important notices
+With the version 0.3.0 API should be less volatile. All public functions should return a Result<>[https://github.com/antitypical/Result] instead of nil or throwing.
+
+Example is not yet updated for 0.3.0, please use tests as an example for your code.
+
 # web3swift
 
 [![Version](https://img.shields.io/cocoapods/v/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
@@ -22,9 +27,16 @@
 
 ## Check this out
 
-- Private key and transaction were created directly on the iOS device and sent directly to [Infura](https://infura.io) node.
+- Private key and transaction were created directly on the iOS device and sent directly to [Infura](https://infura.io) node
 - Native API
-- Security (as cool as hard wallet! Right out-of-the-box! :box:)
+- Security (as cool as hard wallet! Right out-of-the-box! :box: )
+
+## Design decisions
+
+- Not every JSON RPC function is exposed yet, priority is gives to ones required for mobile devices
+- Functionality was focused on serializing and signing transactions locally on device to send raw transaction to Ethereum network
+- Requirements for password input on every transactions are indeed a design decision. Interface designers can save user passwords given user's consent
+- Public function for private key export is exposed for user convenience, but marked as UNSAFE_ :) Normal workflow takes care of EIP155 compatibility and proper clearing of private key data from memory
 
 ### Here it is
 [https://rinkeby.etherscan.io/tx/0xc6eca60ecac004a1501a4323a10edb7fa4cd1a0896675f6b51704c84dedad056](https://rinkeby.etherscan.io/tx/0xc6eca60ecac004a1501a4323a10edb7fa4cd1a0896675f6b51704c84dedad056)
@@ -59,7 +71,7 @@ You can try it by yourself by running the example project:
 
 ### Requirements
 
-Web3swift requires Swift 4.0 and iOS 11.2 or macOS 10.13
+Web3swift requires Swift 4.0 and iOS 9.0 or macOS 10.13 although we recommend to use the latest iOS and MacOS versions for your own safety.
 
 
 ### Installation
@@ -77,6 +89,7 @@ pod 'web3swift', git: 'https://github.com/Vaultie/web3swift.git'
 - Convenience functions for chain state: block number, gas price
 - Check transaction results and get receipt
 - Parse event logs for transaction
+- Manage user's private keys through encrypted keystore abstractions
 
 ### Global plans
 - Full reference `web3js` functionality
