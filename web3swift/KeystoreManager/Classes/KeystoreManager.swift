@@ -24,25 +24,30 @@ public class KeystoreManager: AbstractKeystore {
         }
     }
     
-    public func signedTX(transaction: EthereumTransaction, password: String, account: EthereumAddress) throws -> EthereumTransaction? {
-        guard let keystore = self.walletForAddress(account) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-        return try keystore.signedTX(transaction:transaction, password:password, account:account)
+    public func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data {
+        guard let keystore = self.walletForAddress(account) else {throw AbstractKeystoreError.invalidAccountError}
+        return try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
     }
     
-    public func signTX(transaction: inout EthereumTransaction, password: String, account: EthereumAddress) throws {
-        guard let keystore = self.walletForAddress(account) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-        try keystore.signTX(transaction: &transaction, password: password, account: account)
-    }
-    
-    public func signIntermediate(intermediate: TransactionIntermediate, password: String, account: EthereumAddress) throws {
-        guard let keystore = self.walletForAddress(account) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-        try keystore.signIntermediate(intermediate:intermediate, password:password, account:account)
-    }
-    
-    public func signPersonalMessage(_ personalMessage: Data, password: String, account: EthereumAddress) throws -> Data? {
-        guard let keystore = self.walletForAddress(account) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
-        return try keystore.signPersonalMessage(personalMessage, password:password, account:account)
-    }
+//    public func signedTX(transaction: EthereumTransaction, password: String, account: EthereumAddress) throws -> EthereumTransaction? {
+//        guard let keystore = self.walletForAddress(account) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
+//        return try keystore.signedTX(transaction:transaction, password:password, account:account)
+//    }
+//    
+//    public func signTX(transaction: inout EthereumTransaction, password: String, account: EthereumAddress) throws {
+//        guard let keystore = self.walletForAddress(account) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
+//        try keystore.signTX(transaction: &transaction, password: password, account: account)
+//    }
+//    
+//    public func signIntermediate(intermediate: TransactionIntermediate, password: String, account: EthereumAddress) throws {
+//        guard let keystore = self.walletForAddress(account) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
+//        try keystore.signIntermediate(intermediate:intermediate, password:password, account:account)
+//    }
+//    
+//    public func signPersonalMessage(_ personalMessage: Data, password: String, account: EthereumAddress) throws -> Data? {
+//        guard let keystore = self.walletForAddress(account) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
+//        return try keystore.signPersonalMessage(personalMessage, password:password, account:account)
+//    }
     
     
     public static var allManagers = [KeystoreManager]()
@@ -54,23 +59,8 @@ public class KeystoreManager: AbstractKeystore {
     }
     
     public static func managerForPath(_ path: String, scanForHDwallets: Bool = false, suffix: String? = nil) -> KeystoreManager? {
-//        if KeystoreManager.allManagers.count == 0 {
-            guard let newManager = try? KeystoreManager(path, scanForHDwallets: scanForHDwallets, suffix: suffix), let manager = newManager  else {return nil}
-//            KeystoreManager.allManagers.append(manager)
-            return manager
-//        } else {
-//            let foundManager = KeystoreManager.allManagers.filter({ (manager:KeystoreManager) -> Bool in
-//                return manager.path == path && manager.isHDKeystore == scanForHDwallets
-//            })
-//            if foundManager.count == 0 {
-//                guard let newManager = try? KeystoreManager(path, scanForHDwallets: scanForHDwallets, suffix: suffix), let manager = newManager  else {return nil}
-//                KeystoreManager.allManagers.append(manager)
-//                return manager
-//            } else if (foundManager.count == 1) {
-//                return foundManager[0]
-//            }
-//        }
-//        return nil
+        guard let newManager = try? KeystoreManager(path, scanForHDwallets: scanForHDwallets, suffix: suffix), let manager = newManager  else {return nil}
+        return manager
     }
     
     public var path: String

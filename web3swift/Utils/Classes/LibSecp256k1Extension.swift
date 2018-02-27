@@ -45,7 +45,6 @@ extension SECP256K1 {
             }
             if result == 0 {
                 continue
-//                return (nil, nil)
             }
             let uncompressedSignature = Data(toByteArray(uncompressed))
             var compressedSignature = Data(count: 64)
@@ -56,7 +55,6 @@ extension SECP256K1 {
             }
             if result == 0 {
                 continue
-//                return (nil, nil)
             }
             let buffer = toByteArray(v)
             compressedSignature.append(buffer.last!)

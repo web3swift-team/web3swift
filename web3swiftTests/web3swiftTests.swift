@@ -11,7 +11,7 @@ import XCTest
 import CryptoSwift
 import BigInt
 
-@testable import web3swift
+@testable import web3swift_iOS
 
 class web3swiftTests: XCTestCase {
     
@@ -39,8 +39,9 @@ class web3swiftTests: XCTestCase {
                 return try record.parse()
             })
             print(abiNative)
-            XCTAssert(abiNative != nil, "Can't parse some real-world ABI")
+            XCTAssert(abiNative.count > 0, "Can't parse some real-world ABI")
         } catch {
+            XCTFail()
             print(error)
         }
     }
@@ -294,134 +295,138 @@ class web3swiftTests: XCTestCase {
 //        }
 //    }
 //    
-//    func testABIdecoding() {
-//        let jsonString = "[{\"type\":\"constructor\",\"payable\":false,\"stateMutability\":\"nonpayable\",\"inputs\":[{\"name\":\"testInt\",\"type\":\"uint256\"}]},{\"type\":\"function\",\"name\":\"foo\",\"constant\":false,\"payable\":false,\"stateMutability\":\"nonpayable\",\"inputs\":[{\"name\":\"b\",\"type\":\"uint256\"},{\"name\":\"c\",\"type\":\"bytes32\"}],\"outputs\":[{\"name\":\"\",\"type\":\"address\"}]},{\"type\":\"event\",\"name\":\"Event\",\"inputs\":[{\"indexed\":true,\"name\":\"b\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"c\",\"type\":\"bytes32\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Event2\",\"inputs\":[{\"indexed\":true,\"name\":\"b\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"c\",\"type\":\"bytes32\"}],\"anonymous\":false}]"
-//        do {
-//            let jsonData = jsonString.data(using: .utf8)
-//            let abi = try JSONDecoder().decode([ABIRecord].self, from: jsonData!)
-////            let abi0 = try abi[0].parse()
-////            let abi1 = try abi[1].parse()
-////            let abi2 = try abi[2].parse()
-////            let abi3 = try abi[3].parse()
-//            let abiNative = try abi.map({ (record) -> ABIElement in
-//                return try record.parse()
-//            })
-//            print(abiNative)
-//            XCTAssert(true, "Failed to parse ABI")
-//        } catch {
-//            print(error)
-//        }
-//    }
-//    
-//    func testABIdecoding2() {
-//        let jsonString = "[{\"type\":\"function\",\"name\":\"balance\",\"constant\":true},{\"type\":\"function\",\"name\":\"send\",\"constant\":false,\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\"}]},{\"type\":\"function\",\"name\":\"test\",\"constant\":false,\"inputs\":[{\"name\":\"number\",\"type\":\"uint32\"}]},{\"type\":\"function\",\"name\":\"string\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"string\"}]},{\"type\":\"function\",\"name\":\"bool\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"address\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"address\"}]},{\"type\":\"function\",\"name\":\"uint64[2]\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"uint64[2]\"}]},{\"type\":\"function\",\"name\":\"uint64[]\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"uint64[]\"}]},{\"type\":\"function\",\"name\":\"foo\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"uint32\"}]},{\"type\":\"function\",\"name\":\"bar\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"uint32\"},{\"name\":\"string\",\"type\":\"uint16\"}]},{\"type\":\"function\",\"name\":\"slice\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"uint32[2]\"}]},{\"type\":\"function\",\"name\":\"slice256\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"uint256[2]\"}]},{\"type\":\"function\",\"name\":\"sliceAddress\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"address[]\"}]},{\"type\":\"function\",\"name\":\"sliceMultiAddress\",\"constant\":false,\"inputs\":[{\"name\":\"a\",\"type\":\"address[]\"},{\"name\":\"b\",\"type\":\"address[]\"}]}]"
-//        do {
-//            let jsonData = jsonString.data(using: .utf8)
-//            let abi = try JSONDecoder().decode([ABIRecord].self, from: jsonData!)
-//            //            let abi0 = try abi[0].parse()
-//            //            let abi1 = try abi[1].parse()
-//            //            let abi2 = try abi[2].parse()
-//            //            let abi3 = try abi[3].parse()
-//            let abiNative = try abi.map({ (record) -> ABIElement in
-//                return try record.parse()
-//            })
-//            print(abiNative)
-//            XCTAssert(true, "Failed to parse ABI")
-//        } catch {
-//            print(error)
-//        }
-//    }
-//    
-//    func testRLPencodeShortString() {
-//        let testString = "dog"
-//        let encoded = RLP.encode(testString)
-//        var expected = Data([UInt8(0x83)])
-//        expected.append(testString.data(using: .ascii)!)
-//        XCTAssert(encoded == expected, "Failed to RLP encode short string")
-//    }
-//    
-//    func testRLPencodeListOfShortStrings() {
-//        let testInput = ["cat","dog"]
-//        let encoded = RLP.encode(testInput)
-//        var expected = Data()
-//        expected.append(Data([UInt8(0xc8)]))
-//        expected.append(Data([UInt8(0x83)]))
-//        expected.append("cat".data(using: .ascii)!)
-//        expected.append(Data([UInt8(0x83)]))
-//        expected.append("dog".data(using: .ascii)!)
-//        XCTAssert(encoded == expected, "Failed to RLP encode list of short strings")
-//    }
-//    
-//    func testRLPencodeLongString() {
-//        let testInput = "Lorem ipsum dolor sit amet, consectetur adipisicing elit"
-//        let encoded = RLP.encode(testInput)
-//        var expected = Data()
-//        expected.append(Data([UInt8(0xb8)]))
-//        expected.append(Data([UInt8(0x38)]))
-//        expected.append("Lorem ipsum dolor sit amet, consectetur adipisicing elit".data(using: .ascii)!)
-//        XCTAssert(encoded == expected, "Failed to RLP encode long string")
-//    }
-//    
-//    func testRLPencodeEmptyString() {
-//        let testInput = ""
-//        let encoded = RLP.encode(testInput)
-//        var expected = Data()
-//        expected.append(Data([UInt8(0x80)]))
-//        XCTAssert(encoded == expected, "Failed to RLP encode empty string")
-//    }
-//    
-//    func testRLPencodeEmptyArray() {
-//        let testInput = [Data]()
-//        let encoded = RLP.encode(testInput)
-//        var expected = Data()
-//        expected.append(Data([UInt8(0xc0)]))
-//        XCTAssert(encoded == expected, "Failed to RLP encode empty array")
-//    }
-//    
-//    func testRLPencodeShortInt() {
-//        let testInput = 15
-//        let encoded = RLP.encode(testInput)
-//        let expected = Data([UInt8(0x0f)])
-//        XCTAssert(encoded == expected, "Failed to RLP encode short int")
-//    }
-//    
-//    func testRLPencodeLargeInt() {
-//        let testInput = 1024
-//        let encoded = RLP.encode(testInput)
-//        var expected = Data()
-//        expected.append(Data([UInt8(0x82)]))
-//        expected.append(Data([UInt8(0x04)]))
-//        expected.append(Data([UInt8(0x00)]))
-//        XCTAssert(encoded == expected, "Failed to RLP encode large int")
-//    }
-//    
-//    func testChecksubAddress() {
-//        let input = "0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359"
-//        let output = EthereumAddress.toChecksumAddress(input);
-//        XCTAssert(output == "0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359", "Failed to checksum address")
-//    }
-//    
-//    func testTransaction1() {
-//        var transaction = EthereumTransaction(nonce: BigUInt(9),
-//                                              gasPrice: BigUInt(20000000000),
-//                                              gasLimit: BigUInt(21000),
-//                                              to: EthereumAddress("0x3535353535353535353535353535353535353535"),
-//                                              value: BigUInt("1000000000000000000")!,
-//                                              data: Data(),
-//                                              v: BigUInt(0),
-//                                              r: BigUInt(0),
-//                                              s: BigUInt(0))
-//        let privateKeyData = Data(Array<UInt8>(hex: "0x4646464646464646464646464646464646464646464646464646464646464646"))
-//        let hash = transaction.hash(forSignature: true, chainID: BigUInt(1))
-//        let expectedHash = "0xdaf5a779ae972f972197303d7b574746c7ef83eadac0f2791ad23db92e4c8e53".stripHexPrefix()
-//        XCTAssert(hash!.toHexString() == expectedHash, "Transaction signature failed")
-//        let success = transaction.sign(privateKey: privateKeyData, chainID: BigUInt(1))
-//        XCTAssert(success)
-//        XCTAssert(transaction.v == UInt8(37), "Transaction signature failed")
-//        XCTAssert(transaction.r == BigUInt("18515461264373351373200002665853028612451056578545711640558177340181847433846"), "Transaction signature failed")
-//        XCTAssert(transaction.s == BigUInt("46948507304638947509940763649030358759909902576025900602547168820602576006531"), "Transaction signature failed")
-//    }
-//    
+    func testABIdecoding() {
+        let jsonString = "[{\"type\":\"constructor\",\"payable\":false,\"stateMutability\":\"nonpayable\",\"inputs\":[{\"name\":\"testInt\",\"type\":\"uint256\"}]},{\"type\":\"function\",\"name\":\"foo\",\"constant\":false,\"payable\":false,\"stateMutability\":\"nonpayable\",\"inputs\":[{\"name\":\"b\",\"type\":\"uint256\"},{\"name\":\"c\",\"type\":\"bytes32\"}],\"outputs\":[{\"name\":\"\",\"type\":\"address\"}]},{\"type\":\"event\",\"name\":\"Event\",\"inputs\":[{\"indexed\":true,\"name\":\"b\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"c\",\"type\":\"bytes32\"}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Event2\",\"inputs\":[{\"indexed\":true,\"name\":\"b\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"c\",\"type\":\"bytes32\"}],\"anonymous\":false}]"
+        do {
+            let jsonData = jsonString.data(using: .utf8)
+            let abi = try JSONDecoder().decode([ABIRecord].self, from: jsonData!)
+            let abiNative = try abi.map({ (record) -> ABIElement in
+                return try record.parse()
+            })
+            print(abiNative)
+            XCTAssert(true, "Failed to parse ABI")
+        } catch {
+            print(error)
+            XCTFail()
+        }
+    }
+
+    func testABIdecoding2() {
+        let jsonString = "[{\"type\":\"function\",\"name\":\"balance\",\"constant\":true},{\"type\":\"function\",\"name\":\"send\",\"constant\":false,\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\"}]},{\"type\":\"function\",\"name\":\"test\",\"constant\":false,\"inputs\":[{\"name\":\"number\",\"type\":\"uint32\"}]},{\"type\":\"function\",\"name\":\"string\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"string\"}]},{\"type\":\"function\",\"name\":\"bool\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"address\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"address\"}]},{\"type\":\"function\",\"name\":\"uint64[2]\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"uint64[2]\"}]},{\"type\":\"function\",\"name\":\"uint64[]\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"uint64[]\"}]},{\"type\":\"function\",\"name\":\"foo\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"uint32\"}]},{\"type\":\"function\",\"name\":\"bar\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"uint32\"},{\"name\":\"string\",\"type\":\"uint16\"}]},{\"type\":\"function\",\"name\":\"slice\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"uint32[2]\"}]},{\"type\":\"function\",\"name\":\"slice256\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"uint256[2]\"}]},{\"type\":\"function\",\"name\":\"sliceAddress\",\"constant\":false,\"inputs\":[{\"name\":\"inputs\",\"type\":\"address[]\"}]},{\"type\":\"function\",\"name\":\"sliceMultiAddress\",\"constant\":false,\"inputs\":[{\"name\":\"a\",\"type\":\"address[]\"},{\"name\":\"b\",\"type\":\"address[]\"}]}]"
+        do {
+            let jsonData = jsonString.data(using: .utf8)
+            let abi = try JSONDecoder().decode([ABIRecord].self, from: jsonData!)
+            let abiNative = try abi.map({ (record) -> ABIElement in
+                return try record.parse()
+            })
+            print(abiNative)
+            XCTAssert(true, "Failed to parse ABI")
+        } catch {
+            print(error)
+            XCTFail()
+        }
+    }
+    
+    func testRLPencodeShortString() {
+        let testString = "dog"
+        let encoded = RLP.encode(testString)
+        var expected = Data([UInt8(0x83)])
+        expected.append(testString.data(using: .ascii)!)
+        XCTAssert(encoded == expected, "Failed to RLP encode short string")
+    }
+    
+    func testRLPencodeListOfShortStrings() {
+        let testInput = ["cat","dog"]
+        let encoded = RLP.encode(testInput)
+        var expected = Data()
+        expected.append(Data([UInt8(0xc8)]))
+        expected.append(Data([UInt8(0x83)]))
+        expected.append("cat".data(using: .ascii)!)
+        expected.append(Data([UInt8(0x83)]))
+        expected.append("dog".data(using: .ascii)!)
+        XCTAssert(encoded == expected, "Failed to RLP encode list of short strings")
+    }
+    
+    func testRLPencodeLongString() {
+        let testInput = "Lorem ipsum dolor sit amet, consectetur adipisicing elit"
+        let encoded = RLP.encode(testInput)
+        var expected = Data()
+        expected.append(Data([UInt8(0xb8)]))
+        expected.append(Data([UInt8(0x38)]))
+        expected.append("Lorem ipsum dolor sit amet, consectetur adipisicing elit".data(using: .ascii)!)
+        XCTAssert(encoded == expected, "Failed to RLP encode long string")
+    }
+    
+    func testRLPencodeEmptyString() {
+        let testInput = ""
+        let encoded = RLP.encode(testInput)
+        var expected = Data()
+        expected.append(Data([UInt8(0x80)]))
+        XCTAssert(encoded == expected, "Failed to RLP encode empty string")
+    }
+    
+    func testRLPencodeEmptyArray() {
+        let testInput = [Data]()
+        let encoded = RLP.encode(testInput)
+        var expected = Data()
+        expected.append(Data([UInt8(0xc0)]))
+        XCTAssert(encoded == expected, "Failed to RLP encode empty array")
+    }
+    
+    func testRLPencodeShortInt() {
+        let testInput = 15
+        let encoded = RLP.encode(testInput)
+        let expected = Data([UInt8(0x0f)])
+        XCTAssert(encoded == expected, "Failed to RLP encode short int")
+    }
+    
+    func testRLPencodeLargeInt() {
+        let testInput = 1024
+        let encoded = RLP.encode(testInput)
+        var expected = Data()
+        expected.append(Data([UInt8(0x82)]))
+        expected.append(Data([UInt8(0x04)]))
+        expected.append(Data([UInt8(0x00)]))
+        XCTAssert(encoded == expected, "Failed to RLP encode large int")
+    }
+    
+    func testChecksubAddress() {
+        let input = "0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359"
+        let output = EthereumAddress.toChecksumAddress(input);
+        XCTAssert(output == "0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359", "Failed to checksum address")
+    }
+
+    func testTransaction() {
+        do {
+            var transaction = EthereumTransaction(nonce: BigUInt(9),
+                                                  gasPrice: BigUInt(20000000000),
+                                                  gasLimit: BigUInt(21000),
+                                                  to: EthereumAddress("0x3535353535353535353535353535353535353535"),
+                                                  value: BigUInt("1000000000000000000")!,
+                                                  data: Data(),
+                                                  v: BigUInt(0),
+                                                  r: BigUInt(0),
+                                                  s: BigUInt(0))
+            let privateKeyData = Data.fromHex("0x4646464646464646464646464646464646464646464646464646464646464646")!
+            let publicKey = Web3.Utils.privateToPublic(privateKeyData, compressed: false)
+            let sender = Web3.Utils.publicToAddress(publicKey!)
+            transaction.chainID = BigUInt(1)
+            print(transaction)
+            let hash = transaction.hashForSignature(chainID: BigUInt(1))
+            let expectedHash = "0xdaf5a779ae972f972197303d7b574746c7ef83eadac0f2791ad23db92e4c8e53".stripHexPrefix()
+            XCTAssert(hash!.toHexString() == expectedHash, "Transaction signature failed")
+            let signer = EIP155Signer()
+            try signer.sign(transaction: &transaction, privateKey: privateKeyData)
+            print(transaction.encode(forSignature: false, chainID: BigUInt(1))?.toHexString())
+            XCTAssert(transaction.v == UInt8(37), "Transaction signature failed")
+            XCTAssert(sender == transaction.sender)
+        }
+        catch {
+            print(error)
+            XCTFail()
+        }
+    }
+    
     func testERC20Encode() {
         let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
         do {
@@ -449,7 +454,6 @@ class web3swiftTests: XCTestCase {
             let dummyTrue = BigUInt(1).abiEncode(bits: 256)
             let data = dummyTrue.head!
             let decoded = method[0].decodeReturnData(data)
-            print(decoded)
             let ret1 = decoded!["0"] as? Bool
             let ret2 = decoded!["success"] as? Bool
             XCTAssert(ret1 == true, "Failed to encode ERC20")
@@ -500,7 +504,6 @@ class web3swiftTests: XCTestCase {
             let transaction = contract.method("balanceOf", parameters:parameters,  options: options)
             XCTAssert(transaction != nil, "Failed plasma funding transaction")
             let requestDictionary = transaction!.encodeAsDictionary(from: EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d"))
-            print(requestDictionary)
             XCTAssert(requestDictionary != nil, "Can't read ERC20 balance")
         } catch {
             print(error)
@@ -523,14 +526,14 @@ class web3swiftTests: XCTestCase {
             let transaction = contract.method("name", parameters:parameters,  options: options)
             XCTAssert(transaction != nil, "Failed to create ERC20 name transaction")
             let requestDictionary = transaction!.encodeAsDictionary(from: EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d"))
-            print(requestDictionary)
             XCTAssert(requestDictionary != nil, "Failed to create ERC20 name transaction")
             let resultData  = Data.fromHex("0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000a534f4e4d20546f6b656e00000000000000000000000000000000000000000000")
             let method = contract.methods["name"]
             let result = method!.decodeReturnData(resultData!)
-            print(result)
-            XCTAssert(result != nil, "Failed to create ERC20 name transaction")
+            let res = result!["0"] as! String
+            XCTAssert(res == "SONM Token", "Failed to create ERC20 name transaction")
         } catch {
+            XCTFail()
             print(error)
         }
     }
@@ -541,30 +544,27 @@ class web3swiftTests: XCTestCase {
         XCTAssert(biguint == BigUInt("126978086000000000"))
     }
     
+    func testInfuraERC20name() {
+        let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
+            let web3 = Web3.InfuraMainnetWeb3()
+            let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+            let contract = web3.contract(jsonString, at: contractAddress)
+            XCTAssert(contract != nil, "Failed to create ERC20 contract from ABI")
+            var options = Web3Options.defaultOptions()
+            options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
+            let parameters = [] as [AnyObject]
+            let transactionIntermediate = contract?.method("name", parameters:parameters,  options: options)
+            let result = transactionIntermediate!.call(options: options)
+            switch result {
+            case .failure(let error):
+                print(error)
+                XCTFail()
+            case .success(let response):
+                let name = response["0"] as? String
+                XCTAssert(name == "\"BANKEX\" project utility token", "Failed to create ERC20 name transaction")
+        }
+    }
 //
-//    func testInfuraERC20name() {
-//        let sodium = Sodium()
-//        let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
-//        do {
-//            let jsonData = jsonString.data(using: .utf8)
-//            let abi = try JSONDecoder().decode([ABIRecord].self, from: jsonData!)
-//            let abiNative = try abi.map({ (record) -> ABIElement in
-//                return try record.parse()
-//            })
-//            let constractAddress = EthereumAddress("0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0")
-//            let contract = Contract(abi: abiNative, at: constractAddress)
-//            var options = Web3Options()
-//            options.gas = BigUInt(250000)
-//            options.gasPrice = BigUInt(0)
-//            let parameters = [] as [AnyObject]
-//            let transaction = contract.method("name", parameters:parameters,  options: options)
-//            let result = try! await((transaction?.call(options: options))!)
-//            XCTAssert(transaction != nil, "Failed to create ERC20 name transaction")
-//        } catch {
-//            print(error)
-//        }
-//    }
-//    
 //    func testKeystoreManager(){
 //        let testBundle = Bundle(for: type(of: self))
 //        let testResourcePath = testBundle.url(forResource:"keystore", withExtension: "ks")

@@ -3,6 +3,7 @@ def import_pods
   pod 'Alamofire-Synchronous', '~> 4.0'
   pod 'BigInt', '~> 3.0.1'
   pod 'CryptoSwift'
+  pod 'Result', '~> 3.0.0'
   pod 'libsodium'
   pod 'secp256k1_ios', :git => 'https://github.com/shamatar/secp256k1_ios.git'
 end

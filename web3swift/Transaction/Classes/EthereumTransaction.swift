@@ -21,6 +21,24 @@ public struct EthereumTransaction: CustomStringConvertible {
     public var s: BigUInt = BigUInt(0)
     public var chainID: BigUInt? = nil
     
+    public var inferedChainID: BigUInt? {
+        get{
+            if (self.r == BigUInt(0) && self.s == BigUInt(0)) {
+                return self.v
+            } else if (self.v == BigUInt(27) || self.v == BigUInt(28)) {
+                return nil
+            } else {
+                return ((self.v - BigUInt(1)) / BigUInt(2)) - BigUInt(17)
+            }
+        }
+    }
+    
+    public var hash: Data? {
+        guard let encoded = self.encode(forSignature: false, chainID: self.chainID) else {return nil}
+        let hash = encoded.sha3(.keccak256)
+        return hash
+    }
+    
     public init (nonce: BigUInt, to: EthereumAddress, value: BigUInt, data: Data, chainID: BigUInt) {
         self.nonce = nonce
         self.to = to
@@ -41,22 +59,11 @@ public struct EthereumTransaction: CustomStringConvertible {
     
     public init(to: EthereumAddress, data: Data, options: Web3Options) {
         let defaults = Web3Options.defaultOptions()
+        let merged = Web3Options.merge(defaults, with: options)
         self.nonce = BigUInt(0)
-        if options.gasPrice != nil {
-            self.gasPrice = options.gasPrice!
-        } else {
-            self.gasPrice = defaults.gasPrice!
-        }
-        if options.gas != nil {
-            self.gasLimit = options.gas!
-        } else {
-            self.gasLimit = defaults.gas!
-        }
-        if options.value != nil {
-            self.value = options.value!
-        } else {
-            self.value = defaults.value!
-        }
+        self.gasLimit = merged!.gasLimit!
+        self.gasPrice = merged!.gasPrice!
+        self.value = merged!.value!
         self.to = to
         self.data = data
     }
@@ -72,18 +79,6 @@ public struct EthereumTransaction: CustomStringConvertible {
         self.v = v
         self.r = r
         self.s = s
-    }
-    
-    public var inferedChainID: BigUInt? {
-        get{
-            if (self.r == BigUInt(0) && self.s == BigUInt(0)) {
-                return self.v
-            } else if (self.v == BigUInt(27) || self.v == BigUInt(28)) {
-                return nil
-            } else {
-                return ((self.v - BigUInt(1)) / BigUInt(2)) - BigUInt(17)
-            }
-        }
     }
     
     public var description: String {
@@ -127,7 +122,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         guard let rData = r.serialize().setLengthLeft(32) else {return nil}
         guard let sData = s.serialize().setLengthLeft(32) else {return nil}
         guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else {return nil}
-        guard let hash = self.hash(forSignature: true, chainID: self.chainID) else {return nil}
+        guard let hash = self.hashForSignature(chainID: self.chainID) else {return nil}
         guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
         return publicKey
     }
@@ -135,7 +130,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     public var txhash: String? {
         get{
             guard self.sender != nil else {return nil}
-            guard let hash = self.hash(forSignature: false, chainID: self.chainID) else {return nil}
+            guard let hash = self.hash else {return nil}
             let txid = hash.toHexString().addHexPrefix().lowercased()
             return txid
         }
@@ -187,46 +182,12 @@ public struct EthereumTransaction: CustomStringConvertible {
         return params
     }
     
-    public func hash(forSignature:Bool = false, chainID: BigUInt? = nil) -> Data? {
-        guard let encoded = self.encode(forSignature: forSignature, chainID: chainID) else {return nil}
+
+    
+    public func hashForSignature(chainID: BigUInt? = nil) -> Data? {
+        guard let encoded = self.encode(forSignature: true, chainID: chainID) else {return nil}
         let hash = encoded.sha3(.keccak256)
         return hash
-    }
-    
-    private mutating func attemptSignature(privateKey: Data, chainID: BigUInt? = nil) -> Bool {
-        guard let hash = self.hash(forSignature: true, chainID: chainID) else {
-            return false
-        }
-        let signature  = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey)
-        guard let compressedSignature = signature.compressed else {return false}
-        guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: compressedSignature) else {
-            return false
-        }
-        if (chainID != nil ) {
-            self.v = BigUInt(unmarshalledSignature.v) + BigUInt(35) + chainID! + chainID!
-        } else if (self.chainID != nil ) {
-            self.v = BigUInt(unmarshalledSignature.v) + BigUInt(35) + self.chainID! + self.chainID!
-        } else {
-            self.v = BigUInt(unmarshalledSignature.v) + BigUInt(27)
-        }
-        self.r = BigUInt(Data(unmarshalledSignature.r))
-        self.s = BigUInt(Data(unmarshalledSignature.s))
-        let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey)
-        let recoveredPublicKey = self.recoverPublicKey()
-        if (originalPublicKey != recoveredPublicKey) {
-            return false
-        }
-        return true
-    }
-    
-    public mutating func sign(privateKey: Data, chainID: BigUInt? = nil) -> Bool {
-        for _ in 0..<1024 {
-            let result = self.attemptSignature(privateKey: privateKey, chainID: chainID)
-            if (result) {
-                return true
-            }
-        }
-        return false
     }
     
     static func fromJSON(_ json: [String: Any]) -> EthereumTransaction? {

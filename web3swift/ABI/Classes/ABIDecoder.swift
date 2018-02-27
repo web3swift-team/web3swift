@@ -157,6 +157,29 @@ extension ABIElement {
         case .fallback(_):
             return nil
         case .function(let function):
+            if (data.count == 0 && function.outputs.count == 1) {
+                let name = "0"
+                var value:Any
+                switch function.outputs[0].type {
+                case .dynamicType(let type) :
+                    switch type {
+                    case .string:
+                        value = ""
+                    case .bytes:
+                        value = Data()
+                    default:
+                        return nil
+                    }
+                default:
+                    return nil
+                }
+                var returnArray = [String:Any]()
+                returnArray[name] = value
+                if function.outputs[0].name != "" {
+                    returnArray[function.outputs[0].name] = value
+                }
+                return returnArray
+            }
             guard function.outputs.count*32 <= data.count else {return nil}
             var dataForProcessing = data
             var tailPointer = BigUInt(0)

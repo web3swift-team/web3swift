@@ -10,7 +10,6 @@
 		1CD91B321FD769A6007BFB45 /* web3swiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */; };
 		1CD91B341FD769A6007BFB45 /* web3swift_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift_iOS.framework */; };
 		1CDA65CA1FDE0D3F0025DE71 /* ABIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CDA65C91FDE0D3F0025DE71 /* ABIManager.swift */; };
-		1CF482A005E87F8B41423FA0 /* Pods_web3swift_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62152503789B635C0B08D841 /* Pods_web3swift_iOS.framework */; };
 		4194811B203630530065A83B /* Web3+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */; };
 		4194811C203630530065A83B /* ABIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CDA65C91FDE0D3F0025DE71 /* ABIManager.swift */; };
 		4194811D203630530065A83B /* Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EABD91FDC9A5C00E013FC /* Contract.swift */; };
@@ -31,7 +30,7 @@
 		4194812C203630530065A83B /* KeystoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B81FD7E1590074282C /* KeystoreManager.swift */; };
 		4194812D203630530065A83B /* EthereumAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */; };
 		4194812E203630530065A83B /* AbstractKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB2420066E2B00E02EAA /* AbstractKeystore.swift */; };
-		4194812F203630530065A83B /* Web3Swift+AbstractSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C2200CA0AE00B6D3AB /* Web3Swift+AbstractSigner.swift */; };
+		4194812F203630530065A83B /* Web3+AbstractSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C2200CA0AE00B6D3AB /* Web3+AbstractSigner.swift */; };
 		41948130203630530065A83B /* BIP32Keystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815630012007B53C00A0EC2F /* BIP32Keystore.swift */; };
 		41948131203630530065A83B /* BIP32KeystoreJSONStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81562FFF2007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift */; };
 		41948132203630530065A83B /* BIP32HDNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB112004FE2F00E02EAA /* BIP32HDNode.swift */; };
@@ -50,6 +49,7 @@
 		4194813F203630530065A83B /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C6200CBAC200B6D3AB /* Dictionary+Extension.swift */; };
 		41948140203630530065A83B /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1CA200CBB2200B6D3AB /* Array+Extension.swift */; };
 		41948141203630530065A83B /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2FF1FD7F30F0074282C /* String+Extension.swift */; };
+		472BBA099A26DFD47F33C2E0 /* Pods_web3swift_macOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 010A8466DD6C993827C11A71 /* Pods_web3swift_macOS_Tests.framework */; };
 		8104E2281FE82BDC00F952CB /* Web3+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8104E2271FE82BDC00F952CB /* Web3+Utils.swift */; };
 		810B0F9A1FEC446B00CF0DA2 /* Web3+JSONRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F991FEC446B00CF0DA2 /* Web3+JSONRPC.swift */; };
 		810B0F9C1FEC520500CF0DA2 /* Web3+Methods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */; };
@@ -64,7 +64,7 @@
 		8113D31A1FD7F4C80074282C /* ABITypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D3191FD7F4C80074282C /* ABITypes.swift */; };
 		8113D31C1FD7F8980074282C /* ABIRecordParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D31B1FD7F8980074282C /* ABIRecordParser.swift */; };
 		8113DE7C1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */; };
-		8123E1C3200CA0AE00B6D3AB /* Web3Swift+AbstractSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C2200CA0AE00B6D3AB /* Web3Swift+AbstractSigner.swift */; };
+		8123E1C3200CA0AE00B6D3AB /* Web3+AbstractSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C2200CA0AE00B6D3AB /* Web3+AbstractSigner.swift */; };
 		8123E1C7200CBAC200B6D3AB /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C6200CBAC200B6D3AB /* Dictionary+Extension.swift */; };
 		8123E1C9200CBAF800B6D3AB /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C8200CBAF800B6D3AB /* Data+Extension.swift */; };
 		8123E1CB200CBB2200B6D3AB /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1CA200CBB2200B6D3AB /* Array+Extension.swift */; };
@@ -75,7 +75,6 @@
 		815630002007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81562FFF2007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift */; };
 		815630022007B53C00A0EC2F /* BIP32Keystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815630012007B53C00A0EC2F /* BIP32Keystore.swift */; };
 		815630042007BC8F00A0EC2F /* BIP39+WordLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815630032007BC8F00A0EC2F /* BIP39+WordLists.swift */; };
-		815630062008A64C00A0EC2F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 815630052008A64C00A0EC2F /* Security.framework */; };
 		817EBB102004FE2800E02EAA /* EthereumAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */; };
 		817EBB122004FE2F00E02EAA /* BIP32HDNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB112004FE2F00E02EAA /* BIP32HDNode.swift */; };
 		817EBB162004FE4200E02EAA /* Web3+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */; };
@@ -89,13 +88,21 @@
 		818ABD5D1FE95FC9002657BB /* Web3+Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818ABD5C1FE95FC9002657BB /* Web3+Contract.swift */; };
 		818D810E1FDC1A2000663CE3 /* RLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818D810D1FDC1A2000663CE3 /* RLP.swift */; };
 		818EABDA1FDC9A5C00E013FC /* Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EABD91FDC9A5C00E013FC /* Contract.swift */; };
+		81C0FCF220440EB500D82FAF /* Web3+Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF120440EB500D82FAF /* Web3+Protocols.swift */; };
+		81C0FCF420440F0900D82FAF /* Web3+Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF320440F0900D82FAF /* Web3+Options.swift */; };
+		81C0FCF720441A1D00D82FAF /* TransactionSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF520440F9900D82FAF /* TransactionSigner.swift */; };
+		81C0FD012044A89300D82FAF /* Web3+TransactionIntermediate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCFC20449D1400D82FAF /* Web3+TransactionIntermediate.swift */; };
+		81C0FD032044A89400D82FAF /* Web3+TransactionIntermediate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCFC20449D1400D82FAF /* Web3+TransactionIntermediate.swift */; };
+		81C0FD042044A8A700D82FAF /* Web3+Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF320440F0900D82FAF /* Web3+Options.swift */; };
+		81C0FD052044A8AE00D82FAF /* Web3+Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF120440EB500D82FAF /* Web3+Protocols.swift */; };
+		81C0FD062044A8D100D82FAF /* TransactionSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF520440F9900D82FAF /* TransactionSigner.swift */; };
+		81C0FD082044AB2400D82FAF /* Pods_web3swift_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C0FD092044AB2400D82FAF /* Pods_web3swift_iOS.framework */; };
+		81C0FD0A2044AB4600D82FAF /* Pods_web3swift_iOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C0FD0B2044AB4600D82FAF /* Pods_web3swift_iOS_Tests.framework */; };
 		81C146F71FF274B200AA943E /* Web3+Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C146F61FF274B200AA943E /* Web3+Structures.swift */; };
 		81DDECCF1FDF004E0063684A /* Web3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECCE1FDF004E0063684A /* Web3.swift */; };
+		81FA43F62044097100EE14D5 /* web3swift_macOS_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA43F52044097100EE14D5 /* web3swift_macOS_Tests.swift */; };
+		81FA43F82044097100EE14D5 /* web3swift_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 417715D420362916005C3E16 /* web3swift_macOS.framework */; };
 		A4733E6E22E6216A90CCEA33 /* Pods_web3swift_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4A49B538D672F4DA112A11 /* Pods_web3swift_macOS.framework */; };
-		BD94F2A0BE80CC1005DD8CD1 /* Pods_web3swift_ios_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F133EC83594B17BA8C71784 /* Pods_web3swift_ios_Tests.framework */; };
-		D4B29698B084B81A20BDD51F /* Pods_web3swift_iOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 613A9CE29320FF136EC8903D /* Pods_web3swift_iOS_Tests.framework */; };
-		E82DD6EACF6933D0D3978EA0 /* Pods_web3swiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */; };
-		EE6E59FC45D4B4EA279ADA27 /* Pods_Web3Swift_ios_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68360683136B1FE2C57D65D9 /* Pods_Web3Swift_ios_Tests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,11 +113,17 @@
 			remoteGlobalIDString = 1CD91AFB1FD76910007BFB45;
 			remoteInfo = web3swift;
 		};
+		81FA43F92044097100EE14D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1CD91AF31FD76910007BFB45 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 417715D320362916005C3E16;
+			remoteInfo = "web3swift-macOS";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		010A8466DD6C993827C11A71 /* Pods_web3swift_macOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_macOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		046CD76126C610E5634756CB /* Pods-web3swift_ios_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift_ios_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift_ios_Tests/Pods-web3swift_ios_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		08BD06D432296DA533D07D20 /* Pods_Web3Swift_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Web3Swift_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F133EC83594B17BA8C71784 /* Pods_web3swift_ios_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_ios_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		10C02100CDF7C2D5C79A52B9 /* Pods_web3Swift_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3Swift_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,26 +131,18 @@
 		1CD91AFC1FD76910007BFB45 /* web3swift_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = web3swift_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CD91AFF1FD76910007BFB45 /* web3swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = web3swift.h; sourceTree = "<group>"; };
 		1CD91B001FD76910007BFB45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1CD91B2F1FD769A6007BFB45 /* web3swift_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = web3swift_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1CD91B2F1FD769A6007BFB45 /* web3swift-iOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "web3swift-iOS_Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftTests.swift; sourceTree = "<group>"; };
 		1CD91B331FD769A6007BFB45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1CDA65C91FDE0D3F0025DE71 /* ABIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABIManager.swift; sourceTree = "<group>"; };
 		1E62EF5F091ED9F7B80CA8EE /* Pods-web3swift-macOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS_Tests/Pods-web3swift-macOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		1FE9B8894E3D16872E6AF206 /* Pods-Web3Swift_osx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Web3Swift_osx.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Web3Swift_osx/Pods-Web3Swift_osx.debug.xcconfig"; sourceTree = "<group>"; };
 		2B8FEFF3962166E1BEADC886 /* Pods_web3swift_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		315D907D757EBC8EB6E70C13 /* Pods-Web3Swift_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Web3Swift_ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-Web3Swift_ios/Pods-Web3Swift_ios.release.xcconfig"; sourceTree = "<group>"; };
 		342700493511FEB189700D13 /* Pods-web3swift-iOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-iOS_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-iOS_Tests/Pods-web3swift-iOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		391A0D2EF42488E5C8AB2F71 /* Pods_web3swift_osx_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_osx_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D07F714D1FF1408DBC01EBB /* Pods-web3swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift/Pods-web3swift.release.xcconfig"; sourceTree = "<group>"; };
 		417715D420362916005C3E16 /* web3swift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = web3swift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		417715F720362956005C3E16 /* Web3Swift_macTests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Web3Swift_macTests copy-Info.plist"; path = "/Users/DS/Projects/vaultie/web3swift/Web3Swift_macTests copy-Info.plist"; sourceTree = "<absolute>"; };
 		419481432036338A0065A83B /* Pods_web3swift_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_web3swift_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		45EF5FB62CEF5D014C559D8E /* Pods-web3Swift-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3Swift-Demo.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3Swift-Demo/Pods-web3Swift-Demo.release.xcconfig"; sourceTree = "<group>"; };
-		47FBE23A4D6EF29D0439EF09 /* Pods-web3swift_osx_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift_osx_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift_osx_Tests/Pods-web3swift_osx_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		58BADB6EBA140A4DAD53D2CA /* Pods-web3swift_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift_ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift_ios/Pods-web3swift_ios.release.xcconfig"; sourceTree = "<group>"; };
 		5A31D55232599E417B6F862E /* Pods-web3swift-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-iOS/Pods-web3swift-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		5B83FA95B72D7DA53870479B /* Pods-web3swift-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS/Pods-web3swift-macOS.release.xcconfig"; sourceTree = "<group>"; };
-		5EF0EBFF98DF0E56B960D7FF /* Pods-web3Swift-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3Swift-Demo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3Swift-Demo/Pods-web3Swift-Demo.debug.xcconfig"; sourceTree = "<group>"; };
 		613A9CE29320FF136EC8903D /* Pods_web3swift_iOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_iOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62152503789B635C0B08D841 /* Pods_web3swift_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		68360683136B1FE2C57D65D9 /* Pods_Web3Swift_ios_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Web3Swift_ios_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,7 +162,7 @@
 		8113D3191FD7F4C80074282C /* ABITypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABITypes.swift; sourceTree = "<group>"; };
 		8113D31B1FD7F8980074282C /* ABIRecordParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABIRecordParser.swift; sourceTree = "<group>"; };
 		8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRegularExpressionExtension.swift; sourceTree = "<group>"; };
-		8123E1C2200CA0AE00B6D3AB /* Web3Swift+AbstractSigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3Swift+AbstractSigner.swift"; sourceTree = "<group>"; };
+		8123E1C2200CA0AE00B6D3AB /* Web3+AbstractSigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+AbstractSigner.swift"; sourceTree = "<group>"; };
 		8123E1C6200CBAC200B6D3AB /* Dictionary+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
 		8123E1C8200CBAF800B6D3AB /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		8123E1CA200CBB2200B6D3AB /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
@@ -181,27 +186,25 @@
 		818ABD5C1FE95FC9002657BB /* Web3+Contract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Contract.swift"; sourceTree = "<group>"; };
 		818D810D1FDC1A2000663CE3 /* RLP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RLP.swift; sourceTree = "<group>"; };
 		818EABD91FDC9A5C00E013FC /* Contract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contract.swift; sourceTree = "<group>"; };
+		81C0FCEF20440C3600D82FAF /* Web3+Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+Wallet.swift"; sourceTree = "<group>"; };
+		81C0FCF120440EB500D82FAF /* Web3+Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Protocols.swift"; sourceTree = "<group>"; };
+		81C0FCF320440F0900D82FAF /* Web3+Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Options.swift"; sourceTree = "<group>"; };
+		81C0FCF520440F9900D82FAF /* TransactionSigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSigner.swift; sourceTree = "<group>"; };
+		81C0FCF8204456E600D82FAF /* Web3+BrowserFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+BrowserFunctions.swift"; sourceTree = "<group>"; };
+		81C0FCFA20446C2C00D82FAF /* AbstractSigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractSigner.swift; sourceTree = "<group>"; };
+		81C0FCFC20449D1400D82FAF /* Web3+TransactionIntermediate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+TransactionIntermediate.swift"; sourceTree = "<group>"; };
+		81C0FD092044AB2400D82FAF /* Pods_web3swift_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_web3swift_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		81C0FD0B2044AB4600D82FAF /* Pods_web3swift_iOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_web3swift_iOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81C146F61FF274B200AA943E /* Web3+Structures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+Structures.swift"; sourceTree = "<group>"; };
 		81DDECCE1FDF004E0063684A /* Web3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3.swift; sourceTree = "<group>"; };
-		8C8900D87850714C2DB85DFC /* Pods-web3swiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swiftTests/Pods-web3swiftTests.release.xcconfig"; sourceTree = "<group>"; };
-		9FE2740D77EA32C8AFE16294 /* Pods-Web3Swift_osx_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Web3Swift_osx_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Web3Swift_osx_Tests/Pods-Web3Swift_osx_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		A3A24EAE54B23DA24A01A9A9 /* Pods-web3swift_osx_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift_osx_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift_osx_Tests/Pods-web3swift_osx_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		81FA43F32044097000EE14D5 /* web3swift-macOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "web3swift-macOS_Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		81FA43F52044097100EE14D5 /* web3swift_macOS_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_macOS_Tests.swift; sourceTree = "<group>"; };
+		81FA43F72044097100EE14D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9ADDE40292A17C21B8D5516 /* Pods-web3swift-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-iOS/Pods-web3swift-iOS.release.xcconfig"; sourceTree = "<group>"; };
-		B0F20D724EDC2C4CDC8C7476 /* Pods-Web3Swift_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Web3Swift_ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Web3Swift_ios/Pods-Web3Swift_ios.debug.xcconfig"; sourceTree = "<group>"; };
-		B24058FB823C984C119631B7 /* Pods-Web3Swift_ios_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Web3Swift_ios_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Web3Swift_ios_Tests/Pods-Web3Swift_ios_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		B439329CA8B5C3F76AD38DB8 /* Pods-web3swift_osx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift_osx.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift_osx/Pods-web3swift_osx.debug.xcconfig"; sourceTree = "<group>"; };
 		B48CA58D134401D3C4E8CCC5 /* Pods_Web3Swift_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Web3Swift_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BA4E594FFB2A9853EAA7FE03 /* Pods-web3swift_ios_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift_ios_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift_ios_Tests/Pods-web3swift_ios_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		C040A86A6F6797833A4F135E /* Pods-web3swift_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift_ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift_ios/Pods-web3swift_ios.debug.xcconfig"; sourceTree = "<group>"; };
-		C38B8A3D01E085BF964565D8 /* Pods-Web3Swift_osx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Web3Swift_osx.release.xcconfig"; path = "Pods/Target Support Files/Pods-Web3Swift_osx/Pods-Web3Swift_osx.release.xcconfig"; sourceTree = "<group>"; };
-		C3E9A8924684AD57011403F8 /* Pods-web3swift_osx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift_osx.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift_osx/Pods-web3swift_osx.release.xcconfig"; sourceTree = "<group>"; };
 		CA3F7E825AEBF3455D00150A /* Pods-web3swift-macOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS_Tests/Pods-web3swift-macOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		CDCB852B5E2E84636B80BB99 /* Pods-web3swift-iOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-iOS_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-iOS_Tests/Pods-web3swift-iOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		D11D741983B37E59DB6A65E1 /* Pods-web3swift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift/Pods-web3swift.debug.xcconfig"; sourceTree = "<group>"; };
-		E826BA1AF7696BFC43A392A0 /* Pods-web3swiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swiftTests/Pods-web3swiftTests.debug.xcconfig"; sourceTree = "<group>"; };
-		F2C3D0521469F54731084381 /* Pods-Web3Swift_ios_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Web3Swift_ios_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Web3Swift_ios_Tests/Pods-Web3Swift_ios_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		FA135C3F5438168498AC508A /* Pods-Web3Swift_osx_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Web3Swift_osx_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Web3Swift_osx_Tests/Pods-Web3Swift_osx_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		FB43EC035C593F9E5A3644B6 /* Pods-web3swift-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS/Pods-web3swift-macOS.debug.xcconfig"; sourceTree = "<group>"; };
 		FC1E6C115639177F2629E42A /* Pods_web3swift_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC4A49B538D672F4DA112A11 /* Pods_web3swift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -212,8 +215,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				815630062008A64C00A0EC2F /* Security.framework in Frameworks */,
-				1CF482A005E87F8B41423FA0 /* Pods_web3swift_iOS.framework in Frameworks */,
+				81C0FD082044AB2400D82FAF /* Pods_web3swift_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,11 +223,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81C0FD0A2044AB4600D82FAF /* Pods_web3swift_iOS_Tests.framework in Frameworks */,
 				1CD91B341FD769A6007BFB45 /* web3swift_iOS.framework in Frameworks */,
-				E82DD6EACF6933D0D3978EA0 /* Pods_web3swiftTests.framework in Frameworks */,
-				EE6E59FC45D4B4EA279ADA27 /* Pods_Web3Swift_ios_Tests.framework in Frameworks */,
-				BD94F2A0BE80CC1005DD8CD1 /* Pods_web3swift_ios_Tests.framework in Frameworks */,
-				D4B29698B084B81A20BDD51F /* Pods_web3swift_iOS_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +236,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		81FA43F02044097000EE14D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81FA43F82044097100EE14D5 /* web3swift_macOS.framework in Frameworks */,
+				472BBA099A26DFD47F33C2E0 /* Pods_web3swift_macOS_Tests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -245,10 +253,10 @@
 			children = (
 				1CD91AFE1FD76910007BFB45 /* web3swift */,
 				1CD91B301FD769A6007BFB45 /* web3swiftTests */,
+				81FA43F42044097100EE14D5 /* web3swift-macOS_Tests */,
 				1CD91AFD1FD76910007BFB45 /* Products */,
 				868F9682FE77A7BADF675F92 /* Pods */,
 				78D101CC419F27D142F6E9AE /* Frameworks */,
-				417715F720362956005C3E16 /* Web3Swift_macTests copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -256,8 +264,9 @@
 			isa = PBXGroup;
 			children = (
 				1CD91AFC1FD76910007BFB45 /* web3swift_iOS.framework */,
-				1CD91B2F1FD769A6007BFB45 /* web3swift_Tests.xctest */,
+				1CD91B2F1FD769A6007BFB45 /* web3swift-iOS_Tests.xctest */,
 				417715D420362916005C3E16 /* web3swift_macOS.framework */,
+				81FA43F32044097000EE14D5 /* web3swift-macOS_Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -265,6 +274,8 @@
 		1CD91AFE1FD76910007BFB45 /* web3swift */ = {
 			isa = PBXGroup;
 			children = (
+				81C0FCED20440BDF00D82FAF /* HookedFunctions */,
+				81C0FCEA20440BB400D82FAF /* Web3 */,
 				818EABD71FDC9A3800E013FC /* Contract */,
 				8113D2B91FD7E1590074282C /* ABI */,
 				8113D2B51FD7E1590074282C /* KeystoreManager */,
@@ -290,6 +301,8 @@
 		78D101CC419F27D142F6E9AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				81C0FD0B2044AB4600D82FAF /* Pods_web3swift_iOS_Tests.framework */,
+				81C0FD092044AB2400D82FAF /* Pods_web3swift_iOS.framework */,
 				419481432036338A0065A83B /* Pods_web3swift_osx.framework */,
 				815630052008A64C00A0EC2F /* Security.framework */,
 				18E81592D2802B9F4E200823 /* Pods_web3swift.framework */,
@@ -347,10 +360,9 @@
 		8113D2B71FD7E1590074282C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				817EBB2420066E2B00E02EAA /* AbstractKeystore.swift */,
 				8113D2B81FD7E1590074282C /* KeystoreManager.swift */,
 				817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */,
-				817EBB2420066E2B00E02EAA /* AbstractKeystore.swift */,
-				8123E1C2200CA0AE00B6D3AB /* Web3Swift+AbstractSigner.swift */,
 				815630012007B53C00A0EC2F /* BIP32Keystore.swift */,
 				81562FFF2007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift */,
 				817EBB112004FE2F00E02EAA /* BIP32HDNode.swift */,
@@ -358,6 +370,7 @@
 				815630032007BC8F00A0EC2F /* BIP39+WordLists.swift */,
 				81531A9F1FE7C07A002192CC /* EthereumKeystoreV3.swift */,
 				817EBB26200673D100E02EAA /* KeystoreV3JSONStructure.swift */,
+				81C0FCFA20446C2C00D82FAF /* AbstractSigner.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -394,6 +407,7 @@
 			isa = PBXGroup;
 			children = (
 				8113D2C31FD7E1590074282C /* EthereumTransaction.swift */,
+				81C0FCF520440F9900D82FAF /* TransactionSigner.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -409,10 +423,25 @@
 		818EABD81FDC9A4800E013FC /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */,
 				1CDA65C91FDE0D3F0025DE71 /* ABIManager.swift */,
 				818EABD91FDC9A5C00E013FC /* Contract.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		81C0FCEA20440BB400D82FAF /* Web3 */ = {
+			isa = PBXGroup;
+			children = (
+				81C0FCEB20440BBE00D82FAF /* Classes */,
+			);
+			path = Web3;
+			sourceTree = "<group>";
+		};
+		81C0FCEB20440BBE00D82FAF /* Classes */ = {
+			isa = PBXGroup;
+			children = (
 				81DDECCE1FDF004E0063684A /* Web3.swift */,
+				817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */,
 				818ABD5A1FE95F8F002657BB /* Web3+Instance.swift */,
 				818ABD5C1FE95FC9002657BB /* Web3+Contract.swift */,
 				8104E2271FE82BDC00F952CB /* Web3+Utils.swift */,
@@ -421,35 +450,43 @@
 				81C146F61FF274B200AA943E /* Web3+Structures.swift */,
 				810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */,
 				810B0F9D1FEC5B9C00CF0DA2 /* Web3+Eth.swift */,
+				81C0FCF120440EB500D82FAF /* Web3+Protocols.swift */,
+				8123E1C2200CA0AE00B6D3AB /* Web3+AbstractSigner.swift */,
+				81C0FCF320440F0900D82FAF /* Web3+Options.swift */,
+				81C0FCFC20449D1400D82FAF /* Web3+TransactionIntermediate.swift */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		81C0FCED20440BDF00D82FAF /* HookedFunctions */ = {
+			isa = PBXGroup;
+			children = (
+				81C0FCEE20440BE900D82FAF /* Classes */,
+			);
+			path = HookedFunctions;
+			sourceTree = "<group>";
+		};
+		81C0FCEE20440BE900D82FAF /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				81C0FCEF20440C3600D82FAF /* Web3+Wallet.swift */,
+				81C0FCF8204456E600D82FAF /* Web3+BrowserFunctions.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		81FA43F42044097100EE14D5 /* web3swift-macOS_Tests */ = {
+			isa = PBXGroup;
+			children = (
+				81FA43F52044097100EE14D5 /* web3swift_macOS_Tests.swift */,
+				81FA43F72044097100EE14D5 /* Info.plist */,
+			);
+			path = "web3swift-macOS_Tests";
 			sourceTree = "<group>";
 		};
 		868F9682FE77A7BADF675F92 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D11D741983B37E59DB6A65E1 /* Pods-web3swift.debug.xcconfig */,
-				3D07F714D1FF1408DBC01EBB /* Pods-web3swift.release.xcconfig */,
-				E826BA1AF7696BFC43A392A0 /* Pods-web3swiftTests.debug.xcconfig */,
-				8C8900D87850714C2DB85DFC /* Pods-web3swiftTests.release.xcconfig */,
-				5EF0EBFF98DF0E56B960D7FF /* Pods-web3Swift-Demo.debug.xcconfig */,
-				45EF5FB62CEF5D014C559D8E /* Pods-web3Swift-Demo.release.xcconfig */,
-				B0F20D724EDC2C4CDC8C7476 /* Pods-Web3Swift_ios.debug.xcconfig */,
-				315D907D757EBC8EB6E70C13 /* Pods-Web3Swift_ios.release.xcconfig */,
-				F2C3D0521469F54731084381 /* Pods-Web3Swift_ios_Tests.debug.xcconfig */,
-				B24058FB823C984C119631B7 /* Pods-Web3Swift_ios_Tests.release.xcconfig */,
-				1FE9B8894E3D16872E6AF206 /* Pods-Web3Swift_osx.debug.xcconfig */,
-				C38B8A3D01E085BF964565D8 /* Pods-Web3Swift_osx.release.xcconfig */,
-				FA135C3F5438168498AC508A /* Pods-Web3Swift_osx_Tests.debug.xcconfig */,
-				9FE2740D77EA32C8AFE16294 /* Pods-Web3Swift_osx_Tests.release.xcconfig */,
-				C040A86A6F6797833A4F135E /* Pods-web3swift_ios.debug.xcconfig */,
-				58BADB6EBA140A4DAD53D2CA /* Pods-web3swift_ios.release.xcconfig */,
-				046CD76126C610E5634756CB /* Pods-web3swift_ios_Tests.debug.xcconfig */,
-				BA4E594FFB2A9853EAA7FE03 /* Pods-web3swift_ios_Tests.release.xcconfig */,
-				B439329CA8B5C3F76AD38DB8 /* Pods-web3swift_osx.debug.xcconfig */,
-				C3E9A8924684AD57011403F8 /* Pods-web3swift_osx.release.xcconfig */,
-				A3A24EAE54B23DA24A01A9A9 /* Pods-web3swift_osx_Tests.debug.xcconfig */,
-				47FBE23A4D6EF29D0439EF09 /* Pods-web3swift_osx_Tests.release.xcconfig */,
 				5A31D55232599E417B6F862E /* Pods-web3swift-iOS.debug.xcconfig */,
 				A9ADDE40292A17C21B8D5516 /* Pods-web3swift-iOS.release.xcconfig */,
 				342700493511FEB189700D13 /* Pods-web3swift-iOS_Tests.debug.xcconfig */,
@@ -502,9 +539,9 @@
 			productReference = 1CD91AFC1FD76910007BFB45 /* web3swift_iOS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		1CD91B2E1FD769A6007BFB45 /* web3swift_Tests */ = {
+		1CD91B2E1FD769A6007BFB45 /* web3swift-iOS_Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1CD91B371FD769A6007BFB45 /* Build configuration list for PBXNativeTarget "web3swift_Tests" */;
+			buildConfigurationList = 1CD91B371FD769A6007BFB45 /* Build configuration list for PBXNativeTarget "web3swift-iOS_Tests" */;
 			buildPhases = (
 				8CE421FE6AFA1B201DF09E84 /* [CP] Check Pods Manifest.lock */,
 				1CD91B2B1FD769A6007BFB45 /* Sources */,
@@ -518,9 +555,9 @@
 			dependencies = (
 				1CD91B361FD769A6007BFB45 /* PBXTargetDependency */,
 			);
-			name = web3swift_Tests;
+			name = "web3swift-iOS_Tests";
 			productName = web3swiftTests;
-			productReference = 1CD91B2F1FD769A6007BFB45 /* web3swift_Tests.xctest */;
+			productReference = 1CD91B2F1FD769A6007BFB45 /* web3swift-iOS_Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		417715D320362916005C3E16 /* web3swift-macOS */ = {
@@ -542,6 +579,27 @@
 			productName = Web3Swift_mac;
 			productReference = 417715D420362916005C3E16 /* web3swift_macOS.framework */;
 			productType = "com.apple.product-type.framework";
+		};
+		81FA43F22044097000EE14D5 /* web3swift-macOS_Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81FA43FD2044097100EE14D5 /* Build configuration list for PBXNativeTarget "web3swift-macOS_Tests" */;
+			buildPhases = (
+				6E4349FF8099C4D3F1F4669F /* [CP] Check Pods Manifest.lock */,
+				81FA43EF2044097000EE14D5 /* Sources */,
+				81FA43F02044097000EE14D5 /* Frameworks */,
+				81FA43F12044097000EE14D5 /* Resources */,
+				4272A8167B31CAB015D9817A /* [CP] Embed Pods Frameworks */,
+				DF828C79527B2FCF90B8A626 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				81FA43FA2044097100EE14D5 /* PBXTargetDependency */,
+			);
+			name = "web3swift-macOS_Tests";
+			productName = "web3swift-macOS_Tests";
+			productReference = 81FA43F32044097000EE14D5 /* web3swift-macOS_Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -566,6 +624,10 @@
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
 					};
+					81FA43F22044097000EE14D5 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 1CD91AF61FD76910007BFB45 /* Build configuration list for PBXProject "web3swift" */;
@@ -582,8 +644,9 @@
 			projectRoot = "";
 			targets = (
 				1CD91AFB1FD76910007BFB45 /* web3swift-iOS */,
-				1CD91B2E1FD769A6007BFB45 /* web3swift_Tests */,
+				1CD91B2E1FD769A6007BFB45 /* web3swift-iOS_Tests */,
 				417715D320362916005C3E16 /* web3swift-macOS */,
+				81FA43F22044097000EE14D5 /* web3swift-macOS_Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -606,6 +669,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		417715D220362916005C3E16 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81FA43F12044097000EE14D5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -663,6 +733,38 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-web3swift-iOS/Pods-web3swift-iOS-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		4272A8167B31CAB015D9817A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-web3swift-macOS_Tests/Pods-web3swift-macOS_Tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire-macOS/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Alamofire-Synchronous-macOS/Alamofire_Synchronous.framework",
+				"${BUILT_PRODUCTS_DIR}/BigInt-macOS/BigInt.framework",
+				"${BUILT_PRODUCTS_DIR}/CryptoSwift-macOS/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Result-macOS/Result.framework",
+				"${BUILT_PRODUCTS_DIR}/SipHash-macOS/SipHash.framework",
+				"${BUILT_PRODUCTS_DIR}/libsodium-macOS/libsodium.framework",
+				"${BUILT_PRODUCTS_DIR}/secp256k1_ios-macOS/secp256k1_ios.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire_Synchronous.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SipHash.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libsodium.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1_ios.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-web3swift-macOS_Tests/Pods-web3swift-macOS_Tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		48322606683D458C51615DF4 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -674,6 +776,7 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire-Synchronous-iOS/Alamofire_Synchronous.framework",
 				"${BUILT_PRODUCTS_DIR}/BigInt-iOS/BigInt.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift-iOS/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Result-iOS/Result.framework",
 				"${BUILT_PRODUCTS_DIR}/SipHash-iOS/SipHash.framework",
 				"${BUILT_PRODUCTS_DIR}/libsodium-iOS/libsodium.framework",
 				"${BUILT_PRODUCTS_DIR}/secp256k1_ios-iOS/secp256k1_ios.framework",
@@ -684,6 +787,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire_Synchronous.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SipHash.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libsodium.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1_ios.framework",
@@ -691,6 +795,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-web3swift-iOS_Tests/Pods-web3swift-iOS_Tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6E4349FF8099C4D3F1F4669F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-web3swift-macOS_Tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		823273117A75E5B4A01500E1 /* [CP] Check Pods Manifest.lock */ = {
@@ -729,6 +851,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		DF828C79527B2FCF90B8A626 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-web3swift-macOS_Tests/Pods-web3swift-macOS_Tests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		FEB2C4DB5D16966EBFA7450F /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -759,6 +896,7 @@
 				817EBB1F2006265400E02EAA /* Base58.swift in Sources */,
 				818EABDA1FDC9A5C00E013FC /* Contract.swift in Sources */,
 				817EBB2520066E2B00E02EAA /* AbstractKeystore.swift in Sources */,
+				81C0FCF720441A1D00D82FAF /* TransactionSigner.swift in Sources */,
 				818ABD591FE95558002657BB /* Web3+Infura.swift in Sources */,
 				810B0F9A1FEC446B00CF0DA2 /* Web3+JSONRPC.swift in Sources */,
 				8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */,
@@ -780,7 +918,7 @@
 				8123E1C9200CBAF800B6D3AB /* Data+Extension.swift in Sources */,
 				817EBB23200649E000E02EAA /* RIPEMD160+StackOveflow.swift in Sources */,
 				81DDECCF1FDF004E0063684A /* Web3.swift in Sources */,
-				8123E1C3200CA0AE00B6D3AB /* Web3Swift+AbstractSigner.swift in Sources */,
+				8123E1C3200CA0AE00B6D3AB /* Web3+AbstractSigner.swift in Sources */,
 				815630002007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift in Sources */,
 				8123E1CB200CBB2200B6D3AB /* Array+Extension.swift in Sources */,
 				8113D2C71FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift in Sources */,
@@ -788,8 +926,11 @@
 				8113D31A1FD7F4C80074282C /* ABITypes.swift in Sources */,
 				817EBB162004FE4200E02EAA /* Web3+HttpProvider.swift in Sources */,
 				8113D31C1FD7F8980074282C /* ABIRecordParser.swift in Sources */,
+				81C0FCF220440EB500D82FAF /* Web3+Protocols.swift in Sources */,
+				81C0FCF420440F0900D82FAF /* Web3+Options.swift in Sources */,
 				815630042007BC8F00A0EC2F /* BIP39+WordLists.swift in Sources */,
 				8113D2CE1FD7E1590074282C /* EthereumTransaction.swift in Sources */,
+				81C0FD012044A89300D82FAF /* Web3+TransactionIntermediate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -813,6 +954,7 @@
 				41948120203630530065A83B /* Web3+Contract.swift in Sources */,
 				41948121203630530065A83B /* Web3+Utils.swift in Sources */,
 				41948122203630530065A83B /* Web3+Infura.swift in Sources */,
+				81C0FD062044A8D100D82FAF /* TransactionSigner.swift in Sources */,
 				41948123203630530065A83B /* Web3+JSONRPC.swift in Sources */,
 				41948124203630530065A83B /* Web3+Structures.swift in Sources */,
 				41948125203630530065A83B /* Web3+Methods.swift in Sources */,
@@ -825,7 +967,7 @@
 				4194812C203630530065A83B /* KeystoreManager.swift in Sources */,
 				4194812D203630530065A83B /* EthereumAddress.swift in Sources */,
 				4194812E203630530065A83B /* AbstractKeystore.swift in Sources */,
-				4194812F203630530065A83B /* Web3Swift+AbstractSigner.swift in Sources */,
+				4194812F203630530065A83B /* Web3+AbstractSigner.swift in Sources */,
 				41948130203630530065A83B /* BIP32Keystore.swift in Sources */,
 				41948131203630530065A83B /* BIP32KeystoreJSONStructure.swift in Sources */,
 				41948132203630530065A83B /* BIP32HDNode.swift in Sources */,
@@ -835,15 +977,26 @@
 				41948136203630530065A83B /* KeystoreV3JSONStructure.swift in Sources */,
 				41948137203630530065A83B /* EthereumTransaction.swift in Sources */,
 				41948138203630530065A83B /* CryptoExtensions.swift in Sources */,
+				81C0FD052044A8AE00D82FAF /* Web3+Protocols.swift in Sources */,
 				41948139203630530065A83B /* LibSecp256k1Extension.swift in Sources */,
 				4194813A203630530065A83B /* DictionaryLiteralJSONSerializer.swift in Sources */,
 				4194813B203630530065A83B /* NSRegularExpressionExtension.swift in Sources */,
+				81C0FD042044A8A700D82FAF /* Web3+Options.swift in Sources */,
 				4194813C203630530065A83B /* Base58.swift in Sources */,
+				81C0FD032044A89400D82FAF /* Web3+TransactionIntermediate.swift in Sources */,
 				4194813D203630530065A83B /* RIPEMD160+StackOveflow.swift in Sources */,
 				4194813E203630530065A83B /* Data+Extension.swift in Sources */,
 				4194813F203630530065A83B /* Dictionary+Extension.swift in Sources */,
 				41948140203630530065A83B /* Array+Extension.swift in Sources */,
 				41948141203630530065A83B /* String+Extension.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81FA43EF2044097000EE14D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81FA43F62044097100EE14D5 /* web3swift_macOS_Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -854,6 +1007,11 @@
 			isa = PBXTargetDependency;
 			target = 1CD91AFB1FD76910007BFB45 /* web3swift-iOS */;
 			targetProxy = 1CD91B351FD769A6007BFB45 /* PBXContainerItemProxy */;
+		};
+		81FA43FA2044097100EE14D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 417715D320362916005C3E16 /* web3swift-macOS */;
+			targetProxy = 81FA43F92044097100EE14D5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1170,6 +1328,42 @@
 			};
 			name = Release;
 		};
+		81FA43FB2044097100EE14D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA3F7E825AEBF3455D00150A /* Pods-web3swift-macOS_Tests.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 62V9CKQN89;
+				INFOPLIST_FILE = "web3swift-macOS_Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.bankexfoundation.web3swift-macOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		81FA43FC2044097100EE14D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E62EF5F091ED9F7B80CA8EE /* Pods-web3swift-macOS_Tests.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 62V9CKQN89;
+				INFOPLIST_FILE = "web3swift-macOS_Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.bankexfoundation.web3swift-macOS-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1191,7 +1385,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1CD91B371FD769A6007BFB45 /* Build configuration list for PBXNativeTarget "web3swift_Tests" */ = {
+		1CD91B371FD769A6007BFB45 /* Build configuration list for PBXNativeTarget "web3swift-iOS_Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1CD91B381FD769A6007BFB45 /* Debug */,
@@ -1205,6 +1399,15 @@
 			buildConfigurations = (
 				417715E620362916005C3E16 /* Debug */,
 				417715E720362916005C3E16 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		81FA43FD2044097100EE14D5 /* Build configuration list for PBXNativeTarget "web3swift-macOS_Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81FA43FB2044097100EE14D5 /* Debug */,
+				81FA43FC2044097100EE14D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
