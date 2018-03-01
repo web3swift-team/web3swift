@@ -564,6 +564,34 @@ class web3swiftTests: XCTestCase {
                 XCTAssert(name == "\"BANKEX\" project utility token", "Failed to create ERC20 name transaction")
         }
     }
+    
+    func testTransactionReceipt() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let result = web3.eth.getTransactionReceipt("0x127519412cefd773b952a5413a4467e9119654f59a34eca309c187bd9f3a195a")
+        switch result {
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        case .success(let response):
+            print(response)
+            XCTAssert(response.status == .ok)
+        }
+    }
+    
+    func testTransactionDetails() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let result = web3.eth.getTransactionDetails("0x127519412cefd773b952a5413a4467e9119654f59a34eca309c187bd9f3a195a")
+        switch result {
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        case .success(let response):
+            print(response)
+            XCTAssert(response.gasLimit == BigUInt(78423))
+        }
+    }
+    
+    
 //
 //    func testKeystoreManager(){
 //        let testBundle = Bundle(for: type(of: self))

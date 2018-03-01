@@ -17,7 +17,7 @@ public struct TransactionDetails {
     public var from: EthereumAddress
     public var to: EthereumAddress
     public var value: BigUInt
-    public var gas: BigUInt
+    public var gasLimit: BigUInt
     public var gasPrice: BigUInt
     public var input: Data
     
@@ -51,7 +51,7 @@ public struct TransactionDetails {
         guard let gUnwrapped = BigUInt(g.stripHexPrefix(), radix: 16) else {return nil}
         guard let gpUnwrapped = BigUInt(gp.stripHexPrefix(), radix: 16) else {return nil}
         value = vUnwrapped
-        gas = gUnwrapped
+        gasLimit = gUnwrapped
         gasPrice = gpUnwrapped
         input = Data(Array<UInt8>(hex: i.lowercased().stripHexPrefix()))
     }
@@ -71,6 +71,7 @@ public struct TransactionReceipt {
     public enum TXStatus {
         case ok
         case failed
+        case notYetProcessed
     }
     
     public init? (_ json: [String: Any]) {
@@ -82,7 +83,7 @@ public struct TransactionReceipt {
         guard let cgu = json["cumulativeGasUsed"] as? String else {return nil}
         guard let gu = json["gasUsed"] as? String else {return nil}
         guard let ls = json["logs"] as? Array<[String:Any]> else {return nil}
-        guard let st = json["status"] as? String else {return nil}
+        let st = json["status"] as? String
         
         transactionHash = h
         blockHash = bh
@@ -103,7 +104,9 @@ public struct TransactionReceipt {
             allLogs.append(log)
         }
         logs = allLogs
-        if st == "0x1" {
+        if (st == nil) {
+            status = TXStatus.notYetProcessed
+        } else if st == "0x1" {
             status = TXStatus.ok
         } else {
             status = TXStatus.failed

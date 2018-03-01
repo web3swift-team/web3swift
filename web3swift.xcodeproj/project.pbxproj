@@ -161,7 +161,7 @@
 		8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibSecp256k1Extension.swift; sourceTree = "<group>"; };
 		8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryLiteralJSONSerializer.swift; sourceTree = "<group>"; };
 		8113D2B81FD7E1590074282C /* KeystoreManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeystoreManager.swift; sourceTree = "<group>"; };
-		8113D2BB1FD7E1590074282C /* ABIEncoder_deprecated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ABIEncoder_deprecated.swift; sourceTree = "<group>"; };
+		8113D2BB1FD7E1590074282C /* ABIEncoder_deprecated.bak */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ABIEncoder_deprecated.bak; sourceTree = "<group>"; };
 		8113D2BC1FD7E1590074282C /* ABIDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ABIDecoder.swift; sourceTree = "<group>"; };
 		8113D2C31FD7E1590074282C /* EthereumTransaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EthereumTransaction.swift; sourceTree = "<group>"; };
 		8113D2FF1FD7F30F0074282C /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
@@ -392,7 +392,7 @@
 		8113D2BA1FD7E1590074282C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				8113D2BB1FD7E1590074282C /* ABIEncoder_deprecated.swift */,
+				8113D2BB1FD7E1590074282C /* ABIEncoder_deprecated.bak */,
 				8113D2BC1FD7E1590074282C /* ABIDecoder.swift */,
 				8125F0652047D9FF00A0F2FE /* ABIEncoder.swift */,
 				8113D3191FD7F4C80074282C /* ABITypes.swift */,
