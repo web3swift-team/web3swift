@@ -80,7 +80,7 @@ web3swift is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'web3swift', git: 'https://github.com/Vaultie/web3swift.git'
+pod 'web3swift', git: 'https://github.com/BANKEX/web3swift.git'
 ```
 ### Current functionality
 
