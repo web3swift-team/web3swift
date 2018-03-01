@@ -169,11 +169,11 @@ public struct EthereumTransaction: CustomStringConvertible {
         var params = TransactionParameters(from: from.address.lowercased(),
                                            to: self.to.address.lowercased())
         let gasEncoding = self.gasLimit.abiEncode(bits: 256)
-        params.gas = gasEncoding.head?.toHexString().addHexPrefix().stripLeadingZeroes()
+        params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
         let gasPriceEncoding = self.gasPrice.abiEncode(bits: 256)
-        params.gasPrice = gasPriceEncoding.head?.toHexString().addHexPrefix().stripLeadingZeroes()
+        params.gasPrice = gasPriceEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
         let valueEncoding = self.value.abiEncode(bits: 256)
-        params.value = valueEncoding.head?.toHexString().addHexPrefix().stripLeadingZeroes()
+        params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
         if (self.data != Data()) {
             params.data = self.data.toHexString().addHexPrefix()
         } else {

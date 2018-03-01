@@ -10,8 +10,8 @@ import Foundation
 import BigInt
 
 extension Data {
-    func setLengthLeft(_ toBytes: Int, isNegative:Bool = false ) -> Data? {
-        let existingLength = self.count;
+    func setLengthLeft(_ toBytes: UInt64, isNegative:Bool = false ) -> Data? {
+        let existingLength = UInt64(self.count)
         if (existingLength == toBytes) {
             return Data(self)
         } else if (existingLength > toBytes) {
@@ -19,16 +19,16 @@ extension Data {
         }
         var data:Data
         if (isNegative) {
-            data = Data(repeating: UInt8(255), count: toBytes - existingLength)
+            data = Data(repeating: UInt8(255), count: Int(toBytes - existingLength))
         } else {
-            data = Data(repeating: UInt8(0), count: toBytes - existingLength)
+            data = Data(repeating: UInt8(0), count: Int(toBytes - existingLength))
         }
         data.append(self)
         return data
     }
     
-    func setLengthRight(_ toBytes: Int, isNegative:Bool = false ) -> Data? {
-        let existingLength = self.count;
+    func setLengthRight(_ toBytes: UInt64, isNegative:Bool = false ) -> Data? {
+        let existingLength = UInt64(self.count)
         if (existingLength == toBytes) {
             return Data(self)
         } else if (existingLength > toBytes) {
@@ -37,9 +37,9 @@ extension Data {
         var data:Data = Data()
         data.append(self)
         if (isNegative) {
-            data.append(Data(repeating: UInt8(255), count: toBytes - existingLength))
+            data.append(Data(repeating: UInt8(255), count: Int(toBytes - existingLength)))
         } else {
-            data.append(Data(repeating: UInt8(0), count: toBytes - existingLength))
+            data.append(Data(repeating: UInt8(0), count:Int(toBytes - existingLength)))
         }
         return data
     }
@@ -51,7 +51,7 @@ extension BigInt {
             return self.magnitude.serialize()
         } else {
             let serializedLength = self.magnitude.serialize().count
-            let MAX = BigUInt(1) << serializedLength*8
+            let MAX = BigUInt(1) << (serializedLength*8)
             let twoComplement = MAX - self.magnitude
             return twoComplement.serialize()
         }
@@ -59,46 +59,46 @@ extension BigInt {
 }
 
 extension ABIElement.ParameterType {
-    func encode(_ value: AnyObject) -> (head:Data?, tail: Data?) {
+    func encode(_ value: AnyObject) -> Data? {
         switch self {
-        case .staticType(let type):
+        case .staticABIType(let type):
             return type.encode(value)
-        case .dynamicType(let type):
+        case .dynamicABIType(let type):
             return type.encode(value)
         }
     }
-    func encode(_ values: [AnyObject]) -> (head:Data?, tail: Data?) {
+    func encode(_ values: [AnyObject]) -> Data? {
         switch self {
-        case .staticType(let type):
+        case .staticABIType(let type):
             return type.encode(values)
-        case .dynamicType(let type):
+        case .dynamicABIType(let type):
             return type.encode(values)
         }
     }
 }
 
 extension BigUInt {
-    func abiEncode(bits: Int) -> (head:Data?, tail: Data?) {
+    func abiEncode(bits: UInt64) -> Data? {
         let data = self.serialize()
-        let paddedLength = Int(ceil((Double(bits)/8.0)))
+        let paddedLength = UInt64(ceil((Double(bits)/8.0)))
         let padded = data.setLengthLeft(paddedLength)
-        return (padded, Data())
+        return padded
     }
 }
 
 extension BigInt {
-    func abiEncode(bits: Int) -> (head:Data?, tail: Data?) {
-        let isNegative = self >= (BigInt(0))
+    func abiEncode(bits: UInt64) -> Data? {
+        let isNegative = self < (BigInt(0))
         let data = self.toTwosComplement()
-        let paddedLength = Int(ceil((Double(bits)/8.0)))
+        let paddedLength = UInt64(ceil((Double(bits)/8.0)))
         let padded = data.setLengthLeft(paddedLength, isNegative: isNegative)
-        return (padded, Data())
+        return padded
     }
 }
 
 extension ABIElement.ParameterType.StaticType {
     
-    func encode(_ value: AnyObject) -> (head:Data?, tail: Data?) {
+    func encode(_ value: AnyObject) -> Data? {
         switch self {
         case .uint(_):
             if let biguint = value as? BigUInt {
@@ -116,14 +116,16 @@ extension ABIElement.ParameterType.StaticType {
             }
         case .address:
             if let string = value as? String {
-                guard let data = Data.fromHex(string.lowercased().stripHexPrefix()) else {return (nil, nil)}
-                return (data.setLengthLeft(32), Data())
-            } else if let address = value as? EthereumAddress {
-                guard address.isValid else {return (nil, nil)}
+                let address = EthereumAddress(string)
+                guard address.isValid  else {return nil}
                 let data = address.addressData
-                return (data.setLengthLeft(32), Data())
+                return data.setLengthLeft(32)
+            } else if let address = value as? EthereumAddress {
+                guard address.isValid else {return nil}
+                let data = address.addressData
+                return data.setLengthLeft(32)
             } else if let data = value as? Data {
-                return (data.setLengthLeft(32), Data())
+                return data.setLengthLeft(32)
             }
         case .bool:
             if let bool = value as? Bool {
@@ -135,124 +137,105 @@ extension ABIElement.ParameterType.StaticType {
             }
         case .bytes(let length):
             if let string = value as? String {
+                var dataGuess: Data?
                 if string.hasHexPrefix() {
-                    guard let data = Data.fromHex(string.lowercased().stripHexPrefix()) else {return (nil, nil)}
-                    return (data.setLengthRight(length), Data())
-                } else {
-                    guard let data = string.data(using: .utf8) else {return (nil, nil)}
-                    if data.count > length {return (nil, nil)}
-                    return (data.setLengthRight(length), Data())
+                    dataGuess = Data.fromHex(string.lowercased().stripHexPrefix())
                 }
+                else {
+                    dataGuess = string.data(using: .utf8)
+                }
+                guard let data = dataGuess else {return nil}
+                if data.count > length {return nil}
+                return data.setLengthRight(32)
             } else if let addr = value as? EthereumAddress {
-                guard addr.isValid else {return (nil, nil)}
+                guard addr.isValid else {return nil}
                 let data = addr.addressData
-                return (data.setLengthRight(length), Data())
+                return data.setLengthRight(32)
             } else if let data = value as? Data {
-                return (data.setLengthRight(length), Data())
+                return data.setLengthRight(32)
             }
         default:
-            return (nil, nil)
+            return nil
         }
-        return (nil, nil)
+        return nil
     }
     
-    func encode(_ values: [AnyObject]) -> (head:Data?, tail: Data?) {
+    func encode(_ values: [AnyObject]) -> Data? {
         switch self {
         case let .array(type, length):
             if (values.count != length) {
-                return (nil, nil)
+                return nil
             }
-            var heads = Data()
-            var tails = Data()
+            var data = Data()
             for value in values {
-                let encoded = type.encode(value)
-                guard let head = encoded.head, let tail = encoded.tail else {return (nil, nil) }
-                heads.append(head)
-                tails.append(tail)
+                guard let encoded = type.encode(value) else {return nil}
+                data.append(encoded)
             }
-            return (heads, tails)
+            return data
         default:
-            return (nil, nil)
+            return nil
         }
     }
     
-
+    
 }
 
 extension ABIElement.ParameterType.DynamicType {
-    func encode(_ value: AnyObject) -> (head:Data?, tail: Data?) {
+    func encode(_ value: AnyObject) -> Data? {
         switch self {
         case .string:
             if let string = value as? String {
-                guard let data = string.data(using: .utf8) else {return (nil, nil)}
-                let length = data.count
-                let lengthToPad = Int(ceil(Double(data.count) / 32.0)) * 32
-                var tail = Data()
-                let encodedLen = BigUInt(length).abiEncode(bits: 256)
-                guard let lenHead = encodedLen.head, let _ = encodedLen.tail else {return (nil, nil)}
-                guard let paddedData = data.setLengthRight(lengthToPad) else {return (nil, nil)}
-                tail.append(lenHead)
-                tail.append(paddedData)
-                return (Data(), tail)
+                guard let data = string.data(using: .utf8) else {return nil}
+                let lengthToPad = UInt64(ceil(Double(data.count) / 32.0)) * 32
+                guard let lengthEncoded = BigUInt(data.count).abiEncode(bits: 256) else {return nil}
+                guard let paddedData = data.setLengthRight(lengthToPad) else {return nil}
+                return lengthEncoded + paddedData
             } else if let data = value as? Data {
-                let length = data.count
-                let lengthToPad = Int(ceil(Double(data.count) / 32.0)) * 32
-                var tail = Data()
-                let encodedLen = BigUInt(length).abiEncode(bits: 256)
-                guard let lenHead = encodedLen.head, let _ = encodedLen.tail else {return (nil, nil)}
-                guard let paddedData = data.setLengthRight(lengthToPad) else {return (nil, nil)}
-                tail.append(lenHead)
-                tail.append(paddedData)
-                return (Data(), tail)
+                let lengthToPad = UInt64(ceil(Double(data.count) / 32.0)) * 32
+                guard let lengthEncoded = BigUInt(data.count).abiEncode(bits: 256) else {return nil}
+                guard let paddedData = data.setLengthRight(lengthToPad) else {return (nil)}
+                return lengthEncoded + paddedData
             }
-            return (nil, nil)
+            return nil
         case .bytes:
             if let string = value as? String {
-                guard let data = Data.fromHex(string.lowercased().stripHexPrefix()) else {return (nil, nil) }
-                let length = data.count
-                let lengthToPad = Int(ceil(Double(data.count) / 32.0)) * 32
-                var tail = Data()
-                let encodedLen = BigUInt(length).abiEncode(bits: 256)
-                guard let lenHead = encodedLen.head, let _ = encodedLen.tail else {return (nil, nil)}
-                guard let paddedData = data.setLengthRight(lengthToPad) else {return (nil, nil)}
-                tail.append(lenHead)
-                tail.append(paddedData)
-                return (Data(), tail)
+                var dataGuess: Data?
+                if string.hasHexPrefix() {
+                    dataGuess = Data.fromHex(string.lowercased().stripHexPrefix())
+                }
+                else {
+                    dataGuess = string.data(using: .utf8)
+                }
+                guard let data = dataGuess else {return nil}
+                let lengthToPad = UInt64(ceil(Double(data.count) / 32.0)) * 32
+                guard let lengthEncoded = BigUInt(data.count).abiEncode(bits: 256) else {return nil}
+                guard let paddedData = data.setLengthRight(lengthToPad) else {return nil}
+                return lengthEncoded + paddedData
             } else if let data = value as? Data {
-                let length = data.count
-                let lengthToPad = Int(ceil(Double(data.count) / 32.0)) * 32
-                var tail = Data()
-                let encodedLen = BigUInt(length).abiEncode(bits: 256)
-                guard let lenHead = encodedLen.head, let _ = encodedLen.tail else {return (nil, nil)}
-                guard let paddedData = data.setLengthRight(lengthToPad) else {return (nil, nil)}
-                tail.append(lenHead)
-                tail.append(paddedData)
-                return (Data(), tail)
+                let lengthToPad = UInt64(ceil(Double(data.count) / 32.0)) * 32
+                guard let lengthEncoded = BigUInt(data.count).abiEncode(bits: 256) else {return nil}
+                guard let paddedData = data.setLengthRight(lengthToPad) else {return (nil)}
+                return lengthEncoded + paddedData
             }
         default:
-            return (nil, nil)
+            return nil
         }
-        return (nil, nil)
+        return nil
     }
     
-    func encode(_ values: [AnyObject]) -> (head:Data?, tail: Data?) {
+    func encode(_ values: [AnyObject]) -> Data? {
         switch self {
         case let .dynamicArray(type):
             var data = Data()
             for value in values {
-                let encoded = type.encode(value)
-                guard let encodedHead = encoded.head, let encodedTail = encoded.tail else {return (nil, nil)}
-                data.append(encodedHead)
+                guard let encoded = type.encode(value) else {return nil}
+                data.append(encoded)
             }
-            var tail = Data()
-            let length = data.count
-            let encodedLen = BigUInt(length).abiEncode(bits: 256)
-            guard let lenHead = encodedLen.head, let _ = encodedLen.tail else {return (nil, nil)}
-            tail.append(lenHead)
-            tail.append(data)
-            return (Data(), tail)
+            let length = values.count
+            guard let encodedLen = BigUInt(length).abiEncode(bits: 256) else {return nil}
+            return encodedLen + data
         default:
-            return (nil, nil)
+            return nil
         }
     }
 }
@@ -267,34 +250,14 @@ extension ABIElement {
         case .fallback(_):
             return nil
         case .function(let function):
-            var signature = function.methodEncoding
-            var heads = Data()
-            var tails = Data()
-            var tailsPointer = BigUInt(32)*BigUInt(function.inputs.count)
             guard parameters.count == function.inputs.count else {return nil}
-            for index in 0..<function.inputs.count {
-                let input  = function.inputs[index]
-                let parameter = parameters[index]
-                let encoded = input.type.encode(parameter)
-                guard let head = encoded.head, let tail = encoded.tail else {return nil}
-                if (head != Data() && tail == Data()) {
-                    heads.append(head)
-                    tailsPointer = tailsPointer + BigUInt(head.count)
-                } else if (head == Data() && tail != Data()) {
-                    let pointer = tailsPointer.abiEncode(bits: 256)
-                    guard let h = pointer.head, let _ = pointer.tail else {return nil}
-                    guard h != Data() else {return nil}
-                    heads.append(h)
-                    tailsPointer = tailsPointer + BigUInt(h.count)
-                    tails.append(tail)
-                    tailsPointer = tailsPointer + BigUInt(tail.count)
-                } else {
-                    return nil
-                }
-            }
-            heads.append(tails)
-            signature.append(heads)
-            return signature
+            let allTypes = function.inputs.flatMap({ (input) -> ABIElement.ParameterType in
+                return input.type
+            })
+            let signature = function.methodEncoding
+            guard let data = TypesEncoder.encode(types: allTypes, parameters: parameters) else {return nil}
+            return signature + data
         }
     }
 }
+

@@ -452,7 +452,7 @@ class web3swiftTests: XCTestCase {
             print(hex)
             XCTAssert(hex == "a9059cbb000000000000000000000000e6877a4d8806e9a9f12eb2e8561ea6c1db19978d0000000000000000000000000000000000000000000000000de0b6b3a7640000", "Failed to encode ERC20")
             let dummyTrue = BigUInt(1).abiEncode(bits: 256)
-            let data = dummyTrue.head!
+            let data = dummyTrue!
             let decoded = method[0].decodeReturnData(data)
             let ret1 = decoded!["0"] as? Bool
             let ret2 = decoded!["success"] as? Bool
@@ -574,7 +574,90 @@ class web3swiftTests: XCTestCase {
 //        XCTAssert(keystoreManager != nil, "Can't create keystore manager")
 //    }
     
+    func testABIencoding1()
+    {
+//        var a = abi.methodID('baz', [ 'uint32', 'bool' ]).toString('hex') + abi.rawEncode([ 'uint32', 'bool' ], [ 69, 1 ]).toString('hex')
+//        var b = 'cdcd77c000000000000000000000000000000000000000000000000000000000000000450000000000000000000000000000000000000000000000000000000000000001'
+//
+        
+        let data = TypesEncoder.encode(types: [ABIElement.ParameterType.staticABIType(.uint(bits: 32)), ABIElement.ParameterType.staticABIType(.bool)], parameters: [BigUInt(69), true] as [AnyObject])
+        XCTAssert(data != nil, "failed to encode")
+        let expected = "0x00000000000000000000000000000000000000000000000000000000000000450000000000000000000000000000000000000000000000000000000000000001"
+        XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
+    }
     
+    func testABIencoding2()
+    {
+        let data = TypesEncoder.encode(types: [ABIElement.ParameterType.dynamicABIType(.string)], parameters: ["dave"] as [AnyObject])
+        XCTAssert(data != nil, "failed to encode")
+        let expected = "0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000046461766500000000000000000000000000000000000000000000000000000000"
+        print(data?.toHexString().lowercased().addHexPrefix())
+        XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
+    }
+    
+    func testABIencoding3()
+    {
+//        var a = abi.methodID('sam', [ 'bytes', 'bool', 'uint256[]' ]).toString('hex') + abi.rawEncode([ 'bytes', 'bool', 'uint256[]' ], [ 'dave', true, [ 1, 2, 3 ] ]).toString('hex')
+//        var b = 'a5643bf20000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000464617665000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000003'
+
+        
+        let data = TypesEncoder.encode(types: [ABIElement.ParameterType.dynamicABIType(.bytes), ABIElement.ParameterType.staticABIType(.bool),
+                                               ABIElement.ParameterType.dynamicABIType(.dynamicArray(.uint(bits: 256)))], parameters: ["dave".data(using: .utf8)!, true, [BigUInt(1), BigUInt(2), BigUInt(3)] ] as [AnyObject])
+        XCTAssert(data != nil, "failed to encode")
+        let expected = "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000464617665000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000003"
+        print(data?.toHexString().lowercased().addHexPrefix())
+        XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
+    }
+    
+    func testABIencoding4()
+    {
+//        var a = abi.rawEncode([ 'int256' ], [ new BN('-19999999999999999999999999999999999999999999999999999999999999', 10) ]).toString('hex')
+//        var b = 'fffffffffffff38dd0f10627f5529bdb2c52d4846810af0ac000000000000001'
+        
+        let number = BigInt("-19999999999999999999999999999999999999999999999999999999999999", radix: 10)
+        let data = TypesEncoder.encode(types: [ABIElement.ParameterType.staticABIType(.int(bits: 256))],
+                                       parameters: [number!] as [AnyObject])
+        XCTAssert(data != nil, "failed to encode")
+        let expected = "0xfffffffffffff38dd0f10627f5529bdb2c52d4846810af0ac000000000000001"
+        print(data?.toHexString().lowercased().addHexPrefix())
+        XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
+    }
+    
+    func testABIencoding5()
+    {
+//        var a = abi.rawEncode([ 'string' ], [ ' hello world hello world hello world hello world  hello world hello world hello world hello world  hello world hello world hello world hello world hello world hello world hello world hello world' ]).toString('hex')
+//        var b = '000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c22068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c64202068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c64202068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c64000000000000000000000000000000000000000000000000000000000000'
+        
+        let string = " hello world hello world hello world hello world  hello world hello world hello world hello world  hello world hello world hello world hello world hello world hello world hello world hello world"
+        let data = TypesEncoder.encode(types: [ABIElement.ParameterType.dynamicABIType(.string)],
+                                       parameters: [string] as [AnyObject])
+        XCTAssert(data != nil, "failed to encode")
+        let expected = "0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c22068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c64202068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c64202068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c642068656c6c6f20776f726c64000000000000000000000000000000000000000000000000000000000000"
+        print(data?.toHexString().lowercased().addHexPrefix())
+        XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
+    }
+    
+    func testABIencoding6()
+    {
+//        var a = abi.methodID('f', [ 'uint', 'uint32[]', 'bytes10', 'bytes' ]).toString('hex') + abi.rawEncode([ 'uint', 'uint32[]', 'bytes10', 'bytes' ], [ 0x123, [ 0x456, 0x789 ], '1234567890', 'Hello, world!' ]).toString('hex')
+//        var b = '8be6524600000000000000000000000000000000000000000000000000000000000001230000000000000000000000000000000000000000000000000000000000000080313233343536373839300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000004560000000000000000000000000000000000000000000000000000000000000789000000000000000000000000000000000000000000000000000000000000000d48656c6c6f2c20776f726c642100000000000000000000000000000000000000'
+        
+        let data = TypesEncoder.encode(types: [ABIElement.ParameterType.staticABIType(.uint(bits: 256)),
+                                               ABIElement.ParameterType.dynamicABIType(.dynamicArray(.uint(bits: 32))),
+                                               ABIElement.ParameterType.staticABIType(.bytes(length: 10)),
+                                               ABIElement.ParameterType.dynamicABIType(.bytes)],
+                                       parameters: [BigUInt("123", radix: 16)!,
+                                                    [BigUInt("456", radix: 16)!, BigUInt("789", radix: 16)!] as [AnyObject],
+                                                    "1234567890",
+                                                    "Hello, world!"] as [AnyObject])
+        XCTAssert(data != nil, "failed to encode")
+        let expected = "0x00000000000000000000000000000000000000000000000000000000000001230000000000000000000000000000000000000000000000000000000000000080313233343536373839300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000004560000000000000000000000000000000000000000000000000000000000000789000000000000000000000000000000000000000000000000000000000000000d48656c6c6f2c20776f726c642100000000000000000000000000000000000000"
+        print(data?.toHexString().lowercased().addHexPrefix())
+        XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
+    }
+
+
+
     func testMakePrivateKey()
     {
         let privKey = SECP256K1.generatePrivateKey()

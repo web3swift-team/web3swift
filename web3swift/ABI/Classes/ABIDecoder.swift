@@ -161,7 +161,7 @@ extension ABIElement {
                 let name = "0"
                 var value:Any
                 switch function.outputs[0].type {
-                case .dynamicType(let type) :
+                case .dynamicABIType(let type) :
                     switch type {
                     case .string:
                         value = ""
@@ -188,7 +188,7 @@ extension ABIElement {
             for output in function.outputs{
                 let expectedType = output.type
                 switch expectedType {
-                case .staticType(let type):
+                case .staticABIType(let type):
                     let decoded = type.decode(expectedType: type, data: dataForProcessing, tailPointer: BigUInt(0))
                     guard let value = decoded.value, let consumed = decoded.bytesConsumed else {break}
                     let name = "\(i)"
@@ -203,7 +203,7 @@ extension ABIElement {
                     } else {
                         return nil
                     }
-                case .dynamicType(let type):
+                case .dynamicABIType(let type):
                     let decoded = type.decode(expectedType: type, data: dataForProcessing, tailPointer: tailPointer)
                     guard let value = decoded.value, let consumed = decoded.bytesConsumed else {break}
                     let name = "\(i)"
@@ -248,7 +248,7 @@ extension ABIElement {
                     j = j + 1
                     let expectedType = el.type
                     switch expectedType {
-                    case .staticType(let type):
+                    case .staticABIType(let type):
                         let decoded = type.decode(expectedType: type, data: elementData, tailPointer: BigUInt(0))
                         guard let value = decoded.value, let _ = decoded.bytesConsumed else {break}
                         let name = "\(i)"
@@ -256,7 +256,7 @@ extension ABIElement {
                         if el.name != "" {
                             eventContent[el.name] = value
                         }
-                    case .dynamicType(let type):
+                    case .dynamicABIType(let type):
                         let decoded = type.decode(expectedType: type, data: elementData, tailPointer: BigUInt(0))
                         guard let value = decoded.value, let _ = decoded.bytesConsumed else {break}
                         let name = "\(i)"
@@ -268,7 +268,7 @@ extension ABIElement {
                 } else {
                     let expectedType = el.type
                     switch expectedType {
-                    case .staticType(let type):
+                    case .staticABIType(let type):
                         let decoded = type.decode(expectedType: type, data: dataForProcessing, tailPointer: BigUInt(0))
                         guard let value = decoded.value, let consumed = decoded.bytesConsumed else {break}
                         let name = "\(i)"
@@ -282,7 +282,7 @@ extension ABIElement {
                         } else {
                             return nil
                         }
-                    case .dynamicType(let type):
+                    case .dynamicABIType(let type):
                         let decoded = type.decode(expectedType: type, data: dataForProcessing, tailPointer: tailPointer)
                         guard let value = decoded.value, let consumed = decoded.bytesConsumed else {break}
                         let name = "\(i)"

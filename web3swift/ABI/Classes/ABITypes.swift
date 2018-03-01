@@ -41,7 +41,21 @@ protocol AbiValidating {
     var isValid: Bool { get }
 }
 
+protocol ABIElementPropertiesProtocol {
+    var isArray: Bool {get}
+    var arraySize: ABIElement.ArraySize {get}
+    var subtype: ABIElement.ParameterType? {get}
+    var memoryUsage: UInt64 {get}
+}
+
 public enum ABIElement {
+    
+    enum ArraySize { //bytes for convenience
+        case staticSize(UInt64)
+        case dynamicSize
+        case notArray
+    }
+    
     case function(Function)
     case constructor(Constructor)
     case fallback(Fallback)
@@ -89,25 +103,61 @@ public enum ABIElement {
     
     /// Specifies the type that parameters in a contract have.
     public enum ParameterType {
-        case dynamicType(DynamicType)
-        case staticType(StaticType)
+        case dynamicABIType(DynamicType)
+        case staticABIType(StaticType)
         
         /// Denotes any type that has a fixed length.
-        public enum StaticType {
+        public enum StaticType:ABIElementPropertiesProtocol {
+            var isArray: Bool {
+                switch self {
+                case .array(_, length: _):
+                    return true
+                default:
+                    return false
+                }
+            }
+            
+            var arraySize: ABIElement.ArraySize {
+                switch self {
+                case .array(_, length: let length):
+                    return ABIElement.ArraySize.staticSize(length)
+                default:
+                    return ABIElement.ArraySize.notArray
+                }
+            }
+            
+            var subtype: ABIElement.ParameterType? {
+                switch self {
+                case .array(let type, length: _):
+                    return ParameterType.staticABIType(type)
+                default:
+                    return nil
+                }
+            }
+            
+            var memoryUsage: UInt64 {
+                switch self {
+                case .array(_, length: let length):
+                    return 32*length
+                default:
+                    return 32
+                }
+            }
+            
             /// uint<M>: unsigned integer type of M bits, 0 < M <= 256, M % 8 == 0. e.g. uint32, uint8, uint256.
-            case uint(bits: Int)
+            case uint(bits: UInt64)
             /// int<M>: two's complement signed integer type of M bits, 0 < M <= 256, M % 8 == 0.
-            case int(bits: Int)
+            case int(bits: UInt64)
             /// address: equivalent to uint160, except for the assumed interpretation and language typing.
             case address
             /// bool: equivalent to uint8 restricted to the values 0 and 1
             case bool
             /// bytes<M>: binary type of M bytes, 0 < M <= 32.
-            case bytes(length: Int)
+            case bytes(length: UInt64)
             /// function: equivalent to bytes24: an address, followed by a function selector
-            case function
+//            case function
             /// <type>[M]: a fixed-length array of the given fixed-length type.
-            indirect case array(StaticType, length: Int)
+            indirect case array(StaticType, length: UInt64)
             
             // The specification also defines the following types:
             // uint, int: synonyms for uint256, int256 respectively (not to be used for computing the function selector).
@@ -117,6 +167,52 @@ public enum ABIElement {
         
         /// Denotes any type that has a variable length.
         public enum DynamicType {
+            var isArray: Bool {
+                switch self {
+                case .dynamicArray(_):
+                    return true
+                case .arrayOfDynamicTypes(length: _):
+                    return true
+                default:
+                    return false
+                }
+            }
+            
+            var arraySize: ABIElement.ArraySize {
+                switch self {
+                case .dynamicArray(_):
+                    return ABIElement.ArraySize.dynamicSize
+                case .arrayOfDynamicTypes(_, length: let length):
+                    return ABIElement.ArraySize.staticSize(length)
+                default:
+                    return ABIElement.ArraySize.notArray
+                }
+            }
+            
+            var subtype: ABIElement.ParameterType? {
+                switch self {
+                case .dynamicArray(let type):
+                    return ParameterType.staticABIType(type)
+                case .arrayOfDynamicTypes(let type, length: _):
+                    return ParameterType.dynamicABIType(type)
+                default:
+                    return nil
+                }
+            }
+            
+            var memoryUsage: UInt64 {
+                switch self {
+//                case .dynamicArray(_):
+//                    return 32
+//                case .arrayOfDynamicTypes(_, length: _):
+//                    return 32
+                default:
+                    return 32
+                }
+            }
+            
+            
+            
             /// bytes: dynamic sized byte sequence.
             case bytes
             /// string: dynamic sized unicode string assumed to be UTF-8 encoded.
@@ -124,7 +220,7 @@ public enum ABIElement {
             /// <type>[]: a variable-length array of the given fixed-length type.
             case dynamicArray(StaticType)
             /// fixed length array of dynamic types is considered as dynamic type.
-            indirect case arrayOfDynamicTypes(DynamicType, length: Int)
+            indirect case arrayOfDynamicTypes(DynamicType, length: UInt64)
         }
     }
 }
@@ -151,9 +247,9 @@ extension ABIElement.ParameterType.DynamicType: Equatable {
 extension ABIElement.ParameterType: Equatable {
     public static func ==(lhs: ABIElement.ParameterType, rhs: ABIElement.ParameterType) -> Bool {
         switch (lhs, rhs) {
-        case (.dynamicType(let value1), .dynamicType(let value2)):
+        case (.dynamicABIType(let value1), .dynamicABIType(let value2)):
             return value1 == value2
-        case (.staticType(let value1), .staticType(let value2)):
+        case (.staticABIType(let value1), .staticABIType(let value2)):
             return value1 == value2
         default:
             return false
@@ -175,8 +271,8 @@ extension ABIElement.ParameterType.StaticType: Equatable {
             return true
         case let (.bytes(length1), .bytes(length2)):
             return length1 == length2
-        case (.function, .function):
-            return true
+//        case (.function, .function):
+//            return true
         case let (.array(type1, length1), .array(type2, length2)):
             return type1 == type2 && length1 == length2
         default:
@@ -189,9 +285,9 @@ extension ABIElement.ParameterType.StaticType: Equatable {
 extension ABIElement.ParameterType: AbiValidating {
     public var isValid: Bool {
         switch self {
-        case .staticType(let type):
+        case .staticABIType(let type):
             return type.isValid
-        case .dynamicType(let type):
+        case .dynamicABIType(let type):
             return type.isValid
         }
     }
@@ -255,9 +351,9 @@ protocol AbiEncoding {
 extension ABIElement.ParameterType: AbiEncoding {
     public var abiRepresentation: String {
         switch self {
-        case .staticType(let type):
+        case .staticABIType(let type):
             return type.abiRepresentation
-        case .dynamicType(let type):
+        case .dynamicABIType(let type):
             return type.abiRepresentation
         }
     }
@@ -276,8 +372,8 @@ extension ABIElement.ParameterType.StaticType: AbiEncoding {
             return "bool"
         case .bytes(let length):
             return "bytes\(length)"
-        case .function:
-            return "function"
+//        case .function:
+//            return "function"
         case let .array(type, length):
             return "\(type.abiRepresentation)[\(length)]"
         }

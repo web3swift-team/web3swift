@@ -182,34 +182,34 @@ fileprivate func exactMatchType(from string: String, length:Int? = nil, staticAr
         
     // Static Types
     case .address?:
-        return .staticType(.address)
+        return .staticABIType(.address)
     case .uint?:
-        return .staticType(.uint(bits: length != nil ? length! : 256))
+        return .staticABIType(.uint(bits: length != nil ? UInt64(length!) : 256))
     case .int?:
-        return .staticType(.int(bits: length != nil ? length! : 256))
+        return .staticABIType(.int(bits: length != nil ? UInt64(length!) : 256))
     case .bool?:
-        return .staticType(.bool)
-    case .function?:
-        return .staticType(.function)
+        return .staticABIType(.bool)
+//    case .function?:
+//        return .staticABIType(.function)
         
     // Dynamic Types
     case .bytes?:
-        if (length != nil) { return .staticType(.bytes(length: length!)) }
-        return .dynamicType(.bytes)
+        if (length != nil) { return .staticABIType(.bytes(length: UInt64(length!))) }
+        return .dynamicABIType(.bytes)
     case .string?:
-        return .dynamicType(.string)
+        return .dynamicABIType(.string)
     default:
         guard let arrayLen = staticArrayLength else {return nil}
         guard let baseType = exactMatchType(from: string, length: length) else {return nil}
         switch baseType{
-        case .staticType(let unwrappedType):
+        case .staticABIType(let unwrappedType):
             if (staticArrayLength == 0) {
-                return .dynamicType(.dynamicArray(unwrappedType))
+                return .dynamicABIType(.dynamicArray(unwrappedType))
             }
-            return .staticType(.array(unwrappedType, length: arrayLen))
-        case .dynamicType(let unwrappedType):
+            return .staticABIType(.array(unwrappedType, length: UInt64(arrayLen)))
+        case .dynamicABIType(let unwrappedType):
             if (staticArrayLength == 0) {
-                return .dynamicType(.arrayOfDynamicTypes(unwrappedType, length: arrayLen))
+                return .dynamicABIType(.arrayOfDynamicTypes(unwrappedType, length: UInt64(arrayLen)))
             }
             return nil
         }
@@ -236,7 +236,7 @@ fileprivate func arrayMatch(from string: String) throws -> ABIElement.ParameterT
         guard let typeString = match["type"] else {return nil}
         guard let arrayLength = Int(match["arrayLength"]!) else {throw ParsingError.parameterTypeInvalid}
         guard var type = exactMatchType(from: typeString, staticArrayLength: arrayLength) else {return nil}
-        guard case .staticType(_) = type else {throw ParsingError.parameterTypeInvalid}
+        guard case .staticABIType(_) = type else {throw ParsingError.parameterTypeInvalid}
         if (match.keys.contains("typeLength")) {
             guard let typeLength = Int(match["typeLength"]!) else {throw ParsingError.parameterTypeInvalid}
             guard let canonicalType = exactMatchType(from: typeString, length: typeLength, staticArrayLength: arrayLength) else {throw ParsingError.parameterTypeInvalid}
@@ -250,7 +250,7 @@ fileprivate func arrayMatch(from string: String) throws -> ABIElement.ParameterT
             typeLength = Int(typeLengthString)
         }
         guard var type = exactMatchType(from: typeString, length: typeLength, staticArrayLength: 0) else {throw ParsingError.parameterTypeInvalid}
-        guard case .staticType(_) = type else {return nil}
+        guard case .staticABIType(_) = type else {return nil}
         if (match.keys.contains("typeLength")) {
             guard let typeLength = Int(match["typeLength"]!) else {throw ParsingError.parameterTypeInvalid}
             guard let canonicalType = exactMatchType(from: typeString, length: typeLength, staticArrayLength: 0) else {throw ParsingError.parameterTypeInvalid}
