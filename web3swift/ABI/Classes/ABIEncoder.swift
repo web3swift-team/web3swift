@@ -168,8 +168,22 @@ extension ABIElement.ParameterType.StaticType {
             }
             var data = Data()
             for value in values {
-                guard let encoded = type.encode(value) else {return nil}
-                data.append(encoded)
+                if let arrayOfValues = value as? [AnyObject] {
+                    guard case .array(let subtype, length: let sublength) = type else {return nil}
+                    guard sublength == arrayOfValues.count else {return nil}
+                    guard let encoded = TypesEncoder.encode(types: Array(repeating: ABIElement.ParameterType.staticABIType(subtype), count: Int(sublength)), parameters: arrayOfValues) else {
+                        return nil
+                    }
+//                    guard let encoded = type.encode(arrayOfValues) else {
+//                        return nil
+//                    }
+                    data.append(encoded)
+                } else {
+                    guard let encoded = type.encode(value) else {
+                        return nil
+                    }
+                    data.append(encoded)
+                }
             }
             return data
         default:
@@ -234,6 +248,17 @@ extension ABIElement.ParameterType.DynamicType {
             let length = values.count
             guard let encodedLen = BigUInt(length).abiEncode(bits: 256) else {return nil}
             return encodedLen + data
+        case let .arrayOfDynamicTypes(type, length: length):
+            let typesArray = Array(repeating: ABIElement.ParameterType.dynamicABIType(type), count: Int(length))
+            guard let data = TypesEncoder.encode(types: typesArray, parameters: values) else {return nil}
+            return data
+//            var data = Data()
+//            for value in values {
+//                guard let encoded = type.encode(value) else {return nil}
+//                data.append(encoded)
+//            }
+//            guard let encodedLen = BigUInt(length).abiEncode(bits: 256) else {return nil}
+//            return encodedLen + data
         default:
             return nil
         }

@@ -18,7 +18,7 @@ extension TypesEncoder {
         guard types.count == parameters.count else {return nil}
         var head = Data()
         var tail = Data()
-        let headExpectedLength = 32*parameters.count
+//        let headExpectedLength = 32*parameters.count
         var tailPointer = BigUInt(32)*BigUInt(types.count)
         
         for index in 0..<types.count {
@@ -47,7 +47,8 @@ extension TypesEncoder {
                 head.append(encodedParameter)
             }
         }
-        guard head.count == headExpectedLength else {return nil}
+        //TODO find another way
+//        guard head.count == headExpectedLength else {return nil}
         head.append(tail)
         return head
     }

@@ -656,6 +656,30 @@ class web3swiftTests: XCTestCase {
         XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
     }
 
+    func testABIencoding7()
+    {
+//        uint128[2][3]
+        var data: Data?
+        let subarrayOfLength2 = ABIElement.ParameterType.staticABIType(.array(.uint(bits: 256), length: 2))
+        switch subarrayOfLength2 {
+        case .staticABIType(let type):
+            let arrayOfLength3OfSubarrays = ABIElement.ParameterType.staticABIType(.array(type, length: 3))
+            data = TypesEncoder.encode(types: [arrayOfLength3OfSubarrays], parameters: [[[BigUInt("1"),
+                                                                                             BigUInt("2")] as [AnyObject],
+                                                                                            [BigUInt("3"),
+                                                                                             BigUInt("4")] as [AnyObject],
+                                                                                            [BigUInt("5"),
+                                                                                             BigUInt("6")] as [AnyObject]]] as [AnyObject])
+        default:
+            XCTFail()
+        }
+        XCTAssert(data != nil, "failed to encode")
+        let expected = "0x000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000050000000000000000000000000000000000000000000000000000000000000006"
+        print(data?.toHexString().lowercased().addHexPrefix())
+        XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
+    }
+
+    
 
 
     func testMakePrivateKey()

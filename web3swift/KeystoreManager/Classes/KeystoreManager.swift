@@ -69,6 +69,18 @@ public class KeystoreManager: AbstractKeystore {
         }
     }
     
+    public init(_ keystores: [EthereumKeystoreV3]) {
+        self.isHDKeystore = false
+        self._keystores = keystores
+        self.path = ""
+    }
+    
+    public init(_ keystores: [BIP32Keystore]) {
+        self.isHDKeystore = true
+        self._bip32keystores = keystores
+        self.path = "bip32"
+    }
+    
     private init?(_ path: String, scanForHDwallets: Bool = false, suffix: String? = nil) throws {
         if (scanForHDwallets) {
             self.isHDKeystore = true
