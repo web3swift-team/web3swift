@@ -73,6 +73,8 @@ public struct JSONRPCparams: Encodable{
                 try container.encode(p)
             } else if let p = par as? String {
                 try container.encode(p)
+            } else if let p = par as? Bool {
+                try container.encode(p)
             }
         }
     }

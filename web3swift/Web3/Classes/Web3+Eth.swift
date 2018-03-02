@@ -275,4 +275,57 @@ extension web3.Eth {
         }
     }
     
+    public func getBlockByHash(_ hashString: String, fullTransactions: Bool = false) -> Result<AnyObject,Web3Error> {
+        guard let hash = Data.fromHex(hashString) else {return Result.failure(Web3Error.inputError("Hash should be a hex string"))}
+        return getBlockByHash(hash, fullTransactions: fullTransactions)
+    }
+    
+    public func getBlockByHash(_ hash: Data, fullTransactions: Bool = false) -> Result<AnyObject,Web3Error> {
+        var request = JSONRPCrequest()
+        request.method = JSONRPCmethod.getBlockByHash
+        let params = [hash.toHexString().addHexPrefix(), fullTransactions] as Array<Encodable>
+        let pars = JSONRPCparams(params: params)
+        request.params = pars
+        let response = self.provider.send(request: request)
+        let result = ResultUnwrapper.getResponse(response)
+        switch result {
+        case .failure(let error):
+            return Result.failure(error)
+        case .success(let payload):
+            guard let resultArray = payload as? [String:AnyObject] else {
+                return Result.failure(Web3Error.dataError)
+            }
+            return Result(1 as AnyObject)
+        }
+    }
+    
+    public func getBlockByNumber(_ number: Int, fullTransactions: Bool = false) -> Result<AnyObject,Web3Error> {
+        let block = String(number, radix: 16).addHexPrefix()
+        return getBlockByNumber(block, fullTransactions: fullTransactions)
+    }
+    
+    public func getBlockByNumber(_ number: BigUInt, fullTransactions: Bool = false) -> Result<AnyObject,Web3Error> {
+        let block = String(number, radix: 16).addHexPrefix()
+        return getBlockByNumber(block, fullTransactions: fullTransactions)
+    }
+    
+    public func getBlockByNumber(_ block:String, fullTransactions: Bool = false) -> Result<AnyObject,Web3Error> {
+        var request = JSONRPCrequest()
+        request.method = JSONRPCmethod.getBlockByNumber
+        let params = [block, fullTransactions] as Array<Encodable>
+        let pars = JSONRPCparams(params: params)
+        request.params = pars
+        let response = self.provider.send(request: request)
+        let result = ResultUnwrapper.getResponse(response)
+        switch result {
+        case .failure(let error):
+            return Result.failure(error)
+        case .success(let payload):
+            guard let resultArray = payload as? [String:AnyObject] else {
+                return Result.failure(Web3Error.dataError)
+            }
+            return Result(1 as AnyObject)
+        }
+    }
+    
 }

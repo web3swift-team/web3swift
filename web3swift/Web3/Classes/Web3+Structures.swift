@@ -134,7 +134,7 @@ public struct EventLog {
         removed = rm == 1 ? true : false
         var tops = [Data]()
         for t in tpc {
-            let topic = Data(Array<UInt8>(hex: t.lowercased().stripHexPrefix()))
+            guard let topic = Data.fromHex(t) else {return nil}
             tops.append(topic)
         }
         topics = tops

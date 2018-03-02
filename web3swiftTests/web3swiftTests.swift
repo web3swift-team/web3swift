@@ -575,7 +575,70 @@ class web3swiftTests: XCTestCase {
             }
         }
     }
+    
+    func testBloom() {
+        let positive = [
+                "testtest",
+                "test",
+                "hallo",
+                "other",
+            ]
+        let negative = [
+                "tes",
+                "lo",
+            ]
+        var bloom = EthereumBloomFilter()
+        for str in positive {
+            let data = str.data(using: .utf8)!
+            let oldBytes = bloom.bytes
+            bloom.add(BigUInt(data))
+            let newBytes = bloom.bytes
+            if (newBytes != oldBytes) {
+                print("Added new bits")
+            }
+        }
+        for str in positive {
+            let data = str.data(using: .utf8)!
+            XCTAssert(bloom.lookup(data), "Failed")
+        }
+        for str in negative {
+            let data = str.data(using: .utf8)!
+            XCTAssert(bloom.lookup(data) == false, "Failed")
+        }
+    }
 
+    func testGetBlockByHash() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let response = web3.eth.getBlockByHash("0x6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695", fullTransactions: true)
+        switch response {
+        case .failure(_):
+            XCTFail()
+        case .success(let result):
+            print(result)
+        }
+    }
+    
+    func testGetBlockByNumber1() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let response = web3.eth.getBlockByNumber("latest", fullTransactions: true)
+        switch response {
+        case .failure(_):
+            XCTFail()
+        case .success(let result):
+            print(result)
+        }
+    }
+    
+    func testGetBlockByNumber2() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let response = web3.eth.getBlockByNumber(5184323, fullTransactions: true)
+        switch response {
+        case .failure(_):
+            XCTFail()
+        case .success(let result):
+            print(result)
+        }
+    }
 
     func testMakePrivateKey()
     {
