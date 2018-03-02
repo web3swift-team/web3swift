@@ -211,8 +211,6 @@ public enum ABIElement {
                 }
             }
             
-            
-            
             /// bytes: dynamic sized byte sequence.
             case bytes
             /// string: dynamic sized unicode string assumed to be UTF-8 encoded.

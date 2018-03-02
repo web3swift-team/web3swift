@@ -8,6 +8,7 @@
 
 import Foundation
 import BigInt
+import CryptoSwift
 
 extension Web3 {
     public struct Utils{
@@ -173,5 +174,24 @@ extension Web3.Utils {
         }
         guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
         return Web3.Utils.publicToAddress(publicKey)
+    }
+    
+    
+    /// returns Ethereum varial of sha3 (keccak256) of data. Returns nil is data is empty
+    static public func keccak256(_ data: Data) -> Data? {
+        if data.count == 0 {return nil}
+        return data.sha3(.keccak256)
+    }
+    
+    /// returns Ethereum varial of sha3 (keccak256) of data. Returns nil is data is empty
+    static public func sha3(_ data: Data) -> Data? {
+        if data.count == 0 {return nil}
+        return data.sha3(.keccak256)
+    }
+    
+    /// returns sha256 of data. Returns nil is data is empty
+    static public func sha256(_ data: Data) -> Data? {
+        if data.count == 0 {return nil}
+        return data.sha256()
     }
 }

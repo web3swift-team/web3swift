@@ -23,8 +23,10 @@ public enum ParsingError: Error {
 }
 
 enum TypeMatchingExpressions {
-    static var typeRegex = "^(?<type>[^0-9\\s]*?)(?<typeLength>[1-9][0-9]*)?$"
-    static var arrayRegex = "^(?<type>[^0-9\\s]*?)(?<typeLength>[1-9][0-9]*)?\\[(?<arrayLength>[1-9][0-9]*)?\\]$"
+//    static var typeRegex = "^(?<type>[^0-9\\s]*?)(?<typeLength>[1-9][0-9]*)?$"
+    static var typeRegex = "^([^0-9\\s]*?)([1-9][0-9]*)?$"
+//    static var arrayRegex = "^(?<type>[^0-9\\s]*?)(?<typeLength>[1-9][0-9]*)?\\[(?<arrayLength>[1-9][0-9]*)?\\]$"
+    static var arrayRegex = "^([^0-9\\s]*?)([1-9][0-9]*)?(\\[([1-9][0-9]*)?\\])*?$"
 }
 
 
@@ -150,6 +152,11 @@ extension ABIInput {
     }
 }
 
+public struct ABITypeParser {
+    public static func parseTypeString(_ string:String) throws -> ABIElement.ParameterType {
+        return try parseType(from: string)
+    }
+}
 
 fileprivate func parseType(from string: String) throws -> ABIElement.ParameterType {
     let possibleType = try typeMatch(from: string) ?? arrayMatch(from: string)
@@ -157,7 +164,7 @@ fileprivate func parseType(from string: String) throws -> ABIElement.ParameterTy
         throw ParsingError.parameterTypeInvalid
     }
     guard foundType.isValid else {
-            throw ParsingError.parameterTypeInvalid
+        throw ParsingError.parameterTypeInvalid
     }
     return foundType
 }
@@ -176,7 +183,7 @@ fileprivate enum ExactMatchParameterType: String {
     case string
 }
 
-fileprivate func exactMatchType(from string: String, length:Int? = nil, staticArrayLength:Int? = nil) -> ABIElement.ParameterType? {
+fileprivate func exactMatchType(from string: String, length:UInt64? = nil, staticArrayLength:UInt64? = nil) -> ABIElement.ParameterType? {
     // Check all the exact matches by trying to create a ParameterTypeKey from it.
     switch ExactMatchParameterType(rawValue: string) {
         
@@ -216,47 +223,176 @@ fileprivate func exactMatchType(from string: String, length:Int? = nil, staticAr
     }
 }
 
-fileprivate func typeMatch(from string: String) throws -> ABIElement.ParameterType?{
+//fileprivate func typeMatch(from string: String) throws -> ABIElement.ParameterType?{
+//    let matcher = try NSRegularExpression(pattern: TypeMatchingExpressions.typeRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
+//    let match = matcher.captureGroups(string: string, options: NSRegularExpression.MatchingOptions.anchored)
+//    guard let typeString = match["type"] else {return nil}
+//    guard let type = exactMatchType(from: typeString) else {return nil}
+//    if (match.keys.contains("typeLength")) {
+//        guard let typeLength = Int(match["typeLength"]!) else {throw ParsingError.parameterTypeInvalid}
+//        guard let canonicalType = exactMatchType(from: typeString, length: typeLength) else {throw ParsingError.parameterTypeInvalid}
+//        return canonicalType
+//    }
+//    return type
+//}
+
+fileprivate func typeMatch(from string: String) throws -> ABIElement.ParameterType? {
     let matcher = try NSRegularExpression(pattern: TypeMatchingExpressions.typeRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
-    let match = matcher.captureGroups(string: string, options: NSRegularExpression.MatchingOptions.anchored)
-    guard let typeString = match["type"] else {return nil}
+    let match = matcher.matches(in: string, options: NSRegularExpression.MatchingOptions.anchored, range: string.fullNSRange)
+    guard match.count == 1 else {return nil}
+    guard match[0].numberOfRanges == 3 else {return nil}
+    let typeString = String(string[Range(match[0].range(at: 1), in: string)!])
     guard let type = exactMatchType(from: typeString) else {return nil}
-    if (match.keys.contains("typeLength")) {
-        guard let typeLength = Int(match["typeLength"]!) else {throw ParsingError.parameterTypeInvalid}
-        guard let canonicalType = exactMatchType(from: typeString, length: typeLength) else {throw ParsingError.parameterTypeInvalid}
-        return canonicalType
-    }
-    return type
+    guard let typeRange = Range(match[0].range(at: 2), in: string) else {return type}
+    let typeLengthString = String(string[typeRange])
+    guard let typeLength = UInt64(typeLengthString) else {throw ParsingError.parameterTypeInvalid}
+    guard let canonicalType = exactMatchType(from: typeString, length: typeLength) else {throw ParsingError.parameterTypeInvalid}
+    return canonicalType
 }
 
-fileprivate func arrayMatch(from string: String) throws -> ABIElement.ParameterType?{
-    let matcher = try NSRegularExpression(pattern: TypeMatchingExpressions.arrayRegex, options: [])
-    let match = matcher.captureGroups(string: string, options: NSRegularExpression.MatchingOptions.anchored)
-    if match.keys.contains("arrayLength") {
-        guard let typeString = match["type"] else {return nil}
-        guard let arrayLength = Int(match["arrayLength"]!) else {throw ParsingError.parameterTypeInvalid}
-        guard var type = exactMatchType(from: typeString, staticArrayLength: arrayLength) else {return nil}
-        guard case .staticABIType(_) = type else {throw ParsingError.parameterTypeInvalid}
-        if (match.keys.contains("typeLength")) {
-            guard let typeLength = Int(match["typeLength"]!) else {throw ParsingError.parameterTypeInvalid}
-            guard let canonicalType = exactMatchType(from: typeString, length: typeLength, staticArrayLength: arrayLength) else {throw ParsingError.parameterTypeInvalid}
-            type = canonicalType
+
+//fileprivate func arrayMatch(from string: String) throws -> ABIElement.ParameterType?{
+//    let matcher = try NSRegularExpression(pattern: TypeMatchingExpressions.arrayRegex, options: [])
+//    let match = matcher.captureGroups(string: string, options: NSRegularExpression.MatchingOptions.anchored)
+//    if match.keys.contains("arrayLength") {
+//        guard let typeString = match["type"] else {return nil}
+//        guard let arrayLength = Int(match["arrayLength"]!) else {throw ParsingError.parameterTypeInvalid}
+//        guard var type = exactMatchType(from: typeString, staticArrayLength: arrayLength) else {return nil}
+//        guard case .staticABIType(_) = type else {throw ParsingError.parameterTypeInvalid}
+//        if (match.keys.contains("typeLength")) {
+//            guard let typeLength = Int(match["typeLength"]!) else {throw ParsingError.parameterTypeInvalid}
+//            guard let canonicalType = exactMatchType(from: typeString, length: typeLength, staticArrayLength: arrayLength) else {throw ParsingError.parameterTypeInvalid}
+//            type = canonicalType
+//        }
+//        return type
+//    } else {
+//        guard let typeString = match["type"] else {return nil}
+//        var typeLength: Int? = nil
+//        if let typeLengthString = match["typeLength"] {
+//            typeLength = Int(typeLengthString)
+//        }
+//        guard var type = exactMatchType(from: typeString, length: typeLength, staticArrayLength: 0) else {throw ParsingError.parameterTypeInvalid}
+//        guard case .staticABIType(_) = type else {return nil}
+//        if (match.keys.contains("typeLength")) {
+//            guard let typeLength = Int(match["typeLength"]!) else {throw ParsingError.parameterTypeInvalid}
+//            guard let canonicalType = exactMatchType(from: typeString, length: typeLength, staticArrayLength: 0) else {throw ParsingError.parameterTypeInvalid}
+//            type = canonicalType
+//        }
+//        return type
+//    }
+
+    fileprivate func arrayMatch(from string: String) throws -> ABIElement.ParameterType?{
+        let matcher = try NSRegularExpression(pattern: TypeMatchingExpressions.arrayRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
+        let match = matcher.matches(in: string, options: NSRegularExpression.MatchingOptions.anchored, range: string.fullNSRange)
+        guard match.count == 1 else {return nil}
+        guard match[0].numberOfRanges >= 4 else {return nil}
+        var arrayOfRanges = [NSRange]()
+        var totallyIsDynamic = false
+        for i in 3 ..< match[0].numberOfRanges {
+            let t = Range(match[0].range(at: i), in: string)
+            if (t == nil && i > 3) {
+                continue
+            }
+            guard let arrayRange = t else {
+                throw ParsingError.parameterTypeInvalid
+            }
+            let arraySizeString = String(string[arrayRange])
+            arrayOfRanges.append(match[0].range(at: i))
+            if (arraySizeString.trimmingCharacters(in: CharacterSet(charactersIn: "[]")) == "") {
+                if (totallyIsDynamic == false) {
+                    totallyIsDynamic = true // one level of dynamicity
+                } else {
+                    throw ParsingError.parameterTypeInvalid // nested dynamic arrays are not allowed (yet)
+                }
+            }
         }
-        return type
-    } else {
-        guard let typeString = match["type"] else {return nil}
-        var typeLength: Int? = nil
-        if let typeLengthString = match["typeLength"] {
-            typeLength = Int(typeLengthString)
+        if (!totallyIsDynamic) { // all arrays are static
+            guard let typeRange = Range(match[0].range(at: 1), in: string) else {return nil}
+            let typeString = String(string[typeRange])
+            guard var type = exactMatchType(from: typeString) else {return nil}
+            let typeLengthRange = Range(match[0].range(at: 2), in: string)
+            if (typeLengthRange != nil) {
+                let typeLengthString = String(string[typeLengthRange!])
+                guard let typeLength = UInt64(typeLengthString) else {throw ParsingError.parameterTypeInvalid}
+                guard let canonicalType = exactMatchType(from: typeString, length: typeLength) else {throw ParsingError.parameterTypeInvalid}
+                type = canonicalType
+            }
+            switch type {
+            case .staticABIType(let unwrappedType): // all arrays are static and type is static, so we return static variable
+                var finalStaticSubtype: ABIElement.ParameterType.StaticType? = nil
+                for range in arrayOfRanges {
+                    guard let r = Range(range, in: string) else {return nil}
+                    let arraySizeString = String(string[r])
+                    guard let arraySize = UInt64(arraySizeString.trimmingCharacters(in: CharacterSet(charactersIn: "[]"))) else {throw ParsingError.parameterTypeInvalid}
+                    if (finalStaticSubtype == nil) {
+                        let subtype = ABIElement.ParameterType.StaticType.array(unwrappedType, length: arraySize)
+                        finalStaticSubtype = subtype
+                    } else {
+                        let subtype = ABIElement.ParameterType.StaticType.array(finalStaticSubtype!, length: arraySize)
+                        finalStaticSubtype = subtype
+                    }
+                    guard finalStaticSubtype != nil else {throw ParsingError.parameterTypeInvalid}
+                    return ABIElement.ParameterType.staticABIType(finalStaticSubtype!)
+                }
+            case .dynamicABIType(let unwrappedType): // all arrays are static but type is dynamic, so we return dynamic
+                var finalDynamicSubtype: ABIElement.ParameterType.DynamicType? = nil
+                for range in arrayOfRanges {
+                    guard let r = Range(range, in: string) else {return nil}
+                    let arraySizeString = String(string[r])
+                    guard let arraySize = UInt64(arraySizeString.trimmingCharacters(in: CharacterSet(charactersIn: "[]"))) else {throw ParsingError.parameterTypeInvalid}
+                    if (finalDynamicSubtype == nil) {
+                        let subtype = ABIElement.ParameterType.DynamicType.arrayOfDynamicTypes(unwrappedType, length: arraySize)
+                        finalDynamicSubtype = subtype
+                    } else {
+                        let subtype = ABIElement.ParameterType.DynamicType.arrayOfDynamicTypes(finalDynamicSubtype!, length: arraySize)
+                        finalDynamicSubtype = subtype
+                    }
+                    guard finalDynamicSubtype != nil else {throw ParsingError.parameterTypeInvalid}
+                    return ABIElement.ParameterType.dynamicABIType(finalDynamicSubtype!)
+                }
+            }
+        } else { // one of the arrays is dynamic
+            guard let typeRange = Range(match[0].range(at: 1), in: string) else {return nil}
+            let typeString = String(string[typeRange])
+            guard var type = exactMatchType(from: typeString) else {return nil}
+            let typeLengthRange = Range(match[0].range(at: 2), in: string)
+            if (typeLengthRange != nil) {
+                let typeLengthString = String(string[typeLengthRange!])
+                guard let typeLength = UInt64(typeLengthString) else {throw ParsingError.parameterTypeInvalid}
+                guard let canonicalType = exactMatchType(from: typeString, length: typeLength) else {throw ParsingError.parameterTypeInvalid}
+                type = canonicalType
+            }
+            switch type {
+            case .staticABIType(let unwrappedType): // array is dynamic and type is static, so we return dynamic
+                var finalDynamicSubtype: ABIElement.ParameterType.DynamicType? = nil
+                var tempStaticSubtype: ABIElement.ParameterType.StaticType = unwrappedType
+                for range in arrayOfRanges {
+                    guard let r = Range(range, in: string) else {return nil}
+                    let arraySizeString = String(string[r]).trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
+                    if (arraySizeString == "") {
+                        if (finalDynamicSubtype == nil) { // current depth is dynamic, although we didn't yet start wrapping the static type in arrays
+                            let subtype = ABIElement.ParameterType.DynamicType.dynamicArray(tempStaticSubtype)
+                            finalDynamicSubtype = subtype
+                        } else { // current depth is dynamic and previous one is already dynamic, so throw
+                            throw ParsingError.parameterTypeInvalid
+                        }
+                    } else {
+                        guard let arraySize = UInt64(arraySizeString) else {throw ParsingError.parameterTypeInvalid}
+                        if (finalDynamicSubtype == nil) { // array size is static and we didn't yet start wrapping static type, so wrap in static
+                            let subtype = ABIElement.ParameterType.StaticType.array(tempStaticSubtype, length: arraySize)
+                            tempStaticSubtype = subtype
+                        } else { // current depth is static, but we have at least ones wrapped in dynamic, so it's statically sized array of dynamic variables
+                            let subtype = ABIElement.ParameterType.DynamicType.arrayOfDynamicTypes(finalDynamicSubtype!, length: arraySize)
+                            finalDynamicSubtype = subtype
+                        }
+                    }
+                    guard finalDynamicSubtype != nil else {throw ParsingError.parameterTypeInvalid}
+                    return ABIElement.ParameterType.dynamicABIType(finalDynamicSubtype!)
+                }
+            case .dynamicABIType(_): // variable is dynamic and array is dynamic, not yet allowed
+                throw ParsingError.parameterTypeInvalid
+            }
         }
-        guard var type = exactMatchType(from: typeString, length: typeLength, staticArrayLength: 0) else {throw ParsingError.parameterTypeInvalid}
-        guard case .staticABIType(_) = type else {return nil}
-        if (match.keys.contains("typeLength")) {
-            guard let typeLength = Int(match["typeLength"]!) else {throw ParsingError.parameterTypeInvalid}
-            guard let canonicalType = exactMatchType(from: typeString, length: typeLength, staticArrayLength: 0) else {throw ParsingError.parameterTypeInvalid}
-            type = canonicalType
-        }
-        return type
-    }
+        throw ParsingError.parameterTypeInvalid
 }
 

@@ -63,14 +63,14 @@ public struct Contract {
         }
         
         var gasLimit:BigUInt
-        if let gasInOptions = mergedOptions?.gasLimit, gasInOptions > BigUInt(0) {
+        if let gasInOptions = mergedOptions?.gasLimit {
             gasLimit = gasInOptions
         } else {
             return nil
         }
         
         var gasPrice:BigUInt
-        if let gasPriceInOptions = mergedOptions?.gasPrice, gasPriceInOptions > BigUInt(0) {
+        if let gasPriceInOptions = mergedOptions?.gasPrice {
             gasPrice = gasPriceInOptions
         } else {
             return nil
