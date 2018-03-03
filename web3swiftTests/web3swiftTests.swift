@@ -258,8 +258,7 @@ class web3swiftTests: XCTestCase {
             let hash = transaction.hashForSignature(chainID: BigUInt(1))
             let expectedHash = "0xdaf5a779ae972f972197303d7b574746c7ef83eadac0f2791ad23db92e4c8e53".stripHexPrefix()
             XCTAssert(hash!.toHexString() == expectedHash, "Transaction signature failed")
-            let signer = EIP155Signer()
-            try signer.sign(transaction: &transaction, privateKey: privateKeyData)
+            try Web3Signer.EIP155Signer.sign(transaction: &transaction, privateKey: privateKeyData)
             print(transaction)
             XCTAssert(transaction.v == UInt8(37), "Transaction signature failed")
             XCTAssert(sender == transaction.sender)
@@ -637,6 +636,26 @@ class web3swiftTests: XCTestCase {
             XCTFail()
         case .success(let result):
             print(result)
+            let transactions = result.transactions
+            for transaction in transactions {
+                switch transaction {
+                case .transaction(let tx):
+                    print(String(describing: tx))
+                default:
+                    break
+                }
+            }
+        }
+    }
+    
+    func testGetBlockByNumber3() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let response = web3.eth.getBlockByNumber(1000000000, fullTransactions: true)
+        switch response {
+        case .failure(_):
+            break
+        case .success(_):
+            XCTFail()
         }
     }
 

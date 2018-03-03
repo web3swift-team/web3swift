@@ -37,7 +37,7 @@ public struct Web3Options {
             options.gasLimit = gasBiguint
         }
         if let gasPrice = json["gasPrice"] as? String, let gasPriceBiguint = BigUInt(gasPrice.stripHexPrefix().lowercased(), radix: 16) {
-            options.gasLimit = gasPriceBiguint
+            options.gasPrice = gasPriceBiguint
         }
         if let value = json["value"] as? String, let valueBiguint = BigUInt(value.stripHexPrefix().lowercased(), radix: 16) {
             options.value = valueBiguint

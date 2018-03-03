@@ -29,7 +29,6 @@
 		4194812C203630530065A83B /* KeystoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B81FD7E1590074282C /* KeystoreManager.swift */; };
 		4194812D203630530065A83B /* EthereumAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */; };
 		4194812E203630530065A83B /* AbstractKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB2420066E2B00E02EAA /* AbstractKeystore.swift */; };
-		4194812F203630530065A83B /* Web3+AbstractSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C2200CA0AE00B6D3AB /* Web3+AbstractSigner.swift */; };
 		41948130203630530065A83B /* BIP32Keystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815630012007B53C00A0EC2F /* BIP32Keystore.swift */; };
 		41948131203630530065A83B /* BIP32KeystoreJSONStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81562FFF2007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift */; };
 		41948132203630530065A83B /* BIP32HDNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB112004FE2F00E02EAA /* BIP32HDNode.swift */; };
@@ -66,7 +65,6 @@
 		8116666420455E33008D8AD0 /* Web3+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCEF20440C3600D82FAF /* Web3+Wallet.swift */; };
 		81166665204565AC008D8AD0 /* Web3+BrowserFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF8204456E600D82FAF /* Web3+BrowserFunctions.swift */; };
 		81166666204565AD008D8AD0 /* Web3+BrowserFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF8204456E600D82FAF /* Web3+BrowserFunctions.swift */; };
-		8123E1C3200CA0AE00B6D3AB /* Web3+AbstractSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C2200CA0AE00B6D3AB /* Web3+AbstractSigner.swift */; };
 		8123E1C7200CBAC200B6D3AB /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C6200CBAC200B6D3AB /* Dictionary+Extension.swift */; };
 		8123E1C9200CBAF800B6D3AB /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1C8200CBAF800B6D3AB /* Data+Extension.swift */; };
 		8123E1CB200CBB2200B6D3AB /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1CA200CBB2200B6D3AB /* Array+Extension.swift */; };
@@ -170,7 +168,6 @@
 		8113D3191FD7F4C80074282C /* ABITypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABITypes.swift; sourceTree = "<group>"; };
 		8113D31B1FD7F8980074282C /* ABIRecordParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABIRecordParser.swift; sourceTree = "<group>"; };
 		8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRegularExpressionExtension.swift; sourceTree = "<group>"; };
-		8123E1C2200CA0AE00B6D3AB /* Web3+AbstractSigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+AbstractSigner.swift"; sourceTree = "<group>"; };
 		8123E1C6200CBAC200B6D3AB /* Dictionary+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
 		8123E1C8200CBAF800B6D3AB /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		8123E1CA200CBB2200B6D3AB /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
@@ -463,7 +460,6 @@
 				810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */,
 				810B0F9D1FEC5B9C00CF0DA2 /* Web3+Eth.swift */,
 				81C0FCF120440EB500D82FAF /* Web3+Protocols.swift */,
-				8123E1C2200CA0AE00B6D3AB /* Web3+AbstractSigner.swift */,
 				81C0FCF320440F0900D82FAF /* Web3+Options.swift */,
 				81C0FCFC20449D1400D82FAF /* Web3+TransactionIntermediate.swift */,
 			);
@@ -934,7 +930,6 @@
 				817EBB23200649E000E02EAA /* RIPEMD160+StackOveflow.swift in Sources */,
 				8116666320455E33008D8AD0 /* Web3+Wallet.swift in Sources */,
 				81DDECCF1FDF004E0063684A /* Web3.swift in Sources */,
-				8123E1C3200CA0AE00B6D3AB /* Web3+AbstractSigner.swift in Sources */,
 				815630002007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift in Sources */,
 				8123E1CB200CBB2200B6D3AB /* Array+Extension.swift in Sources */,
 				8113D2C71FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift in Sources */,
@@ -985,7 +980,6 @@
 				4194812D203630530065A83B /* EthereumAddress.swift in Sources */,
 				8125F0642047CE6900A0F2FE /* TypesEncoder.swift in Sources */,
 				4194812E203630530065A83B /* AbstractKeystore.swift in Sources */,
-				4194812F203630530065A83B /* Web3+AbstractSigner.swift in Sources */,
 				41948130203630530065A83B /* BIP32Keystore.swift in Sources */,
 				41948131203630530065A83B /* BIP32KeystoreJSONStructure.swift in Sources */,
 				41948132203630530065A83B /* BIP32HDNode.swift in Sources */,

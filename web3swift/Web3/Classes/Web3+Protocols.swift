@@ -11,6 +11,7 @@ import BigInt
 
 public protocol Web3Provider {
     func send(request: JSONRPCrequest) -> [String:Any]?
+    func sendWithRawResult(request: JSONRPCrequest) -> Data?
     var network: Networks? {get}
     var attachedKeystoreManager: KeystoreManager? {get set}
     var url: URL {get}

@@ -19,7 +19,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     public var v: BigUInt = BigUInt(1)
     public var r: BigUInt = BigUInt(0)
     public var s: BigUInt = BigUInt(0)
-    public var chainID: BigUInt? = nil
+    var chainID: BigUInt? = nil
     
     public var inferedChainID: BigUInt? {
         get{
@@ -33,8 +33,26 @@ public struct EthereumTransaction: CustomStringConvertible {
         }
     }
     
+    public var intrinsicChainID: BigUInt? {
+        get{
+            return self.chainID
+        }
+    }
+    
+    public mutating func UNSAFE_setChainID(_ chainID: BigUInt?) {
+        self.chainID = chainID
+    }
+    
     public var hash: Data? {
-        guard let encoded = self.encode(forSignature: false, chainID: self.chainID) else {return nil}
+        var encoded: Data
+        let inferedChainID = self.inferedChainID
+        if inferedChainID != nil {
+            guard let enc = self.self.encode(forSignature: false, chainID: inferedChainID) else {return nil}
+            encoded = enc
+        } else {
+            guard let enc = self.self.encode(forSignature: false, chainID: self.chainID) else {return nil}
+            encoded = enc
+        }
         let hash = encoded.sha3(.keccak256)
         return hash
     }
@@ -87,7 +105,8 @@ public struct EthereumTransaction: CustomStringConvertible {
             toReturn = toReturn + "s: " + String(self.s) + "\n"
             toReturn = toReturn + "Intrinsic chainID: " + String(describing:self.chainID) + "\n"
             toReturn = toReturn + "Infered chainID: " + String(describing:self.inferedChainID) + "\n"
-            toReturn = toReturn + "sender: " + String(describing: self.sender)  + "\n"
+            toReturn = toReturn + "sender: " + String(describing: self.sender?.address)  + "\n"
+            toReturn = toReturn + "hash: " + String(describing: self.hash?.toHexString().addHexPrefix()) + "\n"
             return toReturn
         }
         
@@ -104,8 +123,11 @@ public struct EthereumTransaction: CustomStringConvertible {
             return nil
         }
         var normalizedV:BigUInt = BigUInt(0)
+        let inferedChainID = self.inferedChainID
         if (self.chainID != nil && self.chainID != BigUInt(0)) {
             normalizedV = self.v - BigUInt(35) - self.chainID! - self.chainID!
+        } else if (inferedChainID != nil) {
+            normalizedV = self.v - BigUInt(35) - inferedChainID! - inferedChainID!
         } else {
             normalizedV = self.v - BigUInt(27)
         }
@@ -113,7 +135,14 @@ public struct EthereumTransaction: CustomStringConvertible {
         guard let rData = r.serialize().setLengthLeft(32) else {return nil}
         guard let sData = s.serialize().setLengthLeft(32) else {return nil}
         guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else {return nil}
-        guard let hash = self.hashForSignature(chainID: self.chainID) else {return nil}
+        var hash: Data
+        if inferedChainID != nil {
+            guard let h = self.hashForSignature(chainID: inferedChainID) else {return nil}
+            hash = h
+        } else {
+            guard let h = self.hashForSignature(chainID: self.chainID) else {return nil}
+            hash = h
+        }
         guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
         return publicKey
     }
@@ -133,7 +162,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         }
     }
     
-    func encode(forSignature:Bool = false, chainID: BigUInt? = nil) -> Data? {
+    public func encode(forSignature:Bool = false, chainID: BigUInt? = nil) -> Data? {
         if (forSignature) {
             if chainID != nil  {
                 let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, chainID!, BigUInt(0), BigUInt(0)] as [AnyObject]
@@ -152,11 +181,10 @@ public struct EthereumTransaction: CustomStringConvertible {
         }
     }
     
-    func encodeAsDictionary(from: EthereumAddress) -> TransactionParameters? {
+    public func encodeAsDictionary(from: EthereumAddress) -> TransactionParameters? {
         if (!from.isValid) {
             return nil
         }
-        
         var params = TransactionParameters(from: from.address.lowercased(),
                                            to: self.to.address.lowercased())
         let gasEncoding = self.gasLimit.abiEncode(bits: 256)
@@ -173,8 +201,6 @@ public struct EthereumTransaction: CustomStringConvertible {
         return params
     }
     
-
-    
     public func hashForSignature(chainID: BigUInt? = nil) -> Data? {
         guard let encoded = self.encode(forSignature: true, chainID: chainID) else {return nil}
         let hash = encoded.sha3(.keccak256)
@@ -188,8 +214,49 @@ public struct EthereumTransaction: CustomStringConvertible {
         if (!to.isValid) {
             return nil
         }
-        guard let dataString = json["data"] as? String, let data = Data.fromHex(dataString) else {return nil}
-        return EthereumTransaction(to: to, data: data, options: options)
+        var dataString = json["data"] as? String
+        if (dataString == nil) {
+            dataString = json["input"] as? String
+        }
+        guard dataString != nil, let data = Data.fromHex(dataString!) else {return nil}
+        var transaction = EthereumTransaction(to: to, data: data, options: options)
+        if let nonceString = json["nonce"] as? String {
+            guard let nonce = BigUInt(nonceString.stripHexPrefix(), radix: 16) else {return nil}
+            transaction.nonce = nonce
+        }
+        if let vString = json["v"] as? String {
+            guard let v = BigUInt(vString.stripHexPrefix(), radix: 16) else {return nil}
+            transaction.v = v
+        }
+        if let rString = json["r"] as? String {
+            guard let r = BigUInt(rString.stripHexPrefix(), radix: 16) else {return nil}
+            transaction.r = r
+        }
+        if let sString = json["s"] as? String {
+            guard let s = BigUInt(sString.stripHexPrefix(), radix: 16) else {return nil}
+            transaction.s = s
+        }
+        if let valueString = json["value"] as? String {
+            guard let value = BigUInt(valueString.stripHexPrefix(), radix: 16) else {return nil}
+            transaction.value = value
+        }
+        let inferedChainID = transaction.inferedChainID
+        if (transaction.inferedChainID != nil && transaction.v >= BigUInt(37)) {
+            transaction.chainID = inferedChainID
+        }
+        let hash = json["hash"] as? String
+        if hash != nil {
+            let calculatedHash = transaction.hash
+            let receivedHash = Data.fromHex(hash!)
+            if (receivedHash != calculatedHash) {
+                print("hash mismatch")
+                print(String(describing: transaction))
+                print(json)
+                return nil
+            }
+//            assert(receivedHash==calculatedHash)
+        }
+        return transaction
     }
     
     static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, onBlock: String? = nil, options: Web3Options?) -> JSONRPCrequest? {

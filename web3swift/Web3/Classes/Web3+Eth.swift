@@ -193,7 +193,7 @@ extension web3.Eth {
         case .failure(let error):
             return Result.failure(error)
         case .success(let payload):
-            guard let resultJSON = payload as? [String: Any] else {
+            guard let resultJSON = payload as? [String: AnyObject] else {
                 return Result.failure(Web3Error.dataError)
             }
             guard let details = TransactionDetails(resultJSON) else {
@@ -215,7 +215,7 @@ extension web3.Eth {
         case .failure(let error):
             return Result.failure(error)
         case .success(let payload):
-            guard let resultJSON = payload as? [String: Any] else {
+            guard let resultJSON = payload as? [String: AnyObject] else {
                 return Result.failure(Web3Error.dataError)
             }
             guard let details = TransactionReceipt(resultJSON) else {
@@ -275,12 +275,12 @@ extension web3.Eth {
         }
     }
     
-    public func getBlockByHash(_ hashString: String, fullTransactions: Bool = false) -> Result<AnyObject,Web3Error> {
+    public func getBlockByHash(_ hashString: String, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
         guard let hash = Data.fromHex(hashString) else {return Result.failure(Web3Error.inputError("Hash should be a hex string"))}
         return getBlockByHash(hash, fullTransactions: fullTransactions)
     }
     
-    public func getBlockByHash(_ hash: Data, fullTransactions: Bool = false) -> Result<AnyObject,Web3Error> {
+    public func getBlockByHash(_ hash: Data, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
         var request = JSONRPCrequest()
         request.method = JSONRPCmethod.getBlockByHash
         let params = [hash.toHexString().addHexPrefix(), fullTransactions] as Array<Encodable>
@@ -292,24 +292,30 @@ extension web3.Eth {
         case .failure(let error):
             return Result.failure(error)
         case .success(let payload):
-            guard let resultArray = payload as? [String:AnyObject] else {
+            guard let resultJSON = payload as? [String:AnyObject] else {
                 return Result.failure(Web3Error.dataError)
             }
-            return Result(1 as AnyObject)
+            guard let resultData = try? JSONSerialization.data(withJSONObject: resultJSON) else {
+                return Result.failure(Web3Error.dataError)
+            }
+            guard let block = try? JSONDecoder().decode(Block.self, from: resultData) else {
+                return Result.failure(Web3Error.dataError)
+            }
+            return Result(block)
         }
     }
     
-    public func getBlockByNumber(_ number: Int, fullTransactions: Bool = false) -> Result<AnyObject,Web3Error> {
+    public func getBlockByNumber(_ number: Int, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
         let block = String(number, radix: 16).addHexPrefix()
         return getBlockByNumber(block, fullTransactions: fullTransactions)
     }
     
-    public func getBlockByNumber(_ number: BigUInt, fullTransactions: Bool = false) -> Result<AnyObject,Web3Error> {
+    public func getBlockByNumber(_ number: BigUInt, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
         let block = String(number, radix: 16).addHexPrefix()
         return getBlockByNumber(block, fullTransactions: fullTransactions)
     }
     
-    public func getBlockByNumber(_ block:String, fullTransactions: Bool = false) -> Result<AnyObject,Web3Error> {
+    public func getBlockByNumber(_ block:String, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
         var request = JSONRPCrequest()
         request.method = JSONRPCmethod.getBlockByNumber
         let params = [block, fullTransactions] as Array<Encodable>
@@ -321,10 +327,16 @@ extension web3.Eth {
         case .failure(let error):
             return Result.failure(error)
         case .success(let payload):
-            guard let resultArray = payload as? [String:AnyObject] else {
+            guard let resultJSON = payload as? [String:AnyObject] else {
                 return Result.failure(Web3Error.dataError)
             }
-            return Result(1 as AnyObject)
+            guard let resultData = try? JSONSerialization.data(withJSONObject: resultJSON) else {
+                return Result.failure(Web3Error.dataError)
+            }
+            guard let block = try? JSONDecoder().decode(Block.self, from: resultData) else {
+                return Result.failure(Web3Error.dataError)
+            }
+            return Result(block)
         }
     }
     
