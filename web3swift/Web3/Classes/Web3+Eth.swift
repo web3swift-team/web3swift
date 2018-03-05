@@ -181,6 +181,11 @@ extension web3.Eth {
         }
     }
     
+    public func getTransactionDetails(_ txhash: Data) -> Result<TransactionDetails, Web3Error> {
+        let hashString = txhash.toHexString().addHexPrefix()
+        return self.getTransactionDetails(hashString)
+    }
+    
     public func getTransactionDetails(_ txhash: String) -> Result<TransactionDetails, Web3Error> {
         var request = JSONRPCrequest()
         request.method = JSONRPCmethod.getTransactionByHash
@@ -201,6 +206,12 @@ extension web3.Eth {
             }
             return Result(details)
         }
+    }
+    
+    
+    public func getTransactionReceipt(_ txhash: Data) -> Result<TransactionReceipt, Web3Error> {
+        let hashString = txhash.toHexString().addHexPrefix()
+        return self.getTransactionReceipt(hashString)
     }
     
     public func getTransactionReceipt(_ txhash: String) -> Result<TransactionReceipt, Web3Error> {

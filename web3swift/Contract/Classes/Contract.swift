@@ -10,6 +10,15 @@ import Foundation
 import BigInt
 
 public struct Contract {
+//    public enum eventFilterType {
+//        case
+//    }
+    
+    public struct EventFilter {
+        public var parameterName: String
+        public var parameterValues: [AnyObject]
+    }
+    
     var address: EthereumAddress? = nil
     var _abi: [ABIElement]
     var methods: [String: ABIElement] {
@@ -40,6 +49,24 @@ public struct Contract {
     }
     
     var options: Web3Options? = Web3Options.defaultOptions()
+    
+    public init?(_ abiString: String, at: EthereumAddress? = nil) {
+        do {
+            let jsonData = abiString.data(using: .utf8)
+            let abi = try JSONDecoder().decode([ABIRecord].self, from: jsonData!)
+            let abiNative = try abi.map({ (record) -> ABIElement in
+                return try record.parse()
+            })
+            _abi = abiNative
+            if at != nil {
+                self.address = at
+            }
+        }
+        catch{
+            print(error)
+            return nil
+        }
+    }
     
     public init(abi: [ABIElement]) {
         _abi = abi
@@ -94,7 +121,6 @@ public struct Contract {
         let abiMethod = foundMethod[method]
         guard let encodedData = abiMethod?.encodeParameters(parameters) else {return nil}
         let transaction = EthereumTransaction(gasPrice: gasPrice, gasLimit: gasLimit, to: to, value: value, data: encodedData)
-//        let transaction = EthereumTransaction(nonce: nonce, gasPrice: gasPrice, gasLimit: gas, to: to, value: value, data: encodedData, v: chainID, r: BigUInt(0), s: BigUInt(0))
         return transaction
     }
     

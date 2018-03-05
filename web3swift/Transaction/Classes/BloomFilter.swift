@@ -88,6 +88,16 @@ extension EthereumBloomFilter {
         return EthereumBloomFilter(bin)
     }
     
+    public func test(topic: Data) -> Bool {
+        let bin = self.asBigUInt()
+        let comparison = EthereumBloomFilter.bloom9(topic)
+        return bin & comparison == comparison
+    }
+    
+    public func test(topic: BigUInt) -> Bool {
+        return self.test(topic: topic.serialize())
+    }
+    
     public static func bloomLookup(_ bloom: EthereumBloomFilter, topic:Data) -> Bool {
         let bin = bloom.asBigUInt()
         let comparison = bloom9(topic)

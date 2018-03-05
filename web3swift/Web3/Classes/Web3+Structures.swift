@@ -9,57 +9,34 @@ import Foundation
 import BigInt
 
 public struct TransactionDetails {
-    public var hash: String
-    public var nonce: BigUInt
-    public var blockHash: String?
+    public var blockHash: Data?
     public var blockNumber: BigUInt?
     public var transactionIndex: BigUInt?
-    public var from: EthereumAddress
-    public var to: EthereumAddress
-    public var value: BigUInt
-    public var gasLimit: BigUInt
-    public var gasPrice: BigUInt
-    public var input: Data
+    public var transaction: EthereumTransaction
     
     public init? (_ json: [String: AnyObject]) {
-        guard let h = json["hash"] as? String else {return nil}
-        guard let n = json["nonce"] as? String else {return nil}
         let bh = json["blockHash"] as? String
+        if (bh != nil) {
+            guard let blockHash = Data.fromHex(bh!) else {return nil}
+            self.blockHash = blockHash
+        }
         let bn = json["blockNumber"] as? String
         let ti = json["transactionIndex"] as? String
-        guard let f = json["from"] as? String else {return nil}
-        guard let t = json["to"] as? String else {return nil}
-        guard let v = json["value"] as? String else {return nil}
-        guard let g = json["gas"] as? String else {return nil}
-        guard let gp = json["gasPrice"] as? String else {return nil}
-        guard let i = json["input"] as? String else {return nil}
         
-        hash = h
-        guard let nUnwrapped = BigUInt(n.stripHexPrefix(), radix: 16) else {return nil}
-        nonce = nUnwrapped
-        blockHash = bh
+        guard let transaction = EthereumTransaction.fromJSON(json) else {return nil}
+        self.transaction = transaction
         if bn != nil {
             blockNumber = BigUInt(bn!.stripHexPrefix(), radix: 16)
         }
         if ti != nil {
             transactionIndex = BigUInt(ti!.stripHexPrefix(), radix: 16)
         }
-        
-        from = EthereumAddress(f)
-        to = EthereumAddress(t)
-        guard let vUnwrapped = BigUInt(v.stripHexPrefix(), radix: 16) else {return nil}
-        guard let gUnwrapped = BigUInt(g.stripHexPrefix(), radix: 16) else {return nil}
-        guard let gpUnwrapped = BigUInt(gp.stripHexPrefix(), radix: 16) else {return nil}
-        value = vUnwrapped
-        gasLimit = gUnwrapped
-        gasPrice = gpUnwrapped
-        input = Data(Array<UInt8>(hex: i.lowercased().stripHexPrefix()))
     }
 }
 
 public struct TransactionReceipt {
-    public var transactionHash: String
-    public var blockHash: String
+    public var transactionHash: Data
+    public var blockHash: Data
     public var blockNumber: BigUInt
     public var transactionIndex: BigUInt
     public var contractAddress: EthereumAddress?
@@ -67,6 +44,7 @@ public struct TransactionReceipt {
     public var gasUsed: BigUInt
     public var logs: [EventLog]
     public var status: TXStatus
+    public var logsBloom: EthereumBloomFilter?
     
     public enum TXStatus {
         case ok
@@ -75,18 +53,21 @@ public struct TransactionReceipt {
     }
     
     public init? (_ json: [String: AnyObject]) {
-        guard let h = json["transactionHash"] as? String else {return nil}
+        guard let th = json["transactionHash"] as? String else {return nil}
+        guard let transactionHash = Data.fromHex(th) else {return nil}
+        self.transactionHash = transactionHash
         guard let bh = json["blockHash"] as? String else {return nil}
+        guard let blockHash = Data.fromHex(bh) else {return nil}
+        self.blockHash = blockHash
         guard let bn = json["blockNumber"] as? String else {return nil}
         guard let ti = json["transactionIndex"] as? String else {return nil}
         let ca = json["contractAddress"] as? String
         guard let cgu = json["cumulativeGasUsed"] as? String else {return nil}
         guard let gu = json["gasUsed"] as? String else {return nil}
         guard let ls = json["logs"] as? Array<[String:AnyObject]> else {return nil}
+        guard let lbl = json["logsBloom"] as? String else {return nil}
         let st = json["status"] as? String
-        
-        transactionHash = h
-        blockHash = bh
+    
         guard let bnUnwrapped = BigUInt(bn.stripHexPrefix(), radix: 16) else {return nil}
         blockNumber = bnUnwrapped
         guard let tiUnwrapped = BigUInt(ti.stripHexPrefix(), radix: 16) else {return nil}
@@ -110,6 +91,10 @@ public struct TransactionReceipt {
             status = TXStatus.ok
         } else {
             status = TXStatus.failed
+        }
+        let logsData = Data.fromHex(lbl)
+        if logsData != nil && logsData!.count > 0 {
+            logsBloom = EthereumBloomFilter(logsData!)
         }
     }
 }
@@ -145,6 +130,7 @@ public enum TransactionInBlock:Decodable {
     case hash(Data)
     case transaction(EthereumTransaction)
     case null
+    
     public init(from decoder: Decoder) throws {
         let value = try decoder.singleValueContainer()
         if let string = try? value.decode(String.self) {
