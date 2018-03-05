@@ -49,7 +49,7 @@ public class Web3HttpProvider: Web3Provider {
         }
         guard let response = self.syncPost(request) else {return nil}
         guard let res = response as? [String: AnyObject] else {return nil}
-        print(res)
+//        print(res)
         return res
     }
     

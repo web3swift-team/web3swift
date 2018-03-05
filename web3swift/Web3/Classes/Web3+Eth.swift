@@ -316,7 +316,7 @@ extension web3.Eth {
         }
     }
     
-    public func getBlockByNumber(_ number: Int, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
+    public func getBlockByNumber(_ number: UInt64, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
         let block = String(number, radix: 16).addHexPrefix()
         return getBlockByNumber(block, fullTransactions: fullTransactions)
     }

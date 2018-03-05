@@ -29,28 +29,32 @@ extension ABIElement.ParameterType.StaticType {
     func decode(expectedType: ABIElement.ParameterType.StaticType, data: Data, tailPointer: BigUInt) -> (bytesConsumed: Int?, value: Any?) {
         switch self {
         case .uint(let bits):
+            guard data.count >= 32 else {break}
             let dataSlice = Data(data[0..<32])
             let biguint = BigUInt(dataSlice)
             guard biguint.bitWidth <= bits else {break}
             return (32, biguint)
         case .int(let bits):
+            guard data.count >= 32 else {break}
             let dataSlice = Data(data[0..<32])
             let bigint = BigInt.fromTwosComplement(data: dataSlice)
             guard bigint.bitWidth <= bits else {break}
             return (32, bigint)
         case .address:
+            guard data.count >= 32 else {break}
             let dataSlice = Data(data[0..<32])
             guard Data(dataSlice[0..<12]) == Data(count: 12) else {break}
             let addressData = Data(dataSlice[12..<32])
             let hexAddress = addressData.toHexString().addHexPrefix().lowercased()
             return (32, EthereumAddress(hexAddress))
         case .bool:
+            guard data.count >= 32 else {break}
             let dataSlice = Data(data[0..<32])
             let biguint = BigUInt(dataSlice)
             guard biguint.bitWidth == 1 else {break}
             return (32, biguint == BigUInt(1))
         case .bytes(let length):
-            guard data.count <= length / 8 else {break}
+            guard data.count <= length else {break}
             return (32, data)
         case .array(let type, let length):
             guard data.count <= length*32 else {break}
@@ -64,8 +68,6 @@ extension ABIElement.ParameterType.StaticType {
                 returnArray.append(value)
             }
             return (len, returnArray)
-        default:
-            return (nil, nil)
         }
         return (nil, nil)
     }
@@ -232,7 +234,7 @@ extension ABIElement {
             return nil
         case .event(let event):
             if event.anonymous {return nil}
-            if eventLog.topics[0] != event.topic {
+            if event.topic != eventLog.topics[0] {
                 return nil
             }
             var eventContent = [String: Any]()
@@ -240,12 +242,16 @@ extension ABIElement {
             let logs = eventLog.topics
             var dataForProcessing = eventLog.data
             var tailPointer = BigUInt(0)
-            var j = 1
+            if (logs.count == 1 && event.inputs.count > 0) {
+                return nil
+            }
             for i in 0 ..< event.inputs.count {
                 let el = event.inputs[i]
                 if el.indexed {
-                    let elementData = logs[j]
-                    j = j + 1
+                    if (i+1 >= logs.count) {
+                        return nil
+                    }
+                    let elementData = logs[i+1]
                     let expectedType = el.type
                     switch expectedType {
                     case .staticABIType(let type):
