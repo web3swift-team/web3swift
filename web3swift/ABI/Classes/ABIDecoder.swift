@@ -164,16 +164,9 @@ extension ABIElement {
                 var value:Any
                 switch function.outputs[0].type {
                 case .dynamicABIType(let type) :
-                    switch type {
-                    case .string:
-                        value = ""
-                    case .bytes:
-                        value = Data()
-                    default:
-                        return nil
-                    }
-                default:
-                    return nil
+                    value = type.emptyValue
+                case .staticABIType(let type) :
+                    value = type.emptyValue
                 }
                 var returnArray = [String:Any]()
                 returnArray[name] = value

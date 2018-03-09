@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BigInt
 
 // JSON Decoding
 public struct ABIInput: Decodable {
@@ -46,6 +47,7 @@ protocol ABIElementPropertiesProtocol {
     var arraySize: ABIElement.ArraySize {get}
     var subtype: ABIElement.ParameterType? {get}
     var memoryUsage: UInt64 {get}
+    var emptyValue: Any {get}
 }
 
 public enum ABIElement {
@@ -144,6 +146,23 @@ public enum ABIElement {
                 }
             }
             
+            var emptyValue: Any {
+                switch self {
+                case .uint(bits: _):
+                    return BigUInt(0)
+                case .int(bits: _):
+                    return BigUInt(0)
+                case .address:
+                    return EthereumAddress("0x0000000000000000000000000000000000000000")
+                case .bool:
+                    return false
+                case .bytes(length: _):
+                    return Data()
+                case .array(_, length: _):
+                    return [StaticType]()
+                }
+            }
+            
             /// uint<M>: unsigned integer type of M bits, 0 < M <= 256, M % 8 == 0. e.g. uint32, uint8, uint256.
             case uint(bits: UInt64)
             /// int<M>: two's complement signed integer type of M bits, 0 < M <= 256, M % 8 == 0.
@@ -208,6 +227,19 @@ public enum ABIElement {
 //                    return 32
                 default:
                     return 32
+                }
+            }
+            
+            var emptyValue: Any {
+                switch self {
+                case .bytes:
+                    return Data()
+                case .string:
+                    return ""
+                case .arrayOfDynamicTypes(_, length: _):
+                    return [DynamicType]()
+                case .dynamicArray(_):
+                    return [StaticType]()
                 }
             }
             
