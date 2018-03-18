@@ -37,14 +37,6 @@ extension web3.web3contract {
             }
         }
         
-        //            public func sign(_ privateKey: Data, network: Networks? = nil) throws {
-        //                if (network != nil) {
-        //                    self.transaction.chainID = network?.chainID
-        //                } else if (self.web3.provider.network != nil) {
-        //                    self.transaction.chainID = self.web3.provider.network?.chainID
-        //                }
-        //                let _ = self.transaction.sign(privateKey: privateKey)
-        //            }
         
         public func send(password: String = "BANKEXFOUNDATION", options: Web3Options? = nil) -> Result<[String:String], Web3Error> {
             do {
@@ -68,7 +60,7 @@ extension web3.web3contract {
                 if mergedOptions.gasLimit == nil {
                     mergedOptions.gasLimit = estimatedGasResult.value!
                 } else {
-                    if (mergedOptions.gasLimit! > estimatedGasResult.value!) {
+                    if (mergedOptions.gasLimit! < estimatedGasResult.value!) {
                         return Result.failure(Web3Error.inputError("Estimated gas is larger than the gas limit"))
                     }
                 }
