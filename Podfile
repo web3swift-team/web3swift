@@ -20,7 +20,7 @@ target 'web3swift-macOS' do
 end
 
 target 'web3swift-iOS' do
-  platform :ios, '11.2'
+  platform :ios, '9.0'
   use_frameworks!
   
   import_pods

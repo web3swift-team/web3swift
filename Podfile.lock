@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (4.6.0)
+  - Alamofire (4.7.0)
   - Alamofire-Synchronous (4.0.0):
     - Alamofire (~> 4.0)
   - BigInt (3.0.1):
@@ -29,7 +29,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/shamatar/secp256k1_ios.git
 
 SPEC CHECKSUMS:
-  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  Alamofire: 907e0a98eb68cdb7f9d1f541a563d6ac5dc77b25
   Alamofire-Synchronous: eedf1e6e961c3795a63c74990b3f7d9fbfac7e50
   BigInt: 8e8a52161c745cd3ab78e3dc346a9fbee51e6cf6
   CryptoSwift: 033efc3523865d19cc6ab6612fa17a62613b5dfa
@@ -38,6 +38,6 @@ SPEC CHECKSUMS:
   secp256k1_ios: 168c6c49ed9771db51875f5255c8f9847e4cf554
   SipHash: c6e9e43e9c531b5bc6602545130c26194a6d31ce
 
-PODFILE CHECKSUM: 509aaee40d3963cdd02f4489f089ccd915d5799b
+PODFILE CHECKSUM: ad6dd243f372aed0175a8f53f5c3377a19efaace
 
 COCOAPODS: 1.4.0
