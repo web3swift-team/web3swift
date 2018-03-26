@@ -73,6 +73,14 @@ public class BIP32Keystore: AbstractKeystore {
         try createNewAccount(parentNode: prefixNode, password: password)
     }
     
+    
+    public func createNewChildAccount(password: String = "BANKEXFOUNDATION") throws {
+        guard let decryptedRootNode = try? self.getPrefixNodeData(password), decryptedRootNode != nil else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
+        guard let rootNode = HDNode(decryptedRootNode!) else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
+        guard rootNode.depth == HDNode.defaultPathPrefix.components(separatedBy: "/").count else {throw AbstractKeystoreError.encryptionError("Failed to sign transaction")}
+        try createNewAccount(parentNode: rootNode, password: password)
+    }
+    
     public func createNewAccount(parentNode: HDNode, password: String = "BANKEXFOUNDATION") throws {
         var newIndex = UInt32(0)
         for (p, _) in paths {
