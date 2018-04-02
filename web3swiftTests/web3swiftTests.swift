@@ -79,6 +79,28 @@ class web3swiftTests: XCTestCase {
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
         XCTAssert(keystore != nil)
     }
+    
+    func testBIP32keystoreExportPrivateKey() {
+        let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
+        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
+        XCTAssertNotNil(keystore)
+        let account = keystore!.addresses![0]
+        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        XCTAssertNotNil(key)
+    }
+    
+    func testByBIP32keystoreCreateChildAccount() {
+        let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
+        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
+        XCTAssertNotNil(keystore)
+        XCTAssertEqual(keystore!.addresses?.count, 1)
+        try! keystore?.createNewChildAccount(password: "")
+        XCTAssertEqual(keystore?.addresses?.count, 2)
+        let account = keystore!.addresses![0]
+        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        XCTAssertNotNil(key)
+    }
+    
 //    func testPBKDF2() {
 //        let pass = "passDATAb00AB7YxDTTl".data(using: .utf8)!
 //        let salt = "saltKEYbcTcXHCBxtjD2".data(using: .utf8)!
@@ -96,8 +118,8 @@ class web3swiftTests: XCTestCase {
         let seed = Data.fromHex("000102030405060708090a0b0c0d0e0f")!
         let node = HDNode(seed: seed)!
         XCTAssert(node.chaincode == Data.fromHex("873dff81c02f525623fd1fe5167eac3a55a049de3d314bb42ee227ffed37d508"))
-        let serialized = node.serialize()
-        let serializedPriv = node.serialize(serializePublic: false)
+        let serialized = node.serializeToString()
+        let serializedPriv = node.serializeToString(serializePublic: false)
         XCTAssert(serialized == "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8")
         XCTAssert(serializedPriv == "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi")
         
@@ -117,8 +139,8 @@ class web3swiftTests: XCTestCase {
         XCTAssert(nextNode?.isHardened == false)
         XCTAssert(nextNode?.parentFingerprint == Data.fromHex("3442193e"))
         XCTAssert(nextNode?.publicKey.toHexString() == "027c4b09ffb985c298afe7e5813266cbfcb7780b480ac294b0b43dc21f2be3d13c")
-        XCTAssert(nextNode?.serialize() == "xpub68Gmy5EVb2BdFbj2LpWrk1M7obNuaPTpT5oh9QCCo5sRfqSHVYWex97WpDZzszdzHzxXDAzPLVSwybe4uPYkSk4G3gnrPqqkV9RyNzAcNJ1")
-        XCTAssert(nextNode?.serialize(serializePublic: false) == "xprv9uHRZZhbkedL37eZEnyrNsQPFZYRAvjy5rt6M1nbEkLSo378x1CQQLo2xxBvREwiK6kqf7GRNvsNEchwibzXaV6i5GcsgyjBeRguXhKsi4R")
+        XCTAssert(nextNode?.serializeToString() == "xpub68Gmy5EVb2BdFbj2LpWrk1M7obNuaPTpT5oh9QCCo5sRfqSHVYWex97WpDZzszdzHzxXDAzPLVSwybe4uPYkSk4G3gnrPqqkV9RyNzAcNJ1")
+        XCTAssert(nextNode?.serializeToString(serializePublic: false) == "xprv9uHRZZhbkedL37eZEnyrNsQPFZYRAvjy5rt6M1nbEkLSo378x1CQQLo2xxBvREwiK6kqf7GRNvsNEchwibzXaV6i5GcsgyjBeRguXhKsi4R")
         
         let nextNodeHardened = node.derive(index: 0, derivePrivateKey: true, hardened: true)
         XCTAssert(nextNodeHardened?.depth == 1)
@@ -126,14 +148,14 @@ class web3swiftTests: XCTestCase {
         XCTAssert(nextNodeHardened?.isHardened == true)
         XCTAssert(nextNodeHardened?.parentFingerprint == Data.fromHex("3442193e"))
         XCTAssert(nextNodeHardened?.publicKey.toHexString() == "035a784662a4a20a65bf6aab9ae98a6c068a81c52e4b032c0fb5400c706cfccc56")
-        XCTAssert(nextNodeHardened?.serialize() == "xpub68Gmy5EdvgibQVfPdqkBBCHxA5htiqg55crXYuXoQRKfDBFA1WEjWgP6LHhwBZeNK1VTsfTFUHCdrfp1bgwQ9xv5ski8PX9rL2dZXvgGDnw")
-        XCTAssert(nextNodeHardened?.serialize(serializePublic: false) == "xprv9uHRZZhk6KAJC1avXpDAp4MDc3sQKNxDiPvvkX8Br5ngLNv1TxvUxt4cV1rGL5hj6KCesnDYUhd7oWgT11eZG7XnxHrnYeSvkzY7d2bhkJ7")
+        XCTAssert(nextNodeHardened?.serializeToString() == "xpub68Gmy5EdvgibQVfPdqkBBCHxA5htiqg55crXYuXoQRKfDBFA1WEjWgP6LHhwBZeNK1VTsfTFUHCdrfp1bgwQ9xv5ski8PX9rL2dZXvgGDnw")
+        XCTAssert(nextNodeHardened?.serializeToString(serializePublic: false) == "xprv9uHRZZhk6KAJC1avXpDAp4MDc3sQKNxDiPvvkX8Br5ngLNv1TxvUxt4cV1rGL5hj6KCesnDYUhd7oWgT11eZG7XnxHrnYeSvkzY7d2bhkJ7")
         
         let treeNode = node.derive(path: HDNode.defaultPath)
         XCTAssert(treeNode != nil)
         XCTAssert(treeNode?.depth == 4)
-        XCTAssert(treeNode?.serialize() == "xpub6DZ3xpo1ixWwwNDQ7KFTamRVM46FQtgcDxsmAyeBpTHEo79E1n1LuWiZSMSRhqMQmrHaqJpek2TbtTzbAdNWJm9AhGdv7iJUpDjA6oJD84b")
-        XCTAssert(treeNode?.serialize(serializePublic: false) == "xprv9zZhZKG7taxeit8w1HiTDdUko2Fm1RxkrjxANbEaG7kFvJp5UEh6MiQ5b5XvwWg8xdHMhueagettVG2AbfqSRDyNpxRDBLyMSbNq1KhZ8ai")
+        XCTAssert(treeNode?.serializeToString() == "xpub6DZ3xpo1ixWwwNDQ7KFTamRVM46FQtgcDxsmAyeBpTHEo79E1n1LuWiZSMSRhqMQmrHaqJpek2TbtTzbAdNWJm9AhGdv7iJUpDjA6oJD84b")
+        XCTAssert(treeNode?.serializeToString(serializePublic: false) == "xprv9zZhZKG7taxeit8w1HiTDdUko2Fm1RxkrjxANbEaG7kFvJp5UEh6MiQ5b5XvwWg8xdHMhueagettVG2AbfqSRDyNpxRDBLyMSbNq1KhZ8ai")
         
         
     }
