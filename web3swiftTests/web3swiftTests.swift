@@ -74,6 +74,14 @@ class web3swiftTests: XCTestCase {
         XCTAssert(Data(hmac).toHexString() == "87aa7cdea5ef619d4ff0b4241a1d6cb02379f4e2ce4ec2787ad0b30545e17cdedaa833b7d6b8a702038b274eaea3f4e4be9d914eeb61f1702e696c203a126854")
     }
     
+    func testV3keystoreExportPrivateKey() {
+        let keystore = try! EthereumKeystoreV3(password: "");
+        XCTAssertNotNil(keystore)
+        let account = keystore!.addresses![0]
+        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        XCTAssertNotNil(key)
+    }
+    
     func testNewBIP32keystore() {
         let mnemonic = try! BIP39.generateMnemonics(bitsOfEntropy: 256)!
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
