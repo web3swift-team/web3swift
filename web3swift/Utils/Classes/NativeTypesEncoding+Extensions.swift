@@ -76,3 +76,18 @@ extension BigInt {
         return padded
     }
 }
+
+extension BigInt {
+    static func fromTwosComplement(data: Data) -> BigInt {
+        let isPositive = ((data[0] & 128) >> 7) == 0
+        if (isPositive) {
+            let magnitude = BigUInt(data)
+            return BigInt(magnitude)
+        } else {
+            let MAX = (BigUInt(1) << (data.count*8))
+            let magnitude = MAX - BigUInt(data)
+            let bigint = BigInt(0) - BigInt(magnitude)
+            return bigint
+        }
+    }
+}

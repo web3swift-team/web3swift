@@ -23,7 +23,7 @@ extension ABIv2 {
     }
     
     enum TypeParsingExpressions {
-        static var typeEatingRegex = "^((u?int|bytes)([1-9][0-9]*)|(address|bool|string|tuple)|(\\[([1-9][0-9]*)\\]))"
+        static var typeEatingRegex = "^((u?int|bytes)([1-9][0-9]*)|(address|bool|string|tuple|bytes)|(\\[([1-9][0-9]*)\\]))"
         static var arrayEatingRegex = "^(\\[([1-9][0-9]*)?\\])?.*$"
     }
 

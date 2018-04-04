@@ -23,6 +23,7 @@ public enum Web3Error: Error {
 }
 
 public struct Web3 {
+    
     public static func new(_ providerURL: URL) -> web3? {
         guard let provider = Web3HttpProvider(providerURL) else {return nil}
         return web3(provider: provider)

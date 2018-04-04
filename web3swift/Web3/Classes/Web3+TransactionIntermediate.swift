@@ -14,11 +14,11 @@ extension web3.web3contract {
 
     public class TransactionIntermediate{
         public var transaction:EthereumTransaction
-        public var contract: Contract
+        public var contract: ContractProtocol
         public var method: String
         public var options: Web3Options? = Web3Options.defaultOptions()
         var web3: web3
-        public init (transaction: EthereumTransaction, web3 web3Instance: web3, contract: Contract, method: String, options: Web3Options?) {
+        public init (transaction: EthereumTransaction, web3 web3Instance: web3, contract: ContractProtocol, method: String, options: Web3Options?) {
             self.transaction = transaction
             self.web3 = web3Instance
             self.contract = contract
@@ -103,19 +103,11 @@ extension web3.web3contract {
                         let resultAsBigUInt = BigUInt(resultString.stripHexPrefix(), radix : 16)
                         return Result(["result": resultAsBigUInt as Any])
                     }
-                    let foundMethod = self.contract.methods.filter { (key, value) -> Bool in
-                        return key == self.method
-                    }
-                    guard foundMethod.count == 1 else
-                    {
-                        return Result.failure(Web3Error.dataError)
-                    }
-                    let abiMethod = foundMethod[self.method]
                     guard let responseData = Data.fromHex(resultString) else
                     {
                         return Result.failure(Web3Error.dataError)
                     }
-                    guard let decodedData = abiMethod?.decodeReturnData(responseData) else
+                    guard let decodedData = contract.decodeReturnData(self.method, data: responseData) else
                     {
                         return Result.failure(Web3Error.dataError)
                     }

@@ -56,7 +56,9 @@ public struct ABIv2TypeParser {
     public static func recursiveParseType(_ string: String) -> (type: ABIv2.Element.ParameterType?, tail: String?) {
         let matcher = try! NSRegularExpression(pattern: ABIv2.TypeParsingExpressions.typeEatingRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
         let match = matcher.matches(in: string, options: NSRegularExpression.MatchingOptions.anchored, range: string.fullNSRange)
-        guard match.count == 1 else {return (nil, nil)}
+        guard match.count == 1 else {
+            return (nil, nil)
+        }
         var tail: String = ""
         var type: ABIv2.Element.ParameterType?
         guard match[0].numberOfRanges >= 1 else {return (nil, nil)}

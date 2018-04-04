@@ -1,15 +1,15 @@
 //
-//  Contract.swift
+//  ContractABIv2.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 10.12.2017.
-//  Copyright © 2017 Bankex Foundation. All rights reserved.
+//  Created by Alexander Vlasov on 04.04.2018.
+//  Copyright © 2018 Bankex Foundation. All rights reserved.
 //
 
 import Foundation
 import BigInt
 
-public struct Contract:ContractProtocol {
+public struct ContractV2:ContractProtocol {
     
     public var allEvents: [String] {
         return events.keys.flatMap({ (s) -> String in
@@ -22,10 +22,15 @@ public struct Contract:ContractProtocol {
         })
     }
     
+    public struct EventFilter {
+        public var parameterName: String
+        public var parameterValues: [AnyObject]
+    }
+    
     public var address: EthereumAddress? = nil
-    var _abi: [ABIElement]
-    public var methods: [String: ABIElement] {
-        var toReturn = [String: ABIElement]()
+    var _abi: [ABIv2.Element]
+    public var methods: [String: ABIv2.Element] {
+        var toReturn = [String: ABIv2.Element]()
         for m in self._abi {
             switch m {
             case .function(let function):
@@ -37,8 +42,8 @@ public struct Contract:ContractProtocol {
         }
         return toReturn
     }
-    public var events: [String: ABIElement] {
-        var toReturn = [String: ABIElement]()
+    public var events: [String: ABIv2.Element] {
+        var toReturn = [String: ABIv2.Element]()
         for m in self._abi {
             switch m {
             case .event(let event):
@@ -56,8 +61,8 @@ public struct Contract:ContractProtocol {
     public init?(_ abiString: String, at: EthereumAddress? = nil) {
         do {
             let jsonData = abiString.data(using: .utf8)
-            let abi = try JSONDecoder().decode([ABIRecord].self, from: jsonData!)
-            let abiNative = try abi.map({ (record) -> ABIElement in
+            let abi = try JSONDecoder().decode([ABIv2.Record].self, from: jsonData!)
+            let abiNative = try abi.map({ (record) -> ABIv2.Element in
                 return try record.parse()
             })
             _abi = abiNative
@@ -71,11 +76,11 @@ public struct Contract:ContractProtocol {
         }
     }
     
-    public init(abi: [ABIElement]) {
+    public init(abi: [ABIv2.Element]) {
         _abi = abi
     }
     
-    public init(abi: [ABIElement], at: EthereumAddress) {
+    public init(abi: [ABIv2.Element], at: EthereumAddress) {
         _abi = abi
         address = at
     }
@@ -128,12 +133,12 @@ public struct Contract:ContractProtocol {
     }
     
     public func parseEvent(_ eventLog: EventLog) -> (eventName:String?, eventData:[String:Any]?) {
-        for (eName, ev) in self.events {
-            let parsed = ev.decodeReturnedLogs(eventLog)
-            if parsed != nil {
-                return (eName, parsed!)
-            }
-        }
+//        for (eName, ev) in self.events {
+//            let parsed = ev.decodeReturnedLogs(eventLog)
+//            if parsed != nil {
+//                return (eName, parsed!)
+//            }
+//        }
         return (nil, nil)
     }
     

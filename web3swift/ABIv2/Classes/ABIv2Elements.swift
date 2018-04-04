@@ -89,4 +89,76 @@ extension ABIv2 {
     }
 }
 
+extension ABIv2.Element {
+    func encodeParameters(_ parameters: [AnyObject]) -> Data? {
+        switch self {
+        case .constructor(_):
+            return nil
+        case .event(_):
+            return nil
+        case .fallback(_):
+            return nil
+        case .function(let function):
+            guard parameters.count == function.inputs.count else {return nil}
+            let signature = function.methodEncoding
+            guard let data = ABIv2Encoder.encode(types: function.inputs, values: parameters) else {return nil}
+            return signature + data
+        }
+    }
+}
+
+extension ABIv2.Element {
+    func decodeReturnData(_ data: Data) -> [String:Any]? {
+        switch self {
+        case .constructor(_):
+            return nil
+        case .event(_):
+            return nil
+        case .fallback(_):
+            return nil
+        case .function(let function):
+            if (data.count == 0 && function.outputs.count == 1) {
+                let name = "0"
+                let value = function.outputs[0].type.emptyValue
+                var returnArray = [String:Any]()
+                returnArray[name] = value
+                if function.outputs[0].name != "" {
+                    returnArray[function.outputs[0].name] = value
+                }
+                return returnArray
+            }
+            
+            guard function.outputs.count*32 <= data.count else {return nil}
+            var returnArray = [String:Any]()
+            var i = 0;
+            guard let values = ABIv2Decoder.decode(types: function.outputs, data: data) else {return nil}
+            for output in function.outputs{
+                let name = "\(i)"
+                returnArray[name] = values[i]
+                if output.name != "" {
+                    returnArray[output.name] = values[i]
+                }
+                i = i + 1
+            }
+            return returnArray
+        }
+    }
+}
+
+extension ABIv2.Element {
+    func decodeReturnedLogs(_ eventLog: EventLog) -> [String:Any]? {
+        switch self {
+        case .constructor(_):
+            return nil
+        case .event(let event):
+            guard let eventContent = ABIv2Decoder.decodeLog(event: event, eventLog: eventLog) else {return nil}
+            return eventContent
+        case .fallback(_):
+            return nil
+        case .function(_):
+            return nil
+        }
+    }
+}
+
 
