@@ -260,7 +260,13 @@ extension HDNode {
         return currentNode
     }
     
-    public func serialize(serializePublic: Bool = true, version: HDversion = HDversion()) -> String? {
+    public func serializeToString(serializePublic: Bool = true, version: HDversion = HDversion()) -> String? {
+        guard let data = self.serialize(serializePublic: serializePublic, version: version) else {return nil}
+        let encoded = Base58.base58FromBytes(data.bytes)
+        return encoded
+    }
+    
+    public func serialize(serializePublic: Bool = true, version: HDversion = HDversion()) -> Data? {
         var data = Data()
         if (!serializePublic && !self.hasPrivate) {return nil}
         if serializePublic {
@@ -281,8 +287,7 @@ extension HDNode {
         let hashedData = data.sha256().sha256()
         let checksum = hashedData[0..<4]
         data.append(checksum)
-        let encoded = Base58.base58FromBytes(data.bytes)
-        return encoded
+        return data
     }
     
 }
