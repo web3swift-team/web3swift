@@ -12,7 +12,7 @@ import BigInt
 
 extension web3 {
     
-    public func contract(_ abiString: String, at: EthereumAddress? = nil, abiVersion: Int = 1) -> web3contract? {
+    public func contract(_ abiString: String, at: EthereumAddress? = nil, abiVersion: Int = 2) -> web3contract? {
         return web3contract(web3: self, abiString: abiString, at: at, options: self.options, abiVersion: abiVersion)
     }
     
@@ -21,7 +21,7 @@ extension web3 {
         var web3 : web3
         public var options: Web3Options? = nil
         
-        public init?(web3 web3Instance:web3, abiString: String, at: EthereumAddress? = nil, options: Web3Options? = nil, abiVersion: Int = 1) {
+        public init?(web3 web3Instance:web3, abiString: String, at: EthereumAddress? = nil, options: Web3Options? = nil, abiVersion: Int = 2) {
             self.web3 = web3Instance
             self.options = web3.options
             switch abiVersion {
@@ -42,9 +42,6 @@ extension web3 {
                 contract.address = addr
             }
             self.options = mergedOptions
-            if contract.address == nil {
-                return nil
-            }
         }
         
         public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), options: Web3Options?) -> TransactionIntermediate? {
@@ -60,7 +57,10 @@ extension web3 {
             return self.contract.parseEvent(eventLog)
         }
         
-        
+        public func createEventParser(_ eventName:String, filter:EventFilter?) -> EventParserProtocol? {
+            let parser = EventParser(web3: self.web3, eventName: eventName, contract: self.contract, filter: filter)
+            return parser
+        }
     
     }
 }

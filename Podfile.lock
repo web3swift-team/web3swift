@@ -1,10 +1,10 @@
 PODS:
-  - Alamofire (4.7.0)
+  - Alamofire (4.7.1)
   - Alamofire-Synchronous (4.0.0):
     - Alamofire (~> 4.0)
   - BigInt (3.0.1):
     - SipHash (~> 1.2)
-  - CryptoSwift (0.8.3)
+  - CryptoSwift (0.9.0)
   - libsodium (1.0.12)
   - Result (3.0.0)
   - secp256k1_ios (0.1.2)
@@ -29,10 +29,10 @@ CHECKOUT OPTIONS:
     :git: https://github.com/shamatar/secp256k1_ios.git
 
 SPEC CHECKSUMS:
-  Alamofire: 907e0a98eb68cdb7f9d1f541a563d6ac5dc77b25
+  Alamofire: 68d7d521118d49c615a8d2214d87cdf525599d30
   Alamofire-Synchronous: eedf1e6e961c3795a63c74990b3f7d9fbfac7e50
   BigInt: 8e8a52161c745cd3ab78e3dc346a9fbee51e6cf6
-  CryptoSwift: 033efc3523865d19cc6ab6612fa17a62613b5dfa
+  CryptoSwift: bca8c5b653dcc2d9734409242a070ff53bafac86
   libsodium: 9a8faa5ef2fa0d2d57bd7f7d79bf8fb7c1a9f0ea
   Result: 1b3e431f37cbcd3ad89c6aa9ab0ae55515fae3b6
   secp256k1_ios: 168c6c49ed9771db51875f5255c8f9847e4cf554

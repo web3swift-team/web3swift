@@ -145,4 +145,8 @@ public struct Contract:ContractProtocol {
         guard case .function(_) = function else {return nil}
         return function.decodeReturnData(data)
     }
+    
+    public func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool? {
+        return false
+    }
 }

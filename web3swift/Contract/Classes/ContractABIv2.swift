@@ -42,13 +42,13 @@ public struct ContractV2:ContractProtocol {
         }
         return toReturn
     }
-    public var events: [String: ABIv2.Element] {
-        var toReturn = [String: ABIv2.Element]()
+    public var events: [String: ABIv2.Element.Event] {
+        var toReturn = [String: ABIv2.Element.Event]()
         for m in self._abi {
             switch m {
             case .event(let event):
                 let name = event.name
-                toReturn[name] = m
+                toReturn[name] = event
             default:
                 continue
             }
@@ -133,13 +133,34 @@ public struct ContractV2:ContractProtocol {
     }
     
     public func parseEvent(_ eventLog: EventLog) -> (eventName:String?, eventData:[String:Any]?) {
-//        for (eName, ev) in self.events {
-//            let parsed = ev.decodeReturnedLogs(eventLog)
-//            if parsed != nil {
-//                return (eName, parsed!)
-//            }
-//        }
+        for (eName, ev) in self.events {
+            if (!ev.anonymous) {
+                if eventLog.topics[0] != ev.topic {
+                    continue
+                }
+                else {
+                    let parsed = ev.decodeReturnedLogs(eventLog)
+                    if parsed != nil {
+                        return (eName, parsed!)
+                    }
+                }
+            } else {
+                let parsed = ev.decodeReturnedLogs(eventLog)
+                if parsed != nil {
+                    return (eName, parsed!)
+                }
+            }
+        }
         return (nil, nil)
+    }
+    
+    public func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool? {
+        guard let event = events[eventName] else {return nil}
+        if event.anonymous {
+            return true
+        }
+        let eventOfSuchTypeIsPresent = bloom.test(topic: event.topic)
+        return eventOfSuchTypeIsPresent
     }
     
     public func decodeReturnData(_ method:String, data: Data) -> [String:Any]? {

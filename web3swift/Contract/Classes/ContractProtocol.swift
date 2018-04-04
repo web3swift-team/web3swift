@@ -17,7 +17,8 @@ public protocol ContractProtocol {
     init?(_ abiString: String, at: EthereumAddress?)
     func decodeReturnData(_ method:String, data: Data) -> [String:Any]?
     func parseEvent(_ eventLog: EventLog) -> (eventName:String?, eventData:[String:Any]?)
-//    optional func createEventFilter(eventName:String, filter: EventFilter?)
+    func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool?
+//    func createEventFilter(eventName:String, filter: EventFilter?)
 }
 
 public struct EventFilter {

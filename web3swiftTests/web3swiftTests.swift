@@ -328,7 +328,7 @@ class web3swiftTests: XCTestCase {
         XCTAssert(encoded == expected, "Failed to RLP encode large int")
     }
     
-    func testChecksubAddress() {
+    func testChecksumAddress() {
         let input = "0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359"
         let output = EthereumAddress.toChecksumAddress(input);
         XCTAssert(output == "0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359", "Failed to checksum address")
@@ -361,6 +361,26 @@ class web3swiftTests: XCTestCase {
         catch {
             print(error)
             XCTFail()
+        }
+    }
+    
+    func testEthSendExample() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let tempKeystore = try! EthereumKeystoreV3(password: "")
+        let keystoreManager = KeystoreManager([tempKeystore!])
+        web3.addKeystoreManager(keystoreManager)
+        let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
+        options.from = keystoreManager.addresses?.first
+        let intermediate = contract?.method("fallback", options: options)
+        guard let result = intermediate?.send(password: "") else {return XCTFail()}
+        switch result {
+        case .success(_):
+            return XCTFail()
+        case .failure(let error):
+            guard case .unknownError = error else {return XCTFail()}
         }
     }
     
@@ -1144,71 +1164,52 @@ class web3swiftTests: XCTestCase {
     
     func testEventParsing1usingABIv2() {
         let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
+        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
         let web3 = Web3.InfuraMainnetWeb3()
-        let response = web3.eth.getBlockByNumber(UInt64(5200088), fullTransactions: true)
-        switch response {
-        case .failure(_):
-            XCTFail()
-        case .success(let result):
-            print(result)
-            let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
-            let contract = ContractV2(jsonString, at: contractAddress)
-            let event = contract?.events["Transfer"]
-            let parser = EventParserV2(web3: web3, event: event!,  contract: contract!, filter: nil)
-            let present = parser!.parseBlock(result)
-            guard case .success(let pres) = present else {return XCTFail()}
-            print(pres)
-            XCTAssert(pres.count == 1)
-            let decoded = pres[0].decodedResult
-            XCTAssert(decoded["name"] as! String == "Transfer")
-            XCTAssert(decoded["_to"] as! EthereumAddress == EthereumAddress("0xa5dcf6e0fee38f635c4a8d50d90e24400ed547d2"))
-            XCTAssert(decoded["_from"] as! EthereumAddress == EthereumAddress("0xdbf493e8d7db835192c02b992bd1ab72e96fd2e3"))
-            XCTAssert(decoded["_value"] as! BigUInt == BigUInt("3946fe37ffce3a0000", radix: 16)!)
-        }
+        let contract = web3.contract(jsonString, at: contractAddress, abiVersion: 2)
+        guard let eventParser = contract?.createEventParser("Transfer", filter: nil) else {return XCTFail()}
+        let present = eventParser.parseBlockByNumber(UInt64(5200088))
+        guard case .success(let pres) = present else {return XCTFail()}
+        print(pres)
+        XCTAssert(pres.count == 1)
+        let decoded = pres[0].decodedResult
+        XCTAssert(decoded["name"] as! String == "Transfer")
+        XCTAssert(decoded["_to"] as! EthereumAddress == EthereumAddress("0xa5dcf6e0fee38f635c4a8d50d90e24400ed547d2"))
+        XCTAssert(decoded["_from"] as! EthereumAddress == EthereumAddress("0xdbf493e8d7db835192c02b992bd1ab72e96fd2e3"))
+        XCTAssert(decoded["_value"] as! BigUInt == BigUInt("3946fe37ffce3a0000", radix: 16)!)
+        XCTAssert(pres[0].contractAddress == EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b"))
+        XCTAssert(pres[0].transactionReceipt.transactionHash.toHexString().addHexPrefix() == "0xcb235e8c6ecda032bc82c1084d2159ab82e7e4de35be703da6e80034bc577673")
     }
     
     func testEventParsing2usingABIv2() {
         let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
         let web3 = Web3.InfuraMainnetWeb3()
-        let response = web3.eth.getBlockByNumber(UInt64(5200120), fullTransactions: false)
-        switch response {
-        case .failure(_):
-            XCTFail()
-        case .success(let result):
-            let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
-            let contract = ContractV2(jsonString, at: nil)
-            let event = contract?.events["Transfer"]
-            let parser = EventParserV2(web3: web3, event: event!,  contract: contract!, filter: nil)
-            let present = parser!.parseBlock(result)
-            guard case .success(let pres) = present else {return XCTFail()}
-            print(pres)
-            XCTAssert(pres.count == 81)
-        }
+        let contract = web3.contract(jsonString, at: nil, abiVersion: 2)
+        guard let eventParser = contract?.createEventParser("Transfer", filter: nil) else {return XCTFail()}
+        let present = eventParser.parseBlockByNumber(UInt64(5200120))
+        guard case .success(let pres) = present else {return XCTFail()}
+        print(pres)
+        XCTAssert(pres.count == 81)
     }
-    
+
     func testEventParsing3usingABIv2() {
         let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
         let web3 = Web3.InfuraMainnetWeb3()
+        let contract = web3.contract(jsonString, at: nil, abiVersion: 2)
+        guard let eventParser = contract?.createEventParser("Transfer", filter: nil) else {return XCTFail()}
         let blockNumber = web3.eth.getBlockNumber()
         guard case .success(let currentBlock) = blockNumber else {return XCTFail()}
         let currentBlockAsInt = UInt64(currentBlock)
         for i in currentBlockAsInt-3 ... currentBlockAsInt {
-            let response = web3.eth.getBlockByNumber(i, fullTransactions: false)
-            switch response {
-            case .failure(_):
-                XCTFail()
-            case .success(let result):
-                let contract = ContractV2(jsonString, at: nil)
-                let event = contract?.events["Transfer"]
-                let parser = EventParserV2(web3: web3, event: event!,  contract: contract!, filter: nil)
-                let present = parser!.parseBlock(result)
-                guard case .success(let pres) = present else {return XCTFail()}
-                for p in pres {
-                    print("Block " + String(i) + "\n")
-                    print("From " + (p.decodedResult["_from"] as! EthereumAddress).address + "\n")
-                    print("From " + (p.decodedResult["_to"] as! EthereumAddress).address + "\n")
-                    print("Value " + String(p.decodedResult["_value"] as! BigUInt) + "\n")
-                }
+            let present = eventParser.parseBlockByNumber(i)
+            guard case .success(let pres) = present else {return XCTFail()}
+            for p in pres {
+                print("Block " + String(i) + "\n")
+                print("Emitted by contract " + p.contractAddress.address + "\n")
+                print("TX hash " + p.transactionReceipt.transactionHash.toHexString().addHexPrefix() + "\n")
+                print("From " + (p.decodedResult["_from"] as! EthereumAddress).address + "\n")
+                print("From " + (p.decodedResult["_to"] as! EthereumAddress).address + "\n")
+                print("Value " + String(p.decodedResult["_value"] as! BigUInt) + "\n")
             }
         }
     }

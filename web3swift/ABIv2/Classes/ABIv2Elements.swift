@@ -145,19 +145,10 @@ extension ABIv2.Element {
     }
 }
 
-extension ABIv2.Element {
+extension ABIv2.Element.Event {
     func decodeReturnedLogs(_ eventLog: EventLog) -> [String:Any]? {
-        switch self {
-        case .constructor(_):
-            return nil
-        case .event(let event):
-            guard let eventContent = ABIv2Decoder.decodeLog(event: event, eventLog: eventLog) else {return nil}
-            return eventContent
-        case .fallback(_):
-            return nil
-        case .function(_):
-            return nil
-        }
+        guard let eventContent = ABIv2Decoder.decodeLog(event: self, eventLog: eventLog) else {return nil}
+        return eventContent
     }
 }
 

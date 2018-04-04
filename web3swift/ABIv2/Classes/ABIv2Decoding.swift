@@ -137,7 +137,7 @@ extension ABIv2Decoder {
         var eventContent = [String: Any]()
         eventContent["name"]=event.name
         let logs = eventLog.topics
-        var dataForProcessing = eventLog.data
+        let dataForProcessing = eventLog.data
         if (logs.count == 1 && event.inputs.count > 0) {
             return nil
         }

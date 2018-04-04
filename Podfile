@@ -1,7 +1,7 @@
 def import_pods
-  pod 'Alamofire', '~> 4.5'
+  pod 'Alamofire', '~> 4.7'
   pod 'Alamofire-Synchronous', '~> 4.0'
-  pod 'BigInt', '~> 3.0.1'
+  pod 'BigInt', '~> 3.0.2'
   pod 'CryptoSwift'
   pod 'Result', '~> 3.0.0'
   pod 'libsodium'
