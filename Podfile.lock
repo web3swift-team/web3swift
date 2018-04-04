@@ -11,7 +11,7 @@ PODS:
   - SipHash (1.2.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 4.5)
+  - Alamofire (~> 4.7)
   - Alamofire-Synchronous (~> 4.0)
   - BigInt (~> 3.0.1)
   - CryptoSwift
@@ -38,6 +38,6 @@ SPEC CHECKSUMS:
   secp256k1_ios: 168c6c49ed9771db51875f5255c8f9847e4cf554
   SipHash: c6e9e43e9c531b5bc6602545130c26194a6d31ce
 
-PODFILE CHECKSUM: ad6dd243f372aed0175a8f53f5c3377a19efaace
+PODFILE CHECKSUM: 51415aa233dc66b3af6a71d098467d77a2d23a80
 
 COCOAPODS: 1.4.0
