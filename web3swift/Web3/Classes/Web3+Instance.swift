@@ -12,6 +12,7 @@ import BigInt
 public class web3: Web3OptionsInheritable {
     public var provider : Web3Provider
     public var options : Web3Options = Web3Options.defaultOptions()
+    public var defaultBlock = "latest"
     public func send(request: JSONRPCrequest) -> [String: Any]? {
         return self.provider.send(request: request)
     }

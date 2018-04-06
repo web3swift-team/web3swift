@@ -240,8 +240,8 @@ extension web3.web3contract {
                     let (n, d) = contract.parseEvent(log)
                     guard let evName = n, let evData = d else {return nil}
                     return EventParserResult(eventName: evName, transactionReceipt: receipt, contractAddress: log.address, decodedResult: evData)
-                }).filter { (res) -> Bool in
-                    return res != nil && res.eventName == self.eventName
+                }).filter { (res:EventParserResultProtocol?) -> Bool in
+                    return res != nil && res?.eventName == self.eventName
                 }
                 var allResults = [EventParserResultProtocol]()
                 if (self.filter != nil) {

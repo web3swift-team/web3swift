@@ -83,7 +83,6 @@ public class Web3HttpProvider: Web3Provider {
         }
     }
     
-    
     internal func syncPost(_ request: JSONRPCrequest) -> Any? {
         return Web3HttpProvider.syncPost(request, providerURL: self.url)
     }

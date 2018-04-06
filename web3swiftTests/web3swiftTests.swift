@@ -10,6 +10,7 @@
 import XCTest
 import CryptoSwift
 import BigInt
+import Result
 
 @testable import web3swift_iOS
 
@@ -1219,6 +1220,326 @@ class web3swiftTests: XCTestCase {
     {
         let privKey = SECP256K1.generatePrivateKey()
         XCTAssert(privKey != nil, "Failed to create new private key")
+    }
+    
+    func testConcurrency1()
+    {
+        var fail = true;
+        let web3 = Web3.InfuraMainnetWeb3()
+        let queue = OperationQueue.init()
+        queue.maxConcurrentOperationCount = 16
+        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        var request = JSONRPCrequest()
+        request.method = JSONRPCmethod.getTransactionCount
+        let params = [address.address.lowercased(), "latest"] as Array<Encodable>
+        let pars = JSONRPCparams(params: params)
+        request.params = pars
+        let operation = DataFetchOperation(web3, queue: queue)
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(_):
+                XCTFail()
+                fatalError()
+            }
+        }
+        operation.next = OperationChainingType.callback(callback, .main)
+        operation.inputData = request as AnyObject
+        queue.addOperation(operation)
+        sleep(10000)
+        XCTAssert(!fail)
+    }
+    
+    func testConcurrency2()
+    {
+        var fail = true;
+        let web3 = Web3.InfuraMainnetWeb3()
+        let queue = OperationQueue.init()
+        queue.maxConcurrentOperationCount = 16
+        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+        let hash = "0x2c6a803416ee1118ffc3b62a3344de768c86952bcf0376bdf1e49c0fc21a062f"
+        let operation = GetTransactionReceiptOperation(web3, queue: queue)
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(_):
+                XCTFail()
+                fatalError()
+            }
+        }
+        operation.next = OperationChainingType.callback(callback, queue)
+        operation.inputData = hash as AnyObject
+        queue.addOperation(operation)
+        sleep(10000)
+        XCTAssert(!fail)
+    }
+    
+    func testConcurrency3()
+    {
+        var fail = true;
+        let web3 = Web3.InfuraMainnetWeb3()
+        let tempKeystore = try! EthereumKeystoreV3(password: "")
+        let keystoreManager = KeystoreManager([tempKeystore!])
+        web3.addKeystoreManager(keystoreManager)
+        let queue = OperationQueue.init()
+        queue.maxConcurrentOperationCount = 16
+        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+        let operation = GetAccountsOperation(web3, queue: queue)
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                guard let accounts = result as? [EthereumAddress] else {return XCTFail()}
+                XCTAssert(accounts.count == 1)
+                XCTAssert(accounts.first == keystoreManager.addresses?.first)
+                fail = false
+            case .failure(_):
+                XCTFail()
+                fatalError()
+            }
+        }
+        operation.next = OperationChainingType.callback(callback, queue)
+        queue.addOperation(operation)
+        sleep(10000)
+        XCTAssert(!fail)
+    }
+    
+    func testConcurrency4()
+    {
+        var fail = true;
+        let web3 = Web3.InfuraMainnetWeb3()
+        let queue = OperationQueue.init()
+        queue.maxConcurrentOperationCount = 16
+        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+        let operation = GetBlockByNumberOperation(web3, queue: queue, block: "latest", fullTransactions: false)
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(_):
+                XCTFail()
+                fatalError()
+            }
+        }
+        operation.next = OperationChainingType.callback(callback, queue)
+        queue.addOperation(operation)
+        sleep(30000)
+        XCTAssert(!fail)
+    }
+    
+    func testConcurrency5()
+    {
+        var fail = true;
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let web3 = Web3.InfuraMainnetWeb3()
+        let queue = OperationQueue.init()
+        queue.maxConcurrentOperationCount = 16
+        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+        let operation = GetTransactionCountOperation(web3, queue: queue, address: address, onBlock: "latest")
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(_):
+                XCTFail()
+                fatalError()
+            }
+        }
+        operation.next = OperationChainingType.callback(callback, queue)
+        queue.addOperation(operation)
+        sleep(30000)
+        XCTAssert(!fail)
+    }
+    
+    func testConcurrency6()
+    {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let web3 = Web3.InfuraMainnetWeb3()
+        let queue = OperationQueue.init()
+        queue.maxConcurrentOperationCount = 16
+        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+        let operation = GetBalanceOperation(web3, queue: queue, address: address, onBlock: "latest")
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                let balance = result as! BigUInt
+                let balString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .eth, decimals: 3)
+                print(balString)
+                fail = false
+            case .failure(_):
+                XCTFail()
+                fatalError()
+            }
+            semaphore.signal()
+        }
+        operation.next = OperationChainingType.callback(callback, queue)
+        queue.addOperation(operation)
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssert(!fail)
+    }
+    
+    func testConcurrency7()
+    {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let web3 = Web3.InfuraMainnetWeb3()
+        let queue = OperationQueue.init()
+        queue.maxConcurrentOperationCount = 16
+        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+        let operation = GetGasPriceOperation(web3, queue: queue)
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                let balance = result as! BigUInt
+                let balString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .Gwei, decimals: 1)
+                print(balString)
+                fail = false
+            case .failure(_):
+                XCTFail()
+                fatalError()
+            }
+            semaphore.signal()
+        }
+        operation.next = OperationChainingType.callback(callback, queue)
+        queue.addOperation(operation)
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssert(!fail)
+    }
+    
+    func testConcurrency8()
+    {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let web3 = Web3.InfuraMainnetWeb3()
+        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let tempKeystore = try! EthereumKeystoreV3(password: "")
+        let keystoreManager = KeystoreManager([tempKeystore!])
+        web3.addKeystoreManager(keystoreManager)
+        let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
+        options.from = keystoreManager.addresses?.first
+        let intermediate = contract?.method("fallback", options: options)
+        let queue = OperationQueue.init()
+        queue.maxConcurrentOperationCount = 16
+        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+        let operation = EstimateGasOperation(web3, queue: queue, transactionIntermediate: intermediate!)
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                let balance = result as! BigUInt
+                XCTAssert(balance == BigUInt(21000))
+                fail = false
+            case .failure(_):
+                XCTFail()
+                fatalError()
+            }
+            semaphore.signal()
+        }
+        operation.next = OperationChainingType.callback(callback, queue)
+        queue.addOperation(operation)
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssert(!fail)
+    }
+    
+    func testConcurrency9()
+    {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let web3 = Web3.InfuraMainnetWeb3()
+        let queue = OperationQueue.init()
+        queue.maxConcurrentOperationCount = 16
+        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+        let blockHash = "0xae6a4fb3bf690b71f2c4bc5a0ab46987fdc2c3519d1e6585b26a44b101f2166c"
+        let operation = GetBlockByHashOperation(web3, queue: queue, hash: blockHash, fullTransactions: false)
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(_):
+                XCTFail()
+                fatalError()
+            }
+            semaphore.signal()
+        }
+        operation.next = OperationChainingType.callback(callback, queue)
+        queue.addOperation(operation)
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssert(!fail)
+    }
+    
+    func testConcurrency10()
+    {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let web3 = Web3.InfuraMainnetWeb3()
+        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+        let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
+        let parameters = [] as [AnyObject]
+        let intermediate = contract?.method("name", parameters:parameters,  options: options)
+        let queue = OperationQueue.init()
+        queue.maxConcurrentOperationCount = 16
+        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+        let operation = CallOperation(web3, queue: queue, transactionIntermediate: intermediate!)
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(_):
+                XCTFail()
+                fatalError()
+            }
+            semaphore.signal()
+        }
+        operation.next = OperationChainingType.callback(callback, queue)
+        queue.addOperation(operation)
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssert(!fail)
+    }
+    
+    func testConcurrency11()
+    {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let web3 = Web3.InfuraMainnetWeb3()
+        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+        let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
+        let parameters = [] as [AnyObject]
+        let queue = OperationQueue.init()
+        queue.maxConcurrentOperationCount = 16
+        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+        guard let operation = ContractCallOperation.init(web3, queue: queue, contract: contract!, method: "name", options: options, onBlock: web3.defaultBlock) else {return XCTFail()}
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(_):
+                XCTFail()
+                fatalError()
+            }
+            semaphore.signal()
+        }
+        operation.next = OperationChainingType.callback(callback, queue)
+        queue.addOperation(operation)
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssert(!fail)
     }
     
     func testPerformanceExample() {
