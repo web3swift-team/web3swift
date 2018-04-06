@@ -308,3 +308,10 @@ public struct Block:Decodable {
         self.uncles = uncles
     }
 }
+
+public struct EventParserResult:EventParserResultProtocol {
+    public var eventName: String
+    public var transactionReceipt: TransactionReceipt
+    public var contractAddress: EthereumAddress
+    public var decodedResult: [String:Any]
+}

@@ -179,3 +179,20 @@ final class StringConversionOperation: Web3Operation {
         }
     }
 }
+
+final class FlattenOperation: Web3Operation {
+    
+    override func main() {
+        if (error != nil) {
+            return self.processError(self.error!)
+        }
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let input = inputData! as? [AnyObject?] else {return processError(Web3Error.dataError)}
+        let notNilElements = input.filter { (el) -> Bool in
+            return el != nil
+        }
+        return processSuccess(notNilElements as AnyObject)
+    
+    }
+}

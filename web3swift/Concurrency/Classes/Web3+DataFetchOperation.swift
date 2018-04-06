@@ -15,11 +15,10 @@ final class DataFetchOperation: Web3Operation {
         if (error != nil) {
             return self.processError(self.error!)
         }
-        
         guard let completion = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? JSONRPCrequest else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        var dispatcher = self.web3.dispatcher
+        let dispatcher = self.web3.dispatcher
         dispatcher.addToQueue(request: input, next: completion)
         return
     }
