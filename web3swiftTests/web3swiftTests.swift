@@ -1514,30 +1514,36 @@ class web3swiftTests: XCTestCase {
     func testConcurrency11()
     {
         let semaphore = DispatchSemaphore(value: 0)
+        let max = 100
+        var i = max
         var fail = true;
         let web3 = Web3.InfuraMainnetWeb3()
         let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
         let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2)
         var options = Web3Options.defaultOptions()
         options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
-        let parameters = [] as [AnyObject]
-        let queue = OperationQueue.init()
-        queue.maxConcurrentOperationCount = 16
-        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
-        guard let operation = ContractCallOperation.init(web3, queue: queue, contract: contract!, method: "name", options: options, onBlock: web3.defaultBlock) else {return XCTFail()}
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                print(result)
-                fail = false
-            case .failure(_):
-                XCTFail()
-                fatalError()
+        for _ in 0 ... max {
+            guard let operation = ContractCallOperation.init(web3, contract: contract!, method: "name", options: options, onBlock: web3.defaultBlock) else {return XCTFail()}
+            let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+                switch res {
+                case .success(let result):
+                    print(result)
+                    fail = false
+                case .failure(_):
+                    XCTFail()
+                    fatalError()
+                }
+                i = i - 1;
+                if i == 0 {
+                    print("All done")
+                    semaphore.signal()
+                }
             }
-            semaphore.signal()
+            operation.next = OperationChainingType.callback(callback, web3.queue)
+            web3.queue.addOperation(operation)
         }
-        operation.next = OperationChainingType.callback(callback, queue)
-        queue.addOperation(operation)
+        
+        
         let _ = semaphore.wait(timeout: .distantFuture)
         XCTAssert(!fail)
     }

@@ -9,11 +9,20 @@
 import Foundation
 import Alamofire
 
+public struct Counter {
+    public static var counter = UInt64(DispatchTime.now().rawValue)
+    public static func increment() -> UInt64 {
+        Counter.counter = Counter.counter + 1
+        return Counter.counter
+    }
+}
+
+
 public struct JSONRPCrequest: Encodable, ParameterEncoding  {
     var jsonrpc: String = "2.0"
     var method: JSONRPCmethod?
     var params: JSONRPCparams?
-    var id: Int = Int(floor(Date().timeIntervalSince1970))
+    var id: UInt64 = Counter.increment()
     
     enum CodingKeys: String, CodingKey {
         case jsonrpc
@@ -45,6 +54,17 @@ public struct JSONRPCrequest: Encodable, ParameterEncoding  {
             guard let method = self.method else {return false}
             return method.requiredNumOfParameter == self.params?.params.count
         }
+    }
+}
+
+public struct JSONRPCrequestBatch: Encodable, ParameterEncoding  {
+    var requests: [JSONRPCrequest]
+    
+    public func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
+        let jsonSerialization = try JSONEncoder().encode(requests)
+        var request = try urlRequest.asURLRequest()
+        request.httpBody = jsonSerialization
+        return request
     }
 }
 
