@@ -10,10 +10,15 @@ import Foundation
 import Alamofire
 
 public struct Counter {
-    public static var counter = UInt64(DispatchTime.now().rawValue)
+    public static var counter = UInt64(1)
+    public static var lockQueue = DispatchQueue(label: "counterQueue")
     public static func increment() -> UInt64 {
-        Counter.counter = Counter.counter + 1
-        return Counter.counter
+        var c:UInt64 = 0
+        lockQueue.sync {
+            c = Counter.counter
+            Counter.counter = Counter.counter + 1
+        }
+        return c
     }
 }
 
