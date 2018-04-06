@@ -1,0 +1,6 @@
+framework module Pods_web3swift_iOS {
+  umbrella header "Pods-web3swift-iOS-umbrella.h"
+
+  export *
+  module * { export * }
+}
