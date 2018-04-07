@@ -26,8 +26,6 @@ extension ABIv2.Element {
         
         var isStatic: Bool {
             switch self {
-            case .bytes:
-                return false
             case .string:
                 return false
             case .dynamicBytes:
@@ -47,11 +45,12 @@ extension ABIv2.Element {
                     }
                 }
                 return true
+            case .bytes(length: _):
+                return true
             default:
                 return true
             }
         }
-        
         
         var isArray: Bool {
             switch self {
