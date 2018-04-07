@@ -1576,6 +1576,33 @@ class web3swiftTests: XCTestCase {
         XCTAssert(!fail)
     }
     
+    func testConcurrency13()
+    {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let web3 = Web3.InfuraMainnetWeb3()
+        let contract = web3.contract(Web3.Utils.erc20ABI, at: nil, abiVersion: 2)
+        guard let operation = ParseBlockForEventsOperation.init(web3, queue: web3.queue, contract: contract!.contract, eventName: "Transfer", filter: nil, block: "latest") else {return XCTFail()}
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(let error):
+                print(error)
+                XCTFail()
+                fatalError()
+            }
+            semaphore.signal()
+        }
+        operation.next = OperationChainingType.callback(callback, web3.queue)
+        web3.queue.addOperation(operation)
+        
+        
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssert(!fail)
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

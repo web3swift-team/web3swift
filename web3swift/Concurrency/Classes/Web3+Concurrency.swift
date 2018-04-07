@@ -16,7 +16,6 @@ public class OperationDispatcher {
     private var provider: Web3Provider
     private var queue: OperationQueue
     public var policy: DispatchPolicy
-//    private var pendingRequests: SynchronizedArray<Request> = SynchronizedArray<Request>()
     private var pendingRequests = [Request]()
     private var schedulingOperation: Operation? = nil
     private var lockQueue: DispatchQueue
