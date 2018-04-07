@@ -25,8 +25,8 @@ final class ContractCallOperation: Web3Operation {
         if (error != nil) {
             return self.processError(self.error!)
         }
-        guard let _ = self.next else {return}
-        guard inputData != nil else {return}
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? [AnyObject] else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard input.count == 3 else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let transaction = input[0] as? EthereumTransaction else {return processError(Web3Error.inputError("Invalid input supplied"))}
@@ -65,5 +65,52 @@ final class ContractCallOperation: Web3Operation {
         }
         parsingOp.next = OperationChainingType.callback(callback, self.expectedQueue)
         self.expectedQueue.addOperation(dataOp)
+    }
+}
+
+
+final class ContractEstimateGasOperation: Web3Operation {
+    
+    convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, contract: web3.web3contract, method: String = "fallback", parameters: [AnyObject] = [], extraData: Data = Data(), options: Web3Options?, onBlock: String = "latest") {
+        guard let intermediate = contract.method(method, parameters: parameters, extraData: extraData, options: options) else {return nil}
+        self.init(web3Instance, queue: queue, inputData: [intermediate, onBlock] as AnyObject)
+    }
+    
+    override func main() {
+        if (error != nil) {
+            return self.processError(self.error!)
+        }
+        guard let completion = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let input = inputData! as? [AnyObject] else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard input.count == 2 else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let intermediate = input[0] as? TransactionIntermediate else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let onBlock = input[1] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        let sendOp = EstimateGasOperation(web3, queue: expectedQueue, transactionIntermediate: intermediate, onBlock: onBlock)
+        sendOp.next = completion
+        self.expectedQueue.addOperation(sendOp)
+    }
+}
+
+final class ContractSendOperation: Web3Operation {
+    
+    convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, contract: web3.web3contract, method: String = "fallback", parameters: [AnyObject] = [], extraData: Data = Data(), options: Web3Options?, password: String = "BANKEXFOUNDATION") {
+        guard let intermediate = contract.method(method, parameters: parameters, extraData: extraData, options: options) else {return nil}
+        self.init(web3Instance, queue: queue, inputData: [intermediate, password] as AnyObject)
+    }
+    
+    override func main() {
+        if (error != nil) {
+            return self.processError(self.error!)
+        }
+        guard let completion = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let input = inputData! as? [AnyObject] else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard input.count == 2 else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let intermediate = input[0] as? TransactionIntermediate else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let password = input[1] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        let sendOp = SendTransactionOperation.init(web3, queue: expectedQueue, transactionIntermediate: intermediate, password: password)
+        sendOp.next = completion
+        self.expectedQueue.addOperation(sendOp)
     }
 }

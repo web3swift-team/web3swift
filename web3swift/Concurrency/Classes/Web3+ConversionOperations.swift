@@ -16,7 +16,8 @@ final class BigUIntConversionOperation: Web3Operation {
         if (error != nil) {
             return self.processError(self.error!)
         }
-        guard inputData != nil else {return}
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? [String: Any] else {return processError(Web3Error.dataError)}
         let result = ResultUnwrapper.getResponse(input)
         switch result {
@@ -40,7 +41,8 @@ final class JSONasDataConversionOperation: Web3Operation {
         if (error != nil) {
             return self.processError(self.error!)
         }
-        guard inputData != nil else {return}
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? [String: Any] else {return processError(Web3Error.dataError)}
         let result = ResultUnwrapper.getResponse(input)
         switch result {
@@ -64,7 +66,8 @@ final class DictionaryConversionOperation: Web3Operation {
         if (error != nil) {
             return self.processError(self.error!)
         }
-        guard inputData != nil else {return}
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? [String: Any] else {return processError(Web3Error.dataError)}
         let result = ResultUnwrapper.getResponse(input)
         switch result {
@@ -85,7 +88,8 @@ final class StringDictionaryConversionOperation: Web3Operation {
         if (error != nil) {
             return self.processError(self.error!)
         }
-        guard inputData != nil else {return}
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? [String: Any] else {return processError(Web3Error.dataError)}
         let result = ResultUnwrapper.getResponse(input)
         switch result {
@@ -106,7 +110,8 @@ final class AddressArrayConversionOperation: Web3Operation {
         if (error != nil) {
             return self.processError(self.error!)
         }
-        guard inputData != nil else {return}
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? [String: Any] else {return processError(Web3Error.dataError)}
         let result = ResultUnwrapper.getResponse(input)
         switch result {
@@ -134,7 +139,8 @@ final class DataConversionOperation: Web3Operation {
         if (error != nil) {
             return self.processError(self.error!)
         }
-        guard inputData != nil else {return}
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? [String: Any] else {return processError(Web3Error.dataError)}
         let result = ResultUnwrapper.getResponse(input)
         switch result {
@@ -158,7 +164,8 @@ final class StringConversionOperation: Web3Operation {
         if (error != nil) {
             return self.processError(self.error!)
         }
-        guard inputData != nil else {return}
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? [String: Any] else {return processError(Web3Error.dataError)}
         let result = ResultUnwrapper.getResponse(input)
         switch result {
@@ -170,5 +177,22 @@ final class StringConversionOperation: Web3Operation {
             }
             return processSuccess(resultString as AnyObject)
         }
+    }
+}
+
+final class FlattenOperation: Web3Operation {
+    
+    override func main() {
+        if (error != nil) {
+            return self.processError(self.error!)
+        }
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let input = inputData! as? [AnyObject?] else {return processError(Web3Error.dataError)}
+        let notNilElements = input.filter { (el) -> Bool in
+            return el != nil
+        }
+        return processSuccess(notNilElements as AnyObject)
+    
     }
 }

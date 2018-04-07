@@ -59,6 +59,8 @@
 		8103BBC72077954200499769 /* Web3+TransactionOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBC52077954200499769 /* Web3+TransactionOperations.swift */; };
 		8103BBC920779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBC820779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift */; };
 		8103BBCA20779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBC820779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift */; };
+		8103BBCC2077B84400499769 /* PlainKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBCB2077B84400499769 /* PlainKeystore.swift */; };
+		8103BBCD2077B84400499769 /* PlainKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBCB2077B84400499769 /* PlainKeystore.swift */; };
 		8104E2281FE82BDC00F952CB /* Web3+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8104E2271FE82BDC00F952CB /* Web3+Utils.swift */; };
 		810B0F9A1FEC446B00CF0DA2 /* Web3+JSONRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F991FEC446B00CF0DA2 /* Web3+JSONRPC.swift */; };
 		810B0F9C1FEC520500CF0DA2 /* Web3+Methods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */; };
@@ -142,6 +144,12 @@
 		81DDECCF1FDF004E0063684A /* Web3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECCE1FDF004E0063684A /* Web3.swift */; };
 		81FA43F62044097100EE14D5 /* web3swift_macOS_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA43F52044097100EE14D5 /* web3swift_macOS_Tests.swift */; };
 		81FA43F82044097100EE14D5 /* web3swift_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 417715D420362916005C3E16 /* web3swift_macOS.framework */; };
+		81FB21EE2077D98A007F9A83 /* SynchronizedQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21ED2077D98A007F9A83 /* SynchronizedQueue.swift */; };
+		81FB21EF2077D98A007F9A83 /* SynchronizedQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21ED2077D98A007F9A83 /* SynchronizedQueue.swift */; };
+		81FB21F12078142D007F9A83 /* Web3+Deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F02078142D007F9A83 /* Web3+Deprecated.swift */; };
+		81FB21F22078142D007F9A83 /* Web3+Deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F02078142D007F9A83 /* Web3+Deprecated.swift */; };
+		81FB21F4207814F7007F9A83 /* Web3+EventOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F3207814F7007F9A83 /* Web3+EventOperations.swift */; };
+		81FB21F5207814F7007F9A83 /* Web3+EventOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F3207814F7007F9A83 /* Web3+EventOperations.swift */; };
 		A4733E6E22E6216A90CCEA33 /* Pods_web3swift_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4A49B538D672F4DA112A11 /* Pods_web3swift_macOS.framework */; };
 /* End PBXBuildFile section */
 
@@ -193,6 +201,7 @@
 		8103BBC2207763B100499769 /* Web3+NativePrimitivesConversionOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+NativePrimitivesConversionOperations.swift"; sourceTree = "<group>"; };
 		8103BBC52077954200499769 /* Web3+TransactionOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+TransactionOperations.swift"; sourceTree = "<group>"; };
 		8103BBC820779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+TransactionAndBlockDetailsOperations.swift"; sourceTree = "<group>"; };
+		8103BBCB2077B84400499769 /* PlainKeystore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainKeystore.swift; sourceTree = "<group>"; };
 		8104E2271FE82BDC00F952CB /* Web3+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Utils.swift"; sourceTree = "<group>"; };
 		810B0F991FEC446B00CF0DA2 /* Web3+JSONRPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+JSONRPC.swift"; sourceTree = "<group>"; };
 		810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Methods.swift"; sourceTree = "<group>"; };
@@ -257,6 +266,9 @@
 		81FA43F32044097000EE14D5 /* web3swift-macOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "web3swift-macOS_Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81FA43F52044097100EE14D5 /* web3swift_macOS_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_macOS_Tests.swift; sourceTree = "<group>"; };
 		81FA43F72044097100EE14D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		81FB21ED2077D98A007F9A83 /* SynchronizedQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronizedQueue.swift; sourceTree = "<group>"; };
+		81FB21F02078142D007F9A83 /* Web3+Deprecated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Deprecated.swift"; sourceTree = "<group>"; };
+		81FB21F3207814F7007F9A83 /* Web3+EventOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+EventOperations.swift"; sourceTree = "<group>"; };
 		A9ADDE40292A17C21B8D5516 /* Pods-web3swift-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-iOS/Pods-web3swift-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		B48CA58D134401D3C4E8CCC5 /* Pods_Web3Swift_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Web3Swift_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -401,6 +413,7 @@
 				8103BBC2207763B100499769 /* Web3+NativePrimitivesConversionOperations.swift */,
 				8103BBC52077954200499769 /* Web3+TransactionOperations.swift */,
 				8103BBC820779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift */,
+				81FB21F3207814F7007F9A83 /* Web3+EventOperations.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -416,6 +429,7 @@
 		8113D2AF1FD7E1590074282C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				81FB21ED2077D98A007F9A83 /* SynchronizedQueue.swift */,
 				81C5DA272072E18200424CD6 /* NativeTypesEncoding+Extensions.swift */,
 				8113D2B01FD7E1590074282C /* CryptoExtensions.swift */,
 				8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */,
@@ -452,6 +466,7 @@
 				815630032007BC8F00A0EC2F /* BIP39+WordLists.swift */,
 				81531A9F1FE7C07A002192CC /* EthereumKeystoreV3.swift */,
 				817EBB26200673D100E02EAA /* KeystoreV3JSONStructure.swift */,
+				8103BBCB2077B84400499769 /* PlainKeystore.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -538,6 +553,7 @@
 				81C0FCF320440F0900D82FAF /* Web3+Options.swift */,
 				81C0FCFC20449D1400D82FAF /* Web3+TransactionIntermediate.swift */,
 				818D16CE204D42910084D2A4 /* Web3+EventParser.swift */,
+				81FB21F02078142D007F9A83 /* Web3+Deprecated.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1027,6 +1043,7 @@
 				81C5DA282072E18200424CD6 /* NativeTypesEncoding+Extensions.swift in Sources */,
 				8123E1C7200CBAC200B6D3AB /* Dictionary+Extension.swift in Sources */,
 				8103BBC920779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift in Sources */,
+				81FB21F12078142D007F9A83 /* Web3+Deprecated.swift in Sources */,
 				810B0F9C1FEC520500CF0DA2 /* Web3+Methods.swift in Sources */,
 				8113DE7C1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift in Sources */,
 				8104E2281FE82BDC00F952CB /* Web3+Utils.swift in Sources */,
@@ -1038,6 +1055,7 @@
 				8103BBBA20764A6900499769 /* Web3+DataFetchOperation.swift in Sources */,
 				8123E1C9200CBAF800B6D3AB /* Data+Extension.swift in Sources */,
 				81C5DA1B2072633300424CD6 /* ABIv2ParameterTypes.swift in Sources */,
+				81FB21EE2077D98A007F9A83 /* SynchronizedQueue.swift in Sources */,
 				817EBB23200649E000E02EAA /* RIPEMD160+StackOveflow.swift in Sources */,
 				8116666320455E33008D8AD0 /* Web3+Wallet.swift in Sources */,
 				81DDECCF1FDF004E0063684A /* Web3.swift in Sources */,
@@ -1050,6 +1068,8 @@
 				81C5DA1D207263D700424CD6 /* ABIv2Parsing.swift in Sources */,
 				8113D31A1FD7F4C80074282C /* ABITypes.swift in Sources */,
 				817EBB162004FE4200E02EAA /* Web3+HttpProvider.swift in Sources */,
+				81FB21F4207814F7007F9A83 /* Web3+EventOperations.swift in Sources */,
+				8103BBCC2077B84400499769 /* PlainKeystore.swift in Sources */,
 				81C0FCF220440EB500D82FAF /* Web3+Protocols.swift in Sources */,
 				81C0FCF420440F0900D82FAF /* Web3+Options.swift in Sources */,
 				815630042007BC8F00A0EC2F /* BIP39+WordLists.swift in Sources */,
@@ -1105,6 +1125,7 @@
 				81C5DA292072E18200424CD6 /* NativeTypesEncoding+Extensions.swift in Sources */,
 				41948130203630530065A83B /* BIP32Keystore.swift in Sources */,
 				8103BBCA20779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift in Sources */,
+				81FB21F22078142D007F9A83 /* Web3+Deprecated.swift in Sources */,
 				41948131203630530065A83B /* BIP32KeystoreJSONStructure.swift in Sources */,
 				41948132203630530065A83B /* BIP32HDNode.swift in Sources */,
 				41948133203630530065A83B /* BIP39.swift in Sources */,
@@ -1116,6 +1137,7 @@
 				8103BBBB20764A6900499769 /* Web3+DataFetchOperation.swift in Sources */,
 				8116666420455E33008D8AD0 /* Web3+Wallet.swift in Sources */,
 				81C5DA1C2072633300424CD6 /* ABIv2ParameterTypes.swift in Sources */,
+				81FB21EF2077D98A007F9A83 /* SynchronizedQueue.swift in Sources */,
 				41948137203630530065A83B /* EthereumTransaction.swift in Sources */,
 				41948138203630530065A83B /* CryptoExtensions.swift in Sources */,
 				81C0FD052044A8AE00D82FAF /* Web3+Protocols.swift in Sources */,
@@ -1128,6 +1150,8 @@
 				81C5DA1E207263D800424CD6 /* ABIv2Parsing.swift in Sources */,
 				4194813C203630530065A83B /* Base58.swift in Sources */,
 				81C0FD032044A89400D82FAF /* Web3+TransactionIntermediate.swift in Sources */,
+				81FB21F5207814F7007F9A83 /* Web3+EventOperations.swift in Sources */,
+				8103BBCD2077B84400499769 /* PlainKeystore.swift in Sources */,
 				4194813D203630530065A83B /* RIPEMD160+StackOveflow.swift in Sources */,
 				4194813E203630530065A83B /* Data+Extension.swift in Sources */,
 				4194813F203630530065A83B /* Dictionary+Extension.swift in Sources */,

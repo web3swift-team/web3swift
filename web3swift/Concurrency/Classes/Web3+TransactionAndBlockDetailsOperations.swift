@@ -69,18 +69,18 @@ final class GetTransactionReceiptOperation: Web3Operation {
 }
 
 final class GetBlockByNumberOperation: Web3Operation {
-    convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, block: UInt64, fullTransactions: Bool = false) {
-        let blockNumber = String(block, radix: 16).addHexPrefix()
-        self.init(web3Instance, queue: queue, inputData: [blockNumber, fullTransactions] as AnyObject)
+    convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, blockNumber: UInt64, fullTransactions: Bool = false) {
+        let blockNumberString = String(blockNumber, radix: 16).addHexPrefix()
+        self.init(web3Instance, queue: queue, blockNumber: blockNumberString, fullTransactions: fullTransactions)
     }
     
-    convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, block: BigUInt, fullTransactions: Bool = false) {
-        let blockNumber = String(block, radix: 16).addHexPrefix()
-        self.init(web3Instance, queue: queue, inputData: [blockNumber, fullTransactions] as AnyObject)
+    convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, blockNumber: BigUInt, fullTransactions: Bool = false) {
+        let blockNumberString = String(blockNumber, radix: 16).addHexPrefix()
+        self.init(web3Instance, queue: queue, blockNumber: blockNumberString, fullTransactions: fullTransactions)
     }
     
-    convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, block: String, fullTransactions: Bool = false) {
-        self.init(web3Instance, queue: queue, inputData: [block, fullTransactions] as AnyObject)
+    convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, blockNumber: String, fullTransactions: Bool = false) {
+        self.init(web3Instance, queue: queue, inputData: [blockNumber, fullTransactions] as AnyObject)
     }
     
     override func main() {

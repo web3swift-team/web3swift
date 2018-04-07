@@ -16,7 +16,8 @@ final class TransactionReceiptConversionOperation: Web3Operation {
         if (error != nil) {
             return self.processError(self.error!)
         }
-        guard inputData != nil else {return}
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? [String: AnyObject] else {return processError(Web3Error.dataError)}
         guard let receipt = TransactionReceipt(input) else {
             return processError(Web3Error.dataError)
@@ -31,7 +32,8 @@ final class BlockConversionOperation: Web3Operation {
         if (error != nil) {
             return self.processError(self.error!)
         }
-        guard inputData != nil else {return}
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? Data else {return processError(Web3Error.dataError)}
         guard let block = try? JSONDecoder().decode(Block.self, from: input) else {
             return processError(Web3Error.dataError)
