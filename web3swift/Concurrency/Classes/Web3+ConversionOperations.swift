@@ -10,6 +10,36 @@ import Foundation
 import Result
 import BigInt
 
+final class ResultUnwrapOperation: Web3Operation {
+    override func main() {
+        if (error != nil) {
+            return self.processError(self.error!)
+        }
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let input = inputData! as? [String: Any] else {return processError(Web3Error.dataError)}
+        let result = ResultUnwrapper.getResponse(input)
+        switch result {
+        case .failure(let error):
+            return processError(error)
+        case .success(let payload):
+            return processSuccess(payload as AnyObject)
+        }
+    }
+}
+
+final class ConversionOperation<T>: Web3Operation {
+    override func main() {
+        if (error != nil) {
+            return self.processError(self.error!)
+        }
+        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let input = inputData! as? T else {return processError(Web3Error.dataError)}
+        return processSuccess(input as AnyObject)
+    }
+}
+
 final class BigUIntConversionOperation: Web3Operation {
     
     override func main() {
@@ -180,7 +210,10 @@ final class StringConversionOperation: Web3Operation {
     }
 }
 
-final class FlattenOperation: Web3Operation {
+final class JoinOperation: Web3Operation {
+    convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, operations: [Web3Operation]) {
+        self.init(web3Instance, queue: queue, inputData: operations as AnyObject)
+    }
     
     override func main() {
         if (error != nil) {
@@ -188,11 +221,60 @@ final class FlattenOperation: Web3Operation {
         }
         guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        guard let input = inputData! as? [AnyObject?] else {return processError(Web3Error.dataError)}
-        let notNilElements = input.filter { (el) -> Bool in
-            return el != nil
+        guard let operations = inputData! as? [Web3Operation] else {return processError(Web3Error.dataError)}
+        var resultsArray = [AnyObject]()
+        let lockQueue = DispatchQueue.init(label: "joinQueue")
+        var expectedOperations = operations.count
+        var earlyReturn = false
+        
+        let joiningCallback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                lockQueue.sync() {
+                    expectedOperations = expectedOperations - 1
+                    guard let ev = result as? [AnyObject] else {
+                        if (!earlyReturn) {
+                            earlyReturn = true
+                            return self.processError(Web3Error.dataError)
+                        } else {
+                            return
+                        }
+                    }
+                    resultsArray.append(contentsOf: ev)
+                    guard let currentQueue = OperationQueue.current else {
+                        if (!earlyReturn) {
+                            earlyReturn = true
+                            return self.processError(Web3Error.dataError)
+                        } else {
+                            return
+                        }
+                    }
+                    
+                    if expectedOperations == 0 {
+                        if (!earlyReturn) {
+                            earlyReturn = true
+                            currentQueue.underlyingQueue?.async(execute: {
+                                self.processSuccess(resultsArray as AnyObject)
+                            })
+                        } else {
+                            return
+                        }
+                    }
+                }
+            case .failure(let error):
+                lockQueue.sync() {
+                    if (!earlyReturn) {
+                        earlyReturn = true
+                        return self.processError(error)
+                    } else {
+                        return
+                    }
+                }
+            }
         }
-        return processSuccess(notNilElements as AnyObject)
-    
+        for op in operations {
+            op.next = OperationChainingType.callback(joiningCallback, self.expectedQueue)
+        }
+        self.expectedQueue.addOperations(operations, waitUntilFinished: false)
     }
 }

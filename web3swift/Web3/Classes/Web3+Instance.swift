@@ -24,7 +24,7 @@ public class web3: Web3OptionsInheritable {
         provider = prov
         if queue == nil {
             self.queue = OperationQueue.init()
-            self.queue.maxConcurrentOperationCount = 16
+            self.queue.maxConcurrentOperationCount = 32
             self.queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
             
         } else {

@@ -31,7 +31,7 @@ final class ParseBlockForEventsOperation: Web3Operation {
         if (error != nil) {
             return self.processError(self.error!)
         }
-        guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let completion = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? [AnyObject] else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard input.count == 4 else {return processError(Web3Error.inputError("Invalid input supplied"))}
@@ -40,58 +40,7 @@ final class ParseBlockForEventsOperation: Web3Operation {
         let filter = input[2] as? EventFilter
         guard let blockNumber = input[3] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
         let getBlockOperation = GetBlockByNumberOperation.init(self.web3, queue: self.expectedQueue, blockNumber: blockNumber, fullTransactions: false)
-        var resultsArray = [EventParserResultProtocol]()
-        let lockQueue = DispatchQueue.init(label: "org.bankexfoundation.LockQueue")
-        var expectedOperations = 0
-        var earlyReturn = false
-        let joiningCallback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                lockQueue.sync() {
-                    expectedOperations = expectedOperations - 1
-                    guard let ev = result as? [EventParserResultProtocol] else {
-                        if (!earlyReturn) {
-                            earlyReturn = true
-                            return self.processError(Web3Error.dataError)
-                        } else {
-                            return
-                        }
-                    }
-                    resultsArray.append(contentsOf: ev)
-                    guard let currentQueue = OperationQueue.current else {
-                        if (!earlyReturn) {
-                            earlyReturn = true
-                            return self.processError(Web3Error.dataError)
-                        } else {
-                            return
-                        }
-                    }
-                    
-                    if expectedOperations == 0 {
-                        if (!earlyReturn) {
-                            earlyReturn = true
-                            currentQueue.underlyingQueue?.async(execute: {
-                                let allEvents = resultsArray.flatMap({ (ev) -> EventParserResultProtocol in
-                                    return ev
-                                })
-                                self.processSuccess(allEvents as AnyObject)
-                            })
-                        } else {
-                            return
-                        }
-                    }
-                }
-            case .failure(let error):
-                lockQueue.sync() {
-                    if (!earlyReturn) {
-                        earlyReturn = true
-                        return self.processError(error)
-                    } else {
-                        return
-                    }
-                }
-            }
-        }
+        let resultsArray = [EventParserResultProtocol]()
         
         let blockCallback = { (res: Result<AnyObject, Web3Error>) -> () in
             switch res {
@@ -120,11 +69,13 @@ final class ParseBlockForEventsOperation: Web3Operation {
                         self.processError(Web3Error.dataError)
                         return
                     }
-                    parseOperation.next = OperationChainingType.callback(joiningCallback, self.expectedQueue)
                     allOps.append(parseOperation)
                 }
-                expectedOperations = allOps.count
-                self.expectedQueue.addOperations(allOps, waitUntilFinished: true)
+                let joinOperation = JoinOperation(self.web3, queue: self.expectedQueue, operations: allOps)
+                let conversionOp = ConversionOperation<[EventParserResultProtocol]>(self.web3, queue: self.expectedQueue)
+                joinOperation.next = OperationChainingType.operation(conversionOp)
+                conversionOp.next = completion
+                self.expectedQueue.addOperation(joinOperation)
             case .failure(let error):
                 return self.processError(error)
             }
@@ -133,6 +84,7 @@ final class ParseBlockForEventsOperation: Web3Operation {
         self.expectedQueue.addOperation(getBlockOperation)
     }
 }
+
 
 final class ParseTransactionForEventsOperation: Web3Operation {
     
