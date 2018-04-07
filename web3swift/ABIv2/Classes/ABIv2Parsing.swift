@@ -133,7 +133,7 @@ extension ABIv2.Input {
                 let input = try inp.parse()
                 return input.type
             })
-            let type = ABIv2.Element.ParameterType.tuple(types: components!, dynamic: false)
+            let type = ABIv2.Element.ParameterType.tuple(types: components!)
             let nativeInput = ABIv2.Element.InOut(name: name, type: type)
             return nativeInput
         }
@@ -155,16 +155,31 @@ extension ABIv2.Output {
     func parse() throws -> ABIv2.Element.InOut {
         let name = self.name != nil ? self.name! : ""
         let parameterType = try ABIv2TypeParser.parseTypeString(self.type)
-        if case .tuple(types: _) = parameterType {
+        switch parameterType {
+        case .tuple(types: _):
             let components = try self.components?.flatMap({ (inp: ABIv2.Output) throws -> ABIv2.Element.ParameterType in
                 let input = try inp.parse()
                 return input.type
             })
-            let type = ABIv2.Element.ParameterType.tuple(types: components!, dynamic: false)
+            let type = ABIv2.Element.ParameterType.tuple(types: components!)
             let nativeInput = ABIv2.Element.InOut(name: name, type: type)
             return nativeInput
-        }
-        else {
+        case .array(type: let subtype, length: let length):
+            switch subtype {
+            case .tuple(types: _):
+                let components = try self.components?.flatMap({ (inp: ABIv2.Output) throws -> ABIv2.Element.ParameterType in
+                    let input = try inp.parse()
+                    return input.type
+                })
+                let nestedSubtype = ABIv2.Element.ParameterType.tuple(types: components!)
+                let properType = ABIv2.Element.ParameterType.array(type: nestedSubtype, length: length)
+                let nativeInput = ABIv2.Element.InOut(name: name, type: properType)
+                return nativeInput
+            default:
+                let nativeInput = ABIv2.Element.InOut(name: name, type: parameterType)
+                return nativeInput
+            }
+        default:
             let nativeInput = ABIv2.Element.InOut(name: name, type: parameterType)
             return nativeInput
         }
