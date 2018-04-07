@@ -18,10 +18,6 @@ extension ABIv2 {
         var components: [Input]?
     }
     
-//    public struct InputComponent: Decodable {
-//
-//    }
-
     public struct Output: Decodable {
         var name: String?
         var type: String

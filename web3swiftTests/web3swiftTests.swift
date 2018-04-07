@@ -775,6 +775,7 @@ class web3swiftTests: XCTestCase {
         let data = ABIv2Encoder.encode(types: types, values: [BigUInt(69), true] as [AnyObject])
         XCTAssert(data != nil, "failed to encode")
         let expected = "0x00000000000000000000000000000000000000000000000000000000000000450000000000000000000000000000000000000000000000000000000000000001"
+        print(data!.toHexString().lowercased())
         XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
     }
     
@@ -786,7 +787,7 @@ class web3swiftTests: XCTestCase {
         let data = ABIv2Encoder.encode(types: types, values: ["dave"] as [AnyObject])
         XCTAssert(data != nil, "failed to encode")
         let expected = "0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000046461766500000000000000000000000000000000000000000000000000000000"
-        print(data?.toHexString().lowercased().addHexPrefix())
+        print(data!.toHexString().lowercased())
         XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
     }
 
@@ -803,7 +804,7 @@ class web3swiftTests: XCTestCase {
         let data = ABIv2Encoder.encode(types: types, values: ["dave".data(using: .utf8)!, true, [BigUInt(1), BigUInt(2), BigUInt(3)] ] as [AnyObject])
         XCTAssert(data != nil, "failed to encode")
         let expected = "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000464617665000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000003"
-        print(data?.toHexString().lowercased().addHexPrefix())
+        print(data!.toHexString().lowercased())
         XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
     }
 
@@ -853,9 +854,36 @@ class web3swiftTests: XCTestCase {
                                                     "Hello, world!"] as [AnyObject])
         XCTAssert(data != nil, "failed to encode")
         let expected = "0x00000000000000000000000000000000000000000000000000000000000001230000000000000000000000000000000000000000000000000000000000000080313233343536373839300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000004560000000000000000000000000000000000000000000000000000000000000789000000000000000000000000000000000000000000000000000000000000000d48656c6c6f2c20776f726c642100000000000000000000000000000000000000"
-        print(data?.toHexString().lowercased().addHexPrefix())
+        print(data!.toHexString().lowercased())
         XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
     }
+    
+    func testABIv2encoding7()
+    {
+        let types = [
+                     ABIv2.Element.InOut(name: "2", type: ABIv2.Element.ParameterType.array(type: .string, length: 0))
+        ]
+        let data = ABIv2Encoder.encode(types: types,
+                                       values: [["Hello", "World"]] as [AnyObject])
+        XCTAssert(data != nil, "failed to encode")
+        let expected = "0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000548656c6c6f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005576f726c64000000000000000000000000000000000000000000000000000000"
+        print(data!.toHexString().lowercased())
+        XCTAssert(data?.toHexString().lowercased() == expected, "failed to encode")
+    }
+    
+    func testABIv2encoding8()
+    {
+        let types = [
+            ABIv2.Element.InOut(name: "2", type: ABIv2.Element.ParameterType.array(type: .string, length: 2))
+        ]
+        let data = ABIv2Encoder.encode(types: types,
+                                       values: [["Hello", "World"]] as [AnyObject])
+        XCTAssert(data != nil, "failed to encode")
+        let expected = "000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000548656c6c6f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005576f726c64000000000000000000000000000000000000000000000000000000"
+        print(data!.toHexString().lowercased())
+        XCTAssert(data?.toHexString().lowercased() == expected, "failed to encode")
+    }
+    
     
     
     func testABIv2Decoding1() {
@@ -1224,18 +1252,16 @@ class web3swiftTests: XCTestCase {
     
     func testConcurrency1()
     {
+        let semaphore = DispatchSemaphore(value: 0)
         var fail = true;
         let web3 = Web3.InfuraMainnetWeb3()
-        let queue = OperationQueue.init()
-        queue.maxConcurrentOperationCount = 16
-        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
         let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
         var request = JSONRPCrequest()
         request.method = JSONRPCmethod.getTransactionCount
         let params = [address.address.lowercased(), "latest"] as Array<Encodable>
         let pars = JSONRPCparams(params: params)
         request.params = pars
-        let operation = DataFetchOperation(web3, queue: queue)
+        let operation = DataFetchOperation(web3, queue: web3.queue)
         let callback = { (res: Result<AnyObject, Web3Error>) -> () in
             switch res {
             case .success(let result):
@@ -1245,16 +1271,18 @@ class web3swiftTests: XCTestCase {
                 XCTFail()
                 fatalError()
             }
+            semaphore.signal()
         }
-        operation.next = OperationChainingType.callback(callback, .main)
+        operation.next = OperationChainingType.callback(callback, web3.queue)
         operation.inputData = request as AnyObject
-        queue.addOperation(operation)
-        sleep(10000)
+        web3.queue.addOperation(operation)
+        let _ = semaphore.wait(timeout: .distantFuture)
         XCTAssert(!fail)
     }
     
     func testConcurrency2()
     {
+        let semaphore = DispatchSemaphore(value: 0)
         var fail = true;
         let web3 = Web3.InfuraMainnetWeb3()
         let queue = OperationQueue.init()
@@ -1271,16 +1299,18 @@ class web3swiftTests: XCTestCase {
                 XCTFail()
                 fatalError()
             }
+            semaphore.signal()
         }
         operation.next = OperationChainingType.callback(callback, queue)
         operation.inputData = hash as AnyObject
         queue.addOperation(operation)
-        sleep(10000)
+        let _ = semaphore.wait(timeout: .distantFuture)
         XCTAssert(!fail)
     }
     
     func testConcurrency3()
     {
+        let semaphore = DispatchSemaphore(value: 0)
         var fail = true;
         let web3 = Web3.InfuraMainnetWeb3()
         let tempKeystore = try! EthereumKeystoreV3(password: "")
@@ -1302,15 +1332,17 @@ class web3swiftTests: XCTestCase {
                 XCTFail()
                 fatalError()
             }
+            semaphore.signal()
         }
         operation.next = OperationChainingType.callback(callback, queue)
         queue.addOperation(operation)
-        sleep(10000)
+        let _ = semaphore.wait(timeout: .distantFuture)
         XCTAssert(!fail)
     }
     
     func testConcurrency4()
     {
+        let semaphore = DispatchSemaphore(value: 0)
         var fail = true;
         let web3 = Web3.InfuraMainnetWeb3()
         let queue = OperationQueue.init()
@@ -1326,15 +1358,17 @@ class web3swiftTests: XCTestCase {
                 XCTFail()
                 fatalError()
             }
+            semaphore.signal()
         }
         operation.next = OperationChainingType.callback(callback, queue)
         queue.addOperation(operation)
-        sleep(30000)
+        let _ = semaphore.wait(timeout: .distantFuture)
         XCTAssert(!fail)
     }
     
     func testConcurrency5()
     {
+        let semaphore = DispatchSemaphore(value: 0)
         var fail = true;
         let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
         let web3 = Web3.InfuraMainnetWeb3()
@@ -1351,10 +1385,11 @@ class web3swiftTests: XCTestCase {
                 XCTFail()
                 fatalError()
             }
+            semaphore.signal()
         }
         operation.next = OperationChainingType.callback(callback, queue)
         queue.addOperation(operation)
-        sleep(30000)
+        let _ = semaphore.wait(timeout: .distantFuture)
         XCTAssert(!fail)
     }
     
@@ -1604,8 +1639,8 @@ class web3swiftTests: XCTestCase {
     }
     
     func testAdvancedABIv2() {
-        let abiString = "[{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"constant\":true,\"inputs\":[],\"name\":\"testDynArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testSingle\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"t\",\"type\":\"tuple\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStaticArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"}]"
-        let contractAddress = EthereumAddress("0xd7723c53d318c7558286aafee82ec22f5ab44e1e")
+        let abiString = "[{\"constant\":true,\"inputs\":[],\"name\":\"testDynOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testDynArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStaticArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testSingle\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"t\",\"type\":\"tuple\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
+        let contractAddress = EthereumAddress("0xd14630167f878e92a40a1c12db4532f29cb3065e")
         let web3 = Web3.InfuraRinkebyWeb3()
         let contract = web3.contract(abiString, at: contractAddress, abiVersion: 2)
         var options = Web3Options.defaultOptions()
@@ -1627,8 +1662,8 @@ class web3swiftTests: XCTestCase {
     }
     
     func testAdvancedABIv2staticArray() {
-        let abiString = "[{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"constant\":true,\"inputs\":[],\"name\":\"testDynArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testSingle\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"t\",\"type\":\"tuple\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStaticArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"}]"
-        let contractAddress = EthereumAddress("0xd7723c53d318c7558286aafee82ec22f5ab44e1e")
+        let abiString = "[{\"constant\":true,\"inputs\":[],\"name\":\"testDynOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testDynArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStaticArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testSingle\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"t\",\"type\":\"tuple\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
+        let contractAddress = EthereumAddress("0xd14630167f878e92a40a1c12db4532f29cb3065e")
         let web3 = Web3.InfuraRinkebyWeb3()
         let contract = web3.contract(abiString, at: contractAddress, abiVersion: 2)
         var options = Web3Options.defaultOptions()
@@ -1650,8 +1685,8 @@ class web3swiftTests: XCTestCase {
     }
     
     func testAdvancedABIv2dynamicArray() {
-        let abiString = "[{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"constant\":true,\"inputs\":[],\"name\":\"testDynArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testSingle\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"t\",\"type\":\"tuple\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStaticArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"}]"
-        let contractAddress = EthereumAddress("0xd7723c53d318c7558286aafee82ec22f5ab44e1e")
+        let abiString = "[{\"constant\":true,\"inputs\":[],\"name\":\"testDynOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testDynArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStaticArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testSingle\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"t\",\"type\":\"tuple\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
+        let contractAddress = EthereumAddress("0xd14630167f878e92a40a1c12db4532f29cb3065e")
         let web3 = Web3.InfuraRinkebyWeb3()
         let contract = web3.contract(abiString, at: contractAddress, abiVersion: 2)
         var options = Web3Options.defaultOptions()
@@ -1661,6 +1696,52 @@ class web3swiftTests: XCTestCase {
         let rawContract = contract?.contract as! ContractV2
         print(rawContract)
         let intermediate = contract?.method("testDynArray", options: options)
+        XCTAssertNotNil(intermediate)
+        let result = intermediate!.call(options: nil)
+        switch result {
+        case .success(let payload):
+            print(payload)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
+    func testAdvancedABIv2dynamicArrayOfStrings() {
+        let abiString = "[{\"constant\":true,\"inputs\":[],\"name\":\"testDynOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testDynArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStaticArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testSingle\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"t\",\"type\":\"tuple\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
+        let contractAddress = EthereumAddress("0xd14630167f878e92a40a1c12db4532f29cb3065e")
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let contract = web3.contract(abiString, at: contractAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.from = contractAddress
+        XCTAssert(contract != nil)
+        print(contract?.contract.allMethods)
+        let rawContract = contract?.contract as! ContractV2
+        print(rawContract)
+        let intermediate = contract?.method("testDynOfDyn", options: options)
+        XCTAssertNotNil(intermediate)
+        let result = intermediate!.call(options: nil)
+        switch result {
+        case .success(let payload):
+            print(payload)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
+    func testAdvancedABIv2staticArrayOfStrings() {
+        let abiString = "[{\"constant\":true,\"inputs\":[],\"name\":\"testDynOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testDynArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStaticArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testSingle\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"t\",\"type\":\"tuple\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
+        let contractAddress = EthereumAddress("0xd14630167f878e92a40a1c12db4532f29cb3065e")
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let contract = web3.contract(abiString, at: contractAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.from = contractAddress
+        XCTAssert(contract != nil)
+        print(contract?.contract.allMethods)
+        let rawContract = contract?.contract as! ContractV2
+        print(rawContract)
+        let intermediate = contract?.method("testStOfDyn", options: options)
         XCTAssertNotNil(intermediate)
         let result = intermediate!.call(options: nil)
         switch result {

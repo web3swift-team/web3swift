@@ -240,7 +240,6 @@ extension ABIv2Decoder {
                 indexedValues.append(valueUnwrapped)
             }
         }
-//        let (v, _) = ABIv2Decoder.decodeTypesTuple(tuple: ABIv2.Element.ParameterType.tuple(types: nonIndexedTypes), data: dataForProcessing)
         let v = ABIv2Decoder.decode(types: nonIndexedTypes, data: dataForProcessing)
         guard let nonIndexedValues = v else {return nil}
         var indexedInputCounter = 0
