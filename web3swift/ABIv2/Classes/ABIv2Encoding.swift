@@ -19,7 +19,7 @@ extension ABIv2Encoder {
         let params = types.flatMap { (el) -> ABIv2.Element.ParameterType in
             return el.type
         }
-        let tuple = ABIv2.Element.ParameterType.tuple(types: params, dynamic: false)
+        let tuple = ABIv2.Element.ParameterType.tuple(types: params)
         let (h, t, _) = encodeTypesTuple(tuple: tuple, values: values)
         guard let head = h, let tail = t else {return nil}
         return head + tail
@@ -143,15 +143,15 @@ extension ABIv2Encoder {
                 guard let val = value as? [AnyObject] else {break}
                 guard staticLength == val.count else {break}
                 let types = [ABIv2.Element.ParameterType](repeating: subType, count: val.count)
-                let tuple = ABIv2.Element.ParameterType.tuple(types: types, dynamic: false)
+                let tuple = ABIv2.Element.ParameterType.tuple(types: types)
                 return encodeTypesTuple(tuple: tuple, values: val, pointer: pointer)
             case .notArray:
                 break
             }
-        case .tuple(types: let subTypes, dynamic: let dynamic):
+        case .tuple(types: let subTypes):
             guard let val = value as? [AnyObject] else {break}
             guard subTypes.count == val.count else {break}
-            let tuple = ABIv2.Element.ParameterType.tuple(types: subTypes, dynamic: dynamic)
+            let tuple = ABIv2.Element.ParameterType.tuple(types: subTypes)
             return encodeTypesTuple(tuple: tuple, values: val, pointer: pointer)
         case .function:
             if let data = value as? Data {
@@ -162,7 +162,7 @@ extension ABIv2Encoder {
     }
     
     public static func encodeTypesTuple(tuple: ABIv2.Element.ParameterType, values: [AnyObject], pointer: BigUInt = BigUInt(0)) -> (head: Data?, tail: Data?, pointer: BigUInt?) {
-        guard case .tuple(types: let types, dynamic: _) = tuple else {return (nil, nil, nil)}
+        guard case .tuple(types: let types) = tuple else {return (nil, nil, nil)}
         let memoryUsage = tuple.memoryUsage
         var offset: BigUInt = BigUInt(memoryUsage);
         if pointer != BigUInt(0) {

@@ -41,7 +41,7 @@ public struct ABIv2TypeParser {
         case .string?:
             return .string
         case .tuple?:
-            return .tuple(types: [ABIv2.Element.ParameterType](), dynamic: false)
+            return .tuple(types: [ABIv2.Element.ParameterType]())
         default:
             return nil
         }

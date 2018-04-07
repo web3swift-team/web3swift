@@ -22,13 +22,15 @@ extension ABIv2.Element {
         indirect case array(type: ParameterType, length: UInt64)
         case dynamicBytes
         case string
-        indirect case tuple(types: [ParameterType], dynamic: Bool)
+        indirect case tuple(types: [ParameterType])
         
         var isStatic: Bool {
             switch self {
             case .bytes:
                 return false
             case .string:
+                return false
+            case .dynamicBytes:
                 return false
             case .array(type: let type, length: let length):
                 if (length == 0) {
@@ -38,10 +40,7 @@ extension ABIv2.Element {
                     return false
                 }
                 return true
-            case .tuple(types: let types, dynamic: let dynamic):
-                if dynamic {
-                    return false
-                }
+            case .tuple(types: let types):
                 for t in types {
                     if (!t.isStatic) {
                         return false
@@ -87,9 +86,12 @@ extension ABIv2.Element {
                 if length == 0 {
                     return 32
                 }
-                return 32*length
-            case .tuple(types: let types, dynamic: let dynamic):
-                if dynamic {
+                if self.isStatic {
+                    return 32*length
+                }
+                return 32
+            case .tuple(types: let types):
+                if !self.isStatic {
                     return 32
                 }
                 var sum: UInt64 = 0;
@@ -130,11 +132,8 @@ extension ABIv2.Element {
         
         var arraySize: ABIv2.Element.ArraySize {
             switch self {
-            case .array(type: let type, length: let length):
+            case .array(type: _, length: let length):
                 if (length == 0) {
-                    return ArraySize.dynamicSize
-                }
-                if (!type.isStatic) {
                     return ArraySize.dynamicSize
                 }
                 return ArraySize.staticSize(length)
@@ -222,7 +221,7 @@ extension ABIv2.Element.ParameterType: ABIv2Encoding {
                 return  "\(type.abiRepresentation)[]"
             }
             return "\(type.abiRepresentation)[\(length)]"
-        case .tuple(types: let types, dynamic: _):
+        case .tuple(types: let types):
             let typesRepresentation = types.map({return $0.abiRepresentation})
             let typesJoined = typesRepresentation.joined(separator: ",")
             return "tuple(\(typesJoined))"
@@ -241,7 +240,7 @@ extension ABIv2.Element.ParameterType: ABIv2Validation {
             return length > 0 && length <= 32
         case .array(type: let type, _):
             return type.isValid
-        case .tuple(types: let types, dynamic: _):
+        case .tuple(types: let types):
             for t in types {
                 if (!t.isValid) {
                     return false
