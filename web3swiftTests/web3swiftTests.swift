@@ -1626,6 +1626,52 @@ class web3swiftTests: XCTestCase {
         }
     }
     
+    func testAdvancedABIv2staticArray() {
+        let abiString = "[{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"constant\":true,\"inputs\":[],\"name\":\"testDynArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testSingle\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"t\",\"type\":\"tuple\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStaticArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"}]"
+        let contractAddress = EthereumAddress("0xd7723c53d318c7558286aafee82ec22f5ab44e1e")
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let contract = web3.contract(abiString, at: contractAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.from = contractAddress
+        XCTAssert(contract != nil)
+        print(contract?.contract.allMethods)
+        let rawContract = contract?.contract as! ContractV2
+        print(rawContract)
+        let intermediate = contract?.method("testStaticArray", options: options)
+        XCTAssertNotNil(intermediate)
+        let result = intermediate!.call(options: nil)
+        switch result {
+        case .success(let payload):
+            print(payload)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
+    func testAdvancedABIv2dynamicArray() {
+        let abiString = "[{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"constant\":true,\"inputs\":[],\"name\":\"testDynArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testSingle\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"t\",\"type\":\"tuple\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStaticArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"}]"
+        let contractAddress = EthereumAddress("0xd7723c53d318c7558286aafee82ec22f5ab44e1e")
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let contract = web3.contract(abiString, at: contractAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.from = contractAddress
+        XCTAssert(contract != nil)
+        print(contract?.contract.allMethods)
+        let rawContract = contract?.contract as! ContractV2
+        print(rawContract)
+        let intermediate = contract?.method("testDynArray", options: options)
+        XCTAssertNotNil(intermediate)
+        let result = intermediate!.call(options: nil)
+        switch result {
+        case .success(let payload):
+            print(payload)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
