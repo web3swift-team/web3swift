@@ -95,11 +95,7 @@ extension web3.Eth {
         guard address.isValid else {
             return Result.failure(Web3Error.inputError("Please check the supplied address"))
         }
-        var request = JSONRPCrequest()
-        request.method = JSONRPCmethod.getTransactionCount
-        let params = [address.address.lowercased(), onBlock] as Array<Encodable>
-        let pars = JSONRPCparams(params: params)
-        request.params = pars
+        let request = JSONRPCRequestFabric.prepareRequest(.getTransactionCount, parameters: [address.address.lowercased(), onBlock])
         let response = self.provider.send(request: request)
         let result = ResultUnwrapper.getResponse(response)
         switch result {
@@ -126,11 +122,7 @@ extension web3.Eth {
         guard address.isValid else {
             return Result.failure(Web3Error.inputError("Please check the supplied address"))
         }
-        var request = JSONRPCrequest()
-        request.method = JSONRPCmethod.getBalance
-        let params = [address.address.lowercased(), onBlock] as Array<Encodable>
-        let pars = JSONRPCparams(params: params)
-        request.params = pars
+        let request = JSONRPCRequestFabric.prepareRequest(.getTransactionCount, parameters: [address.address.lowercased(), onBlock])
         let response = self.provider.send(request: request)
         let result = ResultUnwrapper.getResponse(response)
         switch result {
@@ -148,11 +140,7 @@ extension web3.Eth {
     }
     
     public func getBlockNumber() -> Result<BigUInt, Web3Error> {
-        var request = JSONRPCrequest()
-        request.method = JSONRPCmethod.blockNumber
-        let params = [] as Array<Encodable>
-        let pars = JSONRPCparams(params: params)
-        request.params = pars
+        let request = JSONRPCRequestFabric.prepareRequest(.blockNumber, parameters: [])
         let response = self.provider.send(request: request)
         let result = ResultUnwrapper.getResponse(response)
         switch result {
@@ -170,11 +158,7 @@ extension web3.Eth {
     }
     
     public func getGasPrice() -> Result<BigUInt, Web3Error> {
-        var request = JSONRPCrequest()
-        request.method = JSONRPCmethod.gasPrice
-        let params = [] as Array<Encodable>
-        let pars = JSONRPCparams(params: params)
-        request.params = pars
+        let request = JSONRPCRequestFabric.prepareRequest(.gasPrice, parameters: [])
         let response = self.provider.send(request: request)
         let result = ResultUnwrapper.getResponse(response)
         switch result {
@@ -197,11 +181,7 @@ extension web3.Eth {
     }
     
     public func getTransactionDetails(_ txhash: String) -> Result<TransactionDetails, Web3Error> {
-        var request = JSONRPCrequest()
-        request.method = JSONRPCmethod.getTransactionByHash
-        let params = [txhash] as Array<Encodable>
-        let pars = JSONRPCparams(params: params)
-        request.params = pars
+        let request = JSONRPCRequestFabric.prepareRequest(.getTransactionByHash, parameters: [txhash])
         let response = self.provider.send(request: request)
         let result = ResultUnwrapper.getResponse(response)
         switch result {
@@ -225,11 +205,7 @@ extension web3.Eth {
     }
     
     public func getTransactionReceipt(_ txhash: String) -> Result<TransactionReceipt, Web3Error> {
-        var request = JSONRPCrequest()
-        request.method = JSONRPCmethod.getTransactionReceipt
-        let params = [txhash] as Array<Encodable>
-        let pars = JSONRPCparams(params: params)
-        request.params = pars
+        let request = JSONRPCRequestFabric.prepareRequest(.getTransactionReceipt, parameters: [txhash])
         let response = self.provider.send(request: request)
         let result = ResultUnwrapper.getResponse(response)
         switch result {
@@ -271,11 +247,7 @@ extension web3.Eth {
         if (self.provider.attachedKeystoreManager != nil) {
             return self.web3.wallet.getAccounts()
         }
-        var request = JSONRPCrequest()
-        request.method = JSONRPCmethod.getAccounts
-        let params = [] as Array<Encodable>
-        let pars = JSONRPCparams(params: params)
-        request.params = pars
+        let request = JSONRPCRequestFabric.prepareRequest(.getAccounts, parameters: [])
         let response = self.provider.send(request: request)
         let result = ResultUnwrapper.getResponse(response)
         switch result {
@@ -302,11 +274,7 @@ extension web3.Eth {
     }
     
     public func getBlockByHash(_ hash: Data, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
-        var request = JSONRPCrequest()
-        request.method = JSONRPCmethod.getBlockByHash
-        let params = [hash.toHexString().addHexPrefix(), fullTransactions] as Array<Encodable>
-        let pars = JSONRPCparams(params: params)
-        request.params = pars
+        let request = JSONRPCRequestFabric.prepareRequest(.getBlockByHash, parameters: [hash.toHexString().addHexPrefix(), fullTransactions])
         let response = self.provider.send(request: request)
         let result = ResultUnwrapper.getResponse(response)
         switch result {
@@ -337,11 +305,7 @@ extension web3.Eth {
     }
     
     public func getBlockByNumber(_ block:String, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
-        var request = JSONRPCrequest()
-        request.method = JSONRPCmethod.getBlockByNumber
-        let params = [block, fullTransactions] as Array<Encodable>
-        let pars = JSONRPCparams(params: params)
-        request.params = pars
+        let request = JSONRPCRequestFabric.prepareRequest(.getBlockByHash, parameters: [block, fullTransactions])
         let response = self.provider.send(request: request)
         let result = ResultUnwrapper.getResponse(response)
         switch result {
