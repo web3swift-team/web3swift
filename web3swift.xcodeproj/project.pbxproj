@@ -150,6 +150,10 @@
 		81FB21F22078142D007F9A83 /* Web3+Deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F02078142D007F9A83 /* Web3+Deprecated.swift */; };
 		81FB21F4207814F7007F9A83 /* Web3+EventOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F3207814F7007F9A83 /* Web3+EventOperations.swift */; };
 		81FB21F5207814F7007F9A83 /* Web3+EventOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F3207814F7007F9A83 /* Web3+EventOperations.swift */; };
+		81FB21FE207BB297007F9A83 /* EIP67Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F8207BA78B007F9A83 /* EIP67Code.swift */; };
+		81FB21FF207BB297007F9A83 /* EIP67Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F8207BA78B007F9A83 /* EIP67Code.swift */; };
+		81FB2201207BC58C007F9A83 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2200207BC58B007F9A83 /* CoreImage.framework */; };
+		81FB2203207BC6DB007F9A83 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2202207BC6DB007F9A83 /* ImageIO.framework */; };
 		A4733E6E22E6216A90CCEA33 /* Pods_web3swift_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4A49B538D672F4DA112A11 /* Pods_web3swift_macOS.framework */; };
 /* End PBXBuildFile section */
 
@@ -269,6 +273,9 @@
 		81FB21ED2077D98A007F9A83 /* SynchronizedQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchronizedQueue.swift; sourceTree = "<group>"; };
 		81FB21F02078142D007F9A83 /* Web3+Deprecated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Deprecated.swift"; sourceTree = "<group>"; };
 		81FB21F3207814F7007F9A83 /* Web3+EventOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+EventOperations.swift"; sourceTree = "<group>"; };
+		81FB21F8207BA78B007F9A83 /* EIP67Code.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIP67Code.swift; sourceTree = "<group>"; };
+		81FB2200207BC58B007F9A83 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		81FB2202207BC6DB007F9A83 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		A9ADDE40292A17C21B8D5516 /* Pods-web3swift-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-iOS/Pods-web3swift-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		B48CA58D134401D3C4E8CCC5 /* Pods_Web3Swift_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Web3Swift_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -284,6 +291,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81FB2203207BC6DB007F9A83 /* ImageIO.framework in Frameworks */,
+				81FB2201207BC58C007F9A83 /* CoreImage.framework in Frameworks */,
 				81C0FD082044AB2400D82FAF /* Pods_web3swift_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -352,8 +361,9 @@
 				8113D2B51FD7E1590074282C /* KeystoreManager */,
 				8113D2C11FD7E1590074282C /* Transaction */,
 				8113D2AE1FD7E1590074282C /* Utils */,
-				1CD91AFF1FD76910007BFB45 /* web3swift.h */,
+				81FB21F6207BA6DC007F9A83 /* Convenience */,
 				1CD91B001FD76910007BFB45 /* Info.plist */,
+				1CD91AFF1FD76910007BFB45 /* web3swift.h */,
 			);
 			path = web3swift;
 			sourceTree = "<group>";
@@ -372,6 +382,8 @@
 		78D101CC419F27D142F6E9AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				81FB2202207BC6DB007F9A83 /* ImageIO.framework */,
+				81FB2200207BC58B007F9A83 /* CoreImage.framework */,
 				81C0FD0B2044AB4600D82FAF /* Pods_web3swift_iOS_Tests.framework */,
 				81C0FD092044AB2400D82FAF /* Pods_web3swift_iOS.framework */,
 				419481432036338A0065A83B /* Pods_web3swift_osx.framework */,
@@ -429,18 +441,7 @@
 		8113D2AF1FD7E1590074282C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				81FB21ED2077D98A007F9A83 /* SynchronizedQueue.swift */,
-				81C5DA272072E18200424CD6 /* NativeTypesEncoding+Extensions.swift */,
-				8113D2B01FD7E1590074282C /* CryptoExtensions.swift */,
-				8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */,
-				8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */,
-				8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */,
-				817EBB1E2006265400E02EAA /* Base58.swift */,
-				817EBB22200649E000E02EAA /* RIPEMD160+StackOveflow.swift */,
-				8123E1C8200CBAF800B6D3AB /* Data+Extension.swift */,
-				8123E1C6200CBAC200B6D3AB /* Dictionary+Extension.swift */,
-				8123E1CA200CBB2200B6D3AB /* Array+Extension.swift */,
-				8113D2FF1FD7F30F0074282C /* String+Extension.swift */,
+				81FB21F8207BA78B007F9A83 /* EIP67Code.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -604,6 +605,33 @@
 				81FA43F72044097100EE14D5 /* Info.plist */,
 			);
 			path = "web3swift-macOS_Tests";
+			sourceTree = "<group>";
+		};
+		81FB21F6207BA6DC007F9A83 /* Convenience */ = {
+			isa = PBXGroup;
+			children = (
+				81FB21F7207BA6EB007F9A83 /* Classes */,
+			);
+			path = Convenience;
+			sourceTree = "<group>";
+		};
+		81FB21F7207BA6EB007F9A83 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				81FB21ED2077D98A007F9A83 /* SynchronizedQueue.swift */,
+				81C5DA272072E18200424CD6 /* NativeTypesEncoding+Extensions.swift */,
+				8113D2B01FD7E1590074282C /* CryptoExtensions.swift */,
+				8113D2B21FD7E1590074282C /* LibSecp256k1Extension.swift */,
+				8113D2B31FD7E1590074282C /* DictionaryLiteralJSONSerializer.swift */,
+				8113DE7B1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift */,
+				817EBB1E2006265400E02EAA /* Base58.swift */,
+				817EBB22200649E000E02EAA /* RIPEMD160+StackOveflow.swift */,
+				8123E1C8200CBAF800B6D3AB /* Data+Extension.swift */,
+				8123E1C6200CBAC200B6D3AB /* Dictionary+Extension.swift */,
+				8123E1CA200CBB2200B6D3AB /* Array+Extension.swift */,
+				8113D2FF1FD7F30F0074282C /* String+Extension.swift */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		868F9682FE77A7BADF675F92 /* Pods */ = {
@@ -1011,6 +1039,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81C146F71FF274B200AA943E /* Web3+Structures.swift in Sources */,
+				8104E2281FE82BDC00F952CB /* Web3+Utils.swift in Sources */,
 				818ABD5D1FE95FC9002657BB /* Web3+Contract.swift in Sources */,
 				8113D2CA1FD7E1590074282C /* KeystoreManager.swift in Sources */,
 				817EBB1F2006265400E02EAA /* Base58.swift in Sources */,
@@ -1034,6 +1063,7 @@
 				81C5DA11207254F600424CD6 /* ABIv2.swift in Sources */,
 				8103BBC62077954200499769 /* Web3+TransactionOperations.swift in Sources */,
 				817EBB102004FE2800E02EAA /* EthereumAddress.swift in Sources */,
+				81FB21FE207BB297007F9A83 /* EIP67Code.swift in Sources */,
 				81C5DA0E207254D000424CD6 /* ABIv2Elements.swift in Sources */,
 				8113D2CC1FD7E1590074282C /* ABIDecoder.swift in Sources */,
 				8125F0632047CE6900A0F2FE /* TypesEncoder.swift in Sources */,
@@ -1046,7 +1076,6 @@
 				81FB21F12078142D007F9A83 /* Web3+Deprecated.swift in Sources */,
 				810B0F9C1FEC520500CF0DA2 /* Web3+Methods.swift in Sources */,
 				8113DE7C1FD8514400CD8DF1 /* NSRegularExpressionExtension.swift in Sources */,
-				8104E2281FE82BDC00F952CB /* Web3+Utils.swift in Sources */,
 				81C5DA2E2074EBF500424CD6 /* ContractABIv2.swift in Sources */,
 				810B0F9E1FEC5B9C00CF0DA2 /* Web3+Eth.swift in Sources */,
 				818D810E1FDC1A2000663CE3 /* RLP.swift in Sources */,
@@ -1116,6 +1145,7 @@
 				81C5DA12207254F600424CD6 /* ABIv2.swift in Sources */,
 				8103BBC72077954200499769 /* Web3+TransactionOperations.swift in Sources */,
 				4194812D203630530065A83B /* EthereumAddress.swift in Sources */,
+				81FB21FF207BB297007F9A83 /* EIP67Code.swift in Sources */,
 				81C5DA0F207254D000424CD6 /* ABIv2Elements.swift in Sources */,
 				8125F0642047CE6900A0F2FE /* TypesEncoder.swift in Sources */,
 				818D16D0204D42940084D2A4 /* Web3+EventParser.swift in Sources */,

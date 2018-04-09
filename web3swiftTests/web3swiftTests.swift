@@ -142,6 +142,19 @@ class web3swiftTests: XCTestCase {
         XCTAssertNotNil(key)
     }
     
+    func testByBIP32keystoreCreateCustomChildAccount() {
+        let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
+        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
+        XCTAssertNotNil(keystore)
+        XCTAssertEqual(keystore!.addresses?.count, 1)
+        try! keystore?.createNewCustomChildAccount(password: "", path: "/42/1")
+        XCTAssertEqual(keystore?.addresses?.count, 2)
+        let account = keystore!.addresses![1]
+        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        XCTAssertNotNil(key)
+        print(keystore!.paths)
+    }
+    
 //    func testPBKDF2() {
 //        let pass = "passDATAb00AB7YxDTTl".data(using: .utf8)!
 //        let salt = "saltKEYbcTcXHCBxtjD2".data(using: .utf8)!
@@ -382,6 +395,23 @@ class web3swiftTests: XCTestCase {
             return XCTFail()
         case .failure(let error):
             guard case .unknownError = error else {return XCTFail()}
+        }
+    }
+    
+    func testEthSendExampleWithRemoveSigning() {
+        let web3 = Web3.new(URL.init(string: "http://127.0.0.1:8545")!)!
+        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
+        options.from = EthereumAddress("0x804962017f0da9aa3970dc2adbA52A4c22614edB")
+        let intermediate = contract?.method("fallback", options: options)
+        guard let result = intermediate?.send(password: "") else {return XCTFail()}
+        switch result {
+        case .success(_):
+            return
+        case .failure(let error):
+            return XCTFail()
         }
     }
     
@@ -1751,6 +1781,57 @@ class web3swiftTests: XCTestCase {
             print(error)
             XCTFail()
         }
+    }
+    
+    func testUserCase() {
+        let abiString =  "[{\"constant\":true,\"inputs\":[],\"name\":\"getFlagData\",\"outputs\":[{\"name\":\"data\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"data\",\"type\":\"string\"}],\"name\":\"setFlagData\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
+        let contractAddress = EthereumAddress("0x811411e3cdfd4750cdd3552feb3b89a46ddb612e")
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let contract = web3.contract(abiString, at: contractAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.from = contractAddress
+        XCTAssert(contract != nil)
+        print(contract?.contract.allMethods)
+        let intermediate = contract?.method("getFlagData", options: options)
+        XCTAssertNotNil(intermediate)
+        let result = intermediate!.call(options: nil)
+        switch result {
+        case .success(let payload):
+            print(payload)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
+    func testEIP67encoding() {
+        var eip67Data = Web3.Utils.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
+        eip67Data.gasLimit = BigUInt(21000)
+        eip67Data.amount = BigUInt("1000000000000000000")
+//        eip67Data.data =
+        let encoding = eip67Data.toString()
+        print(encoding)
+    }
+    
+    func testEIP67codeGeneration() {
+        var eip67Data = Web3.Utils.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
+        eip67Data.gasLimit = BigUInt(21000)
+        eip67Data.amount = BigUInt("1000000000000000000")
+        //        eip67Data.data =
+        let encoding = eip67Data.toImage(scale: 5.0)
+        XCTAssert(encoding != CIImage())
+    }
+    
+    func testEIP67decoding() {
+        var eip67Data = Web3.Utils.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
+        eip67Data.gasLimit = BigUInt(21000)
+        eip67Data.amount = BigUInt("1000000000000000000")
+        //        eip67Data.data =
+        let encoding = eip67Data.toString()
+        guard let code = Web3.Utils.EIP67CodeParser.parse(encoding) else {return XCTFail()}
+        XCTAssert(code.address == eip67Data.address)
+        XCTAssert(code.gasLimit == eip67Data.gasLimit)
+        XCTAssert(code.amount == eip67Data.amount)
     }
     
     func testPerformanceExample() {

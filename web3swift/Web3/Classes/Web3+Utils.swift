@@ -10,8 +10,10 @@ import Foundation
 import BigInt
 import CryptoSwift
 
+public typealias Web3Utils = Web3.Utils
+
 extension Web3 {
-    public struct Utils{
+    public struct Utils {
     }
 }
 

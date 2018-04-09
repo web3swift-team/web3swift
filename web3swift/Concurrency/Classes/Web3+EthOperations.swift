@@ -229,7 +229,11 @@ final class SendTransactionOperation: Web3Operation {
             sendRawTxOp.next = completion
             return
         }
-        guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {return processError(Web3Error.transactionSerializationError)}
+        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.sendTransaction, transaction: transaction, onBlock: nil, options: mergedOptions) else
+        {
+            return processError(Web3Error.transactionSerializationError)
+        }
+//        guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {return processError(Web3Error.transactionSerializationError)}
         let dataOp = DataFetchOperation(self.web3, queue: self.expectedQueue)
         dataOp.inputData = request as AnyObject
         let parsingOp = DataConversionOperation(self.web3, queue: self.expectedQueue)
