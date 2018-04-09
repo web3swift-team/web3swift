@@ -1753,6 +1753,29 @@ class web3swiftTests: XCTestCase {
         }
     }
     
+    func testUserCase() {
+        let abiString =  "[{\"constant\":true,\"inputs\":[],\"name\":\"getFlagData\",\"outputs\":[{\"name\":\"data\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"data\",\"type\":\"string\"}],\"name\":\"setFlagData\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
+        let contractAddress = EthereumAddress("0x811411e3cdfd4750cdd3552feb3b89a46ddb612e")
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let contract = web3.contract(abiString, at: contractAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.from = contractAddress
+        XCTAssert(contract != nil)
+        print(contract?.contract.allMethods)
+        let intermediate = contract?.method("getFlagData", options: options)
+        XCTAssertNotNil(intermediate)
+        let result = intermediate!.call(options: nil)
+        switch result {
+        case .success(let payload):
+            print(payload)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
+   
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
