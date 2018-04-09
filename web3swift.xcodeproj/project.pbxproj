@@ -154,6 +154,8 @@
 		81FB21FF207BB297007F9A83 /* EIP67Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F8207BA78B007F9A83 /* EIP67Code.swift */; };
 		81FB2201207BC58C007F9A83 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2200207BC58B007F9A83 /* CoreImage.framework */; };
 		81FB2203207BC6DB007F9A83 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2202207BC6DB007F9A83 /* ImageIO.framework */; };
+		81FB2207207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */ = {isa = PBXBuildFile; fileRef = 81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */; };
+		81FB2208207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */ = {isa = PBXBuildFile; fileRef = 81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */; };
 		A4733E6E22E6216A90CCEA33 /* Pods_web3swift_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4A49B538D672F4DA112A11 /* Pods_web3swift_macOS.framework */; };
 /* End PBXBuildFile section */
 
@@ -276,6 +278,7 @@
 		81FB21F8207BA78B007F9A83 /* EIP67Code.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIP67Code.swift; sourceTree = "<group>"; };
 		81FB2200207BC58B007F9A83 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		81FB2202207BC6DB007F9A83 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bankex-foundation-logo-coin.png"; sourceTree = "<group>"; };
 		A9ADDE40292A17C21B8D5516 /* Pods-web3swift-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-iOS/Pods-web3swift-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		B48CA58D134401D3C4E8CCC5 /* Pods_Web3Swift_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Web3Swift_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -352,6 +355,7 @@
 		1CD91AFE1FD76910007BFB45 /* web3swift */ = {
 			isa = PBXGroup;
 			children = (
+				81FB2204207BCFD9007F9A83 /* Resources */,
 				8103BBB4207638F800499769 /* Concurrency */,
 				81C5DA082072542300424CD6 /* ABIv2 */,
 				81C0FCED20440BDF00D82FAF /* HookedFunctions */,
@@ -634,6 +638,22 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		81FB2204207BCFD9007F9A83 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				81FB2205207BCFE4007F9A83 /* Classes */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		81FB2205207BCFE4007F9A83 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		868F9682FE77A7BADF675F92 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -806,6 +826,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81FB2207207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -822,6 +843,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81FB2208207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

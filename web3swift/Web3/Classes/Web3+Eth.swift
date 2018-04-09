@@ -116,6 +116,12 @@ extension web3.Eth {
         }
     }
     
+    public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetTransactionCountOperation.init(self.web3, queue: self.web3.queue, address: address, onBlock: onBlock)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
+    
     public func getBalance(address: EthereumAddress, onBlock: String = "latest") -> Result<BigUInt, Web3Error> {
         guard address.isValid else {
             return Result.failure(Web3Error.inputError("Please check the supplied address"))

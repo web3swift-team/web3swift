@@ -9,7 +9,7 @@
 import Foundation
 import Result
 
-typealias Callback = ((Result<AnyObject, Web3Error>) -> ())
+public typealias Callback = ((Result<AnyObject, Web3Error>) -> ())
 
 public class OperationDispatcher {
     public var MAX_WAIT_TIME: TimeInterval = 0.2
@@ -172,7 +172,7 @@ public class OperationDispatcher {
 
 
 
-enum OperationChainingType {
+public enum OperationChainingType {
     case callback(Callback, OperationQueue)
     case operation(Web3Operation)
     case endOfChain
@@ -185,7 +185,7 @@ protocol OperationProtocol{
     var error: Web3Error? {get set}
 }
 
-class Web3Operation: Operation, OperationProtocol {
+public class Web3Operation: Operation, OperationProtocol {
     var web3: web3
     
     var next: OperationChainingType?

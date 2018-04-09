@@ -1834,6 +1834,29 @@ class web3swiftTests: XCTestCase {
         XCTAssert(code.amount == eip67Data.amount)
     }
     
+    func testConcurrenctGetTransactionCount()
+    {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let web3 = Web3.InfuraMainnetWeb3()
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(let error):
+                print(error)
+                XCTFail()
+                fatalError()
+            }
+            semaphore.signal()
+        }
+        web3.eth.getTransactionCount(address: address, onBlock: "latest", callback: callback, queue: web3.queue) // queue should be .main here, but can not test in this case with a simple semaphore (getting a deadlock)
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssert(!fail)
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
