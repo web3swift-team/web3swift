@@ -2,8 +2,5 @@ platform :ios, '11.2'
 
 target 'web3swiftExample' do
   use_frameworks!
-  pod 'PromiseKit', '~> 4.4'
-  pod 'AwaitKit', '~> 3.0.1'
-#  pod 'web3swift', :git => 'https://github.com/bankex/web3swift.git'
-	pod 'web3swift', :path => '../../'
+  pod 'web3swift', :git => 'https://github.com/bankex/web3swift.git'
 end

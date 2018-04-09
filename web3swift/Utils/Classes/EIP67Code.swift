@@ -10,7 +10,8 @@ import Foundation
 import CoreImage
 import BigInt
 
-extension  Web3.Utils {
+extension Web3 {
+
     public struct EIP67Code {
         public var address: EthereumAddress
         public var gasLimit: BigUInt?
@@ -94,7 +95,7 @@ extension  Web3.Utils {
             return image
         }
     }
-    
+
     public struct EIP67CodeParser {
         public static func parse(_ data: Data) -> EIP67Code? {
             guard let string = String(data: data, encoding: .utf8) else {return nil}
