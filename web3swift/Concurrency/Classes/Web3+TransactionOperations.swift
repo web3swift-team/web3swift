@@ -14,6 +14,12 @@ final class ContractCallOperation: Web3Operation {
     var intermediate: TransactionIntermediate?
     var method: String?
     
+    convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, intermediate: TransactionIntermediate, onBlock: String = "latest") {
+        self.init(web3Instance, queue: queue, inputData: [intermediate.transaction, intermediate.options as Any, onBlock] as AnyObject)
+        self.intermediate = intermediate
+        self.method = intermediate.method
+    }
+    
     convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, contract: web3.web3contract, method: String = "fallback", parameters: [AnyObject] = [], extraData: Data = Data(), options: Web3Options?, onBlock: String = "latest") {
         guard let intermediate = contract.method(method, parameters: parameters, extraData: extraData, options: options) else {return nil}
         self.init(web3Instance, queue: queue, inputData: [intermediate.transaction, intermediate.options as Any, onBlock] as AnyObject)

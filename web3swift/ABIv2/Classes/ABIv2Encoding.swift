@@ -47,9 +47,6 @@ extension ABIv2Encoder {
         for i in 0 ..< types.count {
             let head = heads[i]
             let tail = tails[i]
-            print(types[i])
-            print(head.toHexString())
-            print(tail.toHexString())
             if !types[i].isStatic {
                 guard let newHead = tailsPointer.abiEncode(bits: 256) else {return nil}
                 headsConcatenated.append(newHead)
@@ -175,7 +172,7 @@ extension ABIv2Encoder {
                         toReturn.append(encoding)
                     }
                     let total = lengthEncoding + toReturn
-                    print("Dynamic array of static types encoding :\n" + String(total.toHexString()))
+//                    print("Dynamic array of static types encoding :\n" + String(total.toHexString()))
                     return total
                 } else {
                     // create new context
@@ -208,7 +205,7 @@ extension ABIv2Encoder {
                         }
                     }
                     let total =  lengthEncoding + headsConcatenated + tailsConcatenated
-                    print("Dynamic array of dynamic types encoding :\n" + String(total.toHexString()))
+//                    print("Dynamic array of dynamic types encoding :\n" + String(total.toHexString()))
                     return total
                 }
             case .staticSize(let staticLength):
@@ -223,7 +220,7 @@ extension ABIv2Encoder {
                         guard let encoding = enc else {break}
                         toReturn.append(encoding)
                     }
-                    print("Static array of static types encoding :\n" + String(toReturn.toHexString()))
+//                    print("Static array of static types encoding :\n" + String(toReturn.toHexString()))
                     let total = toReturn
                     return total
                 } else {
@@ -251,7 +248,7 @@ extension ABIv2Encoder {
                         tailsPointer = tailsPointer + BigUInt(tail.count)
                     }
                     let total = headsConcatenated + tailsConcatenated
-                    print("Static array of dynamic types encoding :\n" + String(total.toHexString()))
+//                    print("Static array of dynamic types encoding :\n" + String(total.toHexString()))
                     return total
                 }
             case .notArray:

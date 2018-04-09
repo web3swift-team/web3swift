@@ -128,7 +128,7 @@ extension ABIv2.Element {
             var returnArray = [String:Any]()
             var i = 0;
             guard let values = ABIv2Decoder.decode(types: function.outputs, data: data) else {return nil}
-            for output in function.outputs{
+            for output in function.outputs {
                 let name = "\(i)"
                 returnArray[name] = values[i]
                 if output.name != "" {

@@ -113,8 +113,23 @@ extension web3.web3contract {
                     }
                     return Result(decodedData)
             }
-            
         }
+        
+        public func call(options: Web3Options?, onBlock: String = "latest", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+            let mergedOptions = Web3Options.merge(self.options, with: options)
+            self.options = mergedOptions
+            guard let operation = ContractCallOperation.init(web3, queue: web3.queue, intermediate: self, onBlock: onBlock) else {
+                guard let dispatchQueue =  queue.underlyingQueue else {return}
+                return dispatchQueue.async {
+                    callback(Result<AnyObject, Web3Error>.failure(Web3Error.dataError))
+                }
+            }
+            operation.next = OperationChainingType.callback(callback, queue)
+            self.web3.queue.addOperation(operation)
+        }
+        
+        
+        
         
         public func estimateGas(options: Web3Options?) -> Result<BigUInt, Web3Error> {
             let mergedOptions = Web3Options.merge(self.options, with: options)
