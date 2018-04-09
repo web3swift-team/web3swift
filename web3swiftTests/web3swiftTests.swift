@@ -142,6 +142,19 @@ class web3swiftTests: XCTestCase {
         XCTAssertNotNil(key)
     }
     
+    func testByBIP32keystoreCreateCustomChildAccount() {
+        let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
+        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
+        XCTAssertNotNil(keystore)
+        XCTAssertEqual(keystore!.addresses?.count, 1)
+        try! keystore?.createNewCustomChildAccount(password: "", path: "/42/1")
+        XCTAssertEqual(keystore?.addresses?.count, 2)
+        let account = keystore!.addresses![1]
+        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        XCTAssertNotNil(key)
+        print(keystore!.paths)
+    }
+    
 //    func testPBKDF2() {
 //        let pass = "passDATAb00AB7YxDTTl".data(using: .utf8)!
 //        let salt = "saltKEYbcTcXHCBxtjD2".data(using: .utf8)!
