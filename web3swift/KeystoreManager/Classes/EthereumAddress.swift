@@ -59,4 +59,8 @@ public struct EthereumAddress: Equatable {
     public init(_ addressString:String) {
         _address = addressString
     }
+    
+    public init(_ addressData:Data) {
+        _address = addressData.toHexString().addHexPrefix()
+    }
 }

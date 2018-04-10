@@ -244,11 +244,13 @@ extension HDNode {
     }
     
     public func derive (path: String, derivePrivateKey: Bool = true) -> HDNode? {
-        guard path.hasPrefix("m") else {return nil}
         let components = path.components(separatedBy: "/")
-        guard components.count >= 2 else {return nil}
         var currentNode:HDNode = self
-        for component in components[1 ..< components.count] {
+        var firstComponent = 0
+        if path.hasPrefix("m") {
+            firstComponent = 1
+        }
+        for component in components[firstComponent ..< components.count] {
             var hardened = false
             if component.hasSuffix("'") {
                 hardened = true

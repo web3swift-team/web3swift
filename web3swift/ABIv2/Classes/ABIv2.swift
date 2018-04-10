@@ -26,7 +26,6 @@ protocol ABIv2Validation {
     var isValid: Bool {get}
 }
 
-
 public struct ABIv2 {
     
 }

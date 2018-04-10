@@ -49,8 +49,12 @@ public class EthereumKeystoreV3: AbstractKeystore {
         self.init(jsonData)
     }
     
-    public init?(_ jsonData: Data) {
+    public convenience init?(_ jsonData: Data) {
         guard let keystoreParams = try? JSONDecoder().decode(KeystoreParamsV3.self, from: jsonData) else {return nil}
+        self.init(keystoreParams)
+    }
+    
+    public init?(_ keystoreParams: KeystoreParamsV3) {
         if (keystoreParams.version != 3) {return nil}
         if (keystoreParams.crypto.version != nil && keystoreParams.crypto.version != "1") {return nil}
         self.keystoreParams = keystoreParams

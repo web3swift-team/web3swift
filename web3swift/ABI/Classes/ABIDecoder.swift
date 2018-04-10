@@ -9,22 +9,6 @@
 import Foundation
 import BigInt
 
-
-extension BigInt {
-    static func fromTwosComplement(data: Data) -> BigInt {
-        let isPositive = ((data[0] & 128) >> 7) == 0
-        if (isPositive) {
-            let magnitude = BigUInt(data)
-            return BigInt(magnitude)
-        } else {
-            let MAX = (BigUInt(1) << 256)
-            let magnitude = MAX - BigUInt(data)
-            let bigint = BigInt(0) - BigInt(magnitude)
-            return bigint
-        }
-    }
-}
-
 extension ABIElement.ParameterType.StaticType {
     func decode(expectedType: ABIElement.ParameterType.StaticType, data: Data, tailPointer: BigUInt) -> (bytesConsumed: Int?, value: Any?) {
         switch self {

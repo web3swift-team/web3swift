@@ -9,19 +9,22 @@
 import Foundation
 import BigInt
 
-public struct Contract {
-//    public enum eventFilterType {
-//        case
-//    }
+public struct Contract:ContractProtocol {
     
-    public struct EventFilter {
-        public var parameterName: String
-        public var parameterValues: [AnyObject]
+    public var allEvents: [String] {
+        return events.keys.flatMap({ (s) -> String in
+            return s
+        })
+    }
+    public var allMethods: [String] {
+        return methods.keys.flatMap({ (s) -> String in
+            return s
+        })
     }
     
-    var address: EthereumAddress? = nil
+    public var address: EthereumAddress? = nil
     var _abi: [ABIElement]
-    var methods: [String: ABIElement] {
+    public var methods: [String: ABIElement] {
         var toReturn = [String: ABIElement]()
         for m in self._abi {
             switch m {
@@ -34,7 +37,7 @@ public struct Contract {
         }
         return toReturn
     }
-    var events: [String: ABIElement] {
+    public var events: [String: ABIElement] {
         var toReturn = [String: ABIElement]()
         for m in self._abi {
             switch m {
@@ -48,7 +51,7 @@ public struct Contract {
         return toReturn
     }
     
-    var options: Web3Options? = Web3Options.defaultOptions()
+    public var options: Web3Options? = Web3Options.defaultOptions()
     
     public init?(_ abiString: String, at: EthereumAddress? = nil) {
         do {
@@ -132,5 +135,18 @@ public struct Contract {
             }
         }
         return (nil, nil)
+    }
+    
+    public func decodeReturnData(_ method:String, data: Data) -> [String:Any]? {
+        if method == "fallback" {
+            return [String:Any]()
+        }
+        guard let function = methods[method] else {return nil}
+        guard case .function(_) = function else {return nil}
+        return function.decodeReturnData(data)
+    }
+    
+    public func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool? {
+        return false
     }
 }

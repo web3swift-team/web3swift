@@ -12,13 +12,32 @@ import BigInt
 public class web3: Web3OptionsInheritable {
     public var provider : Web3Provider
     public var options : Web3Options = Web3Options.defaultOptions()
+    public var defaultBlock = "latest"
+    public var queue: OperationQueue
+    var dispatcher: OperationDispatcher
+    
     public func send(request: JSONRPCrequest) -> [String: Any]? {
         return self.provider.send(request: request)
     }
 
-    public init(provider prov: Web3Provider) {
+    public init(provider prov: Web3Provider, queue: OperationQueue? = nil, dispatcher: OperationDispatcher? = nil) {
         provider = prov
+        if queue == nil {
+            self.queue = OperationQueue.init()
+            self.queue.maxConcurrentOperationCount = 32
+            self.queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+            
+        } else {
+            self.queue = queue!
+        }
+        if dispatcher == nil {
+            self.dispatcher = OperationDispatcher(provider: provider, queue: self.queue, policy: .Batch(16))
+        } else {
+            self.dispatcher = dispatcher!
+        }
     }
+    
+    
     public func addKeystoreManager(_ manager: KeystoreManager?) {
         self.provider.attachedKeystoreManager = manager
     }

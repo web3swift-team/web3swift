@@ -10,8 +10,10 @@ import Foundation
 import BigInt
 import CryptoSwift
 
+public typealias Web3Utils = Web3.Utils
+
 extension Web3 {
-    public struct Utils{
+    public struct Utils {
     }
 }
 
@@ -109,11 +111,11 @@ extension Web3.Utils {
         return hash
     }
     
-    public static func parseToBigUInt(_ amount: String, toUnits: Web3.Utils.Units = .eth) -> BigUInt? {
+    public static func parseToBigUInt(_ amount: String, units: Web3.Utils.Units = .eth) -> BigUInt? {
         let separators = CharacterSet(charactersIn: ".,")
         let components = amount.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: separators)
         guard components.count == 1 || components.count == 2 else {return nil}
-        let unitDecimals = toUnits.decimals
+        let unitDecimals = units.decimals
         guard let beforeDecPoint = BigUInt(components[0], radix: 10) else {return nil}
         var mainPart = beforeDecPoint*BigUInt(10).power(unitDecimals)
         if (components.count == 2) {

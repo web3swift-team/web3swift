@@ -12,41 +12,36 @@ import BigInt
 
 extension web3 {
     
-    public func contract(_ abiString: String, at: EthereumAddress? = nil) -> web3contract? {
-        return web3contract(web3: self, abiString: abiString, at: at, options: self.options)
+    public func contract(_ abiString: String, at: EthereumAddress? = nil, abiVersion: Int = 2) -> web3contract? {
+        return web3contract(web3: self, abiString: abiString, at: at, options: self.options, abiVersion: abiVersion)
     }
     
     public class web3contract {
-        var contract: Contract
+        var contract: ContractProtocol
         var web3 : web3
         public var options: Web3Options? = nil
         
-        public init?(web3 web3Instance:web3, abiString: String, at: EthereumAddress? = nil, options: Web3Options? = nil) {
-            do {
-                self.web3 = web3Instance
-                self.options = web3.options
-                let jsonData = abiString.data(using: .utf8)
-                let abi = try JSONDecoder().decode([ABIRecord].self, from: jsonData!)
-                let abiNative = try abi.map({ (record) -> ABIElement in
-                    return try record.parse()
-                })
-                var mergedOptions = Web3Options.merge(self.options, with: options)
-                contract = Contract(abi: abiNative)
-                if at != nil {
-                    contract.address = at
-                    mergedOptions?.to = at
-                } else if let addr = mergedOptions?.to {
-                    contract.address = addr
-                }
-                self.options = mergedOptions
-                if contract.address == nil {
-                    return nil
-                }
-            }
-            catch{
-                print(error)
+        public init?(web3 web3Instance:web3, abiString: String, at: EthereumAddress? = nil, options: Web3Options? = nil, abiVersion: Int = 2) {
+            self.web3 = web3Instance
+            self.options = web3.options
+            switch abiVersion {
+            case 1:
+                guard let c = Contract(abiString, at: at) else {return nil}
+                contract = c
+            case 2:
+                guard let c = ContractV2(abiString, at: at) else {return nil}
+                contract = c
+            default:
                 return nil
             }
+            var mergedOptions = Web3Options.merge(self.options, with: options)
+            if at != nil {
+                contract.address = at
+                mergedOptions?.to = at
+            } else if let addr = mergedOptions?.to {
+                contract.address = addr
+            }
+            self.options = mergedOptions
         }
         
         public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), options: Web3Options?) -> TransactionIntermediate? {
@@ -62,7 +57,10 @@ extension web3 {
             return self.contract.parseEvent(eventLog)
         }
         
-        
+        public func createEventParser(_ eventName:String, filter:EventFilter?) -> EventParserProtocol? {
+            let parser = EventParser(web3: self.web3, eventName: eventName, contract: self.contract, filter: filter)
+            return parser
+        }
     
     }
 }

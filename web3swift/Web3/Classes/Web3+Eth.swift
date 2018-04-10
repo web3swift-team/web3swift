@@ -34,7 +34,11 @@ extension web3.Eth {
             print(tx)
             return self.sendRawTransaction(tx)
         }
-        guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {return Result.failure(Web3Error.transactionSerializationError)}
+        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.sendTransaction, transaction: transaction, onBlock: nil, options: mergedOptions) else
+        {
+            return Result.failure(Web3Error.transactionSerializationError)
+        }
+//        guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {return Result.failure(Web3Error.transactionSerializationError)}
         let response = self.provider.send(request: request)
         let result = ResultUnwrapper.getResponse(response)
         switch result {

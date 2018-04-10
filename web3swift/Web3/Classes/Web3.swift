@@ -23,6 +23,7 @@ public enum Web3Error: Error {
 }
 
 public struct Web3 {
+    
     public static func new(_ providerURL: URL) -> web3? {
         guard let provider = Web3HttpProvider(providerURL) else {return nil}
         return web3(provider: provider)
@@ -44,9 +45,12 @@ struct ResultUnwrapper {
             return Result.failure(Web3Error.connectionError)
         }
         if let error = res["error"] {
-            let errString = error as? String
-            if (errString != nil) {
-                return Result.failure(Web3Error.nodeError(errString!))
+            if let errString = error as? String {
+                return Result.failure(Web3Error.nodeError(errString))
+            } else if let errDict = error as? [String:Any] {
+                if errDict["message"] != nil, let descr = errDict["message"]! as? String  {
+                    return Result.failure(Web3Error.nodeError(descr))
+                }
             }
             return Result.failure(Web3Error.unknownError)
         }

@@ -53,6 +53,17 @@ public class Web3HttpProvider: Web3Provider {
         return res
     }
     
+    public func send(requests: [JSONRPCrequest]) -> [[String: Any]?]? {
+        for request in requests {
+            if request.method == nil {
+                return nil
+            }
+        }
+        guard let response = self.syncPost(requests) else {return nil}
+        guard let res = response as? [[String: AnyObject]?] else {return nil}
+        return res
+    }
+    
     public func sendWithRawResult(request: JSONRPCrequest) -> Data? {
         if request.method == nil {
             return nil
@@ -83,14 +94,35 @@ public class Web3HttpProvider: Web3Provider {
         }
     }
     
-    
     internal func syncPost(_ request: JSONRPCrequest) -> Any? {
         return Web3HttpProvider.syncPost(request, providerURL: self.url)
+    }
+    
+    internal func syncPost(_ requests: [JSONRPCrequest]) -> Any? {
+        let batch = JSONRPCrequestBatch(requests: requests)
+        return Web3HttpProvider.syncPost(batch, providerURL: self.url)
     }
     
     static func syncPost(_ request: JSONRPCrequest, providerURL: URL) -> Any? {
         guard let _ = try? JSONEncoder().encode(request) else {return nil}
 //        print(String(data: try! JSONEncoder().encode(request), encoding: .utf8))
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        ]
+        let response = Alamofire.request(providerURL, method: .post, parameters: nil, encoding: request, headers: headers).responseJSON()
+        switch response.result {
+        case .success(let resp):
+            return resp
+        case .failure(let err):
+            print(err)
+            return nil
+        }
+    }
+    
+    static func syncPost(_ request: JSONRPCrequestBatch, providerURL: URL) -> Any? {
+        guard let _ = try? JSONEncoder().encode(request) else {return nil}
+        //        print(String(data: try! JSONEncoder().encode(request), encoding: .utf8))
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
             "Accept": "application/json"

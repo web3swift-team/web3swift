@@ -47,7 +47,7 @@ public class BIP32Keystore: AbstractKeystore {
     public var keystoreParams: KeystoreParamsBIP32?
     public var mnemonics: String?
     public var paths: [String:EthereumAddress] = [String:EthereumAddress]()
-    
+    public var rootPrefix: String
     public convenience init?(_ jsonString: String) {
         let lowercaseJSON = jsonString.lowercased()
         guard let jsonData = lowercaseJSON.data(using: .utf8) else {return nil}
@@ -55,29 +55,42 @@ public class BIP32Keystore: AbstractKeystore {
     }
     
     public init?(_ jsonData: Data) {
-        guard let keystorePars = try? JSONDecoder().decode(KeystoreParamsBIP32.self, from: jsonData) else {return nil}
+        guard var keystorePars = try? JSONDecoder().decode(KeystoreParamsBIP32.self, from: jsonData) else {return nil}
         if (keystorePars.version != 3) {return nil}
         if (keystorePars.crypto.version != nil && keystorePars.crypto.version != "1") {return nil}
         if (!keystorePars.isHDWallet) {return nil}
         for (p, ad) in keystorePars.pathToAddress {
             paths[p] = EthereumAddress(ad)
         }
+        if keystorePars.rootPath == nil {
+            keystorePars.rootPath = HDNode.defaultPathPrefix
+        }
         keystoreParams = keystorePars
+        rootPrefix = keystoreParams!.rootPath!
     }
     
-    public init? (mnemonics: String, password: String = "BANKEXFOUNDATION", mnemonicsPassword: String = "BANKEXFOUNDATION", language: BIP39Language = BIP39Language.english) throws {
+//    public init? (mnemonics: String, password: String = "BANKEXFOUNDATION", mnemonicsPassword: String = "", language: BIP39Language = BIP39Language.english) throws {
+//        guard var seed = BIP39.seedFromMmemonics(mnemonics, password: mnemonicsPassword, language: language) else {throw AbstractKeystoreError.noEntropyError}
+//        guard let prefixNode = HDNode(seed: seed)?.derive(path: HDNode.defaultPathPrefix, derivePrivateKey: true) else {return nil}
+//        defer{ Data.zero(&seed) }
+//        self.mnemonics = mnemonics
+//        try createNewAccount(parentNode: prefixNode, password: password)
+//    }
+    
+    public init? (mnemonics: String, password: String = "BANKEXFOUNDATION", mnemonicsPassword: String = "", language: BIP39Language = BIP39Language.english, prefixPath: String = HDNode.defaultPathPrefix) throws {
         guard var seed = BIP39.seedFromMmemonics(mnemonics, password: mnemonicsPassword, language: language) else {throw AbstractKeystoreError.noEntropyError}
-        guard let prefixNode = HDNode(seed: seed)?.derive(path: HDNode.defaultPathPrefix, derivePrivateKey: true) else {return nil}
+        guard let prefixNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else {return nil}
         defer{ Data.zero(&seed) }
         self.mnemonics = mnemonics
+        self.rootPrefix = prefixPath
         try createNewAccount(parentNode: prefixNode, password: password)
     }
-    
     
     public func createNewChildAccount(password: String = "BANKEXFOUNDATION") throws {
         guard let decryptedRootNode = try? self.getPrefixNodeData(password), decryptedRootNode != nil else {throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")}
         guard let rootNode = HDNode(decryptedRootNode!) else {throw AbstractKeystoreError.encryptionError("Failed to deserialize a root node")}
-        guard rootNode.depth == HDNode.defaultPathPrefix.components(separatedBy: "/").count - 1 else {throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")}
+        let prefixPath = self.rootPrefix
+        guard rootNode.depth == prefixPath.components(separatedBy: "/").count - 1 else {throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")}
         try createNewAccount(parentNode: rootNode, password: password)
     }
     
@@ -90,15 +103,53 @@ public class BIP32Keystore: AbstractKeystore {
             }
         }
         guard let newNode = parentNode.derive(index: newIndex, derivePrivateKey: true, hardened: false) else {throw AbstractKeystoreError.keyDerivationError}
-        guard let newAddress = Web3.Utils.publicToAddress(newNode.publicKey)  else {throw AbstractKeystoreError.keyDerivationError}
+        guard let newAddress = Web3.Utils.publicToAddress(newNode.publicKey) else {throw AbstractKeystoreError.keyDerivationError}
+        let prefixPath = self.rootPrefix
         var newPath:String
         if newNode.isHardened {
-            newPath = HDNode.defaultPathPrefix + "/" + String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
+            newPath = prefixPath + "/" + String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
         } else {
-            newPath = HDNode.defaultPathPrefix + "/" + String(newNode.index)
+            newPath = prefixPath + "/" + String(newNode.index)
         }
         paths[newPath] = newAddress
         guard let serializedRootNode = parentNode.serialize(serializePublic: false) else {throw AbstractKeystoreError.keyDerivationError}
+        try encryptDataToStorage(password, data: serializedRootNode)
+    }
+    
+    public func createNewCustomChildAccount(password: String = "BANKEXFOUNDATION", path: String) throws {
+        guard let decryptedRootNode = try? self.getPrefixNodeData(password), decryptedRootNode != nil else {throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")}
+        guard let rootNode = HDNode(decryptedRootNode!) else {throw AbstractKeystoreError.encryptionError("Failed to deserialize a root node")}
+        let prefixPath = self.rootPrefix
+        var pathAppendix: String? = nil
+        if path.hasPrefix(prefixPath) {
+            pathAppendix = String(path[path.index(after: (path.range(of: prefixPath)?.upperBound)!)])
+            guard pathAppendix != nil else {
+                throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
+            }
+            if pathAppendix!.hasPrefix("/") {
+                pathAppendix = pathAppendix?.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
+            }
+        } else {
+            if path.hasPrefix("/") {
+                pathAppendix = path.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
+            }
+        }
+        guard pathAppendix != nil else {
+            throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
+        }
+        guard rootNode.depth == prefixPath.components(separatedBy: "/").count - 1 else {throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")}
+        guard let newNode = rootNode.derive(path: pathAppendix!, derivePrivateKey: true) else {
+            throw AbstractKeystoreError.keyDerivationError
+        }
+        guard let newAddress = Web3.Utils.publicToAddress(newNode.publicKey) else {throw AbstractKeystoreError.keyDerivationError}
+        var newPath:String
+        if newNode.isHardened {
+            newPath = prefixPath + "/" + pathAppendix!.trimmingCharacters(in: CharacterSet.init(charactersIn: "'")) + "'"
+        } else {
+            newPath = prefixPath + "/" + pathAppendix!
+        }
+        paths[newPath] = newAddress
+        guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {throw AbstractKeystoreError.keyDerivationError}
         try encryptDataToStorage(password, data: serializedRootNode)
     }
     
