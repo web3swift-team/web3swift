@@ -12,6 +12,7 @@ import CryptoSwift
 import BigInt
 import Result
 
+
 @testable import web3swift_iOS
 
 class web3swiftTests: XCTestCase {
@@ -398,7 +399,7 @@ class web3swiftTests: XCTestCase {
         }
     }
     
-    func testEthSendExampleWithRemoveSigning() {
+    func testEthSendExampleWithRemoteSigning() {
         let web3 = Web3.new(URL.init(string: "http://127.0.0.1:8545")!)!
         let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
@@ -1805,7 +1806,7 @@ class web3swiftTests: XCTestCase {
     }
     
     func testEIP67encoding() {
-        var eip67Data = Web3.Utils.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
+        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
         eip67Data.gasLimit = BigUInt(21000)
         eip67Data.amount = BigUInt("1000000000000000000")
 //        eip67Data.data =
@@ -1814,7 +1815,7 @@ class web3swiftTests: XCTestCase {
     }
     
     func testEIP67codeGeneration() {
-        var eip67Data = Web3.Utils.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
+        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
         eip67Data.gasLimit = BigUInt(21000)
         eip67Data.amount = BigUInt("1000000000000000000")
         //        eip67Data.data =
@@ -1823,15 +1824,122 @@ class web3swiftTests: XCTestCase {
     }
     
     func testEIP67decoding() {
-        var eip67Data = Web3.Utils.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
+        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
         eip67Data.gasLimit = BigUInt(21000)
         eip67Data.amount = BigUInt("1000000000000000000")
         //        eip67Data.data =
         let encoding = eip67Data.toString()
-        guard let code = Web3.Utils.EIP67CodeParser.parse(encoding) else {return XCTFail()}
+        guard let code = Web3.EIP67CodeParser.parse(encoding) else {return XCTFail()}
         XCTAssert(code.address == eip67Data.address)
         XCTAssert(code.gasLimit == eip67Data.gasLimit)
         XCTAssert(code.amount == eip67Data.amount)
+    }
+    
+    func testConcurrenctGetTransactionCount()
+    {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let web3 = Web3.InfuraMainnetWeb3()
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(let error):
+                print(error)
+                XCTFail()
+                fatalError()
+            }
+            semaphore.signal()
+        }
+        web3.eth.getTransactionCount(address: address, onBlock: "latest", callback: callback, queue: web3.queue) // queue should be .main here, but can not test in this case with a simple semaphore (getting a deadlock)
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssert(!fail)
+    }
+    
+    func testGetAllTokenBalances()
+    {
+        //        let semaphore = DispatchSemaphore(value: 0)
+        let url = URL.init(string: "https://raw.githubusercontent.com/kvhnuke/etherwallet/mercury/app/scripts/tokens/ethTokens.json")
+        let tokensData = try! Data.init(contentsOf: url!)
+        let tokensJSON = try! JSONSerialization.jsonObject(with: tokensData, options: []) as! [[String: Any]]
+        let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
+        let web3 = Web3.InfuraMainnetWeb3()
+        let userAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        var expected = tokensJSON.count
+        let semaphore = DispatchSemaphore(value: 0)
+        for token in tokensJSON {
+            let tokenSymbol = token["symbol"] as! String
+            let tokenAddress = EthereumAddress(token["address"] as! String)
+            let contract = web3.contract(jsonString, at: tokenAddress, abiVersion: 2)
+            XCTAssert(contract != nil, "Failed to create ERC20 contract from ABI")
+            var options = Web3Options.defaultOptions()
+            options.from = userAddress
+            let parameters = [userAddress] as [AnyObject]
+            let transactionIntermediate = contract?.method("balanceOf", parameters:parameters, options: options)
+            let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+                switch res {
+                case .success(let balanceResult):
+                    guard let result = balanceResult as? [String: Any] else {
+                        XCTFail()
+                        break
+                    }
+                    guard let bal = result["balance"] as? BigUInt else {
+                        XCTFail()
+                        break
+                    }
+                    print("Balance of " + tokenSymbol + " is " + String(bal))
+                case .failure(let error):
+                    print(error)
+                    XCTFail()
+                    fatalError()
+                }
+                OperationQueue.current?.underlyingQueue?.async {
+                    expected = expected - 1
+                    if expected == 0 {
+                        semaphore.signal()
+                    }
+                }
+                
+            }
+            transactionIntermediate?.call(options: options, onBlock: "latest", callback: callback, queue: web3.queue)
+        }
+        let _ = semaphore.wait(timeout: .distantFuture)
+    }
+    
+    func testEthSendOperationsExample() {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let tempKeystore = try! EthereumKeystoreV3(password: "")
+        let keystoreManager = KeystoreManager([tempKeystore!])
+        web3.addKeystoreManager(keystoreManager)
+        let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
+        options.from = keystoreManager.addresses?.first
+        let intermediate = contract?.method("fallback", options: options)
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(let error):
+                print(error)
+                if case .nodeError(_) = error {
+                    fail = false
+                }
+//                XCTFail()
+//                fatalError()
+            }
+            semaphore.signal()
+        }
+        intermediate?.send(password: "", options: options, callback: callback, queue: web3.queue)
+        
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssertTrue(!fail)
     }
     
     func testPerformanceExample() {

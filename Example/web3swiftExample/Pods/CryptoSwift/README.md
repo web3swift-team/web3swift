@@ -1,7 +1,7 @@
 [![Platform](https://img.shields.io/badge/Platforms-iOS%20%7C%20macOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-4E4E4E.svg?colorA=28a745)](#installation)
 [![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat&label=CocoaPods)](https://cocoapods.org/pods/CryptoSwift)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat&colorB=64A5DE)](https://github.com/apple/swift-package-manager)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat&colorB=64A5DE)](https://github.com/Carthage/Carthage)
 [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg?style=flat&colorB=64A5DE)](https://github.com/apple/swift-package-manager)
 [![Twitter](https://img.shields.io/badge/twitter-@krzyzanowskim-blue.svg?style=flat&colorB=64A5DE&label=Twitter)](http://twitter.com/krzyzanowskim)
 
@@ -55,6 +55,7 @@ Good mood
 #### Message authenticators
 - [Poly1305](http://cr.yp.to/mac/poly1305-20050329.pdf)
 - [HMAC](https://www.ietf.org/rfc/rfc2104.txt) MD5, SHA1, SHA256
+- [CMAC](https://tools.ietf.org/html/rfc4493)
 
 #### Cipher block mode
 - Electronic codebook ([ECB](http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Electronic_codebook_.28ECB.29))
@@ -74,6 +75,9 @@ Good mood
 - [PKCS#7](http://tools.ietf.org/html/rfc5652#section-6.3)
 - [Zero padding](https://en.wikipedia.org/wiki/Padding_(cryptography)#Zero_padding)
 - No padding
+
+#### Authenticated Encryption with Associated Data (AEAD)
+- [AEAD_CHACHA20_POLY1305](https://tools.ietf.org/html/rfc7539#section-2.8)
 
 ## Why
 [Why?](https://github.com/krzyzanowskim/CryptoSwift/issues/5) [Because I can](https://github.com/krzyzanowskim/CryptoSwift/issues/5#issuecomment-53379391).
@@ -116,7 +120,8 @@ In the project, you'll find [single scheme](http://promisekit.org/news/2016/08/M
 - Swift 2.2, 2.3: branch [swift2](https://github.com/krzyzanowskim/CryptoSwift/tree/swift2) version <= 0.5.2
 - Swift 3.1, branch [swift3](https://github.com/krzyzanowskim/CryptoSwift/tree/swift3) version <= 0.6.9
 - Swift 3.2, branch [swift32](https://github.com/krzyzanowskim/CryptoSwift/tree/swift32) version = 0.7.0
-- Swift 4.0, branch [master](https://github.com/krzyzanowskim/CryptoSwift/tree/master) version >= 0.7.1
+- Swift 4.0, branch [swift4](https://github.com/krzyzanowskim/CryptoSwift/tree/swift4) version >= 0.7.1
+- Swift 4.1, branch [master](https://github.com/krzyzanowskim/CryptoSwift/tree/master) version >= 0.9.0
 
 #### CocoaPods
 
@@ -173,7 +178,7 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 
 * [Basics (data types, conversion, ...)](#basics)
 * [Digest (MD5, SHA...)](#calculate-digest)
-* [Message authenticators (HMAC...)](#message-authenticators-1)
+* [Message authenticators (HMAC, CMAC...)](#message-authenticators-1)
 * [Password-Based Key Derivation Function (PBKDF2, ...)](#password-based-key-derivation-functions)
 * [HMAC-based Key Derivation Function (HKDF)](#hmac-based-key-derivation-function)
 * [Data Padding](#data-padding)
@@ -181,7 +186,7 @@ See: [Package.swift - manual](http://blog.krzyzanowskim.com/2016/08/09/package-s
 * [Rabbit](#rabbit)
 * [Blowfish](#blowfish)
 * [Advanced Encryption Standard (AES)](#aes)
-
+* [Authenticated Encryption with Associated Data (AEAD)](#aead)
 
 also check [Playground](/CryptoSwift.playground/Contents.swift)
 
@@ -281,6 +286,7 @@ let key:Array<UInt8> = [1,2,3,4,5,6,7,8,9,10,...]
 
 try Poly1305(key: key).authenticate(bytes)
 try HMAC(key: key, variant: .sha256).authenticate(bytes)
+try CMAC(key: key).authenticate(bytes)
 ```
 
 ##### Password-Based Key Derivation Functions
@@ -344,7 +350,7 @@ AES-256 example
 ```swift
 try AES(key: [1,2,3,...,32], blockMode: .CBC(iv: [1,2,3,...,16]), padding: .pkcs7)
 ```
- 
+
 ###### All at once
 ```swift
 do {
@@ -405,6 +411,13 @@ Using convenience extensions
 let plain = Data(bytes: [0x01, 0x02, 0x03])
 let encrypted = try! plain.encrypt(ChaCha20(key: key, iv: iv))
 let decrypted = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
+```
+
+##### AEAD
+
+```swift
+let encrypt = try AEADChaCha20Poly1305.encrypt(plaintext, key: key, iv: nonce, authenticationHeader: header)
+let decrypt = try AEADChaCha20Poly1305.decrypt(ciphertext, key: key, iv: nonce, authenticationHeader: header, authenticationTag: tagArr: tag)
 ```
 
 ## Author

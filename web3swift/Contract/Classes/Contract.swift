@@ -37,6 +37,24 @@ public struct Contract:ContractProtocol {
         }
         return toReturn
     }
+    
+    public var constructor: ABIElement? {
+        var toReturn : ABIElement? = nil
+        for m in self._abi {
+            if toReturn != nil {
+                break
+            }
+            switch m {
+            case .constructor(_):
+                toReturn = m
+                break
+            default:
+                continue
+            }
+        }
+        return toReturn
+    }
+    
     public var events: [String: ABIElement] {
         var toReturn = [String: ABIElement]()
         for m in self._abi {
@@ -80,6 +98,48 @@ public struct Contract:ContractProtocol {
         address = at
     }
     
+    public func deploy(bytecode:Data, parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), options: Web3Options?) -> EthereumTransaction? {
+        var to:EthereumAddress
+        let mergedOptions = Web3Options.merge(self.options, with: options)
+        if (self.address != nil) {
+            to = self.address!
+        } else if let toFound = mergedOptions?.to, toFound.isValid {
+            to = toFound
+        } else  {
+            return nil
+        }
+        
+        var gasLimit:BigUInt
+        if let gasInOptions = mergedOptions?.gasLimit {
+            gasLimit = gasInOptions
+        } else {
+            return nil
+        }
+        
+        var gasPrice:BigUInt
+        if let gasPriceInOptions = mergedOptions?.gasPrice {
+            gasPrice = gasPriceInOptions
+        } else {
+            return nil
+        }
+        
+        var value:BigUInt
+        if let valueInOptions = mergedOptions?.value {
+            value = valueInOptions
+        } else {
+            value = BigUInt(0)
+        }
+        guard let constructor = self.constructor else {return nil}
+        guard let encodedData = constructor.encodeParameters(parameters) else {return nil}
+        var fullData = bytecode
+        if encodedData != Data() {
+            fullData.append(encodedData)
+        } else if extraData != Data() {
+            fullData.append(extraData)
+        }
+        let transaction = EthereumTransaction(gasPrice: gasPrice, gasLimit: gasLimit, to: to, value: value, data: fullData)
+        return transaction
+    }
     
     public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), options: Web3Options?) -> EthereumTransaction? {
         var to:EthereumAddress
