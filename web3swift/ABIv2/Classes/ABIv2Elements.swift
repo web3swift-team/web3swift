@@ -88,8 +88,10 @@ extension ABIv2 {
 extension ABIv2.Element {
     func encodeParameters(_ parameters: [AnyObject]) -> Data? {
         switch self {
-        case .constructor(_):
-            return nil
+        case .constructor(let constructor):
+            guard parameters.count == constructor.inputs.count else {return nil}
+            guard let data = ABIv2Encoder.encode(types: constructor.inputs, values: parameters) else {return nil}
+            return data
         case .event(_):
             return nil
         case .fallback(_):

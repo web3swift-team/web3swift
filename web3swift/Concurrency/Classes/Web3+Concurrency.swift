@@ -87,6 +87,9 @@ public class OperationDispatcher {
     
     func triggerExecution() {
         lockQueue.async {
+            if self.schedulingOperation != nil {
+                self.schedulingOperation = nil
+            }
             let allRequests = self.pendingRequests.flatMap { (r) -> Request in
                 return r
             }

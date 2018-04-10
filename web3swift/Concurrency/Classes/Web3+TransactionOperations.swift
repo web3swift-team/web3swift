@@ -82,6 +82,10 @@ final class ContractEstimateGasOperation: Web3Operation {
         self.init(web3Instance, queue: queue, inputData: [intermediate, onBlock] as AnyObject)
     }
     
+    convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, intermediate: TransactionIntermediate, onBlock: String = "latest") {
+        self.init(web3Instance, queue: queue, inputData: [intermediate, onBlock] as AnyObject)
+    }
+    
     override func main() {
         if (error != nil) {
             return self.processError(self.error!)
@@ -100,9 +104,13 @@ final class ContractEstimateGasOperation: Web3Operation {
 
 final class ContractSendOperation: Web3Operation {
     
-    convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, contract: web3.web3contract, method: String = "fallback", parameters: [AnyObject] = [], extraData: Data = Data(), options: Web3Options?, password: String = "BANKEXFOUNDATION") {
+    convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, contract: web3.web3contract, method: String = "fallback", parameters: [AnyObject] = [], extraData: Data = Data(), options: Web3Options?, onBlock: String = "pending", password: String = "BANKEXFOUNDATION") {
         guard let intermediate = contract.method(method, parameters: parameters, extraData: extraData, options: options) else {return nil}
-        self.init(web3Instance, queue: queue, inputData: [intermediate, password] as AnyObject)
+        self.init(web3Instance, queue: queue, inputData: [intermediate, password, onBlock] as AnyObject)
+    }
+    
+    convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, intermediate: TransactionIntermediate, onBlock: String = "pending", password: String = "BANKEXFOUNDATION") {
+        self.init(web3Instance, queue: queue, inputData: [intermediate, password, onBlock] as AnyObject)
     }
     
     override func main() {
@@ -112,11 +120,89 @@ final class ContractSendOperation: Web3Operation {
         guard let completion = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? [AnyObject] else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        guard input.count == 2 else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard input.count == 3 else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let intermediate = input[0] as? TransactionIntermediate else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let password = input[1] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        let sendOp = SendTransactionOperation.init(web3, queue: expectedQueue, transactionIntermediate: intermediate, password: password)
-        sendOp.next = completion
-        self.expectedQueue.addOperation(sendOp)
+        guard let onBlock = input[2] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        
+        guard let from = intermediate.options?.from else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        var transaction = intermediate.transaction
+        guard var options = intermediate.options else {return self.processError(Web3Error.dataError)}
+        
+        let gasEstimationCallback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                guard let gasEstimate = result as? BigUInt else {
+                    return self.processError(Web3Error.dataError)
+                }
+                if options.gasLimit == nil {
+                    options.gasLimit = gasEstimate
+                } else {
+                    if (options.gasLimit! < gasEstimate) {
+                        return self.processError(Web3Error.inputError("Estimated gas is larger than the gas limit"))
+                    }
+                    options.gasLimit = gasEstimate
+                }
+                if options.gasLimit != nil {
+                    transaction.gasLimit = options.gasLimit!
+                }
+                intermediate.transaction = transaction
+                intermediate.options = options
+                let sendOp = SendTransactionOperation.init(self.web3, queue: self.expectedQueue, transactionIntermediate: intermediate, password: password)
+                sendOp.next = completion
+                self.expectedQueue.addOperation(sendOp)
+                return
+            case .failure(let error):
+                return self.processError(error)
+            }
+        }
+    
+        let nonceCallback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                guard let nonce = result as? BigUInt else {
+                    return self.processError(Web3Error.dataError)
+                }
+                if self.web3.provider.network != nil {
+                    transaction.chainID = self.web3.provider.network?.chainID
+                }
+                transaction.nonce = nonce
+                intermediate.transaction = transaction
+                guard let gasEstimateOperation = ContractEstimateGasOperation.init(self.web3, queue: self.expectedQueue, intermediate: intermediate, onBlock: onBlock) else {return self.processError(Web3Error.dataError)}
+                gasEstimateOperation.next = OperationChainingType.callback(gasEstimationCallback, self.expectedQueue)
+                self.expectedQueue.addOperation(gasEstimateOperation)
+                return
+            case .failure(let error):
+                return self.processError(error)
+            }
+        }
+        
+        let gasPriceCallback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                guard let gasPrice = result as? BigUInt else {
+                    return self.processError(Web3Error.dataError)
+                }
+                if options.gasPrice == nil {
+                    options.gasPrice = gasPrice
+                }
+                if options.gasPrice != nil {
+                    transaction.gasPrice = options.gasPrice!
+                }
+                intermediate.transaction = transaction
+                intermediate.options = options
+                
+                let nonceOp = GetTransactionCountOperation.init(self.web3, queue: self.expectedQueue, address: from, onBlock: onBlock)
+                nonceOp.next = OperationChainingType.callback(nonceCallback, self.expectedQueue)
+                self.expectedQueue.addOperation(nonceOp)
+                return
+            case .failure(let error):
+                return self.processError(error)
+            }
+        }
+        
+        let gasPriceOp = GetGasPriceOperation.init(self.web3, queue: self.expectedQueue)
+        gasPriceOp.next = OperationChainingType.callback(gasPriceCallback, self.expectedQueue)
+        self.expectedQueue.addOperation(gasPriceOp)
     }
 }

@@ -135,7 +135,7 @@ final class EstimateGasOperation: Web3Operation {
         self.init(web3Instance, queue: queue, inputData: [transaction, options as Any, onBlock] as AnyObject)
     }
     
-    convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, transactionIntermediate: TransactionIntermediate,  onBlock: String = "latest") {
+    convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, transactionIntermediate: TransactionIntermediate, onBlock: String = "latest") {
         self.init(web3Instance, queue: queue, inputData: [transactionIntermediate.transaction, transactionIntermediate.options as Any, onBlock] as AnyObject)
     }
     
@@ -225,8 +225,10 @@ final class SendTransactionOperation: Web3Operation {
                 }
                 return processError(Web3Error.generalError(error))
             }
+            print(tx)
             let sendRawTxOp = SendRawTransactionOperation(self.web3, queue: self.expectedQueue, transaction: tx)
             sendRawTxOp.next = completion
+            self.expectedQueue.addOperation(sendRawTxOp)
             return
         }
         guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.sendTransaction, transaction: transaction, onBlock: nil, options: mergedOptions) else

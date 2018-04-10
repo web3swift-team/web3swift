@@ -399,7 +399,7 @@ class web3swiftTests: XCTestCase {
         }
     }
     
-    func testEthSendExampleWithRemoveSigning() {
+    func testEthSendExampleWithRemoteSigning() {
         let web3 = Web3.new(URL.init(string: "http://127.0.0.1:8545")!)!
         let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
@@ -1906,6 +1906,40 @@ class web3swiftTests: XCTestCase {
             transactionIntermediate?.call(options: options, onBlock: "latest", callback: callback, queue: web3.queue)
         }
         let _ = semaphore.wait(timeout: .distantFuture)
+    }
+    
+    func testEthSendOperationsExample() {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let tempKeystore = try! EthereumKeystoreV3(password: "")
+        let keystoreManager = KeystoreManager([tempKeystore!])
+        web3.addKeystoreManager(keystoreManager)
+        let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
+        options.from = keystoreManager.addresses?.first
+        let intermediate = contract?.method("fallback", options: options)
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(let error):
+                print(error)
+                if case .nodeError(_) = error {
+                    fail = false
+                }
+//                XCTFail()
+//                fatalError()
+            }
+            semaphore.signal()
+        }
+        intermediate?.send(password: "", options: options, callback: callback, queue: web3.queue)
+        
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssertTrue(!fail)
     }
     
     func testPerformanceExample() {

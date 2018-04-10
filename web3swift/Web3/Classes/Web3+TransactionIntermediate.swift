@@ -37,8 +37,20 @@ extension web3.web3contract {
             }
         }
         
+        public func send(password: String = "BANKEXFOUNDATION", options: Web3Options? = nil, onBlock: String = "pending", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+            let mergedOptions = Web3Options.merge(self.options, with: options)
+            self.options = mergedOptions
+            guard let operation = ContractSendOperation.init(web3, queue: web3.queue, intermediate: self, onBlock: onBlock, password: password) else {
+                guard let dispatchQueue =  queue.underlyingQueue else {return}
+                return dispatchQueue.async {
+                    callback(Result<AnyObject, Web3Error>.failure(Web3Error.dataError))
+                }
+            }
+            operation.next = OperationChainingType.callback(callback, queue)
+            self.web3.queue.addOperation(operation)
+        }
         
-        public func send(password: String = "BANKEXFOUNDATION", options: Web3Options? = nil) -> Result<[String:String], Web3Error> {
+        public func send(password: String = "BANKEXFOUNDATION", options: Web3Options? = nil, onBlock: String = "pending") -> Result<[String:String], Web3Error> {
             do {
                 guard var mergedOptions = Web3Options.merge(self.options, with: options) else
                 {
@@ -48,7 +60,7 @@ extension web3.web3contract {
                 {
                     return Result.failure(Web3Error.inputError("Invalid options supplied"))
                 }
-                let nonceResult = self.web3.eth.getTransactionCount(address: from, onBlock: "pending")
+                let nonceResult = self.web3.eth.getTransactionCount(address: from, onBlock: onBlock)
                 if case .failure(let err) = nonceResult {
                     return Result.failure(err)
                 }
@@ -63,6 +75,11 @@ extension web3.web3contract {
                     if (mergedOptions.gasLimit! < estimatedGasResult.value!) {
                         return Result.failure(Web3Error.inputError("Estimated gas is larger than the gas limit"))
                     }
+                    mergedOptions.gasLimit = estimatedGasResult.value!
+                }
+                var transaction = self.transaction
+                if mergedOptions.gasLimit != nil {
+                    transaction.gasLimit = mergedOptions.gasLimit!
                 }
                 self.options = mergedOptions
                 if let keystoreManager = self.web3.provider.attachedKeystoreManager {
@@ -128,12 +145,22 @@ extension web3.web3contract {
             self.web3.queue.addOperation(operation)
         }
         
-        
-        
-        
-        public func estimateGas(options: Web3Options?) -> Result<BigUInt, Web3Error> {
+        public func estimateGas(options: Web3Options?, onBlock: String = "latest") -> Result<BigUInt, Web3Error> {
             let mergedOptions = Web3Options.merge(self.options, with: options)
-            return self.web3.eth.estimateGas(self.transaction, options: mergedOptions)
+            return self.web3.eth.estimateGas(self.transaction, options: mergedOptions, onBlock: onBlock)
+        }
+        
+        public func estimateGas(options: Web3Options?, onBlock: String = "latest", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+            let mergedOptions = Web3Options.merge(self.options, with: options)
+            self.options = mergedOptions
+            guard let operation = ContractEstimateGasOperation.init(web3, queue: web3.queue, intermediate: self, onBlock: onBlock) else {
+                guard let dispatchQueue =  queue.underlyingQueue else {return}
+                return dispatchQueue.async {
+                    callback(Result<AnyObject, Web3Error>.failure(Web3Error.dataError))
+                }
+            }
+            operation.next = OperationChainingType.callback(callback, queue)
+            self.web3.queue.addOperation(operation)
         }
     }
 }

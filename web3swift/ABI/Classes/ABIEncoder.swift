@@ -200,8 +200,13 @@ extension ABIElement.ParameterType.DynamicType {
 extension ABIElement {
     func encodeParameters(_ parameters: [AnyObject]) -> Data? {
         switch self {
-        case .constructor(_):
-            return nil
+        case .constructor(let constructor):
+            guard parameters.count == constructor.inputs.count else {return nil}
+            let allTypes = constructor.inputs.flatMap({ (input) -> ABIElement.ParameterType in
+                return input.type
+            })
+            guard let data = TypesEncoder.encode(types: allTypes, parameters: parameters) else {return nil}
+            return data
         case .event(_):
             return nil
         case .fallback(_):

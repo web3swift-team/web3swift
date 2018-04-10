@@ -12,6 +12,12 @@ import Result
 
 extension web3.Eth {
     
+    func sendTransaction(_ transaction: EthereumTransaction, options: Web3Options, password:String = "BANKEXFOUNDATION", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = SendTransactionOperation.init(self.web3, queue: self.web3.queue, transaction: transaction, options: options, password: password)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
+    
     func sendTransaction(_ transaction: EthereumTransaction, options: Web3Options, password:String = "BANKEXFOUNDATION") -> Result<[String: String], Web3Error> {
         print(transaction)
         guard let mergedOptions = Web3Options.merge(self.options, with: options) else {
@@ -53,6 +59,12 @@ extension web3.Eth {
         }
     }
     
+    func call(_ transaction: EthereumTransaction, options: Web3Options, onBlock:String = "latest", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = CallOperation.init(self.web3, queue: self.web3.queue, transaction: transaction, options: options, onBlock: onBlock)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
+    
     func call(_ transaction: EthereumTransaction, options: Web3Options, onBlock:String = "latest") -> Result<[String: String], Web3Error> {
         print(transaction)
         let mergedOptions = Web3Options.merge(self.web3.options, with: options)
@@ -73,6 +85,11 @@ extension web3.Eth {
         }
     }
     
+    func sendRawTransaction(_ transaction: EthereumTransaction, options: Web3Options, onBlock:String = "latest", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = SendRawTransactionOperation.init(self.web3, queue: self.web3.queue, transaction: transaction)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
     
     func sendRawTransaction(_ transaction: EthereumTransaction) -> Result<[String: String], Web3Error> {
         print(transaction)
@@ -89,6 +106,12 @@ extension web3.Eth {
             let hash = resultString.addHexPrefix().lowercased()
             return Result(["txhash": hash, "txhashCalculated" : transaction.hash!.toHexString()] as [String: String])
         }
+    }
+    
+    public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetTransactionCountOperation.init(self.web3, queue: self.web3.queue, address: address, onBlock: onBlock)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
     }
     
     public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest") -> Result<BigUInt, Web3Error> {
@@ -112,12 +135,6 @@ extension web3.Eth {
         }
     }
     
-    public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
-        let operation = GetTransactionCountOperation.init(self.web3, queue: self.web3.queue, address: address, onBlock: onBlock)
-        operation.next = OperationChainingType.callback(callback, queue)
-        self.web3.queue.addOperation(operation)
-    }
-    
     public func getBalance(address: EthereumAddress, onBlock: String = "latest") -> Result<BigUInt, Web3Error> {
         guard address.isValid else {
             return Result.failure(Web3Error.inputError("Please check the supplied address"))
@@ -139,6 +156,12 @@ extension web3.Eth {
         }
     }
     
+    public func getBalance(address: EthereumAddress, onBlock: String = "latest", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetBalanceOperation.init(self.web3, queue: self.web3.queue, address: address, onBlock: onBlock)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
+    
     public func getBlockNumber() -> Result<BigUInt, Web3Error> {
         let request = JSONRPCRequestFabric.prepareRequest(.blockNumber, parameters: [])
         let response = self.provider.send(request: request)
@@ -157,6 +180,12 @@ extension web3.Eth {
         }
     }
     
+    public func getBlockNumber(callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetBlockNumberOperation.init(self.web3, queue: self.web3.queue)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
+    
     public func getGasPrice() -> Result<BigUInt, Web3Error> {
         let request = JSONRPCRequestFabric.prepareRequest(.gasPrice, parameters: [])
         let response = self.provider.send(request: request)
@@ -173,6 +202,24 @@ extension web3.Eth {
             }
             return Result(biguint)
         }
+    }
+    
+    public func getGasPrice(callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetGasPriceOperation.init(self.web3, queue: self.web3.queue)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
+    
+    public func getTransactionDetails(_ txhash: String, callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetTransactionDetailsOperation.init(self.web3, queue: self.web3.queue, txHash: txhash)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
+    
+    public func getTransactionDetails(_ txhash: Data, callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetTransactionDetailsOperation.init(self.web3, queue: self.web3.queue, txHash: txhash)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
     }
     
     public func getTransactionDetails(_ txhash: Data) -> Result<TransactionDetails, Web3Error> {
@@ -198,6 +245,17 @@ extension web3.Eth {
         }
     }
     
+    public func getTransactionReceipt(_ txhash: String, callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetTransactionReceiptOperation.init(self.web3, queue: self.web3.queue, txHash: txhash)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
+    
+    public func getTransactionReceipt(_ txhash: Data, callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetTransactionReceiptOperation.init(self.web3, queue: self.web3.queue, txHash: txhash)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
     
     public func getTransactionReceipt(_ txhash: Data) -> Result<TransactionReceipt, Web3Error> {
         let hashString = txhash.toHexString().addHexPrefix()
@@ -222,9 +280,15 @@ extension web3.Eth {
         }
     }
     
-    public func estimateGas(_ transaction: EthereumTransaction, options: Web3Options?) -> Result<BigUInt, Web3Error> {
+    public func estimateGas(_ transaction: EthereumTransaction, options: Web3Options?, onBlock: String = "latest", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = EstimateGasOperation.init(self.web3, queue: self.web3.queue, transaction: transaction, options: options, onBlock: onBlock)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
+    
+    public func estimateGas(_ transaction: EthereumTransaction, options: Web3Options?, onBlock: String = "latest") -> Result<BigUInt, Web3Error> {
         let mergedOptions = Web3Options.merge(Web3Options.defaultOptions(), with: options)
-        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.estimateGas, transaction: transaction, onBlock: nil, options: mergedOptions) else {
+        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.estimateGas, transaction: transaction, onBlock: onBlock, options: mergedOptions) else {
             return Result.failure(Web3Error.inputError("Transaction serialization failed"))
         }
         let response = self.provider.send(request: request)
@@ -241,6 +305,12 @@ extension web3.Eth {
             }
             return Result(biguint)
         }
+    }
+    
+    public func getAccounts(callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetAccountsOperation.init(self.web3, queue: self.web3.queue)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
     }
     
     public func getAccounts() -> Result<[EthereumAddress],Web3Error> {
@@ -268,9 +338,21 @@ extension web3.Eth {
         }
     }
     
-    public func getBlockByHash(_ hashString: String, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
-        guard let hash = Data.fromHex(hashString) else {return Result.failure(Web3Error.inputError("Hash should be a hex string"))}
-        return getBlockByHash(hash, fullTransactions: fullTransactions)
+    public func getBlockByHash(_ hash: Data, callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetBlockByHashOperation.init(self.web3, queue: self.web3.queue, hash: hash)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
+    
+    public func getBlockByHash(_ hash: String, callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetBlockByHashOperation.init(self.web3, queue: self.web3.queue, hash: hash)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
+    
+    public func getBlockByHash(_ hash: String, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
+        guard let h = Data.fromHex(hash) else {return Result.failure(Web3Error.inputError("Hash should be a hex string"))}
+        return getBlockByHash(h, fullTransactions: fullTransactions)
     }
     
     public func getBlockByHash(_ hash: Data, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
@@ -292,6 +374,24 @@ extension web3.Eth {
             }
             return Result(block)
         }
+    }
+    
+    public func getBlockByNumber(_ number: String, callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetBlockByNumberOperation.init(self.web3, queue: self.web3.queue, blockNumber: number)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
+    
+    public func getBlockByNumber(_ number: UInt64, callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetBlockByNumberOperation.init(self.web3, queue: self.web3.queue, blockNumber: number)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
+    }
+    
+    public func getBlockByNumber(_ number: BigUInt, callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+        let operation = GetBlockByNumberOperation.init(self.web3, queue: self.web3.queue, blockNumber: number)
+        operation.next = OperationChainingType.callback(callback, queue)
+        self.web3.queue.addOperation(operation)
     }
     
     public func getBlockByNumber(_ number: UInt64, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
