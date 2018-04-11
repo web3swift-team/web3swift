@@ -3,13 +3,14 @@
 ## Important notices
 With the version 0.3.0 API should be less volatile. All public functions should return a Result<>[https://github.com/antitypical/Result] instead of nil or throwing.
 
-Example is not yet updated for 0.3.0, please use tests as an example for your code.
+Example is updated for 0.5.0, although please prefer to use tests as an example for your code.
 
 # web3swift
 
 [![Version](https://img.shields.io/cocoapods/v/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
+[![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0x6394b37Cf80A7358b38068f0CA4760ad49983a1B)
 
 - Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
 - Interaction with remote node via JSON RPC :thought_balloon:
@@ -72,7 +73,6 @@ You can try it by yourself by running the example project:
 ### Requirements
 
 Web3swift requires Swift 4.0 and iOS 9.0 or macOS 10.13 although we recommend to use the latest iOS and MacOS versions for your own safety.
-
 
 ### Installation
 
