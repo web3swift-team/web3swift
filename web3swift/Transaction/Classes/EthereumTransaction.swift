@@ -256,19 +256,61 @@ public struct EthereumTransaction: CustomStringConvertible {
         if (transaction.inferedChainID != nil && transaction.v >= BigUInt(37)) {
             transaction.chainID = inferedChainID
         }
-        let hash = json["hash"] as? String
-        if hash != nil {
-            let calculatedHash = transaction.hash
-            let receivedHash = Data.fromHex(hash!)
-            if (receivedHash != calculatedHash) {
-                print("hash mismatch")
-                print(String(describing: transaction))
-                print(json)
+//        let hash = json["hash"] as? String
+//        if hash != nil {
+//            let calculatedHash = transaction.hash
+//            let receivedHash = Data.fromHex(hash!)
+//            if (receivedHash != calculatedHash) {
+//                print("hash mismatch, dat")
+//                print(String(describing: transaction))
+//                print(json)
+//                return nil
+//            }
+//        }
+        return transaction
+    }
+    
+    static func fromRaw(_ raw: Data) -> EthereumTransaction? {
+        guard let totalItem = RLP.decode(raw) else {return nil}
+        guard let rlpItem = totalItem[0] else {return nil}
+        switch rlpItem.count {
+        case 9?:
+            guard let nonceData = rlpItem[0]!.data else {return nil}
+            let nonce = BigUInt(nonceData)
+            guard let gasPriceData = rlpItem[1]!.data else {return nil}
+            let gasPrice = BigUInt(gasPriceData)
+            guard let gasLimitData = rlpItem[2]!.data else {return nil}
+            let gasLimit = BigUInt(gasLimitData)
+            var to:EthereumAddress
+            switch rlpItem[3]!.content {
+            case .noItem:
+                to = EthereumAddress.contractDeploymentAddress()
+            case .data(let addressData):
+                if addressData.count == 0 {
+                    to = EthereumAddress.contractDeploymentAddress()
+                } else if addressData.count == 20 {
+                    to = EthereumAddress(addressData)
+                } else {
+                    return nil
+                }
+            case .list(_, _):
                 return nil
             }
-//            assert(receivedHash==calculatedHash)
+            guard let valueData = rlpItem[4]!.data else {return nil}
+            let value = BigUInt(valueData)
+            guard let transactionData = rlpItem[5]!.data else {return nil}
+            guard let vData = rlpItem[6]!.data else {return nil}
+            let v = BigUInt(vData)
+            guard let rData = rlpItem[7]!.data else {return nil}
+            let r = BigUInt(rData)
+            guard let sData = rlpItem[8]!.data else {return nil}
+            let s = BigUInt(sData)
+            return EthereumTransaction.init(nonce: nonce, gasPrice: gasPrice, gasLimit: gasLimit, to: to, value: value, data: transactionData, v: v, r: r, s: s)
+        case 6?:
+            return nil
+        default:
+            return nil
         }
-        return transaction
     }
     
     static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, onBlock: String? = nil, options: Web3Options?) -> JSONRPCrequest? {

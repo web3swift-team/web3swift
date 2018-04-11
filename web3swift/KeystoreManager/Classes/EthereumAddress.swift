@@ -39,7 +39,7 @@ public struct EthereumAddress: Equatable {
                 guard let d = dataArray.setLengthLeft(20) else { return Data()}
                 return d
             case .contractDeployment:
-                return Data(repeating: 0x00, count: 20)
+                return Data()
             }
         }
     }
@@ -48,7 +48,7 @@ public struct EthereumAddress: Equatable {
         case .normal:
             return EthereumAddress.toChecksumAddress(_address)!
         case .contractDeployment:
-            return "0x0000000000000000000000000000000000000000"
+            return "0x"
         }
     }
     
@@ -83,6 +83,6 @@ public struct EthereumAddress: Equatable {
     }
     
     public static func contractDeploymentAddress() -> EthereumAddress {
-        return EthereumAddress("0x0000000000000000000000000000000000000000", type: .contractDeployment)
+        return EthereumAddress("0x", type: .contractDeployment)
     }
 }
