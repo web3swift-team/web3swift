@@ -65,7 +65,7 @@ public struct TransactionReceipt {
         guard let cgu = json["cumulativeGasUsed"] as? String else {return nil}
         guard let gu = json["gasUsed"] as? String else {return nil}
         guard let ls = json["logs"] as? Array<[String:AnyObject]> else {return nil}
-        guard let lbl = json["logsBloom"] as? String else {return nil}
+        let lbl = json["logsBloom"] as? String
         let st = json["status"] as? String
     
         guard let bnUnwrapped = BigUInt(bn.stripHexPrefix(), radix: 16) else {return nil}
@@ -92,9 +92,11 @@ public struct TransactionReceipt {
         } else {
             status = TXStatus.failed
         }
-        let logsData = Data.fromHex(lbl)
-        if logsData != nil && logsData!.count > 0 {
-            logsBloom = EthereumBloomFilter(logsData!)
+        if lbl != nil {
+            let logsData = Data.fromHex(lbl!)
+            if logsData != nil && logsData!.count > 0 {
+                logsBloom = EthereumBloomFilter(logsData!)
+            }
         }
     }
 }
