@@ -21,7 +21,6 @@ public struct EthereumAddress: Equatable {
                 return (self.addressData.count == 20)
             case .contractDeployment:
                 return true
-//                return (self.addressData.count == 0)
             }
             
         }

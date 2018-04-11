@@ -437,6 +437,8 @@ class web3swiftTests: XCTestCase {
             Thread.sleep(forTimeInterval: 1.0)
             let receipt = web3.eth.getTransactionReceipt(txHash)
             print(receipt)
+            let details = web3.eth.getTransactionDetails(txHash)
+            print(details)
             return
         case .failure(let error):
             print(error)
@@ -693,7 +695,7 @@ class web3swiftTests: XCTestCase {
     
     func testTransactionReceipt() {
         let web3 = Web3.InfuraMainnetWeb3()
-        let result = web3.eth.getTransactionReceipt("0x127519412cefd773b952a5413a4467e9119654f59a34eca309c187bd9f3a195a")
+        let result = web3.eth.getTransactionReceipt("0x83b2433606779fd756417a863f26707cf6d7b2b55f5d744a39ecddb8ca01056e")
         switch result {
         case .failure(let error):
             print(error)

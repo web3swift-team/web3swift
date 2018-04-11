@@ -185,12 +185,12 @@ public struct EthereumTransaction: CustomStringConvertible {
         if (!from.isValid) {
             return nil
         }
-        var toString: String = "0x"
+        var toString: String? = nil
         switch self.to.type {
         case .normal:
             toString = self.to.address.lowercased()
         case .contractDeployment:
-            toString = "0x0000000000000000000000000000000000000000"
+            break
         }
         var params = TransactionParameters(from: from.address.lowercased(),
                                            to: toString)
@@ -217,7 +217,12 @@ public struct EthereumTransaction: CustomStringConvertible {
     static func fromJSON(_ json: [String: Any]) -> EthereumTransaction? {
         guard let options = Web3Options.fromJSON(json) else {return nil}
         guard let toString = json["to"] as? String else {return nil}
-        let to = EthereumAddress(toString)
+        var to: EthereumAddress
+        if toString == "0x" || toString == "0x0000000000000000000000000000000000000000" {
+            to = EthereumAddress.contractDeploymentAddress()
+        } else {
+            to = EthereumAddress(toString)
+        }
         if (!to.isValid) {
             return nil
         }
