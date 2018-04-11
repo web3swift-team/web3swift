@@ -218,7 +218,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         guard let options = Web3Options.fromJSON(json) else {return nil}
         guard let toString = json["to"] as? String else {return nil}
         var to: EthereumAddress
-        if toString == "0x" || toString == "0x0000000000000000000000000000000000000000" {
+        if toString == "0x" || toString == "0x0" {
             to = EthereumAddress.contractDeploymentAddress()
         } else {
             to = EthereumAddress(toString)
