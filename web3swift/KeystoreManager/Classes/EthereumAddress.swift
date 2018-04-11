@@ -9,30 +9,47 @@ import Foundation
 import BigInt
 
 public struct EthereumAddress: Equatable {
+    public enum AddressType {
+        case normal
+        case contractDeployment
+    }
+    
     public var isValid: Bool {
         get {
-            return (self.addressData.count == 20);
+            switch self.type {
+            case .normal:
+                return (self.addressData.count == 20)
+            case .contractDeployment:
+                return true
+//                return (self.addressData.count == 0)
+            }
+            
         }
     }
     var _address: String
-    
+    public var type: AddressType = .normal
     public static func ==(lhs: EthereumAddress, rhs: EthereumAddress) -> Bool {
-        return lhs.address.lowercased() == rhs.address.lowercased()
+        return lhs.address.lowercased() == rhs.address.lowercased() && lhs.type == rhs.type
     }
     
     public var addressData: Data {
         get {
-            let dataArray = Array<UInt8>(hex: _address.lowercased().stripHexPrefix())
-            guard let d = Data(dataArray).setLengthLeft(20)
-                else {
-                    return Data()
+            switch self.type {
+            case .normal:
+                guard let dataArray = Data.fromHex(_address) else {return Data()}
+                guard let d = dataArray.setLengthLeft(20) else { return Data()}
+                return d
+            case .contractDeployment:
+                return Data(repeating: 0x00, count: 20)
             }
-            return d
         }
     }
     public var address:String {
-        get {
+        switch self.type {
+        case .normal:
             return EthereumAddress.toChecksumAddress(_address)!
+        case .contractDeployment:
+            return "0x0000000000000000000000000000000000000000"
         }
     }
     
@@ -56,11 +73,17 @@ public struct EthereumAddress: Equatable {
         return ret
     }
     
-    public init(_ addressString:String) {
-        _address = addressString
+    public init(_ addressString:String, type: AddressType = .normal) {
+        self._address = addressString
+        self.type = type
     }
     
-    public init(_ addressData:Data) {
-        _address = addressData.toHexString().addHexPrefix()
+    public init(_ addressData:Data, type: AddressType = .normal) {
+        self._address = addressData.toHexString().addHexPrefix()
+        self.type = type
+    }
+    
+    public static func contractDeploymentAddress() -> EthereumAddress {
+        return EthereumAddress("0x0000000000000000000000000000000000000000", type: .contractDeployment)
     }
 }

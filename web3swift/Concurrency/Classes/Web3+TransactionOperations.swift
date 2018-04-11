@@ -168,6 +168,7 @@ final class ContractSendOperation: Web3Operation {
                 }
                 transaction.nonce = nonce
                 intermediate.transaction = transaction
+                intermediate.options = options
                 guard let gasEstimateOperation = ContractEstimateGasOperation.init(self.web3, queue: self.expectedQueue, intermediate: intermediate, onBlock: onBlock) else {return self.processError(Web3Error.dataError)}
                 gasEstimateOperation.next = OperationChainingType.callback(gasEstimationCallback, self.expectedQueue)
                 self.expectedQueue.addOperation(gasEstimateOperation)

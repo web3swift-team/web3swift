@@ -52,6 +52,10 @@ public struct Contract:ContractProtocol {
                 continue
             }
         }
+        if toReturn == nil {
+            let defaultConstructor = ABIElement.constructor(ABIElement.Constructor.init(inputs: [], constant: false, payable: false))
+            return defaultConstructor
+        }
         return toReturn
     }
     
@@ -99,15 +103,8 @@ public struct Contract:ContractProtocol {
     }
     
     public func deploy(bytecode:Data, parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), options: Web3Options?) -> EthereumTransaction? {
-        var to:EthereumAddress
+        let to:EthereumAddress = EthereumAddress.contractDeploymentAddress()
         let mergedOptions = Web3Options.merge(self.options, with: options)
-        if (self.address != nil) {
-            to = self.address!
-        } else if let toFound = mergedOptions?.to, toFound.isValid {
-            to = toFound
-        } else  {
-            return nil
-        }
         
         var gasLimit:BigUInt
         if let gasInOptions = mergedOptions?.gasLimit {

@@ -185,8 +185,15 @@ public struct EthereumTransaction: CustomStringConvertible {
         if (!from.isValid) {
             return nil
         }
+        var toString: String = "0x"
+        switch self.to.type {
+        case .normal:
+            toString = self.to.address.lowercased()
+        case .contractDeployment:
+            toString = "0x0000000000000000000000000000000000000000"
+        }
         var params = TransactionParameters(from: from.address.lowercased(),
-                                           to: self.to.address.lowercased())
+                                           to: toString)
         let gasEncoding = self.gasLimit.abiEncode(bits: 256)
         params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
         let gasPriceEncoding = self.gasPrice.abiEncode(bits: 256)
