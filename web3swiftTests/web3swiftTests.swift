@@ -512,6 +512,13 @@ class web3swiftTests: XCTestCase {
             Thread.sleep(forTimeInterval: 1.0)
             let receipt = web3.eth.getTransactionReceipt(txHash)
             print(receipt)
+            guard case .success(let rec) = receipt else {return XCTFail()}
+            switch rec.status {
+            case .notYetProcessed:
+                return
+            default:
+                break
+            }
             let details = web3.eth.getTransactionDetails(txHash)
             print(details)
             return
@@ -1200,6 +1207,20 @@ class web3swiftTests: XCTestCase {
         }
     }
 
+    func testGetBalance() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let response = web3.eth.getBalance(address: address)
+        switch response {
+        case .failure(_):
+            XCTFail()
+        case .success(let result):
+            let balance = result
+            let balString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .eth, decimals: 3)
+            print(balString)
+        }
+    }
+    
     func testGetBlockByHash() {
         let web3 = Web3.InfuraMainnetWeb3()
         let response = web3.eth.getBlockByHash("0x6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695", fullTransactions: true)

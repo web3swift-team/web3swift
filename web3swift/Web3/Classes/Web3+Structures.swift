@@ -52,6 +52,19 @@ public struct TransactionReceipt {
         case notYetProcessed
     }
     
+    public init(transactionHash: Data, blockHash: Data, blockNumber: BigUInt, transactionIndex: BigUInt, contractAddress: EthereumAddress?, cumulativeGasUsed: BigUInt, gasUsed: BigUInt, logs: [EventLog], status: TXStatus, logsBloom: EthereumBloomFilter?) {
+        self.transactionHash = transactionHash
+        self.blockHash = blockHash
+        self.blockNumber = blockNumber
+        self.transactionIndex = transactionIndex
+        self.contractAddress = contractAddress
+        self.cumulativeGasUsed = cumulativeGasUsed
+        self.gasUsed = gasUsed
+        self.logs = logs
+        self.status = status
+        self.logsBloom = logsBloom
+    }
+    
     public init? (_ json: [String: AnyObject]) {
         guard let th = json["transactionHash"] as? String else {return nil}
         guard let transactionHash = Data.fromHex(th) else {return nil}
@@ -98,6 +111,11 @@ public struct TransactionReceipt {
                 logsBloom = EthereumBloomFilter(logsData!)
             }
         }
+    }
+    
+    static func notProcessed(transactionHash: Data) -> TransactionReceipt {
+        let receipt = TransactionReceipt.init(transactionHash: transactionHash, blockHash: Data(), blockNumber: BigUInt(0), transactionIndex: BigUInt(0), contractAddress: nil, cumulativeGasUsed: BigUInt(0), gasUsed: BigUInt(0), logs: [EventLog](), status: .notYetProcessed, logsBloom: nil)
+        return receipt
     }
 }
 
