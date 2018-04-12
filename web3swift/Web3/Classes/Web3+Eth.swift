@@ -139,7 +139,7 @@ extension web3.Eth {
         guard address.isValid else {
             return Result.failure(Web3Error.inputError("Please check the supplied address"))
         }
-        let request = JSONRPCRequestFabric.prepareRequest(.getTransactionCount, parameters: [address.address.lowercased(), onBlock])
+        let request = JSONRPCRequestFabric.prepareRequest(.getBalance, parameters: [address.address.lowercased(), onBlock])
         let response = self.provider.send(request: request)
         let result = ResultUnwrapper.getResponse(response)
         switch result {
@@ -270,6 +270,13 @@ extension web3.Eth {
         case .failure(let error):
             return Result.failure(error)
         case .success(let payload):
+            if payload is NSNull {
+//                if let hash = Data.fromHex(txhash) {
+//                    return Result(TransactionReceipt.notProcessed(transactionHash: hash))
+//                } else {
+                    return Result(TransactionReceipt.notProcessed(transactionHash: Data()))
+//                }
+            }
             guard let resultJSON = payload as? [String: AnyObject] else {
                 return Result.failure(Web3Error.dataError)
             }
