@@ -165,7 +165,7 @@ THE SOFTWARE.
 
 ## web3swift
 
-Copyright (c) 2017 shamatar <alex.m.vlasov@gmail.com>
+Copyright (c) 2018 Aleksandr Vlasov, Stichting Bankex Foundation <av@bankexfoundation.org>
 
                                  Apache License
                            Version 2.0, January 2004
@@ -355,7 +355,7 @@ Copyright (c) 2017 shamatar <alex.m.vlasov@gmail.com>
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright [yyyy] [name of copyright owner]
+   Copyright 2018 Stichting Bankex Foundation
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

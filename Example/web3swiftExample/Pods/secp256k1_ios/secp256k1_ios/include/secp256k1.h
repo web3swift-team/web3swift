@@ -260,12 +260,10 @@ SECP256K1_API void secp256k1_context_set_error_callback(
  *
  *  Returns: a newly created scratch space.
  *  Args: ctx:  an existing context object (cannot be NULL)
- *  In:  init_size: initial amount of memory to allocate
- *        max_size: maximum amount of memory to allocate
+ *  In:   max_size: maximum amount of memory to allocate
  */
 SECP256K1_API SECP256K1_WARN_UNUSED_RESULT secp256k1_scratch_space* secp256k1_scratch_space_create(
     const secp256k1_context* ctx,
-    size_t init_size,
     size_t max_size
 ) SECP256K1_ARG_NONNULL(1);
 
@@ -533,7 +531,7 @@ SECP256K1_API SECP256K1_WARN_UNUSED_RESULT int secp256k1_ec_pubkey_create(
  *
  *  Returns: 1 always
  *  Args:   ctx:        pointer to a context object
- *  In/Out: pubkey:     pointer to the public key to be negated (cannot be NULL)
+ *  In/Out: seckey:     pointer to the 32-byte private key to be negated (cannot be NULL)
  */
 SECP256K1_API SECP256K1_WARN_UNUSED_RESULT int secp256k1_ec_privkey_negate(
     const secp256k1_context* ctx,

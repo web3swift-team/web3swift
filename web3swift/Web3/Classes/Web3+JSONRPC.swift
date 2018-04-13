@@ -104,7 +104,3 @@ public struct JSONRPCparams: Encodable{
         }
     }
 }
-
-public struct JSONRPCparamsFabric {
-    
-}

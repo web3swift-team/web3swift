@@ -18,6 +18,15 @@ extension Web3 {
 }
 
 extension Web3.Utils {
+    public static func calcualteContractAddress(from: EthereumAddress, nonce: BigUInt) -> EthereumAddress? {
+        guard let normalizedAddress = from.addressData.setLengthLeft(32) else {return nil}
+        guard let data = RLP.encode([normalizedAddress, nonce] as [Any]) else {return nil}
+        guard let contractAddressData = Web3.Utils.sha3(data)?[12..<32] else {return nil}
+        let contractAddress = EthereumAddress(Data(contractAddressData))
+        guard contractAddress.isValid else {return nil}
+        return contractAddress
+    }
+    
     public enum Units {
         case eth
         case wei
