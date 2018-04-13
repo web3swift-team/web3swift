@@ -443,7 +443,7 @@ class web3swiftTests: XCTestCase {
             let hash = transaction.hashForSignature(chainID: BigUInt(1))
             let expectedHash = "0xdaf5a779ae972f972197303d7b574746c7ef83eadac0f2791ad23db92e4c8e53".stripHexPrefix()
             XCTAssert(hash!.toHexString() == expectedHash, "Transaction signature failed")
-            try Web3Signer.EIP155Signer.sign(transaction: &transaction, privateKey: privateKeyData)
+            try Web3Signer.EIP155Signer.sign(transaction: &transaction, privateKey: privateKeyData, useExtraEntropy: false)
             print(transaction)
             XCTAssert(transaction.v == UInt8(37), "Transaction signature failed")
             XCTAssert(sender == transaction.sender)
@@ -2068,6 +2068,33 @@ class web3swiftTests: XCTestCase {
         
         let _ = semaphore.wait(timeout: .distantFuture)
         XCTAssertTrue(!fail)
+    }
+    
+    func testDeterministicSignature() {
+        var unsuccesfulNondeterministic = 0;
+        for _ in 0 ..< 1024 {
+            let randomHash = Data.randomBytes(length: 32)!
+            let randomPrivateKey = Data.randomBytes(length: 32)!
+            guard SECP256K1.verifyPrivateKey(privateKey: randomPrivateKey) else {continue}
+            let signature = SECP256K1.signForRecovery(hash: randomHash, privateKey: randomPrivateKey, useExtraEntropy: true)
+            guard let _ = signature.compressed, let _ = signature.uncompressed else {
+                unsuccesfulNondeterministic = unsuccesfulNondeterministic + 1
+                continue
+            }
+        }
+        print("Problems with \(unsuccesfulNondeterministic) non-deterministic signatures")
+        var unsuccesfulDeterministic = 0;
+        for _ in 0 ..< 1024 {
+            let randomHash = Data.randomBytes(length: 32)!
+            let randomPrivateKey = Data.randomBytes(length: 32)!
+            guard SECP256K1.verifyPrivateKey(privateKey: randomPrivateKey) else {continue}
+            let signature = SECP256K1.signForRecovery(hash: randomHash, privateKey: randomPrivateKey, useExtraEntropy: false)
+            guard let _ = signature.compressed, let _ = signature.uncompressed else {
+                unsuccesfulDeterministic = unsuccesfulDeterministic + 1
+                continue
+            }
+        }
+        print("Problems with \(unsuccesfulDeterministic) deterministic signatures")
     }
     
     func testPerformanceExample() {

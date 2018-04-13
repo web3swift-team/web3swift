@@ -11,7 +11,6 @@ import BigInt
 import Result
 
 extension web3.Eth {
-    
     func sendTransaction(_ transaction: EthereumTransaction, options: Web3Options, password:String = "BANKEXFOUNDATION", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
         let operation = SendTransactionOperation.init(self.web3, queue: self.web3.queue, transaction: transaction, options: options, password: password)
         operation.next = OperationChainingType.callback(callback, queue)
@@ -68,7 +67,7 @@ extension web3.Eth {
     func call(_ transaction: EthereumTransaction, options: Web3Options, onBlock:String = "latest") -> Result<[String: String], Web3Error> {
         print(transaction)
         let mergedOptions = Web3Options.merge(self.web3.options, with: options)
-        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: transaction, onBlock: onBlock, options: mergedOptions) else
+        guard let request = EthereumTransaction.createRequest(method: .call, transaction: transaction, onBlock: onBlock, options: mergedOptions) else
         {
             return Result.failure(Web3Error.inputError("Transaction or options are malformed"))
         }
@@ -412,7 +411,7 @@ extension web3.Eth {
     }
     
     public func getBlockByNumber(_ block:String, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
-        let request = JSONRPCRequestFabric.prepareRequest(.getBlockByHash, parameters: [block, fullTransactions])
+        let request = JSONRPCRequestFabric.prepareRequest(.getBlockByNumber, parameters: [block, fullTransactions])
         let response = self.provider.send(request: request)
         let result = ResultUnwrapper.getResponse(response)
         switch result {
