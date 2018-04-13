@@ -412,7 +412,7 @@ extension web3.Eth {
     }
     
     public func getBlockByNumber(_ block:String, fullTransactions: Bool = false) -> Result<Block,Web3Error> {
-        let request = JSONRPCRequestFabric.prepareRequest(.getBlockByHash, parameters: [block, fullTransactions])
+        let request = JSONRPCRequestFabric.prepareRequest(.getBlockByNumber, parameters: [block, fullTransactions])
         let response = self.provider.send(request: request)
         let result = ResultUnwrapper.getResponse(response)
         switch result {

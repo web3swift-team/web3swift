@@ -19,7 +19,7 @@ struct SECP256K1 {
 extension SECP256K1 {
     static var context = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_SIGN|SECP256K1_CONTEXT_VERIFY))
     
-    static func signForRecovery(hash: Data, privateKey: Data) -> (compressed:Data?, uncompressed: Data?) {
+    static func signForRecovery(hash: Data, privateKey: Data, useExtraEntropy: Bool = true) -> (compressed:Data?, uncompressed: Data?) {
         if (hash.count != 32 || privateKey.count != 32) {return (nil, nil)}
         if !SECP256K1.verifyPrivateKey(privateKey: privateKey) {
             return (nil, nil)
@@ -38,7 +38,7 @@ extension SECP256K1 {
             var result = hash.withUnsafeBytes { (hashPointer:UnsafePointer<UInt8>) -> Int32 in
                 privateKey.withUnsafeBytes { (privateKeyPointer:UnsafePointer<UInt8>) -> Int32 in
                     extraEntropy.withUnsafeBytes { (extraEntropyPointer:UnsafePointer<UInt8>) -> Int32 in
-                        let res = secp256k1_ecdsa_sign_recoverable(context!, UnsafeMutablePointer<secp256k1_ecdsa_recoverable_signature>(&uncompressed), hashPointer, privateKeyPointer, secp256k1_nonce_function_rfc6979, extraEntropyPointer)
+                        let res = secp256k1_ecdsa_sign_recoverable(context!, UnsafeMutablePointer<secp256k1_ecdsa_recoverable_signature>(&uncompressed), hashPointer, privateKeyPointer, nil, useExtraEntropy ? extraEntropyPointer : nil)
                         return res
                     }
                 }
