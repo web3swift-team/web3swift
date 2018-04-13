@@ -224,7 +224,7 @@ THE SOFTWARE.</string>
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Copyright (c) 2017 shamatar &lt;alex.m.vlasov@gmail.com&gt;
+			<string>Copyright (c) 2018 Aleksandr Vlasov, Stichting Bankex Foundation &lt;av@bankexfoundation.org&gt;
 
                                  Apache License
                            Version 2.0, January 2004
@@ -414,7 +414,7 @@ THE SOFTWARE.</string>
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright [yyyy] [name of copyright owner]
+   Copyright 2018 Stichting Bankex Foundation
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

@@ -63,6 +63,28 @@ public class web3: Web3OptionsInheritable {
             web3 = web3instance
         }
     }
+    
+    var personalInstance: web3.Personal?
+    public var personal: web3.Personal {
+        if (self.personalInstance != nil) {
+            return self.personalInstance!
+        }
+        self.personalInstance = web3.Personal(provider : self.provider, web3: self)
+        return self.personalInstance!
+    }
+    
+    public class Personal:Web3OptionsInheritable {
+        var provider:Web3Provider
+        //        weak var web3: web3?
+        var web3: web3
+        public var options: Web3Options {
+            return self.web3.options
+        }
+        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+            provider = prov
+            web3 = web3instance
+        }
+    }
 
     var walletInstance: web3.Web3Wallet?
     public var wallet: web3.Web3Wallet {

@@ -17,6 +17,9 @@ final class TransactionReceiptConversionOperation: Web3Operation {
             return self.processError(self.error!)
         }
         guard let _ = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        if inputData == nil || inputData! is NSNull {
+            return processSuccess(TransactionReceipt.notProcessed(transactionHash: Data()) as AnyObject)
+        }
         guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let input = inputData! as? [String: AnyObject] else {return processError(Web3Error.dataError)}
         guard let receipt = TransactionReceipt(input) else {
