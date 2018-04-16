@@ -38,7 +38,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   web3swift:
-    :commit: 10c999c937012e32e021bb64581a5199005a2084
+    :commit: 229974c230086a54485a7fe136fbbb9b4fa89824
     :git: https://github.com/bankex/web3swift.git
 
 SPEC CHECKSUMS:

@@ -52,8 +52,8 @@ public struct Web3Signer {
             guard let chainID = transaction.chainID else {return false}
             guard let hash = transaction.hashForSignature(chainID: chainID) else {return false}
             let signature  = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
-            guard let compressedSignature = signature.compressed else {return false}
-            guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: compressedSignature) else {
+            guard let serializedSignature = signature.serializedSignature else {return false}
+            guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: serializedSignature) else {
                 return false
             }
             let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey)
@@ -82,8 +82,8 @@ public struct Web3Signer {
         private static func attemptSignature(transaction:inout EthereumTransaction, privateKey: Data, useExtraEntropy: Bool = true) -> Bool {
             guard let hash = transaction.hashForSignature(chainID: nil) else {return false}
             let signature  = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
-            guard let compressedSignature = signature.compressed else {return false}
-            guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: compressedSignature) else {
+            guard let serializedSignature = signature.serializedSignature else {return false}
+            guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: serializedSignature) else {
                 return false
             }
             let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey)

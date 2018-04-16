@@ -37,7 +37,7 @@ extension SECP256K1 {
             guard let serializedSignature = SECP256K1.serializeSignature(recoverableSignature: &recoverableSignature) else {continue}
             let rawSignature = Data(toByteArray(recoverableSignature))
             return (serializedSignature, rawSignature)
-            print("Signature required \(rounds) rounds")
+//            print("Signature required \(rounds) rounds")
         }
         print("Signature required 1024 rounds and failed")
         return (nil, nil)

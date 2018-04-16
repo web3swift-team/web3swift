@@ -57,7 +57,7 @@ public struct JSONRPCrequest: Encodable, ParameterEncoding  {
                 return false
             }
             guard let method = self.method else {return false}
-            return method.requiredNumOfParameter == self.params?.params.count
+            return method.requiredNumOfParameters == self.params?.params.count
         }
     }
 }
