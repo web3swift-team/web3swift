@@ -45,6 +45,8 @@
 		41948140203630530065A83B /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1CA200CBB2200B6D3AB /* Array+Extension.swift */; };
 		41948141203630530065A83B /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2FF1FD7F30F0074282C /* String+Extension.swift */; };
 		472BBA099A26DFD47F33C2E0 /* Pods_web3swift_macOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 010A8466DD6C993827C11A71 /* Pods_web3swift_macOS_Tests.framework */; };
+		4EFFCB6E208552F2008165FE /* web3swift_local_node_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFFCB6D208552F2008165FE /* web3swift_local_node_Tests.swift */; };
+		4EFFCB70208554EB008165FE /* web3swift_remote_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFFCB6F208554EB008165FE /* web3swift_remote_Tests.swift */; };
 		8103BBB72076391F00499769 /* Web3+Concurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBB62076391F00499769 /* Web3+Concurrency.swift */; };
 		8103BBB82076391F00499769 /* Web3+Concurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBB62076391F00499769 /* Web3+Concurrency.swift */; };
 		8103BBBA20764A6900499769 /* Web3+DataFetchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBB920764A6900499769 /* Web3+DataFetchOperation.swift */; };
@@ -197,6 +199,8 @@
 		391A0D2EF42488E5C8AB2F71 /* Pods_web3swift_osx_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_osx_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		417715D420362916005C3E16 /* web3swift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = web3swift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		419481432036338A0065A83B /* Pods_web3swift_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_web3swift_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4EFFCB6D208552F2008165FE /* web3swift_local_node_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_local_node_Tests.swift; sourceTree = "<group>"; };
+		4EFFCB6F208554EB008165FE /* web3swift_remote_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_remote_Tests.swift; sourceTree = "<group>"; };
 		5A31D55232599E417B6F862E /* Pods-web3swift-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-iOS/Pods-web3swift-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		5B83FA95B72D7DA53870479B /* Pods-web3swift-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS/Pods-web3swift-macOS.release.xcconfig"; sourceTree = "<group>"; };
 		613A9CE29320FF136EC8903D /* Pods_web3swift_iOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_iOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -381,6 +385,8 @@
 			children = (
 				81531AA31FE7CD74002192CC /* ERC20abi.json */,
 				1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */,
+				4EFFCB6F208554EB008165FE /* web3swift_remote_Tests.swift */,
+				4EFFCB6D208552F2008165FE /* web3swift_local_node_Tests.swift */,
 				1CD91B331FD769A6007BFB45 /* Info.plist */,
 			);
 			path = web3swiftTests;
@@ -1077,6 +1083,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EFFCB70208554EB008165FE /* web3swift_remote_Tests.swift in Sources */,
+				4EFFCB6E208552F2008165FE /* web3swift_local_node_Tests.swift in Sources */,
 				1CD91B321FD769A6007BFB45 /* web3swiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

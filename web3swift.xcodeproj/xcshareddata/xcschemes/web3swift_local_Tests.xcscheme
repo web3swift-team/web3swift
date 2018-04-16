@@ -37,6 +37,14 @@
                BlueprintName = "web3swift-iOS_Tests"
                ReferencedContainer = "container:web3swift.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "web3swift_local_node_Tests">
+               </Test>
+               <Test
+                  Identifier = "web3swift_remote_Tests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <AdditionalOptions>
