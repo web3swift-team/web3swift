@@ -319,7 +319,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         guard let from = options?.from else {return nil}
         guard let txParams = transaction.encodeAsDictionary(from: from) else {return nil}
         var params = [txParams] as Array<Encodable>
-        if method.requiredNumOfParameter == 2 && onBlock != nil {
+        if method.requiredNumOfParameters == 2 && onBlock != nil {
             params.append(onBlock as Encodable)
         }
         let pars = JSONRPCparams(params: params)

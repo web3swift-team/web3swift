@@ -107,6 +107,8 @@
 		818D16D0204D42940084D2A4 /* Web3+EventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818D16CE204D42910084D2A4 /* Web3+EventParser.swift */; };
 		818D810E1FDC1A2000663CE3 /* RLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818D810D1FDC1A2000663CE3 /* RLP.swift */; };
 		818EABDA1FDC9A5C00E013FC /* Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EABD91FDC9A5C00E013FC /* Contract.swift */; };
+		81BEDE1D20852F75002CD87D /* Web3+PersonalOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BEDE1C20852F75002CD87D /* Web3+PersonalOperations.swift */; };
+		81BEDE1E20852F75002CD87D /* Web3+PersonalOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BEDE1C20852F75002CD87D /* Web3+PersonalOperations.swift */; };
 		81C0FCF220440EB500D82FAF /* Web3+Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF120440EB500D82FAF /* Web3+Protocols.swift */; };
 		81C0FCF420440F0900D82FAF /* Web3+Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF320440F0900D82FAF /* Web3+Options.swift */; };
 		81C0FCF720441A1D00D82FAF /* TransactionSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF520440F9900D82FAF /* TransactionSigner.swift */; };
@@ -249,6 +251,7 @@
 		818D16CE204D42910084D2A4 /* Web3+EventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+EventParser.swift"; sourceTree = "<group>"; };
 		818D810D1FDC1A2000663CE3 /* RLP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RLP.swift; sourceTree = "<group>"; };
 		818EABD91FDC9A5C00E013FC /* Contract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contract.swift; sourceTree = "<group>"; };
+		81BEDE1C20852F75002CD87D /* Web3+PersonalOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+PersonalOperations.swift"; sourceTree = "<group>"; };
 		81C0FCEF20440C3600D82FAF /* Web3+Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+Wallet.swift"; sourceTree = "<group>"; };
 		81C0FCF120440EB500D82FAF /* Web3+Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Protocols.swift"; sourceTree = "<group>"; };
 		81C0FCF320440F0900D82FAF /* Web3+Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Options.swift"; sourceTree = "<group>"; };
@@ -430,6 +433,7 @@
 				8103BBC52077954200499769 /* Web3+TransactionOperations.swift */,
 				8103BBC820779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift */,
 				81FB21F3207814F7007F9A83 /* Web3+EventOperations.swift */,
+				81BEDE1C20852F75002CD87D /* Web3+PersonalOperations.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1018,6 +1022,7 @@
 				815630022007B53C00A0EC2F /* BIP32Keystore.swift in Sources */,
 				818ABD5B1FE95F8F002657BB /* Web3+Instance.swift in Sources */,
 				817EBB27200673D100E02EAA /* KeystoreV3JSONStructure.swift in Sources */,
+				81BEDE1D20852F75002CD87D /* Web3+PersonalOperations.swift in Sources */,
 				8103BBBD207654B900499769 /* Web3+ConversionOperations.swift in Sources */,
 				81C5DA11207254F600424CD6 /* ABIv2.swift in Sources */,
 				8103BBC62077954200499769 /* Web3+TransactionOperations.swift in Sources */,
@@ -1102,6 +1107,7 @@
 				4194812B203630530065A83B /* RLP.swift in Sources */,
 				4194812C203630530065A83B /* KeystoreManager.swift in Sources */,
 				8103BBBE207654B900499769 /* Web3+ConversionOperations.swift in Sources */,
+				81BEDE1E20852F75002CD87D /* Web3+PersonalOperations.swift in Sources */,
 				81C5DA12207254F600424CD6 /* ABIv2.swift in Sources */,
 				8103BBC72077954200499769 /* Web3+TransactionOperations.swift in Sources */,
 				4194812D203630530065A83B /* EthereumAddress.swift in Sources */,

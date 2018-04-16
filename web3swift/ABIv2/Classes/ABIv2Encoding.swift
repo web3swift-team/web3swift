@@ -69,11 +69,27 @@ extension ABIv2Encoder {
             if let bigint = value as? BigInt {
                 return bigint.abiEncode(bits: 256)
             }
+            if let num = value as? IntegerLiteralType {
+                let biguint = BigUInt(num)
+                return biguint.abiEncode(bits: 256)
+            }
+            if let numString = value as? String {
+                guard let biguint = BigUInt(numString, radix: 10) else {break}
+                return biguint.abiEncode(bits: 256)
+            }
         case .int(_):
             if let biguint = value as? BigUInt {
                 return biguint.abiEncode(bits: 256)
             }
             if let bigint = value as? BigInt {
+                return bigint.abiEncode(bits: 256)
+            }
+            if let num = value as? IntegerLiteralType {
+                let bigint = BigInt(num)
+                return bigint.abiEncode(bits: 256)
+            }
+            if let numString = value as? String {
+                guard let bigint = BigInt(numString, radix: 10) else {break}
                 return bigint.abiEncode(bits: 256)
             }
         case .address:
@@ -115,6 +131,9 @@ extension ABIv2Encoder {
                 return data.setLengthRight(32)
             } else if let data = value as? Data {
                 return data.setLengthRight(32)
+            } else if let byteArray = value as? [UInt8] {
+                let data = Data(byteArray)
+                return data.setLengthRight(32)
             }
         case .string:
             if let string = value as? String {
@@ -150,6 +169,14 @@ extension ABIv2Encoder {
                 let total = head+paddedData
                 return total
             } else if let data = value as? Data {
+                let minLength = ((data.count + 31) / 32)*32
+                guard let paddedData = data.setLengthRight(UInt64(minLength)) else {break}
+                let length = BigUInt(data.count)
+                guard let head = length.abiEncode(bits: 256) else {break}
+                let total = head+paddedData
+                return total
+            } else if let byteArray = value as? [UInt8] {
+                let data = Data(byteArray)
                 let minLength = ((data.count + 31) / 32)*32
                 guard let paddedData = data.setLengthRight(UInt64(minLength)) else {break}
                 let length = BigUInt(data.count)
