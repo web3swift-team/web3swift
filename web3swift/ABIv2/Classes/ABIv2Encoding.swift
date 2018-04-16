@@ -14,6 +14,91 @@ public struct ABIv2Encoder {
 }
 
 extension ABIv2Encoder {
+    public static func convertToBigUInt(_ value: AnyObject) -> BigUInt? {
+        switch value {
+        case let v as BigUInt:
+            return v
+        case let v as BigInt:
+            return v.magnitude
+        case let v as String:
+            let base10 = BigUInt(v, radix: 10)
+            if base10 != nil {
+                return base10!
+            }
+            let base16 = BigUInt(v.stripHexPrefix(), radix: 16)
+            if base16 != nil {
+                return base16!
+            }
+            break
+        case let v as UInt:
+            return BigUInt(v)
+        case let v as UInt8:
+            return BigUInt(v)
+        case let v as UInt16:
+            return BigUInt(v)
+        case let v as UInt32:
+            return BigUInt(v)
+        case let v as UInt64:
+            return BigUInt(v)
+        case let v as Int:
+            return BigUInt(v)
+        case let v as Int8:
+            return BigUInt(v)
+        case let v as Int16:
+            return BigUInt(v)
+        case let v as Int32:
+            return BigUInt(v)
+        case let v as Int64:
+            return BigUInt(v)
+        default:
+            return nil
+        }
+        return nil
+    }
+    
+    public static func convertToBigInt(_ value: AnyObject) -> BigInt? {
+        switch value {
+        case let v as BigUInt:
+            return BigInt(v)
+        case let v as BigInt:
+            return v
+        case let v as String:
+            let base10 = BigInt(v, radix: 10)
+            if base10 != nil {
+                return base10!
+            }
+            let base16 = BigInt(v.stripHexPrefix(), radix: 16)
+            if base16 != nil {
+                return base16!
+            }
+            break
+        case let v as UInt:
+            return BigInt(v)
+        case let v as UInt8:
+            return BigInt(v)
+        case let v as UInt16:
+            return BigInt(v)
+        case let v as UInt32:
+            return BigInt(v)
+        case let v as UInt64:
+            return BigInt(v)
+        case let v as Int:
+            return BigInt(v)
+        case let v as Int8:
+            return BigInt(v)
+        case let v as Int16:
+            return BigInt(v)
+        case let v as Int32:
+            return BigInt(v)
+        case let v as Int64:
+            return BigInt(v)
+        default:
+            return nil
+        }
+        return nil
+    }
+    
+    
     public static func encode(types: [ABIv2.Element.InOut], values: [AnyObject]) -> Data? {
         guard types.count == values.count else {return nil}
         let params = types.flatMap { (el) -> ABIv2.Element.ParameterType in
@@ -63,33 +148,17 @@ extension ABIv2Encoder {
     public static func encodeSingleType(type: ABIv2.Element.ParameterType, value: AnyObject) -> Data? {
         switch type {
         case .uint(_):
-            if let biguint = value as? BigUInt {
+            if let biguint = convertToBigUInt(value) {
                 return biguint.abiEncode(bits: 256)
             }
-            if let bigint = value as? BigInt {
+            if let bigint = convertToBigInt(value) {
                 return bigint.abiEncode(bits: 256)
-            }
-            if let num = value as? IntegerLiteralType {
-                let biguint = BigUInt(num)
-                return biguint.abiEncode(bits: 256)
-            }
-            if let numString = value as? String {
-                guard let biguint = BigUInt(numString, radix: 10) else {break}
-                return biguint.abiEncode(bits: 256)
             }
         case .int(_):
-            if let biguint = value as? BigUInt {
+            if let biguint = convertToBigUInt(value) {
                 return biguint.abiEncode(bits: 256)
             }
-            if let bigint = value as? BigInt {
-                return bigint.abiEncode(bits: 256)
-            }
-            if let num = value as? IntegerLiteralType {
-                let bigint = BigInt(num)
-                return bigint.abiEncode(bits: 256)
-            }
-            if let numString = value as? String {
-                guard let bigint = BigInt(numString, radix: 10) else {break}
+            if let bigint = convertToBigInt(value) {
                 return bigint.abiEncode(bits: 256)
             }
         case .address:
