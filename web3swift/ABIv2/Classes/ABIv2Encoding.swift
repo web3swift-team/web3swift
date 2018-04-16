@@ -65,11 +65,11 @@ extension ABIv2Encoder {
         case let v as String:
             let base10 = BigInt(v, radix: 10)
             if base10 != nil {
-                return base10!
+                return base10
             }
             let base16 = BigInt(v.stripHexPrefix(), radix: 16)
             if base16 != nil {
-                return base16!
+                return base16
             }
             break
         case let v as UInt:
@@ -92,6 +92,36 @@ extension ABIv2Encoder {
             return BigInt(v)
         case let v as Int64:
             return BigInt(v)
+        default:
+            return nil
+        }
+        return nil
+    }
+    
+    public static func convertToData(_ value: AnyObject) -> Data? {
+        switch value {
+        case let d as Data:
+            return d
+        case let d as String:
+            let hex = Data.fromHex(d.stripHexPrefix())
+            if hex != nil {
+                return hex
+            }
+            let str = d.data(using: .utf8)
+            if str != nil {
+                return str
+            }
+        case let d as [UInt8]:
+            return Data(d)
+        case let d as EthereumAddress:
+            return d.addressData
+        case let d as [IntegerLiteralType]:
+            var bytesArray = [UInt8]()
+            for el in d {
+                guard el >= 0, el <= 255 else {return nil}
+                bytesArray.append(UInt8(el))
+            }
+            return Data(bytesArray)
         default:
             return nil
         }
@@ -183,27 +213,9 @@ extension ABIv2Encoder {
                 }
             }
         case .bytes(let length):
-            if let string = value as? String {
-                var dataGuess: Data?
-                if string.hasHexPrefix() {
-                    dataGuess = Data.fromHex(string.lowercased().stripHexPrefix())
-                }
-                else {
-                    dataGuess = string.data(using: .utf8)
-                }
-                guard let data = dataGuess else {break}
-                if data.count > length {break}
-                return data.setLengthRight(32)
-            } else if let addr = value as? EthereumAddress {
-                guard addr.isValid else {break}
-                let data = addr.addressData
-                return data.setLengthRight(32)
-            } else if let data = value as? Data {
-                return data.setLengthRight(32)
-            } else if let byteArray = value as? [UInt8] {
-                let data = Data(byteArray)
-                return data.setLengthRight(32)
-            }
+            guard let data = convertToData(value) else {break}
+            if data.count > length {break}
+            return data.setLengthRight(32)
         case .string:
             if let string = value as? String {
                 var dataGuess: Data?
@@ -222,37 +234,13 @@ extension ABIv2Encoder {
                 return total
             }
         case .dynamicBytes:
-            if let string = value as? String {
-                var dataGuess: Data?
-                if string.hasHexPrefix() {
-                    dataGuess = Data.fromHex(string.lowercased().stripHexPrefix())
-                }
-                else {
-                    dataGuess = string.data(using: .utf8)
-                }
-                guard let data = dataGuess else {break}
-                let minLength = ((data.count + 31) / 32)*32
-                guard let paddedData = data.setLengthRight(UInt64(minLength)) else {break}
-                let length = BigUInt(data.count)
-                guard let head = length.abiEncode(bits: 256) else {break}
-                let total = head+paddedData
-                return total
-            } else if let data = value as? Data {
-                let minLength = ((data.count + 31) / 32)*32
-                guard let paddedData = data.setLengthRight(UInt64(minLength)) else {break}
-                let length = BigUInt(data.count)
-                guard let head = length.abiEncode(bits: 256) else {break}
-                let total = head+paddedData
-                return total
-            } else if let byteArray = value as? [UInt8] {
-                let data = Data(byteArray)
-                let minLength = ((data.count + 31) / 32)*32
-                guard let paddedData = data.setLengthRight(UInt64(minLength)) else {break}
-                let length = BigUInt(data.count)
-                guard let head = length.abiEncode(bits: 256) else {break}
-                let total = head+paddedData
-                return total
-            }
+            guard let data = convertToData(value) else {break}
+            let minLength = ((data.count + 31) / 32)*32
+            guard let paddedData = data.setLengthRight(UInt64(minLength)) else {break}
+            let length = BigUInt(data.count)
+            guard let head = length.abiEncode(bits: 256) else {break}
+            let total = head+paddedData
+            return total
         case .array(type: let subType, length: let length):
             switch type.arraySize {
             case .dynamicSize:
