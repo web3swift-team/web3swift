@@ -470,7 +470,8 @@ class web3swiftTests: XCTestCase {
         case .success(_):
             return XCTFail()
         case .failure(let error):
-            guard case .unknownError = error else {return XCTFail()}
+            guard case .nodeError(let descr) = error else {return XCTFail()}
+            guard descr == "insufficient funds for gas * price + value" else {return XCTFail()}
         }
     }
     
