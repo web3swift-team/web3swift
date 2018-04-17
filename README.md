@@ -1,7 +1,7 @@
 ![bkx-foundation-github-swift](https://user-images.githubusercontent.com/3356474/34412791-5b58962c-ebf0-11e7-8460-5592b12e6e9d.png)
 
 ## Important notices
-With the version 0.3.0 API should be less volatile. All public functions should return a Result<>[https://github.com/antitypical/Result] instead of nil or throwing.
+With the version 0.3.0 API should be less volatile. All public functions should return a [Result](https://github.com/antitypical/Result) instead of `nil` or throwing.
 
 Example is updated for 0.5.0, although please prefer to use tests as an example for your code.
 
@@ -15,7 +15,7 @@ Example is updated for 0.5.0, although please prefer to use tests as an example 
 - Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
 - Interaction with remote node via JSON RPC :thought_balloon:
 - Smart-contract ABI parsing :book:
-  - ABI deconding 
+  - ABI deconding
   - RLP encoding
 - Interactions (read/write to Smart contracts) :arrows_counterclockwise:
 - Local keystore management (geth compatible)
@@ -95,14 +95,14 @@ pod 'web3swift', git: 'https://github.com/BANKEX/web3swift.git'
 - Full reference `web3js` functionality
 - Light Ethereum subprotocol (LES) integration
 
-## Special thanks to 
+## Special thanks to
 
 - Gnosis team and their library [Bivrost-swift](https://github.com/gnosis/bivrost-swift) for inspiration for the ABI decoding approach
 - [Trust iOS Wallet](https://github.com/TrustWallet/trust-wallet-ios) for collaboration and discussion for initial idea
 
 ## Contribution
 
-For the latest version, please check [develop](https://github.com/BANKEX/web3swift/tree/develop) branch. 
+For the latest version, please check [develop](https://github.com/BANKEX/web3swift/tree/develop) branch.
 Changes from this branch will be merged into the [master](https://github.com/BANKEX/web3swift/tree/master) branch at some point.
 
 - If you want to contribute, submit a [pull request](https://github.com/BANKEX/web3swift/pulls) against a development `develop` branch.
