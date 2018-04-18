@@ -2055,6 +2055,7 @@ class web3swiftTests: XCTestCase {
         switch result {
         case .success(let res):
             guard let signer = res["signer"]! as? EthereumAddress else {return XCTFail()}
+            print(signer)
             XCTAssert(signer == expectedAddress)
         case .failure(let error):
             print(error)
