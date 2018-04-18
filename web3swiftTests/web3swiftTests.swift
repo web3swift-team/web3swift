@@ -88,6 +88,15 @@ class web3swiftTests: XCTestCase {
         XCTAssert(first4bits == 0x0f)
     }
     
+    func testCombiningPublicKeys() {
+        let priv1 = Data.randomBytes(length: 32)!
+        let pub1 = Web3.Utils.privateToPublic(priv1, compressed: true)!
+        let priv2 = Data.randomBytes(length: 32)!
+        let pub2 = Web3.Utils.privateToPublic(priv2, compressed: true)!
+        let combined = SECP256K1.combineSerializedPublicKeys(keys: [pub1, pub2], outputCompressed: true)
+        XCTAssert(combined != nil)
+    }
+    
     func testBIP39 () {
         var entropy = Data.fromHex("00000000000000000000000000000000")!
         var phrase = BIP39.generateMnemonicsFromEntropy(entropy: entropy)
@@ -1989,6 +1998,26 @@ class web3swiftTests: XCTestCase {
                 return XCTFail()
             }
         }
+    }
+    
+    func testPersonalSignature() {
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let tempKeystore = try! EthereumKeystoreV3(password: "")
+        let keystoreManager = KeystoreManager([tempKeystore!])
+        web3.addKeystoreManager(keystoreManager)
+        let message = "Hello World"
+        let expectedAddress = keystoreManager.addresses![0]
+        print(expectedAddress)
+        let signRes = web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
+        guard case .success(let signature) = signRes else {return XCTFail()}
+        let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: signature)!
+        print("V = " + String(unmarshalledSignature.v))
+        print("R = " + Data(unmarshalledSignature.r).toHexString())
+        print("S = " + Data(unmarshalledSignature.s).toHexString())
+        print("Personal hash = " + Web3.Utils.hashPersonalMessage(message.data(using: .utf8)!)!.toHexString())
+        let recoveredSigner = web3.personal.ecrecover(personalMessage: message.data(using: .utf8)!, signature: signature)
+        guard case .success(let signer) = recoveredSigner else {return XCTFail()}
+        XCTAssert(expectedAddress == signer, "Failed to sign personal message")
     }
     
     func testPerformanceExample() {
