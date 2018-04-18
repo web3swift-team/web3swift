@@ -88,6 +88,15 @@ class web3swiftTests: XCTestCase {
         XCTAssert(first4bits == 0x0f)
     }
     
+    func testCombiningPublicKeys() {
+        let priv1 = Data.randomBytes(length: 32)!
+        let pub1 = Web3.Utils.privateToPublic(priv1, compressed: true)!
+        let priv2 = Data.randomBytes(length: 32)!
+        let pub2 = Web3.Utils.privateToPublic(priv2, compressed: true)!
+        let combined = SECP256K1.combineSerializedPublicKeys(keys: [pub1, pub2], outputCompressed: true)
+        XCTAssert(combined != nil)
+    }
+    
     func testBIP39 () {
         var entropy = Data.fromHex("00000000000000000000000000000000")!
         var phrase = BIP39.generateMnemonicsFromEntropy(entropy: entropy)
