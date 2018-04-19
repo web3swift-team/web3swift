@@ -89,12 +89,14 @@ class web3swiftTests: XCTestCase {
     }
     
     func testCombiningPublicKeys() {
-        let priv1 = Data.randomBytes(length: 32)!
+        let priv1 = Data(repeating: 0x01, count: 32)
         let pub1 = Web3.Utils.privateToPublic(priv1, compressed: true)!
-        let priv2 = Data.randomBytes(length: 32)!
+        let priv2 = Data(repeating: 0x02, count: 32)
         let pub2 = Web3.Utils.privateToPublic(priv2, compressed: true)!
         let combined = SECP256K1.combineSerializedPublicKeys(keys: [pub1, pub2], outputCompressed: true)
-        XCTAssert(combined != nil)
+        let compinedPriv = Data(repeating: 0x03, count: 32)
+        let compinedPub = Web3.Utils.privateToPublic(compinedPriv, compressed: true)
+        XCTAssert(compinedPub == combined)
     }
     
     func testBIP39 () {
@@ -2055,6 +2057,7 @@ class web3swiftTests: XCTestCase {
         switch result {
         case .success(let res):
             guard let signer = res["signer"]! as? EthereumAddress else {return XCTFail()}
+            print(signer)
             XCTAssert(signer == expectedAddress)
         case .failure(let error):
             print(error)
@@ -2062,7 +2065,17 @@ class web3swiftTests: XCTestCase {
         }
     }
     
-    
+    func testUserCaseEventParsing() {
+        let contractAddress = EthereumAddress("0x7ff546aaccd379d2d1f241e1d29cdd61d4d50778")
+        let jsonString = "[{\"constant\":false,\"inputs\":[{\"name\":\"_id\",\"type\":\"string\"}],\"name\":\"deposit\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_id\",\"type\":\"string\"},{\"indexed\":true,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Deposit\",\"type\":\"event\"}]"
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let contract = web3.contract(jsonString, at: contractAddress, abiVersion: 2)
+        guard let eventParser = contract?.createEventParser("Deposit", filter: nil) else {return XCTFail()}
+        let present = eventParser.parseBlockByNumber(UInt64(2138657))
+        guard case .success(let pres) = present else {return XCTFail()}
+        print(pres)
+        XCTAssert(pres.count == 1)
+    }
     
     func testPerformanceExample() {
         // This is an example of a performance test case.
