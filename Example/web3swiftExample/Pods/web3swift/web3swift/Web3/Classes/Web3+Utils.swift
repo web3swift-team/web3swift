@@ -175,26 +175,28 @@ extension Web3.Utils {
         let sData = signature[32..<64].bytes
         let vData = signature[64]
         guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else {return nil}
-        var hash: Data
-        if personalMessage.count == 32 {
-            print("Most likely it's hash already, allow for now")
-            hash = personalMessage
-        } else {
-            guard let h = Web3.Utils.hashPersonalMessage(personalMessage) else {return nil}
-            hash = h
-        }
+        guard let hash = Web3.Utils.hashPersonalMessage(personalMessage) else {return nil}
         guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
         return Web3.Utils.publicToAddress(publicKey)
     }
     
+    static public func hashECRecover(hash: Data, signature: Data) -> EthereumAddress? {
+        if signature.count != 65 { return nil}
+        let rData = signature[0..<32].bytes
+        let sData = signature[32..<64].bytes
+        let vData = signature[64]
+        guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else {return nil}
+        guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
+        return Web3.Utils.publicToAddress(publicKey)
+    }
     
-    /// returns Ethereum varial of sha3 (keccak256) of data. Returns nil is data is empty
+    /// returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
     static public func keccak256(_ data: Data) -> Data? {
         if data.count == 0 {return nil}
         return data.sha3(.keccak256)
     }
     
-    /// returns Ethereum varial of sha3 (keccak256) of data. Returns nil is data is empty
+    /// returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
     static public func sha3(_ data: Data) -> Data? {
         if data.count == 0 {return nil}
         return data.sha3(.keccak256)

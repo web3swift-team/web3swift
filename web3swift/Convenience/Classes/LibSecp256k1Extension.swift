@@ -5,8 +5,8 @@ import BigInt
 
 
 
-struct SECP256K1 {
-    struct UnmarshaledSignature{
+public struct SECP256K1 {
+    public struct UnmarshaledSignature{
         var v: UInt8
         var r = [UInt8](repeating: 0, count: 32)
         var s = [UInt8](repeating: 0, count: 32)
