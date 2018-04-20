@@ -18,6 +18,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
+        // create normal keystore
+        
         let userDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         let keystoreManager = KeystoreManager.managerForPath(userDir + "/keystore")
         var ks: EthereumKeystoreV3?
@@ -31,6 +33,20 @@ class ViewController: UIViewController {
         guard let sender = ks?.addresses?.first else {return}
         print(sender)
     
+        //create BIP32 keystore
+        let bip32keystoreManager = KeystoreManager.managerForPath(userDir + "/bip32_keystore")
+        var bip32ks: BIP32Keystore?
+        if (bip32keystoreManager?.addresses?.count == 0) {
+            bip32ks = try! BIP32Keystore.init(mnemonics: "normal dune pole key case cradle unfold require tornado mercy hospital buyer", password: "BANKEXFOUNDATION", mnemonicsPassword: "", language: .english)
+            let keydata = try! JSONEncoder().encode(bip32ks!.keystoreParams)
+            FileManager.default.createFile(atPath: userDir + "/bip32_keystore"+"/key.json", contents: keydata, attributes: nil)
+        } else {
+            bip32ks = bip32keystoreManager?.walletForAddress((bip32keystoreManager?.addresses![0])!) as! BIP32Keystore
+        }
+        guard let bip32sender = bip32ks?.addresses?.first else {return}
+        print(bip32sender)
+        
+        
         // BKX TOKEN
         let web3Main = Web3.InfuraMainnetWeb3()
         let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
@@ -60,12 +76,12 @@ class ViewController: UIViewController {
         let encoding = eip67Data.toImage(scale: 10.0)
         self.imageView.image = UIImage(ciImage: encoding)
         self.imageView.contentMode = .scaleAspectFit
-            //Send on Rinkeby
+        
+        //Send on Rinkeby using normal keystore
         
         let web3Rinkeby = Web3.InfuraRinkebyWeb3()
         web3Rinkeby.addKeystoreManager(keystoreManager)
         let coldWalletABI = "[{\"payable\":true,\"type\":\"fallback\"}]"
-
         options = Web3Options.defaultOptions()
         options.gasLimit = BigUInt(21000)
         options.from = ks?.addresses?.first!
@@ -85,13 +101,24 @@ class ViewController: UIViewController {
         guard case .success(let sendingResult) = sendResult else {return}
         let txid = sendingResult["txhash"] as? String
         print("On Rinkeby TXid = " + txid!)
-
+        
+        //Send ETH on Rinkeby using BIP32 keystore. Should fail due to insufficient balance
+        web3Rinkeby.addKeystoreManager(bip32keystoreManager)
+        options.from = bip32ks?.addresses?.first!
+        intermediateSend = web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress, abiVersion: 2)!.method(options: options)!
+        let sendResultBip32 = intermediateSend.send(password: "BANKEXFOUNDATION")
+        switch sendResultBip32 {
+        case .success(let r):
+            print(r)
+        case .failure(let err):
+            print(err)
+        }
+        
         //Balance on Rinkeby
         let balanceResult = web3Rinkeby.eth.getBalance(address: coldWalletAddress)
         guard case .success(let balance) = balanceResult else {return}
         print("Balance of " + coldWalletAddress.address + " = " + String(balance))
-
-
+        
 //                Send mutating transaction taking parameters
         let testABIonRinkeby = "[{\"constant\":true,\"inputs\":[],\"name\":\"counter\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_value\",\"type\":\"uint8\"}],\"name\":\"increaseCounter\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
         let deployedTestAddress = EthereumAddress("0x1e528b190b6acf2d7c044141df775c7a79d68eba")
