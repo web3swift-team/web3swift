@@ -27,7 +27,7 @@ public class BIP32Keystore: AbstractKeystore {
         }
     }
     
-    public var isHDKeystore: Bool = false
+    public var isHDKeystore: Bool = true
     
     public func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data {
         if let key = self.paths.keyForValue(value: account) {
@@ -182,6 +182,7 @@ public class BIP32Keystore: AbstractKeystore {
         }
         var keystorePars = KeystoreParamsBIP32(crypto: crypto, id: UUID().uuidString.lowercased(), version: 3)
         keystorePars.pathToAddress = pathToAddress
+        keystorePars.rootPath = self.rootPrefix
         keystoreParams = keystorePars
     }
     

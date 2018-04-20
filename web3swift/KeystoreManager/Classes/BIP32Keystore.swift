@@ -27,7 +27,7 @@ public class BIP32Keystore: AbstractKeystore {
         }
     }
     
-    public var isHDKeystore: Bool = false
+    public var isHDKeystore: Bool = true
     
     public func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data {
         if let key = self.paths.keyForValue(value: account) {
@@ -68,14 +68,6 @@ public class BIP32Keystore: AbstractKeystore {
         keystoreParams = keystorePars
         rootPrefix = keystoreParams!.rootPath!
     }
-    
-//    public init? (mnemonics: String, password: String = "BANKEXFOUNDATION", mnemonicsPassword: String = "", language: BIP39Language = BIP39Language.english) throws {
-//        guard var seed = BIP39.seedFromMmemonics(mnemonics, password: mnemonicsPassword, language: language) else {throw AbstractKeystoreError.noEntropyError}
-//        guard let prefixNode = HDNode(seed: seed)?.derive(path: HDNode.defaultPathPrefix, derivePrivateKey: true) else {return nil}
-//        defer{ Data.zero(&seed) }
-//        self.mnemonics = mnemonics
-//        try createNewAccount(parentNode: prefixNode, password: password)
-//    }
     
     public init? (mnemonics: String, password: String = "BANKEXFOUNDATION", mnemonicsPassword: String = "", language: BIP39Language = BIP39Language.english, prefixPath: String = HDNode.defaultPathPrefix) throws {
         guard var seed = BIP39.seedFromMmemonics(mnemonics, password: mnemonicsPassword, language: language) else {throw AbstractKeystoreError.noEntropyError}
@@ -182,6 +174,7 @@ public class BIP32Keystore: AbstractKeystore {
         }
         var keystorePars = KeystoreParamsBIP32(crypto: crypto, id: UUID().uuidString.lowercased(), version: 3)
         keystorePars.pathToAddress = pathToAddress
+        keystorePars.rootPath = self.rootPrefix
         keystoreParams = keystorePars
     }
     

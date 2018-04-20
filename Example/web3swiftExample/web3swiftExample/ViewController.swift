@@ -34,7 +34,7 @@ class ViewController: UIViewController {
         print(sender)
     
         //create BIP32 keystore
-        let bip32keystoreManager = KeystoreManager.managerForPath(userDir + "/bip32_keystore")
+        let bip32keystoreManager = KeystoreManager.managerForPath(userDir + "/bip32_keystore", scanForHDwallets: true)
         var bip32ks: BIP32Keystore?
         if (bip32keystoreManager?.addresses?.count == 0) {
             bip32ks = try! BIP32Keystore.init(mnemonics: "normal dune pole key case cradle unfold require tornado mercy hospital buyer", password: "BANKEXFOUNDATION", mnemonicsPassword: "", language: .english)
