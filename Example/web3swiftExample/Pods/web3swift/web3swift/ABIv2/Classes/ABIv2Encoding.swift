@@ -14,6 +14,128 @@ public struct ABIv2Encoder {
 }
 
 extension ABIv2Encoder {
+    public static func convertToBigUInt(_ value: AnyObject) -> BigUInt? {
+        switch value {
+        case let v as BigUInt:
+            return v
+        case let v as BigInt:
+            switch v.sign {
+            case .minus:
+                return nil
+            case .plus:
+                return v.magnitude
+            }
+        case let v as String:
+            let base10 = BigUInt(v, radix: 10)
+            if base10 != nil {
+                return base10!
+            }
+            let base16 = BigUInt(v.stripHexPrefix(), radix: 16)
+            if base16 != nil {
+                return base16!
+            }
+            break
+        case let v as UInt:
+            return BigUInt(v)
+        case let v as UInt8:
+            return BigUInt(v)
+        case let v as UInt16:
+            return BigUInt(v)
+        case let v as UInt32:
+            return BigUInt(v)
+        case let v as UInt64:
+            return BigUInt(v)
+        case let v as Int:
+            return BigUInt(v)
+        case let v as Int8:
+            return BigUInt(v)
+        case let v as Int16:
+            return BigUInt(v)
+        case let v as Int32:
+            return BigUInt(v)
+        case let v as Int64:
+            return BigUInt(v)
+        default:
+            return nil
+        }
+        return nil
+    }
+    
+    public static func convertToBigInt(_ value: AnyObject) -> BigInt? {
+        switch value {
+        case let v as BigUInt:
+            return BigInt(v)
+        case let v as BigInt:
+            return v
+        case let v as String:
+            let base10 = BigInt(v, radix: 10)
+            if base10 != nil {
+                return base10
+            }
+            let base16 = BigInt(v.stripHexPrefix(), radix: 16)
+            if base16 != nil {
+                return base16
+            }
+            break
+        case let v as UInt:
+            return BigInt(v)
+        case let v as UInt8:
+            return BigInt(v)
+        case let v as UInt16:
+            return BigInt(v)
+        case let v as UInt32:
+            return BigInt(v)
+        case let v as UInt64:
+            return BigInt(v)
+        case let v as Int:
+            return BigInt(v)
+        case let v as Int8:
+            return BigInt(v)
+        case let v as Int16:
+            return BigInt(v)
+        case let v as Int32:
+            return BigInt(v)
+        case let v as Int64:
+            return BigInt(v)
+        default:
+            return nil
+        }
+        return nil
+    }
+    
+    public static func convertToData(_ value: AnyObject) -> Data? {
+        switch value {
+        case let d as Data:
+            return d
+        case let d as String:
+            if d.hasHexPrefix() {
+                let hex = Data.fromHex(d)
+                if hex != nil {
+                    return hex
+                }
+            }
+            let str = d.data(using: .utf8)
+            if str != nil {
+                return str
+            }
+        case let d as [UInt8]:
+            return Data(d)
+        case let d as EthereumAddress:
+            return d.addressData
+        case let d as [IntegerLiteralType]:
+            var bytesArray = [UInt8]()
+            for el in d {
+                guard el >= 0, el <= 255 else {return nil}
+                bytesArray.append(UInt8(el))
+            }
+            return Data(bytesArray)
+        default:
+            return nil
+        }
+        return nil
+    }
+    
+    
     public static func encode(types: [ABIv2.Element.InOut], values: [AnyObject]) -> Data? {
         guard types.count == values.count else {return nil}
         let params = types.flatMap { (el) -> ABIv2.Element.ParameterType in
@@ -63,17 +185,17 @@ extension ABIv2Encoder {
     public static func encodeSingleType(type: ABIv2.Element.ParameterType, value: AnyObject) -> Data? {
         switch type {
         case .uint(_):
-            if let biguint = value as? BigUInt {
+            if let biguint = convertToBigUInt(value) {
                 return biguint.abiEncode(bits: 256)
             }
-            if let bigint = value as? BigInt {
+            if let bigint = convertToBigInt(value) {
                 return bigint.abiEncode(bits: 256)
             }
         case .int(_):
-            if let biguint = value as? BigUInt {
+            if let biguint = convertToBigUInt(value) {
                 return biguint.abiEncode(bits: 256)
             }
-            if let bigint = value as? BigInt {
+            if let bigint = convertToBigInt(value) {
                 return bigint.abiEncode(bits: 256)
             }
         case .address:
@@ -98,24 +220,9 @@ extension ABIv2Encoder {
                 }
             }
         case .bytes(let length):
-            if let string = value as? String {
-                var dataGuess: Data?
-                if string.hasHexPrefix() {
-                    dataGuess = Data.fromHex(string.lowercased().stripHexPrefix())
-                }
-                else {
-                    dataGuess = string.data(using: .utf8)
-                }
-                guard let data = dataGuess else {break}
-                if data.count > length {break}
-                return data.setLengthRight(32)
-            } else if let addr = value as? EthereumAddress {
-                guard addr.isValid else {break}
-                let data = addr.addressData
-                return data.setLengthRight(32)
-            } else if let data = value as? Data {
-                return data.setLengthRight(32)
-            }
+            guard let data = convertToData(value) else {break}
+            if data.count > length {break}
+            return data.setLengthRight(32)
         case .string:
             if let string = value as? String {
                 var dataGuess: Data?
@@ -134,29 +241,13 @@ extension ABIv2Encoder {
                 return total
             }
         case .dynamicBytes:
-            if let string = value as? String {
-                var dataGuess: Data?
-                if string.hasHexPrefix() {
-                    dataGuess = Data.fromHex(string.lowercased().stripHexPrefix())
-                }
-                else {
-                    dataGuess = string.data(using: .utf8)
-                }
-                guard let data = dataGuess else {break}
-                let minLength = ((data.count + 31) / 32)*32
-                guard let paddedData = data.setLengthRight(UInt64(minLength)) else {break}
-                let length = BigUInt(data.count)
-                guard let head = length.abiEncode(bits: 256) else {break}
-                let total = head+paddedData
-                return total
-            } else if let data = value as? Data {
-                let minLength = ((data.count + 31) / 32)*32
-                guard let paddedData = data.setLengthRight(UInt64(minLength)) else {break}
-                let length = BigUInt(data.count)
-                guard let head = length.abiEncode(bits: 256) else {break}
-                let total = head+paddedData
-                return total
-            }
+            guard let data = convertToData(value) else {break}
+            let minLength = ((data.count + 31) / 32)*32
+            guard let paddedData = data.setLengthRight(UInt64(minLength)) else {break}
+            let length = BigUInt(data.count)
+            guard let head = length.abiEncode(bits: 256) else {break}
+            let total = head+paddedData
+            return total
         case .array(type: let subType, length: let length):
             switch type.arraySize {
             case .dynamicSize:

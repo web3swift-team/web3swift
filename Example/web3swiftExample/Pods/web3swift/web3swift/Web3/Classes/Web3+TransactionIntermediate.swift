@@ -80,6 +80,7 @@ extension web3.web3contract {
                 var transaction = self.transaction
                 if mergedOptions.gasLimit != nil {
                     transaction.gasLimit = mergedOptions.gasLimit!
+                    self.transaction = transaction
                 }
                 self.options = mergedOptions
                 if let keystoreManager = self.web3.provider.attachedKeystoreManager {
