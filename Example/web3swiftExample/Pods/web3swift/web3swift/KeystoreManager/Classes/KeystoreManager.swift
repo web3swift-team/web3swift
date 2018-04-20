@@ -20,6 +20,14 @@ public class KeystoreManager: AbstractKeystore {
                     toReturn.append(key)
                 }
             }
+            for keystore in _bip32keystores {
+                guard let allAddresses = keystore.addresses else {continue}
+                for addr in allAddresses {
+                    if addr.isValid {
+                        toReturn.append(addr)
+                    }
+                }
+            }
             return toReturn
         }
     }
@@ -49,6 +57,14 @@ public class KeystoreManager: AbstractKeystore {
             guard let key = keystore.addresses?.first else {continue}
             if key == address && key.isValid {
                 return keystore as AbstractKeystore?
+            }
+        }
+        for keystore in _bip32keystores {
+            guard let allAddresses = keystore.addresses else {continue}
+            for addr in allAddresses {
+                if addr == address && addr.isValid {
+                    return keystore as AbstractKeystore?
+                }
             }
         }
         return nil

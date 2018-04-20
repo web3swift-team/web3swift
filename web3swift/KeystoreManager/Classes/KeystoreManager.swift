@@ -20,6 +20,14 @@ public class KeystoreManager: AbstractKeystore {
                     toReturn.append(key)
                 }
             }
+            for keystore in _bip32keystores {
+                guard let allAddresses = keystore.addresses else {continue}
+                for addr in allAddresses {
+                    if addr.isValid {
+                        toReturn.append(addr)
+                    }
+                }
+            }
             return toReturn
         }
     }
@@ -138,10 +146,6 @@ public class KeystoreManager: AbstractKeystore {
                 }
             }
         }
-
+        
     }
 }
-
-
-
-
