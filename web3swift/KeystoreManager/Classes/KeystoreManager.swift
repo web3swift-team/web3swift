@@ -51,6 +51,14 @@ public class KeystoreManager: AbstractKeystore {
                 return keystore as AbstractKeystore?
             }
         }
+        for keystore in _bip32keystores {
+            guard let allAddresses = keystore.addresses else {continue}
+            for addr in allAddresses {
+                if addr == address && addr.isValid {
+                    return keystore as AbstractKeystore?
+                }
+            }
+        }
         return nil
     }
     

@@ -76,12 +76,12 @@ class ViewController: UIViewController {
         let encoding = eip67Data.toImage(scale: 10.0)
         self.imageView.image = UIImage(ciImage: encoding)
         self.imageView.contentMode = .scaleAspectFit
-            //Send on Rinkeby
+        
+        //Send on Rinkeby using normal keystore
         
         let web3Rinkeby = Web3.InfuraRinkebyWeb3()
         web3Rinkeby.addKeystoreManager(keystoreManager)
         let coldWalletABI = "[{\"payable\":true,\"type\":\"fallback\"}]"
-
         options = Web3Options.defaultOptions()
         options.gasLimit = BigUInt(21000)
         options.from = ks?.addresses?.first!
@@ -101,13 +101,24 @@ class ViewController: UIViewController {
         guard case .success(let sendingResult) = sendResult else {return}
         let txid = sendingResult["txhash"] as? String
         print("On Rinkeby TXid = " + txid!)
-
+        
+        //Send ETH on Rinkeby using BIP32 keystore. Should fail due to insufficient balance
+        web3Rinkeby.addKeystoreManager(bip32keystoreManager)
+        options.from = bip32ks?.addresses?.first!
+        intermediateSend = web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress, abiVersion: 2)!.method(options: options)!
+        let sendResultBip32 = intermediateSend.send(password: "BANKEXFOUNDATION")
+        switch sendResultBip32 {
+        case .success(let r):
+            print(r)
+        case .failure(let err):
+            print(err)
+        }
+        
         //Balance on Rinkeby
         let balanceResult = web3Rinkeby.eth.getBalance(address: coldWalletAddress)
         guard case .success(let balance) = balanceResult else {return}
         print("Balance of " + coldWalletAddress.address + " = " + String(balance))
-
-
+        
 //                Send mutating transaction taking parameters
         let testABIonRinkeby = "[{\"constant\":true,\"inputs\":[],\"name\":\"counter\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_value\",\"type\":\"uint8\"}],\"name\":\"increaseCounter\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
         let deployedTestAddress = EthereumAddress("0x1e528b190b6acf2d7c044141df775c7a79d68eba")
