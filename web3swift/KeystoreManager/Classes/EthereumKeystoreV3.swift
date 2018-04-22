@@ -168,4 +168,10 @@ public class EthereumKeystoreV3: AbstractKeystore {
         guard decryptedPK != nil else {return nil}
         return Data(bytes:decryptedPK!)
     }
+    
+    public func serialize() throws -> Data? {
+        guard let params = self.keystoreParams else {return nil}
+        let data = try JSONEncoder().encode(params)
+        return data
+    }
 }
