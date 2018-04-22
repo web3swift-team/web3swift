@@ -293,7 +293,7 @@ extension web3.Eth {
     }
     
     public func estimateGas(_ transaction: EthereumTransaction, options: Web3Options?, onBlock: String = "latest") -> Result<BigUInt, Web3Error> {
-        let mergedOptions = Web3Options.merge(Web3Options.defaultOptions(), with: options)
+        let mergedOptions = Web3Options.merge(self.options, with: options)
         guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.estimateGas, transaction: transaction, onBlock: onBlock, options: mergedOptions) else {
             return Result.failure(Web3Error.inputError("Transaction serialization failed"))
         }
@@ -429,6 +429,22 @@ extension web3.Eth {
             }
             return Result(block)
         }
+    }
+    public func sendETH(to: EthereumAddress, amount: BigUInt, extraData: Data = Data(), options: Web3Options? = nil) -> TransactionIntermediate? {
+        let contract = self.web3.contract(Web3.Utils.coldWalletABI, at: to, abiVersion: 2)
+        guard var mergedOptions = Web3Options.merge(self.options, with: options) else {return nil}
+        mergedOptions.value = amount
+        let intermediate = contract?.method("fallback", extraData: extraData, options: mergedOptions)
+        return intermediate
+    }
+    
+    public func sendETH(to: EthereumAddress, amount: String, units: Web3.Utils.Units = .eth, extraData: Data = Data(), options: Web3Options? = nil) -> TransactionIntermediate? {
+        let contract = self.web3.contract(Web3.Utils.coldWalletABI, at: to, abiVersion: 2)
+        guard var mergedOptions = Web3Options.merge(self.options, with: options) else {return nil}
+        guard let value = Web3.Utils.parseToBigUInt(amount, units: .eth) else {return nil}
+        mergedOptions.value = value
+        let intermediate = contract?.method("fallback", extraData: extraData, options: mergedOptions)
+        return intermediate
     }
     
 }

@@ -167,6 +167,21 @@ class web3swiftTests: XCTestCase {
         print(keystore!.paths)
     }
     
+    func testByBIP32keystoreSaveAndDeriva() {
+        let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
+        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "", prefixPath: "m/44'/60'/0'")
+        XCTAssertNotNil(keystore)
+        XCTAssertEqual(keystore!.addresses?.count, 1)
+        try! keystore?.createNewCustomChildAccount(password: "", path: "/0/1")
+        XCTAssertEqual(keystore?.addresses?.count, 2)
+        let data = try! keystore?.serialize()
+        let recreatedStore = BIP32Keystore.init(data!)
+        XCTAssert(keystore?.addresses?.count == recreatedStore?.addresses?.count)
+        XCTAssert(keystore?.rootPrefix == recreatedStore?.rootPrefix)
+        XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![0])
+        XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![1])
+    }
+    
 //    func testPBKDF2() {
 //        let pass = "passDATAb00AB7YxDTTl".data(using: .utf8)!
 //        let salt = "saltKEYbcTcXHCBxtjD2".data(using: .utf8)!
@@ -222,8 +237,17 @@ class web3swiftTests: XCTestCase {
         XCTAssert(treeNode?.depth == 4)
         XCTAssert(treeNode?.serializeToString() == "xpub6DZ3xpo1ixWwwNDQ7KFTamRVM46FQtgcDxsmAyeBpTHEo79E1n1LuWiZSMSRhqMQmrHaqJpek2TbtTzbAdNWJm9AhGdv7iJUpDjA6oJD84b")
         XCTAssert(treeNode?.serializeToString(serializePublic: false) == "xprv9zZhZKG7taxeit8w1HiTDdUko2Fm1RxkrjxANbEaG7kFvJp5UEh6MiQ5b5XvwWg8xdHMhueagettVG2AbfqSRDyNpxRDBLyMSbNq1KhZ8ai")
-        
-        
+    }
+    
+    func testBIP32derivation2() {
+        let seed = Data.fromHex("fffcf9f6f3f0edeae7e4e1dedbd8d5d2cfccc9c6c3c0bdbab7b4b1aeaba8a5a29f9c999693908d8a8784817e7b7875726f6c696663605d5a5754514e4b484542")!
+        let node = HDNode(seed: seed)!
+        let path = "m/0/2147483647'/1/2147483646'/2"
+        let treeNode = node.derive(path: path)
+        XCTAssert(treeNode != nil)
+        XCTAssert(treeNode?.depth == 5)
+        XCTAssert(treeNode?.serializeToString() == "xpub6FnCn6nSzZAw5Tw7cgR9bi15UV96gLZhjDstkXXxvCLsUXBGXPdSnLFbdpq8p9HmGsApME5hQTZ3emM2rnY5agb9rXpVGyy3bdW6EEgAtqt")
+        XCTAssert(treeNode?.serializeToString(serializePublic: false) == "xprvA2nrNbFZABcdryreWet9Ea4LvTJcGsqrMzxHx98MMrotbir7yrKCEXw7nadnHM8Dq38EGfSh6dqA9QWTyefMLEcBYJUuekgW4BYPJcr9E7j")
     }
     
     func testABIdecoding() {
