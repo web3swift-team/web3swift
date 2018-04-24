@@ -14,7 +14,7 @@ s.source           = { :git => 'https://github.com/bankex/web3swift.git', :tag =
 s.social_media_url = 'https://twitter.com/shamatar'
 
 s.pod_target_xcconfig = {
-  'SWIFT_VERSION' => '4.0'
+  'SWIFT_VERSION' => '4.1'
 }
 
 s.module_name = 'web3swift'

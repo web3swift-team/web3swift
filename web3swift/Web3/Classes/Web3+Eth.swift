@@ -54,7 +54,7 @@ extension web3.Eth {
                 return Result.failure(Web3Error.dataError)
             }
             let hash = resultString.addHexPrefix().lowercased()
-            return Result(["txhash": hash, "txhashCalculated" : transaction.hash!.toHexString()] as [String: String])
+            return Result(["txhash": hash, "txhashCalculated" : transaction.hash!.toHexString().addHexPrefix()] as [String: String])
         }
     }
     
@@ -103,7 +103,7 @@ extension web3.Eth {
                 return Result.failure(Web3Error.dataError)
             }
             let hash = resultString.addHexPrefix().lowercased()
-            return Result(["txhash": hash, "txhashCalculated" : transaction.hash!.toHexString()] as [String: String])
+            return Result(["txhash": hash, "txhashCalculated" : transaction.hash!.toHexString().addHexPrefix()] as [String: String])
         }
     }
     

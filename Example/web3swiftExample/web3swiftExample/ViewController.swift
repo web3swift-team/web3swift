@@ -53,7 +53,7 @@ class ViewController: UIViewController {
         let constractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
         let gasPriceResult = web3Main.eth.getGasPrice()
         guard case .success(let gasPrice) = gasPriceResult else {return}
-        var options = Web3Options()
+        var options = Web3Options.defaultOptions()
         options.gasPrice = gasPrice
         options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
         let parameters = [] as [AnyObject]
@@ -68,6 +68,9 @@ class ViewController: UIViewController {
         guard let bkxBalanceResult = contract.method("balanceOf", parameters: [coldWalletAddress] as [AnyObject], options: options)?.call(options: nil) else {return}
         guard case .success(let bkxBalance) = bkxBalanceResult, let bal = bkxBalance["0"] as? BigUInt else {return}
         print("BKX token balance = " + String(bal))
+        
+        // Test token transfer on Rinkeby
+        
         
         var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
         eip67Data.gasLimit = BigUInt(21000)
@@ -99,7 +102,7 @@ class ViewController: UIViewController {
             print("Address mismatch")
         }
         guard case .success(let sendingResult) = sendResult else {return}
-        let txid = sendingResult["txhash"] as? String
+        let txid = sendingResult["txhash"]
         print("On Rinkeby TXid = " + txid!)
         
         //Send ETH on Rinkeby using BIP32 keystore. Should fail due to insufficient balance
@@ -112,6 +115,23 @@ class ViewController: UIViewController {
             print(r)
         case .failure(let err):
             print(err)
+        }
+        
+        
+        guard case .success(let gasPriceRinkeby) = web3Rinkeby.eth.getGasPrice() else {return}
+        web3Rinkeby.addKeystoreManager(keystoreManager)
+        var tokenTransferOptions = Web3Options.defaultOptions()
+        tokenTransferOptions.gasPrice = gasPriceRinkeby
+        tokenTransferOptions.from = ks?.addresses?.first!
+        let testToken = web3Rinkeby.contract(Web3.Utils.erc20ABI, at: EthereumAddress("0xa407dd0cbc9f9d20cdbd557686625e586c85b20a"), abiVersion: 2)!
+        let intermediateForTokenTransfer = testToken.method("transfer", parameters: [EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"), BigUInt(1)] as [AnyObject], options: tokenTransferOptions)!
+        let tokenTransferResult = intermediateForTokenTransfer.send(password: "BANKEXFOUNDATION")
+        switch tokenTransferResult {
+        case .success(let res):
+            print("Token transfer successful")
+            print(res)
+        case .failure(let error):
+            print(error)
         }
         
         //Balance on Rinkeby
