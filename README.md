@@ -15,7 +15,7 @@ Example is updated for 0.5.0, although please prefer to use tests as an example 
 - Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
 - Interaction with remote node via JSON RPC :thought_balloon:
 - Smart-contract ABI parsing :book:
-  - ABI deconding
+  - ABI deconding (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
   - RLP encoding
 - Interactions (read/write to Smart contracts) :arrows_counterclockwise:
 - Local keystore management (geth compatible)
@@ -72,7 +72,7 @@ You can try it by yourself by running the example project:
 
 ### Requirements
 
-Web3swift requires Swift 4.0 and iOS 9.0 or macOS 10.13 although we recommend to use the latest iOS and MacOS versions for your own safety.
+Web3swift requires Swift 4.1 and iOS 9.0 or macOS 10.13 although we recommend to use the latest iOS and MacOS versions for your own safety. Don't forget to set iOS version i na Podfile, otherwise you get an error if deployment target is less than the latest SDK.
 
 ### Installation
 
@@ -90,6 +90,7 @@ pod 'web3swift', git: 'https://github.com/BANKEX/web3swift.git'
 - Check transaction results and get receipt
 - Parse event logs for transaction
 - Manage user's private keys through encrypted keystore abstractions
+- Batched requests in concurrent mode, checks balances of 580 tokens (from the latest MyEtherWallet repo) over 3 seconds
 
 ### Global plans
 - Full reference `web3js` functionality
@@ -99,7 +100,7 @@ pod 'web3swift', git: 'https://github.com/BANKEX/web3swift.git'
 
 - Gnosis team and their library [Bivrost-swift](https://github.com/gnosis/bivrost-swift) for inspiration for the ABI decoding approach
 - [Trust iOS Wallet](https://github.com/TrustWallet/trust-wallet-ios) for collaboration and discussion for initial idea
-
+- Official Ethereum and Solidity docs, everything was written from ground truth standards
 ## Contribution
 
 For the latest version, please check [develop](https://github.com/BANKEX/web3swift/tree/develop) branch.
