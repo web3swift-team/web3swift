@@ -2101,6 +2101,27 @@ class web3swiftTests: XCTestCase {
         XCTAssert(pres.count == 1)
     }
     
+    func testTokenBalanceTransferOnMainNet() {
+        // BKX TOKEN
+        let web3 = Web3.InfuraMainnetWeb3()
+        let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let constractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+        var options = Web3Options()
+        options.from = coldWalletAddress
+        let tempKeystore = try! EthereumKeystoreV3(password: "")
+        let keystoreManager = KeystoreManager([tempKeystore!])
+        web3.addKeystoreManager(keystoreManager)
+        let contract = web3.contract(Web3.Utils.erc20ABI, at: constractAddress, abiVersion: 2)!
+        let bkxBalanceSend = contract.method("transfer", parameters: [coldWalletAddress, BigUInt(1)] as [AnyObject], options: options)!.call(options: nil)
+        switch bkxBalanceSend {
+        case .success(let result):
+            print(result)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
