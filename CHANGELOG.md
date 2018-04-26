@@ -2,10 +2,60 @@
 
 ## [Unreleased](https://github.com/bankex/web3swift/tree/HEAD)
 
-[Full Changelog](https://github.com/bankex/web3swift/compare/0.5.4...HEAD)
+[Full Changelog](https://github.com/bankex/web3swift/compare/0.6.0...HEAD)
+
+**Closed issues:**
+
+- Transaction or options are malformed in Token Transfer [\#78](https://github.com/BANKEX/web3swift/issues/78)
+- Error when install [\#75](https://github.com/BANKEX/web3swift/issues/75)
 
 **Merged pull requests:**
 
+- update podspec and readme [\#82](https://github.com/BANKEX/web3swift/pull/82) ([shamatar](https://github.com/shamatar))
+
+## [0.6.0](https://github.com/bankex/web3swift/tree/0.6.0) (2018-04-24)
+[Full Changelog](https://github.com/bankex/web3swift/compare/0.5.6...0.6.0)
+
+**Closed issues:**
+
+- InValid Account Error [\#76](https://github.com/BANKEX/web3swift/issues/76)
+
+**Merged pull requests:**
+
+- add example of ERC20 transfer in Example [\#81](https://github.com/BANKEX/web3swift/pull/81) ([shamatar](https://github.com/shamatar))
+- include example of ERC20 token transfer [\#80](https://github.com/BANKEX/web3swift/pull/80) ([shamatar](https://github.com/shamatar))
+- Allow BIP32 keystore init from seed directly Add convenience BIP32 keystore and KeystoreV3 serialization methods Test custom path derivation after saving Add new BIP39 languages [\#74](https://github.com/BANKEX/web3swift/pull/74) ([shamatar](https://github.com/shamatar))
+
+## [0.5.6](https://github.com/bankex/web3swift/tree/0.5.6) (2018-04-20)
+[Full Changelog](https://github.com/bankex/web3swift/compare/0.5.5...0.5.6)
+
+**Fixed bugs:**
+
+- Crash when generate keystore by mnemonics [\#62](https://github.com/BANKEX/web3swift/issues/62)
+
+**Closed issues:**
+
+- BIP39 Keystore not accessible from keystore parameter path [\#68](https://github.com/BANKEX/web3swift/issues/68)
+
+**Merged pull requests:**
+
+- convenience methods in web3.eth to send ETH using either raw BigUInt value in Wei, or parsing a decimal string of arbitrary units [\#72](https://github.com/BANKEX/web3swift/pull/72) ([shamatar](https://github.com/shamatar))
+- improve BIP32 serialization to disk [\#71](https://github.com/BANKEX/web3swift/pull/71) ([shamatar](https://github.com/shamatar))
+- Fix BIP32 keystore when used through Manager [\#70](https://github.com/BANKEX/web3swift/pull/70) ([shamatar](https://github.com/shamatar))
+- add marshalling and unmarshalling signature as a part of Web3.Utils [\#69](https://github.com/BANKEX/web3swift/pull/69) ([shamatar](https://github.com/shamatar))
+- Event parsing example from user case [\#67](https://github.com/BANKEX/web3swift/pull/67) ([shamatar](https://github.com/shamatar))
+
+## [0.5.5](https://github.com/bankex/web3swift/tree/0.5.5) (2018-04-18)
+[Full Changelog](https://github.com/bankex/web3swift/compare/0.5.4...0.5.5)
+
+**Closed issues:**
+
+- Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value [\#57](https://github.com/BANKEX/web3swift/issues/57)
+
+**Merged pull requests:**
+
+- Solidity bound ECRecover test and example [\#66](https://github.com/BANKEX/web3swift/pull/66) ([shamatar](https://github.com/shamatar))
+- Fix BIP 32 derivation in release build \(with optimization\) [\#65](https://github.com/BANKEX/web3swift/pull/65) ([shamatar](https://github.com/shamatar))
 - Tests refactoring [\#61](https://github.com/BANKEX/web3swift/pull/61) ([skywinder](https://github.com/skywinder))
 
 ## [0.5.4](https://github.com/bankex/web3swift/tree/0.5.4) (2018-04-16)
@@ -18,16 +68,16 @@
 ## [0.5.3](https://github.com/bankex/web3swift/tree/0.5.3) (2018-04-16)
 [Full Changelog](https://github.com/bankex/web3swift/compare/0.5.2...0.5.3)
 
-**Implemented enhancements:**
-
-- how to create Mnemonic account with five level derivation path like M/44'/60'/0'/0/1 [\#42](https://github.com/BANKEX/web3swift/issues/42)
-
 **Merged pull requests:**
 
 - Wider range of parameter types as input to ABI encoder [\#59](https://github.com/BANKEX/web3swift/pull/59) ([shamatar](https://github.com/shamatar))
 
 ## [0.5.2](https://github.com/bankex/web3swift/tree/0.5.2) (2018-04-16)
 [Full Changelog](https://github.com/bankex/web3swift/compare/0.5.1...0.5.2)
+
+**Implemented enhancements:**
+
+- Signing and unsigning. [\#52](https://github.com/BANKEX/web3swift/issues/52)
 
 **Fixed bugs:**
 
@@ -39,9 +89,7 @@
 
 - the method " web3.eth.getBlockByNumber\(\)" reseult  fail? [\#54](https://github.com/BANKEX/web3swift/issues/54)
 - the method"web3Main?.eth.getBalance\(\)" result is not correct? [\#50](https://github.com/BANKEX/web3swift/issues/50)
-- Trying to create archive with web3swift [\#15](https://github.com/BANKEX/web3swift/issues/15)
 - Documentation, samples, comments [\#13](https://github.com/BANKEX/web3swift/issues/13)
-- Signing and unsigning. [\#52](https://github.com/BANKEX/web3swift/issues/52)
 
 **Merged pull requests:**
 
@@ -64,6 +112,11 @@
 **Implemented enhancements:**
 
 - Support returning structs from functions [\#33](https://github.com/BANKEX/web3swift/issues/33)
+- Mnemonic account with five level derivation path like M/44'/60'/0'/0/1 [\#42](https://github.com/BANKEX/web3swift/issues/42)
+
+**Fixed bugs:**
+
+- Build error during archiving web3swift [\#15](https://github.com/BANKEX/web3swift/issues/15)
 
 **Merged pull requests:**
 
