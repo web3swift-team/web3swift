@@ -213,11 +213,11 @@ extension ABIv2Decoder {
         eventContent["name"]=event.name
         let logs = eventLog.topics
         let dataForProcessing = eventLog.data
-        if (logs.count == 1 && event.inputs.count > 0) {
-            return nil
-        }
         let indexedInputs = event.inputs.filter { (inp) -> Bool in
             return inp.indexed
+        }
+        if (logs.count == 1 && indexedInputs.count > 0) {
+            return nil
         }
         let nonIndexedInputs = event.inputs.filter { (inp) -> Bool in
             return !inp.indexed
