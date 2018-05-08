@@ -70,6 +70,5 @@ extension web3 {
             let parser = EventParser(web3: self.web3, eventName: eventName, contract: self.contract, filter: filter)
             return parser
         }
-    
     }
 }

@@ -142,7 +142,18 @@ extension ABIv2.Element {
         }
     }
     
-    func decodeInputData(_ data: Data) -> [String: Any]? {
+    func decodeInputData(_ rawData: Data) -> [String: Any]? {
+        var data = rawData
+        var sig: Data? = nil
+        switch rawData.count % 4 {
+        case 0:
+            break
+        case 4:
+            let sig = rawData[0 ..< 4]
+            data = rawData[4 ..< rawData.count]
+        default:
+            return nil
+        }
         switch self {
         case .constructor(let function):
             if (data.count == 0 && function.inputs.count == 1) {
@@ -174,6 +185,9 @@ extension ABIv2.Element {
         case .fallback(_):
             return nil
         case .function(let function):
+            if sig != nil && sig != function.signature {
+                return nil
+            }
             if (data.count == 0 && function.inputs.count == 1) {
                 let name = "0"
                 let value = function.inputs[0].type.emptyValue
