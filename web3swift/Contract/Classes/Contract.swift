@@ -206,4 +206,8 @@ public struct Contract:ContractProtocol {
     public func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool? {
         return false
     }
+    
+    public func decodeInputData(_ method: String, data: Data) -> [String : Any]? {
+        return nil
+    }
 }

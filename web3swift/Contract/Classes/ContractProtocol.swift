@@ -17,6 +17,7 @@ public protocol ContractProtocol {
     func method(_ method:String, parameters: [AnyObject], extraData: Data, options: Web3Options?) -> EthereumTransaction?
     init?(_ abiString: String, at: EthereumAddress?)
     func decodeReturnData(_ method:String, data: Data) -> [String:Any]?
+    func decodeInputData(_ method:String, data: Data) -> [String:Any]?
     func parseEvent(_ eventLog: EventLog) -> (eventName:String?, eventData:[String:Any]?)
     func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool?
 //    func createEventFilter(eventName:String, filter: EventFilter?)

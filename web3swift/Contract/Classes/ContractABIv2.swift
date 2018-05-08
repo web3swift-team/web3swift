@@ -228,4 +228,19 @@ public struct ContractV2:ContractProtocol {
         guard case .function(_) = function else {return nil}
         return function.decodeReturnData(data)
     }
+    
+    public func decodeInputData(_ method: String, data: Data) -> [String : Any]? {
+        if method == "fallback" {
+            return [String:Any]()
+        }
+        guard let function = methods[method] else {return nil}
+        switch function {
+        case .function(_):
+            return function.decodeInputData(data)
+        case .constructor(_):
+            return function.decodeInputData(data)
+        default:
+            return [String:Any]()
+        }
+    }
 }
