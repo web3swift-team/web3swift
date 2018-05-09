@@ -2148,6 +2148,13 @@ class web3swiftTests: XCTestCase {
         XCTAssert(decoded!["_to"] as? EthereumAddress == EthereumAddress("0xcdd45864e794fe5e3e1b0045b77e62f4c43b8bd9"))
     }
     
+    func testDecodeInputDataWithoutMethodName() {
+        let contract = ContractV2.init(Web3.Utils.erc20ABI)!
+        let dataToDecode = Data.fromHex("0xa9059cbb000000000000000000000000cdd45864e794fe5e3e1b0045b77e62f4c43b8bd9000000000000000000000000000000000000000000000224b5f018c3e30142d5")!
+        let decoded = contract.decodeInputData(dataToDecode)
+        XCTAssert(decoded!["_to"] as? EthereumAddress == EthereumAddress("0xcdd45864e794fe5e3e1b0045b77e62f4c43b8bd9"))
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

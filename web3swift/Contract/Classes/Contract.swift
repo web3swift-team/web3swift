@@ -11,6 +11,7 @@ import BigInt
 
 @available(*, deprecated)
 public struct Contract:ContractProtocol {
+    
     public var allEvents: [String] {
         return events.keys.flatMap({ (s) -> String in
             return s
@@ -208,6 +209,10 @@ public struct Contract:ContractProtocol {
     }
     
     public func decodeInputData(_ method: String, data: Data) -> [String : Any]? {
+        return nil
+    }
+    
+    public func decodeInputData(_ data: Data) -> [String : Any]? {
         return nil
     }
 }
