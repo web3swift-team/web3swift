@@ -145,12 +145,12 @@ extension ABIv2.Element {
     func decodeInputData(_ rawData: Data) -> [String: Any]? {
         var data = rawData
         var sig: Data? = nil
-        switch rawData.count % 4 {
+        switch rawData.count % 32 {
         case 0:
             break
         case 4:
             sig = rawData[0 ..< 4]
-            data = rawData[4 ..< rawData.count]
+            data = Data(rawData[4 ..< rawData.count])
         default:
             return nil
         }
