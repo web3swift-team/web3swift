@@ -144,6 +144,10 @@
 		81C5DA2F2074EBF500424CD6 /* ContractABIv2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C5DA2D2074EBF500424CD6 /* ContractABIv2.swift */; };
 		81C5DA312074EC1E00424CD6 /* ContractProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C5DA302074EC1E00424CD6 /* ContractProtocol.swift */; };
 		81C5DA322074EC1E00424CD6 /* ContractProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C5DA302074EC1E00424CD6 /* ContractProtocol.swift */; };
+		81D7D97220A31FB700A193EC /* ComparisonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97120A31FB700A193EC /* ComparisonExtensions.swift */; };
+		81D7D97320A31FB700A193EC /* ComparisonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97120A31FB700A193EC /* ComparisonExtensions.swift */; };
+		81D7D97520A3240900A193EC /* EthereumStringEncodingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97420A3240900A193EC /* EthereumStringEncodingExtensions.swift */; };
+		81D7D97620A3240900A193EC /* EthereumStringEncodingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97420A3240900A193EC /* EthereumStringEncodingExtensions.swift */; };
 		81DDECCF1FDF004E0063684A /* Web3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECCE1FDF004E0063684A /* Web3.swift */; };
 		81EB1E4B208173D7003BD47F /* Web3+Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EB1E4A208173D7003BD47F /* Web3+Personal.swift */; };
 		81EB1E4C208173D7003BD47F /* Web3+Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EB1E4A208173D7003BD47F /* Web3+Personal.swift */; };
@@ -275,6 +279,8 @@
 		81C5DA2A2074CA1400424CD6 /* ABIv2Decoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABIv2Decoding.swift; sourceTree = "<group>"; };
 		81C5DA2D2074EBF500424CD6 /* ContractABIv2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractABIv2.swift; sourceTree = "<group>"; };
 		81C5DA302074EC1E00424CD6 /* ContractProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractProtocol.swift; sourceTree = "<group>"; };
+		81D7D97120A31FB700A193EC /* ComparisonExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonExtensions.swift; sourceTree = "<group>"; };
+		81D7D97420A3240900A193EC /* EthereumStringEncodingExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumStringEncodingExtensions.swift; sourceTree = "<group>"; };
 		81DDECCE1FDF004E0063684A /* Web3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3.swift; sourceTree = "<group>"; };
 		81EB1E4A208173D7003BD47F /* Web3+Personal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Personal.swift"; sourceTree = "<group>"; };
 		81FA43F32044097000EE14D5 /* web3swift-macOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "web3swift-macOS_Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -539,6 +545,8 @@
 				818EABD91FDC9A5C00E013FC /* Contract.swift */,
 				81C5DA2D2074EBF500424CD6 /* ContractABIv2.swift */,
 				81C5DA302074EC1E00424CD6 /* ContractProtocol.swift */,
+				81D7D97120A31FB700A193EC /* ComparisonExtensions.swift */,
+				81D7D97420A3240900A193EC /* EthereumStringEncodingExtensions.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1020,6 +1028,7 @@
 				8125F0662047D9FF00A0F2FE /* ABIEncoder.swift in Sources */,
 				8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */,
 				81EB1E4B208173D7003BD47F /* Web3+Personal.swift in Sources */,
+				81D7D97520A3240900A193EC /* EthereumStringEncodingExtensions.swift in Sources */,
 				817EBB122004FE2F00E02EAA /* BIP32HDNode.swift in Sources */,
 				8113D2C41FD7E1590074282C /* CryptoExtensions.swift in Sources */,
 				8103BBB72076391F00499769 /* Web3+Concurrency.swift in Sources */,
@@ -1027,6 +1036,7 @@
 				817EBB2920075D2E00E02EAA /* BIP39.swift in Sources */,
 				815630022007B53C00A0EC2F /* BIP32Keystore.swift in Sources */,
 				818ABD5B1FE95F8F002657BB /* Web3+Instance.swift in Sources */,
+				81D7D97220A31FB700A193EC /* ComparisonExtensions.swift in Sources */,
 				817EBB27200673D100E02EAA /* KeystoreV3JSONStructure.swift in Sources */,
 				81BEDE1D20852F75002CD87D /* Web3+PersonalOperations.swift in Sources */,
 				8103BBBD207654B900499769 /* Web3+ConversionOperations.swift in Sources */,
@@ -1107,6 +1117,7 @@
 				8125F0672047D9FF00A0F2FE /* ABIEncoder.swift in Sources */,
 				41948125203630530065A83B /* Web3+Methods.swift in Sources */,
 				81EB1E4C208173D7003BD47F /* Web3+Personal.swift in Sources */,
+				81D7D97620A3240900A193EC /* EthereumStringEncodingExtensions.swift in Sources */,
 				41948126203630530065A83B /* Web3+Eth.swift in Sources */,
 				8103BBB82076391F00499769 /* Web3+Concurrency.swift in Sources */,
 				81C5DA262072E14E00424CD6 /* ABIv2Encoding.swift in Sources */,
@@ -1114,6 +1125,7 @@
 				41948129203630530065A83B /* ABITypes.swift in Sources */,
 				4194812B203630530065A83B /* RLP.swift in Sources */,
 				4194812C203630530065A83B /* KeystoreManager.swift in Sources */,
+				81D7D97320A31FB700A193EC /* ComparisonExtensions.swift in Sources */,
 				8103BBBE207654B900499769 /* Web3+ConversionOperations.swift in Sources */,
 				81BEDE1E20852F75002CD87D /* Web3+PersonalOperations.swift in Sources */,
 				81C5DA12207254F600424CD6 /* ABIv2.swift in Sources */,

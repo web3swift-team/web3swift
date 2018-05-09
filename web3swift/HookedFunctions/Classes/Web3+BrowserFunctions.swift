@@ -17,7 +17,7 @@ extension web3.BrowserFunctions {
         case .failure(_):
             return nil
         case .success(let accounts):
-            return accounts.flatMap({$0.address})
+            return accounts.compactMap({$0.address})
         }
     }
     

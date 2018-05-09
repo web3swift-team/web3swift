@@ -138,7 +138,7 @@ extension ABIv2Encoder {
     
     public static func encode(types: [ABIv2.Element.InOut], values: [AnyObject]) -> Data? {
         guard types.count == values.count else {return nil}
-        let params = types.flatMap { (el) -> ABIv2.Element.ParameterType in
+        let params = types.compactMap { (el) -> ABIv2.Element.ParameterType in
             return el.type
         }
         return encode(types: params, values: values)

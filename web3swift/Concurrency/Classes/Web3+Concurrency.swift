@@ -90,7 +90,7 @@ public class OperationDispatcher {
             if self.schedulingOperation != nil {
                 self.schedulingOperation = nil
             }
-            let allRequests = self.pendingRequests.flatMap { (r) -> Request in
+            let allRequests = self.pendingRequests.compactMap { (r) -> Request in
                 return r
             }
             self.pendingRequests.removeAll()

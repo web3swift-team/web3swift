@@ -2105,13 +2105,13 @@ class web3swiftTests: XCTestCase {
         // BKX TOKEN
         let web3 = Web3.InfuraMainnetWeb3()
         let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
-        let constractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
         var options = Web3Options()
         options.from = coldWalletAddress
         let tempKeystore = try! EthereumKeystoreV3(password: "")
         let keystoreManager = KeystoreManager([tempKeystore!])
         web3.addKeystoreManager(keystoreManager)
-        let contract = web3.contract(Web3.Utils.erc20ABI, at: constractAddress, abiVersion: 2)!
+        let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2)!
         let bkxBalanceSend = contract.method("transfer", parameters: [coldWalletAddress, BigUInt(1)] as [AnyObject], options: options)!.call(options: nil)
         switch bkxBalanceSend {
         case .success(let result):
@@ -2120,6 +2120,39 @@ class web3swiftTests: XCTestCase {
             print(error)
             XCTFail()
         }
+    }
+    
+    func testTokenBalanceTransferOnMainNetUsingConvenience() {
+        // BKX TOKEN
+        let web3 = Web3.InfuraMainnetWeb3()
+        let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+        let tempKeystore = try! EthereumKeystoreV3(password: "")
+        let keystoreManager = KeystoreManager([tempKeystore!])
+        web3.addKeystoreManager(keystoreManager)
+        let intermediate = web3.eth.sendERC20tokensWithNaturalUnits(tokenAddress:contractAddress, from: coldWalletAddress, to: coldWalletAddress, amount: "1.0")
+        let bkxBalanceSend = intermediate!.call(options: nil)
+        switch bkxBalanceSend {
+        case .success(let result):
+            print(result)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
+    func testDecodeInputData() {
+        let contract = ContractV2.init(Web3.Utils.erc20ABI)!
+        let dataToDecode = Data.fromHex("0xa9059cbb000000000000000000000000cdd45864e794fe5e3e1b0045b77e62f4c43b8bd9000000000000000000000000000000000000000000000224b5f018c3e30142d5")!
+        let decoded = contract.decodeInputData("transfer", data: dataToDecode)
+        XCTAssert(decoded!["_to"] as? EthereumAddress == EthereumAddress("0xcdd45864e794fe5e3e1b0045b77e62f4c43b8bd9"))
+    }
+    
+    func testDecodeInputDataWithoutMethodName() {
+        let contract = ContractV2.init(Web3.Utils.erc20ABI)!
+        let dataToDecode = Data.fromHex("0xa9059cbb000000000000000000000000cdd45864e794fe5e3e1b0045b77e62f4c43b8bd9000000000000000000000000000000000000000000000224b5f018c3e30142d5")!
+        let decoded = contract.decodeInputData(dataToDecode)
+        XCTAssert(decoded!["_to"] as? EthereumAddress == EthereumAddress("0xcdd45864e794fe5e3e1b0045b77e62f4c43b8bd9"))
     }
     
     func testPerformanceExample() {
