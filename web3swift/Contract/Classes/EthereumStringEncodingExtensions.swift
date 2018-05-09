@@ -23,13 +23,15 @@ extension BigInt: EventFilterEncodable {
 
 extension Data: EventFilterEncodable {
     public func eventFilterEncoded() -> String? {
-        return self.toHexString().addHexPrefix()
+        guard let padded = self.setLengthLeft(32) else {return nil}
+        return padded.toHexString().addHexPrefix()
     }
 }
 
 extension EthereumAddress: EventFilterEncodable {
     public func eventFilterEncoded() -> String? {
-        return self.address
+        guard let padded = self.addressData.setLengthLeft(32) else {return nil}
+        return padded.toHexString().addHexPrefix()
     }
 }
 

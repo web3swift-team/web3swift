@@ -88,6 +88,13 @@ public struct TransactionParameters: Codable {
     }
 }
 
+public struct EventFilterParameters: Codable {
+    public var fromBlock: String?
+    public var toBlock: String?
+    public var topics: [[String?]?]?
+    public var address: [String?]?
+}
+
 public struct JSONRPCparams: Encodable{
     public var params = [Any]()
     
@@ -99,6 +106,8 @@ public struct JSONRPCparams: Encodable{
             } else if let p = par as? String {
                 try container.encode(p)
             } else if let p = par as? Bool {
+                try container.encode(p)
+            } else if let p = par as? EventFilterParameters {
                 try container.encode(p)
             }
         }

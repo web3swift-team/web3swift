@@ -69,4 +69,26 @@ public struct EventFilter {
     public var toBlock: Block?
     public var addresses: [EthereumAddress]?
     public var parameterFilters: [[EventFilterable]?]?
+    
+    public func rpcPreEncode() -> EventFilterParameters {
+        var encoding = EventFilterParameters()
+        if self.fromBlock != nil {
+            encoding.fromBlock = self.fromBlock!.encoded
+        }
+        if self.toBlock != nil {
+            encoding.toBlock = self.toBlock!.encoded
+        }
+        if self.addresses != nil {
+            if self.addresses!.count == 1 {
+                encoding.address = [self.addresses![0].address]
+            } else {
+                var encodedAddresses = [String?]()
+                for addr in self.addresses! {
+                    encodedAddresses.append(addr.address)
+                }
+                encoding.address = encodedAddresses
+            }
+        }
+        return encoding
+    }
 }
