@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BigInt
 
 public protocol ContractProtocol {
     var address: EthereumAddress? {get set}
@@ -34,6 +35,18 @@ public protocol EventFilterEncodable {
 public protocol EventFilterable: EventFilterComparable, EventFilterEncodable {
     
 }
+
+extension BigUInt: EventFilterable {
+}
+extension BigInt: EventFilterable {
+}
+extension Data: EventFilterable {
+}
+extension String: EventFilterable {
+}
+extension EthereumAddress: EventFilterable {
+}
+
 
 public struct EventFilter {
     public enum Block {

@@ -113,7 +113,6 @@ extension web3.web3contract {
                 var allResults = [EventParserResultProtocol]()
                 if (self.filter != nil) {
                     let eventFilter = self.filter!
-                    // TODO NYI
                     let filteredLogs = decodedLogs.filter { (result) -> Bool in
                         if eventFilter.addresses == nil {
                             return true
@@ -134,7 +133,7 @@ extension web3.web3contract {
                                 }
                                 return false
                             })
-                            if keys.count != eventFilter.parameterFilters!.count {
+                            if keys.count < eventFilter.parameterFilters!.count {
                                 return false
                             }
                             for i in 0 ..< keys.count {
@@ -150,6 +149,7 @@ extension web3.web3contract {
                                 for value in allowedValues! {
                                     if value.isEqualTo(actualValue! as AnyObject) {
                                         inAllowed = true
+                                        break
                                     }
                                 }
                                 if !inAllowed {
