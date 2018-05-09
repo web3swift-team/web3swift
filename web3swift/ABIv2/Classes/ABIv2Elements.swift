@@ -149,7 +149,7 @@ extension ABIv2.Element {
         case 0:
             break
         case 4:
-            let sig = rawData[0 ..< 4]
+            sig = rawData[0 ..< 4]
             data = rawData[4 ..< rawData.count]
         default:
             return nil
@@ -185,7 +185,7 @@ extension ABIv2.Element {
         case .fallback(_):
             return nil
         case .function(let function):
-            if sig != nil && sig != function.signature {
+            if sig != nil && sig != function.methodEncoding {
                 return nil
             }
             if (data.count == 0 && function.inputs.count == 1) {

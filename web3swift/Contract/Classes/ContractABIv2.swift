@@ -12,12 +12,13 @@ import BigInt
 public struct ContractV2:ContractProtocol {
     
     public var allEvents: [String] {
-        return events.keys.flatMap({ (s) -> String in
+        return events.keys.compactMap({ (s) -> String in
             return s
         })
     }
+    
     public var allMethods: [String] {
-        return methods.keys.flatMap({ (s) -> String in
+        return methods.keys.compactMap({ (s) -> String in
             return s
         })
     }

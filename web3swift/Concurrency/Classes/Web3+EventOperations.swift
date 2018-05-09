@@ -144,7 +144,7 @@ final class ParseTransactionForEventsOperation: Web3Operation {
                         log.address == contract.address
                     })
                 }
-                let decodedLogs = allLogs.flatMap({ (log) -> EventParserResultProtocol? in
+                let decodedLogs = allLogs.compactMap({ (log) -> EventParserResultProtocol? in
                     let (n, d) = contract.parseEvent(log)
                     guard let evName = n, let evData = d else {return nil}
                     return EventParserResult(eventName: evName, transactionReceipt: receipt, contractAddress: log.address, decodedResult: evData)

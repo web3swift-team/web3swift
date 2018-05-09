@@ -20,10 +20,40 @@ public protocol ContractProtocol {
     func decodeInputData(_ method:String, data: Data) -> [String:Any]?
     func parseEvent(_ eventLog: EventLog) -> (eventName:String?, eventData:[String:Any]?)
     func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool?
-//    func createEventFilter(eventName:String, filter: EventFilter?)
+//    func allEvents() -> [String: [String: Any]?]
+}
+
+public protocol EventFilterComparable {
+    func isEqualTo(_ other: AnyObject) -> Bool
+}
+
+public protocol EventFilterEncodable {
+    func eventFilterEncoded() -> String?
+}
+
+public protocol EventFilterable: EventFilterComparable, EventFilterEncodable {
+    
 }
 
 public struct EventFilter {
-    public var parameterName: String
-    public var parameterValues: [AnyObject]
+    public enum Block {
+        case latest
+        case pending
+        case blockNumber(UInt64)
+        
+        var encoded: String {
+            switch self {
+            case .latest:
+                return "latest"
+            case .pending:
+                return "pending"
+            case .blockNumber(let number):
+                return String(number, radix: 16).addHexPrefix()
+            }
+        }
+    }
+    public var fromBlock: Block?
+    public var toBlock: Block?
+    public var addresses: [EthereumAddress]?
+    public var parameterFilters: [[EventFilterable]?]?
 }

@@ -15,7 +15,7 @@ public struct ABIv2Decoder {
 
 extension ABIv2Decoder {
     public static func decode(types: [ABIv2.Element.InOut], data: Data) -> [AnyObject]? {
-        let params = types.flatMap { (el) -> ABIv2.Element.ParameterType in
+        let params = types.compactMap { (el) -> ABIv2.Element.ParameterType in
             return el.type
         }
         return decode(types: params, data: data)
@@ -222,7 +222,7 @@ extension ABIv2Decoder {
         let nonIndexedInputs = event.inputs.filter { (inp) -> Bool in
             return !inp.indexed
         }
-        let nonIndexedTypes = nonIndexedInputs.flatMap { (inp) -> ABIv2.Element.ParameterType in
+        let nonIndexedTypes = nonIndexedInputs.compactMap { (inp) -> ABIv2.Element.ParameterType in
             return inp.type
         }
         guard logs.count == indexedInputs.count + 1 else {return nil}

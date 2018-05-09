@@ -202,7 +202,7 @@ extension ABIElement {
         switch self {
         case .constructor(let constructor):
             guard parameters.count == constructor.inputs.count else {return nil}
-            let allTypes = constructor.inputs.flatMap({ (input) -> ABIElement.ParameterType in
+            let allTypes = constructor.inputs.compactMap({ (input) -> ABIElement.ParameterType in
                 return input.type
             })
             guard let data = TypesEncoder.encode(types: allTypes, parameters: parameters) else {return nil}
@@ -213,7 +213,7 @@ extension ABIElement {
             return nil
         case .function(let function):
             guard parameters.count == function.inputs.count else {return nil}
-            let allTypes = function.inputs.flatMap({ (input) -> ABIElement.ParameterType in
+            let allTypes = function.inputs.compactMap({ (input) -> ABIElement.ParameterType in
                 return input.type
             })
             let signature = function.methodEncoding

@@ -9,8 +9,8 @@
 import Foundation
 import BigInt
 
+@available(*, deprecated)
 public struct Contract:ContractProtocol {
-    
     public var allEvents: [String] {
         return events.keys.flatMap({ (s) -> String in
             return s

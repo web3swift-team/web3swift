@@ -26,6 +26,9 @@ extension web3.web3contract {
         }
         
         public func parseBlockByNumber(_ blockNumber: UInt64) -> Result<[EventParserResultProtocol], Web3Error> {
+            if self.filter != nil && (self.filter?.fromBlock != nil || self.filter?.toBlock != nil) {
+                return Result([EventParserResultProtocol]())
+            }
             let response = web3.eth.getBlockByNumber(blockNumber)
             switch response {
             case .success(let block):
@@ -75,6 +78,9 @@ extension web3.web3contract {
         }
         
         public func parseTransactionByHash(_ hash: Data) -> Result<[EventParserResultProtocol], Web3Error> {
+            if self.filter != nil && (self.filter?.fromBlock != nil || self.filter?.toBlock != nil) {
+                return Result([EventParserResultProtocol]())
+            }
             let response = web3.eth.getTransactionReceipt(hash)
             switch response {
             case .failure(let error):
@@ -97,7 +103,7 @@ extension web3.web3contract {
                         log.address == self.contract.address
                     })
                 }
-                let decodedLogs = allLogs.flatMap({ (log) -> EventParserResultProtocol? in
+                let decodedLogs = allLogs.compactMap({ (log) -> EventParserResultProtocol? in
                     let (n, d) = contract.parseEvent(log)
                     guard let evName = n, let evData = d else {return nil}
                     return EventParserResult(eventName: evName, transactionReceipt: receipt, contractAddress: log.address, decodedResult: evData)
@@ -106,12 +112,54 @@ extension web3.web3contract {
                 }
                 var allResults = [EventParserResultProtocol]()
                 if (self.filter != nil) {
+                    let eventFilter = self.filter!
                     // TODO NYI
-                    allResults = decodedLogs
-//                    for log in decodedLogs {
-//                        let parsingResult = EventParserResult(eventName: self.eventName, transactionReceipt: receipt, decodedResult: log)
-//                        allResults.append(parsingResult)
-//                    }
+                    let filteredLogs = decodedLogs.filter { (result) -> Bool in
+                        if eventFilter.addresses == nil {
+                            return true
+                        } else {
+                            if eventFilter.addresses!.contains(result.contractAddress) {
+                                return true
+                            } else {
+                                return false
+                            }
+                        }
+                    }.filter { (result) -> Bool in
+                        if eventFilter.parameterFilters == nil {
+                            return true
+                        } else {
+                            let keys = result.decodedResult.keys.filter({ (key) -> Bool in
+                                if let _ = UInt64(key) {
+                                    return true
+                                }
+                                return false
+                            })
+                            if keys.count != eventFilter.parameterFilters!.count {
+                                return false
+                            }
+                            for i in 0 ..< keys.count {
+                                let allowedValues = eventFilter.parameterFilters![i]
+                                let actualValue = result.decodedResult["\(i)"]
+                                if actualValue == nil {
+                                    return false
+                                }
+                                if allowedValues == nil {
+                                    continue
+                                }
+                                var inAllowed = false
+                                for value in allowedValues! {
+                                    if value.isEqualTo(actualValue! as AnyObject) {
+                                        inAllowed = true
+                                    }
+                                }
+                                if !inAllowed {
+                                    return false
+                                }
+                            }
+                            return true
+                        }
+                    }
+                    allResults = filteredLogs
                 } else {
                     allResults = decodedLogs
                 }
@@ -122,6 +170,10 @@ extension web3.web3contract {
         public func parseTransaction(_ transaction: EthereumTransaction) -> Result<[EventParserResultProtocol], Web3Error> {
             guard let hash = transaction.hash else {return Result.failure(Web3Error.dataError)}
             return self.parseTransactionByHash(hash)
+        }
+        
+        public func getEventsByTopics(_ filter: EventFilter) -> Result<[EventParserResultProtocol], Web3Error> {
+            return Result.failure(Web3Error.nodeError("NYI"))
         }
     }
 }
