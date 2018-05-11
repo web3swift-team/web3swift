@@ -45,7 +45,7 @@ public class BIP32Keystore: AbstractKeystore {
     // --------------
     
     public var keystoreParams: KeystoreParamsBIP32?
-    public var mnemonics: String?
+//    public var mnemonics: String?
     public var paths: [String:EthereumAddress] = [String:EthereumAddress]()
     public var rootPrefix: String
     public convenience init?(_ jsonString: String) {
