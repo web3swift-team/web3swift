@@ -183,6 +183,9 @@ public class BIP32Keystore: AbstractKeystore {
     
     public func regenerate(oldPassword: String, newPassword: String, dkLen: Int=32, N: Int = 262144, R: Int = 8, P: Int = 1) throws {
         var keyData = try self.getPrefixNodeData(oldPassword)
+        if keyData == nil {
+            throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
+        }
         defer {Data.zero(&keyData!)}
         try self.encryptDataToStorage(newPassword, data: keyData!)
     }
