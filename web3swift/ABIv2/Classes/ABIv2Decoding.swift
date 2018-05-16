@@ -196,7 +196,17 @@ extension ABIv2Decoder {
         } else {
             guard data.count >= pointer + type.memoryUsage else {return (nil, nil)}
             let dataSlice = data[pointer ..< pointer + type.memoryUsage]
-            let elementPointer = UInt64(BigUInt(dataSlice))
+            let bn = BigUInt(dataSlice)
+            if bn > UINT64_MAX {
+                return (nil, nil)
+//                let nextElement = pointer + type.memoryUsage
+//                return (Data(), nextElement)
+//                return (Data(repeating: 0x00, count: 32), nextElement)
+            }
+            let elementPointer = UInt64(bn)
+            guard elementPointer < data.count else {
+                return (nil, nil)
+            }
             let elementItself = data[elementPointer ..< UInt64(data.count)]
             let nextElement = pointer + type.memoryUsage
 //            print("Got element itself: \n" + elementItself.toHexString())
