@@ -1896,7 +1896,57 @@ class web3swiftTests: XCTestCase {
             var options = Web3Options.defaultOptions()
             options.from = userAddress
             let parameters = [userAddress] as [AnyObject]
-//            let transactionIntermediate = contract?.method("balanceOf", parameters:parameters, options: options)
+            let transactionIntermediate = contract?.method("balanceOf", parameters:parameters, options: options)
+            let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+                switch res {
+                case .success(let balanceResult):
+                    guard let result = balanceResult as? [String: Any] else {
+                        XCTFail()
+                        break
+                    }
+                    guard let bal = result["balance"] as? BigUInt else {
+                        XCTFail()
+                        break
+                    }
+                    print("Balance of " + tokenSymbol + " is " + String(bal))
+                case .failure(let error):
+                    print(error)
+                    XCTFail()
+                    fatalError()
+                }
+                OperationQueue.current?.underlyingQueue?.async {
+                    expected = expected - 1
+//                    print(String(expected) + " tokens left to update")
+                    if expected == 0 {
+                        semaphore.signal()
+                    }
+                }
+                
+            }
+            transactionIntermediate?.call(options: options, onBlock: "latest", callback: callback, queue: web3.queue)
+        }
+        let _ = semaphore.wait(timeout: .distantFuture)
+    }
+    
+    func testGetAllTokenNames()
+    {
+        //        let semaphore = DispatchSemaphore(value: 0)
+        let url = URL.init(string: "https://raw.githubusercontent.com/kvhnuke/etherwallet/mercury/app/scripts/tokens/ethTokens.json")
+        let tokensData = try! Data.init(contentsOf: url!)
+        let tokensJSON = try! JSONSerialization.jsonObject(with: tokensData, options: []) as! [[String: Any]]
+        let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
+        let web3 = Web3.InfuraMainnetWeb3()
+        let userAddress = EthereumAddress("0xc011bf81e3f88931cf331856e45fab6b6450e54c")
+        var expected = tokensJSON.count
+        print(String(expected) + " tokens to update")
+        let semaphore = DispatchSemaphore(value: 0)
+        for token in tokensJSON {
+            let tokenSymbol = token["symbol"] as! String
+            let tokenAddress = EthereumAddress(token["address"] as! String)
+            let contract = web3.contract(jsonString, at: tokenAddress, abiVersion: 2)
+            XCTAssert(contract != nil, "Failed to create ERC20 contract from ABI")
+            var options = Web3Options.defaultOptions()
+            options.from = userAddress
             let transactionIntermediate = contract?.method("name", options: options)
             let callback = { (res: Result<AnyObject, Web3Error>) -> () in
                 switch res {
@@ -1905,22 +1955,19 @@ class web3swiftTests: XCTestCase {
                         XCTFail()
                         break
                     }
-//                    guard let bal = result["balance"] as? BigUInt else {
-//                        XCTFail()
-//                        break
-//                    }
-                    if (result["name"] != nil) {
-                        print(result["name"])
+                    guard let bal = result["0"] as? String else {
+                        XCTFail()
+                        break
                     }
-//                    print("Balance of " + tokenSymbol + " is " + String(bal))
+                    print("Name of " + tokenSymbol + " is " + String(bal))
                 case .failure(let error):
                     print(error)
+                    print("Name of " + tokenSymbol + " is undefined")
 //                    XCTFail()
 //                    fatalError()
                 }
                 OperationQueue.current?.underlyingQueue?.async {
                     expected = expected - 1
-//                    print(String(expected) + " tokens left to update")
                     if expected == 0 {
                         semaphore.signal()
                     }
