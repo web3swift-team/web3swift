@@ -197,16 +197,20 @@ extension ABIv2Decoder {
             guard data.count >= pointer + type.memoryUsage else {return (nil, nil)}
             let dataSlice = data[pointer ..< pointer + type.memoryUsage]
             let bn = BigUInt(dataSlice)
-            if bn > UINT64_MAX {
+            if bn > UINT64_MAX || bn >= data.count {
+                // there are ERC20 contracts that use bytes32 intead of string. Let's be optimistic and return some data
+                if case .string = type {
+                    let nextElement = pointer + type.memoryUsage
+                    let preambula = BigUInt(32).abiEncode(bits: 256)!
+                    return (preambula + Data(dataSlice), nextElement)
+                } else if case .dynamicBytes = type {
+                    let nextElement = pointer + type.memoryUsage
+                    let preambula = BigUInt(32).abiEncode(bits: 256)!
+                    return (preambula + Data(dataSlice), nextElement)
+                }
                 return (nil, nil)
-//                let nextElement = pointer + type.memoryUsage
-//                return (Data(), nextElement)
-//                return (Data(repeating: 0x00, count: 32), nextElement)
             }
             let elementPointer = UInt64(bn)
-            guard elementPointer < data.count else {
-                return (nil, nil)
-            }
             let elementItself = data[elementPointer ..< UInt64(data.count)]
             let nextElement = pointer + type.memoryUsage
 //            print("Got element itself: \n" + elementItself.toHexString())
