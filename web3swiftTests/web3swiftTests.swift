@@ -2237,6 +2237,36 @@ class web3swiftTests: XCTestCase {
         XCTAssert(decoded!["_to"] as? EthereumAddress == EthereumAddress("0xcdd45864e794fe5e3e1b0045b77e62f4c43b8bd9"))
     }
     
+    func testNumberFormattingUtil() {
+        let balance = BigInt("-1000000000000000000")!
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 4, decimalSeparator: ",")
+        XCTAssert(formatted == "-1,0000")
+    }
+    
+    func testNumberFormattingUtil2() {
+        let balance = BigInt("-1000000000000000")!
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 4, decimalSeparator: ",")
+        XCTAssert(formatted == "-0,0010")
+    }
+    
+    func testNumberFormattingUtil3() {
+        let balance = BigInt("-1000000000000")!
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 4, decimalSeparator: ",")
+        XCTAssert(formatted == "-0,0000")
+    }
+    
+    func testNumberFormattingUtil4() {
+        let balance = BigInt("-1000000000000")!
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 9, decimalSeparator: ",")
+        XCTAssert(formatted == "-0,000001000")
+    }
+    
+    func testNumberFormattingUtil5() {
+        let balance = BigInt("-1")!
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 9, decimalSeparator: ",")
+        XCTAssert(formatted == "-1e-18")
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
