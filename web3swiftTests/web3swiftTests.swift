@@ -2213,6 +2213,14 @@ class web3swiftTests: XCTestCase {
         let keystoreManager = KeystoreManager([tempKeystore!])
         web3.addKeystoreManager(keystoreManager)
         let intermediate = web3.eth.sendERC20tokensWithNaturalUnits(tokenAddress:contractAddress, from: coldWalletAddress, to: coldWalletAddress, amount: "1.0")
+        let gasEstimate = intermediate!.estimateGas(options: nil)
+        switch gasEstimate {
+        case .success(let result):
+            print(result)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
         let bkxBalanceSend = intermediate!.call(options: nil)
         switch bkxBalanceSend {
         case .success(let result):
@@ -2265,6 +2273,12 @@ class web3swiftTests: XCTestCase {
         let balance = BigInt("-1")!
         let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 9, decimalSeparator: ",")
         XCTAssert(formatted == "-1e-18")
+    }
+    
+    func testNumberFormattingUtil6() {
+        let balance = BigInt("0")!
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 9, decimalSeparator: ",")
+        XCTAssert(formatted == "0")
     }
     
     func testPerformanceExample() {

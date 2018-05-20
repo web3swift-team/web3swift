@@ -293,7 +293,8 @@ extension web3.Eth {
     }
     
     public func estimateGas(_ transaction: EthereumTransaction, options: Web3Options?, onBlock: String = "latest") -> Result<BigUInt, Web3Error> {
-        let mergedOptions = Web3Options.merge(self.options, with: options)
+        var mergedOptions = Web3Options.merge(self.options, with: options)
+        mergedOptions?.gasLimit = nil // use gas limit of the previous block
         guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.estimateGas, transaction: transaction, onBlock: onBlock, options: mergedOptions) else {
             return Result.failure(Web3Error.inputError("Transaction serialization failed"))
         }

@@ -169,6 +169,9 @@ extension Web3.Utils {
     }
     
     public static func formatToPrecision(_ bigNumber: BigUInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+        if bigNumber == 0 {
+            return "0"
+        }
         let unitDecimals = numberDecimals
         var toDecimals = formattingDecimals
         if unitDecimals < toDecimals {
@@ -179,17 +182,21 @@ extension Web3.Utils {
         let fullRemainder = String(remainder);
         let fullPaddedRemainder = fullRemainder.leftPadding(toLength: unitDecimals, withPad: "0")
         let remainderPadded = fullPaddedRemainder[0..<toDecimals]
-        if remainderPadded == String(repeating: "0", count: toDecimals) && quotient == 0 {
-            var firstDigit = 0
-            for char in fullPaddedRemainder {
-                if (char == "0") {
-                    firstDigit = firstDigit + 1;
-                } else {
-                    firstDigit = firstDigit + 1;
-                    break
+        if remainderPadded == String(repeating: "0", count: toDecimals) {
+            if quotient != 0 {
+                return String(quotient)
+            } else if fallbackToScientific {
+                var firstDigit = 0
+                for char in fullPaddedRemainder {
+                    if (char == "0") {
+                        firstDigit = firstDigit + 1;
+                    } else {
+                        firstDigit = firstDigit + 1;
+                        break
+                    }
                 }
+                return fullRemainder + "e-" + String(firstDigit)
             }
-            return fullRemainder + "e-" + String(firstDigit)
         }
         if (toDecimals == 0) {
             return String(quotient)

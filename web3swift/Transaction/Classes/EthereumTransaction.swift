@@ -317,7 +317,10 @@ public struct EthereumTransaction: CustomStringConvertible {
         var request = JSONRPCrequest()
         request.method = method
         guard let from = options?.from else {return nil}
-        guard let txParams = transaction.encodeAsDictionary(from: from) else {return nil}
+        guard var txParams = transaction.encodeAsDictionary(from: from) else {return nil}
+        if options?.gasLimit == nil {
+            txParams.gas = nil
+        }
         var params = [txParams] as Array<Encodable>
         if method.requiredNumOfParameters == 2 && onBlock != nil {
             params.append(onBlock as Encodable)
