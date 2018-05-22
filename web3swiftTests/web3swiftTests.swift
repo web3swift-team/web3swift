@@ -464,7 +464,7 @@ class web3swiftTests: XCTestCase {
             var transaction = EthereumTransaction(nonce: BigUInt(9),
                                                   gasPrice: BigUInt(20000000000),
                                                   gasLimit: BigUInt(21000),
-                                                  to: EthereumAddress("0x3535353535353535353535353535353535353535"),
+                                                  to: EthereumAddress("0x3535353535353535353535353535353535353535")!,
                                                   value: BigUInt("1000000000000000000")!,
                                                   data: Data(),
                                                   v: BigUInt(0),
@@ -491,7 +491,7 @@ class web3swiftTests: XCTestCase {
     
     func testEthSendExample() {
         let web3 = Web3.InfuraMainnetWeb3()
-        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
         let tempKeystore = try! EthereumKeystoreV3(password: "")
         let keystoreManager = KeystoreManager([tempKeystore!])
         web3.addKeystoreManager(keystoreManager)
@@ -593,7 +593,7 @@ class web3swiftTests: XCTestCase {
             let abiNative = try abi.map({ (record) -> ABIElement in
                 return try record.parse()
             })
-            let address = EthereumAddress("0x158cb5485ea2e7fe03845d45c40c63469814bd9a")
+            let address = EthereumAddress("0x158cb5485ea2e7fe03845d45c40c63469814bd9a")!
             let amount = BigUInt(10).power(18)
             let contract = Contract(abi: abiNative, at: address)
             var options = Web3Options()
@@ -602,7 +602,7 @@ class web3swiftTests: XCTestCase {
             options.value = amount
             let transaction = contract.method("deposit", options: options)
             XCTAssert(transaction != nil, "Failed plasma funding transaction")
-            let requestDictionary = transaction?.encodeAsDictionary(from: EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d"))
+            let requestDictionary = transaction?.encodeAsDictionary(from: EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")!)
             print(requestDictionary)
             XCTAssert(requestDictionary != nil, "Failed plasma funding transaction")
         } catch {
@@ -619,14 +619,14 @@ class web3swiftTests: XCTestCase {
             let abiNative = try abi.map({ (record) -> ABIElement in
                 return try record.parse()
             })
-            let constractAddress = EthereumAddress("0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0")
+            let constractAddress = EthereumAddress("0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0")!
             let contract = Contract(abi: abiNative, at: constractAddress)
             let options = Web3Options.defaultOptions()
             let address = "0xd0a6e6c54dbc68db5db3a091b171a77407ff7ccf"
             let parameters = [address] as [AnyObject]
             let transaction = contract.method("balanceOf", parameters:parameters,  options: options)
             XCTAssert(transaction != nil, "Failed plasma funding transaction")
-            let requestDictionary = transaction!.encodeAsDictionary(from: EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d"))
+            let requestDictionary = transaction!.encodeAsDictionary(from: EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")!)
             XCTAssert(requestDictionary != nil, "Can't read ERC20 balance")
         } catch {
             print(error)
@@ -641,14 +641,14 @@ class web3swiftTests: XCTestCase {
             let abiNative = try abi.map({ (record) -> ABIv2.Element in
                 return try record.parse()
             })
-            let constractAddress = EthereumAddress("0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0")
+            let constractAddress = EthereumAddress("0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0")!
             let contract = ContractV2(abi: abiNative, at: constractAddress)
             let options = Web3Options.defaultOptions()
             let address = "0xd0a6e6c54dbc68db5db3a091b171a77407ff7ccf"
             let parameters = [address] as [AnyObject]
             let transaction = contract.method("balanceOf", parameters:parameters,  options: options)
             XCTAssert(transaction != nil, "Failed plasma funding transaction")
-            let requestDictionary = transaction!.encodeAsDictionary(from: EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d"))
+            let requestDictionary = transaction!.encodeAsDictionary(from: EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")!)
             XCTAssert(requestDictionary != nil, "Can't read ERC20 balance")
         } catch {
             print(error)
@@ -664,13 +664,13 @@ class web3swiftTests: XCTestCase {
             let abiNative = try abi.map({ (record) -> ABIElement in
                 return try record.parse()
             })
-            let constractAddress = EthereumAddress("0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0")
+            let constractAddress = EthereumAddress("0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0")!
             let contract = Contract(abi: abiNative, at: constractAddress)
             let options = Web3Options.defaultOptions()
             let parameters = [] as [AnyObject]
             let transaction = contract.method("name", parameters:parameters,  options: options)
             XCTAssert(transaction != nil, "Failed to create ERC20 name transaction")
-            let requestDictionary = transaction!.encodeAsDictionary(from: EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d"))
+            let requestDictionary = transaction!.encodeAsDictionary(from: EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")!)
             XCTAssert(requestDictionary != nil, "Failed to create ERC20 name transaction")
             let resultData  = Data.fromHex("0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000a534f4e4d20546f6b656e00000000000000000000000000000000000000000000")
             let method = contract.methods["name"]
@@ -755,6 +755,18 @@ class web3swiftTests: XCTestCase {
             let name = response["0"] as? String
             XCTAssert(name == "\"BANKEX\" project utility token", "Failed to create ERC20 name transaction")
             print("Token name = " + name!)
+        }
+    }
+    
+    func testGasPrice() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let result = web3.eth.getGasPrice()
+        switch result {
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        case .success(let response):
+            print(response)
         }
     }
     
@@ -1194,7 +1206,7 @@ class web3swiftTests: XCTestCase {
 
     func testGetBalance() {
         let web3 = Web3.InfuraMainnetWeb3()
-        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
         let response = web3.eth.getBalance(address: address)
         switch response {
         case .failure(_):
@@ -1272,7 +1284,7 @@ class web3swiftTests: XCTestCase {
         let semaphore = DispatchSemaphore(value: 0)
         var fail = true;
         let web3 = Web3.InfuraMainnetWeb3()
-        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
         var request = JSONRPCrequest()
         request.method = JSONRPCmethod.getTransactionCount
         let params = [address.address.lowercased(), "latest"] as Array<Encodable>
@@ -1387,7 +1399,7 @@ class web3swiftTests: XCTestCase {
     {
         let semaphore = DispatchSemaphore(value: 0)
         var fail = true;
-        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
         let web3 = Web3.InfuraMainnetWeb3()
         let queue = OperationQueue.init()
         queue.maxConcurrentOperationCount = 16
@@ -1414,7 +1426,7 @@ class web3swiftTests: XCTestCase {
     {
         let semaphore = DispatchSemaphore(value: 0)
         var fail = true;
-        let address = EthereumAddress("0xc011bf81e3f88931cf331856e45fab6b6450e54c")
+        let address = EthereumAddress("0xc011bf81e3f88931cf331856e45fab6b6450e54c")!
         
         let web3 = Web3.InfuraMainnetWeb3()
         let queue = OperationQueue.init()
@@ -1663,8 +1675,8 @@ class web3swiftTests: XCTestCase {
         let web3 = Web3.InfuraMainnetWeb3()
         let contract = web3.contract(Web3.Utils.erc20ABI, at: nil, abiVersion: 2)
         var filter = EventFilter()
-        filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")]
-        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")] as [EventFilterable])]
+        filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
+        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")!] as [EventFilterable])]
         guard let operation = ParseBlockForEventsOperation.init(web3, queue: web3.queue, contract: contract!.contract, eventName: "Transfer", filter: filter, block: UInt64(5200120)) else {return XCTFail()}
         let callback = { (res: Result<AnyObject, Web3Error>) -> () in
             switch res {
@@ -1824,7 +1836,7 @@ class web3swiftTests: XCTestCase {
     }
     
     func testEIP67encoding() {
-        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
+        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!)
         eip67Data.gasLimit = BigUInt(21000)
         eip67Data.amount = BigUInt("1000000000000000000")
 //        eip67Data.data =
@@ -1833,7 +1845,7 @@ class web3swiftTests: XCTestCase {
     }
     
     func testEIP67codeGeneration() {
-        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
+        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!)
         eip67Data.gasLimit = BigUInt(21000)
         eip67Data.amount = BigUInt("1000000000000000000")
         //        eip67Data.data =
@@ -1842,7 +1854,7 @@ class web3swiftTests: XCTestCase {
     }
     
     func testEIP67decoding() {
-        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
+        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!)
         eip67Data.gasLimit = BigUInt(21000)
         eip67Data.amount = BigUInt("1000000000000000000")
         //        eip67Data.data =
@@ -1858,7 +1870,7 @@ class web3swiftTests: XCTestCase {
         let semaphore = DispatchSemaphore(value: 0)
         var fail = true;
         let web3 = Web3.InfuraMainnetWeb3()
-        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
         let callback = { (res: Result<AnyObject, Web3Error>) -> () in
             switch res {
             case .success(let result):
@@ -1884,7 +1896,7 @@ class web3swiftTests: XCTestCase {
         let tokensJSON = try! JSONSerialization.jsonObject(with: tokensData, options: []) as! [[String: Any]]
         let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
         let web3 = Web3.InfuraMainnetWeb3()
-        let userAddress = EthereumAddress("0xc011bf81e3f88931cf331856e45fab6b6450e54c")
+        let userAddress = EthereumAddress("0xc011bf81e3f88931cf331856e45fab6b6450e54c")!
         var expected = tokensJSON.count
         print(String(expected) + " tokens to update")
         let semaphore = DispatchSemaphore(value: 0)
@@ -1936,7 +1948,7 @@ class web3swiftTests: XCTestCase {
         let tokensJSON = try! JSONSerialization.jsonObject(with: tokensData, options: []) as! [[String: Any]]
         let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
         let web3 = Web3.InfuraMainnetWeb3()
-        let userAddress = EthereumAddress("0xc011bf81e3f88931cf331856e45fab6b6450e54c")
+        let userAddress = EthereumAddress("0xc011bf81e3f88931cf331856e45fab6b6450e54c")!
         var expected = tokensJSON.count
         print(String(expected) + " tokens to update")
         let semaphore = DispatchSemaphore(value: 0)
@@ -1983,7 +1995,7 @@ class web3swiftTests: XCTestCase {
         let semaphore = DispatchSemaphore(value: 0)
         var fail = true;
         let web3 = Web3.InfuraRinkebyWeb3()
-        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
         let tempKeystore = try! EthereumKeystoreV3(password: "")
         let keystoreManager = KeystoreManager([tempKeystore!])
         web3.addKeystoreManager(keystoreManager)
@@ -2186,8 +2198,8 @@ class web3swiftTests: XCTestCase {
     func testTokenBalanceTransferOnMainNet() {
         // BKX TOKEN
         let web3 = Web3.InfuraMainnetWeb3()
-        let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
-        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+        let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!
         var options = Web3Options()
         options.from = coldWalletAddress
         let tempKeystore = try! EthereumKeystoreV3(password: "")
@@ -2207,8 +2219,8 @@ class web3swiftTests: XCTestCase {
     func testTokenBalanceTransferOnMainNetUsingConvenience() {
         // BKX TOKEN
         let web3 = Web3.InfuraMainnetWeb3()
-        let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
-        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+        let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!
         let tempKeystore = try! EthereumKeystoreV3(password: "")
         let keystoreManager = KeystoreManager([tempKeystore!])
         web3.addKeystoreManager(keystoreManager)
@@ -2235,14 +2247,14 @@ class web3swiftTests: XCTestCase {
         let contract = ContractV2.init(Web3.Utils.erc20ABI)!
         let dataToDecode = Data.fromHex("0xa9059cbb000000000000000000000000cdd45864e794fe5e3e1b0045b77e62f4c43b8bd9000000000000000000000000000000000000000000000224b5f018c3e30142d5")!
         let decoded = contract.decodeInputData("transfer", data: dataToDecode)
-        XCTAssert(decoded!["_to"] as? EthereumAddress == EthereumAddress("0xcdd45864e794fe5e3e1b0045b77e62f4c43b8bd9"))
+        XCTAssert(decoded!["_to"] as? EthereumAddress == EthereumAddress("0xcdd45864e794fe5e3e1b0045b77e62f4c43b8bd9")!)
     }
     
     func testDecodeInputDataWithoutMethodName() {
         let contract = ContractV2.init(Web3.Utils.erc20ABI)!
         let dataToDecode = Data.fromHex("0xa9059cbb000000000000000000000000cdd45864e794fe5e3e1b0045b77e62f4c43b8bd9000000000000000000000000000000000000000000000224b5f018c3e30142d5")!
         let decoded = contract.decodeInputData(dataToDecode)
-        XCTAssert(decoded!["_to"] as? EthereumAddress == EthereumAddress("0xcdd45864e794fe5e3e1b0045b77e62f4c43b8bd9"))
+        XCTAssert(decoded!["_to"] as? EthereumAddress == EthereumAddress("0xcdd45864e794fe5e3e1b0045b77e62f4c43b8bd9")!)
     }
     
     func testNumberFormattingUtil() {

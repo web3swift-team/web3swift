@@ -38,9 +38,7 @@ extension web3.web3contract {
         }
         
         public func send(password: String = "BANKEXFOUNDATION", options: Web3Options? = nil, onBlock: String = "pending", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
-            let mergedOptions = Web3Options.merge(self.options, with: options)
-            self.options = mergedOptions
-            guard let operation = ContractSendOperation.init(web3, queue: web3.queue, intermediate: self, onBlock: onBlock, password: password) else {
+            guard let operation = ContractSendOperation.init(web3, queue: web3.queue, intermediate: self, options: options, onBlock: onBlock, password: password) else {
                 guard let dispatchQueue =  queue.underlyingQueue else {return}
                 return dispatchQueue.async {
                     callback(Result<AnyObject, Web3Error>.failure(Web3Error.dataError))
@@ -65,7 +63,7 @@ extension web3.web3contract {
                     return Result.failure(err)
                 }
                 try self.setNonce(nonceResult.value!)
-                let estimatedGasResult = self.estimateGas(options: self.options)
+                let estimatedGasResult = self.estimateGas(options: mergedOptions)
                 if case .failure(let err) = estimatedGasResult {
                     return Result.failure(err)
                 }
@@ -73,9 +71,12 @@ extension web3.web3contract {
                     mergedOptions.gasLimit = estimatedGasResult.value!
                 } else {
                     if (mergedOptions.gasLimit! < estimatedGasResult.value!) {
-                        return Result.failure(Web3Error.inputError("Estimated gas is larger than the gas limit"))
+                        if (options?.gasLimit != nil && options!.gasLimit != nil && options!.gasLimit! >=  estimatedGasResult.value!) {
+                            mergedOptions.gasLimit = estimatedGasResult.value!
+                        } else {
+                            return Result.failure(Web3Error.inputError("Estimated gas is larger than the gas limit"))
+                        }
                     }
-                    mergedOptions.gasLimit = estimatedGasResult.value!
                 }
                 var transaction = self.transaction
                 if mergedOptions.gasLimit != nil {

@@ -132,7 +132,8 @@ public struct EventLog {
         guard let li = json["logIndex"] as? String else {return nil}
         guard let rm = json["removed"] as? Int else {return nil}
         guard let tpc = json["topics"] as? [String] else {return nil}
-        address = EthereumAddress(ad)
+        guard let addr = EthereumAddress(ad) else {return nil}
+        address = addr
         data = Data.fromHex(d)!
         guard let liUnwrapped = BigUInt(li.stripHexPrefix(), radix: 16) else {return nil}
         logIndex = liUnwrapped

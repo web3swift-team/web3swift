@@ -106,11 +106,11 @@ final class ContractSendOperation: Web3Operation {
     
     convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, contract: web3.web3contract, method: String = "fallback", parameters: [AnyObject] = [], extraData: Data = Data(), options: Web3Options?, onBlock: String = "pending", password: String = "BANKEXFOUNDATION") {
         guard let intermediate = contract.method(method, parameters: parameters, extraData: extraData, options: options) else {return nil}
-        self.init(web3Instance, queue: queue, inputData: [intermediate, password, onBlock] as AnyObject)
+        self.init(web3Instance, queue: queue, inputData: [intermediate, password, onBlock, options] as AnyObject)
     }
     
-    convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, intermediate: TransactionIntermediate, onBlock: String = "pending", password: String = "BANKEXFOUNDATION") {
-        self.init(web3Instance, queue: queue, inputData: [intermediate, password, onBlock] as AnyObject)
+    convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, intermediate: TransactionIntermediate, options: Web3Options? = nil, onBlock: String = "pending", password: String = "BANKEXFOUNDATION") {
+        self.init(web3Instance, queue: queue, inputData: [intermediate, password, onBlock, options] as AnyObject)
     }
     
     override func main() {
@@ -124,10 +124,10 @@ final class ContractSendOperation: Web3Operation {
         guard let intermediate = input[0] as? TransactionIntermediate else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let password = input[1] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let onBlock = input[2] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        
-        guard let from = intermediate.options?.from else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        let options = input[3] as? Web3Options
+        guard var mergedOptions = Web3Options.merge(intermediate.options, with: options) else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let from = mergedOptions.from else {return processError(Web3Error.inputError("Invalid input supplied"))}
         var transaction = intermediate.transaction
-        guard var options = intermediate.options else {return self.processError(Web3Error.dataError)}
         
         let gasEstimationCallback = { (res: Result<AnyObject, Web3Error>) -> () in
             switch res {
@@ -135,19 +135,19 @@ final class ContractSendOperation: Web3Operation {
                 guard let gasEstimate = result as? BigUInt else {
                     return self.processError(Web3Error.dataError)
                 }
-                if options.gasLimit == nil {
-                    options.gasLimit = gasEstimate
+                if mergedOptions.gasLimit == nil {
+                    mergedOptions.gasLimit = gasEstimate
                 } else {
-                    if (options.gasLimit! < gasEstimate) {
-                        return self.processError(Web3Error.inputError("Estimated gas is larger than the gas limit"))
+                    if (mergedOptions.gasLimit! < gasEstimate) {
+                        if (options?.gasLimit != nil && options!.gasLimit != nil && options!.gasLimit! >=  gasEstimate) {
+                            mergedOptions.gasLimit = gasEstimate
+                        } else {
+                            return self.processError(Web3Error.inputError("Estimated gas is larger than the gas limit"))
+                        }
                     }
-                    options.gasLimit = gasEstimate
-                }
-                if options.gasLimit != nil {
-                    transaction.gasLimit = options.gasLimit!
                 }
                 intermediate.transaction = transaction
-                intermediate.options = options
+                intermediate.options = mergedOptions
                 let sendOp = SendTransactionOperation.init(self.web3, queue: self.expectedQueue, transactionIntermediate: intermediate, password: password)
                 sendOp.next = completion
                 self.expectedQueue.addOperation(sendOp)
@@ -168,7 +168,6 @@ final class ContractSendOperation: Web3Operation {
                 }
                 transaction.nonce = nonce
                 intermediate.transaction = transaction
-                intermediate.options = options
                 guard let gasEstimateOperation = ContractEstimateGasOperation.init(self.web3, queue: self.expectedQueue, intermediate: intermediate, onBlock: onBlock) else {return self.processError(Web3Error.dataError)}
                 gasEstimateOperation.next = OperationChainingType.callback(gasEstimationCallback, self.expectedQueue)
                 self.expectedQueue.addOperation(gasEstimateOperation)
@@ -184,14 +183,11 @@ final class ContractSendOperation: Web3Operation {
                 guard let gasPrice = result as? BigUInt else {
                     return self.processError(Web3Error.dataError)
                 }
-                if options.gasPrice == nil {
-                    options.gasPrice = gasPrice
-                }
-                if options.gasPrice != nil {
-                    transaction.gasPrice = options.gasPrice!
+                if mergedOptions.gasPrice == nil {
+                    mergedOptions.gasPrice = gasPrice
                 }
                 intermediate.transaction = transaction
-                intermediate.options = options
+                intermediate.options = mergedOptions
                 
                 let nonceOp = GetTransactionCountOperation.init(self.web3, queue: self.expectedQueue, address: from, onBlock: onBlock)
                 nonceOp.next = OperationChainingType.callback(nonceCallback, self.expectedQueue)

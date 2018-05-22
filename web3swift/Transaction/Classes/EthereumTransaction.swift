@@ -221,11 +221,12 @@ public struct EthereumTransaction: CustomStringConvertible {
         if toString == "0x" || toString == "0x0" {
             to = EthereumAddress.contractDeploymentAddress()
         } else {
-            to = EthereumAddress(toString)
+            guard let ethAddr = EthereumAddress(toString) else {return nil}
+            to = ethAddr
         }
-        if (!to.isValid) {
-            return nil
-        }
+//        if (!to.isValid) {
+//            return nil
+//        }
         var dataString = json["data"] as? String
         if (dataString == nil) {
             dataString = json["input"] as? String
@@ -289,7 +290,8 @@ public struct EthereumTransaction: CustomStringConvertible {
                 if addressData.count == 0 {
                     to = EthereumAddress.contractDeploymentAddress()
                 } else if addressData.count == 20 {
-                    to = EthereumAddress(addressData)
+                    guard let addr = EthereumAddress(addressData) else {return nil}
+                    to = addr
                 } else {
                     return nil
                 }

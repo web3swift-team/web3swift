@@ -22,8 +22,7 @@ extension Web3.Utils {
         guard let normalizedAddress = from.addressData.setLengthLeft(32) else {return nil}
         guard let data = RLP.encode([normalizedAddress, nonce] as [Any]) else {return nil}
         guard let contractAddressData = Web3.Utils.sha3(data)?[12..<32] else {return nil}
-        let contractAddress = EthereumAddress(Data(contractAddressData))
-        guard contractAddress.isValid else {return nil}
+        guard let contractAddress = EthereumAddress(Data(contractAddressData)) else {return nil}
         return contractAddress
     }
     

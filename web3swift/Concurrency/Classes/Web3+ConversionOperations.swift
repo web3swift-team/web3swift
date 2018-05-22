@@ -153,7 +153,9 @@ final class AddressArrayConversionOperation: Web3Operation {
             }
             var toReturn = [EthereumAddress]()
             for addrString in resultArray {
-                let addr = EthereumAddress(addrString)
+                guard let addr = EthereumAddress(addrString) else {
+                    return processError(Web3Error.dataError)
+                }
                 if (addr.isValid) {
                     toReturn.append(addr)
                 }
