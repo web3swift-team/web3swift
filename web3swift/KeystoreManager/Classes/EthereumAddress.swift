@@ -74,11 +74,15 @@ public struct EthereumAddress: Equatable {
         return ret
     }
     
-    public init?(_ addressString:String, type: AddressType = .normal) {
+    public init?(_ addressString:String, type: AddressType = .normal, ignoreChecksum: Bool = false) {
         switch type {
         case .normal:
             guard let data = Data.fromHex(addressString) else {return nil}
             guard data.count == 20 else {return nil}
+            if (!ignoreChecksum && data.toHexString().addHexPrefix() != addressString.lowercased()) {
+                let checksummedAddress = EthereumAddress.toChecksumAddress(data.toHexString().addHexPrefix())
+                guard checksummedAddress == addressString else {return nil}
+            }
             self._address = data.toHexString().addHexPrefix()
             self.type = .normal
         case .contractDeployment:

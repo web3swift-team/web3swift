@@ -289,8 +289,8 @@ public struct Block:Decodable {
         let minerAddress = try? container.decode(String.self, forKey: .miner)
         var miner:EthereumAddress?
         if minerAddress != nil {
-            miner = EthereumAddress(minerAddress!)
-            guard miner!.isValid else {throw Web3Error.dataError}
+            guard let minr = EthereumAddress(minerAddress!) else {throw Web3Error.dataError}
+            miner = minr
         }
         self.miner = miner
         

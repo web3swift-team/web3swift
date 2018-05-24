@@ -131,7 +131,7 @@ class web3swift_remote_Tests: XCTestCase {
         let blockNumber = web3.eth.getBlockNumber()
         guard case .success(let currentBlock) = blockNumber else {return XCTFail()}
         let currentBlockAsInt = UInt64(currentBlock)
-        for i in currentBlockAsInt-3 ... currentBlockAsInt {
+        for i in currentBlockAsInt-1 ... currentBlockAsInt {
             let present = eventParser.parseBlockByNumber(i)
             guard case .success(let pres) = present else {return XCTFail()}
             for p in pres {

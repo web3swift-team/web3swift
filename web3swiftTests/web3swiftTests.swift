@@ -142,6 +142,34 @@ class web3swiftTests: XCTestCase {
         XCTAssertNotNil(key)
     }
     
+    func testBIP32keystoreMatching() {
+        let mnemonic = "fruit wave dwarf banana earth journey tattoo true farm silk olive fence"
+        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana")
+        XCTAssertNotNil(keystore)
+        let account = keystore!.addresses![0]
+        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        let pubKey = Web3.Utils.privateToPublic(key, compressed: true);
+        XCTAssert(pubKey?.toHexString() == "027160bd3a4d938cac609ff3a11fe9233de7b76c22a80d2b575e202cbf26631659")
+    }
+    
+    func testBIP32keystoreMatchingRootNode() {
+        let mnemonic = "fruit wave dwarf banana earth journey tattoo true farm silk olive fence"
+        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana")
+        XCTAssertNotNil(keystore)
+        let rootNode = try! keystore!.serializeRootNodeToString(password: "")
+        XCTAssert(rootNode == "xprvA2KM71v838kPwE8Lfr12m9DL939TZmPStMnhoFcZkr1nBwDXSG7c3pjYbMM9SaqcofK154zNSCp7W7b4boEVstZu1J3pniLQJJq7uvodfCV")
+    }
+    
+    func testBIP32keystoreCustomPathMatching() {
+        let mnemonic = "fruit wave dwarf banana earth journey tattoo true farm silk olive fence"
+        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana", prefixPath:"m/44'/60'/0'/0")
+        XCTAssertNotNil(keystore)
+        let account = keystore!.addresses![0]
+        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        let pubKey = Web3.Utils.privateToPublic(key, compressed: true);
+        XCTAssert(pubKey?.toHexString() == "027160bd3a4d938cac609ff3a11fe9233de7b76c22a80d2b575e202cbf26631659")
+    }
+    
     func testByBIP32keystoreCreateChildAccount() {
         let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
@@ -457,6 +485,15 @@ class web3swiftTests: XCTestCase {
         let input = "0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359"
         let output = EthereumAddress.toChecksumAddress(input);
         XCTAssert(output == "0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359", "Failed to checksum address")
+    }
+    
+    func testChecksumAddressParsing() {
+        let input = "0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359"
+        let addr = EthereumAddress(input);
+        XCTAssert(addr != nil);
+        let invalidInput = "0xfb6916095ca1df60bB79Ce92cE3Ea74c37c5d359"
+        let invalidAddr = EthereumAddress(invalidInput);
+        XCTAssert(invalidAddr == nil);
     }
 
     func testTransaction() {
@@ -1924,7 +1961,7 @@ class web3swiftTests: XCTestCase {
                 case .failure(let error):
                     print(error)
                     XCTFail()
-                    fatalError()
+//                    fatalError()
                 }
                 OperationQueue.current?.underlyingQueue?.async {
                     expected = expected - 1
@@ -2013,8 +2050,9 @@ class web3swiftTests: XCTestCase {
                 print(error)
                 if case .nodeError(_) = error {
                     fail = false
+                    break
                 }
-//                XCTFail()
+                XCTFail()
 //                fatalError()
             }
             semaphore.signal()
@@ -2233,7 +2271,9 @@ class web3swiftTests: XCTestCase {
             print(error)
             XCTFail()
         }
-        let bkxBalanceSend = intermediate!.call(options: nil)
+        var options = Web3Options();
+        options.gasLimit = gasEstimate.value!
+        let bkxBalanceSend = intermediate!.call(options: options)
         switch bkxBalanceSend {
         case .success(let result):
             print(result)
@@ -2260,7 +2300,7 @@ class web3swiftTests: XCTestCase {
     func testNumberFormattingUtil() {
         let balance = BigInt("-1000000000000000000")!
         let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 4, decimalSeparator: ",")
-        XCTAssert(formatted == "-1,0000")
+        XCTAssert(formatted == "-1")
     }
     
     func testNumberFormattingUtil2() {
@@ -2283,7 +2323,7 @@ class web3swiftTests: XCTestCase {
     
     func testNumberFormattingUtil5() {
         let balance = BigInt("-1")!
-        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 9, decimalSeparator: ",")
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 9, decimalSeparator: ",", fallbackToScientific: true)
         XCTAssert(formatted == "-1e-18")
     }
     
@@ -2291,6 +2331,12 @@ class web3swiftTests: XCTestCase {
         let balance = BigInt("0")!
         let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 9, decimalSeparator: ",")
         XCTAssert(formatted == "0")
+    }
+    
+    func testNumberFormattingUtil7() {
+        let balance = BigInt("-1100000000000000000")!
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 4, decimalSeparator: ",")
+        XCTAssert(formatted == "-1,1000")
     }
     
     func testPerformanceExample() {
