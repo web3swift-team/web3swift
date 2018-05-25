@@ -117,7 +117,7 @@ class ViewController: UIViewController {
             print(err)
         }
         
-        
+        //Send ERC20 token on Rinkeby
         guard case .success(let gasPriceRinkeby) = web3Rinkeby.eth.getGasPrice() else {return}
         web3Rinkeby.addKeystoreManager(keystoreManager)
         var tokenTransferOptions = Web3Options.defaultOptions()
@@ -125,7 +125,11 @@ class ViewController: UIViewController {
         tokenTransferOptions.from = ks?.addresses?.first!
         let testToken = web3Rinkeby.contract(Web3.Utils.erc20ABI, at: EthereumAddress("0xa407dd0cbc9f9d20cdbd557686625e586c85b20a"), abiVersion: 2)!
         let intermediateForTokenTransfer = testToken.method("transfer", parameters: [EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"), BigUInt(1)] as [AnyObject], options: tokenTransferOptions)!
-        let tokenTransferResult = intermediateForTokenTransfer.send(password: "BANKEXFOUNDATION")
+        let gasEstimateResult = intermediateForTokenTransfer.estimateGas(options: nil)
+        guard case .success(let gasEstimate) = gasEstimateResult else {return}
+        var optionsWithCustomGasLimit = Web3Options()
+        optionsWithCustomGasLimit.gasLimit = gasEstimate
+        let tokenTransferResult = intermediateForTokenTransfer.send(password: "BANKEXFOUNDATION", options: optionsWithCustomGasLimit)
         switch tokenTransferResult {
         case .success(let res):
             print("Token transfer successful")

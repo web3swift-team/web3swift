@@ -48,8 +48,7 @@ extension ABIElement.ParameterType.StaticType {
             }
         case .address:
             if let string = value as? String {
-                let address = EthereumAddress(string)
-                guard address.isValid  else {return nil}
+                guard let address = EthereumAddress(string) else {return nil}
                 let data = address.addressData
                 return data.setLengthLeft(32)
             } else if let address = value as? EthereumAddress {

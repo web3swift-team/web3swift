@@ -43,10 +43,8 @@ public struct Web3Options {
             options.value = valueBiguint
         }
         if let fromString = json["from"] as? String {
-            let addressFrom = EthereumAddress(fromString)
-            if addressFrom.isValid {
-                options.from = addressFrom
-            }
+            guard let addressFrom = EthereumAddress(fromString) else {return nil}
+            options.from = addressFrom
         }
         return options
     }

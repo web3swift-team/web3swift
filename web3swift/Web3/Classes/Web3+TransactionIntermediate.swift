@@ -38,9 +38,7 @@ extension web3.web3contract {
         }
         
         public func send(password: String = "BANKEXFOUNDATION", options: Web3Options? = nil, onBlock: String = "pending", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
-            let mergedOptions = Web3Options.merge(self.options, with: options)
-            self.options = mergedOptions
-            guard let operation = ContractSendOperation.init(web3, queue: web3.queue, intermediate: self, onBlock: onBlock, password: password) else {
+            guard let operation = ContractSendOperation.init(web3, queue: web3.queue, intermediate: self, options: options, onBlock: onBlock, password: password) else {
                 guard let dispatchQueue =  queue.underlyingQueue else {return}
                 return dispatchQueue.async {
                     callback(Result<AnyObject, Web3Error>.failure(Web3Error.dataError))
@@ -51,49 +49,73 @@ extension web3.web3contract {
         }
         
         public func send(password: String = "BANKEXFOUNDATION", options: Web3Options? = nil, onBlock: String = "pending") -> Result<[String:String], Web3Error> {
-            do {
-                guard var mergedOptions = Web3Options.merge(self.options, with: options) else
-                {
-                    return Result.failure(Web3Error.inputError("Invalid options supplied"))
-                }
-                guard let from = mergedOptions.from else
-                {
-                    return Result.failure(Web3Error.inputError("Invalid options supplied"))
-                }
-                let nonceResult = self.web3.eth.getTransactionCount(address: from, onBlock: onBlock)
-                if case .failure(let err) = nonceResult {
-                    return Result.failure(err)
-                }
-                try self.setNonce(nonceResult.value!)
-                let estimatedGasResult = self.estimateGas(options: self.options)
-                if case .failure(let err) = estimatedGasResult {
-                    return Result.failure(err)
-                }
-                if mergedOptions.gasLimit == nil {
-                    mergedOptions.gasLimit = estimatedGasResult.value!
-                } else {
-                    if (mergedOptions.gasLimit! < estimatedGasResult.value!) {
-                        return Result.failure(Web3Error.inputError("Estimated gas is larger than the gas limit"))
+            
+            var externalResult: Result<[String:String], Web3Error>!
+            let semaphore = DispatchSemaphore(value: 0)
+            let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+                switch res {
+                case .success(let result):
+                    guard let unwrappedResult = result as? [String:String] else {
+                        externalResult = Result.failure(Web3Error.dataError)
+                        break
                     }
-                    mergedOptions.gasLimit = estimatedGasResult.value!
+                    externalResult = Result<[String:String], Web3Error>(unwrappedResult)
+                case .failure(let error):
+                    externalResult = Result.failure(error)
+                    break
                 }
-                var transaction = self.transaction
-                if mergedOptions.gasLimit != nil {
-                    transaction.gasLimit = mergedOptions.gasLimit!
-                    self.transaction = transaction
-                }
-                self.options = mergedOptions
-                if let keystoreManager = self.web3.provider.attachedKeystoreManager {
-                    try Web3Signer.signTX(transaction: &self.transaction, keystore: keystoreManager, account: from, password: password)
-                    print(self.transaction)
-                    return self.web3.eth.sendRawTransaction(self.transaction)
-                } else {
-                    return self.web3.eth.sendTransaction(self.transaction, options: mergedOptions)
-                }
+                semaphore.signal()
             }
-            catch {
-                return Result.failure(Web3Error.generalError(error))
-            }
+            send(password: password, options: options, onBlock: onBlock, callback: callback, queue: self.web3.queue)
+            _ = semaphore.wait(timeout: .distantFuture)
+            return externalResult
+            
+//            do {
+//                guard var mergedOptions = Web3Options.merge(self.options, with: options) else
+//                {
+//                    return Result.failure(Web3Error.inputError("Invalid options supplied"))
+//                }
+//                guard let from = mergedOptions.from else
+//                {
+//                    return Result.failure(Web3Error.inputError("Invalid options supplied"))
+//                }
+//                let nonceResult = self.web3.eth.getTransactionCount(address: from, onBlock: onBlock)
+//                if case .failure(let err) = nonceResult {
+//                    return Result.failure(err)
+//                }
+//                try self.setNonce(nonceResult.value!)
+//                let estimatedGasResult = self.estimateGas(options: mergedOptions)
+//                if case .failure(let err) = estimatedGasResult {
+//                    return Result.failure(err)
+//                }
+//                if mergedOptions.gasLimit == nil {
+//                    mergedOptions.gasLimit = estimatedGasResult.value!
+//                } else {
+//                    if (mergedOptions.gasLimit! < estimatedGasResult.value!) {
+//                        if (options?.gasLimit != nil && options!.gasLimit != nil && options!.gasLimit! >=  estimatedGasResult.value!) {
+//                            mergedOptions.gasLimit = estimatedGasResult.value!
+//                        } else {
+//                            return Result.failure(Web3Error.inputError("Estimated gas is larger than the gas limit"))
+//                        }
+//                    }
+//                }
+//                var transaction = self.transaction
+//                if mergedOptions.gasLimit != nil {
+//                    transaction.gasLimit = mergedOptions.gasLimit!
+//                    self.transaction = transaction
+//                }
+//                self.options = mergedOptions
+//                if let keystoreManager = self.web3.provider.attachedKeystoreManager {
+//                    try Web3Signer.signTX(transaction: &self.transaction, keystore: keystoreManager, account: from, password: password)
+//                    print(self.transaction)
+//                    return self.web3.eth.sendRawTransaction(self.transaction)
+//                } else {
+//                    return self.web3.eth.sendTransaction(self.transaction, options: mergedOptions)
+//                }
+//            }
+//            catch {
+//                return Result.failure(Web3Error.generalError(error))
+//            }
         }
         
         public func sendSigned() -> Result<[String:String], Web3Error> {
@@ -103,40 +125,63 @@ extension web3.web3contract {
         
         
         public func call(options: Web3Options?, onBlock: String = "latest") -> Result<[String:Any], Web3Error> {
-            let mergedOptions = Web3Options.merge(self.options, with: options)
-            guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: self.transaction, onBlock: onBlock, options: mergedOptions) else
-            {
-                return Result.failure(Web3Error.inputError("Transaction or options are malformed"))
-            }
-            let response = self.web3.provider.send(request: request)
-            let result = ResultUnwrapper.getResponse(response)
-            switch result {
+            
+            var externalResult: Result<[String:Any], Web3Error>!
+            let semaphore = DispatchSemaphore(value: 0)
+            let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+                switch res {
+                case .success(let result):
+                    guard let unwrappedResult = result as? [String:Any] else {
+                        externalResult = Result.failure(Web3Error.dataError)
+                        break
+                    }
+                    externalResult = Result<[String:Any], Web3Error>(unwrappedResult)
                 case .failure(let error):
-                    return Result.failure(error)
-                case .success(let payload):
-                    guard let resultString = payload as? String else {
-                        return Result.failure(Web3Error.dataError)
-                    }
-                    if (self.method == "fallback") {
-                        let resultAsBigUInt = BigUInt(resultString.stripHexPrefix(), radix : 16)
-                        return Result(["result": resultAsBigUInt as Any])
-                    }
-                    guard let responseData = Data.fromHex(resultString) else
-                    {
-                        return Result.failure(Web3Error.dataError)
-                    }
-                    guard let decodedData = contract.decodeReturnData(self.method, data: responseData) else
-                    {
-                        return Result.failure(Web3Error.dataError)
-                    }
-                    return Result(decodedData)
+                    externalResult = Result.failure(error)
+                    break
+                }
+                semaphore.signal()
             }
+            call(options: options, onBlock: onBlock, callback: callback, queue: self.web3.queue)
+            _ = semaphore.wait(timeout: .distantFuture)
+            return externalResult
+            
+            
+            
+//            let mergedOptions = Web3Options.merge(self.options, with: options)
+//            guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: self.transaction, onBlock: onBlock, options: mergedOptions) else
+//            {
+//                return Result.failure(Web3Error.inputError("Transaction or options are malformed"))
+//            }
+//            let response = self.web3.provider.send(request: request)
+//            let result = ResultUnwrapper.getResponse(response)
+//            switch result {
+//                case .failure(let error):
+//                    return Result.failure(error)
+//                case .success(let payload):
+//                    guard let resultString = payload as? String else {
+//                        return Result.failure(Web3Error.dataError)
+//                    }
+//                    if (self.method == "fallback") {
+//                        let resultAsBigUInt = BigUInt(resultString.stripHexPrefix(), radix : 16)
+//                        return Result(["result": resultAsBigUInt as Any])
+//                    }
+//                    guard let responseData = Data.fromHex(resultString) else
+//                    {
+//                        return Result.failure(Web3Error.dataError)
+//                    }
+//                    guard let decodedData = contract.decodeReturnData(self.method, data: responseData) else
+//                    {
+//                        return Result.failure(Web3Error.dataError)
+//                    }
+//                    return Result(decodedData)
+//            }
         }
         
         public func call(options: Web3Options?, onBlock: String = "latest", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
-            let mergedOptions = Web3Options.merge(self.options, with: options)
-            self.options = mergedOptions
-            guard let operation = ContractCallOperation.init(web3, queue: web3.queue, intermediate: self, onBlock: onBlock) else {
+//            let mergedOptions = Web3Options.merge(self.options, with: options)
+//            self.options = mergedOptions
+            guard let operation = ContractCallOperation(web3, queue: web3.queue, intermediate: self, onBlock: onBlock, options: options) else {
                 guard let dispatchQueue =  queue.underlyingQueue else {return}
                 return dispatchQueue.async {
                     callback(Result<AnyObject, Web3Error>.failure(Web3Error.dataError))

@@ -119,6 +119,8 @@ public class HDNode {
     private static var curveOrder = BigUInt("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", radix: 16)!
     public static var defaultPath: String = "m/44'/60'/0'/0"
     public static var defaultPathPrefix: String = "m/44'/60'/0'"
+    public static var defaultPathMetamask: String = "m/44'/60'/0'/0/0"
+    public static var defaultPathMetamaskPrefix: String = "m/44'/60'/0'/0"
     public static var hardenedIndexPrefix: UInt32 = (UInt32(1) << 31)
 }
 

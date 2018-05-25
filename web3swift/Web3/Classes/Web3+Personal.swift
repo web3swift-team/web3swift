@@ -59,21 +59,42 @@ extension web3.Personal {
     }
     
     public func unlockAccount(account: EthereumAddress, password:String = "BANKEXFOUNDATION", seconds: UInt64 = 300) -> Result<Bool, Web3Error> {
-        if let _ = self.web3.provider.attachedKeystoreManager {
-            return Result.failure(Web3Error.walletError)
-        }
-        let request = JSONRPCRequestFabric.prepareRequest(.unlockAccount, parameters: [account.address.lowercased(), password, seconds])
-        let response = self.provider.send(request: request)
-        let result = ResultUnwrapper.getResponse(response)
-        switch result {
-        case .failure(let error):
-            return Result.failure(error)
-        case .success(let payload):
-            guard let resultBool = payload as? Bool else {
-                return Result.failure(Web3Error.dataError)
+        var externalResult: Result<Bool, Web3Error>!
+        let semaphore = DispatchSemaphore(value: 0)
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                guard let unwrappedResult = result as? Bool else {
+                    externalResult = Result.failure(Web3Error.dataError)
+                    break
+                }
+                externalResult = Result<Bool, Web3Error>(unwrappedResult)
+            case .failure(let error):
+                externalResult = Result.failure(error)
+                break
             }
-            return Result(resultBool)
+            semaphore.signal()
         }
+        unlockAccount(account: account, password: password, seconds: seconds, callback: callback, queue: self.web3.queue)
+        _ = semaphore.wait(timeout: .distantFuture)
+        return externalResult
+        
+        
+//        if let _ = self.web3.provider.attachedKeystoreManager {
+//            return Result.failure(Web3Error.walletError)
+//        }
+//        let request = JSONRPCRequestFabric.prepareRequest(.unlockAccount, parameters: [account.address.lowercased(), password, seconds])
+//        let response = self.provider.send(request: request)
+//        let result = ResultUnwrapper.getResponse(response)
+//        switch result {
+//        case .failure(let error):
+//            return Result.failure(error)
+//        case .success(let payload):
+//            guard let resultBool = payload as? Bool else {
+//                return Result.failure(Web3Error.dataError)
+//            }
+//            return Result(resultBool)
+//        }
     }
     
     public func ecrecover(personalMessage: Data, signature: Data) -> Result<EthereumAddress, Web3Error> {

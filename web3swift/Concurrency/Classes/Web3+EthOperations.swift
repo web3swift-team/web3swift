@@ -56,7 +56,7 @@ final class GetTransactionCountOperation: Web3Operation {
         guard input.count == 2 else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let address = input[0] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let onBlock = input[1] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        guard EthereumAddress(address).isValid else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let _ = EthereumAddress(address) else {return processError(Web3Error.inputError("Invalid input supplied"))}
         let request = JSONRPCRequestFabric.prepareRequest(.getTransactionCount, parameters: [address, onBlock])
         let dataOp = DataFetchOperation(self.web3, queue: self.expectedQueue)
         dataOp.inputData = request as AnyObject
@@ -87,7 +87,7 @@ final class GetBalanceOperation: Web3Operation {
         guard input.count == 2 else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let address = input[0] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let onBlock = input[1] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        guard EthereumAddress(address).isValid else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let _ = EthereumAddress(address) else {return processError(Web3Error.inputError("Invalid input supplied"))}
         let request = JSONRPCRequestFabric.prepareRequest(.getBalance, parameters: [address, onBlock])
         let dataOp = DataFetchOperation(self.web3, queue: self.expectedQueue)
         dataOp.inputData = request as AnyObject
@@ -150,7 +150,8 @@ final class EstimateGasOperation: Web3Operation {
         guard let transaction = input[0] as? EthereumTransaction else {return processError(Web3Error.inputError("Invalid input supplied"))}
         let options = input[1] as? Web3Options
         guard let onBlock = input[2] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        let mergedOptions = Web3Options.merge(Web3Options.defaultOptions(), with: options)
+        var mergedOptions = Web3Options.merge(Web3Options.defaultOptions(), with: options)
+        mergedOptions?.gasLimit = nil
         guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.estimateGas, transaction: transaction, onBlock: onBlock, options: mergedOptions) else {return processError(Web3Error.inputError("Invalid input supplied"))}
         let dataOp = DataFetchOperation(self.web3, queue: self.expectedQueue)
         dataOp.inputData = request as AnyObject

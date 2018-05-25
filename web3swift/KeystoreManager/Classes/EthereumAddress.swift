@@ -28,7 +28,8 @@ public struct EthereumAddress: Equatable {
     var _address: String
     public var type: AddressType = .normal
     public static func ==(lhs: EthereumAddress, rhs: EthereumAddress) -> Bool {
-        return lhs.address.lowercased() == rhs.address.lowercased() && lhs.type == rhs.type
+        return lhs.addressData == rhs.addressData && lhs.type == rhs.type
+//        return lhs.address.lowercased() == rhs.address.lowercased() && lhs.type == rhs.type
     }
     
     public var addressData: Data {
@@ -36,8 +37,9 @@ public struct EthereumAddress: Equatable {
             switch self.type {
             case .normal:
                 guard let dataArray = Data.fromHex(_address) else {return Data()}
-                guard let d = dataArray.setLengthLeft(20) else { return Data()}
-                return d
+                return dataArray
+//                guard let d = dataArray.setLengthLeft(20) else { return Data()}
+//                return d
             case .contractDeployment:
                 return Data()
             }
@@ -72,17 +74,30 @@ public struct EthereumAddress: Equatable {
         return ret
     }
     
-    public init(_ addressString:String, type: AddressType = .normal) {
-        self._address = addressString
-        self.type = type
+    public init?(_ addressString:String, type: AddressType = .normal, ignoreChecksum: Bool = false) {
+        switch type {
+        case .normal:
+            guard let data = Data.fromHex(addressString) else {return nil}
+            guard data.count == 20 else {return nil}
+            if (!ignoreChecksum && data.toHexString().addHexPrefix() != addressString) {
+                let checksummedAddress = EthereumAddress.toChecksumAddress(data.toHexString().addHexPrefix())
+                guard checksummedAddress == addressString else {return nil}
+            }
+            self._address = data.toHexString().addHexPrefix()
+            self.type = .normal
+        case .contractDeployment:
+            self._address = "0x"
+            self.type = .contractDeployment
+        }
     }
     
-    public init(_ addressData:Data, type: AddressType = .normal) {
+    public init?(_ addressData:Data, type: AddressType = .normal) {
+        guard addressData.count == 20 else {return nil}
         self._address = addressData.toHexString().addHexPrefix()
         self.type = type
     }
     
     public static func contractDeploymentAddress() -> EthereumAddress {
-        return EthereumAddress("0x", type: .contractDeployment)
+        return EthereumAddress("0x", type: .contractDeployment)!
     }
 }
