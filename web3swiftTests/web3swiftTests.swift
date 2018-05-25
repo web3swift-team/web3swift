@@ -11,6 +11,7 @@ import XCTest
 import CryptoSwift
 import BigInt
 import Result
+import secp256k1_ios
 
 @testable import web3swift_iOS
 
@@ -87,6 +88,17 @@ class web3swiftTests: XCTestCase {
         XCTAssert(first4bits == 0x0f)
     }
     
+    func testCombiningPublicKeys() {
+        let priv1 = Data(repeating: 0x01, count: 32)
+        let pub1 = Web3.Utils.privateToPublic(priv1, compressed: true)!
+        let priv2 = Data(repeating: 0x02, count: 32)
+        let pub2 = Web3.Utils.privateToPublic(priv2, compressed: true)!
+        let combined = SECP256K1.combineSerializedPublicKeys(keys: [pub1, pub2], outputCompressed: true)
+        let compinedPriv = Data(repeating: 0x03, count: 32)
+        let compinedPub = Web3.Utils.privateToPublic(compinedPriv, compressed: true)
+        XCTAssert(compinedPub == combined)
+    }
+    
     func testBIP39 () {
         var entropy = Data.fromHex("00000000000000000000000000000000")!
         var phrase = BIP39.generateMnemonicsFromEntropy(entropy: entropy)
@@ -155,6 +167,21 @@ class web3swiftTests: XCTestCase {
         print(keystore!.paths)
     }
     
+    func testByBIP32keystoreSaveAndDeriva() {
+        let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
+        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "", prefixPath: "m/44'/60'/0'")
+        XCTAssertNotNil(keystore)
+        XCTAssertEqual(keystore!.addresses?.count, 1)
+        try! keystore?.createNewCustomChildAccount(password: "", path: "/0/1")
+        XCTAssertEqual(keystore?.addresses?.count, 2)
+        let data = try! keystore?.serialize()
+        let recreatedStore = BIP32Keystore.init(data!)
+        XCTAssert(keystore?.addresses?.count == recreatedStore?.addresses?.count)
+        XCTAssert(keystore?.rootPrefix == recreatedStore?.rootPrefix)
+        XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![0])
+        XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![1])
+    }
+    
 //    func testPBKDF2() {
 //        let pass = "passDATAb00AB7YxDTTl".data(using: .utf8)!
 //        let salt = "saltKEYbcTcXHCBxtjD2".data(using: .utf8)!
@@ -210,8 +237,17 @@ class web3swiftTests: XCTestCase {
         XCTAssert(treeNode?.depth == 4)
         XCTAssert(treeNode?.serializeToString() == "xpub6DZ3xpo1ixWwwNDQ7KFTamRVM46FQtgcDxsmAyeBpTHEo79E1n1LuWiZSMSRhqMQmrHaqJpek2TbtTzbAdNWJm9AhGdv7iJUpDjA6oJD84b")
         XCTAssert(treeNode?.serializeToString(serializePublic: false) == "xprv9zZhZKG7taxeit8w1HiTDdUko2Fm1RxkrjxANbEaG7kFvJp5UEh6MiQ5b5XvwWg8xdHMhueagettVG2AbfqSRDyNpxRDBLyMSbNq1KhZ8ai")
-        
-        
+    }
+    
+    func testBIP32derivation2() {
+        let seed = Data.fromHex("fffcf9f6f3f0edeae7e4e1dedbd8d5d2cfccc9c6c3c0bdbab7b4b1aeaba8a5a29f9c999693908d8a8784817e7b7875726f6c696663605d5a5754514e4b484542")!
+        let node = HDNode(seed: seed)!
+        let path = "m/0/2147483647'/1/2147483646'/2"
+        let treeNode = node.derive(path: path)
+        XCTAssert(treeNode != nil)
+        XCTAssert(treeNode?.depth == 5)
+        XCTAssert(treeNode?.serializeToString() == "xpub6FnCn6nSzZAw5Tw7cgR9bi15UV96gLZhjDstkXXxvCLsUXBGXPdSnLFbdpq8p9HmGsApME5hQTZ3emM2rnY5agb9rXpVGyy3bdW6EEgAtqt")
+        XCTAssert(treeNode?.serializeToString(serializePublic: false) == "xprvA2nrNbFZABcdryreWet9Ea4LvTJcGsqrMzxHx98MMrotbir7yrKCEXw7nadnHM8Dq38EGfSh6dqA9QWTyefMLEcBYJUuekgW4BYPJcr9E7j")
     }
     
     func testABIdecoding() {
@@ -299,6 +335,24 @@ class web3swiftTests: XCTestCase {
         XCTAssert(encoded == expected, "Failed to RLP encode list of short strings")
     }
     
+    func testRLPdecodeListOfShortStrings() {
+        let testInput = ["cat","dog"]
+        var expected = Data()
+        expected.append(Data([UInt8(0xc8)]))
+        expected.append(Data([UInt8(0x83)]))
+        expected.append("cat".data(using: .ascii)!)
+        expected.append(Data([UInt8(0x83)]))
+        expected.append("dog".data(using: .ascii)!)
+        var result = RLP.decode(expected)!
+        XCTAssert(result.isList, "Failed to RLP decode list of short strings") // we got something non-empty
+        XCTAssert(result.count == 1, "Failed to RLP decode list of short strings") // we got something non-empty
+        result = result[0]!
+        XCTAssert(result.isList, "Failed to RLP decode list of short strings") // we got something non-empty
+        XCTAssert(result.count == 2, "Failed to RLP decode list of short strings") // we got something non-empty
+        XCTAssert(result[0]!.data == testInput[0].data(using: .ascii), "Failed to RLP decode list of short strings")
+        XCTAssert(result[1]!.data == testInput[1].data(using: .ascii), "Failed to RLP decode list of short strings")
+    }
+    
     func testRLPencodeLongString() {
         let testInput = "Lorem ipsum dolor sit amet, consectetur adipisicing elit"
         let encoded = RLP.encode(testInput)
@@ -309,12 +363,32 @@ class web3swiftTests: XCTestCase {
         XCTAssert(encoded == expected, "Failed to RLP encode long string")
     }
     
+    func testRLPdecodeLongString() {
+        let testInput = "Lorem ipsum dolor sit amet, consectetur adipisicing elit"
+        var expected = Data()
+        expected.append(Data([UInt8(0xb8)]))
+        expected.append(Data([UInt8(0x38)]))
+        expected.append(testInput.data(using: .ascii)!)
+        let result = RLP.decode(expected)!
+        XCTAssert(result.count == 1, "Failed to RLP decode long string")
+        XCTAssert(result[0]!.data == testInput.data(using: .ascii), "Failed to RLP decode long string")
+    }
+    
     func testRLPencodeEmptyString() {
         let testInput = ""
         let encoded = RLP.encode(testInput)
         var expected = Data()
         expected.append(Data([UInt8(0x80)]))
         XCTAssert(encoded == expected, "Failed to RLP encode empty string")
+    }
+    
+    func testRLPdecodeEmptyString() {
+        let testInput = ""
+        var expected = Data()
+        expected.append(Data([UInt8(0x80)]))
+        let result = RLP.decode(expected)!
+        XCTAssert(result.count == 1, "Failed to RLP decode empty string")
+        XCTAssert(result[0]!.data == testInput.data(using: .ascii), "Failed to RLP decode empty string")
     }
     
     func testRLPencodeEmptyArray() {
@@ -325,11 +399,30 @@ class web3swiftTests: XCTestCase {
         XCTAssert(encoded == expected, "Failed to RLP encode empty array")
     }
     
+    func testRLPdecodeEmptyArray() {
+//        let testInput = [Data]()
+        var expected = Data()
+        expected.append(Data([UInt8(0xc0)]))
+        var result = RLP.decode(expected)!
+        XCTAssert(result.count == 1, "Failed to RLP decode empty array")
+        result = result[0]!
+        guard case .noItem = result.content else {return XCTFail()}
+    }
+    
     func testRLPencodeShortInt() {
         let testInput = 15
         let encoded = RLP.encode(testInput)
         let expected = Data([UInt8(0x0f)])
         XCTAssert(encoded == expected, "Failed to RLP encode short int")
+    }
+    
+    func testRLPdecodeShortInt() {
+        let testInput = 15
+        let expected = Data([UInt8(0x0f)])
+        let result = RLP.decode(expected)!
+
+        XCTAssert(result.count == 1, "Failed to RLP decode short int")
+        XCTAssert(BigUInt(result[0]!.data!) == testInput, "Failed to RLP decode short int")
     }
     
     func testRLPencodeLargeInt() {
@@ -340,6 +433,24 @@ class web3swiftTests: XCTestCase {
         expected.append(Data([UInt8(0x04)]))
         expected.append(Data([UInt8(0x00)]))
         XCTAssert(encoded == expected, "Failed to RLP encode large int")
+    }
+    
+    func testRLPdecodeLargeInt() {
+        let testInput = 1024
+        var expected = Data()
+        expected.append(Data([UInt8(0x82)]))
+        expected.append(Data([UInt8(0x04)]))
+        expected.append(Data([UInt8(0x00)]))
+        let result = RLP.decode(expected)!
+        
+        XCTAssert(result.count == 1, "Failed to RLP decode large int")
+        XCTAssert(BigUInt(result[0]!.data!) == testInput, "Failed to RLP decode large int")
+    }
+    
+    func testRLPdecodeTransaction() {
+        let input = Data.fromHex("0xf90890558504e3b292008309153a8080b9083d6060604052336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550341561004f57600080fd5b60405160208061081d83398101604052808051906020019091905050600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141515156100a757600080fd5b80600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050610725806100f86000396000f300606060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680638da5cb5b14610067578063b2b2c008146100bc578063d59ba0df146101eb578063d8ffdcc414610247575b600080fd5b341561007257600080fd5b61007a61029c565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34156100c757600080fd5b61019460048080359060200190820180359060200190808060200260200160405190810160405280939291908181526020018383602002808284378201915050505050509190803590602001908201803590602001908080602002602001604051908101604052809392919081815260200183836020028082843782019150505050505091908035906020019082018035906020019080806020026020016040519081016040528093929190818152602001838360200280828437820191505050505050919050506102c1565b6040518080602001828103825283818151815260200191508051906020019060200280838360005b838110156101d75780820151818401526020810190506101bc565b505050509050019250505060405180910390f35b34156101f657600080fd5b61022d600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919080351515906020019091905050610601565b604051808215151515815260200191505060405180910390f35b341561025257600080fd5b61025a6106bf565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6102c96106e5565b6102d16106e5565b6000806000600260003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060009054906101000a900460ff16151561032e57600080fd5b8651885114151561033e57600080fd5b875160405180591061034d5750595b9080825280602002602001820160405250935060009250600091505b87518210156105f357600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166323b872dd87848151811015156103be57fe5b906020019060200201518a858151811015156103d657fe5b906020019060200201518a868151811015156103ee57fe5b906020019060200201516000604051602001526040518463ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018281526020019350505050602060405180830381600087803b15156104b857600080fd5b6102c65a03f115156104c957600080fd5b50505060405180519050905080156105e65787828151811015156104e957fe5b90602001906020020151848481518110151561050157fe5b9060200190602002019073ffffffffffffffffffffffffffffffffffffffff16908173ffffffffffffffffffffffffffffffffffffffff16815250508280600101935050868281518110151561055357fe5b90602001906020020151888381518110151561056b57fe5b9060200190602002015173ffffffffffffffffffffffffffffffffffffffff16878481518110151561059957fe5b9060200190602002015173ffffffffffffffffffffffffffffffffffffffff167f334b3b1d4ad406523ee8e24beb689f5adbe99883a662c37d43275de52389da1460405160405180910390a45b8180600101925050610369565b839450505050509392505050565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561065e57600080fd5b81600260008573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055506001905092915050565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6020604051908101604052806000815250905600a165627a7a723058200618093d895b780d4616f24638637da0e0f9767e6d3675a9525fee1d6ed7f431002900000000000000000000000045245bc59219eeaaf6cd3f382e078a461ff9de7b25a0d1efc3c97d1aa9053aa0f59bf148d73f59764343bf3cae576c8769a14866948da0613d0265634fddd436397bc858e2672653833b57a05cfc8b93c14a6c05166e4a")!
+        let transaction = EthereumTransaction.fromRaw(input)
+        print(transaction)
     }
     
     func testChecksumAddress() {
@@ -367,7 +478,7 @@ class web3swiftTests: XCTestCase {
             let hash = transaction.hashForSignature(chainID: BigUInt(1))
             let expectedHash = "0xdaf5a779ae972f972197303d7b574746c7ef83eadac0f2791ad23db92e4c8e53".stripHexPrefix()
             XCTAssert(hash!.toHexString() == expectedHash, "Transaction signature failed")
-            try Web3Signer.EIP155Signer.sign(transaction: &transaction, privateKey: privateKeyData)
+            try Web3Signer.EIP155Signer.sign(transaction: &transaction, privateKey: privateKeyData, useExtraEntropy: false)
             print(transaction)
             XCTAssert(transaction.v == UInt8(37), "Transaction signature failed")
             XCTAssert(sender == transaction.sender)
@@ -394,27 +505,12 @@ class web3swiftTests: XCTestCase {
         case .success(_):
             return XCTFail()
         case .failure(let error):
-            guard case .unknownError = error else {return XCTFail()}
+            guard case .nodeError(let descr) = error else {return XCTFail()}
+            guard descr == "insufficient funds for gas * price + value" else {return XCTFail()}
         }
     }
     
-    func testEthSendExampleWithRemoveSigning() {
-        let web3 = Web3.new(URL.init(string: "http://127.0.0.1:8545")!)!
-        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
-        let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
-        var options = Web3Options.defaultOptions()
-        options.value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
-        options.from = EthereumAddress("0x804962017f0da9aa3970dc2adbA52A4c22614edB")
-        let intermediate = contract?.method("fallback", options: options)
-        guard let result = intermediate?.send(password: "") else {return XCTFail()}
-        switch result {
-        case .success(_):
-            return
-        case .failure(let error):
-            return XCTFail()
-        }
-    }
-    
+   
     func testERC20Encode() {
         let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
         do {
@@ -664,7 +760,7 @@ class web3swiftTests: XCTestCase {
     
     func testTransactionReceipt() {
         let web3 = Web3.InfuraMainnetWeb3()
-        let result = web3.eth.getTransactionReceipt("0x127519412cefd773b952a5413a4467e9119654f59a34eca309c187bd9f3a195a")
+        let result = web3.eth.getTransactionReceipt("0x83b2433606779fd756417a863f26707cf6d7b2b55f5d744a39ecddb8ca01056e")
         switch result {
         case .failure(let error):
             print(error)
@@ -733,8 +829,9 @@ class web3swiftTests: XCTestCase {
                                        parameters: [number!] as [AnyObject])
         XCTAssert(data != nil, "failed to encode")
         let expected = "0xfffffffffffff38dd0f10627f5529bdb2c52d4846810af0ac000000000000001"
-        print(data?.toHexString().lowercased().addHexPrefix())
-        XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
+        let result = data?.toHexString().lowercased().addHexPrefix()
+        print(result)
+        XCTAssert(result == expected, "failed to encode")
     }
     
     func testABIencoding5()
@@ -849,8 +946,9 @@ class web3swiftTests: XCTestCase {
                                        values: [number!] as [AnyObject])
         XCTAssert(data != nil, "failed to encode")
         let expected = "0xfffffffffffff38dd0f10627f5529bdb2c52d4846810af0ac000000000000001"
-        print(data?.toHexString().lowercased().addHexPrefix())
-        XCTAssert(data?.toHexString().lowercased().addHexPrefix() == expected, "failed to encode")
+        let result = data?.toHexString().lowercased().addHexPrefix()
+        print(result)
+        XCTAssert(result == expected, "failed to encode")
     }
 
     func testABIv2encoding5()
@@ -1094,6 +1192,20 @@ class web3swiftTests: XCTestCase {
         }
     }
 
+    func testGetBalance() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let response = web3.eth.getBalance(address: address)
+        switch response {
+        case .failure(_):
+            XCTFail()
+        case .success(let result):
+            let balance = result
+            let balString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .eth, decimals: 3)
+            print(balString)
+        }
+    }
+    
     func testGetBlockByHash() {
         let web3 = Web3.InfuraMainnetWeb3()
         let response = web3.eth.getBlockByHash("0x6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695", fullTransactions: true)
@@ -1147,132 +1259,7 @@ class web3swiftTests: XCTestCase {
         }
     }
     
-    func testEventParsing1() {
-        let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
-        let web3 = Web3.InfuraMainnetWeb3()
-        let response = web3.eth.getBlockByNumber(UInt64(5200088), fullTransactions: true)
-        switch response {
-        case .failure(_):
-            XCTFail()
-        case .success(let result):
-            print(result)
-            let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
-            let contract = Contract(jsonString, at: contractAddress)
-            let event = contract?.events["Transfer"]
-            let parser = EventParser(web3: web3, event: event!,  contract: contract!, filter: nil, forAddress: contractAddress)
-            let present = parser!.parseBlock(result)
-            guard case .success(let pres) = present else {return XCTFail()}
-            print(pres)
-            XCTAssert(pres.count == 1)
-            let decoded = pres[0].decodedResult
-            XCTAssert(decoded["name"] as! String == "Transfer")
-            XCTAssert(decoded["_to"] as! EthereumAddress == EthereumAddress("0xa5dcf6e0fee38f635c4a8d50d90e24400ed547d2"))
-            XCTAssert(decoded["_from"] as! EthereumAddress == EthereumAddress("0xdbf493e8d7db835192c02b992bd1ab72e96fd2e3"))
-            XCTAssert(decoded["_value"] as! BigUInt == BigUInt("3946fe37ffce3a0000", radix: 16)!)
-        }
-    }
-    
-    func testEventParsing2() {
-        let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
-        let web3 = Web3.InfuraMainnetWeb3()
-        let response = web3.eth.getBlockByNumber(UInt64(5200120), fullTransactions: false)
-        switch response {
-        case .failure(_):
-            XCTFail()
-        case .success(let result):
-            print(result)
-            let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
-            let contract = Contract(jsonString, at: contractAddress)
-            let event = contract?.events["Transfer"]
-            let parser = EventParser(web3: web3, event: event!,  contract: contract!, filter: nil, forAddress: nil)
-            let present = parser!.parseBlock(result)
-            guard case .success(let pres) = present else {return XCTFail()}
-            print(pres)
-            XCTAssert(pres.count == 81)
-        }
-    }
-    
-    func testEventParsing3() {
-        let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
-        let web3 = Web3.InfuraMainnetWeb3()
-        let blockNumber = web3.eth.getBlockNumber()
-        guard case .success(let currentBlock) = blockNumber else {return XCTFail()}
-        let currentBlockAsInt = UInt64(currentBlock)
-        for i in currentBlockAsInt-3 ... currentBlockAsInt {
-            let response = web3.eth.getBlockByNumber(i, fullTransactions: false)
-            switch response {
-            case .failure(_):
-                XCTFail()
-            case .success(let result):
-//                print(result)
-                let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
-                let contract = Contract(jsonString, at: contractAddress)
-                let event = contract?.events["Transfer"]
-                let parser = EventParser(web3: web3, event: event!,  contract: contract!, filter: nil, forAddress: nil)
-                let present = parser!.parseBlock(result)
-                guard case .success(let pres) = present else {return XCTFail()}
-                for p in pres {
-                    print("Block " + String(i) + "\n")
-                    print("From " + (p.decodedResult["_from"] as! EthereumAddress).address + "\n")
-                    print("From " + (p.decodedResult["_to"] as! EthereumAddress).address + "\n")
-                    print("Value " + String(p.decodedResult["_value"] as! BigUInt) + "\n")
-                }
-            }
-        }
-    }
-    
-    func testEventParsing1usingABIv2() {
-        let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
-        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
-        let web3 = Web3.InfuraMainnetWeb3()
-        let contract = web3.contract(jsonString, at: contractAddress, abiVersion: 2)
-        guard let eventParser = contract?.createEventParser("Transfer", filter: nil) else {return XCTFail()}
-        let present = eventParser.parseBlockByNumber(UInt64(5200088))
-        guard case .success(let pres) = present else {return XCTFail()}
-        print(pres)
-        XCTAssert(pres.count == 1)
-        let decoded = pres[0].decodedResult
-        XCTAssert(decoded["name"] as! String == "Transfer")
-        XCTAssert(decoded["_to"] as! EthereumAddress == EthereumAddress("0xa5dcf6e0fee38f635c4a8d50d90e24400ed547d2"))
-        XCTAssert(decoded["_from"] as! EthereumAddress == EthereumAddress("0xdbf493e8d7db835192c02b992bd1ab72e96fd2e3"))
-        XCTAssert(decoded["_value"] as! BigUInt == BigUInt("3946fe37ffce3a0000", radix: 16)!)
-        XCTAssert(pres[0].contractAddress == EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b"))
-        XCTAssert(pres[0].transactionReceipt.transactionHash.toHexString().addHexPrefix() == "0xcb235e8c6ecda032bc82c1084d2159ab82e7e4de35be703da6e80034bc577673")
-    }
-    
-    func testEventParsing2usingABIv2() {
-        let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
-        let web3 = Web3.InfuraMainnetWeb3()
-        let contract = web3.contract(jsonString, at: nil, abiVersion: 2)
-        guard let eventParser = contract?.createEventParser("Transfer", filter: nil) else {return XCTFail()}
-        let present = eventParser.parseBlockByNumber(UInt64(5200120))
-        guard case .success(let pres) = present else {return XCTFail()}
-        print(pres)
-        XCTAssert(pres.count == 81)
-    }
 
-    func testEventParsing3usingABIv2() {
-        let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
-        let web3 = Web3.InfuraMainnetWeb3()
-        let contract = web3.contract(jsonString, at: nil, abiVersion: 2)
-        guard let eventParser = contract?.createEventParser("Transfer", filter: nil) else {return XCTFail()}
-        let blockNumber = web3.eth.getBlockNumber()
-        guard case .success(let currentBlock) = blockNumber else {return XCTFail()}
-        let currentBlockAsInt = UInt64(currentBlock)
-        for i in currentBlockAsInt-3 ... currentBlockAsInt {
-            let present = eventParser.parseBlockByNumber(i)
-            guard case .success(let pres) = present else {return XCTFail()}
-            for p in pres {
-                print("Block " + String(i) + "\n")
-                print("Emitted by contract " + p.contractAddress.address + "\n")
-                print("TX hash " + p.transactionReceipt.transactionHash.toHexString().addHexPrefix() + "\n")
-                print("From " + (p.decodedResult["_from"] as! EthereumAddress).address + "\n")
-                print("From " + (p.decodedResult["_to"] as! EthereumAddress).address + "\n")
-                print("Value " + String(p.decodedResult["_value"] as! BigUInt) + "\n")
-            }
-        }
-    }
-    
 
     func testMakePrivateKey()
     {
@@ -1427,7 +1414,8 @@ class web3swiftTests: XCTestCase {
     {
         let semaphore = DispatchSemaphore(value: 0)
         var fail = true;
-        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let address = EthereumAddress("0xc011bf81e3f88931cf331856e45fab6b6450e54c")
+        
         let web3 = Web3.InfuraMainnetWeb3()
         let queue = OperationQueue.init()
         queue.maxConcurrentOperationCount = 16
@@ -1668,6 +1656,37 @@ class web3swiftTests: XCTestCase {
         XCTAssert(!fail)
     }
     
+    func testConcurrency14()
+    {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let web3 = Web3.InfuraMainnetWeb3()
+        let contract = web3.contract(Web3.Utils.erc20ABI, at: nil, abiVersion: 2)
+        var filter = EventFilter()
+        filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")]
+        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")] as [EventFilterable])]
+        guard let operation = ParseBlockForEventsOperation.init(web3, queue: web3.queue, contract: contract!.contract, eventName: "Transfer", filter: filter, block: UInt64(5200120)) else {return XCTFail()}
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                XCTAssert((result as! [AnyObject]).count == 1)
+                fail = false
+            case .failure(let error):
+                print(error)
+                XCTFail()
+                fatalError()
+            }
+            semaphore.signal()
+        }
+        operation.next = OperationChainingType.callback(callback, web3.queue)
+        web3.queue.addOperation(operation)
+        
+        
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssert(!fail)
+    }
+    
     func testAdvancedABIv2() {
         let abiString = "[{\"constant\":true,\"inputs\":[],\"name\":\"testDynOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testDynArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStaticArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testSingle\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"t\",\"type\":\"tuple\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
         let contractAddress = EthereumAddress("0xd14630167f878e92a40a1c12db4532f29cb3065e")
@@ -1805,7 +1824,7 @@ class web3swiftTests: XCTestCase {
     }
     
     func testEIP67encoding() {
-        var eip67Data = Web3.Utils.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
+        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
         eip67Data.gasLimit = BigUInt(21000)
         eip67Data.amount = BigUInt("1000000000000000000")
 //        eip67Data.data =
@@ -1814,7 +1833,7 @@ class web3swiftTests: XCTestCase {
     }
     
     func testEIP67codeGeneration() {
-        var eip67Data = Web3.Utils.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
+        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
         eip67Data.gasLimit = BigUInt(21000)
         eip67Data.amount = BigUInt("1000000000000000000")
         //        eip67Data.data =
@@ -1823,15 +1842,443 @@ class web3swiftTests: XCTestCase {
     }
     
     func testEIP67decoding() {
-        var eip67Data = Web3.Utils.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
+        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
         eip67Data.gasLimit = BigUInt(21000)
         eip67Data.amount = BigUInt("1000000000000000000")
         //        eip67Data.data =
         let encoding = eip67Data.toString()
-        guard let code = Web3.Utils.EIP67CodeParser.parse(encoding) else {return XCTFail()}
+        guard let code = Web3.EIP67CodeParser.parse(encoding) else {return XCTFail()}
         XCTAssert(code.address == eip67Data.address)
         XCTAssert(code.gasLimit == eip67Data.gasLimit)
         XCTAssert(code.amount == eip67Data.amount)
+    }
+    
+    func testConcurrenctGetTransactionCount()
+    {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let web3 = Web3.InfuraMainnetWeb3()
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(let error):
+                print(error)
+                XCTFail()
+                fatalError()
+            }
+            semaphore.signal()
+        }
+        web3.eth.getTransactionCount(address: address, onBlock: "latest", callback: callback, queue: web3.queue) // queue should be .main here, but can not test in this case with a simple semaphore (getting a deadlock)
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssert(!fail)
+    }
+    
+    func testGetAllTokenBalances()
+    {
+        //        let semaphore = DispatchSemaphore(value: 0)
+        let url = URL.init(string: "https://raw.githubusercontent.com/kvhnuke/etherwallet/mercury/app/scripts/tokens/ethTokens.json")
+        let tokensData = try! Data.init(contentsOf: url!)
+        let tokensJSON = try! JSONSerialization.jsonObject(with: tokensData, options: []) as! [[String: Any]]
+        let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
+        let web3 = Web3.InfuraMainnetWeb3()
+        let userAddress = EthereumAddress("0xc011bf81e3f88931cf331856e45fab6b6450e54c")
+        var expected = tokensJSON.count
+        print(String(expected) + " tokens to update")
+        let semaphore = DispatchSemaphore(value: 0)
+        for token in tokensJSON {
+            let tokenSymbol = token["symbol"] as! String
+            let tokenAddress = EthereumAddress(token["address"] as! String)
+            let contract = web3.contract(jsonString, at: tokenAddress, abiVersion: 2)
+            XCTAssert(contract != nil, "Failed to create ERC20 contract from ABI")
+            var options = Web3Options.defaultOptions()
+            options.from = userAddress
+            let parameters = [userAddress] as [AnyObject]
+            let transactionIntermediate = contract?.method("balanceOf", parameters:parameters, options: options)
+            let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+                switch res {
+                case .success(let balanceResult):
+                    guard let result = balanceResult as? [String: Any] else {
+                        XCTFail()
+                        break
+                    }
+                    guard let bal = result["balance"] as? BigUInt else {
+                        XCTFail()
+                        break
+                    }
+                    print("Balance of " + tokenSymbol + " is " + String(bal))
+                case .failure(let error):
+                    print(error)
+                    XCTFail()
+                    fatalError()
+                }
+                OperationQueue.current?.underlyingQueue?.async {
+                    expected = expected - 1
+//                    print(String(expected) + " tokens left to update")
+                    if expected == 0 {
+                        semaphore.signal()
+                    }
+                }
+                
+            }
+            transactionIntermediate?.call(options: options, onBlock: "latest", callback: callback, queue: web3.queue)
+        }
+        let _ = semaphore.wait(timeout: .distantFuture)
+    }
+    
+    func testGetAllTokenNames()
+    {
+        //        let semaphore = DispatchSemaphore(value: 0)
+        let url = URL.init(string: "https://raw.githubusercontent.com/kvhnuke/etherwallet/mercury/app/scripts/tokens/ethTokens.json")
+        let tokensData = try! Data.init(contentsOf: url!)
+        let tokensJSON = try! JSONSerialization.jsonObject(with: tokensData, options: []) as! [[String: Any]]
+        let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
+        let web3 = Web3.InfuraMainnetWeb3()
+        let userAddress = EthereumAddress("0xc011bf81e3f88931cf331856e45fab6b6450e54c")
+        var expected = tokensJSON.count
+        print(String(expected) + " tokens to update")
+        let semaphore = DispatchSemaphore(value: 0)
+        for token in tokensJSON {
+            let tokenSymbol = token["symbol"] as! String
+            let tokenAddress = EthereumAddress(token["address"] as! String)
+            let contract = web3.contract(jsonString, at: tokenAddress, abiVersion: 2)
+            XCTAssert(contract != nil, "Failed to create ERC20 contract from ABI")
+            var options = Web3Options.defaultOptions()
+            options.from = userAddress
+            let transactionIntermediate = contract?.method("name", options: options)
+            let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+                switch res {
+                case .success(let balanceResult):
+                    guard let result = balanceResult as? [String: Any] else {
+                        XCTFail()
+                        break
+                    }
+                    guard let bal = result["0"] as? String else {
+                        XCTFail()
+                        break
+                    }
+                    print("Name of " + tokenSymbol + " is " + String(bal))
+                case .failure(let error):
+                    print(error)
+                    print("Name of " + tokenSymbol + " is undefined")
+//                    XCTFail()
+//                    fatalError()
+                }
+                OperationQueue.current?.underlyingQueue?.async {
+                    expected = expected - 1
+                    if expected == 0 {
+                        semaphore.signal()
+                    }
+                }
+                
+            }
+            transactionIntermediate?.call(options: options, onBlock: "latest", callback: callback, queue: web3.queue)
+        }
+        let _ = semaphore.wait(timeout: .distantFuture)
+    }
+    
+    func testEthSendOperationsExample() {
+        let semaphore = DispatchSemaphore(value: 0)
+        var fail = true;
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let tempKeystore = try! EthereumKeystoreV3(password: "")
+        let keystoreManager = KeystoreManager([tempKeystore!])
+        web3.addKeystoreManager(keystoreManager)
+        let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
+        options.from = keystoreManager.addresses?.first
+        let intermediate = contract?.method("fallback", options: options)
+        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+            switch res {
+            case .success(let result):
+                print(result)
+                fail = false
+            case .failure(let error):
+                print(error)
+                if case .nodeError(_) = error {
+                    fail = false
+                }
+//                XCTFail()
+//                fatalError()
+            }
+            semaphore.signal()
+        }
+        intermediate?.send(password: "", options: options, callback: callback, queue: web3.queue)
+        
+        let _ = semaphore.wait(timeout: .distantFuture)
+        XCTAssertTrue(!fail)
+    }
+    
+    func testNonDeterministicSignature() {
+        var unsuccesfulNondeterministic = 0;
+        var allAttempts = 0
+        for _ in 0 ..< 10000 {
+            let randomHash = Data.randomBytes(length: 32)!
+            let randomPrivateKey = Data.randomBytes(length: 32)!
+            guard SECP256K1.verifyPrivateKey(privateKey: randomPrivateKey) else {continue}
+            allAttempts = allAttempts + 1
+            let signature = SECP256K1.signForRecovery(hash: randomHash, privateKey: randomPrivateKey, useExtraEntropy: true)
+            guard let serialized = signature.serializedSignature else {
+                unsuccesfulNondeterministic = unsuccesfulNondeterministic + 1
+                continue
+            }
+            guard let recovered = SECP256K1.recoverPublicKey(hash: randomHash, signature: serialized, compressed: true) else {
+                unsuccesfulNondeterministic = unsuccesfulNondeterministic + 1
+                continue
+            }
+            guard let original = SECP256K1.privateToPublic(privateKey: randomPrivateKey, compressed: true) else {
+                unsuccesfulNondeterministic = unsuccesfulNondeterministic + 1
+                continue
+            }
+            guard recovered == original else {
+                unsuccesfulNondeterministic = unsuccesfulNondeterministic + 1
+                continue
+            }
+        }
+        print("Problems with \(unsuccesfulNondeterministic) non-deterministic signatures out from \(allAttempts)")
+        XCTAssert(unsuccesfulNondeterministic == 0)
+    }
+    
+    func testDeterministicSignature() {
+        var unsuccesfulDeterministic = 0;
+        var allAttempts = 0
+        for _ in 0 ..< 10000 {
+            let randomHash = Data.randomBytes(length: 32)!
+            let randomPrivateKey = Data.randomBytes(length: 32)!
+            guard SECP256K1.verifyPrivateKey(privateKey: randomPrivateKey) else {continue}
+            allAttempts = allAttempts + 1
+            let signature = SECP256K1.signForRecovery(hash: randomHash, privateKey: randomPrivateKey, useExtraEntropy: false)
+            guard let serialized = signature.serializedSignature else {
+                unsuccesfulDeterministic = unsuccesfulDeterministic + 1
+                continue
+            }
+            guard let recovered = SECP256K1.recoverPublicKey(hash: randomHash, signature: serialized, compressed: true) else {
+                unsuccesfulDeterministic = unsuccesfulDeterministic + 1
+                continue
+            }
+            guard let original = SECP256K1.privateToPublic(privateKey: randomPrivateKey, compressed: true) else {
+                unsuccesfulDeterministic = unsuccesfulDeterministic + 1
+                continue
+            }
+            guard recovered == original else {
+                unsuccesfulDeterministic = unsuccesfulDeterministic + 1
+                continue
+            }
+            
+        }
+        print("Problems with \(unsuccesfulDeterministic) deterministic signatures out from \(allAttempts)")
+        XCTAssert(unsuccesfulDeterministic == 0)
+    }
+    
+    func testPrivateToPublic() {
+        let randomPrivateKey = Data.randomBytes(length: 32)!
+        guard SECP256K1.verifyPrivateKey(privateKey: randomPrivateKey) else {return XCTFail()}
+        guard var previousPublic = SECP256K1.privateKeyToPublicKey(privateKey: randomPrivateKey) else {return XCTFail()}
+        for _ in 0 ..< 100000 {
+            guard let pub = SECP256K1.privateKeyToPublicKey(privateKey: randomPrivateKey) else {return XCTFail()}
+            guard Data(toByteArray(previousPublic.data)) == Data(toByteArray(pub.data)) else {
+                return XCTFail()
+            }
+            previousPublic = pub
+        }
+    }
+    
+    func testSerializationAndParsing() {
+        for _ in 0 ..< 1024 {
+            let randomHash = Data.randomBytes(length: 32)!
+            let randomPrivateKey = Data.randomBytes(length: 32)!
+            guard SECP256K1.verifyPrivateKey(privateKey: randomPrivateKey) else {continue}
+            guard var signature = SECP256K1.recoverableSign(hash: randomHash, privateKey: randomPrivateKey, useExtraEntropy: true) else {return XCTFail()}
+            guard let serialized = SECP256K1.serializeSignature(recoverableSignature: &signature) else {return XCTFail()}
+            guard let parsed = SECP256K1.parseSignature(signature: serialized) else {return XCTFail()}
+            let sigData = Data(toByteArray(signature.data))
+            let parsedData = Data(toByteArray(parsed.data))
+            guard sigData == parsedData else {
+                for i in 0 ..< sigData.count {
+                    if sigData[i] != parsedData[i] {
+                        print(i)
+                    }
+                }
+                return XCTFail()
+            }
+        }
+    }
+    
+    func testPersonalSignature() {
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let tempKeystore = try! EthereumKeystoreV3(password: "")
+        let keystoreManager = KeystoreManager([tempKeystore!])
+        web3.addKeystoreManager(keystoreManager)
+        let message = "Hello World"
+        let expectedAddress = keystoreManager.addresses![0]
+        print(expectedAddress)
+        let signRes = web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
+        guard case .success(let signature) = signRes else {return XCTFail()}
+        let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: signature)!
+        print("V = " + String(unmarshalledSignature.v))
+        print("R = " + Data(unmarshalledSignature.r).toHexString())
+        print("S = " + Data(unmarshalledSignature.s).toHexString())
+        print("Personal hash = " + Web3.Utils.hashPersonalMessage(message.data(using: .utf8)!)!.toHexString())
+        let recoveredSigner = web3.personal.ecrecover(personalMessage: message.data(using: .utf8)!, signature: signature)
+        guard case .success(let signer) = recoveredSigner else {return XCTFail()}
+        XCTAssert(expectedAddress == signer, "Failed to sign personal message")
+    }
+    
+    func testPersonalSignatureOnContract() {
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let tempKeystore = try! EthereumKeystoreV3(password: "")
+        let keystoreManager = KeystoreManager([tempKeystore!])
+        web3.addKeystoreManager(keystoreManager)
+        let message = "Hello World"
+        let expectedAddress = keystoreManager.addresses![0]
+        print(expectedAddress)
+        let signRes = web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
+        guard case .success(let signature) = signRes else {return XCTFail()}
+        let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: signature)!
+        print("V = " + String(unmarshalledSignature.v))
+        print("R = " + Data(unmarshalledSignature.r).toHexString())
+        print("S = " + Data(unmarshalledSignature.s).toHexString())
+        print("Personal hash = " + Web3.Utils.hashPersonalMessage(message.data(using: .utf8)!)!.toHexString())
+        let jsonString = "[{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"constant\":true,\"inputs\":[{\"name\":\"_message\",\"type\":\"string\"}],\"name\":\"hashPersonalMessage\",\"outputs\":[{\"name\":\"hash\",\"type\":\"bytes32\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_message\",\"type\":\"string\"},{\"name\":\"v\",\"type\":\"uint8\"},{\"name\":\"r\",\"type\":\"bytes32\"},{\"name\":\"s\",\"type\":\"bytes32\"}],\"name\":\"recoverSigner\",\"outputs\":[{\"name\":\"signer\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"}]"
+        let contract = web3.contract(jsonString, at: EthereumAddress("0x6f1745a39059268e8e4572e97897b50e4aab62a8"), abiVersion: 2)
+        var options = Web3Options.defaultOptions()
+        options.from = expectedAddress
+        var intermediate = contract?.method("hashPersonalMessage", parameters: [message as AnyObject], options: options)
+        var result = intermediate!.call(options: nil)
+        switch result {
+        case .success(let res):
+            guard let hash = res["hash"]! as? Data else {return XCTFail()}
+            XCTAssert(Web3.Utils.hashPersonalMessage(message.data(using: .utf8)!)! == hash)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+        
+        intermediate = contract?.method("recoverSigner", parameters: [message, unmarshalledSignature.v, Data(unmarshalledSignature.r), Data(unmarshalledSignature.s)] as [AnyObject], options: options)
+        result = intermediate!.call(options: nil)
+        switch result {
+        case .success(let res):
+            guard let signer = res["signer"]! as? EthereumAddress else {return XCTFail()}
+            print(signer)
+            XCTAssert(signer == expectedAddress)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
+    func testUserCaseEventParsing() {
+        let contractAddress = EthereumAddress("0x7ff546aaccd379d2d1f241e1d29cdd61d4d50778")
+        let jsonString = "[{\"constant\":false,\"inputs\":[{\"name\":\"_id\",\"type\":\"string\"}],\"name\":\"deposit\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_id\",\"type\":\"string\"},{\"indexed\":true,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Deposit\",\"type\":\"event\"}]"
+        let web3 = Web3.InfuraRinkebyWeb3()
+        let contract = web3.contract(jsonString, at: contractAddress, abiVersion: 2)
+        guard let eventParser = contract?.createEventParser("Deposit", filter: nil) else {return XCTFail()}
+        let present = eventParser.parseBlockByNumber(UInt64(2138657))
+        guard case .success(let pres) = present else {return XCTFail()}
+        print(pres)
+        XCTAssert(pres.count == 1)
+    }
+    
+    func testTokenBalanceTransferOnMainNet() {
+        // BKX TOKEN
+        let web3 = Web3.InfuraMainnetWeb3()
+        let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+        var options = Web3Options()
+        options.from = coldWalletAddress
+        let tempKeystore = try! EthereumKeystoreV3(password: "")
+        let keystoreManager = KeystoreManager([tempKeystore!])
+        web3.addKeystoreManager(keystoreManager)
+        let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2)!
+        let bkxBalanceSend = contract.method("transfer", parameters: [coldWalletAddress, BigUInt(1)] as [AnyObject], options: options)!.call(options: nil)
+        switch bkxBalanceSend {
+        case .success(let result):
+            print(result)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
+    func testTokenBalanceTransferOnMainNetUsingConvenience() {
+        // BKX TOKEN
+        let web3 = Web3.InfuraMainnetWeb3()
+        let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+        let tempKeystore = try! EthereumKeystoreV3(password: "")
+        let keystoreManager = KeystoreManager([tempKeystore!])
+        web3.addKeystoreManager(keystoreManager)
+        let intermediate = web3.eth.sendERC20tokensWithNaturalUnits(tokenAddress:contractAddress, from: coldWalletAddress, to: coldWalletAddress, amount: "1.0")
+        let gasEstimate = intermediate!.estimateGas(options: nil)
+        switch gasEstimate {
+        case .success(let result):
+            print(result)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+        let bkxBalanceSend = intermediate!.call(options: nil)
+        switch bkxBalanceSend {
+        case .success(let result):
+            print(result)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
+    func testDecodeInputData() {
+        let contract = ContractV2.init(Web3.Utils.erc20ABI)!
+        let dataToDecode = Data.fromHex("0xa9059cbb000000000000000000000000cdd45864e794fe5e3e1b0045b77e62f4c43b8bd9000000000000000000000000000000000000000000000224b5f018c3e30142d5")!
+        let decoded = contract.decodeInputData("transfer", data: dataToDecode)
+        XCTAssert(decoded!["_to"] as? EthereumAddress == EthereumAddress("0xcdd45864e794fe5e3e1b0045b77e62f4c43b8bd9"))
+    }
+    
+    func testDecodeInputDataWithoutMethodName() {
+        let contract = ContractV2.init(Web3.Utils.erc20ABI)!
+        let dataToDecode = Data.fromHex("0xa9059cbb000000000000000000000000cdd45864e794fe5e3e1b0045b77e62f4c43b8bd9000000000000000000000000000000000000000000000224b5f018c3e30142d5")!
+        let decoded = contract.decodeInputData(dataToDecode)
+        XCTAssert(decoded!["_to"] as? EthereumAddress == EthereumAddress("0xcdd45864e794fe5e3e1b0045b77e62f4c43b8bd9"))
+    }
+    
+    func testNumberFormattingUtil() {
+        let balance = BigInt("-1000000000000000000")!
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 4, decimalSeparator: ",")
+        XCTAssert(formatted == "-1,0000")
+    }
+    
+    func testNumberFormattingUtil2() {
+        let balance = BigInt("-1000000000000000")!
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 4, decimalSeparator: ",")
+        XCTAssert(formatted == "-0,0010")
+    }
+    
+    func testNumberFormattingUtil3() {
+        let balance = BigInt("-1000000000000")!
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 4, decimalSeparator: ",")
+        XCTAssert(formatted == "-0,0000")
+    }
+    
+    func testNumberFormattingUtil4() {
+        let balance = BigInt("-1000000000000")!
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 9, decimalSeparator: ",")
+        XCTAssert(formatted == "-0,000001000")
+    }
+    
+    func testNumberFormattingUtil5() {
+        let balance = BigInt("-1")!
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 9, decimalSeparator: ",")
+        XCTAssert(formatted == "-1e-18")
+    }
+    
+    func testNumberFormattingUtil6() {
+        let balance = BigInt("0")!
+        let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 9, decimalSeparator: ",")
+        XCTAssert(formatted == "0")
     }
     
     func testPerformanceExample() {

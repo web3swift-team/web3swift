@@ -9,7 +9,7 @@
 import Foundation
 import Result
 
-typealias Callback = ((Result<AnyObject, Web3Error>) -> ())
+public typealias Callback = ((Result<AnyObject, Web3Error>) -> ())
 
 public class OperationDispatcher {
     public var MAX_WAIT_TIME: TimeInterval = 0.2
@@ -87,7 +87,10 @@ public class OperationDispatcher {
     
     func triggerExecution() {
         lockQueue.async {
-            let allRequests = self.pendingRequests.flatMap { (r) -> Request in
+            if self.schedulingOperation != nil {
+                self.schedulingOperation = nil
+            }
+            let allRequests = self.pendingRequests.compactMap { (r) -> Request in
                 return r
             }
             self.pendingRequests.removeAll()
@@ -172,7 +175,7 @@ public class OperationDispatcher {
 
 
 
-enum OperationChainingType {
+public enum OperationChainingType {
     case callback(Callback, OperationQueue)
     case operation(Web3Operation)
     case endOfChain
@@ -185,7 +188,7 @@ protocol OperationProtocol{
     var error: Web3Error? {get set}
 }
 
-class Web3Operation: Operation, OperationProtocol {
+public class Web3Operation: Operation, OperationProtocol {
     var web3: web3
     
     var next: OperationChainingType?

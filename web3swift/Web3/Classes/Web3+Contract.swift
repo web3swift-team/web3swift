@@ -44,8 +44,16 @@ extension web3 {
             self.options = mergedOptions
         }
         
-        public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), options: Web3Options?) -> TransactionIntermediate? {
+        public func deploy(bytecode: Data, parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), options: Web3Options?) -> TransactionIntermediate? {
             
+            let mergedOptions = Web3Options.merge(self.options, with: options)
+            guard var tx = self.contract.deploy(bytecode: bytecode, parameters: parameters, extraData: extraData, options: mergedOptions) else {return nil}
+            tx.chainID = self.web3.provider.network?.chainID
+            let intermediate = TransactionIntermediate(transaction: tx, web3: self.web3, contract: self.contract, method: "fallback", options: mergedOptions)
+            return intermediate
+        }
+        
+        public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), options: Web3Options?) -> TransactionIntermediate? {
             let mergedOptions = Web3Options.merge(self.options, with: options)
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData, options: mergedOptions) else {return nil}
             tx.chainID = self.web3.provider.network?.chainID
@@ -61,6 +69,5 @@ extension web3 {
             let parser = EventParser(web3: self.web3, eventName: eventName, contract: self.contract, filter: filter)
             return parser
         }
-    
     }
 }

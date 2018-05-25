@@ -200,15 +200,20 @@ extension ABIElement.ParameterType.DynamicType {
 extension ABIElement {
     func encodeParameters(_ parameters: [AnyObject]) -> Data? {
         switch self {
-        case .constructor(_):
-            return nil
+        case .constructor(let constructor):
+            guard parameters.count == constructor.inputs.count else {return nil}
+            let allTypes = constructor.inputs.compactMap({ (input) -> ABIElement.ParameterType in
+                return input.type
+            })
+            guard let data = TypesEncoder.encode(types: allTypes, parameters: parameters) else {return nil}
+            return data
         case .event(_):
             return nil
         case .fallback(_):
             return nil
         case .function(let function):
             guard parameters.count == function.inputs.count else {return nil}
-            let allTypes = function.inputs.flatMap({ (input) -> ABIElement.ParameterType in
+            let allTypes = function.inputs.compactMap({ (input) -> ABIElement.ParameterType in
                 return input.type
             })
             let signature = function.methodEncoding

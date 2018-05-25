@@ -20,6 +20,20 @@ public class KeystoreManager: AbstractKeystore {
                     toReturn.append(key)
                 }
             }
+            for keystore in _bip32keystores {
+                guard let allAddresses = keystore.addresses else {continue}
+                for addr in allAddresses {
+                    if addr.isValid {
+                        toReturn.append(addr)
+                    }
+                }
+            }
+            for keystore in _plainKeystores {
+                guard let key = keystore.addresses?.first else {continue}
+                if key.isValid {
+                    toReturn.append(key)
+                }
+            }
             return toReturn
         }
     }
@@ -51,11 +65,26 @@ public class KeystoreManager: AbstractKeystore {
                 return keystore as AbstractKeystore?
             }
         }
+        for keystore in _bip32keystores {
+            guard let allAddresses = keystore.addresses else {continue}
+            for addr in allAddresses {
+                if addr == address && addr.isValid {
+                    return keystore as AbstractKeystore?
+                }
+            }
+        }
+        for keystore in _plainKeystores {
+            guard let key = keystore.addresses?.first else {continue}
+            if key == address && key.isValid {
+                return keystore as AbstractKeystore?
+            }
+        }
         return nil
     }
     
     var _keystores:[EthereumKeystoreV3] = [EthereumKeystoreV3]()
     var _bip32keystores: [BIP32Keystore] = [BIP32Keystore]()
+    var _plainKeystores: [PlainKeystore] = [PlainKeystore]()
     
     public var keystores:[EthereumKeystoreV3] {
         get {
@@ -69,6 +98,12 @@ public class KeystoreManager: AbstractKeystore {
         }
     }
     
+    public var plainKeystores:[PlainKeystore] {
+        get {
+            return self._plainKeystores
+        }
+    }
+    
     public init(_ keystores: [EthereumKeystoreV3]) {
         self.isHDKeystore = false
         self._keystores = keystores
@@ -79,6 +114,12 @@ public class KeystoreManager: AbstractKeystore {
         self.isHDKeystore = true
         self._bip32keystores = keystores
         self.path = "bip32"
+    }
+    
+    public init(_ keystores: [PlainKeystore]) {
+        self.isHDKeystore = false
+        self._plainKeystores = keystores
+        self.path="plain"
     }
     
     private init?(_ path: String, scanForHDwallets: Bool = false, suffix: String? = nil) throws {
@@ -130,10 +171,6 @@ public class KeystoreManager: AbstractKeystore {
                 }
             }
         }
-
+        
     }
 }
-
-
-
-

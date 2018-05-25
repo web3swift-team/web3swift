@@ -18,6 +18,15 @@ extension Web3 {
 }
 
 extension Web3.Utils {
+    public static func calcualteContractAddress(from: EthereumAddress, nonce: BigUInt) -> EthereumAddress? {
+        guard let normalizedAddress = from.addressData.setLengthLeft(32) else {return nil}
+        guard let data = RLP.encode([normalizedAddress, nonce] as [Any]) else {return nil}
+        guard let contractAddressData = Web3.Utils.sha3(data)?[12..<32] else {return nil}
+        let contractAddress = EthereumAddress(Data(contractAddressData))
+        guard contractAddress.isValid else {return nil}
+        return contractAddress
+    }
+    
     public enum Units {
         case eth
         case wei
@@ -112,10 +121,15 @@ extension Web3.Utils {
     }
     
     public static func parseToBigUInt(_ amount: String, units: Web3.Utils.Units = .eth) -> BigUInt? {
+        let unitDecimals = units.decimals
+        return parseToBigUInt(amount, decimals: unitDecimals)
+    }
+    
+    public static func parseToBigUInt(_ amount: String, decimals: Int = 18) -> BigUInt? {
         let separators = CharacterSet(charactersIn: ".,")
         let components = amount.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: separators)
         guard components.count == 1 || components.count == 2 else {return nil}
-        let unitDecimals = units.decimals
+        let unitDecimals = decimals
         guard let beforeDecPoint = BigUInt(components[0], radix: 10) else {return nil}
         var mainPart = beforeDecPoint*BigUInt(10).power(unitDecimals)
         if (components.count == 2) {
@@ -128,9 +142,9 @@ extension Web3.Utils {
         return mainPart
     }
     
-    public static func formatToEthereumUnits(_ bigNumber: BigInt, toUnits: Web3.Utils.Units = .eth, decimals: Int = 4) -> String? {
+    public static func formatToEthereumUnits(_ bigNumber: BigInt, toUnits: Web3.Utils.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".") -> String? {
         let magnitude = bigNumber.magnitude
-        guard let formatted = formatToEthereumUnits(magnitude, toUnits: toUnits, decimals: decimals) else {return nil}
+        guard let formatted = formatToEthereumUnits(magnitude, toUnits: toUnits, decimals: decimals, decimalSeparator: decimalSeparator) else {return nil}
         switch bigNumber.sign {
         case .plus:
             return formatted
@@ -139,19 +153,55 @@ extension Web3.Utils {
         }
     }
     
-    public static func formatToEthereumUnits(_ bigNumber: BigUInt, toUnits: Web3.Utils.Units = .eth, decimals: Int = 4) -> String? {
-        let unitDecimals = toUnits.decimals
-        var toDecimals = decimals
+    public static func formatToPrecision(_ bigNumber: BigInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".") -> String? {
+        let magnitude = bigNumber.magnitude
+        guard let formatted = formatToPrecision(magnitude, numberDecimals: numberDecimals, formattingDecimals: formattingDecimals, decimalSeparator: decimalSeparator) else {return nil}
+        switch bigNumber.sign {
+        case .plus:
+            return formatted
+        case .minus:
+            return "-" + formatted
+        }
+    }
+    
+    public static func formatToEthereumUnits(_ bigNumber: BigUInt, toUnits: Web3.Utils.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+        return formatToPrecision(bigNumber, numberDecimals: toUnits.decimals, formattingDecimals: decimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific);
+    }
+    
+    public static func formatToPrecision(_ bigNumber: BigUInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+        if bigNumber == 0 {
+            return "0"
+        }
+        let unitDecimals = numberDecimals
+        var toDecimals = formattingDecimals
         if unitDecimals < toDecimals {
             toDecimals = unitDecimals
         }
         let divisor = BigUInt(10).power(unitDecimals)
         let (quotient, remainder) = bigNumber.quotientAndRemainder(dividingBy: divisor)
-        let remainderPadded = String(remainder).leftPadding(toLength: unitDecimals, withPad: "0")[0..<toDecimals]
-        if (decimals == 0) {
+        let fullRemainder = String(remainder);
+        let fullPaddedRemainder = fullRemainder.leftPadding(toLength: unitDecimals, withPad: "0")
+        let remainderPadded = fullPaddedRemainder[0..<toDecimals]
+        if remainderPadded == String(repeating: "0", count: toDecimals) {
+            if quotient != 0 {
+                return String(quotient)
+            } else if fallbackToScientific {
+                var firstDigit = 0
+                for char in fullPaddedRemainder {
+                    if (char == "0") {
+                        firstDigit = firstDigit + 1;
+                    } else {
+                        firstDigit = firstDigit + 1;
+                        break
+                    }
+                }
+                return fullRemainder + "e-" + String(firstDigit)
+            }
+        }
+        if (toDecimals == 0) {
             return String(quotient)
         }
-        return String(quotient) + "." + remainderPadded
+        return String(quotient) + decimalSeparator + remainderPadded
     }
     
     static public func personalECRecover(_ personalMessage: String, signature: String) -> EthereumAddress? {
@@ -166,26 +216,28 @@ extension Web3.Utils {
         let sData = signature[32..<64].bytes
         let vData = signature[64]
         guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else {return nil}
-        var hash: Data
-        if personalMessage.count == 32 {
-            print("Most likely it's hash already, allow for now")
-            hash = personalMessage
-        } else {
-            guard let h = Web3.Utils.hashPersonalMessage(personalMessage) else {return nil}
-            hash = h
-        }
+        guard let hash = Web3.Utils.hashPersonalMessage(personalMessage) else {return nil}
         guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
         return Web3.Utils.publicToAddress(publicKey)
     }
     
+    static public func hashECRecover(hash: Data, signature: Data) -> EthereumAddress? {
+        if signature.count != 65 { return nil}
+        let rData = signature[0..<32].bytes
+        let sData = signature[32..<64].bytes
+        let vData = signature[64]
+        guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else {return nil}
+        guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
+        return Web3.Utils.publicToAddress(publicKey)
+    }
     
-    /// returns Ethereum varial of sha3 (keccak256) of data. Returns nil is data is empty
+    /// returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
     static public func keccak256(_ data: Data) -> Data? {
         if data.count == 0 {return nil}
         return data.sha3(.keccak256)
     }
     
-    /// returns Ethereum varial of sha3 (keccak256) of data. Returns nil is data is empty
+    /// returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
     static public func sha3(_ data: Data) -> Data? {
         if data.count == 0 {return nil}
         return data.sha3(.keccak256)
@@ -195,5 +247,28 @@ extension Web3.Utils {
     static public func sha256(_ data: Data) -> Data? {
         if data.count == 0 {return nil}
         return data.sha256()
+    }
+    
+    static func unmarshalSignature(signatureData:Data) -> SECP256K1.UnmarshaledSignature? {
+        if (signatureData.count != 65) {return nil}
+        let bytes = signatureData.bytes
+        let r = Array(bytes[0..<32])
+        let s = Array(bytes[32..<64])
+        return SECP256K1.UnmarshaledSignature(v: bytes[64], r: r, s: s)
+    }
+    
+    static func marshalSignature(v: UInt8, r: [UInt8], s: [UInt8]) -> Data? {
+        guard r.count == 32, s.count == 32 else {return nil}
+        var completeSignature = Data(bytes: r)
+        completeSignature.append(Data(bytes: s))
+        completeSignature.append(Data(bytes: [v]))
+        return completeSignature
+    }
+    
+    static func marshalSignature(unmarshalledSignature: SECP256K1.UnmarshaledSignature) -> Data? {
+        var completeSignature = Data(bytes: unmarshalledSignature.r)
+        completeSignature.append(Data(bytes: unmarshalledSignature.s))
+        completeSignature.append(Data(bytes: [unmarshalledSignature.v]))
+        return completeSignature
     }
 }

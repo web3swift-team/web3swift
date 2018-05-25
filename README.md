@@ -1,20 +1,21 @@
 ![bkx-foundation-github-swift](https://user-images.githubusercontent.com/3356474/34412791-5b58962c-ebf0-11e7-8460-5592b12e6e9d.png)
 
 ## Important notices
-With the version 0.3.0 API should be less volatile. All public functions should return a Result<>[https://github.com/antitypical/Result] instead of nil or throwing.
+With the version 0.3.0 API should be less volatile. All public functions should return a [Result](https://github.com/antitypical/Result) instead of `nil` or throwing.
 
-Example is not yet updated for 0.3.0, please use tests as an example for your code.
+Example is updated for 0.5.0, although please prefer to use tests as an example for your code.
 
 # web3swift
 
 [![Version](https://img.shields.io/cocoapods/v/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
+[![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0x6394b37Cf80A7358b38068f0CA4760ad49983a1B)
 
 - Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
 - Interaction with remote node via JSON RPC :thought_balloon:
 - Smart-contract ABI parsing :book:
-  - ABI deconding 
+  - ABI deconding (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
   - RLP encoding
 - Interactions (read/write to Smart contracts) :arrows_counterclockwise:
 - Local keystore management (geth compatible)
@@ -71,8 +72,7 @@ You can try it by yourself by running the example project:
 
 ### Requirements
 
-Web3swift requires Swift 4.0 and iOS 9.0 or macOS 10.13 although we recommend to use the latest iOS and MacOS versions for your own safety.
-
+Web3swift requires Swift 4.1 and iOS 9.0 or macOS 10.13 although we recommend to use the latest iOS and MacOS versions for your own safety. Don't forget to set iOS version i na Podfile, otherwise you get an error if deployment target is less than the latest SDK.
 
 ### Installation
 
@@ -90,19 +90,20 @@ pod 'web3swift', git: 'https://github.com/BANKEX/web3swift.git'
 - Check transaction results and get receipt
 - Parse event logs for transaction
 - Manage user's private keys through encrypted keystore abstractions
+- Batched requests in concurrent mode, checks balances of 580 tokens (from the latest MyEtherWallet repo) over 3 seconds
 
 ### Global plans
 - Full reference `web3js` functionality
 - Light Ethereum subprotocol (LES) integration
 
-## Special thanks to 
+## Special thanks to
 
 - Gnosis team and their library [Bivrost-swift](https://github.com/gnosis/bivrost-swift) for inspiration for the ABI decoding approach
 - [Trust iOS Wallet](https://github.com/TrustWallet/trust-wallet-ios) for collaboration and discussion for initial idea
-
+- Official Ethereum and Solidity docs, everything was written from ground truth standards
 ## Contribution
 
-For the latest version, please check [develop](https://github.com/BANKEX/web3swift/tree/develop) branch. 
+For the latest version, please check [develop](https://github.com/BANKEX/web3swift/tree/develop) branch.
 Changes from this branch will be merged into the [master](https://github.com/BANKEX/web3swift/tree/master) branch at some point.
 
 - If you want to contribute, submit a [pull request](https://github.com/BANKEX/web3swift/pulls) against a development `develop` branch.

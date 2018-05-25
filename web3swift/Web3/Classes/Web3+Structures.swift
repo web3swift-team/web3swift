@@ -52,6 +52,19 @@ public struct TransactionReceipt {
         case notYetProcessed
     }
     
+    public init(transactionHash: Data, blockHash: Data, blockNumber: BigUInt, transactionIndex: BigUInt, contractAddress: EthereumAddress?, cumulativeGasUsed: BigUInt, gasUsed: BigUInt, logs: [EventLog], status: TXStatus, logsBloom: EthereumBloomFilter?) {
+        self.transactionHash = transactionHash
+        self.blockHash = blockHash
+        self.blockNumber = blockNumber
+        self.transactionIndex = transactionIndex
+        self.contractAddress = contractAddress
+        self.cumulativeGasUsed = cumulativeGasUsed
+        self.gasUsed = gasUsed
+        self.logs = logs
+        self.status = status
+        self.logsBloom = logsBloom
+    }
+    
     public init? (_ json: [String: AnyObject]) {
         guard let th = json["transactionHash"] as? String else {return nil}
         guard let transactionHash = Data.fromHex(th) else {return nil}
@@ -65,7 +78,7 @@ public struct TransactionReceipt {
         guard let cgu = json["cumulativeGasUsed"] as? String else {return nil}
         guard let gu = json["gasUsed"] as? String else {return nil}
         guard let ls = json["logs"] as? Array<[String:AnyObject]> else {return nil}
-        guard let lbl = json["logsBloom"] as? String else {return nil}
+        let lbl = json["logsBloom"] as? String
         let st = json["status"] as? String
     
         guard let bnUnwrapped = BigUInt(bn.stripHexPrefix(), radix: 16) else {return nil}
@@ -92,10 +105,17 @@ public struct TransactionReceipt {
         } else {
             status = TXStatus.failed
         }
-        let logsData = Data.fromHex(lbl)
-        if logsData != nil && logsData!.count > 0 {
-            logsBloom = EthereumBloomFilter(logsData!)
+        if lbl != nil {
+            let logsData = Data.fromHex(lbl!)
+            if logsData != nil && logsData!.count > 0 {
+                logsBloom = EthereumBloomFilter(logsData!)
+            }
         }
+    }
+    
+    static func notProcessed(transactionHash: Data) -> TransactionReceipt {
+        let receipt = TransactionReceipt.init(transactionHash: transactionHash, blockHash: Data(), blockNumber: BigUInt(0), transactionIndex: BigUInt(0), contractAddress: nil, cumulativeGasUsed: BigUInt(0), gasUsed: BigUInt(0), logs: [EventLog](), status: .notYetProcessed, logsBloom: nil)
+        return receipt
     }
 }
 
@@ -311,7 +331,7 @@ public struct Block:Decodable {
 
 public struct EventParserResult:EventParserResultProtocol {
     public var eventName: String
-    public var transactionReceipt: TransactionReceipt
+    public var transactionReceipt: TransactionReceipt?
     public var contractAddress: EthereumAddress
     public var decodedResult: [String:Any]
 }

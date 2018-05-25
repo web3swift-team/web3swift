@@ -27,7 +27,7 @@ public class BIP32Keystore: AbstractKeystore {
         }
     }
     
-    public var isHDKeystore: Bool = false
+    public var isHDKeystore: Bool = true
     
     public func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data {
         if let key = self.paths.keyForValue(value: account) {
@@ -45,7 +45,7 @@ public class BIP32Keystore: AbstractKeystore {
     // --------------
     
     public var keystoreParams: KeystoreParamsBIP32?
-    public var mnemonics: String?
+//    public var mnemonics: String?
     public var paths: [String:EthereumAddress] = [String:EthereumAddress]()
     public var rootPrefix: String
     public convenience init?(_ jsonString: String) {
@@ -69,19 +69,14 @@ public class BIP32Keystore: AbstractKeystore {
         rootPrefix = keystoreParams!.rootPath!
     }
     
-//    public init? (mnemonics: String, password: String = "BANKEXFOUNDATION", mnemonicsPassword: String = "", language: BIP39Language = BIP39Language.english) throws {
-//        guard var seed = BIP39.seedFromMmemonics(mnemonics, password: mnemonicsPassword, language: language) else {throw AbstractKeystoreError.noEntropyError}
-//        guard let prefixNode = HDNode(seed: seed)?.derive(path: HDNode.defaultPathPrefix, derivePrivateKey: true) else {return nil}
-//        defer{ Data.zero(&seed) }
-//        self.mnemonics = mnemonics
-//        try createNewAccount(parentNode: prefixNode, password: password)
-//    }
-    
-    public init? (mnemonics: String, password: String = "BANKEXFOUNDATION", mnemonicsPassword: String = "", language: BIP39Language = BIP39Language.english, prefixPath: String = HDNode.defaultPathPrefix) throws {
+    public convenience init? (mnemonics: String, password: String = "BANKEXFOUNDATION", mnemonicsPassword: String = "", language: BIP39Language = BIP39Language.english, prefixPath: String = HDNode.defaultPathPrefix) throws {
         guard var seed = BIP39.seedFromMmemonics(mnemonics, password: mnemonicsPassword, language: language) else {throw AbstractKeystoreError.noEntropyError}
-        guard let prefixNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else {return nil}
         defer{ Data.zero(&seed) }
-        self.mnemonics = mnemonics
+        try self.init(seed: seed, password: password, prefixPath: prefixPath)
+    }
+    
+    public init? (seed: Data, password: String = "BANKEXFOUNDATION", prefixPath: String = HDNode.defaultPathPrefix) throws {
+        guard let prefixNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else {return nil}
         self.rootPrefix = prefixPath
         try createNewAccount(parentNode: prefixNode, password: password)
     }
@@ -182,11 +177,15 @@ public class BIP32Keystore: AbstractKeystore {
         }
         var keystorePars = KeystoreParamsBIP32(crypto: crypto, id: UUID().uuidString.lowercased(), version: 3)
         keystorePars.pathToAddress = pathToAddress
+        keystorePars.rootPath = self.rootPrefix
         keystoreParams = keystorePars
     }
     
     public func regenerate(oldPassword: String, newPassword: String, dkLen: Int=32, N: Int = 262144, R: Int = 8, P: Int = 1) throws {
         var keyData = try self.getPrefixNodeData(oldPassword)
+        if keyData == nil {
+            throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
+        }
         defer {Data.zero(&keyData!)}
         try self.encryptDataToStorage(newPassword, data: keyData!)
     }
@@ -249,5 +248,11 @@ public class BIP32Keystore: AbstractKeystore {
         guard decryptedPK != nil else {return nil}
         guard decryptedPK?.count == 82 else {return nil}
         return Data(bytes:decryptedPK!)
+    }
+    
+    public func serialize() throws -> Data? {
+        guard let params = self.keystoreParams else {return nil}
+        let data = try JSONEncoder().encode(params)
+        return data
     }
 }

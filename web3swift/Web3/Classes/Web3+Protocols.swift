@@ -14,7 +14,7 @@ public protocol Web3Provider {
     func send(request: JSONRPCrequest) -> [String:Any]?
     func send(requests: [JSONRPCrequest]) -> [[String: Any]?]?
     func sendWithRawResult(request: JSONRPCrequest) -> Data?
-    var network: Networks? {get}
+    var network: Networks? {get set}
     var attachedKeystoreManager: KeystoreManager? {get set}
     var url: URL {get}
 }
@@ -23,7 +23,7 @@ public protocol EventParserResultProtocol {
     var eventName: String {get}
     var decodedResult: [String:Any] {get}
     var contractAddress: EthereumAddress {get}
-    var transactionReceipt: TransactionReceipt {get}
+    var transactionReceipt: TransactionReceipt? {get}
 }
 
 public protocol EventParserProtocol {

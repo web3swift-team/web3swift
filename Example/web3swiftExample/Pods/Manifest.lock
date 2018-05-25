@@ -1,55 +1,57 @@
 PODS:
-  - Alamofire (4.6.0)
+  - Alamofire (4.7.2)
   - Alamofire-Synchronous (4.0.0):
     - Alamofire (~> 4.0)
-  - AwaitKit (3.0.1):
-    - PromiseKit (~> 4.2)
   - BigInt (3.0.1):
     - SipHash (~> 1.2)
-  - CryptoSwift (0.8.3)
+  - CryptoSwift (0.9.0)
   - libsodium (1.0.12)
-  - PromiseKit (4.5.2):
-    - PromiseKit/Foundation (= 4.5.2)
-    - PromiseKit/QuartzCore (= 4.5.2)
-    - PromiseKit/UIKit (= 4.5.2)
-  - PromiseKit/CorePromise (4.5.2)
-  - PromiseKit/Foundation (4.5.2):
-    - PromiseKit/CorePromise
-  - PromiseKit/QuartzCore (4.5.2):
-    - PromiseKit/CorePromise
-  - PromiseKit/UIKit (4.5.2):
-    - PromiseKit/CorePromise
-  - secp256k1_ios (0.1.1)
+  - Result (3.0.0)
+  - secp256k1_ios (0.1.3)
   - SipHash (1.2.0)
-  - web3swift (0.2.14):
-    - Alamofire (~> 4.5)
+  - web3swift (0.5.5):
+    - Alamofire (~> 4.7)
     - Alamofire-Synchronous (~> 4.0)
     - BigInt (~> 3.0.1)
-    - CryptoSwift
-    - libsodium
-    - secp256k1_ios (~> 0.1.1)
+    - CryptoSwift (~> 0.9.0)
+    - libsodium (~> 1.0.12)
+    - Result (~> 3.0.0)
+    - secp256k1_ios (~> 0.1.3)
 
 DEPENDENCIES:
-  - AwaitKit (~> 3.0.1)
-  - PromiseKit (~> 4.4)
-  - web3swift (from `../../`)
+  - web3swift (from `https://github.com/bankex/web3swift.git`)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Alamofire
+    - Alamofire-Synchronous
+    - BigInt
+    - CryptoSwift
+    - libsodium
+    - Result
+    - secp256k1_ios
+    - SipHash
 
 EXTERNAL SOURCES:
   web3swift:
-    :path: ../../
+    :git: https://github.com/bankex/web3swift.git
+
+CHECKOUT OPTIONS:
+  web3swift:
+    :commit: 72b40c0679a38b3b186669e22af5e1d79b398ac3
+    :git: https://github.com/bankex/web3swift.git
 
 SPEC CHECKSUMS:
-  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   Alamofire-Synchronous: eedf1e6e961c3795a63c74990b3f7d9fbfac7e50
-  AwaitKit: daf1af84544413a8dfadb4fc25d8b0f9706e5c83
   BigInt: 8e8a52161c745cd3ab78e3dc346a9fbee51e6cf6
-  CryptoSwift: 033efc3523865d19cc6ab6612fa17a62613b5dfa
+  CryptoSwift: bca8c5b653dcc2d9734409242a070ff53bafac86
   libsodium: 9a8faa5ef2fa0d2d57bd7f7d79bf8fb7c1a9f0ea
-  PromiseKit: 743e497a5f505a470d3bbbf4ce0663c1268af0a4
-  secp256k1_ios: 3c94e6cce14ff03924cb6dc10c5017f17011b79d
+  Result: 1b3e431f37cbcd3ad89c6aa9ab0ae55515fae3b6
+  secp256k1_ios: ac9ef04e761f43c58012b28548afa91493761f17
   SipHash: c6e9e43e9c531b5bc6602545130c26194a6d31ce
-  web3swift: 39787043f9867a4709ce2852f2b9b77543df5f46
+  web3swift: c495b050198367cc00393d974e6a756ac3c9b7c1
 
-PODFILE CHECKSUM: 5ca116ba7ac7ede430186cd1d2b7ef07870944f2
+PODFILE CHECKSUM: bdafe2b945771533e7dcc16ffe5f73ddd0d37406
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.0

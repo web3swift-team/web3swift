@@ -57,7 +57,7 @@ public struct JSONRPCrequest: Encodable, ParameterEncoding  {
                 return false
             }
             guard let method = self.method else {return false}
-            return method.requiredNumOfParameter == self.params?.params.count
+            return method.requiredNumOfParameters == self.params?.params.count
         }
     }
 }
@@ -79,13 +79,20 @@ public struct TransactionParameters: Codable {
     public var from: String
     public var gas: String?
     public var gasPrice: String?
-    public var to: String
+    public var to: String?
     public var value: String? = "0x0"
     
-    public init(from _from:String, to _to:String) {
+    public init(from _from:String, to _to:String?) {
         from = _from
         to = _to
     }
+}
+
+public struct EventFilterParameters: Codable {
+    public var fromBlock: String?
+    public var toBlock: String?
+    public var topics: [[String?]?]?
+    public var address: [String?]?
 }
 
 public struct JSONRPCparams: Encodable{
@@ -100,11 +107,9 @@ public struct JSONRPCparams: Encodable{
                 try container.encode(p)
             } else if let p = par as? Bool {
                 try container.encode(p)
+            } else if let p = par as? EventFilterParameters {
+                try container.encode(p)
             }
         }
     }
-}
-
-public struct JSONRPCparamsFabric {
-    
 }

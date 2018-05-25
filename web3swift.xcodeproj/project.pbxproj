@@ -45,6 +45,8 @@
 		41948140203630530065A83B /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1CA200CBB2200B6D3AB /* Array+Extension.swift */; };
 		41948141203630530065A83B /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2FF1FD7F30F0074282C /* String+Extension.swift */; };
 		472BBA099A26DFD47F33C2E0 /* Pods_web3swift_macOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 010A8466DD6C993827C11A71 /* Pods_web3swift_macOS_Tests.framework */; };
+		4EFFCB6E208552F2008165FE /* web3swift_local_node_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFFCB6D208552F2008165FE /* web3swift_local_node_Tests.swift */; };
+		4EFFCB70208554EB008165FE /* web3swift_remote_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFFCB6F208554EB008165FE /* web3swift_remote_Tests.swift */; };
 		8103BBB72076391F00499769 /* Web3+Concurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBB62076391F00499769 /* Web3+Concurrency.swift */; };
 		8103BBB82076391F00499769 /* Web3+Concurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBB62076391F00499769 /* Web3+Concurrency.swift */; };
 		8103BBBA20764A6900499769 /* Web3+DataFetchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBB920764A6900499769 /* Web3+DataFetchOperation.swift */; };
@@ -89,7 +91,6 @@
 		813FFF8D1FD82EEB006379A2 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2FF1FD7F30F0074282C /* String+Extension.swift */; };
 		81531AA01FE7C07A002192CC /* EthereumKeystoreV3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81531A9F1FE7C07A002192CC /* EthereumKeystoreV3.swift */; };
 		81531AA71FE7D8DB002192CC /* ERC20abi.json in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA31FE7CD74002192CC /* ERC20abi.json */; };
-		81531AA81FE7D8DB002192CC /* keystore.ks in Resources */ = {isa = PBXBuildFile; fileRef = 81531AA51FE7D2CE002192CC /* keystore.ks */; };
 		815630002007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81562FFF2007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift */; };
 		815630022007B53C00A0EC2F /* BIP32Keystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815630012007B53C00A0EC2F /* BIP32Keystore.swift */; };
 		815630042007BC8F00A0EC2F /* BIP39+WordLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815630032007BC8F00A0EC2F /* BIP39+WordLists.swift */; };
@@ -108,6 +109,8 @@
 		818D16D0204D42940084D2A4 /* Web3+EventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818D16CE204D42910084D2A4 /* Web3+EventParser.swift */; };
 		818D810E1FDC1A2000663CE3 /* RLP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818D810D1FDC1A2000663CE3 /* RLP.swift */; };
 		818EABDA1FDC9A5C00E013FC /* Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EABD91FDC9A5C00E013FC /* Contract.swift */; };
+		81BEDE1D20852F75002CD87D /* Web3+PersonalOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BEDE1C20852F75002CD87D /* Web3+PersonalOperations.swift */; };
+		81BEDE1E20852F75002CD87D /* Web3+PersonalOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BEDE1C20852F75002CD87D /* Web3+PersonalOperations.swift */; };
 		81C0FCF220440EB500D82FAF /* Web3+Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF120440EB500D82FAF /* Web3+Protocols.swift */; };
 		81C0FCF420440F0900D82FAF /* Web3+Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF320440F0900D82FAF /* Web3+Options.swift */; };
 		81C0FCF720441A1D00D82FAF /* TransactionSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF520440F9900D82FAF /* TransactionSigner.swift */; };
@@ -141,7 +144,15 @@
 		81C5DA2F2074EBF500424CD6 /* ContractABIv2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C5DA2D2074EBF500424CD6 /* ContractABIv2.swift */; };
 		81C5DA312074EC1E00424CD6 /* ContractProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C5DA302074EC1E00424CD6 /* ContractProtocol.swift */; };
 		81C5DA322074EC1E00424CD6 /* ContractProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C5DA302074EC1E00424CD6 /* ContractProtocol.swift */; };
+		81D7D97220A31FB700A193EC /* ComparisonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97120A31FB700A193EC /* ComparisonExtensions.swift */; };
+		81D7D97320A31FB700A193EC /* ComparisonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97120A31FB700A193EC /* ComparisonExtensions.swift */; };
+		81D7D97520A3240900A193EC /* EthereumFilterEncodingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97420A3240900A193EC /* EthereumFilterEncodingExtensions.swift */; };
+		81D7D97620A3240900A193EC /* EthereumFilterEncodingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97420A3240900A193EC /* EthereumFilterEncodingExtensions.swift */; };
+		81D7D97820A61E3800A193EC /* EventFiltering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97720A61E3800A193EC /* EventFiltering.swift */; };
+		81D7D97920A61E3800A193EC /* EventFiltering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97720A61E3800A193EC /* EventFiltering.swift */; };
 		81DDECCF1FDF004E0063684A /* Web3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECCE1FDF004E0063684A /* Web3.swift */; };
+		81EB1E4B208173D7003BD47F /* Web3+Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EB1E4A208173D7003BD47F /* Web3+Personal.swift */; };
+		81EB1E4C208173D7003BD47F /* Web3+Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EB1E4A208173D7003BD47F /* Web3+Personal.swift */; };
 		81FA43F62044097100EE14D5 /* web3swift_macOS_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA43F52044097100EE14D5 /* web3swift_macOS_Tests.swift */; };
 		81FA43F82044097100EE14D5 /* web3swift_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 417715D420362916005C3E16 /* web3swift_macOS.framework */; };
 		81FB21EE2077D98A007F9A83 /* SynchronizedQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21ED2077D98A007F9A83 /* SynchronizedQueue.swift */; };
@@ -154,6 +165,8 @@
 		81FB21FF207BB297007F9A83 /* EIP67Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F8207BA78B007F9A83 /* EIP67Code.swift */; };
 		81FB2201207BC58C007F9A83 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2200207BC58B007F9A83 /* CoreImage.framework */; };
 		81FB2203207BC6DB007F9A83 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2202207BC6DB007F9A83 /* ImageIO.framework */; };
+		81FB2207207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */ = {isa = PBXBuildFile; fileRef = 81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */; };
+		81FB2208207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */ = {isa = PBXBuildFile; fileRef = 81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */; };
 		A4733E6E22E6216A90CCEA33 /* Pods_web3swift_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC4A49B538D672F4DA112A11 /* Pods_web3swift_macOS.framework */; };
 /* End PBXBuildFile section */
 
@@ -192,6 +205,8 @@
 		391A0D2EF42488E5C8AB2F71 /* Pods_web3swift_osx_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_osx_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		417715D420362916005C3E16 /* web3swift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = web3swift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		419481432036338A0065A83B /* Pods_web3swift_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_web3swift_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4EFFCB6D208552F2008165FE /* web3swift_local_node_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_local_node_Tests.swift; sourceTree = "<group>"; };
+		4EFFCB6F208554EB008165FE /* web3swift_remote_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_remote_Tests.swift; sourceTree = "<group>"; };
 		5A31D55232599E417B6F862E /* Pods-web3swift-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-iOS/Pods-web3swift-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		5B83FA95B72D7DA53870479B /* Pods-web3swift-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS/Pods-web3swift-macOS.release.xcconfig"; sourceTree = "<group>"; };
 		613A9CE29320FF136EC8903D /* Pods_web3swift_iOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_iOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -228,7 +243,6 @@
 		8125F06820499AC300A0F2FE /* BloomFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomFilter.swift; sourceTree = "<group>"; };
 		81531A9F1FE7C07A002192CC /* EthereumKeystoreV3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumKeystoreV3.swift; sourceTree = "<group>"; };
 		81531AA31FE7CD74002192CC /* ERC20abi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ERC20abi.json; sourceTree = "<group>"; };
-		81531AA51FE7D2CE002192CC /* keystore.ks */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = keystore.ks; sourceTree = "<group>"; };
 		81562FFF2007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP32KeystoreJSONStructure.swift; sourceTree = "<group>"; };
 		815630012007B53C00A0EC2F /* BIP32Keystore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP32Keystore.swift; sourceTree = "<group>"; };
 		815630032007BC8F00A0EC2F /* BIP39+WordLists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BIP39+WordLists.swift"; sourceTree = "<group>"; };
@@ -247,6 +261,7 @@
 		818D16CE204D42910084D2A4 /* Web3+EventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+EventParser.swift"; sourceTree = "<group>"; };
 		818D810D1FDC1A2000663CE3 /* RLP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RLP.swift; sourceTree = "<group>"; };
 		818EABD91FDC9A5C00E013FC /* Contract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contract.swift; sourceTree = "<group>"; };
+		81BEDE1C20852F75002CD87D /* Web3+PersonalOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+PersonalOperations.swift"; sourceTree = "<group>"; };
 		81C0FCEF20440C3600D82FAF /* Web3+Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+Wallet.swift"; sourceTree = "<group>"; };
 		81C0FCF120440EB500D82FAF /* Web3+Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Protocols.swift"; sourceTree = "<group>"; };
 		81C0FCF320440F0900D82FAF /* Web3+Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Options.swift"; sourceTree = "<group>"; };
@@ -266,7 +281,11 @@
 		81C5DA2A2074CA1400424CD6 /* ABIv2Decoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABIv2Decoding.swift; sourceTree = "<group>"; };
 		81C5DA2D2074EBF500424CD6 /* ContractABIv2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractABIv2.swift; sourceTree = "<group>"; };
 		81C5DA302074EC1E00424CD6 /* ContractProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractProtocol.swift; sourceTree = "<group>"; };
+		81D7D97120A31FB700A193EC /* ComparisonExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonExtensions.swift; sourceTree = "<group>"; };
+		81D7D97420A3240900A193EC /* EthereumFilterEncodingExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumFilterEncodingExtensions.swift; sourceTree = "<group>"; };
+		81D7D97720A61E3800A193EC /* EventFiltering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFiltering.swift; sourceTree = "<group>"; };
 		81DDECCE1FDF004E0063684A /* Web3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3.swift; sourceTree = "<group>"; };
+		81EB1E4A208173D7003BD47F /* Web3+Personal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Personal.swift"; sourceTree = "<group>"; };
 		81FA43F32044097000EE14D5 /* web3swift-macOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "web3swift-macOS_Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81FA43F52044097100EE14D5 /* web3swift_macOS_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_macOS_Tests.swift; sourceTree = "<group>"; };
 		81FA43F72044097100EE14D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -276,6 +295,7 @@
 		81FB21F8207BA78B007F9A83 /* EIP67Code.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIP67Code.swift; sourceTree = "<group>"; };
 		81FB2200207BC58B007F9A83 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		81FB2202207BC6DB007F9A83 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bankex-foundation-logo-coin.png"; sourceTree = "<group>"; };
 		A9ADDE40292A17C21B8D5516 /* Pods-web3swift-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-iOS/Pods-web3swift-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		B48CA58D134401D3C4E8CCC5 /* Pods_Web3Swift_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Web3Swift_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -352,6 +372,7 @@
 		1CD91AFE1FD76910007BFB45 /* web3swift */ = {
 			isa = PBXGroup;
 			children = (
+				81FB2204207BCFD9007F9A83 /* Resources */,
 				8103BBB4207638F800499769 /* Concurrency */,
 				81C5DA082072542300424CD6 /* ABIv2 */,
 				81C0FCED20440BDF00D82FAF /* HookedFunctions */,
@@ -372,8 +393,9 @@
 			isa = PBXGroup;
 			children = (
 				81531AA31FE7CD74002192CC /* ERC20abi.json */,
-				81531AA51FE7D2CE002192CC /* keystore.ks */,
 				1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */,
+				4EFFCB6F208554EB008165FE /* web3swift_remote_Tests.swift */,
+				4EFFCB6D208552F2008165FE /* web3swift_local_node_Tests.swift */,
 				1CD91B331FD769A6007BFB45 /* Info.plist */,
 			);
 			path = web3swiftTests;
@@ -426,6 +448,7 @@
 				8103BBC52077954200499769 /* Web3+TransactionOperations.swift */,
 				8103BBC820779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift */,
 				81FB21F3207814F7007F9A83 /* Web3+EventOperations.swift */,
+				81BEDE1C20852F75002CD87D /* Web3+PersonalOperations.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -525,6 +548,9 @@
 				818EABD91FDC9A5C00E013FC /* Contract.swift */,
 				81C5DA2D2074EBF500424CD6 /* ContractABIv2.swift */,
 				81C5DA302074EC1E00424CD6 /* ContractProtocol.swift */,
+				81D7D97120A31FB700A193EC /* ComparisonExtensions.swift */,
+				81D7D97420A3240900A193EC /* EthereumFilterEncodingExtensions.swift */,
+				81D7D97720A61E3800A193EC /* EventFiltering.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -555,6 +581,7 @@
 				81C0FCFC20449D1400D82FAF /* Web3+TransactionIntermediate.swift */,
 				818D16CE204D42910084D2A4 /* Web3+EventParser.swift */,
 				81FB21F02078142D007F9A83 /* Web3+Deprecated.swift */,
+				81EB1E4A208173D7003BD47F /* Web3+Personal.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -634,6 +661,22 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		81FB2204207BCFD9007F9A83 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				81FB2205207BCFE4007F9A83 /* Classes */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		81FB2205207BCFE4007F9A83 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		868F9682FE77A7BADF675F92 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -678,7 +721,6 @@
 				1CD91AF81FD76910007BFB45 /* Frameworks */,
 				1CD91AF91FD76910007BFB45 /* Headers */,
 				1CD91AFA1FD76910007BFB45 /* Resources */,
-				135EA46F18D71F0443C8BA58 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -698,7 +740,6 @@
 				1CD91B2C1FD769A6007BFB45 /* Frameworks */,
 				1CD91B2D1FD769A6007BFB45 /* Resources */,
 				48322606683D458C51615DF4 /* [CP] Embed Pods Frameworks */,
-				0C789EA4C3CD1751EC8F0066 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -719,7 +760,6 @@
 				417715D020362916005C3E16 /* Frameworks */,
 				417715D120362916005C3E16 /* Headers */,
 				417715D220362916005C3E16 /* Resources */,
-				FEB2C4DB5D16966EBFA7450F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -739,7 +779,6 @@
 				81FA43F02044097000EE14D5 /* Frameworks */,
 				81FA43F12044097000EE14D5 /* Resources */,
 				4272A8167B31CAB015D9817A /* [CP] Embed Pods Frameworks */,
-				DF828C79527B2FCF90B8A626 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -806,6 +845,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81FB2207207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -814,7 +854,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				81531AA71FE7D8DB002192CC /* ERC20abi.json in Resources */,
-				81531AA81FE7D8DB002192CC /* keystore.ks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -822,6 +861,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81FB2208207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -851,36 +891,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		0C789EA4C3CD1751EC8F0066 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-web3swift-iOS_Tests/Pods-web3swift-iOS_Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		135EA46F18D71F0443C8BA58 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-web3swift-iOS/Pods-web3swift-iOS-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4272A8167B31CAB015D9817A /* [CP] Embed Pods Frameworks */ = {
@@ -1001,36 +1011,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DF828C79527B2FCF90B8A626 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-web3swift-macOS_Tests/Pods-web3swift-macOS_Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FEB2C4DB5D16966EBFA7450F /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-web3swift-macOS/Pods-web3swift-macOS-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1051,6 +1031,8 @@
 				810B0F9A1FEC446B00CF0DA2 /* Web3+JSONRPC.swift in Sources */,
 				8125F0662047D9FF00A0F2FE /* ABIEncoder.swift in Sources */,
 				8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */,
+				81EB1E4B208173D7003BD47F /* Web3+Personal.swift in Sources */,
+				81D7D97520A3240900A193EC /* EthereumFilterEncodingExtensions.swift in Sources */,
 				817EBB122004FE2F00E02EAA /* BIP32HDNode.swift in Sources */,
 				8113D2C41FD7E1590074282C /* CryptoExtensions.swift in Sources */,
 				8103BBB72076391F00499769 /* Web3+Concurrency.swift in Sources */,
@@ -1058,7 +1040,9 @@
 				817EBB2920075D2E00E02EAA /* BIP39.swift in Sources */,
 				815630022007B53C00A0EC2F /* BIP32Keystore.swift in Sources */,
 				818ABD5B1FE95F8F002657BB /* Web3+Instance.swift in Sources */,
+				81D7D97220A31FB700A193EC /* ComparisonExtensions.swift in Sources */,
 				817EBB27200673D100E02EAA /* KeystoreV3JSONStructure.swift in Sources */,
+				81BEDE1D20852F75002CD87D /* Web3+PersonalOperations.swift in Sources */,
 				8103BBBD207654B900499769 /* Web3+ConversionOperations.swift in Sources */,
 				81C5DA11207254F600424CD6 /* ABIv2.swift in Sources */,
 				8103BBC62077954200499769 /* Web3+TransactionOperations.swift in Sources */,
@@ -1072,6 +1056,7 @@
 				81C5DA16207261C800424CD6 /* ABIRecordParser.swift in Sources */,
 				81C5DA282072E18200424CD6 /* NativeTypesEncoding+Extensions.swift in Sources */,
 				8123E1C7200CBAC200B6D3AB /* Dictionary+Extension.swift in Sources */,
+				81D7D97820A61E3800A193EC /* EventFiltering.swift in Sources */,
 				8103BBC920779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift in Sources */,
 				81FB21F12078142D007F9A83 /* Web3+Deprecated.swift in Sources */,
 				810B0F9C1FEC520500CF0DA2 /* Web3+Methods.swift in Sources */,
@@ -1113,6 +1098,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EFFCB70208554EB008165FE /* web3swift_remote_Tests.swift in Sources */,
+				4EFFCB6E208552F2008165FE /* web3swift_local_node_Tests.swift in Sources */,
 				1CD91B321FD769A6007BFB45 /* web3swiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1134,6 +1121,8 @@
 				41948124203630530065A83B /* Web3+Structures.swift in Sources */,
 				8125F0672047D9FF00A0F2FE /* ABIEncoder.swift in Sources */,
 				41948125203630530065A83B /* Web3+Methods.swift in Sources */,
+				81EB1E4C208173D7003BD47F /* Web3+Personal.swift in Sources */,
+				81D7D97620A3240900A193EC /* EthereumFilterEncodingExtensions.swift in Sources */,
 				41948126203630530065A83B /* Web3+Eth.swift in Sources */,
 				8103BBB82076391F00499769 /* Web3+Concurrency.swift in Sources */,
 				81C5DA262072E14E00424CD6 /* ABIv2Encoding.swift in Sources */,
@@ -1141,7 +1130,9 @@
 				41948129203630530065A83B /* ABITypes.swift in Sources */,
 				4194812B203630530065A83B /* RLP.swift in Sources */,
 				4194812C203630530065A83B /* KeystoreManager.swift in Sources */,
+				81D7D97320A31FB700A193EC /* ComparisonExtensions.swift in Sources */,
 				8103BBBE207654B900499769 /* Web3+ConversionOperations.swift in Sources */,
+				81BEDE1E20852F75002CD87D /* Web3+PersonalOperations.swift in Sources */,
 				81C5DA12207254F600424CD6 /* ABIv2.swift in Sources */,
 				8103BBC72077954200499769 /* Web3+TransactionOperations.swift in Sources */,
 				4194812D203630530065A83B /* EthereumAddress.swift in Sources */,
@@ -1155,6 +1146,7 @@
 				81C5DA292072E18200424CD6 /* NativeTypesEncoding+Extensions.swift in Sources */,
 				41948130203630530065A83B /* BIP32Keystore.swift in Sources */,
 				8103BBCA20779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift in Sources */,
+				81D7D97920A61E3800A193EC /* EventFiltering.swift in Sources */,
 				81FB21F22078142D007F9A83 /* Web3+Deprecated.swift in Sources */,
 				41948131203630530065A83B /* BIP32KeystoreJSONStructure.swift in Sources */,
 				41948132203630530065A83B /* BIP32HDNode.swift in Sources */,
