@@ -72,7 +72,7 @@ You can try it by yourself by running the example project:
 
 ### Requirements
 
-Web3swift requires Swift 4.1 and iOS 9.0 or macOS 10.13 although we recommend to use the latest iOS and MacOS versions for your own safety. Don't forget to set iOS version i na Podfile, otherwise you get an error if deployment target is less than the latest SDK.
+Web3swift requires Swift 4.1 and iOS 9.0 or macOS 10.13 although we recommend to use the latest iOS and MacOS versions for your own safety. Don't forget to set iOS version in a Podfile, otherwise you get an error if deployment target is less than the latest SDK.
 
 ### Installation
 
@@ -113,7 +113,7 @@ Changes from this branch will be merged into the [master](https://github.com/BAN
 
 ## Appreciation
 
-When using this pod references to this repo, [Bankex](http://bankex.com) and [Bankex Foundation](http://bankexfoundation.org) are appreciated.
+When using this pod references to this repo, [BANKEX](http://bankex.com) and [BANKEX Foundation](http://bankexfoundation.org) are appreciated.
 
 ## Authors
 

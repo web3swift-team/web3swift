@@ -14,6 +14,8 @@ public typealias Web3Utils = Web3.Utils
 
 extension Web3 {
     public struct Utils {
+        
+        typealias Iban = IBAN
     }
 }
 

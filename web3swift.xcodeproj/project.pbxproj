@@ -94,6 +94,8 @@
 		815630002007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81562FFF2007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift */; };
 		815630022007B53C00A0EC2F /* BIP32Keystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815630012007B53C00A0EC2F /* BIP32Keystore.swift */; };
 		815630042007BC8F00A0EC2F /* BIP39+WordLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815630032007BC8F00A0EC2F /* BIP39+WordLists.swift */; };
+		8160E5CE20B8245A0070070B /* IBAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8160E5CD20B8245A0070070B /* IBAN.swift */; };
+		8160E5CF20B8245A0070070B /* IBAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8160E5CD20B8245A0070070B /* IBAN.swift */; };
 		817EBB102004FE2800E02EAA /* EthereumAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */; };
 		817EBB122004FE2F00E02EAA /* BIP32HDNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB112004FE2F00E02EAA /* BIP32HDNode.swift */; };
 		817EBB162004FE4200E02EAA /* Web3+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */; };
@@ -247,6 +249,7 @@
 		815630012007B53C00A0EC2F /* BIP32Keystore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP32Keystore.swift; sourceTree = "<group>"; };
 		815630032007BC8F00A0EC2F /* BIP39+WordLists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BIP39+WordLists.swift"; sourceTree = "<group>"; };
 		815630052008A64C00A0EC2F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		8160E5CD20B8245A0070070B /* IBAN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IBAN.swift; sourceTree = "<group>"; };
 		817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EthereumAddress.swift; sourceTree = "<group>"; };
 		817EBB112004FE2F00E02EAA /* BIP32HDNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BIP32HDNode.swift; sourceTree = "<group>"; };
 		817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+HttpProvider.swift"; sourceTree = "<group>"; };
@@ -491,6 +494,7 @@
 				81531A9F1FE7C07A002192CC /* EthereumKeystoreV3.swift */,
 				817EBB26200673D100E02EAA /* KeystoreV3JSONStructure.swift */,
 				8103BBCB2077B84400499769 /* PlainKeystore.swift */,
+				8160E5CD20B8245A0070070B /* IBAN.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1057,6 +1061,7 @@
 				81C5DA282072E18200424CD6 /* NativeTypesEncoding+Extensions.swift in Sources */,
 				8123E1C7200CBAC200B6D3AB /* Dictionary+Extension.swift in Sources */,
 				81D7D97820A61E3800A193EC /* EventFiltering.swift in Sources */,
+				8160E5CE20B8245A0070070B /* IBAN.swift in Sources */,
 				8103BBC920779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift in Sources */,
 				81FB21F12078142D007F9A83 /* Web3+Deprecated.swift in Sources */,
 				810B0F9C1FEC520500CF0DA2 /* Web3+Methods.swift in Sources */,
@@ -1147,6 +1152,7 @@
 				41948130203630530065A83B /* BIP32Keystore.swift in Sources */,
 				8103BBCA20779E2200499769 /* Web3+TransactionAndBlockDetailsOperations.swift in Sources */,
 				81D7D97920A61E3800A193EC /* EventFiltering.swift in Sources */,
+				8160E5CF20B8245A0070070B /* IBAN.swift in Sources */,
 				81FB21F22078142D007F9A83 /* Web3+Deprecated.swift in Sources */,
 				41948131203630530065A83B /* BIP32KeystoreJSONStructure.swift in Sources */,
 				41948132203630530065A83B /* BIP32HDNode.swift in Sources */,
