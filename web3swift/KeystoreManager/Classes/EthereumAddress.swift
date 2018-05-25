@@ -100,4 +100,13 @@ public struct EthereumAddress: Equatable {
     public static func contractDeploymentAddress() -> EthereumAddress {
         return EthereumAddress("0x", type: .contractDeployment)!
     }
+    
+//    public static func fromIBAN(_ iban: String) -> EthereumAddress {
+//
+//    }
+    
 }
+
+
+
+

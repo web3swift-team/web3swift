@@ -2339,6 +2339,20 @@ class web3swiftTests: XCTestCase {
         XCTAssert(formatted == "-1,1000")
     }
     
+    func testIBANcreation() {
+        let iban = "XE7338O073KYGTWWZN0F2WZ0R8PX5ZPPZS"
+        let native = Web3.Utils.Iban(iban)
+        XCTAssert(native != nil)
+        let expectedAddress = "0x00c5496aEe77C1bA1f0854206A26DdA82a81D6D8"
+        let createdAddress = native?.toEthereumAddress()?.address
+        XCTAssert(createdAddress == expectedAddress)
+        
+        let address = EthereumAddress("0x03c5496aee77c1ba1f0854206a26dda82a81d6d8")!
+        let fromAddress = Web3.Utils.Iban(address)
+        let ibn = fromAddress?.iban
+        XCTAssert(ibn == "XE83FUTTUNPK7WZJSGGCWVEBARQWQ8YML4")
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
