@@ -17,7 +17,7 @@ extension web3.BrowserFunctions {
         case .failure(_):
             return nil
         case .success(let accounts):
-            return accounts.flatMap({$0.address})
+            return accounts.compactMap({$0.address})
         }
     }
     
@@ -40,7 +40,7 @@ extension web3.BrowserFunctions {
         do {
             guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {return nil}
             
-            guard let signature = try Web3Signer.signPersonalMessage(personalMessage, keystore: keystoreManager, account: EthereumAddress(account), password: password) else {return nil}
+            guard let signature = try Web3Signer.signPersonalMessage(personalMessage, keystore: keystoreManager, account: EthereumAddress(account)!, password: password) else {return nil}
             guard let sender = self.personalECRecover(personalMessage, signature: signature) else {return nil}
             print(sender)
             if sender.lowercased() != account.lowercased() {

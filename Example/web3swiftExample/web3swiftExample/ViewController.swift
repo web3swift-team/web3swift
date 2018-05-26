@@ -49,13 +49,13 @@ class ViewController: UIViewController {
         
         // BKX TOKEN
         let web3Main = Web3.InfuraMainnetWeb3()
-        let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
-        let constractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+        let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        let constractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!
         let gasPriceResult = web3Main.eth.getGasPrice()
         guard case .success(let gasPrice) = gasPriceResult else {return}
         var options = Web3Options.defaultOptions()
         options.gasPrice = gasPrice
-        options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
+        options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")!
         let parameters = [] as [AnyObject]
         
         web3Main.addKeystoreManager(keystoreManager)
@@ -72,7 +72,7 @@ class ViewController: UIViewController {
         // Test token transfer on Rinkeby
         
         
-        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"))
+        var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!)
         eip67Data.gasLimit = BigUInt(21000)
         eip67Data.amount = BigUInt("1000000000000000000")
         //        eip67Data.data =
@@ -95,12 +95,12 @@ class ViewController: UIViewController {
         options.gasLimit = estimatedGas
         var intermediateSend = web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress, abiVersion: 2)!.method(options: options)!
         let sendResult = intermediateSend.send(password: "BANKEXFOUNDATION")
-        let derivedSender = intermediateSend.transaction.sender
-        if (derivedSender?.address != sender.address) {
-            print(derivedSender!.address)
-            print(sender.address)
-            print("Address mismatch")
-        }
+//        let derivedSender = intermediateSend.transaction.sender
+//        if (derivedSender?.address != sender.address) {
+//            print(derivedSender!.address)
+//            print(sender.address)
+//            print("Address mismatch")
+//        }
         guard case .success(let sendingResult) = sendResult else {return}
         let txid = sendingResult["txhash"]
         print("On Rinkeby TXid = " + txid!)
@@ -123,14 +123,30 @@ class ViewController: UIViewController {
         var tokenTransferOptions = Web3Options.defaultOptions()
         tokenTransferOptions.gasPrice = gasPriceRinkeby
         tokenTransferOptions.from = ks?.addresses?.first!
-        let testToken = web3Rinkeby.contract(Web3.Utils.erc20ABI, at: EthereumAddress("0xa407dd0cbc9f9d20cdbd557686625e586c85b20a"), abiVersion: 2)!
-        let intermediateForTokenTransfer = testToken.method("transfer", parameters: [EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B"), BigUInt(1)] as [AnyObject], options: tokenTransferOptions)!
+        let testToken = web3Rinkeby.contract(Web3.Utils.erc20ABI, at: EthereumAddress("0xa407dd0cbc9f9d20cdbd557686625e586c85b20a")!, abiVersion: 2)!
+        let intermediateForTokenTransfer = testToken.method("transfer", parameters: [EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!, BigUInt(1)] as [AnyObject], options: tokenTransferOptions)!
         let gasEstimateResult = intermediateForTokenTransfer.estimateGas(options: nil)
         guard case .success(let gasEstimate) = gasEstimateResult else {return}
         var optionsWithCustomGasLimit = Web3Options()
         optionsWithCustomGasLimit.gasLimit = gasEstimate
         let tokenTransferResult = intermediateForTokenTransfer.send(password: "BANKEXFOUNDATION", options: optionsWithCustomGasLimit)
         switch tokenTransferResult {
+        case .success(let res):
+            print("Token transfer successful")
+            print(res)
+        case .failure(let error):
+            print(error)
+        }
+        
+        //Send ERC20 on Rinkeby using a convenience function
+        var convenienceTransferOptions = Web3Options.defaultOptions()
+        convenienceTransferOptions.gasPrice = gasPriceRinkeby
+        let convenienceTokenTransfer = web3Rinkeby.eth.sendERC20tokensWithNaturalUnits(tokenAddress: EthereumAddress("0xa407dd0cbc9f9d20cdbd557686625e586c85b20a")!, from: (ks?.addresses?.first!)!, to: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!, amount: "0.0001", options: convenienceTransferOptions)
+        let gasEstimateResult2 = convenienceTokenTransfer!.estimateGas(options: nil)
+        guard case .success(let gasEstimate2) = gasEstimateResult2 else {return}
+        convenienceTransferOptions.gasLimit = gasEstimate2
+        let convenienceTransferResult = convenienceTokenTransfer!.send(password: "BANKEXFOUNDATION", options: convenienceTransferOptions)
+        switch convenienceTransferResult {
         case .success(let res):
             print("Token transfer successful")
             print(res)
@@ -145,7 +161,7 @@ class ViewController: UIViewController {
         
 //                Send mutating transaction taking parameters
         let testABIonRinkeby = "[{\"constant\":true,\"inputs\":[],\"name\":\"counter\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_value\",\"type\":\"uint8\"}],\"name\":\"increaseCounter\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
-        let deployedTestAddress = EthereumAddress("0x1e528b190b6acf2d7c044141df775c7a79d68eba")
+        let deployedTestAddress = EthereumAddress("0x1e528b190b6acf2d7c044141df775c7a79d68eba")!
         options = Web3Options.defaultOptions()
         options.gasLimit = BigUInt(100000)
         options.value = BigUInt(0)

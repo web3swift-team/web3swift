@@ -9,6 +9,7 @@
 import Foundation
 import BigInt
 
+@available(*, deprecated)
 public struct Contract:ContractProtocol {
     
     public var allEvents: [String] {
@@ -205,5 +206,13 @@ public struct Contract:ContractProtocol {
     
     public func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool? {
         return false
+    }
+    
+    public func decodeInputData(_ method: String, data: Data) -> [String : Any]? {
+        return nil
+    }
+    
+    public func decodeInputData(_ data: Data) -> [String : Any]? {
+        return nil
     }
 }

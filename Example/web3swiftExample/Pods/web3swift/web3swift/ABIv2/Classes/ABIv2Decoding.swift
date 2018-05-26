@@ -15,7 +15,7 @@ public struct ABIv2Decoder {
 
 extension ABIv2Decoder {
     public static func decode(types: [ABIv2.Element.InOut], data: Data) -> [AnyObject]? {
-        let params = types.flatMap { (el) -> ABIv2.Element.ParameterType in
+        let params = types.compactMap { (el) -> ABIv2.Element.ParameterType in
             return el.type
         }
         return decode(types: params, data: data)
@@ -196,7 +196,21 @@ extension ABIv2Decoder {
         } else {
             guard data.count >= pointer + type.memoryUsage else {return (nil, nil)}
             let dataSlice = data[pointer ..< pointer + type.memoryUsage]
-            let elementPointer = UInt64(BigUInt(dataSlice))
+            let bn = BigUInt(dataSlice)
+            if bn > UINT64_MAX || bn >= data.count {
+                // there are ERC20 contracts that use bytes32 intead of string. Let's be optimistic and return some data
+                if case .string = type {
+                    let nextElement = pointer + type.memoryUsage
+                    let preambula = BigUInt(32).abiEncode(bits: 256)!
+                    return (preambula + Data(dataSlice), nextElement)
+                } else if case .dynamicBytes = type {
+                    let nextElement = pointer + type.memoryUsage
+                    let preambula = BigUInt(32).abiEncode(bits: 256)!
+                    return (preambula + Data(dataSlice), nextElement)
+                }
+                return (nil, nil)
+            }
+            let elementPointer = UInt64(bn)
             let elementItself = data[elementPointer ..< UInt64(data.count)]
             let nextElement = pointer + type.memoryUsage
 //            print("Got element itself: \n" + elementItself.toHexString())
@@ -213,16 +227,16 @@ extension ABIv2Decoder {
         eventContent["name"]=event.name
         let logs = eventLog.topics
         let dataForProcessing = eventLog.data
-        if (logs.count == 1 && event.inputs.count > 0) {
-            return nil
-        }
         let indexedInputs = event.inputs.filter { (inp) -> Bool in
             return inp.indexed
+        }
+        if (logs.count == 1 && indexedInputs.count > 0) {
+            return nil
         }
         let nonIndexedInputs = event.inputs.filter { (inp) -> Bool in
             return !inp.indexed
         }
-        let nonIndexedTypes = nonIndexedInputs.flatMap { (inp) -> ABIv2.Element.ParameterType in
+        let nonIndexedTypes = nonIndexedInputs.compactMap { (inp) -> ABIv2.Element.ParameterType in
             return inp.type
         }
         guard logs.count == indexedInputs.count + 1 else {return nil}

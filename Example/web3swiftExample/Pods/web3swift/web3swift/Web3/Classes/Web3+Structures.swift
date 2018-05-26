@@ -132,7 +132,8 @@ public struct EventLog {
         guard let li = json["logIndex"] as? String else {return nil}
         guard let rm = json["removed"] as? Int else {return nil}
         guard let tpc = json["topics"] as? [String] else {return nil}
-        address = EthereumAddress(ad)
+        guard let addr = EthereumAddress(ad) else {return nil}
+        address = addr
         data = Data.fromHex(d)!
         guard let liUnwrapped = BigUInt(li.stripHexPrefix(), radix: 16) else {return nil}
         logIndex = liUnwrapped
@@ -288,8 +289,8 @@ public struct Block:Decodable {
         let minerAddress = try? container.decode(String.self, forKey: .miner)
         var miner:EthereumAddress?
         if minerAddress != nil {
-            miner = EthereumAddress(minerAddress!)
-            guard miner!.isValid else {throw Web3Error.dataError}
+            guard let minr = EthereumAddress(minerAddress!) else {throw Web3Error.dataError}
+            miner = minr
         }
         self.miner = miner
         
@@ -331,7 +332,7 @@ public struct Block:Decodable {
 
 public struct EventParserResult:EventParserResultProtocol {
     public var eventName: String
-    public var transactionReceipt: TransactionReceipt
+    public var transactionReceipt: TransactionReceipt?
     public var contractAddress: EthereumAddress
     public var decodedResult: [String:Any]
 }
