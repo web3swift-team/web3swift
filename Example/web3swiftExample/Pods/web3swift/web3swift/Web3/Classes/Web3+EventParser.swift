@@ -26,6 +26,9 @@ extension web3.web3contract {
         }
         
         public func parseBlockByNumber(_ blockNumber: UInt64) -> Result<[EventParserResultProtocol], Web3Error> {
+            if self.filter != nil && (self.filter?.fromBlock != nil || self.filter?.toBlock != nil) {
+                return Result([EventParserResultProtocol]())
+            }
             let response = web3.eth.getBlockByNumber(blockNumber)
             switch response {
             case .success(let block):
@@ -75,47 +78,16 @@ extension web3.web3contract {
         }
         
         public func parseTransactionByHash(_ hash: Data) -> Result<[EventParserResultProtocol], Web3Error> {
+            if self.filter != nil && (self.filter?.fromBlock != nil || self.filter?.toBlock != nil) {
+                return Result([EventParserResultProtocol]())
+            }
             let response = web3.eth.getTransactionReceipt(hash)
             switch response {
             case .failure(let error):
                 return Result.failure(error)
             case .success(let receipt):
-                guard let bloom = receipt.logsBloom else {return Result.failure(Web3Error.dataError)}
-                if self.contract.address != nil {
-                    let addressPresent = bloom.test(topic: self.contract.address!.addressData)
-                    if (addressPresent != true) {
-                        return Result([EventParserResultProtocol]())
-                    }
-                }
-                guard let eventOfSuchTypeIsPresent = self.contract.testBloomForEventPrecence(eventName: self.eventName, bloom: bloom) else {return Result.failure(Web3Error.dataError)}
-                if (!eventOfSuchTypeIsPresent) {
-                    return Result([EventParserResultProtocol]())
-                }
-                var allLogs = receipt.logs
-                if (self.contract.address != nil) {
-                    allLogs = receipt.logs.filter({ (log) -> Bool in
-                        log.address == self.contract.address
-                    })
-                }
-                let decodedLogs = allLogs.flatMap({ (log) -> EventParserResultProtocol? in
-                    let (n, d) = contract.parseEvent(log)
-                    guard let evName = n, let evData = d else {return nil}
-                    return EventParserResult(eventName: evName, transactionReceipt: receipt, contractAddress: log.address, decodedResult: evData)
-                }).filter { (res:EventParserResultProtocol?) -> Bool in
-                    return res != nil && res?.eventName == self.eventName
-                }
-                var allResults = [EventParserResultProtocol]()
-                if (self.filter != nil) {
-                    // TODO NYI
-                    allResults = decodedLogs
-//                    for log in decodedLogs {
-//                        let parsingResult = EventParserResult(eventName: self.eventName, transactionReceipt: receipt, decodedResult: log)
-//                        allResults.append(parsingResult)
-//                    }
-                } else {
-                    allResults = decodedLogs
-                }
-                return Result(allResults)
+                guard let results = parseReceiptForLogs(receipt: receipt, contract: self.contract, eventName: self.eventName, filter: self.filter) else {return Result.failure(Web3Error.dataError)}
+                return Result(results)
             }
         }
         
@@ -126,3 +98,52 @@ extension web3.web3contract {
     }
 }
 
+extension web3.web3contract {
+    public func getIndexedEvents(eventName: String?, filter: EventFilter) -> Result<[EventParserResultProtocol], Web3Error> {
+        guard let rawContract = self.contract as? ContractV2 else {return Result.failure(Web3Error.nodeError("ABIv1 is not supported for this method"))}
+        guard let preEncoding = encodeTopicToGetLogs(contract: rawContract, eventName: eventName, filter: filter) else {
+            return Result.failure(Web3Error.dataError)
+        }
+        var event: ABIv2.Element.Event? = nil
+        if eventName != nil {
+            guard let ev = rawContract.events[eventName!] else {return Result.failure(Web3Error.dataError)}
+            event = ev
+        }
+        let request = JSONRPCRequestFabric.prepareRequest(.getLogs, parameters: [preEncoding])
+        let response = self.web3.provider.send(request: request)
+        let result = ResultUnwrapper.getResponse(response)
+        switch result {
+        case .failure(let error):
+            return Result.failure(error)
+        case .success(let payload):
+            if payload is NSNull {
+                return Result.failure(Web3Error.nodeError("Empty response"))
+            }
+            guard let resultArray = payload as? [[String: AnyObject]] else {
+                return Result.failure(Web3Error.dataError)
+            }
+            var allLogs = [EventLog]()
+            for log in resultArray {
+                guard let parsedLog = EventLog.init(log) else {return Result.failure(Web3Error.dataError)}
+                allLogs.append(parsedLog)
+            }
+            if event != nil {
+                let decodedLogs = allLogs.compactMap({ (log) -> EventParserResultProtocol? in
+                    let (n, d) = contract.parseEvent(log)
+                    guard let evName = n, let evData = d else {return nil}
+                    return EventParserResult(eventName: evName, transactionReceipt: nil, contractAddress: log.address, decodedResult: evData)
+                }).filter { (res:EventParserResultProtocol?) -> Bool in
+                    if eventName != nil {
+                        return res != nil && res?.eventName == eventName
+                    } else {
+                        return res != nil
+                    }
+                }
+                var allResults = [EventParserResultProtocol]()
+                allResults = decodedLogs
+                return Result(allResults)
+            }
+            return Result([EventParserResultProtocol]())
+        }
+    }
+}

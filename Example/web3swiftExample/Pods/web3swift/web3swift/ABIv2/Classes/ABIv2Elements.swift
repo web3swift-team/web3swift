@@ -141,6 +141,79 @@ extension ABIv2.Element {
             return returnArray
         }
     }
+    
+    func decodeInputData(_ rawData: Data) -> [String: Any]? {
+        var data = rawData
+        var sig: Data? = nil
+        switch rawData.count % 32 {
+        case 0:
+            break
+        case 4:
+            sig = rawData[0 ..< 4]
+            data = Data(rawData[4 ..< rawData.count])
+        default:
+            return nil
+        }
+        switch self {
+        case .constructor(let function):
+            if (data.count == 0 && function.inputs.count == 1) {
+                let name = "0"
+                let value = function.inputs[0].type.emptyValue
+                var returnArray = [String:Any]()
+                returnArray[name] = value
+                if function.inputs[0].name != "" {
+                    returnArray[function.inputs[0].name] = value
+                }
+                return returnArray
+            }
+            
+            guard function.inputs.count*32 <= data.count else {return nil}
+            var returnArray = [String:Any]()
+            var i = 0;
+            guard let values = ABIv2Decoder.decode(types: function.inputs, data: data) else {return nil}
+            for input in function.inputs {
+                let name = "\(i)"
+                returnArray[name] = values[i]
+                if input.name != "" {
+                    returnArray[input.name] = values[i]
+                }
+                i = i + 1
+            }
+            return returnArray
+        case .event(_):
+            return nil
+        case .fallback(_):
+            return nil
+        case .function(let function):
+            if sig != nil && sig != function.methodEncoding {
+                return nil
+            }
+            if (data.count == 0 && function.inputs.count == 1) {
+                let name = "0"
+                let value = function.inputs[0].type.emptyValue
+                var returnArray = [String:Any]()
+                returnArray[name] = value
+                if function.inputs[0].name != "" {
+                    returnArray[function.inputs[0].name] = value
+                }
+                return returnArray
+            }
+            
+            guard function.inputs.count*32 <= data.count else {return nil}
+            var returnArray = [String:Any]()
+            var i = 0;
+            guard let values = ABIv2Decoder.decode(types: function.inputs, data: data) else {return nil}
+            for input in function.inputs {
+                let name = "\(i)"
+                returnArray[name] = values[i]
+                if input.name != "" {
+                    returnArray[input.name] = values[i]
+                }
+                i = i + 1
+            }
+            return returnArray
+        }
+    }
 }
 
 extension ABIv2.Element.Event {

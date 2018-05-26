@@ -55,11 +55,12 @@ extension web3.web3contract {
             let callback = { (res: Result<AnyObject, Web3Error>) -> () in
                 switch res {
                 case .success(let result):
-                    guard let unwrappedResult = result as? [String:String] else {
+                    guard let unwrappedResult = result as? String else {
                         externalResult = Result.failure(Web3Error.dataError)
                         break
                     }
-                    externalResult = Result<[String:String], Web3Error>(unwrappedResult)
+                    let resultDict = ["txhash" : unwrappedResult] as [String: String]
+                    externalResult = Result<[String:String], Web3Error>(resultDict)
                 case .failure(let error):
                     externalResult = Result.failure(error)
                     break

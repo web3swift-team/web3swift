@@ -12,12 +12,13 @@ import BigInt
 public struct ContractV2:ContractProtocol {
     
     public var allEvents: [String] {
-        return events.keys.flatMap({ (s) -> String in
+        return events.keys.compactMap({ (s) -> String in
             return s
         })
     }
+    
     public var allMethods: [String] {
-        return methods.keys.flatMap({ (s) -> String in
+        return methods.keys.compactMap({ (s) -> String in
             return s
         })
     }
@@ -227,5 +228,38 @@ public struct ContractV2:ContractProtocol {
         guard let function = methods[method] else {return nil}
         guard case .function(_) = function else {return nil}
         return function.decodeReturnData(data)
+    }
+    
+    public func decodeInputData(_ method: String, data: Data) -> [String : Any]? {
+        if method == "fallback" {
+            return nil
+        }
+        guard let function = methods[method] else {return nil}
+        switch function {
+        case .function(_):
+            return function.decodeInputData(data)
+        case .constructor(_):
+            return function.decodeInputData(data)
+        default:
+            return nil
+        }
+    }
+    
+    public func decodeInputData(_ data: Data) -> [String:Any]? {
+        guard data.count % 32 == 4 else {return nil}
+        let methodSignature = data[0..<4]
+        let foundFunction = self._abi.filter { (m) -> Bool in
+            switch m {
+            case .function(let function):
+                return function.methodEncoding == methodSignature
+            default:
+                return false
+            }
+        }
+        guard foundFunction.count == 1 else {
+            return nil
+        }
+        let function = foundFunction[0]
+        return function.decodeInputData(Data(data[4 ..< data.count]))
     }
 }

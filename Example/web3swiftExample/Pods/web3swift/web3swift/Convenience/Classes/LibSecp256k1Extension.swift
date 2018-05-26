@@ -24,7 +24,7 @@ extension SECP256K1 {
         if !SECP256K1.verifyPrivateKey(privateKey: privateKey) {
             return (nil, nil)
         }
-        for rounds in 0...1024 {
+        for _ in 0...1024 {
             guard var recoverableSignature = SECP256K1.recoverableSign(hash: hash, privateKey: privateKey, useExtraEntropy: useExtraEntropy) else {
                 continue
             }
