@@ -130,7 +130,7 @@ public struct EventLog {
         guard let ad = json["address"] as? String else {return nil}
         guard let d = json["data"] as? String else {return nil}
         guard let li = json["logIndex"] as? String else {return nil}
-        guard let rm = json["removed"] as? Int else {return nil}
+        let rm = json["removed"] as? Int ?? 0
         guard let tpc = json["topics"] as? [String] else {return nil}
         guard let addr = EthereumAddress(ad) else {return nil}
         address = addr
