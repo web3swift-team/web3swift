@@ -110,7 +110,7 @@ extension ABIv2Decoder {
                     var dataSlice = elementItself[0 ..< 32]
                     let length = UInt64(BigUInt(dataSlice))
                     guard elementItself.count >= 32 + subType.memoryUsage*length else {break}
-                    dataSlice = elementItself[32 ..< subType.memoryUsage*length]
+                    dataSlice = elementItself[32 ..< 32 + subType.memoryUsage*length]
                     var subpointer: UInt64 = 32;
                     var toReturn = [AnyObject]()
                     for _ in 0 ..< length {

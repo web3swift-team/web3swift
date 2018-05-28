@@ -67,6 +67,10 @@ public struct EventFilter {
         }
     }
     
+    public init() {
+        
+    }
+    
     public init(fromBlock: Block?, toBlock: Block?,
                 addresses: [EthereumAddress]? = nil,
                 parameterFilters: [[EventFilterable]?]? = nil) {
