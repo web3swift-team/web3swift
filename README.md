@@ -77,11 +77,13 @@ Web3swift requires Swift 4.1 and iOS 9.0 or macOS 10.13 although we recommend to
 ### Installation
 
 web3swift is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+it, simply add the following line to your `Podfile`:
 
 ```ruby
 pod 'web3swift', git: 'https://github.com/BANKEX/web3swift.git'
 ```
+
+Run `pod install` from the command line
 ### Current functionality
 
 - Send transactions, call functions of smart-contracts, estimate gas costs
