@@ -31,7 +31,7 @@ final class GetTransactionDetailsOperation: Web3Operation {
         dataOp.inputData = request as AnyObject
         let convOp = DictionaryConversionOperation(self.web3, queue: self.expectedQueue)
         dataOp.next = OperationChainingType.operation(convOp)
-        let parsingOp = TransactionReceiptConversionOperation(self.web3, queue: self.expectedQueue)
+        let parsingOp = TransactionDetailsConversionOperation(self.web3, queue: self.expectedQueue)
         convOp.next = OperationChainingType.operation(parsingOp)
         parsingOp.next = completion
         self.expectedQueue.addOperation(dataOp)

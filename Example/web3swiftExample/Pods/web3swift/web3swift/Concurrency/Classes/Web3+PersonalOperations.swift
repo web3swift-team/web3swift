@@ -30,7 +30,7 @@ final class PersonalUnlockAccountOperation: Web3Operation {
         guard let address = input[0] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let password = input[1] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let seconds = input[2] as? UInt64 else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        guard EthereumAddress(address).isValid else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let _ = EthereumAddress(address) else {return processError(Web3Error.inputError("Invalid input supplied"))}
         let request = JSONRPCRequestFabric.prepareRequest(.unlockAccount, parameters: [address, password, seconds])
         let dataOp = DataFetchOperation(self.web3, queue: self.expectedQueue)
         dataOp.inputData = request as AnyObject

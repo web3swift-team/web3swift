@@ -106,6 +106,9 @@ public class EthereumKeystoreV3: AbstractKeystore {
     
     public func regenerate(oldPassword: String, newPassword: String, dkLen: Int=32, N: Int = 262144, R: Int = 8, P: Int = 1) throws {
         var keyData = try self.getKeyData(oldPassword)
+        if keyData == nil {
+            throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
+        }
         defer {Data.zero(&keyData!)}
         try self.encryptDataToStorage(newPassword, keyData: keyData!)
     }
@@ -167,5 +170,11 @@ public class EthereumKeystoreV3: AbstractKeystore {
         }
         guard decryptedPK != nil else {return nil}
         return Data(bytes:decryptedPK!)
+    }
+    
+    public func serialize() throws -> Data? {
+        guard let params = self.keystoreParams else {return nil}
+        let data = try JSONEncoder().encode(params)
+        return data
     }
 }

@@ -138,7 +138,7 @@ extension ABIv2Encoder {
     
     public static func encode(types: [ABIv2.Element.InOut], values: [AnyObject]) -> Data? {
         guard types.count == values.count else {return nil}
-        let params = types.flatMap { (el) -> ABIv2.Element.ParameterType in
+        let params = types.compactMap { (el) -> ABIv2.Element.ParameterType in
             return el.type
         }
         return encode(types: params, values: values)
@@ -200,8 +200,7 @@ extension ABIv2Encoder {
             }
         case .address:
             if let string = value as? String {
-                let address = EthereumAddress(string)
-                guard address.isValid else {break}
+                guard let address = EthereumAddress(string) else {return nil}
                 let data = address.addressData
                 return data.setLengthLeft(32)
             } else if let address = value as? EthereumAddress {

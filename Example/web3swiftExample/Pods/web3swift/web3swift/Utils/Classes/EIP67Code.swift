@@ -47,8 +47,9 @@ extension Web3 {
             self.address = address
         }
         
-        public init (address : String) {
-            self.address = EthereumAddress(address)
+        public init? (address : String) {
+            guard let addr = EthereumAddress(address) else {return nil}
+            self.address = addr
         }
         
         public func toString() -> String {
@@ -108,8 +109,7 @@ extension Web3 {
             guard striped.count == 2 else {return nil}
             guard let encoding = striped[1].removingPercentEncoding else {return nil}
             guard let url = URL.init(string: encoding) else {return nil}
-            let address = EthereumAddress(url.lastPathComponent)
-            guard address.isValid else {return nil}
+            guard let address = EthereumAddress(url.lastPathComponent) else {return nil}
             var code = EIP67Code(address: address)
             guard let components = URLComponents(string: encoding)?.queryItems else {return code}
             for comp in components {

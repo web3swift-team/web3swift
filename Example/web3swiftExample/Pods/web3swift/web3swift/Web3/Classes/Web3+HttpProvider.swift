@@ -61,6 +61,7 @@ public class Web3HttpProvider: Web3Provider {
         }
         guard let response = self.syncPost(requests) else {return nil}
         guard let res = response as? [[String: AnyObject]?] else {return nil}
+//        print(res)
         return res
     }
     
@@ -122,7 +123,7 @@ public class Web3HttpProvider: Web3Provider {
     
     static func syncPost(_ request: JSONRPCrequestBatch, providerURL: URL) -> Any? {
         guard let _ = try? JSONEncoder().encode(request) else {return nil}
-        //        print(String(data: try! JSONEncoder().encode(request), encoding: .utf8))
+//        print(String(data: try! JSONEncoder().encode(request), encoding: .utf8))
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",
             "Accept": "application/json"

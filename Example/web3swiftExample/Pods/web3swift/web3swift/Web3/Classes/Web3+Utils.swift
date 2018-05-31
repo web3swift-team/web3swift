@@ -14,6 +14,8 @@ public typealias Web3Utils = Web3.Utils
 
 extension Web3 {
     public struct Utils {
+        
+        typealias Iban = IBAN
     }
 }
 
@@ -22,8 +24,7 @@ extension Web3.Utils {
         guard let normalizedAddress = from.addressData.setLengthLeft(32) else {return nil}
         guard let data = RLP.encode([normalizedAddress, nonce] as [Any]) else {return nil}
         guard let contractAddressData = Web3.Utils.sha3(data)?[12..<32] else {return nil}
-        let contractAddress = EthereumAddress(Data(contractAddressData))
-        guard contractAddress.isValid else {return nil}
+        guard let contractAddress = EthereumAddress(Data(contractAddressData)) else {return nil}
         return contractAddress
     }
     
@@ -121,10 +122,15 @@ extension Web3.Utils {
     }
     
     public static func parseToBigUInt(_ amount: String, units: Web3.Utils.Units = .eth) -> BigUInt? {
+        let unitDecimals = units.decimals
+        return parseToBigUInt(amount, decimals: unitDecimals)
+    }
+    
+    public static func parseToBigUInt(_ amount: String, decimals: Int = 18) -> BigUInt? {
         let separators = CharacterSet(charactersIn: ".,")
         let components = amount.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: separators)
         guard components.count == 1 || components.count == 2 else {return nil}
-        let unitDecimals = units.decimals
+        let unitDecimals = decimals
         guard let beforeDecPoint = BigUInt(components[0], radix: 10) else {return nil}
         var mainPart = beforeDecPoint*BigUInt(10).power(unitDecimals)
         if (components.count == 2) {
@@ -137,9 +143,9 @@ extension Web3.Utils {
         return mainPart
     }
     
-    public static func formatToEthereumUnits(_ bigNumber: BigInt, toUnits: Web3.Utils.Units = .eth, decimals: Int = 4) -> String? {
+    public static func formatToEthereumUnits(_ bigNumber: BigInt, toUnits: Web3.Utils.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".") -> String? {
         let magnitude = bigNumber.magnitude
-        guard let formatted = formatToEthereumUnits(magnitude, toUnits: toUnits, decimals: decimals) else {return nil}
+        guard let formatted = formatToEthereumUnits(magnitude, toUnits: toUnits, decimals: decimals, decimalSeparator: decimalSeparator) else {return nil}
         switch bigNumber.sign {
         case .plus:
             return formatted
@@ -148,19 +154,55 @@ extension Web3.Utils {
         }
     }
     
-    public static func formatToEthereumUnits(_ bigNumber: BigUInt, toUnits: Web3.Utils.Units = .eth, decimals: Int = 4) -> String? {
-        let unitDecimals = toUnits.decimals
-        var toDecimals = decimals
+    public static func formatToPrecision(_ bigNumber: BigInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+        let magnitude = bigNumber.magnitude
+        guard let formatted = formatToPrecision(magnitude, numberDecimals: numberDecimals, formattingDecimals: formattingDecimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific) else {return nil}
+        switch bigNumber.sign {
+        case .plus:
+            return formatted
+        case .minus:
+            return "-" + formatted
+        }
+    }
+    
+    public static func formatToEthereumUnits(_ bigNumber: BigUInt, toUnits: Web3.Utils.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+        return formatToPrecision(bigNumber, numberDecimals: toUnits.decimals, formattingDecimals: decimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific);
+    }
+    
+    public static func formatToPrecision(_ bigNumber: BigUInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+        if bigNumber == 0 {
+            return "0"
+        }
+        let unitDecimals = numberDecimals
+        var toDecimals = formattingDecimals
         if unitDecimals < toDecimals {
             toDecimals = unitDecimals
         }
         let divisor = BigUInt(10).power(unitDecimals)
         let (quotient, remainder) = bigNumber.quotientAndRemainder(dividingBy: divisor)
-        let remainderPadded = String(remainder).leftPadding(toLength: unitDecimals, withPad: "0")[0..<toDecimals]
-        if (decimals == 0) {
+        let fullRemainder = String(remainder);
+        let fullPaddedRemainder = fullRemainder.leftPadding(toLength: unitDecimals, withPad: "0")
+        let remainderPadded = fullPaddedRemainder[0..<toDecimals]
+        if remainderPadded == String(repeating: "0", count: toDecimals) {
+            if quotient != 0 {
+                return String(quotient)
+            } else if fallbackToScientific {
+                var firstDigit = 0
+                for char in fullPaddedRemainder {
+                    if (char == "0") {
+                        firstDigit = firstDigit + 1;
+                    } else {
+                        firstDigit = firstDigit + 1;
+                        break
+                    }
+                }
+                return fullRemainder + "e-" + String(firstDigit)
+            }
+        }
+        if (toDecimals == 0) {
             return String(quotient)
         }
-        return String(quotient) + "." + remainderPadded
+        return String(quotient) + decimalSeparator + remainderPadded
     }
     
     static public func personalECRecover(_ personalMessage: String, signature: String) -> EthereumAddress? {

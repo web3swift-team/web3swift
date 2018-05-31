@@ -24,7 +24,7 @@ public class OperationDispatcher {
         self.provider = provider
         self.queue = queue
         self.policy = policy
-        self.lockQueue = DispatchQueue(label: "batchingQueue")
+        self.lockQueue = DispatchQueue(label: "batchingQueue", qos: .userInitiated)
     }
     
     struct Request {

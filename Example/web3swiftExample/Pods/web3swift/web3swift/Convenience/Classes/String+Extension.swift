@@ -46,6 +46,12 @@ extension String {
         return String(self[start..<end])
     }
     
+    subscript (bounds: CountablePartialRangeFrom<Int>) -> String {
+        let start = index(self.startIndex, offsetBy: bounds.lowerBound)
+        let end = self.endIndex
+        return String(self[start..<end])
+    }
+    
     func leftPadding(toLength: Int, withPad character: Character) -> String {
         let stringLength = self.count
         if stringLength < toLength {
@@ -112,5 +118,21 @@ extension String {
             let to = to16.samePosition(in: self)
             else { return nil }
         return from ..< to
+    }
+    
+    var asciiValue: Int {
+        get {
+            let s = self.unicodeScalars
+            return Int(s[s.startIndex].value)
+        }
+    }
+}
+
+extension Character {
+    var asciiValue: Int {
+        get {
+            let s = String(self).unicodeScalars
+            return Int(s[s.startIndex].value)
+        }
     }
 }

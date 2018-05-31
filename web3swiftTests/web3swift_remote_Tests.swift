@@ -28,7 +28,7 @@ class web3swift_remote_Tests: XCTestCase {
             XCTFail()
         case .success(let result):
             print(result)
-            let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+            let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!
             let contract = Contract(jsonString, at: contractAddress)
             let event = contract?.events["Transfer"]
             let parser = EventParser(web3: web3, event: event!,  contract: contract!, filter: nil, forAddress: contractAddress)
@@ -38,8 +38,8 @@ class web3swift_remote_Tests: XCTestCase {
             XCTAssert(pres.count == 1)
             let decoded = pres[0].decodedResult
             XCTAssert(decoded["name"] as! String == "Transfer")
-            XCTAssert(decoded["_to"] as! EthereumAddress == EthereumAddress("0xa5dcf6e0fee38f635c4a8d50d90e24400ed547d2"))
-            XCTAssert(decoded["_from"] as! EthereumAddress == EthereumAddress("0xdbf493e8d7db835192c02b992bd1ab72e96fd2e3"))
+            XCTAssert(decoded["_to"] as! EthereumAddress == EthereumAddress("0xa5dcf6e0fee38f635c4a8d50d90e24400ed547d2")!)
+            XCTAssert(decoded["_from"] as! EthereumAddress == EthereumAddress("0xdbf493e8d7db835192c02b992bd1ab72e96fd2e3")!)
             XCTAssert(decoded["_value"] as! BigUInt == BigUInt("3946fe37ffce3a0000", radix: 16)!)
         }
     }
@@ -53,7 +53,7 @@ class web3swift_remote_Tests: XCTestCase {
             XCTFail()
         case .success(let result):
             print(result)
-            let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+            let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!
             let contract = Contract(jsonString, at: contractAddress)
             let event = contract?.events["Transfer"]
             let parser = EventParser(web3: web3, event: event!,  contract: contract!, filter: nil, forAddress: nil)
@@ -77,7 +77,7 @@ class web3swift_remote_Tests: XCTestCase {
                 XCTFail()
             case .success(let result):
                 //                print(result)
-                let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+                let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!
                 let contract = Contract(jsonString, at: contractAddress)
                 let event = contract?.events["Transfer"]
                 let parser = EventParser(web3: web3, event: event!,  contract: contract!, filter: nil, forAddress: nil)
@@ -105,10 +105,10 @@ class web3swift_remote_Tests: XCTestCase {
         XCTAssert(pres.count == 1)
         let decoded = pres[0].decodedResult
         XCTAssert(decoded["name"] as! String == "Transfer")
-        XCTAssert(decoded["_to"] as! EthereumAddress == EthereumAddress("0xa5dcf6e0fee38f635c4a8d50d90e24400ed547d2"))
-        XCTAssert(decoded["_from"] as! EthereumAddress == EthereumAddress("0xdbf493e8d7db835192c02b992bd1ab72e96fd2e3"))
+        XCTAssert(decoded["_to"] as! EthereumAddress == EthereumAddress("0xa5dcf6e0fee38f635c4a8d50d90e24400ed547d2")!)
+        XCTAssert(decoded["_from"] as! EthereumAddress == EthereumAddress("0xdbf493e8d7db835192c02b992bd1ab72e96fd2e3")!)
         XCTAssert(decoded["_value"] as! BigUInt == BigUInt("3946fe37ffce3a0000", radix: 16)!)
-        XCTAssert(pres[0].contractAddress == EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b"))
+        XCTAssert(pres[0].contractAddress == EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!)
         XCTAssert(pres[0].transactionReceipt!.transactionHash.toHexString().addHexPrefix() == "0xcb235e8c6ecda032bc82c1084d2159ab82e7e4de35be703da6e80034bc577673")
     }
     
@@ -131,7 +131,7 @@ class web3swift_remote_Tests: XCTestCase {
         let blockNumber = web3.eth.getBlockNumber()
         guard case .success(let currentBlock) = blockNumber else {return XCTFail()}
         let currentBlockAsInt = UInt64(currentBlock)
-        for i in currentBlockAsInt-3 ... currentBlockAsInt {
+        for i in currentBlockAsInt-1 ... currentBlockAsInt {
             let present = eventParser.parseBlockByNumber(i)
             guard case .success(let pres) = present else {return XCTFail()}
             for p in pres {
@@ -150,8 +150,8 @@ class web3swift_remote_Tests: XCTestCase {
         let web3 = Web3.InfuraMainnetWeb3()
         let contract = web3.contract(jsonString, at: nil, abiVersion: 2)
         var filter = EventFilter()
-        filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")]
-        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")] as [EventFilterable])]
+        filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
+        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")!] as [EventFilterable])]
         guard let eventParser = contract?.createEventParser("Transfer", filter: filter) else {return XCTFail()}
         let present = eventParser.parseBlockByNumber(UInt64(5200120))
         guard case .success(let pres) = present else {return XCTFail()}
@@ -168,8 +168,8 @@ class web3swift_remote_Tests: XCTestCase {
         var filter = EventFilter()
         filter.fromBlock = .blockNumber(UInt64(5200120))
         filter.toBlock = .blockNumber(UInt64(5200120))
-        filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")]
-        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")] as [EventFilterable])]
+        filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
+        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")!] as [EventFilterable])]
         guard let eventParserResult = contract?.getIndexedEvents(eventName: "Transfer", filter: filter) else {return XCTFail()}
         switch eventParserResult {
         case .success(let result):
@@ -188,8 +188,8 @@ class web3swift_remote_Tests: XCTestCase {
         var filter = EventFilter()
         filter.fromBlock = .blockNumber(UInt64(5200120))
         filter.toBlock = .blockNumber(UInt64(5200120))
-        filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")]
-        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")] as [EventFilterable]), (nil as [EventFilterable]?)]
+        filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
+        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), (nil as [EventFilterable]?)]
         guard let eventParserResult = contract?.getIndexedEvents(eventName: "Transfer", filter: filter) else {return XCTFail()}
         switch eventParserResult {
         case .success(let result):

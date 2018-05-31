@@ -119,45 +119,10 @@ final class ParseTransactionForEventsOperation: Web3Operation {
         let receiptCallback = { (res: Result<AnyObject, Web3Error>) -> () in
             switch res {
             case .success(let result):
-                var allEvents = [EventParserResultProtocol]()
                 guard let receipt = result as? TransactionReceipt else {
                     return self.processError(Web3Error.dataError)
                 }
-                guard let bloom = receipt.logsBloom else {
-                    return self.processError(Web3Error.dataError)
-                }
-                if contract.address != nil {
-                    let addressPresent = bloom.test(topic: contract.address!.addressData)
-                    if (addressPresent != true) {
-                        return self.processSuccess(allEvents as AnyObject)
-                    }
-                }
-                guard let eventOfSuchTypeIsPresent = contract.testBloomForEventPrecence(eventName: eventName, bloom: bloom) else {
-                    return self.processError(Web3Error.dataError)
-                }
-                if (!eventOfSuchTypeIsPresent) {
-                    return self.processSuccess(allEvents as AnyObject)
-                }
-                var allLogs = receipt.logs
-                if contract.address != nil {
-                    allLogs = receipt.logs.filter({ (log) -> Bool in
-                        log.address == contract.address
-                    })
-                }
-                let decodedLogs = allLogs.flatMap({ (log) -> EventParserResultProtocol? in
-                    let (n, d) = contract.parseEvent(log)
-                    guard let evName = n, let evData = d else {return nil}
-                    return EventParserResult(eventName: evName, transactionReceipt: receipt, contractAddress: log.address, decodedResult: evData)
-                }).filter { (res:EventParserResultProtocol?) -> Bool in
-                    return res != nil && res?.eventName == eventName
-                }
-                
-                if (filter != nil) {
-                    // TODO NYI
-                    allEvents = decodedLogs
-                } else {
-                    allEvents = decodedLogs
-                }
+                guard let allEvents = parseReceiptForLogs(receipt: receipt, contract: contract, eventName: eventName, filter: filter) else {return self.processError(Web3Error.dataError)}
                 return self.processSuccess(allEvents as AnyObject)
             case .failure(let error):
                 return self.processError(error)
