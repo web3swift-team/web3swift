@@ -125,6 +125,67 @@ $ pod install
 
 ## Usage
 
+Here you can see a few examples of use of our library
+### Initializing Ethereum address
+```bash
+let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+let constractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!
+```
+
+### Getting gas price
+```bash
+let web3Main = Web3.InfuraMainnetWeb3()
+let gasPriceResult = web3Main.eth.getGasPrice()
+guard case .success(let gasPrice) = gasPriceResult else {return}
+```
+### Setting options
+```bash
+var options = Web3Options.defaultOptions()
+options.gasPrice = gasPrice
+options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")!
+let parameters = [] as [AnyObject]
+```
+
+### Getting balance
+```bash
+guard let bkxBalanceResult = contract.method("balanceOf", parameters: [coldWalletAddress] as [AnyObject], options: options)?.call(options: nil) else {return}
+guard case .success(let bkxBalance) = bkxBalanceResult, let bal = bkxBalance["0"] as? BigUInt else {return}
+print("BKX token balance = " + String(bal))
+```
+
+### Sending ETH
+```bash
+let web3Rinkeby = Web3.InfuraRinkebyWeb3()
+
+web3Rinkeby.addKeystoreManager(bip32keystoreManager)
+options.from = bip32ks?.addresses?.first!
+intermediateSend = web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress, abiVersion: 2)!.method(options: options)!
+let sendResultBip32 = intermediateSend.send(password: "BANKEXFOUNDATION")
+switch sendResultBip32 {
+    case .success(let r):
+        print(r)
+    case .failure(let err):
+        print(err)
+}
+```
+
+### Sending ERC20
+```bash
+var convenienceTransferOptions = Web3Options.defaultOptions()
+convenienceTransferOptions.gasPrice = gasPriceRinkeby
+let convenienceTokenTransfer = web3Rinkeby.eth.sendERC20tokensWithNaturalUnits(tokenAddress: EthereumAddress("0xa407dd0cbc9f9d20cdbd557686625e586c85b20a")!, from: (ks?.addresses?.first!)!, to: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!, amount: "0.0001", options: convenienceTransferOptions)
+let gasEstimateResult2 = convenienceTokenTransfer!.estimateGas(options: nil)
+guard case .success(let gasEstimate2) = gasEstimateResult2 else {return}
+convenienceTransferOptions.gasLimit = gasEstimate2
+let convenienceTransferResult = convenienceTokenTransfer!.send(password: "BANKEXFOUNDATION", options: convenienceTransferOptions)
+switch convenienceTransferResult {
+    case .success(let res):
+        print("Token transfer successful")
+        print(res)
+    case .failure(let error):
+        print(error)
+}
+```
 
 ## Global plans
 - Full reference `web3js` functionality
