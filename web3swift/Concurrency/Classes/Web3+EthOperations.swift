@@ -150,9 +150,10 @@ final class EstimateGasOperation: Web3Operation {
         guard let transaction = input[0] as? EthereumTransaction else {return processError(Web3Error.inputError("Invalid input supplied"))}
         let options = input[1] as? Web3Options
         guard let onBlock = input[2] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        var mergedOptions = Web3Options.merge(Web3Options.defaultOptions(), with: options)
-        mergedOptions?.gasLimit = nil
-        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.estimateGas, transaction: transaction, onBlock: onBlock, options: mergedOptions) else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard var mergedOptions = Web3Options.merge(Web3Options.defaultOptions(), with: options) else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        mergedOptions.gasLimit = nil
+        let tx = transaction.mergedWithOptions(mergedOptions)
+        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.estimateGas, transaction: tx, onBlock: onBlock, options: mergedOptions) else {return processError(Web3Error.inputError("Invalid input supplied"))}
         let dataOp = DataFetchOperation(self.web3, queue: self.expectedQueue)
         dataOp.inputData = request as AnyObject
         let parsingOp = BigUIntConversionOperation(self.web3, queue: self.expectedQueue)
@@ -182,8 +183,11 @@ final class CallOperation: Web3Operation {
         guard let transaction = input[0] as? EthereumTransaction else {return processError(Web3Error.inputError("Invalid input supplied"))}
         let options = input[1] as? Web3Options
         guard let onBlock = input[2] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        let mergedOptions = Web3Options.merge(Web3Options.defaultOptions(), with: options)
-        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: transaction, onBlock: onBlock, options: mergedOptions) else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let mergedOptions = Web3Options.merge(Web3Options.defaultOptions(), with: options) else {
+            return processError(Web3Error.inputError("Invalid input supplied"))
+        }
+        let tx = transaction.mergedWithOptions(mergedOptions)
+        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: tx, onBlock: onBlock, options: mergedOptions) else {return processError(Web3Error.inputError("Invalid input supplied"))}
         let dataOp = DataFetchOperation(self.web3, queue: self.expectedQueue)
         dataOp.inputData = request as AnyObject
         let parsingOp = DataConversionOperation(self.web3, queue: self.expectedQueue)
@@ -215,8 +219,9 @@ final class SendTransactionOperation: Web3Operation {
         guard let password = input[2] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let mergedOptions = Web3Options.merge(Web3Options.defaultOptions(), with: options) else {return processError(Web3Error.inputError("Invalid input supplied"))}
         guard let from = mergedOptions.from else {return processError(Web3Error.walletError)}
+        var tx = transaction
+        tx = tx.mergedWithOptions(mergedOptions)
         if let keystoreManager = self.web3.provider.attachedKeystoreManager {
-            var tx = transaction
             do {
                 try Web3Signer.signTX(transaction: &tx, keystore: keystoreManager, account: from, password: password)
             }
@@ -232,11 +237,10 @@ final class SendTransactionOperation: Web3Operation {
             self.expectedQueue.addOperation(sendRawTxOp)
             return
         }
-        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.sendTransaction, transaction: transaction, onBlock: nil, options: mergedOptions) else
+        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.sendTransaction, transaction: tx, onBlock: nil, options: mergedOptions) else
         {
             return processError(Web3Error.transactionSerializationError)
         }
-//        guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {return processError(Web3Error.transactionSerializationError)}
         let dataOp = DataFetchOperation(self.web3, queue: self.expectedQueue)
         dataOp.inputData = request as AnyObject
         let parsingOp = DataConversionOperation(self.web3, queue: self.expectedQueue)

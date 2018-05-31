@@ -707,6 +707,13 @@ extension web3.Eth {
         return sendETH(to: to, amount: value, extraData: extraData, options: options)
     }
     
+    public func sendETH(from: EthereumAddress, to: EthereumAddress, amount: String, units: Web3.Utils.Units = .eth, extraData: Data = Data(), options: Web3Options? = nil) -> TransactionIntermediate? {
+        guard let value = Web3.Utils.parseToBigUInt(amount, units: .eth) else {return nil}
+        guard var mergedOptions = Web3Options.merge(self.options, with: options) else {return nil}
+        mergedOptions.from = from
+        return sendETH(to: to, amount: value, extraData: extraData, options: mergedOptions)
+    }
+    
     public func sendERC20tokensWithKnownDecimals(tokenAddress: EthereumAddress, from: EthereumAddress, to: EthereumAddress, amount: BigUInt, options: Web3Options? = nil) -> TransactionIntermediate? {
         let contract = self.web3.contract(Web3.Utils.erc20ABI, at: tokenAddress, abiVersion: 2)
         guard var mergedOptions = Web3Options.merge(self.options, with: options) else {return nil}
