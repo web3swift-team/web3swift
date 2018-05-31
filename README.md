@@ -70,35 +70,69 @@ You can try it by yourself by running the example project:
 - run `pod install` from the `Example/web3swiftExample` directory.
 - `open ./web3swiftExample.xcworkspace`
 
-### Requirements
+## Requirements
 
 Web3swift requires Swift 4.1 and iOS 9.0 or macOS 10.13 although we recommend to use the latest iOS and MacOS versions for your own safety. Don't forget to set iOS version in a Podfile, otherwise you get an error if deployment target is less than the latest SDK.
 
-### Installation
+## Communication
 
-web3swift is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+- if you **need help**, use [Stack Overflow](https://stackoverflow.com/questions/tagged/web3swift) (tag 'web3swift')
+- If you'd like to **ask a general question**, use [Stack Overflow](http://stackoverflow.com/questions/tagged/web3swift).
+- If you **found a bug**, [open an issue](https://github.com/BANKEX/web3swift/issues).
+- If you **have a feature request**, [open an issue](https://github.com/BANKEX/web3swift/issues).
+- If you **want to contribute**, [submit a pull request](https://github.com/BANKEX/web3swift/pulls).
+
+## Installation
+
+### CocoaPods
+
+[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
+
+```bash
+$ sudo gem install cocoapods
+```
+
+
+To integrate web3swift into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
-pod 'web3swift', git: 'https://github.com/BANKEX/web3swift.git'
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
+
+target '<Your Target Name>' do
+    use_frameworks!
+    pod 'web3swift', :git => 'https://github.com/BANKEX/web3swift.git'
+end
 ```
-### Current functionality
 
-- Send transactions, call functions of smart-contracts, estimate gas costs
-- Serialize and deserialize transactions and results to native Swift types
-- Convenience functions for chain state: block number, gas price
-- Check transaction results and get receipt
-- Parse event logs for transaction
-- Manage user's private keys through encrypted keystore abstractions
-- Batched requests in concurrent mode, checks balances of 580 tokens (from the latest MyEtherWallet repo) over 3 seconds
+Then, run the following command:
 
-### Global plans
+```bash
+$ pod install
+```
+## Features
+
+- [x] Create Account
+- [x] Import Account
+- [x] Sign transictions
+- [x] Send transactions, call functions of smart-contracts, estimate gas costs
+- [x] Serialize and deserialize transactions and results to native Swift types
+- [x] Convenience functions for chain state: block number, gas price
+- [x] Check transaction results and get receipt
+- [x] Parse event logs for transaction
+- [x] Manage user's private keys through encrypted keystore abstractions
+- [x] Batched requests in concurrent mode, checks balances of 580 tokens (from the latest MyEtherWallet repo) over 3 seconds
+
+## Usage
+
+
+## Global plans
 - Full reference `web3js` functionality
 - Light Ethereum subprotocol (LES) integration
 
 ## [Apps using this library](https://github.com/BANKEX/web3swift/wiki/Apps-using-web3swift) 
 
-If you've used this project in a live app, please let us know! Nothing makes us happier than seeing someone else take my work and go wild with it.
+If you've used this project in a live app, please let us know!
 
 *If you are using `web3swift` in your app or know of an app that uses it, please add it to [this] (https://github.com/BANKEX/web3swift/wiki/Apps-using-web3swift) list.*
 
@@ -107,6 +141,7 @@ If you've used this project in a live app, please let us know! Nothing makes us 
 - Gnosis team and their library [Bivrost-swift](https://github.com/gnosis/bivrost-swift) for inspiration for the ABI decoding approach
 - [Trust iOS Wallet](https://github.com/TrustWallet/trust-wallet-ios) for collaboration and discussion for initial idea
 - Official Ethereum and Solidity docs, everything was written from ground truth standards
+
 ## Contribution
 
 For the latest version, please check [develop](https://github.com/BANKEX/web3swift/tree/develop) branch.
