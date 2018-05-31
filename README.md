@@ -96,6 +96,12 @@ pod 'web3swift', git: 'https://github.com/BANKEX/web3swift.git'
 - Full reference `web3js` functionality
 - Light Ethereum subprotocol (LES) integration
 
+## [Apps using this library](https://github.com/BANKEX/web3swift/wiki/Apps-using-web3swift) 
+
+If you've used this project in a live app, please let us know! Nothing makes us happier than seeing someone else take my work and go wild with it.
+
+*If you are using `web3swift` in your app or know of an app that uses it, please add it to [this] (https://github.com/BANKEX/web3swift/wiki/Apps-using-web3swift) list.*
+
 ## Special thanks to
 
 - Gnosis team and their library [Bivrost-swift](https://github.com/gnosis/bivrost-swift) for inspiration for the ABI decoding approach
