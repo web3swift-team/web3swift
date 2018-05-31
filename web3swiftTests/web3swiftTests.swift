@@ -2376,6 +2376,36 @@ class web3swiftTests: XCTestCase {
         XCTAssert(ibn == "XE83FUTTUNPK7WZJSGGCWVEBARQWQ8YML4")
     }
     
+    func testSendETH() {
+        guard let keystoreData = getKeystoreData() else {return}
+        guard let keystoreV3 = EthereumKeystoreV3.init(keystoreData) else {return XCTFail()}
+        let web3Rinkeby = Web3.InfuraRinkebyWeb3()
+        let keystoreManager = KeystoreManager.init([keystoreV3])
+        web3Rinkeby.addKeystoreManager(keystoreManager)
+        guard case .success(let gasPriceRinkeby) = web3Rinkeby.eth.getGasPrice() else {return}
+        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        guard let intermediate = web3Rinkeby.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
+        var options = Web3Options.defaultOptions()
+        options.from = keystoreV3.addresses?.first
+        options.gasPrice = gasPriceRinkeby
+        let result = intermediate.send(password: "BANKEXFOUNDATION", options: options)
+        switch result {
+        case .success(let res):
+            print(res)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
+    
+    func getKeystoreData() -> Data? {
+        let bundle = Bundle(for: type(of: self))
+        guard let path = bundle.path(forResource: "key", ofType: "json") else {return nil}
+        guard let data = NSData(contentsOfFile: path) else {return nil}
+        return data as Data
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

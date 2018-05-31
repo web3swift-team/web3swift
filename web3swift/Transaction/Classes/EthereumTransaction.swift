@@ -90,6 +90,23 @@ public struct EthereumTransaction: CustomStringConvertible {
         self.s = s
     }
     
+    public func mergedWithOptions(_ options: Web3Options) -> EthereumTransaction {
+        var tx = self;
+        if options.gasPrice != nil {
+            tx.gasPrice = options.gasPrice!
+        }
+        if options.gasLimit != nil {
+            tx.gasLimit = options.gasLimit!
+        }
+        if options.value != nil {
+            tx.value = options.value!
+        }
+        if options.to != nil {
+            tx.to = options.to!
+        }
+        return tx
+    }
+    
     public var description: String {
         get {
             var toReturn = ""
@@ -320,7 +337,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         request.method = method
         guard let from = options?.from else {return nil}
         guard var txParams = transaction.encodeAsDictionary(from: from) else {return nil}
-        if options?.gasLimit == nil {
+        if method == .estimateGas || options?.gasLimit == nil {
             txParams.gas = nil
         }
         var params = [txParams] as Array<Encodable>
