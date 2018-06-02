@@ -162,7 +162,7 @@ public class BIP32Keystore: AbstractKeystore {
         let last16bytes = derivedKey[(derivedKey.count - 16)...(derivedKey.count-1)]
         let encryptionKey = derivedKey[0...15]
         guard let IV = Data.randomBytes(length: 16) else {throw AbstractKeystoreError.noEntropyError}
-        let aecCipher = try? AES(key: encryptionKey.bytes, blockMode: .CBC(iv: IV.bytes), padding: .pkcs7)
+        let aecCipher = try? AES(key: encryptionKey.bytes, blockMode: CBC(iv: IV.bytes), padding: .pkcs7)
         guard let encryptedKey = try aecCipher?.encrypt(data!.bytes) else {throw AbstractKeystoreError.aesError}
         let encryptedKeyData = Data(bytes:encryptedKey)
         var dataForMAC = Data()
@@ -238,10 +238,10 @@ public class BIP32Keystore: AbstractKeystore {
         var decryptedPK:Array<UInt8>?
         switch cipher {
         case "aes-128-ctr":
-            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: .CTR(iv: IV.bytes), padding: .pkcs7) else {return nil}
+            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: IV.bytes), padding: .pkcs7) else {return nil}
             decryptedPK = try aesCipher.decrypt(cipherText.bytes)
         case "aes-128-cbc":
-            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: .CBC(iv: IV.bytes), padding: .pkcs7) else {return nil}
+            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CBC(iv: IV.bytes), padding: .pkcs7) else {return nil}
             decryptedPK = try? aesCipher.decrypt(cipherText.bytes)
         default:
             return nil

@@ -13,22 +13,22 @@
 //  - This notice may not be removed or altered from any source or binary distribution.
 //
 
-#if os(Linux) || os(Android) || os(FreeBSD)
-    import Glibc
+#if canImport(Darwin)
+import Darwin
 #else
-    import Darwin
+import Glibc
 #endif
 
 /// Worker cryptor/decryptor of `Updatable` types
 public protocol Cryptors: class {
-    associatedtype EncryptorType: Updatable
-    associatedtype DecryptorType: Updatable
+    associatedtype Encryptor: Cryptor
+    associatedtype Decryptor: Cryptor
 
     /// Cryptor suitable for encryption
-    func makeEncryptor() throws -> EncryptorType
+    func makeEncryptor() throws -> Encryptor
 
     /// Cryptor suitable for decryption
-    func makeDecryptor() throws -> DecryptorType
+    func makeDecryptor() throws -> Decryptor
 
     /// Generate array of random bytes. Helper function.
     static func randomIV(_ blockSize: Int) -> Array<UInt8>

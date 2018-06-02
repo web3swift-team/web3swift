@@ -1,0 +1,7 @@
+module Alamofire_Synchronous {
+  umbrella header "Alamofire-Synchronous-iOS-umbrella.h"
+  exclude header "Alamofire-Synchronous-macOS-umbrella.h"
+
+  export *
+  module * { export * }
+}
