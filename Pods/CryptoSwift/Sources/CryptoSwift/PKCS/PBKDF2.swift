@@ -16,10 +16,10 @@
 //  https://www.ietf.org/rfc/rfc2898.txt
 //
 
-#if os(Linux) || os(Android) || os(FreeBSD)
-    import Glibc
+#if canImport(Darwin)
+import Darwin
 #else
-    import Darwin
+import Glibc
 #endif
 
 public extension PKCS5 {
@@ -44,12 +44,13 @@ public extension PKCS5 {
         ///   - variant: hash variant
         ///   - iterations: iteration count, a positive integer
         ///   - keyLength: intended length of derived key
+        ///   - variant: MAC variant. Defaults to SHA256
         public init(password: Array<UInt8>, salt: Array<UInt8>, iterations: Int = 4096 /* c */, keyLength: Int? = nil /* dkLen */, variant: HMAC.Variant = .sha256) throws {
             precondition(iterations > 0)
 
             let prf = HMAC(key: password, variant: variant)
 
-            guard iterations > 0 && !password.isEmpty && !salt.isEmpty else {
+            guard iterations > 0 && !salt.isEmpty else {
                 throw Error.invalidInput
             }
 

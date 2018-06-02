@@ -1,0 +1,7 @@
+module libsodium {
+  umbrella header "libsodium-iOS-umbrella.h"
+  exclude header "libsodium-macOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

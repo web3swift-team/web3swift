@@ -1,0 +1,7 @@
+module CryptoSwift {
+  umbrella header "CryptoSwift-macOS-umbrella.h"
+  exclude header "CryptoSwift-iOS-umbrella.h"
+
+  export *
+  module * { export * }
+}
