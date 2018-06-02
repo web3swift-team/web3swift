@@ -70,39 +70,140 @@ You can try it by yourself by running the example project:
 - run `pod install` from the `Example/web3swiftExample` directory.
 - `open ./web3swiftExample.xcworkspace`
 
-### Requirements
+## Requirements
 
 Web3swift requires Swift 4.1 and iOS 9.0 or macOS 10.13 although we recommend to use the latest iOS and MacOS versions for your own safety. Don't forget to set iOS version in a Podfile, otherwise you get an error if deployment target is less than the latest SDK.
 
-### Installation
+## Communication
 
-web3swift is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your `Podfile`:
+- if you **need help**, use [Stack Overflow](https://stackoverflow.com/questions/tagged/web3swift) (tag 'web3swift')
+- If you'd like to **ask a general question**, use [Stack Overflow](http://stackoverflow.com/questions/tagged/web3swift).
+- If you **found a bug**, [open an issue](https://github.com/BANKEX/web3swift/issues).
+- If you **have a feature request**, [open an issue](https://github.com/BANKEX/web3swift/issues).
+- If you **want to contribute**, [submit a pull request](https://github.com/BANKEX/web3swift/pulls).
 
-```ruby
-pod 'web3swift', git: 'https://github.com/BANKEX/web3swift.git'
+## Installation
+
+### CocoaPods
+
+[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
+
+```bash
+$ sudo gem install cocoapods
 ```
 
-Run `pod install` from the command line
-### Current functionality
 
-- Send transactions, call functions of smart-contracts, estimate gas costs
-- Serialize and deserialize transactions and results to native Swift types
-- Convenience functions for chain state: block number, gas price
-- Check transaction results and get receipt
-- Parse event logs for transaction
-- Manage user's private keys through encrypted keystore abstractions
-- Batched requests in concurrent mode, checks balances of 580 tokens (from the latest MyEtherWallet repo) over 3 seconds
+To integrate web3swift into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
-### Global plans
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
+
+target '<Your Target Name>' do
+    use_frameworks!
+    pod 'web3swift', :git => 'https://github.com/BANKEX/web3swift.git'
+end
+```
+
+Then, run the following command:
+
+```bash
+$ pod install
+```
+## Features
+
+- [x] Create Account
+- [x] Import Account
+- [x] Sign transictions
+- [x] Send transactions, call functions of smart-contracts, estimate gas costs
+- [x] Serialize and deserialize transactions and results to native Swift types
+- [x] Convenience functions for chain state: block number, gas price
+- [x] Check transaction results and get receipt
+- [x] Parse event logs for transaction
+- [x] Manage user's private keys through encrypted keystore abstractions
+- [x] Batched requests in concurrent mode, checks balances of 580 tokens (from the latest MyEtherWallet repo) over 3 seconds
+
+## Usage
+
+Here you can see a few examples of use of our library
+### Initializing Ethereum address
+```bash
+let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+let constractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!
+```
+
+### Getting gas price
+```bash
+let web3Main = Web3.InfuraMainnetWeb3()
+let gasPriceResult = web3Main.eth.getGasPrice()
+guard case .success(let gasPrice) = gasPriceResult else {return}
+```
+### Setting options
+```bash
+var options = Web3Options.defaultOptions()
+options.gasPrice = gasPrice
+options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")!
+let parameters = [] as [AnyObject]
+```
+
+### Getting balance
+```bash
+guard let bkxBalanceResult = contract.method("balanceOf", parameters: [coldWalletAddress] as [AnyObject], options: options)?.call(options: nil) else {return}
+guard case .success(let bkxBalance) = bkxBalanceResult, let bal = bkxBalance["0"] as? BigUInt else {return}
+print("BKX token balance = " + String(bal))
+```
+
+### Sending ETH
+```bash
+let web3Rinkeby = Web3.InfuraRinkebyWeb3()
+
+web3Rinkeby.addKeystoreManager(bip32keystoreManager)
+options.from = bip32ks?.addresses?.first!
+intermediateSend = web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress, abiVersion: 2)!.method(options: options)!
+let sendResultBip32 = intermediateSend.send(password: "BANKEXFOUNDATION")
+switch sendResultBip32 {
+    case .success(let r):
+        print(r)
+    case .failure(let err):
+        print(err)
+}
+```
+
+### Sending ERC20
+```bash
+var convenienceTransferOptions = Web3Options.defaultOptions()
+convenienceTransferOptions.gasPrice = gasPriceRinkeby
+let convenienceTokenTransfer = web3Rinkeby.eth.sendERC20tokensWithNaturalUnits(tokenAddress: EthereumAddress("0xa407dd0cbc9f9d20cdbd557686625e586c85b20a")!, from: (ks?.addresses?.first!)!, to: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!, amount: "0.0001", options: convenienceTransferOptions)
+let gasEstimateResult2 = convenienceTokenTransfer!.estimateGas(options: nil)
+guard case .success(let gasEstimate2) = gasEstimateResult2 else {return}
+convenienceTransferOptions.gasLimit = gasEstimate2
+let convenienceTransferResult = convenienceTokenTransfer!.send(password: "BANKEXFOUNDATION", options: convenienceTransferOptions)
+switch convenienceTransferResult {
+    case .success(let res):
+        print("Token transfer successful")
+        print(res)
+    case .failure(let error):
+        print(error)
+}
+```
+
+## Global plans
 - Full reference `web3js` functionality
 - Light Ethereum subprotocol (LES) integration
+
+## [Apps using this library](https://github.com/BANKEX/web3swift/wiki/Apps-using-web3swift) 
+
+If you've used this project in a live app, please let us know!
+
+*If you are using `web3swift` in your app or know of an app that uses it, please add it to [this] (https://github.com/BANKEX/web3swift/wiki/Apps-using-web3swift) list.*
 
 ## Special thanks to
 
 - Gnosis team and their library [Bivrost-swift](https://github.com/gnosis/bivrost-swift) for inspiration for the ABI decoding approach
 - [Trust iOS Wallet](https://github.com/TrustWallet/trust-wallet-ios) for collaboration and discussion for initial idea
 - Official Ethereum and Solidity docs, everything was written from ground truth standards
+
 ## Contribution
 
 For the latest version, please check [develop](https://github.com/BANKEX/web3swift/tree/develop) branch.
