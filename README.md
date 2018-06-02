@@ -102,7 +102,7 @@ platform :ios, '9.0'
 
 target '<Your Target Name>' do
     use_frameworks!
-    pod 'web3swift', :git => 'https://github.com/BANKEX/web3swift.git'
+    pod 'web3swift', '~> 0.8.0'
 end
 ```
 
