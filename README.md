@@ -174,7 +174,7 @@ print("BKX token balance = " + String(bal))
 let web3Rinkeby = Web3.InfuraRinkebyWeb3()
 web3Rinkeby.addKeystoreManager(bip32keystoreManager) // attach a keystore if you want to sign locally. Otherwise unsigned request will be sent to remote node
 options.from = bip32ks?.addresses?.first! // specify from what address you want to send it
-intermediateSend = web3Rinkeby.contract(coldWalletABI, at: coldWalletAddress, abiVersion: 2)!.method(options: options)!
+intermediateSend = web3Rinkeby.contract(Web3.Utils.coldWalletABI, at: coldWalletAddress, abiVersion: 2)!.method(options: options)! // an address with a private key attached in not different from any other address, just has very simple ABI
 let sendResultBip32 = intermediateSend.send(password: "BANKEXFOUNDATION")
 ```
 
