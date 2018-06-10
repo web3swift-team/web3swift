@@ -41,7 +41,7 @@ final class ContractCallOperation: Web3Operation {
         if (options?.gasLimit != nil) {
             mergedOptions.gasLimit = options?.gasLimit
         }
-        guard let _ = mergedOptions.from else {return processError(Web3Error.inputError("Invalid input supplied"))}
+//        guard let _ = mergedOptions.from else {return processError(Web3Error.inputError("Invalid input supplied"))}
         let transaction = intermediate.transaction
 
         let parsingCallback = { (res: Result<AnyObject, Web3Error>) -> () in

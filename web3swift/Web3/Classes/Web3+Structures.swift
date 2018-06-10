@@ -125,6 +125,7 @@ public struct EventLog {
     public var logIndex: BigUInt
     public var removed: Bool
     public var topics: [Data]
+    public var transactionHash: Data
     
     public init? (_ json: [String: AnyObject]) {
         guard let ad = json["address"] as? String else {return nil}
@@ -134,6 +135,13 @@ public struct EventLog {
         guard let tpc = json["topics"] as? [String] else {return nil}
         guard let addr = EthereumAddress(ad) else {return nil}
         address = addr
+        guard let txhash = json["transactionHash"] as? String else{return nil}
+        let hash = Data.fromHex(txhash)
+        if hash != nil {
+            transactionHash = hash!
+        } else {
+            transactionHash = Data()
+        }
         data = Data.fromHex(d)!
         guard let liUnwrapped = BigUInt(li.stripHexPrefix(), radix: 16) else {return nil}
         logIndex = liUnwrapped
