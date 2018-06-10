@@ -2398,6 +2398,17 @@ class web3swiftTests: XCTestCase {
         }
     }
     
+    func testERC20tokenBalance() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!, abiVersion: 2)
+        var options = Web3Options();
+        options.from = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        let addressOfUser = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        guard let tokenBalanceResult = contract?.method("balanceOf", parameters: [addressOfUser] as [AnyObject], options: options)?.call(options: nil) else {return XCTFail()}
+        guard case .success(let tokenBalance) = tokenBalanceResult, let bal = tokenBalance["0"] as? BigUInt else {return XCTFail()}
+        print(String(bal))
+    }
+    
     
     func getKeystoreData() -> Data? {
         let bundle = Bundle(for: type(of: self))
