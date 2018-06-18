@@ -248,9 +248,9 @@ extension web3.web3contract {
             self.web3.queue.addOperation(operation)
         }
         
-        func assemble(password:String = "BANKEXFOUNDATION", options: Web3Options? = nil, onBlock: String = "pending") -> Result<EthereumTransaction, Web3Error> {
+        func assemble(options: Web3Options? = nil, onBlock: String = "pending") -> Result<EthereumTransaction, Web3Error> {
             do {
-                let result = try self.assemblePromise(password:password, options: options, onBlock: onBlock).wait()
+                let result = try self.assemblePromise(options: options, onBlock: onBlock).wait()
                 return Result(result)
             } catch {
                 if let err = error as? Web3Error {
@@ -265,7 +265,7 @@ extension web3.web3contract {
 
 extension web3.web3contract.TransactionIntermediate {
     
-    func assemblePromise(password:String = "BANKEXFOUNDATION", options: Web3Options? = nil, onBlock: String = "pending") -> Promise<EthereumTransaction> {
+    func assemblePromise(options: Web3Options? = nil, onBlock: String = "pending") -> Promise<EthereumTransaction> {
         var assembledTransaction : EthereumTransaction = self.transaction
         let queue = self.web3.requestDispatcher.queue
         let returnPromise = Promise<EthereumTransaction> { seal in
@@ -317,7 +317,7 @@ extension web3.web3contract.TransactionIntermediate {
     
     func sendPromise(password:String = "BANKEXFOUNDATION", options: Web3Options? = nil, onBlock: String = "pending") -> Promise<TransactionSendingResult>{
             let queue = self.web3.requestDispatcher.queue
-            return self.assemblePromise(password: password, options: options, onBlock: onBlock).then(on: queue) { transaction throws -> Promise<TransactionSendingResult> in
+            return self.assemblePromise(options: options, onBlock: onBlock).then(on: queue) { transaction throws -> Promise<TransactionSendingResult> in
                 guard let mergedOptions = Web3Options.merge(self.options, with: options) else {
                     throw Web3Error.inputError("Provided options are invalid")
                 }
