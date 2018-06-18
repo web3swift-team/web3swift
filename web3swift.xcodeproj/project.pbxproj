@@ -145,6 +145,10 @@
 		81A1824320D7AA750016741F /* Promise+Web3+Eth+SendTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1824120D7AA750016741F /* Promise+Web3+Eth+SendTransaction.swift */; };
 		81A1824520D7B91B0016741F /* Promise+Web3+Intermediate+Send.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1824420D7B91B0016741F /* Promise+Web3+Intermediate+Send.swift */; };
 		81A1824620D7B91B0016741F /* Promise+Web3+Intermediate+Send.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1824420D7B91B0016741F /* Promise+Web3+Intermediate+Send.swift */; };
+		81A1824820D7DDA20016741F /* Promise+Web3+Personal+Sign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1824720D7DDA20016741F /* Promise+Web3+Personal+Sign.swift */; };
+		81A1824920D7DDA20016741F /* Promise+Web3+Personal+Sign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1824720D7DDA20016741F /* Promise+Web3+Personal+Sign.swift */; };
+		81A1824B20D7DF1B0016741F /* Promise+Web3+Personal+UnlockAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1824A20D7DF1B0016741F /* Promise+Web3+Personal+UnlockAccount.swift */; };
+		81A1824C20D7DF1B0016741F /* Promise+Web3+Personal+UnlockAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1824A20D7DF1B0016741F /* Promise+Web3+Personal+UnlockAccount.swift */; };
 		81BEDE1D20852F75002CD87D /* Web3+PersonalOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BEDE1C20852F75002CD87D /* Web3+PersonalOperations.swift */; };
 		81BEDE1E20852F75002CD87D /* Web3+PersonalOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BEDE1C20852F75002CD87D /* Web3+PersonalOperations.swift */; };
 		81C0FCF220440EB500D82FAF /* Web3+Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF120440EB500D82FAF /* Web3+Protocols.swift */; };
@@ -311,6 +315,8 @@
 		81A1823F20D79FDB0016741F /* Promise+Web3+Eth+EstimateGas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Eth+EstimateGas.swift"; sourceTree = "<group>"; };
 		81A1824120D7AA750016741F /* Promise+Web3+Eth+SendTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Eth+SendTransaction.swift"; sourceTree = "<group>"; };
 		81A1824420D7B91B0016741F /* Promise+Web3+Intermediate+Send.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Intermediate+Send.swift"; sourceTree = "<group>"; };
+		81A1824720D7DDA20016741F /* Promise+Web3+Personal+Sign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Personal+Sign.swift"; sourceTree = "<group>"; };
+		81A1824A20D7DF1B0016741F /* Promise+Web3+Personal+UnlockAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Personal+UnlockAccount.swift"; sourceTree = "<group>"; };
 		81BEDE1C20852F75002CD87D /* Web3+PersonalOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+PersonalOperations.swift"; sourceTree = "<group>"; };
 		81C0FCEF20440C3600D82FAF /* Web3+Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+Wallet.swift"; sourceTree = "<group>"; };
 		81C0FCF120440EB500D82FAF /* Web3+Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Protocols.swift"; sourceTree = "<group>"; };
@@ -633,6 +639,8 @@
 				81A1823F20D79FDB0016741F /* Promise+Web3+Eth+EstimateGas.swift */,
 				81A1824120D7AA750016741F /* Promise+Web3+Eth+SendTransaction.swift */,
 				81A1824420D7B91B0016741F /* Promise+Web3+Intermediate+Send.swift */,
+				81A1824720D7DDA20016741F /* Promise+Web3+Personal+Sign.swift */,
+				81A1824A20D7DF1B0016741F /* Promise+Web3+Personal+UnlockAccount.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1048,6 +1056,7 @@
 				8125F0662047D9FF00A0F2FE /* ABIEncoder.swift in Sources */,
 				8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */,
 				81EB1E4B208173D7003BD47F /* Web3+Personal.swift in Sources */,
+				81A1824B20D7DF1B0016741F /* Promise+Web3+Personal+UnlockAccount.swift in Sources */,
 				81A1823A20D79AD40016741F /* Promise+Web3+Eth+SendRawTransaction.swift in Sources */,
 				81D7D97520A3240900A193EC /* EthereumFilterEncodingExtensions.swift in Sources */,
 				817EBB122004FE2F00E02EAA /* BIP32HDNode.swift in Sources */,
@@ -1091,6 +1100,7 @@
 				81166665204565AC008D8AD0 /* Web3+BrowserFunctions.swift in Sources */,
 				81531AA01FE7C07A002192CC /* EthereumKeystoreV3.swift in Sources */,
 				8103BBBA20764A6900499769 /* Web3+DataFetchOperation.swift in Sources */,
+				81A1824820D7DDA20016741F /* Promise+Web3+Personal+Sign.swift in Sources */,
 				8123E1C9200CBAF800B6D3AB /* Data+Extension.swift in Sources */,
 				81C5DA1B2072633300424CD6 /* ABIv2ParameterTypes.swift in Sources */,
 				81FB21EE2077D98A007F9A83 /* SynchronizedQueue.swift in Sources */,
@@ -1190,6 +1200,7 @@
 				81FB21F22078142D007F9A83 /* Web3+Deprecated.swift in Sources */,
 				41948131203630530065A83B /* BIP32KeystoreJSONStructure.swift in Sources */,
 				41948132203630530065A83B /* BIP32HDNode.swift in Sources */,
+				81A1824920D7DDA20016741F /* Promise+Web3+Personal+Sign.swift in Sources */,
 				81A1822620D678590016741F /* Promise+Web3+Eth+GetGasPrice.swift in Sources */,
 				41948133203630530065A83B /* BIP39.swift in Sources */,
 				81C5DA2F2074EBF500424CD6 /* ContractABIv2.swift in Sources */,
@@ -1209,6 +1220,7 @@
 				81A1822920D678BF0016741F /* Promise+Web3+Eth+GetAccounts.swift in Sources */,
 				81C5DA322074EC1E00424CD6 /* ContractProtocol.swift in Sources */,
 				81C5DA232072DFE600424CD6 /* ABIv2TypeParser.swift in Sources */,
+				81A1824C20D7DF1B0016741F /* Promise+Web3+Personal+UnlockAccount.swift in Sources */,
 				41948139203630530065A83B /* LibSecp256k1Extension.swift in Sources */,
 				4194813A203630530065A83B /* DictionaryLiteralJSONSerializer.swift in Sources */,
 				4194813B203630530065A83B /* NSRegularExpressionExtension.swift in Sources */,

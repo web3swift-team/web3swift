@@ -102,6 +102,25 @@ public struct JSONRPCresponse: Decodable{
         self.message = message
     }
     
+    internal var decodableTypes: [Decodable.Type] = [[EventLog].self,
+                                  [TransactionDetails].self,
+                                  [TransactionReceipt].self,
+                                  [Block].self,
+                                  [EthereumTransaction].self,
+                                  [String].self,
+                                  [Int].self,
+                                  [Bool].self,
+                                  EventLog.self,
+                                  TransactionDetails.self,
+                                  TransactionReceipt.self,
+                                  Block.self,
+                                  EthereumTransaction.self,
+                                  String.self,
+                                  Int.self,
+                                  Bool.self,
+                                  [String:String].self,
+                                  [String:Int].self]
+    
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: JSONRPCresponseKeys.self)
         let id: Int = try container.decode(Int.self, forKey: .id)
@@ -109,9 +128,41 @@ public struct JSONRPCresponse: Decodable{
         let error: String? = try container.decodeIfPresent(String.self, forKey: .error)
         let message: String? = try container.decodeIfPresent(String.self, forKey: .message)
         var result: Any? = nil
+//        for type in decodableTypes {
+//            if let rawValue = try? container.decodeIfPresent(type, forKey: .result) {
+//                result = rawValue
+//                break
+//            }
+//        }
         if let rawValue = try? container.decodeIfPresent(String.self, forKey: .result) {
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent(Int.self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent(Bool.self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent(EventLog.self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent(EthereumTransaction.self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent(Block.self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent(TransactionReceipt.self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent(TransactionDetails.self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent([EventLog].self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent([Block].self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent([EthereumTransaction].self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent([TransactionReceipt].self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent([TransactionDetails].self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent([Bool].self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent([Int].self, forKey: .result) {
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent([String].self, forKey: .result) {
             result = rawValue
@@ -119,7 +170,7 @@ public struct JSONRPCresponse: Decodable{
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent([String: Int].self, forKey: .result) {
             result = rawValue
-        }
+        } 
         self.init(id: id, jsonrpc: jsonrpc, result: result, error: error, message: message)
     }
     
