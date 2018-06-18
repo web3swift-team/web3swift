@@ -87,8 +87,8 @@ extension Web3HttpProvider {
         return rp.promise.ensure(on: queue) {
             task = nil
             }.map(on: queue){ (data: Data) throws -> JSONRPCresponseBatch in
-                let debugValue = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions(rawValue: 0))
-                print(debugValue)
+//                let debugValue = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions(rawValue: 0))
+//                print(debugValue)
                 let parsedResponse = try JSONDecoder().decode(JSONRPCresponseBatch.self, from: data)
                 return parsedResponse
         }

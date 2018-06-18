@@ -52,6 +52,7 @@ class web3swift_promises_Tests: XCTestCase {
             XCTAssert(esimate == 21000)
         } catch{
             print(error)
+            XCTFail()
         }
     }
     
@@ -72,6 +73,7 @@ class web3swift_promises_Tests: XCTestCase {
             print(result)
         } catch {
             print(error)
+            XCTFail()
         }
     }
     
@@ -85,6 +87,7 @@ class web3swift_promises_Tests: XCTestCase {
             print(String(bal))
         } catch {
             print(error)
+            XCTFail()
         }
     }
     
@@ -105,6 +108,7 @@ class web3swift_promises_Tests: XCTestCase {
             XCTAssert(eventParserResult[0].eventLog != nil)
         }catch {
             print(error)
+            XCTFail()
         }
     }
     
@@ -122,6 +126,7 @@ class web3swift_promises_Tests: XCTestCase {
             XCTAssert(present.count == 1)
         } catch{
             print(error)
+            XCTFail()
         }
     }
     
