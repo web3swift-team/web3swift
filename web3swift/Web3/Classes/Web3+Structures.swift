@@ -640,14 +640,14 @@ public struct EventParserResult:EventParserResultProtocol {
     public var transactionReceipt: TransactionReceipt?
     public var contractAddress: EthereumAddress
     public var decodedResult: [String:Any]
-    var transactionHash: Data?
+    public var eventLog: EventLog?
     
     public init (eventName: String, transactionReceipt: TransactionReceipt?, contractAddress: EthereumAddress, decodedResult: [String:Any]) {
         self.eventName = eventName
         self.transactionReceipt = transactionReceipt
         self.contractAddress = contractAddress
         self.decodedResult = decodedResult
-        self.transactionHash = nil
+        self.eventLog = nil
     }
 }
 

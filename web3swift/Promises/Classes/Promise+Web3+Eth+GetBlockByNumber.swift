@@ -22,7 +22,7 @@ extension web3.Eth {
     }
     
     public func getBlockByNumberPromise(_ number: String, fullTransactions: Bool = false) -> Promise<Block> {
-        let request = JSONRPCRequestFabric.prepareRequest(.getBlockByNumber, parameters: [number])
+        let request = JSONRPCRequestFabric.prepareRequest(.getBlockByNumber, parameters: [number, fullTransactions])
         let rp = web3.dispatch(request)
         let queue = web3.requestDispatcher.queue
         return rp.map(on: queue ) { response in

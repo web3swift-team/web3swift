@@ -46,6 +46,9 @@ extension Web3HttpProvider {
                 task = nil
             }.map(on: queue){ (data: Data) throws -> JSONRPCresponse in
                 let parsedResponse = try JSONDecoder().decode(JSONRPCresponse.self, from: data)
+                if parsedResponse.error != nil {
+                    throw Web3Error.nodeError("Received an error message from node\n" + String(describing: parsedResponse.error!))
+                }
                 return parsedResponse
             }
         }
