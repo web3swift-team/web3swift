@@ -10,21 +10,34 @@ import Foundation
 import Alamofire
 import Alamofire_Synchronous
 import BigInt
+import PromiseKit
+
+public protocol Web3Provider {
+    func send(request: JSONRPCrequest) -> [String:Any]?
+    func send(requests: [JSONRPCrequest]) -> [[String: Any]?]?
+    func sendWithRawResult(request: JSONRPCrequest) -> Data?
+    func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse>
+    func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue) -> Promise<JSONRPCresponseBatch>
+    var network: Networks? {get set}
+    var attachedKeystoreManager: KeystoreManager? {get set}
+    var url: URL {get}
+    var session: URLSession {get}
+}
 
 public class Web3HttpProvider: Web3Provider {
     public var url: URL
     public var network: Networks?
     public var attachedKeystoreManager: KeystoreManager? = nil
-    
+    public var session: URLSession = {() -> URLSession in
+        let config = URLSessionConfiguration.default
+        let urlSession = URLSession(configuration: config)
+        return urlSession
+    }()
     public init?(_ httpProviderURL: URL, network net: Networks? = nil, keystoreManager manager: KeystoreManager? = nil) {
         guard httpProviderURL.scheme == "http" || httpProviderURL.scheme == "https" else {return nil}
         url = httpProviderURL
         if net == nil {
-            var request = JSONRPCrequest()
-            request.method = JSONRPCmethod.getNetwork
-            let params = [] as Array<Encodable>
-            let pars = JSONRPCparams(params: params)
-            request.params = pars
+            let request = JSONRPCRequestFabric.prepareRequest(.getNetwork, parameters: [])
             let response = Web3HttpProvider.syncPost(request, providerURL: httpProviderURL)
             if response == nil {
                 return nil

@@ -41,10 +41,11 @@ public extension Data {
         }
     }
     public static func randomBytes(length: Int) -> Data? {
-        var data = Data(count: length)
         for _ in 0...1024 {
+            var data = Data(repeating: 0, count: length)
             let result = data.withUnsafeMutableBytes {
-                SecRandomCopyBytes(kSecRandomDefault, data.count, $0)
+                (mutableBytes: UnsafeMutablePointer<UInt8>) -> Int32 in
+                SecRandomCopyBytes(kSecRandomDefault, 32, mutableBytes)
             }
             if result == errSecSuccess {
                 return data
