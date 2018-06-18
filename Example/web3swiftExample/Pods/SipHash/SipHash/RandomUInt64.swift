@@ -12,15 +12,28 @@
     func randomUInt64() -> UInt64 {
         return UInt64(arc4random()) << 32 | UInt64(arc4random())
     }
-#elseif os(Linux)
-    import SwiftShims
+#elseif os(Linux) || os(FreeBSD)
+    import Glibc
 
     func randomUInt64() -> UInt64 {
-        return UInt64(_swift_stdlib_cxx11_mt19937()) << 32 | UInt64(_swift_stdlib_cxx11_mt19937())
+        var randomArray = [UInt8](repeating: 0, count: 8)
+
+        let fd = open("/dev/urandom", O_RDONLY)
+        defer {
+            close(fd)
+        }
+
+        let _ = read(fd, &randomArray, MemoryLayout<UInt8>.size * 8)
+
+        var randomInt: UInt64 = 0
+        for i in 0..<randomArray.count {
+            randomInt = randomInt | (UInt64(randomArray[i]) << (i * 8))
+        }
+
+        return randomInt
     }
 #else
     func randomUInt64() -> UInt64 {
         fatalError("Unsupported platform")
     }
 #endif
-

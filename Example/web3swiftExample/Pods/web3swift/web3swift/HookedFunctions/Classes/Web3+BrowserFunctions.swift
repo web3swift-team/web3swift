@@ -91,7 +91,7 @@ extension web3.BrowserFunctions {
         case .failure(_):
             return nil
         case .success(let res):
-            return res
+            return ["txhash": res.hash]
         }
     }
     

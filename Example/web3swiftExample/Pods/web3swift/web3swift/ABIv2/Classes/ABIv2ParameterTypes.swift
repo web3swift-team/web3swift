@@ -110,7 +110,7 @@ extension ABIv2.Element {
             case .int(bits: _):
                 return BigUInt(0)
             case .address:
-                return EthereumAddress("0x0000000000000000000000000000000000000000")
+                return EthereumAddress("0x0000000000000000000000000000000000000000")!
             case .function:
                 return Data(repeating: 0x00, count: 24)
             case .bool:
