@@ -219,9 +219,6 @@ extension web3.web3contract.EventParser {
     
 }
 
-
-
-
 extension web3.web3contract {
     public func getIndexedEvents(eventName: String?, filter: EventFilter) -> Result<[EventParserResultProtocol], Web3Error> {
         guard let rawContract = self.contract as? ContractV2 else {return Result.failure(Web3Error.nodeError("ABIv1 is not supported for this method"))}
