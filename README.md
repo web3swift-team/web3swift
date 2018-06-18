@@ -32,6 +32,9 @@ Example is updated for 0.5.0, although please prefer to use tests as an example 
 - Private key and transaction were created directly on the iOS device and sent directly to [Infura](https://infura.io) node
 - Native API
 - Security (as cool as hard wallet! Right out-of-the-box! :box: )
+- No unnecessary  dependencies
+- Possibility to work with all existing smart contracts
+- Referencing the newest features introduced in Solidity
 
 ## Design decisions
 
@@ -205,7 +208,7 @@ switch convenienceTransferResult {
 
 If you've used this project in a live app, please let us know!
 
-*If you are using `web3swift` in your app or know of an app that uses it, please add it to [this] (https://github.com/BANKEX/web3swift/wiki/Apps-using-web3swift) list.*
+*If you are using `web3swift` in your app or know of an app that uses it, please add it to [this](https://github.com/BANKEX/web3swift/wiki/Apps-using-web3swift) list.*
 
 ## Special thanks to
 
