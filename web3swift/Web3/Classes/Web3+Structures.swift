@@ -597,4 +597,9 @@ public struct EventParserResult:EventParserResultProtocol {
     public var decodedResult: [String:Any]
 }
 
+public struct TransactionSendingResult {
+    public var transaction: EthereumTransaction
+    public var hash: String
+}
+
 

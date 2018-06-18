@@ -7,7 +7,8 @@
 //
 
 import Foundation
-import Result
+import enum Result.Result
+//typealias ExecResult = Result
 import BigInt
 
 extension web3.web3contract {
@@ -209,5 +210,62 @@ extension web3.web3contract {
             operation.next = OperationChainingType.callback(callback, queue)
             self.web3.queue.addOperation(operation)
         }
+    }
+}
+
+import PromiseKit
+typealias PromiseResult = PromiseKit.Result
+
+extension web3.web3contract.TransactionIntermediate {
+    
+    func sendPromise(password:String = "BANKEXFOUNDATION", options: Web3Options? = nil, onBlock: String = "pending" ) -> Promise<TransactionSendingResult>{
+        var assembledTransaction : EthereumTransaction = self.transaction
+        let queue = self.web3.requestDispatcher.queue
+        let returnPromise = Promise<TransactionSendingResult> { seal in
+            guard let mergedOptions = Web3Options.merge(self.options, with: options) else {
+                seal.reject(Web3Error.inputError("Provided options are invalid"))
+                return
+            }
+            guard let from = mergedOptions.from else {
+                seal.reject(Web3Error.inputError("No 'from' field provided"))
+                return
+            }
+            let getNoncePromise : Promise<BigUInt> = self.web3.eth.getTransactionCountPromise(address: from, onBlock: onBlock)
+            let gasEstimatePromise : Promise<BigUInt> = self.web3.eth.estimateGasPromise(assembledTransaction, onBlock: onBlock)
+            let gasPricePromise : Promise<BigUInt> = self.web3.eth.getGasPricePromise()
+            var promisesToFulfill: [Promise<BigUInt>] = [getNoncePromise, gasPricePromise, gasPricePromise]
+            when(resolved: getNoncePromise, gasEstimatePromise, gasPricePromise).map(on: queue, { (results:[PromiseResult<BigUInt>]) throws -> EthereumTransaction in
+                
+                promisesToFulfill.removeAll()
+                guard case .fulfilled(let nonce) = results[0] else {
+                    throw Web3Error.processingError("Failed to fetch nonce")
+                }
+                guard case .fulfilled(let gasEstimate) = results[1] else {
+                    throw Web3Error.processingError("Failed to fetch gas estimate")
+                }
+                guard case .fulfilled(let gasPrice) = results[2] else {
+                    throw Web3Error.processingError("Failed to fetch gas price")
+                }
+                guard let estimate = Web3Options.smartMergeGasLimit(originalOptions: options, extraOptions: nil, gasEstimage: gasEstimate) else {
+                    throw Web3Error.processingError("Failed to calculate gas estimate that satisfied options")
+                }
+                assembledTransaction.nonce = nonce
+                assembledTransaction.gasLimit = estimate
+                if assembledTransaction.gasPrice == 0 {
+                    assembledTransaction.gasPrice = gasPrice
+                }
+                return assembledTransaction
+            }).then(on: queue) { transaction -> Promise<TransactionSendingResult> in
+                var cleanedOptions = Web3Options()
+                cleanedOptions.from = mergedOptions.from
+                cleanedOptions.to = mergedOptions.to
+                return self.web3.eth.sendTransactionPromise(assembledTransaction, options: cleanedOptions)
+            }.done(on: queue) {transactionSendingResult in
+                seal.fulfill(transactionSendingResult)
+            }.catch(on: queue) {err in
+                seal.reject(err)
+            }
+        }
+        return returnPromise
     }
 }

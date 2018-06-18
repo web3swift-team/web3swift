@@ -35,6 +35,53 @@ class web3swift_promises_Tests: XCTestCase {
         }
     }
     
+    func testEstimateGasPromise() {
+        do {
+            let web3 = Web3.InfuraMainnetWeb3()
+            let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+            let tempKeystore = try! EthereumKeystoreV3(password: "")
+            let keystoreManager = KeystoreManager([tempKeystore!])
+            web3.addKeystoreManager(keystoreManager)
+            let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
+            var options = Web3Options.defaultOptions()
+            options.value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
+            options.from = keystoreManager.addresses?.first
+            let intermediate = contract?.method("fallback", options: options)
+            let esimate = try web3.eth.estimateGasPromise(intermediate!.transaction, options: intermediate!.options!).wait()
+            print(esimate)
+            XCTAssert(esimate == 21000)
+        } catch{
+            print(error)
+        }
+    }
+    
+    func testSendETHPromise() {
+        do {
+            guard let keystoreData = getKeystoreData() else {return}
+            guard let keystoreV3 = EthereumKeystoreV3.init(keystoreData) else {return XCTFail()}
+            let web3Rinkeby = Web3.InfuraRinkebyWeb3()
+            let keystoreManager = KeystoreManager.init([keystoreV3])
+            web3Rinkeby.addKeystoreManager(keystoreManager)
+            guard case .success(let gasPriceRinkeby) = web3Rinkeby.eth.getGasPrice() else {return}
+            let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+            guard let intermediate = web3Rinkeby.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
+            var options = Web3Options.defaultOptions()
+            options.from = keystoreV3.addresses?.first
+            options.gasPrice = gasPriceRinkeby
+            let result = try intermediate.sendPromise(options: options).wait()
+            print(result)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func getKeystoreData() -> Data? {
+        let bundle = Bundle(for: type(of: self))
+        guard let path = bundle.path(forResource: "key", ofType: "json") else {return nil}
+        guard let data = NSData(contentsOfFile: path) else {return nil}
+        return data as Data
+    }
+    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.

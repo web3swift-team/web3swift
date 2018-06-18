@@ -208,13 +208,13 @@ public struct JSONRPCresponseBatch: Decodable {
 
 public struct TransactionParameters: Codable {
     public var data: String?
-    public var from: String
+    public var from: String?
     public var gas: String?
     public var gasPrice: String?
     public var to: String?
     public var value: String? = "0x0"
     
-    public init(from _from:String, to _to:String?) {
+    public init(from _from:String?, to _to:String?) {
         from = _from
         to = _to
     }

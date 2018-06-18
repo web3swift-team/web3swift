@@ -35,7 +35,10 @@ public class JSONRPCrequestDispatcher {
         var queue: DispatchQueue
         var lockQueue : DispatchQueue
         var triggered : Bool = false
-        func add(_ request: JSONRPCrequest, maxWaitTime: TimeInterval) -> Promise<JSONRPCresponse> {
+        func add(_ request: JSONRPCrequest, maxWaitTime: TimeInterval) throws -> Promise<JSONRPCresponse> {
+            if self.triggered {
+                throw Web3Error.nodeError("Batch is already in flight")
+            }
             let requestID = request.id
             let promiseToReturn = Promise<JSONRPCresponse>.pending()
             self.queue.async {
@@ -97,7 +100,7 @@ public class JSONRPCrequestDispatcher {
             throw Web3Error.inputError("Trying to batch a request when policy is not to batch")
         }
         let currentBatch = self.batches.last!
-        if currentBatch.requests.count % batchLength == 0 {
+        if currentBatch.requests.count % batchLength == 0 || currentBatch.triggered {
             let newBatch = Batch(provider: self.provider, capacity: Int(batchLength), queue: self.queue, lockQueue: self.lockQueue)
             self.batches.append(newBatch)
             return newBatch
@@ -120,7 +123,7 @@ public class JSONRPCrequestDispatcher {
                 self.lockQueue.async {
                     do {
                         let batch = try self.getBatch()
-                        let internalPromise = batch.add(request, maxWaitTime: self.MAX_WAIT_TIME)
+                        let internalPromise = try batch.add(request, maxWaitTime: self.MAX_WAIT_TIME)
                         internalPromise.done(on: self.queue) {resp in
                             seal.fulfill(resp)
                         }.catch(on: self.queue){err in
