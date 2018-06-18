@@ -17,6 +17,7 @@ public enum Web3Error: Error {
     case walletError
     case inputError(String)
     case nodeError(String)
+    case processingError(String)
     case keystoreError(AbstractKeystoreError)
     case generalError(Error)
     case unknownError

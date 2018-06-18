@@ -13,6 +13,7 @@ import BigInt
 import Result
 import secp256k1_ios
 
+
 @testable import web3swift_iOS
 
 class web3swiftTests: XCTestCase {
@@ -542,6 +543,7 @@ class web3swiftTests: XCTestCase {
         case .success(_):
             return XCTFail()
         case .failure(let error):
+            print(error)
             guard case .nodeError(let descr) = error else {return XCTFail()}
             guard descr == "insufficient funds for gas * price + value" else {return XCTFail()}
         }
@@ -2409,7 +2411,13 @@ class web3swiftTests: XCTestCase {
         print(String(bal))
     }
     
-    
+    func testGenericRPCresponse() {
+        let hex = "0x1"
+        let rpcResponse = JSONRPCresponse(id: 1, jsonrpc: "2.0", result: hex, error: nil)
+        let value: BigUInt? = rpcResponse.getValue()
+        XCTAssert(value == 1)
+    }
+        
     func getKeystoreData() -> Data? {
         let bundle = Bundle(for: type(of: self))
         guard let path = bundle.path(forResource: "key", ofType: "json") else {return nil}

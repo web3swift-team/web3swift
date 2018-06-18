@@ -30,7 +30,7 @@ class web3swift_local_node_Tests: XCTestCase {
         guard let result = intermediate?.send(password: "") else {return XCTFail()}
         switch result {
         case .success(let res):
-            let txHash = res["txhash"]!
+            let txHash = res.hash
             print("Transaction with hash " + txHash)
             Thread.sleep(forTimeInterval: 1.0)
             let receipt = web3.eth.getTransactionReceipt(txHash)

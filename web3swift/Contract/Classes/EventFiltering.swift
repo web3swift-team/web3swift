@@ -140,7 +140,9 @@ internal func parseReceiptForLogs(receipt: TransactionReceipt, contract: Contrac
     let decodedLogs = allLogs.compactMap({ (log) -> EventParserResultProtocol? in
         let (n, d) = contract.parseEvent(log)
         guard let evName = n, let evData = d else {return nil}
-        return EventParserResult(eventName: evName, transactionReceipt: receipt, contractAddress: log.address, decodedResult: evData)
+        var result = EventParserResult(eventName: evName, transactionReceipt: receipt, contractAddress: log.address, decodedResult: evData)
+        result.eventLog = log
+        return result
     }).filter { (res:EventParserResultProtocol?) -> Bool in
         return res != nil && res?.eventName == eventName
     }

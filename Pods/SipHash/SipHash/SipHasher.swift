@@ -151,7 +151,7 @@ public struct SipHasher {
         while i < end {
             var m: UInt64 = 0
             withUnsafeMutableBytes(of: &m) { p in
-                p.copyBytes(from: .init(rebasing: buffer[i ..< i + 8]))
+                p.copyMemory(from: .init(rebasing: buffer[i ..< i + 8]))
             }
             compressWord(UInt64(littleEndian: m))
             i += 8
