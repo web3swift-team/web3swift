@@ -109,7 +109,6 @@ public struct JSONRPCresponse: Decodable{
                                   [TransactionDetails].self,
                                   [TransactionReceipt].self,
                                   [Block].self,
-                                  [EthereumTransaction].self,
                                   [String].self,
                                   [Int].self,
                                   [Bool].self,
@@ -117,7 +116,6 @@ public struct JSONRPCresponse: Decodable{
                                   TransactionDetails.self,
                                   TransactionReceipt.self,
                                   Block.self,
-                                  EthereumTransaction.self,
                                   String.self,
                                   Int.self,
                                   Bool.self,
@@ -148,8 +146,6 @@ public struct JSONRPCresponse: Decodable{
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent(EventLog.self, forKey: .result) {
             result = rawValue
-        } else if let rawValue = try? container.decodeIfPresent(EthereumTransaction.self, forKey: .result) {
-            result = rawValue
         } else if let rawValue = try? container.decodeIfPresent(Block.self, forKey: .result) {
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent(TransactionReceipt.self, forKey: .result) {
@@ -159,8 +155,6 @@ public struct JSONRPCresponse: Decodable{
         } else if let rawValue = try? container.decodeIfPresent([EventLog].self, forKey: .result) {
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent([Block].self, forKey: .result) {
-            result = rawValue
-        } else if let rawValue = try? container.decodeIfPresent([EthereumTransaction].self, forKey: .result) {
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent([TransactionReceipt].self, forKey: .result) {
             result = rawValue

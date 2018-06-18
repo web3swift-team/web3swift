@@ -12,7 +12,7 @@ import PromiseKit
 
 extension web3.Personal {
     
-    func sendPersonalMessagePromise(message: Data, from: EthereumAddress, password:String = "BANKEXFOUNDATION") -> Promise<Data> {
+    func signPersonalMessagePromise(message: Data, from: EthereumAddress, password:String = "BANKEXFOUNDATION") -> Promise<Data> {
         let queue = web3.requestDispatcher.queue
         do {
             if self.web3.provider.attachedKeystoreManager == nil {
@@ -20,6 +20,9 @@ extension web3.Personal {
                 let request = JSONRPCRequestFabric.prepareRequest(.personalSign, parameters: [from.address.lowercased(), hexData])
                 return self.web3.dispatch(request).map(on: queue) {response in
                     guard let value: Data = response.getValue() else {
+                        if response.error != nil {
+                            throw Web3Error.nodeError(response.error!.message)
+                        }
                         throw Web3Error.nodeError("Invalid value from Ethereum node")
                     }
                     return value

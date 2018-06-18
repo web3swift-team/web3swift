@@ -24,6 +24,9 @@ extension web3.Eth {
                 }
                 return self.web3.dispatch(request).map(on: queue) {response in
                     guard let value: String = response.getValue() else {
+                        if response.error != nil {
+                            throw Web3Error.nodeError(response.error!.message)
+                        }
                         throw Web3Error.nodeError("Invalid value from Ethereum node")
                     }
                     let result = TransactionSendingResult(transaction: assembledTransaction, hash: value)
@@ -33,7 +36,8 @@ extension web3.Eth {
             guard let from = options.from else {
                 throw Web3Error.inputError("No 'from' field provided")
             }
-            do {try Web3Signer.signTX(transaction: &assembledTransaction, keystore: self.web3.provider.attachedKeystoreManager!, account: from, password: password)
+            do {
+                try Web3Signer.signTX(transaction: &assembledTransaction, keystore: self.web3.provider.attachedKeystoreManager!, account: from, password: password)
             } catch {
                 throw Web3Error.inputError("Failed to locally sign a transaction")
             }

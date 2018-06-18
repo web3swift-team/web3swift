@@ -24,6 +24,9 @@ extension web3.Personal {
                 let request = JSONRPCRequestFabric.prepareRequest(.unlockAccount, parameters: [account.lowercased(), password, seconds])
                 return self.web3.dispatch(request).map(on: queue) {response in
                     guard let value: Bool = response.getValue() else {
+                        if response.error != nil {
+                            throw Web3Error.nodeError(response.error!.message)
+                        }
                         throw Web3Error.nodeError("Invalid value from Ethereum node")
                     }
                     return value

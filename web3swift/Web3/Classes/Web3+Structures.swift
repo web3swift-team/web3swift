@@ -145,7 +145,6 @@ public struct TransactionDetails: Decodable {
         case blockHash
         case blockNumber
         case transactionIndex
-        case transaction
     }
     
     public init(from decoder: Decoder) throws {

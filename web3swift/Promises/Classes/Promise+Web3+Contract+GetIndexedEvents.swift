@@ -29,6 +29,9 @@ extension web3.web3contract {
             let request = JSONRPCRequestFabric.prepareRequest(.getLogs, parameters: [preEncoding])
             let fetchLogsPromise = self.web3.dispatch(request).map(on: queue) {response throws -> [EventParserResult] in
                 guard let value: [EventLog] = response.getValue() else {
+                    if response.error != nil {
+                        throw Web3Error.nodeError(response.error!.message)
+                    }
                     throw Web3Error.nodeError("Empty or malformed response")
                 }
                 let allLogs = value

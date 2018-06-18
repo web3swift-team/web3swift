@@ -84,8 +84,8 @@ public class EthereumKeystoreV3: AbstractKeystore {
         let saltLen = 32;
         guard let saltData = Data.randomBytes(length: saltLen) else {throw AbstractKeystoreError.noEntropyError}
         guard let derivedKey = scrypt(password: password, salt: saltData, length: dkLen, N: N, R: R, P: P) else {throw AbstractKeystoreError.keyDerivationError}
-        let last16bytes = derivedKey[(derivedKey.count - 16)...(derivedKey.count-1)]
-        let encryptionKey = derivedKey[0...15]
+        let last16bytes = Data(derivedKey[(derivedKey.count - 16)...(derivedKey.count-1)])
+        let encryptionKey = Data(derivedKey[0...15])
         guard let IV = Data.randomBytes(length: 16) else {throw AbstractKeystoreError.noEntropyError}
         var aesCipher : AES?
         switch aesMode {
@@ -148,7 +148,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
                 default:
                     hashVariant = nil
             }
-            guard (hashVariant != nil) else {return nil}
+            guard hashVariant != nil else {return nil}
             guard let c = keystoreParams.crypto.kdfparams.c else {return nil}
             guard let passData = password.data(using: .utf8) else {return nil}
             guard let derivedArray = try? PKCS5.PBKDF2(password: passData.bytes, salt: saltData.bytes, iterations: c, keyLength: derivedLen, variant: hashVariant!).calculate() else {return nil}
@@ -158,7 +158,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         }
         guard let derivedKey = passwordDerivedKey else {return nil}
         var dataForMAC = Data()
-        let derivedKeyLast16bytes = derivedKey[(derivedKey.count - 16)...(derivedKey.count - 1)]
+        let derivedKeyLast16bytes = Data(derivedKey[(derivedKey.count - 16)...(derivedKey.count - 1)])
         dataForMAC.append(derivedKeyLast16bytes)
         guard let cipherText = Data.fromHex(keystoreParams.crypto.ciphertext) else {return nil}
         if (cipherText.count != 32) {return nil}

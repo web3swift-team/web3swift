@@ -20,6 +20,9 @@ extension web3.Eth {
             let rp = web3.dispatch(request)
             return rp.map(on: queue ) { response in
                 guard let value: Data = response.getValue() else {
+                    if response.error != nil {
+                        throw Web3Error.nodeError(response.error!.message)
+                    }
                     throw Web3Error.nodeError("Invalid value from Ethereum node")
                 }
                 return value

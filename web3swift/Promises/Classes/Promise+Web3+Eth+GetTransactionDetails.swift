@@ -22,16 +22,12 @@ extension web3.Eth {
         let queue = web3.requestDispatcher.queue
         return rp.map(on: queue ) { response in
             guard let value: TransactionDetails = response.getValue() else {
+                if response.error != nil {
+                    throw Web3Error.nodeError(response.error!.message)
+                }
                 throw Web3Error.nodeError("Invalid value from Ethereum node")
             }
             return value
-//            guard let details = TransactionDetails(value) else {
-//                throw Web3Error.processingError("Can not deserialize transaction details")
-//            }
-//            return details
-//            let reencoded = try JSONSerialization.data(withJSONObject: value, options: JSONSerialization.WritingOptions(rawValue: 0))
-//            let details = try JSONDecoder().decode(TransactionDetails.self, from: reencoded)
-//            return details
         }
     }
 }
