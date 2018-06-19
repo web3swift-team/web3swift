@@ -219,7 +219,7 @@ If you've used this project in a live app, please let us know!
 ## Contribution
 
 For the latest version, please check [develop](https://github.com/BANKEX/web3swift/tree/develop) branch.
-Changes from this branch will be merged into the [master](https://github.com/BANKEX/web3swift/tree/master) branch at some point.
+Changes made to this branch will be merged into the [master](https://github.com/BANKEX/web3swift/tree/master) branch at some point.
 
 - If you want to contribute, submit a [pull request](https://github.com/BANKEX/web3swift/pulls) against a development `develop` branch.
 - If you found a bug, [open an issue](https://github.com/BANKEX/web3swift/issues).
@@ -228,7 +228,7 @@ Changes from this branch will be merged into the [master](https://github.com/BAN
 
 ## Appreciation
 
-When using this pod references to this repo, [BANKEX](http://bankex.com) and [BANKEX Foundation](http://bankexfoundation.org) are appreciated.
+When using this pod, references to this repo, [BANKEX](http://bankex.com) and [BANKEX Foundation](http://bankexfoundation.org) are appreciated.
 
 ## Authors
 
