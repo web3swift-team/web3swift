@@ -2,7 +2,7 @@
 
 <img align="left" width="25" height="25" src="https://user-images.githubusercontent.com/28599454/41086111-af4bc3b0-6a41-11e8-9f9f-2d642b12666e.png">[Ask questions](https://stackoverflow.com/questions/tagged/web3swift)
 ## Important notices
-With the version 0.3.0 API should be less volatile. All public functions should return a [Result](https://github.com/antitypical/Result) instead of `nil` or throwing.
+With the version 0.3.0 the API should be less volatile. All public functions should return a [Result](https://github.com/antitypical/Result) instead of `nil` or throwing.
 
 Example is updated for 0.5.0, although please prefer to use tests as an example for your code.
 
@@ -20,7 +20,7 @@ Example is updated for 0.5.0, although please prefer to use tests as an example 
   - RLP encoding
 - Interactions (read/write to Smart contracts) :arrows_counterclockwise:
 - Local keystore management (geth compatible)
-- Literally following the standarts:
+- Literally following the standards:
   - [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) HD Wallets: Deterministic Wallet
   - [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases)
   - [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)
@@ -29,18 +29,18 @@ Example is updated for 0.5.0, although please prefer to use tests as an example 
 
 ## Check this out
 
-- Private key and transaction were created directly on the iOS device and sent directly to [Infura](https://infura.io) node
+- Private key and transaction were created directly on an iOS device and sent directly to [Infura](https://infura.io) node
 - Native API
-- Security (as cool as hard wallet! Right out-of-the-box! :box: )
-- No unnecessary  dependencies
+- Security (as cool as a hard wallet! Right out-of-the-box! :box: )
+- No unnecessary dependencies
 - Possibility to work with all existing smart contracts
 - Referencing the newest features introduced in Solidity
 
 ## Design decisions
 
-- Not every JSON RPC function is exposed yet, priority is gives to ones required for mobile devices
-- Functionality was focused on serializing and signing transactions locally on device to send raw transaction to Ethereum network
-- Requirements for password input on every transactions are indeed a design decision. Interface designers can save user passwords given user's consent
+- Not every JSON RPC function is exposed yet, priority is given to the ones required for mobile devices
+- Functionality was focused on serializing and signing transactions locally on the device to send raw transactions to Ethereum network
+- Requirements for password input on every transaction are indeed a design decision. Interface designers can save user passwords with the user's consent
 - Public function for private key export is exposed for user convenience, but marked as UNSAFE_ :) Normal workflow takes care of EIP155 compatibility and proper clearing of private key data from memory
 
 ### Here it is
@@ -67,7 +67,7 @@ On Rinkeby TXid = 0xc6eca60ecac004a1501a4323a10edb7fa4cd1a0896675f6b51704c84deda
 
 ## Example
 
-You can try it by yourself by running the example project:
+You can try it yourself by running the example project:
 
 - Clone the repo
 - `cd Example/web3swiftExample`
@@ -76,7 +76,7 @@ You can try it by yourself by running the example project:
 
 ## Requirements
 
-Web3swift requires Swift 4.1 and iOS 9.0 or macOS 10.13 although we recommend to use the latest iOS and MacOS versions for your own safety. Don't forget to set iOS version in a Podfile, otherwise you get an error if deployment target is less than the latest SDK.
+Web3swift requires Swift 4.1 and iOS 9.0 or macOS 10.13 although we recommend to use the latest iOS and MacOS versions for your own safety. Don't forget to set the iOS version in a Podfile, otherwise you get an error if the deployment target is less than the latest SDK.
 
 ## Communication
 
@@ -119,7 +119,7 @@ $ pod install
 
 - [x] Create Account
 - [x] Import Account
-- [x] Sign transictions
+- [x] Sign transactions
 - [x] Send transactions, call functions of smart-contracts, estimate gas costs
 - [x] Serialize and deserialize transactions and results to native Swift types
 - [x] Convenience functions for chain state: block number, gas price
@@ -130,7 +130,7 @@ $ pod install
 
 ## Usage
 
-Here you can see a few examples of use of our library
+Here's a few use cases of our library
 ### Initializing Ethereum address
 ```bash
 let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
@@ -213,7 +213,7 @@ If you've used this project in a live app, please let us know!
 ## Special thanks to
 
 - Gnosis team and their library [Bivrost-swift](https://github.com/gnosis/bivrost-swift) for inspiration for the ABI decoding approach
-- [Trust iOS Wallet](https://github.com/TrustWallet/trust-wallet-ios) for collaboration and discussion for initial idea
+- [Trust iOS Wallet](https://github.com/TrustWallet/trust-wallet-ios) for the collaboration and discussion of the initial idea
 - Official Ethereum and Solidity docs, everything was written from ground truth standards
 
 ## Contribution
