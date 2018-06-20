@@ -124,6 +124,9 @@ class web3swiftTests: XCTestCase {
         let keystore = try! EthereumKeystoreV3(password: "");
         XCTAssertNotNil(keystore)
         let account = keystore!.addresses![0]
+        print(account)
+        let data = try! keystore!.serialize()
+        print(try! JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions(rawValue:0)))
         let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
         XCTAssertNotNil(key)
     }
