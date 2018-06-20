@@ -79,7 +79,14 @@ public struct EthereumAddress: Equatable {
         case .normal:
             guard let data = Data.fromHex(addressString) else {return nil}
             guard data.count == 20 else {return nil}
-            if (!ignoreChecksum && data.toHexString().addHexPrefix() != addressString) {
+            if !addressString.hasHexPrefix() {
+                return nil
+            }
+            if (!ignoreChecksum && data.toHexString().uppercased() != addressString.stripHexPrefix()) { // cover edge case if address is not completely UPPERCASED and potentially missing 0x prefix
+                let checksummedAddress = EthereumAddress.toChecksumAddress(data.toHexString().addHexPrefix())
+                guard checksummedAddress == addressString else {return nil}
+            }
+            if (!ignoreChecksum && data.toHexString().addHexPrefix() != addressString.stripHexPrefix()) { // cover edge case if address not completely lowercased and potentially missing 0x prefix
                 let checksummedAddress = EthereumAddress.toChecksumAddress(data.toHexString().addHexPrefix())
                 guard checksummedAddress == addressString else {return nil}
             }

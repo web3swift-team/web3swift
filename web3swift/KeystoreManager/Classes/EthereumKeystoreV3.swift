@@ -59,7 +59,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         if (keystoreParams.crypto.version != nil && keystoreParams.crypto.version != "1") {return nil}
         self.keystoreParams = keystoreParams
         if keystoreParams.address != nil {
-            self.address = EthereumAddress(keystoreParams.address!)
+            self.address = EthereumAddress(keystoreParams.address!.addHexPrefix())
         } else {
             return nil
         }
