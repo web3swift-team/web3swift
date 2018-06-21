@@ -2420,7 +2420,26 @@ class web3swiftTests: XCTestCase {
         let value: BigUInt? = rpcResponse.getValue()
         XCTAssert(value == 1)
     }
-        
+    
+    func testPublicMappingsAccess() {
+        do {
+            let jsonString = "[{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"users\",\"outputs\":[{\"name\":\"name\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"address\"}],\"name\":\"userDeviceCount\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalUsers\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}]"
+            let web3 = Web3.InfuraRinkebyWeb3()
+            guard let addr = EthereumAddress("0xdef61132a0c1259464b19e4590e33666aae38574") else {return XCTFail()}
+            let contract = web3.contract(jsonString, at: addr, abiVersion: 2)
+            XCTAssert(contract != nil)
+            let allMethods = contract!.contract.allMethods
+            let userDeviceCount = try contract!.method("userDeviceCount", parameters: [addr as AnyObject], options: nil)?.callPromise().wait()
+            print(userDeviceCount)
+            let totalUsers = try contract!.method("totalUsers", parameters: [], options: nil)?.callPromise().wait()
+            print(totalUsers)
+            let user = try contract!.method("users", parameters: [0 as AnyObject], options: nil)?.callPromise().wait()
+            print(user)
+            print(allMethods)
+        } catch {
+            print(error)
+        }
+    }
     func getKeystoreData() -> Data? {
         let bundle = Bundle(for: type(of: self))
         guard let path = bundle.path(forResource: "key", ofType: "json") else {return nil}
