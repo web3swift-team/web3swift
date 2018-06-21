@@ -82,16 +82,25 @@ public struct EthereumAddress: Equatable {
             if !addressString.hasHexPrefix() {
                 return nil
             }
-            if (!ignoreChecksum && data.toHexString().uppercased() != addressString.stripHexPrefix()) { // cover edge case if address is not completely UPPERCASED and potentially missing 0x prefix
-                let checksummedAddress = EthereumAddress.toChecksumAddress(data.toHexString().addHexPrefix())
-                guard checksummedAddress == addressString else {return nil}
+            if (!ignoreChecksum) {
+                // check for checksum
+                if data.toHexString() == addressString.stripHexPrefix() {
+                    self._address = data.toHexString().addHexPrefix()
+                    self.type = .normal
+                    return
+                } else if data.toHexString().uppercased() == addressString.stripHexPrefix() {
+                    self._address = data.toHexString().addHexPrefix()
+                    self.type = .normal
+                    return
+                } else {
+                    let checksummedAddress = EthereumAddress.toChecksumAddress(data.toHexString().addHexPrefix())
+                    guard checksummedAddress == addressString else {return nil}
+                    self._address = data.toHexString().addHexPrefix()
+                    self.type = .normal
+                    return
+                }
             }
-            if (!ignoreChecksum && data.toHexString().addHexPrefix() != addressString.stripHexPrefix()) { // cover edge case if address not completely lowercased and potentially missing 0x prefix
-                let checksummedAddress = EthereumAddress.toChecksumAddress(data.toHexString().addHexPrefix())
-                guard checksummedAddress == addressString else {return nil}
-            }
-            self._address = data.toHexString().addHexPrefix()
-            self.type = .normal
+            return nil
         case .contractDeployment:
             self._address = "0x"
             self.type = .contractDeployment
