@@ -270,7 +270,7 @@ extension SECP256K1 {
         if v >= 27 {
             v = v - 27
         }
-        if v > 4 {
+        if v > 3 {
             return nil
         }
         return UnmarshaledSignature(v: v, r: r, s: s)
@@ -285,7 +285,7 @@ extension SECP256K1 {
     }
     
     static func marshalSignature(v: Data, r: Data, s: Data) -> Data? {
-        guard r.count == 32, s.count == 32 else {return nil}
+        guard r.count == 32, s.count == 32, v.count == 1 else {return nil}
         var completeSignature = Data(r)
         completeSignature.append(s)
         completeSignature.append(v)
