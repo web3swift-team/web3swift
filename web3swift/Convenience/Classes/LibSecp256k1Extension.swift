@@ -19,7 +19,7 @@ public struct SECP256K1 {
 extension SECP256K1 {
     static var context = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_SIGN|SECP256K1_CONTEXT_VERIFY))
     
-    static func signForRecovery(hash: Data, privateKey: Data, useExtraEntropy: Bool = true) -> (serializedSignature:Data?, rawSignature: Data?) {
+    static func signForRecovery(hash: Data, privateKey: Data, useExtraEntropy: Bool = false) -> (serializedSignature:Data?, rawSignature: Data?) {
         if (hash.count != 32 || privateKey.count != 32) {return (nil, nil)}
         if !SECP256K1.verifyPrivateKey(privateKey: privateKey) {
             return (nil, nil)
@@ -266,7 +266,14 @@ extension SECP256K1 {
         let bytes = signatureData.bytes
         let r = Array(bytes[0..<32])
         let s = Array(bytes[32..<64])
-        return UnmarshaledSignature(v: bytes[64], r: r, s: s)
+        var v = bytes[64]
+        if v >= 27 {
+            v = v - 27
+        }
+        if v > 4 {
+            return nil
+        }
+        return UnmarshaledSignature(v: v, r: r, s: s)
     }
     
     static func marshalSignature(v: UInt8, r: [UInt8], s: [UInt8]) -> Data? {
