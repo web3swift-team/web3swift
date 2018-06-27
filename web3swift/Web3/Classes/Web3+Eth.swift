@@ -20,7 +20,7 @@ extension web3.Eth {
         self.web3.queue.addOperation(operation)
     }
     
-    func sendTransaction(_ transaction: EthereumTransaction, options: Web3Options, password:String = "BANKEXFOUNDATION") -> Result<TransactionSendingResult, Web3Error> {
+    public func sendTransaction(_ transaction: EthereumTransaction, options: Web3Options, password:String = "BANKEXFOUNDATION") -> Result<TransactionSendingResult, Web3Error> {
         do {
             let result = try self.sendTransactionPromise(transaction, options: options, password: password).wait()
             return Result(result)
@@ -154,14 +154,14 @@ extension web3.Eth {
 //    }
     
     @available(*, deprecated)
-    func sendRawTransaction(_ transaction: EthereumTransaction, callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
+    public func sendRawTransaction(_ transaction: EthereumTransaction, callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
         print(transaction)
         let operation = SendRawTransactionOperation.init(self.web3, queue: self.web3.queue, transaction: transaction)
         operation.next = OperationChainingType.callback(callback, queue)
         self.web3.queue.addOperation(operation)
     }
     
-    func sendRawTransaction(_ transaction: Data) -> Result<TransactionSendingResult, Web3Error> {
+    public func sendRawTransaction(_ transaction: Data) -> Result<TransactionSendingResult, Web3Error> {
         do {
             let result = try self.sendRawTransactionPromise(transaction).wait()
             return Result(result)
@@ -173,7 +173,7 @@ extension web3.Eth {
         }
     }
     
-    func sendRawTransaction(_ transaction: EthereumTransaction) -> Result<TransactionSendingResult, Web3Error> {
+    public func sendRawTransaction(_ transaction: EthereumTransaction) -> Result<TransactionSendingResult, Web3Error> {
         do {
             let result = try self.sendRawTransactionPromise(transaction).wait()
             return Result(result)
