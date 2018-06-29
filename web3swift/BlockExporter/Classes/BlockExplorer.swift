@@ -8,6 +8,6 @@
 
 import Foundation
 
-public class BlockExporter {
+public class BlockExplorer {
     public var urlStringList = "https://scan.bankex.com/api/list"
 }

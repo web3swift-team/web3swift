@@ -10,7 +10,7 @@ import Foundation
 import PromiseKit
 import BigInt
 
-extension BlockExporter {
+extension BlockExplorer {
     public func getTransactionHistory(address: EthereumAddress, tokenName name: String = "Ether", page: Int = 1, size: Int = 50) -> Promise<[TransactionHistorical]> {
         let address = address.address
         return getTransactionsHistory(address: address, tokenName: name, page: page, size: size)
