@@ -11,6 +11,7 @@ import Result
 import BigInt
 
 
+@available(*, deprecated)
 final class GetAccountsOperation: Web3Operation {
     override func main() {
         if (error != nil) {
@@ -36,6 +37,7 @@ final class GetAccountsOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class GetTransactionCountOperation: Web3Operation {
     convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, address: EthereumAddress, onBlock: String = "latest") {
         let addressString = address.address.lowercased()
@@ -67,6 +69,7 @@ final class GetTransactionCountOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class GetBalanceOperation: Web3Operation {
     convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, address: EthereumAddress, onBlock: String = "latest") {
         let addressString = address.address.lowercased()
@@ -98,6 +101,7 @@ final class GetBalanceOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class GetBlockNumberOperation: Web3Operation {
     override func main() {
         if (error != nil) {
@@ -114,6 +118,7 @@ final class GetBlockNumberOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class GetGasPriceOperation: Web3Operation {
     override func main() {
         if (error != nil) {
@@ -130,6 +135,7 @@ final class GetGasPriceOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class EstimateGasOperation: Web3Operation {
     convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, transaction: EthereumTransaction, options: Web3Options?,  onBlock: String = "latest") {
         self.init(web3Instance, queue: queue, inputData: [transaction, options as Any, onBlock] as AnyObject)
@@ -163,6 +169,7 @@ final class EstimateGasOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class CallOperation: Web3Operation {
     convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, transaction: EthereumTransaction, options: Web3Options?, onBlock: String = "latest") {
         self.init(web3Instance, queue: queue, inputData: [transaction, options as Any, onBlock] as AnyObject)
@@ -197,6 +204,7 @@ final class CallOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class SendTransactionOperation: Web3Operation {
     convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, transaction: EthereumTransaction, options: Web3Options?, password:String = "BANKEXFOUNDATION") {
         self.init(web3Instance, queue: queue, inputData: [transaction, options as Any, password] as AnyObject)
@@ -250,6 +258,7 @@ final class SendTransactionOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class SendRawTransactionOperation: Web3Operation {
     convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, transaction: EthereumTransaction) {
         self.init(web3Instance, queue: queue, inputData: transaction as AnyObject)

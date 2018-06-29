@@ -10,6 +10,7 @@ import Foundation
 import Result
 import BigInt
 
+@available(*, deprecated)
 final class TransactionReceiptConversionOperation: Web3Operation {
     
     override func main() {
@@ -29,6 +30,7 @@ final class TransactionReceiptConversionOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class TransactionDetailsConversionOperation: Web3Operation {
     
     override func main() {
@@ -48,6 +50,7 @@ final class TransactionDetailsConversionOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class BlockConversionOperation: Web3Operation {
     
     override func main() {

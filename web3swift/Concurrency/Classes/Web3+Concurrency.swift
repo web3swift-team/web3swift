@@ -11,6 +11,7 @@ import Result
 
 public typealias Callback = ((Result<AnyObject, Web3Error>) -> ())
 
+@available(*, deprecated)
 public class OperationDispatcher {
     public var MAX_WAIT_TIME: TimeInterval = 0.2
     private var provider: Web3Provider
@@ -188,6 +189,7 @@ protocol OperationProtocol{
     var error: Web3Error? {get set}
 }
 
+@available(*, deprecated)
 public class Web3Operation: Operation, OperationProtocol {
     var web3: web3
     

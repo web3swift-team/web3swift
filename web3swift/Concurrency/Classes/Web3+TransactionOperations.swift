@@ -10,6 +10,7 @@ import Foundation
 import Result
 import BigInt
 
+@available(*, deprecated)
 final class ContractCallOperation: Web3Operation {
     var method: String?
     
@@ -113,6 +114,7 @@ final class ContractCallOperation: Web3Operation {
 }
 
 
+@available(*, deprecated)
 final class ContractEstimateGasOperation: Web3Operation {
     
     convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, contract: web3.web3contract, method: String = "fallback", parameters: [AnyObject] = [], extraData: Data = Data(), options: Web3Options?, onBlock: String = "latest") {
@@ -140,6 +142,7 @@ final class ContractEstimateGasOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class ContractSendOperation: Web3Operation {
     
     convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, contract: web3.web3contract, method: String = "fallback", parameters: [AnyObject] = [], extraData: Data = Data(), options: Web3Options?, onBlock: String = "pending", password: String = "BANKEXFOUNDATION") {

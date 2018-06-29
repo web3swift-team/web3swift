@@ -9,6 +9,7 @@
 import Foundation
 import Result
 
+@available(*, deprecated)
 final class DataFetchOperation: Web3Operation {
     
     override func main() {
@@ -24,6 +25,7 @@ final class DataFetchOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class NoBatchingDataFetchOperation: Web3Operation {
     
     override func main() {

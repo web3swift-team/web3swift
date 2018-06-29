@@ -10,6 +10,7 @@ import Foundation
 import Result
 import BigInt
 
+@available(*, deprecated)
 final class ParseBlockForEventsOperation: Web3Operation {
     
     convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, contract: ContractProtocol, eventName: String, filter: EventFilter? = nil, block: UInt64) {
@@ -86,6 +87,7 @@ final class ParseBlockForEventsOperation: Web3Operation {
 }
 
 
+@available(*, deprecated)
 final class ParseTransactionForEventsOperation: Web3Operation {
     
     convenience init?(_ web3Instance: web3, queue: OperationQueue? = nil, contract: ContractProtocol, eventName: String, filter: EventFilter? = nil, transactionHash: Data) {
