@@ -11,12 +11,12 @@ import PromiseKit
 import BigInt
 
 extension BlockExplorer {
-    public func getTransactionHistory(address: EthereumAddress, tokenName name: String = "Ether", page: Int = 1, size: Int = 50) -> Promise<[TransactionHistorical]> {
+    public func getTransactionHistory(address: EthereumAddress, tokenName name: String = "Ether", page: Int = 1, size: Int = 50) -> Promise<[TransactionHistoryRecord]> {
         let address = address.address
         return getTransactionsHistory(address: address, tokenName: name, page: page, size: size)
     }
     
-    public func getTransactionsHistory(address publicAddress: String, tokenName name: String = "Ether", page: Int = 1, size: Int = 50) -> Promise<[TransactionHistorical]> {
+    public func getTransactionsHistory(address publicAddress: String, tokenName name: String = "Ether", page: Int = 1, size: Int = 50) -> Promise<[TransactionHistoryRecord]> {
         
         //Configuring http request
         let listId: ListId = (name == "Ether") ? .listOfETH : .listOfTokens
@@ -26,7 +26,7 @@ extension BlockExplorer {
         let internalParams = InternalParam(entityId: publicAddress, page: page, size: size)
         let parameters = Body(listId: listId.rawValue, moduleId: "address", params: internalParams)
 
-        return Promise<[TransactionHistorical]> {seal in
+        return Promise<[TransactionHistoryRecord]> {seal in
             do {
                 request.httpBody = try JSONEncoder().encode(parameters)
             } catch {
@@ -57,11 +57,11 @@ extension BlockExplorer {
 //MARK: - Decodable structures
 
 public struct Response: Decodable {
-    let rows: [TransactionHistorical]
+    let rows: [TransactionHistoryRecord]
     let head: Head
 }
 
-public struct TransactionHistorical: Decodable {
+public struct TransactionHistoryRecord: Decodable {
     
     let id: String
     let hash: Data

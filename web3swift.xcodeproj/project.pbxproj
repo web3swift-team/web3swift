@@ -406,12 +406,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0073F22320D949D7000791F1 /* BlockExporter */ = {
+		0073F22320D949D7000791F1 /* BlockExplorer */ = {
 			isa = PBXGroup;
 			children = (
 				0073F22420D949E8000791F1 /* Classes */,
 			);
-			path = BlockExporter;
+			path = BlockExplorer;
 			sourceTree = "<group>";
 		};
 		0073F22420D949E8000791F1 /* Classes */ = {
@@ -449,7 +449,7 @@
 		1CD91AFE1FD76910007BFB45 /* web3swift */ = {
 			isa = PBXGroup;
 			children = (
-				0073F22320D949D7000791F1 /* BlockExporter */,
+				0073F22320D949D7000791F1 /* BlockExplorer */,
 				81A1821220D5A2430016741F /* Promises */,
 				81FB2204207BCFD9007F9A83 /* Resources */,
 				8103BBB4207638F800499769 /* Concurrency */,
