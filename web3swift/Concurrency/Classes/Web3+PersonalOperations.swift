@@ -8,7 +8,7 @@
 
 import Foundation
 
-
+@available(*, deprecated)
 final class PersonalUnlockAccountOperation: Web3Operation {
     convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, account: EthereumAddress, password: String = "BANKEXFOUNDATION", seconds: UInt64 = 300) {
         let addressString = account.address.lowercased()
@@ -41,6 +41,7 @@ final class PersonalUnlockAccountOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class PersonalSignOperation: Web3Operation {
     
     convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, message: Data, from: EthereumAddress, password:String = "BANKEXFOUNDATION") {

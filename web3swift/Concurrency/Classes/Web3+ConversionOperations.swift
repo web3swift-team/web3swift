@@ -10,6 +10,7 @@ import Foundation
 import Result
 import BigInt
 
+@available(*, deprecated)
 final class ResultUnwrapOperation: Web3Operation {
     override func main() {
         if (error != nil) {
@@ -28,6 +29,7 @@ final class ResultUnwrapOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class ConversionOperation<T>: Web3Operation {
     override func main() {
         if (error != nil) {
@@ -40,6 +42,7 @@ final class ConversionOperation<T>: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class BigUIntConversionOperation: Web3Operation {
     
     override func main() {
@@ -65,6 +68,7 @@ final class BigUIntConversionOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class JSONasDataConversionOperation: Web3Operation {
     
     override func main() {
@@ -90,6 +94,7 @@ final class JSONasDataConversionOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class DictionaryConversionOperation: Web3Operation {
     
     override func main() {
@@ -112,6 +117,7 @@ final class DictionaryConversionOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class StringDictionaryConversionOperation: Web3Operation {
     
     override func main() {
@@ -134,6 +140,7 @@ final class StringDictionaryConversionOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class AddressArrayConversionOperation: Web3Operation {
     
     override func main() {
@@ -165,6 +172,7 @@ final class AddressArrayConversionOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class DataConversionOperation: Web3Operation {
     
     override func main() {
@@ -190,6 +198,7 @@ final class DataConversionOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class StringConversionOperation: Web3Operation {
     
     override func main() {
@@ -212,6 +221,7 @@ final class StringConversionOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class JoinOperation: Web3Operation {
     convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, operations: [Web3Operation]) {
         self.init(web3Instance, queue: queue, inputData: operations as AnyObject)

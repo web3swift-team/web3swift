@@ -14,12 +14,6 @@ func toByteArray<T>(_ value: T) -> [UInt8] {
     return withUnsafeBytes(of: &value) { Array($0) }
 }
 
-func fromByteArray<T>(_ value: [UInt8], _: T.Type) -> T {
-    return value.withUnsafeBytes {
-        $0.baseAddress!.load(as: T.self)
-    }
-}
-
 public func scrypt (password: String, salt: Data, length: Int, N: Int, R: Int, P: Int) -> Data? {
     let BytesMin = Int(crypto_generichash_bytes_min())
     let BytesMax = Int(crypto_generichash_bytes_max())

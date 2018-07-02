@@ -9,6 +9,7 @@
 import Foundation
 import BigInt
 
+@available(*, deprecated)
 final class GetTransactionDetailsOperation: Web3Operation {
     
     convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, txHash: String) {
@@ -38,7 +39,7 @@ final class GetTransactionDetailsOperation: Web3Operation {
     }
 }
 
-
+@available(*, deprecated)
 final class GetTransactionReceiptOperation: Web3Operation {
     
     convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, txHash: String) {
@@ -68,6 +69,7 @@ final class GetTransactionReceiptOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class GetBlockByNumberOperation: Web3Operation {
     convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, blockNumber: UInt64, fullTransactions: Bool = false) {
         let blockNumberString = String(blockNumber, radix: 16).addHexPrefix()
@@ -105,6 +107,7 @@ final class GetBlockByNumberOperation: Web3Operation {
     }
 }
 
+@available(*, deprecated)
 final class GetBlockByHashOperation: Web3Operation {
     convenience init(_ web3Instance: web3, queue: OperationQueue? = nil, hash: String, fullTransactions: Bool = false) {
         self.init(web3Instance, queue: queue, inputData: [hash, fullTransactions] as AnyObject)

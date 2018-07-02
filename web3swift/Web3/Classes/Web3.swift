@@ -62,10 +62,6 @@ struct ResultUnwrapper {
     }
 }
 
-func isInstanceOf <T>(instance: Any, of kind: T.Type) -> Bool {
-    return instance is T;
-}
-
 
 
 
