@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		0073F22620D949F7000791F1 /* BlockExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0073F22520D949F7000791F1 /* BlockExplorer.swift */; };
 		0073F22820D94A11000791F1 /* BlockExplorer+GetTransactionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0073F22720D94A11000791F1 /* BlockExplorer+GetTransactionHistory.swift */; };
+		00E5FE7620EA34370030E0D6 /* web3swiftKyestoresTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7520EA34370030E0D6 /* web3swiftKyestoresTests.swift */; };
+		00E5FE7A20EA355D0030E0D6 /* web3swiftTransactionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7920EA355D0030E0D6 /* web3swiftTransactionsTests.swift */; };
+		00E5FE7C20EA37B50030E0D6 /* web3swiftERC20Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7B20EA37B50030E0D6 /* web3swiftERC20Tests.swift */; };
+		00E5FE7E20EA3A3F0030E0D6 /* web3swiftABITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7D20EA3A3F0030E0D6 /* web3swiftABITests.swift */; };
+		00E5FE8020EA3CEA0030E0D6 /* web3swiftRLPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7F20EA3CEA0030E0D6 /* web3swiftRLPTests.swift */; };
+		00E5FE8220EA3FF40030E0D6 /* web3swiftInfuraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE8120EA3FF40030E0D6 /* web3swiftInfuraTests.swift */; };
 		13AE5971A972F5B55FA6FB69 /* libPods-web3swift-iOS_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8349531F1984454E50389370 /* libPods-web3swift-iOS_Tests.a */; };
 		1CD91B321FD769A6007BFB45 /* web3swiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */; };
 		1CD91B341FD769A6007BFB45 /* web3swift_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift_iOS.framework */; };
@@ -212,6 +218,12 @@
 /* Begin PBXFileReference section */
 		0073F22520D949F7000791F1 /* BlockExplorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockExplorer.swift; sourceTree = "<group>"; };
 		0073F22720D94A11000791F1 /* BlockExplorer+GetTransactionHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockExplorer+GetTransactionHistory.swift"; sourceTree = "<group>"; };
+		00E5FE7520EA34370030E0D6 /* web3swiftKyestoresTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftKyestoresTests.swift; sourceTree = "<group>"; };
+		00E5FE7920EA355D0030E0D6 /* web3swiftTransactionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftTransactionsTests.swift; sourceTree = "<group>"; };
+		00E5FE7B20EA37B50030E0D6 /* web3swiftERC20Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftERC20Tests.swift; sourceTree = "<group>"; };
+		00E5FE7D20EA3A3F0030E0D6 /* web3swiftABITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftABITests.swift; sourceTree = "<group>"; };
+		00E5FE7F20EA3CEA0030E0D6 /* web3swiftRLPTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftRLPTests.swift; sourceTree = "<group>"; };
+		00E5FE8120EA3FF40030E0D6 /* web3swiftInfuraTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftInfuraTests.swift; sourceTree = "<group>"; };
 		08BD06D432296DA533D07D20 /* Pods_Web3Swift_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Web3Swift_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F133EC83594B17BA8C71784 /* Pods_web3swift_ios_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_ios_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		10C02100CDF7C2D5C79A52B9 /* Pods_web3Swift_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3Swift_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -443,6 +455,12 @@
 		1CD91B301FD769A6007BFB45 /* web3swiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				00E5FE8120EA3FF40030E0D6 /* web3swiftInfuraTests.swift */,
+				00E5FE7F20EA3CEA0030E0D6 /* web3swiftRLPTests.swift */,
+				00E5FE7D20EA3A3F0030E0D6 /* web3swiftABITests.swift */,
+				00E5FE7B20EA37B50030E0D6 /* web3swiftERC20Tests.swift */,
+				00E5FE7920EA355D0030E0D6 /* web3swiftTransactionsTests.swift */,
+				00E5FE7520EA34370030E0D6 /* web3swiftKyestoresTests.swift */,
 				81A1821C20D5C6C10016741F /* web3swift_promises_Tests.swift */,
 				1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */,
 				4EFFCB6F208554EB008165FE /* web3swift_remote_Tests.swift */,
@@ -1105,9 +1123,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				4EFFCB70208554EB008165FE /* web3swift_remote_Tests.swift in Sources */,
+				00E5FE7C20EA37B50030E0D6 /* web3swiftERC20Tests.swift in Sources */,
+				00E5FE7A20EA355D0030E0D6 /* web3swiftTransactionsTests.swift in Sources */,
+				00E5FE7620EA34370030E0D6 /* web3swiftKyestoresTests.swift in Sources */,
+				00E5FE8020EA3CEA0030E0D6 /* web3swiftRLPTests.swift in Sources */,
 				4EFFCB6E208552F2008165FE /* web3swift_local_node_Tests.swift in Sources */,
 				81A1821D20D5C6C10016741F /* web3swift_promises_Tests.swift in Sources */,
+				00E5FE8220EA3FF40030E0D6 /* web3swiftInfuraTests.swift in Sources */,
 				1CD91B321FD769A6007BFB45 /* web3swiftTests.swift in Sources */,
+				00E5FE7E20EA3A3F0030E0D6 /* web3swiftABITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
