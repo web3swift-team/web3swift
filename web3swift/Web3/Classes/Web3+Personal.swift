@@ -12,12 +12,7 @@ import Result
 
 extension web3.Personal {
     
-    @available(*, deprecated)
-    func signPersonalMessage(message: Data, from: EthereumAddress, password:String = "BANKEXFOUNDATION", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
-        let operation = PersonalSignOperation.init(self.web3, queue: self.web3.queue, message: message, from: from, password: password)
-        operation.next = OperationChainingType.callback(callback, queue)
-        self.web3.queue.addOperation(operation)
-    }
+
     
     public func signPersonalMessage(message: Data, from: EthereumAddress, password:String = "BANKEXFOUNDATION") -> Result<Data, Web3Error> {
         do {
@@ -63,12 +58,7 @@ extension web3.Personal {
 //        }
 //    }
     
-    @available(*, deprecated)
-    func unlockAccount(account: EthereumAddress, password:String = "BANKEXFOUNDATION", seconds: UInt64 = 300, callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
-        let operation = PersonalUnlockAccountOperation.init(self.web3, queue: self.web3.queue, account: account, password: password, seconds: seconds)
-        operation.next = OperationChainingType.callback(callback, queue)
-        self.web3.queue.addOperation(operation)
-    }
+
     
     public func unlockAccount(account: EthereumAddress, password:String = "BANKEXFOUNDATION", seconds: UInt64 = 300) -> Result<Bool, Web3Error> {
         do {

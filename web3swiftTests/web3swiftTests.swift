@@ -1321,425 +1321,425 @@ class web3swiftTests: XCTestCase {
         XCTAssert(privKey != nil, "Failed to create new private key")
     }
     
-    func testConcurrency1()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        var fail = true;
-        let web3 = Web3.InfuraMainnetWeb3()
-        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
-        var request = JSONRPCrequest()
-        request.method = JSONRPCmethod.getTransactionCount
-        let params = [address.address.lowercased(), "latest"] as Array<Encodable>
-        let pars = JSONRPCparams(params: params)
-        request.params = pars
-        let operation = DataFetchOperation(web3, queue: web3.queue)
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                print(result)
-                fail = false
-            case .failure(_):
-                XCTFail()
-                fatalError()
-            }
-            semaphore.signal()
-        }
-        operation.next = OperationChainingType.callback(callback, web3.queue)
-        operation.inputData = request as AnyObject
-        web3.queue.addOperation(operation)
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
-    
-    func testConcurrency2()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        var fail = true;
-        let web3 = Web3.InfuraMainnetWeb3()
-        let queue = OperationQueue.init()
-        queue.maxConcurrentOperationCount = 16
-        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
-        let hash = "0x2c6a803416ee1118ffc3b62a3344de768c86952bcf0376bdf1e49c0fc21a062f"
-        let operation = GetTransactionReceiptOperation(web3, queue: queue)
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                print(result)
-                fail = false
-            case .failure(_):
-                XCTFail()
-                fatalError()
-            }
-            semaphore.signal()
-        }
-        operation.next = OperationChainingType.callback(callback, queue)
-        operation.inputData = hash as AnyObject
-        queue.addOperation(operation)
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
-    
-    func testConcurrency3()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        var fail = true;
-        let web3 = Web3.InfuraMainnetWeb3()
-        let tempKeystore = try! EthereumKeystoreV3(password: "")
-        let keystoreManager = KeystoreManager([tempKeystore!])
-        web3.addKeystoreManager(keystoreManager)
-        let queue = OperationQueue.init()
-        queue.maxConcurrentOperationCount = 16
-        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
-        let operation = GetAccountsOperation(web3, queue: queue)
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                print(result)
-                guard let accounts = result as? [EthereumAddress] else {return XCTFail()}
-                XCTAssert(accounts.count == 1)
-                XCTAssert(accounts.first == keystoreManager.addresses?.first)
-                fail = false
-            case .failure(_):
-                XCTFail()
-                fatalError()
-            }
-            semaphore.signal()
-        }
-        operation.next = OperationChainingType.callback(callback, queue)
-        queue.addOperation(operation)
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
-    
-    func testConcurrency4()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        var fail = true;
-        let web3 = Web3.InfuraMainnetWeb3()
-        let queue = OperationQueue.init()
-        queue.maxConcurrentOperationCount = 16
-        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
-        let operation = GetBlockByNumberOperation(web3, queue: queue, blockNumber: "latest", fullTransactions: false)
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                print(result)
-                fail = false
-            case .failure(_):
-                XCTFail()
-                fatalError()
-            }
-            semaphore.signal()
-        }
-        operation.next = OperationChainingType.callback(callback, queue)
-        queue.addOperation(operation)
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
-    
-    func testConcurrency5()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        var fail = true;
-        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
-        let web3 = Web3.InfuraMainnetWeb3()
-        let queue = OperationQueue.init()
-        queue.maxConcurrentOperationCount = 16
-        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
-        let operation = GetTransactionCountOperation(web3, queue: queue, address: address, onBlock: "latest")
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                print(result)
-                fail = false
-            case .failure(_):
-                XCTFail()
-                fatalError()
-            }
-            semaphore.signal()
-        }
-        operation.next = OperationChainingType.callback(callback, queue)
-        queue.addOperation(operation)
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
-    
-    func testConcurrency6()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        var fail = true;
-        let address = EthereumAddress("0xc011bf81e3f88931cf331856e45fab6b6450e54c")!
-        
-        let web3 = Web3.InfuraMainnetWeb3()
-        let queue = OperationQueue.init()
-        queue.maxConcurrentOperationCount = 16
-        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
-        let operation = GetBalanceOperation(web3, queue: queue, address: address, onBlock: "latest")
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                let balance = result as! BigUInt
-                let balString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .eth, decimals: 3)
-                print(balString)
-                fail = false
-            case .failure(_):
-                XCTFail()
-                fatalError()
-            }
-            semaphore.signal()
-        }
-        operation.next = OperationChainingType.callback(callback, queue)
-        queue.addOperation(operation)
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
-    
-    func testConcurrency7()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        var fail = true;
-        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
-        let web3 = Web3.InfuraMainnetWeb3()
-        let queue = OperationQueue.init()
-        queue.maxConcurrentOperationCount = 16
-        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
-        let operation = GetGasPriceOperation(web3, queue: queue)
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                let balance = result as! BigUInt
-                let balString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .Gwei, decimals: 1)
-                print(balString)
-                fail = false
-            case .failure(_):
-                XCTFail()
-                fatalError()
-            }
-            semaphore.signal()
-        }
-        operation.next = OperationChainingType.callback(callback, queue)
-        queue.addOperation(operation)
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
-    
-    func testConcurrency8()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        var fail = true;
-        let web3 = Web3.InfuraMainnetWeb3()
-        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
-        let tempKeystore = try! EthereumKeystoreV3(password: "")
-        let keystoreManager = KeystoreManager([tempKeystore!])
-        web3.addKeystoreManager(keystoreManager)
-        let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
-        var options = Web3Options.defaultOptions()
-        options.value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
-        options.from = keystoreManager.addresses?.first
-        let intermediate = contract?.method("fallback", options: options)
-        let queue = OperationQueue.init()
-        queue.maxConcurrentOperationCount = 16
-        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
-        let operation = EstimateGasOperation(web3, queue: queue, transactionIntermediate: intermediate!)
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                let balance = result as! BigUInt
-                XCTAssert(balance == BigUInt(21000))
-                fail = false
-            case .failure(_):
-                XCTFail()
-                fatalError()
-            }
-            semaphore.signal()
-        }
-        operation.next = OperationChainingType.callback(callback, queue)
-        queue.addOperation(operation)
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
-    
-    func testConcurrency9()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        var fail = true;
-        let web3 = Web3.InfuraMainnetWeb3()
-        let queue = OperationQueue.init()
-        queue.maxConcurrentOperationCount = 16
-        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
-        let blockHash = "0xae6a4fb3bf690b71f2c4bc5a0ab46987fdc2c3519d1e6585b26a44b101f2166c"
-        let operation = GetBlockByHashOperation(web3, queue: queue, hash: blockHash, fullTransactions: false)
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                print(result)
-                fail = false
-            case .failure(_):
-                XCTFail()
-                fatalError()
-            }
-            semaphore.signal()
-        }
-        operation.next = OperationChainingType.callback(callback, queue)
-        queue.addOperation(operation)
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
-    
-    func testConcurrency10()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        var fail = true;
-        let web3 = Web3.InfuraMainnetWeb3()
-        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
-        let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2)
-        var options = Web3Options.defaultOptions()
-        options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
-        let parameters = [] as [AnyObject]
-        let intermediate = contract?.method("name", parameters:parameters,  options: options)
-        let queue = OperationQueue.init()
-        queue.maxConcurrentOperationCount = 16
-        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
-        let operation = CallOperation(web3, queue: queue, transactionIntermediate: intermediate!)
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                print(result)
-                fail = false
-            case .failure(_):
-                XCTFail()
-                fatalError()
-            }
-            semaphore.signal()
-        }
-        operation.next = OperationChainingType.callback(callback, queue)
-        queue.addOperation(operation)
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
-    
-    func testConcurrency11()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        let max = 100
-        var i = max
-        var fail = true;
-        let web3 = Web3.InfuraMainnetWeb3()
-        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
-        let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2)
-        var options = Web3Options.defaultOptions()
-        options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
-        for _ in 0 ... max {
-            guard let operation = ContractCallOperation.init(web3, contract: contract!, method: "name", options: options, onBlock: web3.defaultBlock) else {return XCTFail()}
-            let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-                switch res {
-                case .success(let result):
-                    print(result)
-                    fail = false
-                case .failure(_):
-                    XCTFail()
-                    fatalError()
-                }
-                i = i - 1;
-                if i == 0 {
-                    print("All done")
-                    semaphore.signal()
-                }
-            }
-            operation.next = OperationChainingType.callback(callback, web3.queue)
-            web3.queue.addOperation(operation)
-        }
-        
-        
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
-    
-    func testConcurrency12()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        var fail = true;
-        let web3 = Web3.InfuraMainnetWeb3()
-        let contract = web3.contract(Web3.Utils.erc20ABI, at: nil, abiVersion: 2)
-        guard let operation = ParseBlockForEventsOperation.init(web3, queue: web3.queue, contract: contract!.contract, eventName: "Transfer", filter: nil, block: UInt64(5200120)) else {return XCTFail()}
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                print(result)
-                XCTAssert((result as! [AnyObject]).count == 81)
-                fail = false
-            case .failure(let error):
-                print(error)
-                XCTFail()
-                fatalError()
-            }
-            semaphore.signal()
-        }
-        operation.next = OperationChainingType.callback(callback, web3.queue)
-        web3.queue.addOperation(operation)
-        
-        
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
-    
-    func testConcurrency13()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        var fail = true;
-        let web3 = Web3.InfuraMainnetWeb3()
-        let contract = web3.contract(Web3.Utils.erc20ABI, at: nil, abiVersion: 2)
-        guard let operation = ParseBlockForEventsOperation.init(web3, queue: web3.queue, contract: contract!.contract, eventName: "Transfer", filter: nil, block: "latest") else {return XCTFail()}
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                print(result)
-                fail = false
-            case .failure(let error):
-                print(error)
-                XCTFail()
-                fatalError()
-            }
-            semaphore.signal()
-        }
-        operation.next = OperationChainingType.callback(callback, web3.queue)
-        web3.queue.addOperation(operation)
-        
-        
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
-    
-    func testConcurrency14()
-    {
-        let semaphore = DispatchSemaphore(value: 0)
-        var fail = true;
-        let web3 = Web3.InfuraMainnetWeb3()
-        let contract = web3.contract(Web3.Utils.erc20ABI, at: nil, abiVersion: 2)
-        var filter = EventFilter()
-        filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
-        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")!] as [EventFilterable])]
-        guard let operation = ParseBlockForEventsOperation.init(web3, queue: web3.queue, contract: contract!.contract, eventName: "Transfer", filter: filter, block: UInt64(5200120)) else {return XCTFail()}
-        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-            switch res {
-            case .success(let result):
-                print(result)
-                XCTAssert((result as! [AnyObject]).count == 1)
-                fail = false
-            case .failure(let error):
-                print(error)
-                XCTFail()
-                fatalError()
-            }
-            semaphore.signal()
-        }
-        operation.next = OperationChainingType.callback(callback, web3.queue)
-        web3.queue.addOperation(operation)
-        
-        
-        let _ = semaphore.wait(timeout: .distantFuture)
-        XCTAssert(!fail)
-    }
+//    func testConcurrency1()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var fail = true;
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+//        var request = JSONRPCrequest()
+//        request.method = JSONRPCmethod.getTransactionCount
+//        let params = [address.address.lowercased(), "latest"] as Array<Encodable>
+//        let pars = JSONRPCparams(params: params)
+//        request.params = pars
+//        let operation = DataFetchOperation(web3, queue: web3.queue)
+//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//            switch res {
+//            case .success(let result):
+//                print(result)
+//                fail = false
+//            case .failure(_):
+//                XCTFail()
+//                fatalError()
+//            }
+//            semaphore.signal()
+//        }
+//        operation.next = OperationChainingType.callback(callback, web3.queue)
+//        operation.inputData = request as AnyObject
+//        web3.queue.addOperation(operation)
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
+//    
+//    func testConcurrency2()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var fail = true;
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let queue = OperationQueue.init()
+//        queue.maxConcurrentOperationCount = 16
+//        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+//        let hash = "0x2c6a803416ee1118ffc3b62a3344de768c86952bcf0376bdf1e49c0fc21a062f"
+//        let operation = GetTransactionReceiptOperation(web3, queue: queue)
+//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//            switch res {
+//            case .success(let result):
+//                print(result)
+//                fail = false
+//            case .failure(_):
+//                XCTFail()
+//                fatalError()
+//            }
+//            semaphore.signal()
+//        }
+//        operation.next = OperationChainingType.callback(callback, queue)
+//        operation.inputData = hash as AnyObject
+//        queue.addOperation(operation)
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
+//    
+//    func testConcurrency3()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var fail = true;
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let tempKeystore = try! EthereumKeystoreV3(password: "")
+//        let keystoreManager = KeystoreManager([tempKeystore!])
+//        web3.addKeystoreManager(keystoreManager)
+//        let queue = OperationQueue.init()
+//        queue.maxConcurrentOperationCount = 16
+//        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+//        let operation = GetAccountsOperation(web3, queue: queue)
+//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//            switch res {
+//            case .success(let result):
+//                print(result)
+//                guard let accounts = result as? [EthereumAddress] else {return XCTFail()}
+//                XCTAssert(accounts.count == 1)
+//                XCTAssert(accounts.first == keystoreManager.addresses?.first)
+//                fail = false
+//            case .failure(_):
+//                XCTFail()
+//                fatalError()
+//            }
+//            semaphore.signal()
+//        }
+//        operation.next = OperationChainingType.callback(callback, queue)
+//        queue.addOperation(operation)
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
+//    
+//    func testConcurrency4()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var fail = true;
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let queue = OperationQueue.init()
+//        queue.maxConcurrentOperationCount = 16
+//        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+//        let operation = GetBlockByNumberOperation(web3, queue: queue, blockNumber: "latest", fullTransactions: false)
+//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//            switch res {
+//            case .success(let result):
+//                print(result)
+//                fail = false
+//            case .failure(_):
+//                XCTFail()
+//                fatalError()
+//            }
+//            semaphore.signal()
+//        }
+//        operation.next = OperationChainingType.callback(callback, queue)
+//        queue.addOperation(operation)
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
+//    
+//    func testConcurrency5()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var fail = true;
+//        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let queue = OperationQueue.init()
+//        queue.maxConcurrentOperationCount = 16
+//        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+//        let operation = GetTransactionCountOperation(web3, queue: queue, address: address, onBlock: "latest")
+//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//            switch res {
+//            case .success(let result):
+//                print(result)
+//                fail = false
+//            case .failure(_):
+//                XCTFail()
+//                fatalError()
+//            }
+//            semaphore.signal()
+//        }
+//        operation.next = OperationChainingType.callback(callback, queue)
+//        queue.addOperation(operation)
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
+//    
+//    func testConcurrency6()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var fail = true;
+//        let address = EthereumAddress("0xc011bf81e3f88931cf331856e45fab6b6450e54c")!
+//        
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let queue = OperationQueue.init()
+//        queue.maxConcurrentOperationCount = 16
+//        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+//        let operation = GetBalanceOperation(web3, queue: queue, address: address, onBlock: "latest")
+//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//            switch res {
+//            case .success(let result):
+//                let balance = result as! BigUInt
+//                let balString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .eth, decimals: 3)
+//                print(balString)
+//                fail = false
+//            case .failure(_):
+//                XCTFail()
+//                fatalError()
+//            }
+//            semaphore.signal()
+//        }
+//        operation.next = OperationChainingType.callback(callback, queue)
+//        queue.addOperation(operation)
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
+//    
+//    func testConcurrency7()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var fail = true;
+//        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let queue = OperationQueue.init()
+//        queue.maxConcurrentOperationCount = 16
+//        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+//        let operation = GetGasPriceOperation(web3, queue: queue)
+//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//            switch res {
+//            case .success(let result):
+//                let balance = result as! BigUInt
+//                let balString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .Gwei, decimals: 1)
+//                print(balString)
+//                fail = false
+//            case .failure(_):
+//                XCTFail()
+//                fatalError()
+//            }
+//            semaphore.signal()
+//        }
+//        operation.next = OperationChainingType.callback(callback, queue)
+//        queue.addOperation(operation)
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
+//    
+//    func testConcurrency8()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var fail = true;
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+//        let tempKeystore = try! EthereumKeystoreV3(password: "")
+//        let keystoreManager = KeystoreManager([tempKeystore!])
+//        web3.addKeystoreManager(keystoreManager)
+//        let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
+//        var options = Web3Options.defaultOptions()
+//        options.value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
+//        options.from = keystoreManager.addresses?.first
+//        let intermediate = contract?.method("fallback", options: options)
+//        let queue = OperationQueue.init()
+//        queue.maxConcurrentOperationCount = 16
+//        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+//        let operation = EstimateGasOperation(web3, queue: queue, transactionIntermediate: intermediate!)
+//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//            switch res {
+//            case .success(let result):
+//                let balance = result as! BigUInt
+//                XCTAssert(balance == BigUInt(21000))
+//                fail = false
+//            case .failure(_):
+//                XCTFail()
+//                fatalError()
+//            }
+//            semaphore.signal()
+//        }
+//        operation.next = OperationChainingType.callback(callback, queue)
+//        queue.addOperation(operation)
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
+//    
+//    func testConcurrency9()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var fail = true;
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let queue = OperationQueue.init()
+//        queue.maxConcurrentOperationCount = 16
+//        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+//        let blockHash = "0xae6a4fb3bf690b71f2c4bc5a0ab46987fdc2c3519d1e6585b26a44b101f2166c"
+//        let operation = GetBlockByHashOperation(web3, queue: queue, hash: blockHash, fullTransactions: false)
+//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//            switch res {
+//            case .success(let result):
+//                print(result)
+//                fail = false
+//            case .failure(_):
+//                XCTFail()
+//                fatalError()
+//            }
+//            semaphore.signal()
+//        }
+//        operation.next = OperationChainingType.callback(callback, queue)
+//        queue.addOperation(operation)
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
+//    
+//    func testConcurrency10()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var fail = true;
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+//        let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2)
+//        var options = Web3Options.defaultOptions()
+//        options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
+//        let parameters = [] as [AnyObject]
+//        let intermediate = contract?.method("name", parameters:parameters,  options: options)
+//        let queue = OperationQueue.init()
+//        queue.maxConcurrentOperationCount = 16
+//        queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
+//        let operation = CallOperation(web3, queue: queue, transactionIntermediate: intermediate!)
+//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//            switch res {
+//            case .success(let result):
+//                print(result)
+//                fail = false
+//            case .failure(_):
+//                XCTFail()
+//                fatalError()
+//            }
+//            semaphore.signal()
+//        }
+//        operation.next = OperationChainingType.callback(callback, queue)
+//        queue.addOperation(operation)
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
+//    
+//    func testConcurrency11()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        let max = 100
+//        var i = max
+//        var fail = true;
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+//        let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2)
+//        var options = Web3Options.defaultOptions()
+//        options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
+//        for _ in 0 ... max {
+//            guard let operation = ContractCallOperation.init(web3, contract: contract!, method: "name", options: options, onBlock: web3.defaultBlock) else {return XCTFail()}
+//            let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//                switch res {
+//                case .success(let result):
+//                    print(result)
+//                    fail = false
+//                case .failure(_):
+//                    XCTFail()
+//                    fatalError()
+//                }
+//                i = i - 1;
+//                if i == 0 {
+//                    print("All done")
+//                    semaphore.signal()
+//                }
+//            }
+//            operation.next = OperationChainingType.callback(callback, web3.queue)
+//            web3.queue.addOperation(operation)
+//        }
+//        
+//        
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
+//    
+//    func testConcurrency12()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var fail = true;
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let contract = web3.contract(Web3.Utils.erc20ABI, at: nil, abiVersion: 2)
+//        guard let operation = ParseBlockForEventsOperation.init(web3, queue: web3.queue, contract: contract!.contract, eventName: "Transfer", filter: nil, block: UInt64(5200120)) else {return XCTFail()}
+//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//            switch res {
+//            case .success(let result):
+//                print(result)
+//                XCTAssert((result as! [AnyObject]).count == 81)
+//                fail = false
+//            case .failure(let error):
+//                print(error)
+//                XCTFail()
+//                fatalError()
+//            }
+//            semaphore.signal()
+//        }
+//        operation.next = OperationChainingType.callback(callback, web3.queue)
+//        web3.queue.addOperation(operation)
+//        
+//        
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
+//    
+//    func testConcurrency13()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var fail = true;
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let contract = web3.contract(Web3.Utils.erc20ABI, at: nil, abiVersion: 2)
+//        guard let operation = ParseBlockForEventsOperation.init(web3, queue: web3.queue, contract: contract!.contract, eventName: "Transfer", filter: nil, block: "latest") else {return XCTFail()}
+//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//            switch res {
+//            case .success(let result):
+//                print(result)
+//                fail = false
+//            case .failure(let error):
+//                print(error)
+//                XCTFail()
+//                fatalError()
+//            }
+//            semaphore.signal()
+//        }
+//        operation.next = OperationChainingType.callback(callback, web3.queue)
+//        web3.queue.addOperation(operation)
+//        
+//        
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
+//    
+//    func testConcurrency14()
+//    {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var fail = true;
+//        let web3 = Web3.InfuraMainnetWeb3()
+//        let contract = web3.contract(Web3.Utils.erc20ABI, at: nil, abiVersion: 2)
+//        var filter = EventFilter()
+//        filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
+//        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")!] as [EventFilterable])]
+//        guard let operation = ParseBlockForEventsOperation.init(web3, queue: web3.queue, contract: contract!.contract, eventName: "Transfer", filter: filter, block: UInt64(5200120)) else {return XCTFail()}
+//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
+//            switch res {
+//            case .success(let result):
+//                print(result)
+//                XCTAssert((result as! [AnyObject]).count == 1)
+//                fail = false
+//            case .failure(let error):
+//                print(error)
+//                XCTFail()
+//                fatalError()
+//            }
+//            semaphore.signal()
+//        }
+//        operation.next = OperationChainingType.callback(callback, web3.queue)
+//        web3.queue.addOperation(operation)
+//        
+//        
+//        let _ = semaphore.wait(timeout: .distantFuture)
+//        XCTAssert(!fail)
+//    }
     
     func testAdvancedABIv2() {
         let abiString = "[{\"constant\":true,\"inputs\":[],\"name\":\"testDynOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStOfDyn\",\"outputs\":[{\"name\":\"ts\",\"type\":\"string[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testDynArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testStaticArray\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"ts\",\"type\":\"tuple[2]\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"testSingle\",\"outputs\":[{\"components\":[{\"name\":\"number\",\"type\":\"uint256\"},{\"name\":\"someText\",\"type\":\"string\"},{\"name\":\"staticArray\",\"type\":\"uint256[2]\"},{\"name\":\"dynamicArray\",\"type\":\"uint256[]\"},{\"name\":\"anotherDynamicArray\",\"type\":\"string[2]\"}],\"name\":\"t\",\"type\":\"tuple\"}],\"payable\":false,\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"

@@ -17,7 +17,6 @@ public class web3: Web3OptionsInheritable {
     public var queue: OperationQueue
     public var requestDispatcher: JSONRPCrequestDispatcher
 
-    var dispatcher: OperationDispatcher
     
     public func send(request: JSONRPCrequest) -> [String: Any]? {
         return self.provider.send(request: request)
@@ -26,7 +25,7 @@ public class web3: Web3OptionsInheritable {
         return self.requestDispatcher.addToQueue(request: request)
     }
 
-    public init(provider prov: Web3Provider, queue: OperationQueue? = nil, dispatcher: OperationDispatcher? = nil, requestDispatcher: JSONRPCrequestDispatcher? = nil) {
+    public init(provider prov: Web3Provider, queue: OperationQueue? = nil, requestDispatcher: JSONRPCrequestDispatcher? = nil) {
         provider = prov
         if queue == nil {
             self.queue = OperationQueue.init()
@@ -36,11 +35,7 @@ public class web3: Web3OptionsInheritable {
         } else {
             self.queue = queue!
         }
-        if dispatcher == nil {
-            self.dispatcher = OperationDispatcher(provider: provider, queue: self.queue, policy: .Batch(16))
-        } else {
-            self.dispatcher = dispatcher!
-        }
+        
         if requestDispatcher == nil {
             self.requestDispatcher = JSONRPCrequestDispatcher(provider: provider, queue: self.queue.underlyingQueue!, policy: .Batch(32))
         } else {

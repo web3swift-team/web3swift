@@ -40,17 +40,6 @@ extension web3.web3contract {
             }
         }
         
-        @available(*, deprecated)
-        public func send(password: String = "BANKEXFOUNDATION", options: Web3Options? = nil, onBlock: String = "pending", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
-            guard let operation = ContractSendOperation.init(web3, queue: web3.queue, intermediate: self, options: options, onBlock: onBlock, password: password) else {
-                guard let dispatchQueue =  queue.underlyingQueue else {return}
-                return dispatchQueue.async {
-                    callback(Result<AnyObject, Web3Error>.failure(Web3Error.dataError))
-                }
-            }
-            operation.next = OperationChainingType.callback(callback, queue)
-            self.web3.queue.addOperation(operation)
-        }
         
         public func send(password: String = "BANKEXFOUNDATION", options: Web3Options? = nil, onBlock: String = "pending") -> Result<TransactionSendingResult, Web3Error> {
             do {
@@ -203,19 +192,6 @@ extension web3.web3contract {
 ////            }
 //        }
         
-        @available(*, deprecated)
-        public func call(options: Web3Options?, onBlock: String = "latest", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
-//            let mergedOptions = Web3Options.merge(self.options, with: options)
-//            self.options = mergedOptions
-            guard let operation = ContractCallOperation(web3, queue: web3.queue, intermediate: self, onBlock: onBlock, options: options) else {
-                guard let dispatchQueue =  queue.underlyingQueue else {return}
-                return dispatchQueue.async {
-                    callback(Result<AnyObject, Web3Error>.failure(Web3Error.dataError))
-                }
-            }
-            operation.next = OperationChainingType.callback(callback, queue)
-            self.web3.queue.addOperation(operation)
-        }
         
         public func estimateGas(options: Web3Options?, onBlock: String = "latest") -> Result<BigUInt, Web3Error> {
             do {
@@ -234,19 +210,6 @@ extension web3.web3contract {
 //            return self.web3.eth.estimateGas(self.transaction, options: mergedOptions, onBlock: onBlock)
 //        }
         
-        @available(*, deprecated)
-        public func estimateGas(options: Web3Options?, onBlock: String = "latest", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
-            let mergedOptions = Web3Options.merge(self.options, with: options)
-            self.options = mergedOptions
-            guard let operation = ContractEstimateGasOperation.init(web3, queue: web3.queue, intermediate: self, onBlock: onBlock) else {
-                guard let dispatchQueue =  queue.underlyingQueue else {return}
-                return dispatchQueue.async {
-                    callback(Result<AnyObject, Web3Error>.failure(Web3Error.dataError))
-                }
-            }
-            operation.next = OperationChainingType.callback(callback, queue)
-            self.web3.queue.addOperation(operation)
-        }
         
         func assemble(options: Web3Options? = nil, onBlock: String = "pending") -> Result<EthereumTransaction, Web3Error> {
             do {
