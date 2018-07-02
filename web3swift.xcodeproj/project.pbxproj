@@ -9,14 +9,14 @@
 /* Begin PBXBuildFile section */
 		0073F22620D949F7000791F1 /* BlockExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0073F22520D949F7000791F1 /* BlockExplorer.swift */; };
 		0073F22820D94A11000791F1 /* BlockExplorer+GetTransactionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0073F22720D94A11000791F1 /* BlockExplorer+GetTransactionHistory.swift */; };
-		00E5FE7620EA34370030E0D6 /* web3swiftKyestoresTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7520EA34370030E0D6 /* web3swiftKyestoresTests.swift */; };
-		00E5FE7A20EA355D0030E0D6 /* web3swiftTransactionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7920EA355D0030E0D6 /* web3swiftTransactionsTests.swift */; };
-		00E5FE7C20EA37B50030E0D6 /* web3swiftERC20Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7B20EA37B50030E0D6 /* web3swiftERC20Tests.swift */; };
-		00E5FE7E20EA3A3F0030E0D6 /* web3swiftABITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7D20EA3A3F0030E0D6 /* web3swiftABITests.swift */; };
-		00E5FE8020EA3CEA0030E0D6 /* web3swiftRLPTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7F20EA3CEA0030E0D6 /* web3swiftRLPTests.swift */; };
-		00E5FE8220EA3FF40030E0D6 /* web3swiftInfuraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE8120EA3FF40030E0D6 /* web3swiftInfuraTests.swift */; };
+		00E5FE7620EA34370030E0D6 /* web3swift_keystores_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7520EA34370030E0D6 /* web3swift_keystores_Tests.swift */; };
+		00E5FE7A20EA355D0030E0D6 /* web3swift_transactions_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7920EA355D0030E0D6 /* web3swift_transactions_Tests.swift */; };
+		00E5FE7C20EA37B50030E0D6 /* web3swift_ERC20_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7B20EA37B50030E0D6 /* web3swift_ERC20_Tests.swift */; };
+		00E5FE7E20EA3A3F0030E0D6 /* web3swift_ABI_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7D20EA3A3F0030E0D6 /* web3swift_ABI_Tests.swift */; };
+		00E5FE8020EA3CEA0030E0D6 /* web3swift_RLP_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7F20EA3CEA0030E0D6 /* web3swift_RLP_Tests.swift */; };
+		00E5FE8220EA3FF40030E0D6 /* web3swift_infura_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE8120EA3FF40030E0D6 /* web3swift_infura_Tests.swift */; };
 		13AE5971A972F5B55FA6FB69 /* libPods-web3swift-iOS_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8349531F1984454E50389370 /* libPods-web3swift-iOS_Tests.a */; };
-		1CD91B321FD769A6007BFB45 /* web3swiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */; };
+		1CD91B321FD769A6007BFB45 /* web3swift_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD91B311FD769A6007BFB45 /* web3swift_Tests.swift */; };
 		1CD91B341FD769A6007BFB45 /* web3swift_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift_iOS.framework */; };
 		4194811B203630530065A83B /* Web3+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */; };
 		4194811D203630530065A83B /* Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EABD91FDC9A5C00E013FC /* Contract.swift */; };
@@ -55,7 +55,7 @@
 		41948141203630530065A83B /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2FF1FD7F30F0074282C /* String+Extension.swift */; };
 		4B900282EFA99F16100CC958 /* libPods-web3swift-macOS_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8675751D91DB2DBC9E7A3469 /* libPods-web3swift-macOS_Tests.a */; };
 		4EFFCB6E208552F2008165FE /* web3swift_local_node_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFFCB6D208552F2008165FE /* web3swift_local_node_Tests.swift */; };
-		4EFFCB70208554EB008165FE /* web3swift_remote_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFFCB6F208554EB008165FE /* web3swift_remote_Tests.swift */; };
+		4EFFCB70208554EB008165FE /* web3swift_remoteParsing_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFFCB6F208554EB008165FE /* web3swift_remoteParsing_Tests.swift */; };
 		64CF114189285D8E240C4985 /* libPods-web3swift-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E8AF69880F5141B4AC9DF0 /* libPods-web3swift-iOS.a */; };
 		8103BBCC2077B84400499769 /* PlainKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBCB2077B84400499769 /* PlainKeystore.swift */; };
 		8103BBCD2077B84400499769 /* PlainKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBCB2077B84400499769 /* PlainKeystore.swift */; };
@@ -196,6 +196,12 @@
 		81FB2207207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */ = {isa = PBXBuildFile; fileRef = 81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */; };
 		81FB2208207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */ = {isa = PBXBuildFile; fileRef = 81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */; };
 		B350A445E5DB35C60E59AD70 /* libPods-web3swift-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F8C9C48884592DCF561393 /* libPods-web3swift-macOS.a */; };
+		E23B5ADB20EA67D800DC7F32 /* web3swift_AdvancedABIv2_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5ADA20EA67D800DC7F32 /* web3swift_AdvancedABIv2_Tests.swift */; };
+		E23B5ADD20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5ADC20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift */; };
+		E23B5ADF20EA68FA00DC7F32 /* web3swift_SECP256K1_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5ADE20EA68F900DC7F32 /* web3swift_SECP256K1_Tests.swift */; };
+		E23B5AE120EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5AE020EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift */; };
+		E23B5AE320EA69B900DC7F32 /* web3swift_numberFormattingUtil_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5AE220EA69B900DC7F32 /* web3swift_numberFormattingUtil_Tests.swift */; };
+		E23B5AE520EA6A0A00DC7F32 /* web3swift_contractV2_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5AE420EA6A0A00DC7F32 /* web3swift_contractV2_Tests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -218,12 +224,12 @@
 /* Begin PBXFileReference section */
 		0073F22520D949F7000791F1 /* BlockExplorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockExplorer.swift; sourceTree = "<group>"; };
 		0073F22720D94A11000791F1 /* BlockExplorer+GetTransactionHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockExplorer+GetTransactionHistory.swift"; sourceTree = "<group>"; };
-		00E5FE7520EA34370030E0D6 /* web3swiftKyestoresTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftKyestoresTests.swift; sourceTree = "<group>"; };
-		00E5FE7920EA355D0030E0D6 /* web3swiftTransactionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftTransactionsTests.swift; sourceTree = "<group>"; };
-		00E5FE7B20EA37B50030E0D6 /* web3swiftERC20Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftERC20Tests.swift; sourceTree = "<group>"; };
-		00E5FE7D20EA3A3F0030E0D6 /* web3swiftABITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftABITests.swift; sourceTree = "<group>"; };
-		00E5FE7F20EA3CEA0030E0D6 /* web3swiftRLPTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftRLPTests.swift; sourceTree = "<group>"; };
-		00E5FE8120EA3FF40030E0D6 /* web3swiftInfuraTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftInfuraTests.swift; sourceTree = "<group>"; };
+		00E5FE7520EA34370030E0D6 /* web3swift_keystores_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_keystores_Tests.swift; sourceTree = "<group>"; };
+		00E5FE7920EA355D0030E0D6 /* web3swift_transactions_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_transactions_Tests.swift; sourceTree = "<group>"; };
+		00E5FE7B20EA37B50030E0D6 /* web3swift_ERC20_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_ERC20_Tests.swift; sourceTree = "<group>"; };
+		00E5FE7D20EA3A3F0030E0D6 /* web3swift_ABI_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_ABI_Tests.swift; sourceTree = "<group>"; };
+		00E5FE7F20EA3CEA0030E0D6 /* web3swift_RLP_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_RLP_Tests.swift; sourceTree = "<group>"; };
+		00E5FE8120EA3FF40030E0D6 /* web3swift_infura_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_infura_Tests.swift; sourceTree = "<group>"; };
 		08BD06D432296DA533D07D20 /* Pods_Web3Swift_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Web3Swift_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F133EC83594B17BA8C71784 /* Pods_web3swift_ios_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_ios_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		10C02100CDF7C2D5C79A52B9 /* Pods_web3Swift_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3Swift_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -232,7 +238,7 @@
 		1CD91AFF1FD76910007BFB45 /* web3swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = web3swift.h; sourceTree = "<group>"; };
 		1CD91B001FD76910007BFB45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1CD91B2F1FD769A6007BFB45 /* web3swift-iOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "web3swift-iOS_Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftTests.swift; sourceTree = "<group>"; };
+		1CD91B311FD769A6007BFB45 /* web3swift_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_Tests.swift; sourceTree = "<group>"; };
 		1CD91B331FD769A6007BFB45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1E62EF5F091ED9F7B80CA8EE /* Pods-web3swift-macOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS_Tests/Pods-web3swift-macOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		2B8FEFF3962166E1BEADC886 /* Pods_web3swift_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -241,7 +247,7 @@
 		417715D420362916005C3E16 /* web3swift_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = web3swift_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		419481432036338A0065A83B /* Pods_web3swift_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_web3swift_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EFFCB6D208552F2008165FE /* web3swift_local_node_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_local_node_Tests.swift; sourceTree = "<group>"; };
-		4EFFCB6F208554EB008165FE /* web3swift_remote_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_remote_Tests.swift; sourceTree = "<group>"; };
+		4EFFCB6F208554EB008165FE /* web3swift_remoteParsing_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_remoteParsing_Tests.swift; sourceTree = "<group>"; };
 		57F8C9C48884592DCF561393 /* libPods-web3swift-macOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-web3swift-macOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A31D55232599E417B6F862E /* Pods-web3swift-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-iOS/Pods-web3swift-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		5B83FA95B72D7DA53870479B /* Pods-web3swift-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS/Pods-web3swift-macOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -347,6 +353,12 @@
 		B5AFAFC5440E52BE57C7BA13 /* Pods_web3swiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA3F7E825AEBF3455D00150A /* Pods-web3swift-macOS_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS_Tests/Pods-web3swift-macOS_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		CDCB852B5E2E84636B80BB99 /* Pods-web3swift-iOS_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-iOS_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-iOS_Tests/Pods-web3swift-iOS_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		E23B5ADA20EA67D800DC7F32 /* web3swift_AdvancedABIv2_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_AdvancedABIv2_Tests.swift; sourceTree = "<group>"; };
+		E23B5ADC20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_EIP67_Tests.swift; sourceTree = "<group>"; };
+		E23B5ADE20EA68F900DC7F32 /* web3swift_SECP256K1_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_SECP256K1_Tests.swift; sourceTree = "<group>"; };
+		E23B5AE020EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_rinkeby_personalSignature_Tests.swift; sourceTree = "<group>"; };
+		E23B5AE220EA69B900DC7F32 /* web3swift_numberFormattingUtil_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_numberFormattingUtil_Tests.swift; sourceTree = "<group>"; };
+		E23B5AE420EA6A0A00DC7F32 /* web3swift_contractV2_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_contractV2_Tests.swift; sourceTree = "<group>"; };
 		FB43EC035C593F9E5A3644B6 /* Pods-web3swift-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS/Pods-web3swift-macOS.debug.xcconfig"; sourceTree = "<group>"; };
 		FC1E6C115639177F2629E42A /* Pods_web3swift_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -455,17 +467,23 @@
 		1CD91B301FD769A6007BFB45 /* web3swiftTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E5FE8120EA3FF40030E0D6 /* web3swiftInfuraTests.swift */,
-				00E5FE7F20EA3CEA0030E0D6 /* web3swiftRLPTests.swift */,
-				00E5FE7D20EA3A3F0030E0D6 /* web3swiftABITests.swift */,
-				00E5FE7B20EA37B50030E0D6 /* web3swiftERC20Tests.swift */,
-				00E5FE7920EA355D0030E0D6 /* web3swiftTransactionsTests.swift */,
-				00E5FE7520EA34370030E0D6 /* web3swiftKyestoresTests.swift */,
+				00E5FE8120EA3FF40030E0D6 /* web3swift_infura_Tests.swift */,
+				00E5FE7F20EA3CEA0030E0D6 /* web3swift_RLP_Tests.swift */,
+				00E5FE7D20EA3A3F0030E0D6 /* web3swift_ABI_Tests.swift */,
+				00E5FE7B20EA37B50030E0D6 /* web3swift_ERC20_Tests.swift */,
+				00E5FE7920EA355D0030E0D6 /* web3swift_transactions_Tests.swift */,
+				00E5FE7520EA34370030E0D6 /* web3swift_keystores_Tests.swift */,
 				81A1821C20D5C6C10016741F /* web3swift_promises_Tests.swift */,
-				1CD91B311FD769A6007BFB45 /* web3swiftTests.swift */,
-				4EFFCB6F208554EB008165FE /* web3swift_remote_Tests.swift */,
+				1CD91B311FD769A6007BFB45 /* web3swift_Tests.swift */,
+				4EFFCB6F208554EB008165FE /* web3swift_remoteParsing_Tests.swift */,
 				4EFFCB6D208552F2008165FE /* web3swift_local_node_Tests.swift */,
 				1CD91B331FD769A6007BFB45 /* Info.plist */,
+				E23B5ADA20EA67D800DC7F32 /* web3swift_AdvancedABIv2_Tests.swift */,
+				E23B5ADC20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift */,
+				E23B5ADE20EA68F900DC7F32 /* web3swift_SECP256K1_Tests.swift */,
+				E23B5AE020EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift */,
+				E23B5AE220EA69B900DC7F32 /* web3swift_numberFormattingUtil_Tests.swift */,
+				E23B5AE420EA6A0A00DC7F32 /* web3swift_contractV2_Tests.swift */,
 			);
 			path = web3swiftTests;
 			sourceTree = "<group>";
@@ -1122,16 +1140,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4EFFCB70208554EB008165FE /* web3swift_remote_Tests.swift in Sources */,
-				00E5FE7C20EA37B50030E0D6 /* web3swiftERC20Tests.swift in Sources */,
-				00E5FE7A20EA355D0030E0D6 /* web3swiftTransactionsTests.swift in Sources */,
-				00E5FE7620EA34370030E0D6 /* web3swiftKyestoresTests.swift in Sources */,
-				00E5FE8020EA3CEA0030E0D6 /* web3swiftRLPTests.swift in Sources */,
+				E23B5AE520EA6A0A00DC7F32 /* web3swift_contractV2_Tests.swift in Sources */,
+				E23B5AE120EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift in Sources */,
+				E23B5ADB20EA67D800DC7F32 /* web3swift_AdvancedABIv2_Tests.swift in Sources */,
+				4EFFCB70208554EB008165FE /* web3swift_remoteParsing_Tests.swift in Sources */,
+				00E5FE7C20EA37B50030E0D6 /* web3swift_ERC20_Tests.swift in Sources */,
+				E23B5AE320EA69B900DC7F32 /* web3swift_numberFormattingUtil_Tests.swift in Sources */,
+				00E5FE7A20EA355D0030E0D6 /* web3swift_transactions_Tests.swift in Sources */,
+				00E5FE7620EA34370030E0D6 /* web3swift_keystores_Tests.swift in Sources */,
+				00E5FE8020EA3CEA0030E0D6 /* web3swift_RLP_Tests.swift in Sources */,
 				4EFFCB6E208552F2008165FE /* web3swift_local_node_Tests.swift in Sources */,
 				81A1821D20D5C6C10016741F /* web3swift_promises_Tests.swift in Sources */,
-				00E5FE8220EA3FF40030E0D6 /* web3swiftInfuraTests.swift in Sources */,
-				1CD91B321FD769A6007BFB45 /* web3swiftTests.swift in Sources */,
-				00E5FE7E20EA3A3F0030E0D6 /* web3swiftABITests.swift in Sources */,
+				E23B5ADD20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift in Sources */,
+				00E5FE8220EA3FF40030E0D6 /* web3swift_infura_Tests.swift in Sources */,
+				1CD91B321FD769A6007BFB45 /* web3swift_Tests.swift in Sources */,
+				E23B5ADF20EA68FA00DC7F32 /* web3swift_SECP256K1_Tests.swift in Sources */,
+				00E5FE7E20EA3A3F0030E0D6 /* web3swift_ABI_Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
