@@ -84,7 +84,7 @@ public struct TransactionHistoryRecord: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: CodingKeys.id)
         let hashString = try container.decode(String.self, forKey: CodingKeys.hash)
-        guard let hashData  = hashString.interpretAsBinaryData() else {
+        guard let hashData  = Data.fromHex(hashString) else {
             throw Web3Error.transactionSerializationError
         }
         hash = hashData
