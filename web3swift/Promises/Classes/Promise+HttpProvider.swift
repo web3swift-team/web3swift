@@ -18,7 +18,8 @@ extension Web3HttpProvider {
             do {
                 let encoder = JSONEncoder()
                 let requestData = try encoder.encode(request)
-                var urlRequest = try URLRequest(url: providerURL, method: .post)
+                var urlRequest = URLRequest(url: providerURL, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData)
+                urlRequest.httpMethod = "POST"
                 urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
                 urlRequest.httpBody = requestData
@@ -60,7 +61,8 @@ extension Web3HttpProvider {
             do {
                 let encoder = JSONEncoder()
                 let requestData = try encoder.encode(request)
-                var urlRequest = try URLRequest(url: providerURL, method: .post)
+                var urlRequest = URLRequest(url: providerURL, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData)
+                urlRequest.httpMethod = "POST"
                 urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
                 urlRequest.httpBody = requestData

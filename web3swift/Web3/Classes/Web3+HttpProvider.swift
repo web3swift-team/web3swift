@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import Alamofire
-import Alamofire_Synchronous
 import BigInt
 import PromiseKit
 
