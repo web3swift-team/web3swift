@@ -15,10 +15,7 @@ public class web3: Web3OptionsInheritable {
     public var options : Web3Options = Web3Options.defaultOptions()
     public var defaultBlock = "latest"
     public var requestDispatcher: JSONRPCrequestDispatcher
-
-    public func send(request: JSONRPCrequest) -> [String: Any]? {
-        return self.provider.send(request: request)
-    }
+    
     public func dispatch(_ request: JSONRPCrequest) -> Promise<JSONRPCresponse> {
         return self.requestDispatcher.addToQueue(request: request)
     }
@@ -31,7 +28,6 @@ public class web3: Web3OptionsInheritable {
             self.requestDispatcher = requestDispatcher!
         }
     }
-    
     
     public func addKeystoreManager(_ manager: KeystoreManager?) {
         self.provider.attachedKeystoreManager = manager

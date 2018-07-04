@@ -132,12 +132,6 @@ public struct JSONRPCresponse: Decodable{
             return
         }
         var result: Any? = nil
-//        for type in decodableTypes {
-//            if let rawValue = try? container.decodeIfPresent(type, forKey: .result) {
-//                result = rawValue
-//                break
-//            }
-//        }
         if let rawValue = try? container.decodeIfPresent(String.self, forKey: .result) {
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent(Int.self, forKey: .result) {

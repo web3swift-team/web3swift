@@ -34,6 +34,11 @@ class web3swift_User_cases: XCTestCase {
         }
     }
     
+    func testUserCase2() {
+        let url = URL(string: "https://mainnet.infura.io")!
+        let web3 = Web3.new(url)
+        XCTAssert(web3 != nil, "Failed to create web3 for custom provider")
+    }
     
     
 }
