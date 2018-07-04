@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Alamofire
 import BigInt
 
 public struct Counter {
@@ -24,7 +23,7 @@ public struct Counter {
 }
 
 
-public struct JSONRPCrequest: Encodable, ParameterEncoding  {
+public struct JSONRPCrequest: Encodable {
     var jsonrpc: String = "2.0"
     var method: JSONRPCmethod?
     var params: JSONRPCparams?
@@ -45,13 +44,6 @@ public struct JSONRPCrequest: Encodable, ParameterEncoding  {
         try container.encode(id, forKey: .id)
     }
     
-    public func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
-        let jsonSerialization = try JSONEncoder().encode(self)
-        var request = try urlRequest.asURLRequest()
-        request.httpBody = jsonSerialization
-        return request
-    }
-    
     public var isValid: Bool {
         get {
             if self.method == nil {
@@ -63,15 +55,8 @@ public struct JSONRPCrequest: Encodable, ParameterEncoding  {
     }
 }
 
-public struct JSONRPCrequestBatch: Encodable, ParameterEncoding  {
+public struct JSONRPCrequestBatch: Encodable {
     var requests: [JSONRPCrequest]
-    
-    public func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
-        let jsonSerialization = try JSONEncoder().encode(requests)
-        var request = try urlRequest.asURLRequest()
-        request.httpBody = jsonSerialization
-        return request
-    }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
@@ -132,12 +117,6 @@ public struct JSONRPCresponse: Decodable{
             return
         }
         var result: Any? = nil
-//        for type in decodableTypes {
-//            if let rawValue = try? container.decodeIfPresent(type, forKey: .result) {
-//                result = rawValue
-//                break
-//            }
-//        }
         if let rawValue = try? container.decodeIfPresent(String.self, forKey: .result) {
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent(Int.self, forKey: .result) {

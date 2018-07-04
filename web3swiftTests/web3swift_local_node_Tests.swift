@@ -1,10 +1,10 @@
-//
-//  web3swift_local_node_Tests.swift
-//  web3swift-iOS_Tests
-//
-//  Created by Petr Korolev on 16/04/2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
-//
+////
+////  web3swift_local_node_Tests.swift
+////  web3swift-iOS_Tests
+////
+////  Created by Petr Korolev on 16/04/2018.
+////  Copyright © 2018 Bankex Foundation. All rights reserved.
+////
 
 
 import XCTest
@@ -16,7 +16,7 @@ import secp256k1_ios
 @testable import web3swift_iOS
 
 class web3swift_local_node_Tests: XCTestCase {
-    
+
     func testDeployWithRemoteSigning() {
         let web3 = Web3.new(URL.init(string: "http://127.0.0.1:8545")!)!
         guard case .success(let allAddresses) = web3.eth.getAccounts() else {return XCTFail()}
@@ -50,7 +50,7 @@ class web3swift_local_node_Tests: XCTestCase {
             return XCTFail()
         }
     }
-    
+
     func testEthSendExampleWithRemoteSigning() {
         let web3 = Web3.new(URL.init(string: "http://127.0.0.1:8545")!)!
         guard case .success(let allAddresses) = web3.eth.getAccounts() else {return XCTFail()}
@@ -70,10 +70,10 @@ class web3swift_local_node_Tests: XCTestCase {
             return XCTFail()
         }
     }
-    
-    
-    
- 
+
+
+
+
     func testSignPersonal() {
         let web3 = Web3.new(URL.init(string: "http://127.0.0.1:8545")!)!
         guard case .success(let allAddresses) = web3.eth.getAccounts() else {return XCTFail()}
@@ -86,7 +86,7 @@ class web3swift_local_node_Tests: XCTestCase {
             print(result)
         }
     }
-    
+
     //TODO: preinit new account to test
     //    func testUnlockAccount() {
     //        let web3 = Web3.new(URL.init(string: "http://127.0.0.1:8545")!)!
@@ -100,6 +100,6 @@ class web3swift_local_node_Tests: XCTestCase {
     //            print(result)
     //        }
     //    }
-    
-    
+
+
 }

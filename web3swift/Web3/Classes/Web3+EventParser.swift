@@ -269,51 +269,15 @@ extension web3.web3contract.EventParser {
 }
 
 extension web3.web3contract {
-    public func getIndexedEvents(eventName: String?, filter: EventFilter) -> Result<[EventParserResultProtocol], Web3Error> {
-        guard let rawContract = self.contract as? ContractV2 else {return Result.failure(Web3Error.nodeError("ABIv1 is not supported for this method"))}
-        guard let preEncoding = encodeTopicToGetLogs(contract: rawContract, eventName: eventName, filter: filter) else {
-            return Result.failure(Web3Error.dataError)
-        }
-        var event: ABIv2.Element.Event? = nil
-        if eventName != nil {
-            guard let ev = rawContract.events[eventName!] else {return Result.failure(Web3Error.dataError)}
-            event = ev
-        }
-        let request = JSONRPCRequestFabric.prepareRequest(.getLogs, parameters: [preEncoding])
-        let response = self.web3.provider.send(request: request)
-        let result = ResultUnwrapper.getResponse(response)
-        switch result {
-        case .failure(let error):
-            return Result.failure(error)
-        case .success(let payload):
-            if payload is NSNull {
-                return Result.failure(Web3Error.nodeError("Empty response"))
+    public func getIndexedEvents(eventName: String?, filter: EventFilter, joinWithReceipts: Bool = false) -> Result<[EventParserResultProtocol], Web3Error> {
+        do {
+            let result = try self.getIndexedEventsPromise(eventName: eventName, filter: filter, joinWithReceipts: joinWithReceipts).wait()
+            return Result(result)
+        } catch {
+            if let err = error as? Web3Error {
+                return Result.failure(err)
             }
-            guard let resultArray = payload as? [[String: AnyObject]] else {
-                return Result.failure(Web3Error.dataError)
-            }
-            var allLogs = [EventLog]()
-            for log in resultArray {
-                guard let parsedLog = EventLog.init(log) else {return Result.failure(Web3Error.dataError)}
-                allLogs.append(parsedLog)
-            }
-            if event != nil {
-                let decodedLogs = allLogs.compactMap({ (log) -> EventParserResultProtocol? in
-                    let (n, d) = contract.parseEvent(log)
-                    guard let evName = n, let evData = d else {return nil}
-                    return EventParserResult(eventName: evName, transactionReceipt: nil, contractAddress: log.address, decodedResult: evData)
-                }).filter { (res:EventParserResultProtocol?) -> Bool in
-                    if eventName != nil {
-                        return res != nil && res?.eventName == eventName
-                    } else {
-                        return res != nil
-                    }
-                }
-                var allResults = [EventParserResultProtocol]()
-                allResults = decodedLogs
-                return Result(allResults)
-            }
-            return Result([EventParserResultProtocol]())
+            return Result.failure(Web3Error.generalError(error))
         }
     }
 }

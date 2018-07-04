@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name             = "web3swift"
-s.version          = "0.9.0"
+s.version          = "1.0.0"
 s.summary          = "Web3 implementation in vanilla Swift for iOS ans macOS"
 
 s.description      = <<-DESC
@@ -22,8 +22,6 @@ s.public_header_files = "web3swift/**/*.{h}"
 s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 
 s.frameworks = 'CoreImage'
-s.dependency 'Alamofire', '~> 4.7'
-s.dependency 'Alamofire-Synchronous', '~> 4.0'
 s.dependency 'BigInt', '~> 3.0.1'
 s.dependency 'Result', '~> 3.0.0'
 s.dependency 'CryptoSwift', '~> 0.10.0'

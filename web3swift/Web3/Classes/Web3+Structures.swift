@@ -1,6 +1,5 @@
 //
 //  Web3+Structures.swift
-//  Alamofire
 //
 //  Created by Alexander Vlasov on 26.12.2017.
 //
