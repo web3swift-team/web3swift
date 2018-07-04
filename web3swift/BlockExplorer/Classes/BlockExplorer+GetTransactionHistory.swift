@@ -63,22 +63,22 @@ public struct Response: Decodable {
 
 public struct TransactionHistoryRecord: Decodable {
     
-    let id: String
-    let hash: Data
-    let block: BigUInt
-    let addressFrom: EthereumAddress
-    let addressTo: EthereumAddress
-    let isoTime: String
-    let type: TransactionType
-    let status: TransactionStatus
-    let error: String
-    let isContract: Bool
-    let isInner: Bool
-    let value: BigUInt // in wei
-    let token: Token
-    let txFee: BigUInt // in wei
-    let gasUsed: BigUInt // in wei
-    let gasCost: BigUInt // in wei
+    public let id: String
+    public let hash: Data
+    public let block: BigUInt
+    public let addressFrom: EthereumAddress
+    public let addressTo: EthereumAddress
+    public let isoTime: String
+    public let type: TransactionType
+    public let status: TransactionStatus
+    public let error: String
+    public let isContract: Bool
+    public let isInner: Bool
+    public let value: BigUInt // in wei
+    public let token: Token
+    public let txFee: BigUInt // in wei
+    public let gasUsed: BigUInt // in wei
+    public let gasCost: BigUInt // in wei
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -173,10 +173,10 @@ public struct TransactionHistoryRecord: Decodable {
 }
 
 public struct Token: Decodable {
-    let address: EthereumAddress?
-    let name: String
-    let symbol: String
-    let decimal: Int
+    public let address: EthereumAddress?
+    public let name: String
+    public let symbol: String
+    public let decimal: Int
     
     enum CodingKeys: String, CodingKey {
         case address = "addr"
