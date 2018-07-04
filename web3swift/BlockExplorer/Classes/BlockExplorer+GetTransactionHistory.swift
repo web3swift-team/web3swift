@@ -90,14 +90,19 @@ public struct TransactionHistoryRecord: Decodable {
         hash = hashData
         let intBlock = try container.decode(UInt64.self, forKey: CodingKeys.block)
         block = BigUInt.init(integerLiteral: intBlock)
-        let stringAddressFrom = try container.decode(String.self, forKey: CodingKeys.addressFrom)
-        guard let nativeAddressFrom = EthereumAddress(stringAddressFrom, type: .normal, ignoreChecksum: true) else {
+        var stringAddressFrom = try container.decode(String.self, forKey: CodingKeys.addressFrom)
+        if !stringAddressFrom.hasHexPrefix() {
+            stringAddressFrom = stringAddressFrom.addHexPrefix()
+        }
+        guard let nativeAddressFrom = EthereumAddress(stringAddressFrom) else {
             throw Web3Error.transactionSerializationError
         }
         addressFrom = nativeAddressFrom
-        let stringAddressTo = try container.decode(String.self, forKey: CodingKeys.addressTo)
-        
-        guard let nativeAddressTo = EthereumAddress(stringAddressTo, type: .normal, ignoreChecksum: true) else {
+        var stringAddressTo = try container.decode(String.self, forKey: CodingKeys.addressTo)
+        if !stringAddressTo.hasHexPrefix() {
+            stringAddressTo = stringAddressTo.addHexPrefix()
+        }
+        guard let nativeAddressTo = EthereumAddress(stringAddressTo) else {
             throw Web3Error.transactionSerializationError
         }
         addressTo = nativeAddressTo
