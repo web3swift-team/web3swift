@@ -14,10 +14,8 @@ public class web3: Web3OptionsInheritable {
     public var provider : Web3Provider
     public var options : Web3Options = Web3Options.defaultOptions()
     public var defaultBlock = "latest"
-    public var queue: OperationQueue
     public var requestDispatcher: JSONRPCrequestDispatcher
 
-    
     public func send(request: JSONRPCrequest) -> [String: Any]? {
         return self.provider.send(request: request)
     }
@@ -26,18 +24,9 @@ public class web3: Web3OptionsInheritable {
     }
 
     public init(provider prov: Web3Provider, queue: OperationQueue? = nil, requestDispatcher: JSONRPCrequestDispatcher? = nil) {
-        provider = prov
-        if queue == nil {
-            self.queue = OperationQueue.init()
-            self.queue.maxConcurrentOperationCount = 32
-            self.queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
-            
-        } else {
-            self.queue = queue!
-        }
-        
+        provider = prov        
         if requestDispatcher == nil {
-            self.requestDispatcher = JSONRPCrequestDispatcher(provider: provider, queue: self.queue.underlyingQueue!, policy: .Batch(32))
+            self.requestDispatcher = JSONRPCrequestDispatcher(provider: provider, queue: DispatchQueue.global(qos: .userInteractive), policy: .Batch(32))
         } else {
             self.requestDispatcher = requestDispatcher!
         }

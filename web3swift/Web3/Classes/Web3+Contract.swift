@@ -26,8 +26,8 @@ extension web3 {
             self.options = web3.options
             switch abiVersion {
             case 1:
-                guard let c = Contract(abiString, at: at) else {return nil}
-                contract = c
+                print("ABIv1 bound contract is now deprecated")
+                return nil
             case 2:
                 guard let c = ContractV2(abiString, at: at) else {return nil}
                 contract = c

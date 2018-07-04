@@ -11,7 +11,7 @@ import CryptoSwift
 
 @testable import web3swift_iOS
 
-class web3swiftKyestoresTests: XCTestCase {
+class web3swift_Keystores_tests: XCTestCase {
     
     func testBIP39 () {
         var entropy = Data.fromHex("00000000000000000000000000000000")!
