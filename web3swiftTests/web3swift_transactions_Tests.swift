@@ -173,5 +173,4 @@ class web3swift_transactions_Tests: XCTestCase {
             XCTFail()
         }
     }
-    
 }

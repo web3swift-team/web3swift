@@ -39,7 +39,9 @@ public class Web3HttpProvider: Web3Provider {
                 let request = JSONRPCRequestFabric.prepareRequest(.getNetwork, parameters: [])
                 let response = try Web3HttpProvider.post(request, providerURL: httpProviderURL, queue: DispatchQueue.global(qos: .userInteractive), session: session).wait()
                 if response.error != nil {
-                    print(response.message)
+                    if response.message != nil {
+                        print(response.message!)
+                    }
                     return nil
                 }
                 guard let result: String = response.getValue(), let intNetworkNumber = Int(result) else {return nil}

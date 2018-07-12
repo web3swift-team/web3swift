@@ -126,13 +126,17 @@ extension web3.web3contract.TransactionIntermediate {
                 guard case .fulfilled(let gasPrice) = results[2] else {
                     throw Web3Error.processingError("Failed to fetch gas price")
                 }
-                guard let estimate = Web3Options.smartMergeGasLimit(originalOptions: options, extraOptions: nil, gasEstimage: gasEstimate) else {
+                guard let estimate = Web3Options.smartMergeGasLimit(originalOptions: options, extraOptions: mergedOptions, gasEstimate: gasEstimate) else {
                     throw Web3Error.processingError("Failed to calculate gas estimate that satisfied options")
                 }
                 assembledTransaction.nonce = nonce
                 assembledTransaction.gasLimit = estimate
                 if assembledTransaction.gasPrice == 0 {
-                    assembledTransaction.gasPrice = gasPrice
+                    if mergedOptions.gasPrice != nil {
+                        assembledTransaction.gasPrice = mergedOptions.gasPrice!
+                    } else {
+                        assembledTransaction.gasPrice = gasPrice
+                    }
                 }
                 return assembledTransaction
             }).done(on: queue) {tx in

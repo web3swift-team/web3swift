@@ -168,6 +168,7 @@
 		81D7D97820A61E3800A193EC /* EventFiltering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97720A61E3800A193EC /* EventFiltering.swift */; };
 		81D7D97920A61E3800A193EC /* EventFiltering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97720A61E3800A193EC /* EventFiltering.swift */; };
 		81DDECCF1FDF004E0063684A /* Web3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECCE1FDF004E0063684A /* Web3.swift */; };
+		81DFCC4C20F7546300603123 /* key.json in Resources */ = {isa = PBXBuildFile; fileRef = 81DFCC4B20F7546300603123 /* key.json */; };
 		81EB1E4B208173D7003BD47F /* Web3+Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EB1E4A208173D7003BD47F /* Web3+Personal.swift */; };
 		81EB1E4C208173D7003BD47F /* Web3+Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EB1E4A208173D7003BD47F /* Web3+Personal.swift */; };
 		81FA43F62044097100EE14D5 /* web3swift_macOS_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA43F52044097100EE14D5 /* web3swift_macOS_Tests.swift */; };
@@ -312,6 +313,7 @@
 		81D7D97420A3240900A193EC /* EthereumFilterEncodingExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumFilterEncodingExtensions.swift; sourceTree = "<group>"; };
 		81D7D97720A61E3800A193EC /* EventFiltering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFiltering.swift; sourceTree = "<group>"; };
 		81DDECCE1FDF004E0063684A /* Web3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3.swift; sourceTree = "<group>"; };
+		81DFCC4B20F7546300603123 /* key.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = key.json; path = ../../../../Desktop/key.json; sourceTree = "<group>"; };
 		81EB1E4A208173D7003BD47F /* Web3+Personal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Personal.swift"; sourceTree = "<group>"; };
 		81FA43F32044097000EE14D5 /* web3swift-macOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "web3swift-macOS_Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81FA43F52044097100EE14D5 /* web3swift_macOS_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_macOS_Tests.swift; sourceTree = "<group>"; };
@@ -441,6 +443,7 @@
 		1CD91B301FD769A6007BFB45 /* web3swiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				81DFCC4B20F7546300603123 /* key.json */,
 				815C74C720ECBF3E00DE2AC4 /* web3swift_User_cases.swift */,
 				00E5FE8120EA3FF40030E0D6 /* web3swift_infura_Tests.swift */,
 				00E5FE7F20EA3CEA0030E0D6 /* web3swift_RLP_Tests.swift */,
@@ -898,6 +901,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81DFCC4C20F7546300603123 /* key.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
