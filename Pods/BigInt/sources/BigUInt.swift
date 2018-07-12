@@ -77,7 +77,7 @@ extension BigUInt {
         }
     }
 
-    /// Returns `-1` if this value is negative and `1` if it’s positive; otherwise, `0`.
+    /// Returns `1` if this value is, positive; otherwise, `0`.
     ///
     /// - Returns: The sign of this number, expressed as an integer of the same type.
     public func signum() -> BigUInt {

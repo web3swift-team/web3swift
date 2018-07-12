@@ -25,35 +25,35 @@
 
 This repository provides [integer types of arbitrary width][wiki] implemented
 in 100% pure Swift. The underlying representation is in base 2^64, using `Array<UInt64>`.
-                                                                  
+
 [wiki]: https://en.wikipedia.org/wiki/Arbitrary-precision_arithmetic
 
-This module is handy when you need an integer type that's wider than `UIntMax`, but 
-you don't want to add [The GNU Multiple Precision Arithmetic Library][GMP] 
+This module is handy when you need an integer type that's wider than `UIntMax`, but
+you don't want to add [The GNU Multiple Precision Arithmetic Library][GMP]
 as a dependency.
 
 [GMP]: https://gmplib.org
 
-Two big integer types are included: [`BigUInt`][BigUInt] and [`BigInt`][BigInt], 
+Two big integer types are included: [`BigUInt`][BigUInt] and [`BigInt`][BigInt],
 the latter being the signed variant.
-Both of these are Swift structs with copy-on-write value semantics, and they can be used much 
+Both of these are Swift structs with copy-on-write value semantics, and they can be used much
 like any other integer type.
 
-The library provides implementations for some of the most frequently useful functions on 
+The library provides implementations for some of the most frequently useful functions on
 big integers, including
 
 - All functionality from [`Comparable`][comparison] and [`Hashable`][hashing]
 
 - [The full set of arithmetic operators][addition]: `+`, `-`, `*`, `/`, `%`, `+=`, `-=`, `*=`, `/=`, `%=`
-  - [Addition][addition] and [subtraction][subtraction] have variants that allow for 
+  - [Addition][addition] and [subtraction][subtraction] have variants that allow for
     shifting the digits of the second operand on the fly.
-  - Unsigned subtraction will trap when the result would be negative. 
+  - Unsigned subtraction will trap when the result would be negative.
     ([There are variants][subtraction] that return an overflow flag.)
-  - [Multiplication][mul] uses brute force for numbers up to 1024 digits, then switches to Karatsuba's recursive method. 
-    (This limit is configurable, see `BigUInt.directMultiplicationLimit`.) 
+  - [Multiplication][mul] uses brute force for numbers up to 1024 digits, then switches to Karatsuba's recursive method.
+    (This limit is configurable, see `BigUInt.directMultiplicationLimit`.)
   - A [fused multiply-add][fused] method is also available, along with other [special-case variants][multiplication].
-  - [Division][division] uses Knuth's Algorithm D, with its 3/2 digits wide quotient approximation. 
-    It will trap when the divisor is zero. 
+  - [Division][division] uses Knuth's Algorithm D, with its 3/2 digits wide quotient approximation.
+    It will trap when the divisor is zero.
   - [`BigUInt.divide`][divide] returns the quotient and
     remainder at once; this is faster than calculating them separately.
 
@@ -70,12 +70,12 @@ big integers, including
 
 - Radix conversion to/from [`String`s][radix1] and [big integers][radix2] up to base 36 (using repeated divisions).
   - Big integers use this to implement `StringLiteralConvertible` (in base 10).
-  
+
 - [`sqrt(n)`][sqrt]: The square root of an integer (using Newton's method).
 
 - [`BigUInt.gcd(n, m)`][GCD]: The greatest common divisor of two integers (Stein's algorithm).
-  
-- [`base.power(exponent, modulus)`][powmod]: Modular exponentiation (right-to-left binary method). 
+
+- [`base.power(exponent, modulus)`][powmod]: Modular exponentiation (right-to-left binary method).
   [Vanilla exponentiation][power] is also available.
 - [`n.inverse(modulus)`][inverse]: Multiplicative inverse in modulo arithmetic (extended Euclidean algorithm).
 - [`n.isPrime()`][prime]: Miller–Rabin primality test.
@@ -100,9 +100,9 @@ BigInt can be used, distributed and modified under [the MIT license][license].
 BigInt 3.0.0 requires Swift 4. (The last version with support for Swift 3.x was BigInt 2.1.0.
 The last version with support for Swift 2 was BigInt 1.3.0.)
 
-BigInt deploys to macOS 10.10, iOS 9, watchOS 2 and tvOS 9. 
-It has been tested on the latest OS releases only---however, as the module uses very few platform-provided APIs, 
-there should be very few issues with earlier versions. 
+BigInt deploys to macOS 10.10, iOS 9, watchOS 2 and tvOS 9.
+It has been tested on the latest OS releases only---however, as the module uses very few platform-provided APIs,
+there should be very few issues with earlier versions.
 
 BigInt uses no APIs specific to Apple platforms except for `arc4random_buf` in `BigUInt Random.swift`, so
 it should be easy to port it to other operating systems.
@@ -110,41 +110,41 @@ it should be easy to port it to other operating systems.
 Setup instructions:
 
 - **Swift Package Manager:**
-  Although the Package Manager is still in its infancy, BigInt provides experimental support for it. 
+  Although the Package Manager is still in its infancy, BigInt provides experimental support for it.
   Add this to the dependency section of your `Package.swift` manifest:
 
     ```Swift
-    .Package(url: "https://github.com/attaswift/BigInt.git", from: "3.0.0")
+    .Package(url: "https://github.com/attaswift/BigInt.git", from: "3.1.0")
     ```
 
 - **CocoaPods:** Put this in your `Podfile`:
 
     ```Ruby
-    pod 'BigInt', '~> 3.0'
+    pod 'BigInt', '~> 3.1'
     ```
 
 - **Carthage:** Put this in your `Cartfile`:
 
     ```
-    github "attaswift/BigInt" ~> 3.0
+    github "attaswift/BigInt" ~> 3.1
     ```
 
 
 ## <a name="notes">Implementation notes</a>
 
-[`BigUInt`][BigUInt] is a `MutableCollectionType` of its 64-bit digits, with the least significant 
+[`BigUInt`][BigUInt] is a `MutableCollectionType` of its 64-bit digits, with the least significant
 digit at index 0. As a convenience, [`BigUInt`][BigUInt] allows you to subscript it with indexes at
 or above its `count`. [The subscript operator][subscript] returns 0 for out-of-bound `get`s and
 automatically extends the array on out-of-bound `set`s. This makes memory management simpler.
 
-[`BigInt`][BigInt] is just a tiny wrapper around a `BigUInt` [absolute value][abs] and a 
-[sign bit][negative], both of which are accessible as public read-write properties. 
+[`BigInt`][BigInt] is just a tiny wrapper around a `BigUInt` [absolute value][abs] and a
+[sign bit][negative], both of which are accessible as public read-write properties.
 
 ### <a name="fullwidth">Full-width multiplication and division primitives</a>
 
 I haven't found (64,64)->128 multiplication or (128,64)->64 division operations
 in Swift, so [the module has generic implementations for them][fullmuldiv] in terms of the standard
-single-width `*` and `/` operators. I suspect there are LLVM intrinsics for full-width 
+single-width `*` and `/` operators. I suspect there are LLVM intrinsics for full-width
 arithmetics that are probably accessible somehow, though. ([Let me know][twitter] if you know how!)
 
 This sounds slow, but 64-bit digits are
@@ -153,15 +153,15 @@ implement these primitives.
 
 ### <a name="generics">Why is there no generic `BigInt<Digit>` type?</a>
 
-The types provided by `BigInt` are not parametric—this is very much intentional, as 
+The types provided by `BigInt` are not parametric—this is very much intentional, as
 Swift generics cost us dearly at runtime in this use case. In every approach I tried,
-making arbitrary-precision arithmetic operations work with a generic `Digit` type parameter 
+making arbitrary-precision arithmetic operations work with a generic `Digit` type parameter
 resulted in code that was literally *ten times slower*. If you can make the algorithms generic
 without such a huge performance hit, [please enlighten me][twitter]!
 
 This is an area that I plan to investigate more, as it would be useful to have generic
 implementations for arbitrary-width arithmetic operations. (Polynomial division and decimal bases
-are two examples.) The library already implements double-digit multiplication and division as 
+are two examples.) The library already implements double-digit multiplication and division as
 extension methods on a protocol with an associated type requirement; this has not measurably affected
 performance. Unfortunately, the same is not true for `BigUInt`'s methods.
 
@@ -267,8 +267,8 @@ simple [RSA cryptography system][RSA].
 
 [RSA]: https://en.wikipedia.org/wiki/RSA_(cryptosystem)
 
-Let's start with a simple function that generates a random n-bit prime. The module 
-includes a function to generate random integers of a specific size, and also an 
+Let's start with a simple function that generates a random n-bit prime. The module
+includes a function to generate random integers of a specific size, and also an
 `isPrime` method that performs the Miller–Rabin primality test. These are all we need:
 
 ```Swift
@@ -337,7 +337,7 @@ func encrypt(_ message: BigUInt, key: Key) -> BigUInt {
 
 Let's try out our new keypair by converting a string into UTF-8, interpreting
 the resulting binary representation as a big integer, and encrypting it with the
-public key. `BigUInt` has an initializer that takes an `NSData`, so this is pretty 
+public key. `BigUInt` has an initializer that takes an `NSData`, so this is pretty
 easy to do:
 
 ```Swift
@@ -356,7 +356,7 @@ let cyphertext = encrypt(secret, key: publicKey)
     49208193955207336172861151720299024935127021719852700882
 ```
 
-Well, it looks encrypted all right, but can we get the original message back? 
+Well, it looks encrypted all right, but can we get the original message back?
 In theory, encrypting the cyphertext with the private key returns the original message.
 Let's see:
 
@@ -369,14 +369,14 @@ let received = String(data: plaintext.serialize(), encoding: NSUTF8StringEncodin
 ==> "Arbitrary precision arithmetic is fun!"
 ```
 
-Yay! This is truly terrific, but please don't use this example code in an actual 
+Yay! This is truly terrific, but please don't use this example code in an actual
 cryptography system. RSA has lots of subtle (and some not so subtle) complications
 that we ignored to keep this example short.
 
 ### <a name="pi">Calculating the Digits of π</a>
 
 Another fun activity to try with `BigInt`s is to generate the digits of π.
-Let's try implementing [Jeremy Gibbon's spigot algorithm][spigot]. 
+Let's try implementing [Jeremy Gibbon's spigot algorithm][spigot].
 This is a rather slow algorithm as π-generators go, but it makes up for it with its grooviness
 factor: it's remarkably short, it only uses (big) integer arithmetic, and every iteration
 produces a single new digit in the base-10 representation of π. This naturally leads to an

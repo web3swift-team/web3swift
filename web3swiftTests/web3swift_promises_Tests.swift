@@ -136,5 +136,6 @@ class web3swift_promises_Tests: XCTestCase {
         guard let data = NSData(contentsOfFile: path) else {return nil}
         return data as Data
     }
-    
 }
+
+
