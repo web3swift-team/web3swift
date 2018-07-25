@@ -59,36 +59,47 @@ public class EthereumKeystoreV3: AbstractKeystore {
         if (keystoreParams.crypto.version != nil && keystoreParams.crypto.version != "1") {return nil}
         self.keystoreParams = keystoreParams
         if keystoreParams.address != nil {
-            self.address = EthereumAddress(keystoreParams.address!)
+            self.address = EthereumAddress(keystoreParams.address!.addHexPrefix())
         } else {
             return nil
         }
     }
     
-    public init? (password: String = "BANKEXFOUNDATION") throws {
+    public init? (password: String = "BANKEXFOUNDATION", aesMode: String = "aes-128-cbc") throws {
         guard var newPrivateKey = SECP256K1.generatePrivateKey() else {return nil}
         defer {Data.zero(&newPrivateKey)}
-        try encryptDataToStorage(password, keyData: newPrivateKey)
+        try encryptDataToStorage(password, keyData: newPrivateKey, aesMode: aesMode)
     }
     
-    public init? (privateKey: Data, password: String = "BANKEXFOUNDATION") throws {
+    public init? (privateKey: Data, password: String = "BANKEXFOUNDATION", aesMode: String = "aes-128-cbc") throws {
         guard privateKey.count == 32 else {return nil}
         guard SECP256K1.verifyPrivateKey(privateKey: privateKey) else {return nil}
-        try encryptDataToStorage(password, keyData: privateKey)
+        try encryptDataToStorage(password, keyData: privateKey, aesMode: aesMode)
     }
     
-    fileprivate func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int=32, N: Int = 4096, R: Int = 6, P: Int = 1) throws {
+    fileprivate func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int=32, N: Int = 4096, R: Int = 6, P: Int = 1, aesMode: String = "aes-128-cbc") throws {
         if (keyData == nil) {
             throw AbstractKeystoreError.encryptionError("Encryption without key data")
         }
         let saltLen = 32;
         guard let saltData = Data.randomBytes(length: saltLen) else {throw AbstractKeystoreError.noEntropyError}
         guard let derivedKey = scrypt(password: password, salt: saltData, length: dkLen, N: N, R: R, P: P) else {throw AbstractKeystoreError.keyDerivationError}
-        let last16bytes = derivedKey[(derivedKey.count - 16)...(derivedKey.count-1)]
-        let encryptionKey = derivedKey[0...15]
+        let last16bytes = Data(derivedKey[(derivedKey.count - 16)...(derivedKey.count-1)])
+        let encryptionKey = Data(derivedKey[0...15])
         guard let IV = Data.randomBytes(length: 16) else {throw AbstractKeystoreError.noEntropyError}
-        let aecCipher = try? AES(key: encryptionKey.bytes, blockMode: .CBC(iv: IV.bytes), padding: .noPadding)
-        guard let encryptedKey = try aecCipher?.encrypt(keyData!.bytes) else {throw AbstractKeystoreError.aesError}
+        var aesCipher : AES?
+        switch aesMode {
+        case "aes-128-cbc":
+            aesCipher = try? AES(key: encryptionKey.bytes, blockMode: CBC(iv: IV.bytes), padding: .noPadding)
+        case "aes-128-ctr":
+            aesCipher = try? AES(key: encryptionKey.bytes, blockMode: CTR(iv: IV.bytes), padding: .noPadding)
+        default:
+            aesCipher = nil
+        }
+        if aesCipher == nil {
+            throw AbstractKeystoreError.aesError
+        }
+        guard let encryptedKey = try aesCipher?.encrypt(keyData!.bytes) else {throw AbstractKeystoreError.aesError}
         let encryptedKeyData = Data(bytes:encryptedKey)
         var dataForMAC = Data()
         dataForMAC.append(last16bytes)
@@ -96,7 +107,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         let mac = dataForMAC.sha3(.keccak256)
         let kdfparams = KdfParamsV3(salt: saltData.toHexString(), dklen: dkLen, n: N, p: P, r: R, c: nil, prf: nil)
         let cipherparams = CipherParamsV3(iv: IV.toHexString())
-        let crypto = CryptoParamsV3(ciphertext: encryptedKeyData.toHexString(), cipher: "aes-128-cbc", cipherparams: cipherparams, kdf: "scrypt", kdfparams: kdfparams, mac: mac.toHexString(), version: nil)
+        let crypto = CryptoParamsV3(ciphertext: encryptedKeyData.toHexString(), cipher: aesMode, cipherparams: cipherparams, kdf: "scrypt", kdfparams: kdfparams, mac: mac.toHexString(), version: nil)
         guard let pubKey = Web3.Utils.privateToPublic(keyData!) else {throw AbstractKeystoreError.keyDerivationError}
         guard let addr = Web3.Utils.publicToAddress(pubKey) else {throw AbstractKeystoreError.keyDerivationError}
         self.address = addr
@@ -110,7 +121,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
         defer {Data.zero(&keyData!)}
-        try self.encryptDataToStorage(newPassword, keyData: keyData!)
+        try self.encryptDataToStorage(newPassword, keyData: keyData!, aesMode: self.keystoreParams!.crypto.cipher)
     }
     
     fileprivate func getKeyData(_ password: String) throws -> Data? {
@@ -128,16 +139,16 @@ public class EthereumKeystoreV3: AbstractKeystore {
             guard let algo = keystoreParams.crypto.kdfparams.prf else {return nil}
             var hashVariant:HMAC.Variant?;
             switch algo {
-            case "hmac-sha256" :
-                hashVariant = HMAC.Variant.sha256
-            case "hmac-sha384" :
-                hashVariant = HMAC.Variant.sha384
-            case "hmac-sha512" :
-                hashVariant = HMAC.Variant.sha512
-            default:
-                hashVariant = nil
+                case "hmac-sha256" :
+                    hashVariant = HMAC.Variant.sha256
+                case "hmac-sha384" :
+                    hashVariant = HMAC.Variant.sha384
+                case "hmac-sha512" :
+                    hashVariant = HMAC.Variant.sha512
+                default:
+                    hashVariant = nil
             }
-            guard (hashVariant != nil) else {return nil}
+            guard hashVariant != nil else {return nil}
             guard let c = keystoreParams.crypto.kdfparams.c else {return nil}
             guard let passData = password.data(using: .utf8) else {return nil}
             guard let derivedArray = try? PKCS5.PBKDF2(password: passData.bytes, salt: saltData.bytes, iterations: c, keyLength: derivedLen, variant: hashVariant!).calculate() else {return nil}
@@ -147,7 +158,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         }
         guard let derivedKey = passwordDerivedKey else {return nil}
         var dataForMAC = Data()
-        let derivedKeyLast16bytes = derivedKey[(derivedKey.count - 16)...(derivedKey.count - 1)]
+        let derivedKeyLast16bytes = Data(derivedKey[(derivedKey.count - 16)...(derivedKey.count - 1)])
         dataForMAC.append(derivedKeyLast16bytes)
         guard let cipherText = Data.fromHex(keystoreParams.crypto.ciphertext) else {return nil}
         if (cipherText.count != 32) {return nil}
@@ -160,10 +171,10 @@ public class EthereumKeystoreV3: AbstractKeystore {
         var decryptedPK:Array<UInt8>?
         switch cipher {
         case "aes-128-ctr":
-            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: .CTR(iv: IV.bytes), padding: .noPadding) else {return nil}
+            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: IV.bytes), padding: .noPadding) else {return nil}
             decryptedPK = try aesCipher.decrypt(cipherText.bytes)
         case "aes-128-cbc":
-            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: .CBC(iv: IV.bytes), padding: .noPadding) else {return nil}
+            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CBC(iv: IV.bytes), padding: .noPadding) else {return nil}
             decryptedPK = try? aesCipher.decrypt(cipherText.bytes)
         default:
             return nil

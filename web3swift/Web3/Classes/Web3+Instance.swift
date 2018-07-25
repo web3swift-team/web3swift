@@ -8,35 +8,26 @@
 
 import Foundation
 import BigInt
+import PromiseKit
 
 public class web3: Web3OptionsInheritable {
     public var provider : Web3Provider
     public var options : Web3Options = Web3Options.defaultOptions()
     public var defaultBlock = "latest"
-    public var queue: OperationQueue
-    var dispatcher: OperationDispatcher
+    public var requestDispatcher: JSONRPCrequestDispatcher
     
-    public func send(request: JSONRPCrequest) -> [String: Any]? {
-        return self.provider.send(request: request)
+    public func dispatch(_ request: JSONRPCrequest) -> Promise<JSONRPCresponse> {
+        return self.requestDispatcher.addToQueue(request: request)
     }
 
-    public init(provider prov: Web3Provider, queue: OperationQueue? = nil, dispatcher: OperationDispatcher? = nil) {
-        provider = prov
-        if queue == nil {
-            self.queue = OperationQueue.init()
-            self.queue.maxConcurrentOperationCount = 32
-            self.queue.underlyingQueue = DispatchQueue.global(qos: .userInteractive)
-            
+    public init(provider prov: Web3Provider, queue: OperationQueue? = nil, requestDispatcher: JSONRPCrequestDispatcher? = nil) {
+        provider = prov        
+        if requestDispatcher == nil {
+            self.requestDispatcher = JSONRPCrequestDispatcher(provider: provider, queue: DispatchQueue.global(qos: .userInteractive), policy: .Batch(32))
         } else {
-            self.queue = queue!
-        }
-        if dispatcher == nil {
-            self.dispatcher = OperationDispatcher(provider: provider, queue: self.queue, policy: .Batch(16))
-        } else {
-            self.dispatcher = dispatcher!
+            self.requestDispatcher = requestDispatcher!
         }
     }
-    
     
     public func addKeystoreManager(_ manager: KeystoreManager?) {
         self.provider.attachedKeystoreManager = manager

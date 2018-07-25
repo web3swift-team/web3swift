@@ -141,27 +141,6 @@ strip_invalid_archs() {
   STRIP_BINARY_RETVAL=1
 }
 
-
-if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/Alamofire-macOS/Alamofire.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/Alamofire-Synchronous-macOS/Alamofire_Synchronous.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/BigInt-macOS/BigInt.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/CryptoSwift-macOS/CryptoSwift.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/Result-macOS/Result.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/SipHash-macOS/SipHash.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/libsodium-macOS/libsodium.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/secp256k1_ios-macOS/secp256k1_ios.framework"
-fi
-if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/Alamofire-macOS/Alamofire.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/Alamofire-Synchronous-macOS/Alamofire_Synchronous.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/BigInt-macOS/BigInt.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/CryptoSwift-macOS/CryptoSwift.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/Result-macOS/Result.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/SipHash-macOS/SipHash.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/libsodium-macOS/libsodium.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/secp256k1_ios-macOS/secp256k1_ios.framework"
-fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait
 fi

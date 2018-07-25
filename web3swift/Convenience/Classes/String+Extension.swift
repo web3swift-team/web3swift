@@ -8,13 +8,6 @@ extension String {
     var fullNSRange: NSRange {
         return NSRange(fullRange, in: self)
     }
-
-    func lastIndex(of char: Character) -> Index? {
-        guard let range = range(of: String(char), options: .backwards) else {
-            return nil
-        }
-        return range.lowerBound
-    }
     
     func index(of char: Character) -> Index? {
         guard let range = range(of: String(char)) else {

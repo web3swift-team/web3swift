@@ -9,21 +9,14 @@
 import Foundation
 import BigInt
 import Result
-
-public protocol Web3Provider {
-    func send(request: JSONRPCrequest) -> [String:Any]?
-    func send(requests: [JSONRPCrequest]) -> [[String: Any]?]?
-    func sendWithRawResult(request: JSONRPCrequest) -> Data?
-    var network: Networks? {get set}
-    var attachedKeystoreManager: KeystoreManager? {get set}
-    var url: URL {get}
-}
+import class PromiseKit.Promise
 
 public protocol EventParserResultProtocol {
     var eventName: String {get}
     var decodedResult: [String:Any] {get}
     var contractAddress: EthereumAddress {get}
     var transactionReceipt: TransactionReceipt? {get}
+    var eventLog: EventLog? {get}
 }
 
 public protocol EventParserProtocol {
@@ -31,6 +24,10 @@ public protocol EventParserProtocol {
     func parseTransactionByHash(_ hash: Data) -> Result<[EventParserResultProtocol], Web3Error>
     func parseBlock(_ block: Block) -> Result<[EventParserResultProtocol], Web3Error>
     func parseBlockByNumber(_ blockNumber: UInt64) -> Result<[EventParserResultProtocol], Web3Error>
+    func parseTransactionPromise(_ transaction: EthereumTransaction) -> Promise<[EventParserResultProtocol]>
+    func parseTransactionByHashPromise(_ hash: Data) -> Promise<[EventParserResultProtocol]>
+    func parseBlockByNumberPromise(_ blockNumber: UInt64) -> Promise<[EventParserResultProtocol]>
+    func parseBlockPromise(_ block: Block) -> Promise<[EventParserResultProtocol]>
 }
 
 public enum Networks {

@@ -11,7 +11,7 @@ import BigInt
 
 public struct EthereumTransaction: CustomStringConvertible {
     public var nonce: BigUInt
-    public var gasPrice: BigUInt = BigUInt("5000000000", radix: 10)!
+    public var gasPrice: BigUInt = BigUInt(0)
     public var gasLimit: BigUInt = BigUInt(0)
     public var to: EthereumAddress
     public var value: BigUInt
@@ -88,6 +88,23 @@ public struct EthereumTransaction: CustomStringConvertible {
         self.v = v
         self.r = r
         self.s = s
+    }
+    
+    public func mergedWithOptions(_ options: Web3Options) -> EthereumTransaction {
+        var tx = self;
+        if options.gasPrice != nil {
+            tx.gasPrice = options.gasPrice!
+        }
+        if options.gasLimit != nil {
+            tx.gasLimit = options.gasLimit!
+        }
+        if options.value != nil {
+            tx.value = options.value!
+        }
+        if options.to != nil {
+            tx.to = options.to!
+        }
+        return tx
     }
     
     public var description: String {
@@ -181,10 +198,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         }
     }
     
-    public func encodeAsDictionary(from: EthereumAddress) -> TransactionParameters? {
-        if (!from.isValid) {
-            return nil
-        }
+    public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? {
         var toString: String? = nil
         switch self.to.type {
         case .normal:
@@ -192,7 +206,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         case .contractDeployment:
             break
         }
-        var params = TransactionParameters(from: from.address.lowercased(),
+        var params = TransactionParameters(from: from?.address.lowercased(),
                                            to: toString)
         let gasEncoding = self.gasLimit.abiEncode(bits: 256)
         params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
@@ -318,9 +332,9 @@ public struct EthereumTransaction: CustomStringConvertible {
     static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, onBlock: String? = nil, options: Web3Options?) -> JSONRPCrequest? {
         var request = JSONRPCrequest()
         request.method = method
-        guard let from = options?.from else {return nil}
-        guard var txParams = transaction.encodeAsDictionary(from: from) else {return nil}
-        if options?.gasLimit == nil {
+//        guard let from = options?.from else {return nil}
+        guard var txParams = transaction.encodeAsDictionary(from: options?.from) else {return nil}
+        if method == .estimateGas || options?.gasLimit == nil {
             txParams.gas = nil
         }
         var params = [txParams] as Array<Encodable>

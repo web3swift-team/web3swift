@@ -79,12 +79,28 @@ public struct EthereumAddress: Equatable {
         case .normal:
             guard let data = Data.fromHex(addressString) else {return nil}
             guard data.count == 20 else {return nil}
-            if (!ignoreChecksum && data.toHexString().addHexPrefix() != addressString) {
-                let checksummedAddress = EthereumAddress.toChecksumAddress(data.toHexString().addHexPrefix())
-                guard checksummedAddress == addressString else {return nil}
+            if !addressString.hasHexPrefix() {
+                return nil
             }
-            self._address = data.toHexString().addHexPrefix()
-            self.type = .normal
+            if (!ignoreChecksum) {
+                // check for checksum
+                if data.toHexString() == addressString.stripHexPrefix() {
+                    self._address = data.toHexString().addHexPrefix()
+                    self.type = .normal
+                    return
+                } else if data.toHexString().uppercased() == addressString.stripHexPrefix() {
+                    self._address = data.toHexString().addHexPrefix()
+                    self.type = .normal
+                    return
+                } else {
+                    let checksummedAddress = EthereumAddress.toChecksumAddress(data.toHexString().addHexPrefix())
+                    guard checksummedAddress == addressString else {return nil}
+                    self._address = data.toHexString().addHexPrefix()
+                    self.type = .normal
+                    return
+                }
+            }
+            return nil
         case .contractDeployment:
             self._address = "0x"
             self.type = .contractDeployment

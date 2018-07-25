@@ -16,17 +16,42 @@
 //  Counter (CTR)
 //
 
+public struct CTR: BlockMode {
+    public enum Error: Swift.Error {
+        /// Invalid IV
+        case invalidInitializationVector
+    }
+
+    public let options: BlockModeOption = [.initializationVectorRequired, .useEncryptToDecrypt]
+    private let iv: Array<UInt8>
+
+    public init(iv: Array<UInt8>) {
+        self.iv = iv
+    }
+
+    public func worker(blockSize: Int, cipherOperation: @escaping CipherOperationOnBlock) throws -> BlockModeWorker {
+        if iv.count != blockSize {
+            throw Error.invalidInitializationVector
+        }
+
+        return CTRModeWorker(blockSize: blockSize, iv: iv.slice, cipherOperation: cipherOperation)
+    }
+}
+
 struct CTRModeWorker: RandomAccessBlockModeWorker {
     let cipherOperation: CipherOperationOnBlock
+    let blockSize: Int
+    let additionalBufferSize: Int = 0
     private let iv: ArraySlice<UInt8>
     var counter: UInt = 0
 
-    init(iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
+    init(blockSize: Int, iv: ArraySlice<UInt8>, cipherOperation: @escaping CipherOperationOnBlock) {
+        self.blockSize = blockSize
         self.iv = iv
         self.cipherOperation = cipherOperation
     }
 
-    mutating func encrypt(_ plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
+    mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
         let nonce = buildNonce(iv, counter: UInt64(counter))
         counter = counter + 1
 
@@ -37,15 +62,15 @@ struct CTRModeWorker: RandomAccessBlockModeWorker {
         return xor(plaintext, ciphertext)
     }
 
-    mutating func decrypt(_ ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
-        return encrypt(ciphertext)
+    mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
+        return encrypt(block: ciphertext)
     }
 }
 
 private func buildNonce(_ iv: ArraySlice<UInt8>, counter: UInt64) -> Array<UInt8> {
-    let noncePartLen = AES.blockSize / 2
-    let noncePrefix = Array(iv[iv.startIndex..<iv.startIndex.advanced(by: noncePartLen)])
-    let nonceSuffix = Array(iv[iv.startIndex.advanced(by: noncePartLen)..<iv.startIndex.advanced(by: iv.count)])
+    let noncePartLen = iv.count / 2
+    let noncePrefix = iv[iv.startIndex..<iv.startIndex.advanced(by: noncePartLen)]
+    let nonceSuffix = iv[iv.startIndex.advanced(by: noncePartLen)..<iv.startIndex.advanced(by: iv.count)]
     let c = UInt64(bytes: nonceSuffix) + counter
     return noncePrefix + c.bytes()
 }

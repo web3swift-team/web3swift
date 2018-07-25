@@ -41,7 +41,7 @@ final class ContractCallOperation: Web3Operation {
         if (options?.gasLimit != nil) {
             mergedOptions.gasLimit = options?.gasLimit
         }
-        guard let _ = mergedOptions.from else {return processError(Web3Error.inputError("Invalid input supplied"))}
+//        guard let _ = mergedOptions.from else {return processError(Web3Error.inputError("Invalid input supplied"))}
         let transaction = intermediate.transaction
 
         let parsingCallback = { (res: Result<AnyObject, Web3Error>) -> () in
@@ -66,8 +66,8 @@ final class ContractCallOperation: Web3Operation {
                 return self.processError(error)
             }
         }
-        
-        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: transaction, onBlock: onBlock, options: mergedOptions) else {return self.processError(Web3Error.inputError("Invalid input supplied"))}
+        let tx = transaction.mergedWithOptions(mergedOptions)
+        guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.call, transaction: tx, onBlock: onBlock, options: mergedOptions) else {return self.processError(Web3Error.inputError("Invalid input supplied"))}
         let dataOp = DataFetchOperation(self.web3, queue: self.expectedQueue)
         dataOp.inputData = request as AnyObject
         let parsingOp = DataConversionOperation(self.web3, queue: self.expectedQueue)
@@ -155,17 +155,17 @@ final class ContractSendOperation: Web3Operation {
         if (error != nil) {
             return self.processError(self.error!)
         }
-        guard let completion = self.next else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        guard inputData != nil else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        guard let input = inputData! as? [AnyObject] else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        guard input.count == 4 else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        guard let intermediate = input[0] as? TransactionIntermediate else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        guard let password = input[1] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        guard let onBlock = input[2] as? String else {return processError(Web3Error.inputError("Invalid input supplied"))}
+        guard let completion = self.next else {return processError(Web3Error.inputError("No completion handler supplied"))}
+        guard inputData != nil else {return processError(Web3Error.inputError("No input data supploed"))}
+        guard let input = inputData! as? [AnyObject] else {return processError(Web3Error.inputError("Invalid input data supplied"))}
+        guard input.count == 4 else {return processError(Web3Error.inputError("Invalid number of inputs supplied"))}
+        guard let intermediate = input[0] as? TransactionIntermediate else {return processError(Web3Error.inputError("Invalid transaction intermediate supplied"))}
+        guard let password = input[1] as? String else {return processError(Web3Error.inputError("Invalid (no) password supplied"))}
+        guard let onBlock = input[2] as? String else {return processError(Web3Error.inputError("Invalid onBlock supplied"))}
         let options = input[3] as? Web3Options
-        guard var mergedOptions = Web3Options.merge(intermediate.options, with: options) else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        guard let from = mergedOptions.from else {return processError(Web3Error.inputError("Invalid input supplied"))}
-        var transaction = intermediate.transaction
+        guard var mergedOptions = Web3Options.merge(intermediate.options, with: options) else {return processError(Web3Error.inputError("Can not merge options"))}
+        guard let from = mergedOptions.from else {return processError(Web3Error.inputError("Invalid from supplied"))}
+        
         
         let gasEstimationCallback = { (res: Result<AnyObject, Web3Error>) -> () in
             switch res {
@@ -173,19 +173,14 @@ final class ContractSendOperation: Web3Operation {
                 guard let gasEstimate = result as? BigUInt else {
                     return self.processError(Web3Error.dataError)
                 }
-                if mergedOptions.gasLimit == nil {
-                    mergedOptions.gasLimit = gasEstimate
-                } else {
-                    if (mergedOptions.gasLimit! < gasEstimate) {
-                        if (options?.gasLimit != nil && options!.gasLimit != nil && options!.gasLimit! >=  gasEstimate) {
-                            mergedOptions.gasLimit = options!.gasLimit!
-                        } else {
-                            return self.processError(Web3Error.inputError("Estimated gas is larger than the gas limit"))
-                        }
-                    }
+                guard let gasEstimateMerged = Web3Options.smartMergeGasLimit(originalOptions: intermediate.options, extraOptions: options, gasEstimage: gasEstimate) else {
+                    return self.processError(Web3Error.inputError("Estimated gas is larger than the gas limit"))
                 }
-                intermediate.transaction = transaction
+                mergedOptions.gasLimit = gasEstimateMerged
+                let transaction = intermediate.transaction
+                intermediate.transaction = transaction.mergedWithOptions(mergedOptions)
                 intermediate.options = mergedOptions
+                
                 let sendOp = SendTransactionOperation.init(self.web3, queue: self.expectedQueue, transactionIntermediate: intermediate, password: password)
                 sendOp.next = completion
                 self.expectedQueue.addOperation(sendOp)
@@ -201,6 +196,7 @@ final class ContractSendOperation: Web3Operation {
                 guard let nonce = result as? BigUInt else {
                     return self.processError(Web3Error.dataError)
                 }
+                var transaction = intermediate.transaction
                 if self.web3.provider.network != nil {
                     transaction.chainID = self.web3.provider.network?.chainID
                 }
@@ -224,7 +220,8 @@ final class ContractSendOperation: Web3Operation {
                 if mergedOptions.gasPrice == nil {
                     mergedOptions.gasPrice = gasPrice
                 }
-                intermediate.transaction = transaction
+                let transaction = intermediate.transaction
+                intermediate.transaction = transaction.mergedWithOptions(mergedOptions)
                 intermediate.options = mergedOptions
                 
                 let nonceOp = GetTransactionCountOperation.init(self.web3, queue: self.expectedQueue, address: from, onBlock: onBlock)

@@ -102,8 +102,8 @@ class ViewController: UIViewController {
 //            print("Address mismatch")
 //        }
         guard case .success(let sendingResult) = sendResult else {return}
-        let txid = sendingResult["txhash"]
-        print("On Rinkeby TXid = " + txid!)
+        let txid = sendingResult.hash
+        print("On Rinkeby TXid = " + txid)
         
         //Send ETH on Rinkeby using BIP32 keystore. Should fail due to insufficient balance
         web3Rinkeby.addKeystoreManager(bip32keystoreManager)
