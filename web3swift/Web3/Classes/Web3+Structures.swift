@@ -2,6 +2,7 @@
 //  Web3+Structures.swift
 //
 //  Created by Alexander Vlasov on 26.12.2017.
+//  Copyright © 2017 Bankex Foundation. All rights reserved.
 //
 
 import Foundation
@@ -271,54 +272,6 @@ public struct TransactionReceipt: Decodable {
         self.logsBloom = logsBloom
     }
     
-    public init? (_ json: [String: AnyObject]) {
-        guard let th = json["transactionHash"] as? String else {return nil}
-        guard let transactionHash = Data.fromHex(th) else {return nil}
-        self.transactionHash = transactionHash
-        guard let bh = json["blockHash"] as? String else {return nil}
-        guard let blockHash = Data.fromHex(bh) else {return nil}
-        self.blockHash = blockHash
-        guard let bn = json["blockNumber"] as? String else {return nil}
-        guard let ti = json["transactionIndex"] as? String else {return nil}
-        let ca = json["contractAddress"] as? String
-        guard let cgu = json["cumulativeGasUsed"] as? String else {return nil}
-        guard let gu = json["gasUsed"] as? String else {return nil}
-        guard let ls = json["logs"] as? Array<[String:AnyObject]> else {return nil}
-        let lbl = json["logsBloom"] as? String
-        let st = json["status"] as? String
-    
-        guard let bnUnwrapped = BigUInt(bn.stripHexPrefix(), radix: 16) else {return nil}
-        blockNumber = bnUnwrapped
-        guard let tiUnwrapped = BigUInt(ti.stripHexPrefix(), radix: 16) else {return nil}
-        transactionIndex = tiUnwrapped
-        if ca != nil {
-            contractAddress = EthereumAddress(ca!.addHexPrefix())
-        }
-        guard let cguUnwrapped = BigUInt(cgu.stripHexPrefix(), radix: 16) else {return nil}
-        cumulativeGasUsed = cguUnwrapped
-        guard let guUnwrapped = BigUInt(gu.stripHexPrefix(), radix: 16) else {return nil}
-        gasUsed = guUnwrapped
-        var allLogs = [EventLog]()
-        for l in ls {
-            guard let log = EventLog(l) else {return nil}
-            allLogs.append(log)
-        }
-        logs = allLogs
-        if (st == nil) {
-            status = TXStatus.notYetProcessed
-        } else if st == "0x1" {
-            status = TXStatus.ok
-        } else {
-            status = TXStatus.failed
-        }
-        if lbl != nil {
-            let logsData = Data.fromHex(lbl!)
-            if logsData != nil && logsData!.count > 0 {
-                logsBloom = EthereumBloomFilter(logsData!)
-            }
-        }
-    }
-    
     static func notProcessed(transactionHash: Data) -> TransactionReceipt {
         let receipt = TransactionReceipt.init(transactionHash: transactionHash, blockHash: Data(), blockNumber: BigUInt(0), transactionIndex: BigUInt(0), contractAddress: nil, cumulativeGasUsed: BigUInt(0), gasUsed: BigUInt(0), logs: [EventLog](), status: .notYetProcessed, logsBloom: nil)
         return receipt
@@ -416,38 +369,6 @@ public struct EventLog : Decodable {
         }
         self.topics = allTopics
     }
-    
-    
-    public init? (_ json: [String: AnyObject]) {
-        guard let ad = json["address"] as? String else {return nil}
-        guard let d = json["data"] as? String else {return nil}
-        guard let li = json["logIndex"] as? String else {return nil}
-        let rm = json["removed"] as? Int ?? 0
-        guard let tpc = json["topics"] as? [String] else {return nil}
-        guard let addr = EthereumAddress(ad) else {return nil}
-        address = addr
-        guard let txhash = json["transactionHash"] as? String else{return nil}
-        let hash = Data.fromHex(txhash)
-        if hash != nil {
-            transactionHash = hash!
-        } else {
-            transactionHash = Data()
-        }
-        data = Data.fromHex(d)!
-        guard let liUnwrapped = BigUInt(li.stripHexPrefix(), radix: 16) else {return nil}
-        logIndex = liUnwrapped
-        removed = rm == 1 ? true : false
-        var tops = [Data]()
-        for t in tpc {
-            guard let topic = Data.fromHex(t) else {return nil}
-            tops.append(topic)
-        }
-        topics = tops
-        // TODO
-        blockNumber = 0
-        blockHash = Data()
-        transactionIndex = 0
-    }
 }
 
 public enum TransactionInBlock:Decodable {
@@ -528,35 +449,6 @@ public struct Block:Decodable {
     }
     
     public init(from decoder: Decoder) throws {
-//        func decodeHexToData(_ container:  KeyedDecodingContainer<Block.CodingKeys>, key: KeyedDecodingContainer<Block.CodingKeys>.Key, allowOptional:Bool = false) throws -> Data? {
-//            if (allowOptional) {
-//                let string = try? container.decode(String.self, forKey: key)
-//                if string != nil {
-//                    guard let data = Data.fromHex(string!) else {throw Web3Error.dataError}
-//                    return data
-//                }
-//                return nil
-//            } else {
-//                let string = try container.decode(String.self, forKey: key)
-//                guard let data = Data.fromHex(string) else {throw Web3Error.dataError}
-//                return data
-//            }
-//        }
-//
-//        func decodeHexToBigUInt(_ container:  KeyedDecodingContainer<Block.CodingKeys>, key: KeyedDecodingContainer<Block.CodingKeys>.Key, allowOptional:Bool = false) throws -> BigUInt? {
-//            if (allowOptional) {
-//                let string = try? container.decode(String.self, forKey: key)
-//                if string != nil {
-//                    guard let number = BigUInt(string!.stripHexPrefix(), radix: 16) else {throw Web3Error.dataError}
-//                    return number
-//                }
-//                return nil
-//            } else {
-//                let string = try container.decode(String.self, forKey: key)
-//                guard let number = BigUInt(string.stripHexPrefix(), radix: 16) else {throw Web3Error.dataError}
-//                return number
-//            }
-//        }
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard let number = try decodeHexToBigUInt(container, key: .number) else {throw Web3Error.dataError}
         self.number = number
