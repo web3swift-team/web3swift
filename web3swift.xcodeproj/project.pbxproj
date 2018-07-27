@@ -23,7 +23,6 @@
 		4194811F203630530065A83B /* Web3+Instance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818ABD5A1FE95F8F002657BB /* Web3+Instance.swift */; };
 		41948120203630530065A83B /* Web3+Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818ABD5C1FE95FC9002657BB /* Web3+Contract.swift */; };
 		41948121203630530065A83B /* Web3+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8104E2271FE82BDC00F952CB /* Web3+Utils.swift */; };
-		41948122203630530065A83B /* Web3+Infura.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818ABD581FE95558002657BB /* Web3+Infura.swift */; };
 		41948123203630530065A83B /* Web3+JSONRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F991FEC446B00CF0DA2 /* Web3+JSONRPC.swift */; };
 		41948124203630530065A83B /* Web3+Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C146F61FF274B200AA943E /* Web3+Structures.swift */; };
 		41948125203630530065A83B /* Web3+Methods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */; };
@@ -90,7 +89,6 @@
 		817EBB2520066E2B00E02EAA /* AbstractKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB2420066E2B00E02EAA /* AbstractKeystore.swift */; };
 		817EBB27200673D100E02EAA /* KeystoreV3JSONStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB26200673D100E02EAA /* KeystoreV3JSONStructure.swift */; };
 		817EBB2920075D2E00E02EAA /* BIP39.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB2820075D2E00E02EAA /* BIP39.swift */; };
-		818ABD591FE95558002657BB /* Web3+Infura.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818ABD581FE95558002657BB /* Web3+Infura.swift */; };
 		818ABD5B1FE95F8F002657BB /* Web3+Instance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818ABD5A1FE95F8F002657BB /* Web3+Instance.swift */; };
 		818ABD5D1FE95FC9002657BB /* Web3+Contract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818ABD5C1FE95FC9002657BB /* Web3+Contract.swift */; };
 		818D16CF204D42910084D2A4 /* Web3+EventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818D16CE204D42910084D2A4 /* Web3+EventParser.swift */; };
@@ -168,6 +166,8 @@
 		81D7D97820A61E3800A193EC /* EventFiltering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97720A61E3800A193EC /* EventFiltering.swift */; };
 		81D7D97920A61E3800A193EC /* EventFiltering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7D97720A61E3800A193EC /* EventFiltering.swift */; };
 		81DDECCF1FDF004E0063684A /* Web3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECCE1FDF004E0063684A /* Web3.swift */; };
+		81DFB3FF210775320011DC85 /* Web3+Infura.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DFB3FE210775320011DC85 /* Web3+Infura.swift */; };
+		81DFB400210775320011DC85 /* Web3+Infura.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DFB3FE210775320011DC85 /* Web3+Infura.swift */; };
 		81DFCC4C20F7546300603123 /* key.json in Resources */ = {isa = PBXBuildFile; fileRef = 81DFCC4B20F7546300603123 /* key.json */; };
 		81EB1E4B208173D7003BD47F /* Web3+Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EB1E4A208173D7003BD47F /* Web3+Personal.swift */; };
 		81EB1E4C208173D7003BD47F /* Web3+Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EB1E4A208173D7003BD47F /* Web3+Personal.swift */; };
@@ -268,7 +268,6 @@
 		817EBB2420066E2B00E02EAA /* AbstractKeystore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractKeystore.swift; sourceTree = "<group>"; };
 		817EBB26200673D100E02EAA /* KeystoreV3JSONStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeystoreV3JSONStructure.swift; sourceTree = "<group>"; };
 		817EBB2820075D2E00E02EAA /* BIP39.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP39.swift; sourceTree = "<group>"; };
-		818ABD581FE95558002657BB /* Web3+Infura.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Infura.swift"; sourceTree = "<group>"; };
 		818ABD5A1FE95F8F002657BB /* Web3+Instance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Instance.swift"; sourceTree = "<group>"; };
 		818ABD5C1FE95FC9002657BB /* Web3+Contract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Contract.swift"; sourceTree = "<group>"; };
 		818D16CE204D42910084D2A4 /* Web3+EventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+EventParser.swift"; sourceTree = "<group>"; };
@@ -313,6 +312,7 @@
 		81D7D97420A3240900A193EC /* EthereumFilterEncodingExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumFilterEncodingExtensions.swift; sourceTree = "<group>"; };
 		81D7D97720A61E3800A193EC /* EventFiltering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFiltering.swift; sourceTree = "<group>"; };
 		81DDECCE1FDF004E0063684A /* Web3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3.swift; sourceTree = "<group>"; };
+		81DFB3FE210775320011DC85 /* Web3+Infura.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+Infura.swift"; sourceTree = "<group>"; };
 		81DFCC4B20F7546300603123 /* key.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = key.json; path = ../../../../Desktop/key.json; sourceTree = "<group>"; };
 		81EB1E4A208173D7003BD47F /* Web3+Personal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Personal.swift"; sourceTree = "<group>"; };
 		81FA43F32044097000EE14D5 /* web3swift-macOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "web3swift-macOS_Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -623,8 +623,8 @@
 				817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */,
 				818ABD5A1FE95F8F002657BB /* Web3+Instance.swift */,
 				818ABD5C1FE95FC9002657BB /* Web3+Contract.swift */,
+				81DFB3FE210775320011DC85 /* Web3+Infura.swift */,
 				8104E2271FE82BDC00F952CB /* Web3+Utils.swift */,
-				818ABD581FE95558002657BB /* Web3+Infura.swift */,
 				810B0F991FEC446B00CF0DA2 /* Web3+JSONRPC.swift */,
 				81C146F61FF274B200AA943E /* Web3+Structures.swift */,
 				810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */,
@@ -1010,7 +1010,6 @@
 				817EBB2520066E2B00E02EAA /* AbstractKeystore.swift in Sources */,
 				81C0FCF720441A1D00D82FAF /* TransactionSigner.swift in Sources */,
 				8125F06920499AC300A0F2FE /* BloomFilter.swift in Sources */,
-				818ABD591FE95558002657BB /* Web3+Infura.swift in Sources */,
 				810B0F9A1FEC446B00CF0DA2 /* Web3+JSONRPC.swift in Sources */,
 				81195AB020D7FF8500ABC6B1 /* Promise+Web3+Contract+GetIndexedEvents.swift in Sources */,
 				8113D2C61FD7E1590074282C /* LibSecp256k1Extension.swift in Sources */,
@@ -1065,6 +1064,7 @@
 				81A1823120D68A110016741F /* Promise+Batching.swift in Sources */,
 				817EBB162004FE4200E02EAA /* Web3+HttpProvider.swift in Sources */,
 				8103BBCC2077B84400499769 /* PlainKeystore.swift in Sources */,
+				81DFB3FF210775320011DC85 /* Web3+Infura.swift in Sources */,
 				81C0FCF220440EB500D82FAF /* Web3+Protocols.swift in Sources */,
 				81C0FCF420440F0900D82FAF /* Web3+Options.swift in Sources */,
 				81A1822E20D67BC30016741F /* Promise+Web3+Eth+GetTransactionReceipt.swift in Sources */,
@@ -1115,7 +1115,6 @@
 				4194811F203630530065A83B /* Web3+Instance.swift in Sources */,
 				41948120203630530065A83B /* Web3+Contract.swift in Sources */,
 				41948121203630530065A83B /* Web3+Utils.swift in Sources */,
-				41948122203630530065A83B /* Web3+Infura.swift in Sources */,
 				8125F06A20499AC300A0F2FE /* BloomFilter.swift in Sources */,
 				81C0FD062044A8D100D82FAF /* TransactionSigner.swift in Sources */,
 				41948123203630530065A83B /* Web3+JSONRPC.swift in Sources */,
@@ -1128,6 +1127,7 @@
 				81A1822320D678060016741F /* Promise+Web3+Eth+GetBlockNumber.swift in Sources */,
 				4194812B203630530065A83B /* RLP.swift in Sources */,
 				4194812C203630530065A83B /* KeystoreManager.swift in Sources */,
+				81DFB400210775320011DC85 /* Web3+Infura.swift in Sources */,
 				81D7D97320A31FB700A193EC /* ComparisonExtensions.swift in Sources */,
 				81A1823E20D79C2C0016741F /* Promise+Web3+Eth+SendRawTransaction.swift in Sources */,
 				81A1823D20D79C290016741F /* Promise+Web3+Eth+Call.swift in Sources */,
