@@ -178,13 +178,17 @@ extension web3.web3contract.TransactionIntermediate {
                 }
                 assembledTransaction.nonce = nonce
                 assembledTransaction.gasLimit = estimate
-                if assembledTransaction.gasPrice == 0 {
-                    if mergedOptions.gasPrice != nil {
-                        assembledTransaction.gasPrice = mergedOptions.gasPrice!
-                    } else {
-                        assembledTransaction.gasPrice = gasPrice
-                    }
+                guard let finalGasPrice = Web3Options.smartMergeGasPrice(originalOptions: options, extraOptions: mergedOptions, priceEstimate: gasPrice) else {
+                    throw Web3Error.processingError("Missing parameter of gas price for transaction")
                 }
+                assembledTransaction.gasPrice = finalGasPrice
+//                if assembledTransaction.gasPrice == 0 {
+//                    if mergedOptions.gasPrice != nil {
+//                        assembledTransaction.gasPrice = mergedOptions.gasPrice!
+//                    } else {
+//                        assembledTransaction.gasPrice = gasPrice
+//                    }
+//                }
                 return assembledTransaction
             }).done(on: queue) {tx in
                     seal.fulfill(tx)
