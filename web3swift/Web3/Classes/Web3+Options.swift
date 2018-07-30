@@ -132,4 +132,15 @@ public struct Web3Options {
             }
         }
     }
+    
+    public static func smartMergeGasPrice(originalOptions: Web3Options?, extraOptions: Web3Options?, priceEstimate: BigUInt) -> BigUInt? {
+        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} //just require any non-nils
+        if mergedOptions.gasPrice == nil {
+            return priceEstimate
+        } else if mergedOptions.gasPrice == 0 {
+            return priceEstimate
+        } else {
+            return mergedOptions.gasPrice!
+        }
+    }
 }
