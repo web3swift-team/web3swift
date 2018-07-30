@@ -1,8 +1,8 @@
 def import_pods
   pod "PromiseKit", "~> 6.3"
-  pod 'BigInt', '~> 3.1.0'
-  pod 'CryptoSwift', '~> 0.10.0'
-  pod 'Result', '~> 3.0.0'
+  pod 'BigInt', '~> 3.1'
+  pod 'CryptoSwift', '~> 0.10'
+  pod 'Result', '~> 3.0'
   pod 'libsodium', :modular_headers => true
   pod 'secp256k1_ios', :git => 'https://github.com/shamatar/secp256k1_ios.git', :modular_headers => true
 end
