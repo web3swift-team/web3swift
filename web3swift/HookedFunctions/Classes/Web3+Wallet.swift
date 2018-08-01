@@ -40,7 +40,7 @@ extension web3.Web3Wallet {
                 return Result.failure(Web3Error.walletError)
             }
             try Web3Signer.signTX(transaction: &transaction, keystore: keystoreManager, account: account, password: password)
-            print(transaction)
+//            print(transaction)
             return Result(true)
         } catch {
             if error is AbstractKeystoreError {
