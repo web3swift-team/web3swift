@@ -56,12 +56,13 @@ extension Web3Options:Decodable {
         let gasPrice = try decodeHexToBigUInt(container, key: .gasPrice)
         self.gasPrice = gasPrice
         
-        let toString = try container.decode(String.self, forKey: .to)
+        let toString = try container.decode(String?.self, forKey: .to)
         var to: EthereumAddress?
-        if toString == "0x" || toString == "0x0" {
+        if toString == nil || toString == "0x" || toString == "0x0" {
             to = EthereumAddress.contractDeploymentAddress()
         } else {
-            guard let ethAddr = EthereumAddress(toString) else {throw Web3Error.dataError}
+            guard let addressString = toString else {throw Web3Error.dataError}
+            guard let ethAddr = EthereumAddress(addressString) else {throw Web3Error.dataError}
             to = ethAddr
         }
         self.to = to
