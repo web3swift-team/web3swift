@@ -84,4 +84,26 @@ class web3swift_User_cases: XCTestCase {
         XCTAssert(assembled.gasPrice == options.gasPrice)
     }
     
+    func testParseTransactionDetailsForContractCreation() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let details = web3.eth.getTransactionDetails("0x1c85b9b7f7c2cbdb3fa264f6b78b226360aa2084c48cf7869b756e0762bd851b")
+        switch details {
+        case .success(let details):
+            print(details)
+            XCTAssert(details.transaction.to == .contractDeploymentAddress())
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+        let receipt = web3.eth.getTransactionReceipt("0x1c85b9b7f7c2cbdb3fa264f6b78b226360aa2084c48cf7869b756e0762bd851b")
+        switch receipt {
+        case .success(let receipt):
+            print(receipt)
+            XCTAssert(receipt.contractAddress != nil)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
 }
