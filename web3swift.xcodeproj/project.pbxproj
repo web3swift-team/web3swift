@@ -179,6 +179,23 @@
 		81FB2203207BC6DB007F9A83 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2202207BC6DB007F9A83 /* ImageIO.framework */; };
 		81FB2207207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */ = {isa = PBXBuildFile; fileRef = 81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */; };
 		81FB2208207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */ = {isa = PBXBuildFile; fileRef = 81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */; };
+		81FECD45211ADE51006DA367 /* Web3+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD44211ADE51006DA367 /* Web3+ObjC.swift */; };
+		81FECD46211ADE51006DA367 /* Web3+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD44211ADE51006DA367 /* Web3+ObjC.swift */; };
+		81FECD49211ADEB1006DA367 /* Web3+Instance+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD48211ADEB1006DA367 /* Web3+Instance+ObjC.swift */; };
+		81FECD4A211ADEB1006DA367 /* Web3+Instance+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD48211ADEB1006DA367 /* Web3+Instance+ObjC.swift */; };
+		81FECD4C211ADF70006DA367 /* Web3+HttpProvider+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD4B211ADF70006DA367 /* Web3+HttpProvider+ObjC.swift */; };
+		81FECD4D211ADF70006DA367 /* Web3+HttpProvider+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD4B211ADF70006DA367 /* Web3+HttpProvider+ObjC.swift */; };
+		81FECD4F211AE100006DA367 /* KeystoreManager+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD4E211AE100006DA367 /* KeystoreManager+ObjC.swift */; };
+		81FECD50211AE100006DA367 /* KeystoreManager+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD4E211AE100006DA367 /* KeystoreManager+ObjC.swift */; };
+		81FECD52211AE110006DA367 /* PlainKeystore+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD51211AE110006DA367 /* PlainKeystore+ObjC.swift */; };
+		81FECD53211AE110006DA367 /* PlainKeystore+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD51211AE110006DA367 /* PlainKeystore+ObjC.swift */; };
+		81FECD55211AEB49006DA367 /* EthereumAddress+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD54211AEB49006DA367 /* EthereumAddress+ObjC.swift */; };
+		81FECD56211AEB49006DA367 /* EthereumAddress+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD54211AEB49006DA367 /* EthereumAddress+ObjC.swift */; };
+		81FECD58211AEB56006DA367 /* BigUInt+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD57211AEB56006DA367 /* BigUInt+ObjC.swift */; };
+		81FECD59211AEB56006DA367 /* BigUInt+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD57211AEB56006DA367 /* BigUInt+ObjC.swift */; };
+		81FECD5B211AECBD006DA367 /* Web3+Eth+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD5A211AECBD006DA367 /* Web3+Eth+ObjC.swift */; };
+		81FECD5C211AECBD006DA367 /* Web3+Eth+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD5A211AECBD006DA367 /* Web3+Eth+ObjC.swift */; };
+		81FECD5E211AEFCE006DA367 /* web3swift_ObjC_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD5D211AEFCE006DA367 /* web3swift_ObjC_Tests.swift */; };
 		B350A445E5DB35C60E59AD70 /* libPods-web3swift-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F8C9C48884592DCF561393 /* libPods-web3swift-macOS.a */; };
 		E23B5ADB20EA67D800DC7F32 /* web3swift_AdvancedABIv2_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5ADA20EA67D800DC7F32 /* web3swift_AdvancedABIv2_Tests.swift */; };
 		E23B5ADD20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5ADC20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift */; };
@@ -322,6 +339,16 @@
 		81FB2200207BC58B007F9A83 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		81FB2202207BC6DB007F9A83 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bankex-foundation-logo-coin.png"; sourceTree = "<group>"; };
+		81FECD44211ADE51006DA367 /* Web3+ObjC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+ObjC.swift"; sourceTree = "<group>"; };
+		81FECD48211ADEB1006DA367 /* Web3+Instance+ObjC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Instance+ObjC.swift"; sourceTree = "<group>"; };
+		81FECD4B211ADF70006DA367 /* Web3+HttpProvider+ObjC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+HttpProvider+ObjC.swift"; sourceTree = "<group>"; };
+		81FECD4E211AE100006DA367 /* KeystoreManager+ObjC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeystoreManager+ObjC.swift"; sourceTree = "<group>"; };
+		81FECD51211AE110006DA367 /* PlainKeystore+ObjC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlainKeystore+ObjC.swift"; sourceTree = "<group>"; };
+		81FECD54211AEB49006DA367 /* EthereumAddress+ObjC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EthereumAddress+ObjC.swift"; sourceTree = "<group>"; };
+		81FECD57211AEB56006DA367 /* BigUInt+ObjC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BigUInt+ObjC.swift"; sourceTree = "<group>"; };
+		81FECD5A211AECBD006DA367 /* Web3+Eth+ObjC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Eth+ObjC.swift"; sourceTree = "<group>"; };
+		81FECD5D211AEFCE006DA367 /* web3swift_ObjC_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_ObjC_Tests.swift; sourceTree = "<group>"; };
+		81FECD63211AF162006DA367 /* web3swift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "web3swift-Bridging-Header.h"; sourceTree = "<group>"; };
 		8349531F1984454E50389370 /* libPods-web3swift-iOS_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-web3swift-iOS_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8675751D91DB2DBC9E7A3469 /* libPods-web3swift-macOS_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-web3swift-macOS_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5E8AF69880F5141B4AC9DF0 /* libPods-web3swift-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-web3swift-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -423,6 +450,7 @@
 		1CD91AFE1FD76910007BFB45 /* web3swift */ = {
 			isa = PBXGroup;
 			children = (
+				81FECD43211ADE20006DA367 /* ObjectiveCbridge */,
 				0073F22320D949D7000791F1 /* BlockExplorer */,
 				81A1821220D5A2430016741F /* Promises */,
 				81FB2204207BCFD9007F9A83 /* Resources */,
@@ -436,6 +464,7 @@
 				81FB21F6207BA6DC007F9A83 /* Convenience */,
 				1CD91B001FD76910007BFB45 /* Info.plist */,
 				1CD91AFF1FD76910007BFB45 /* web3swift.h */,
+				81FECD63211AF162006DA367 /* web3swift-Bridging-Header.h */,
 			);
 			path = web3swift;
 			sourceTree = "<group>";
@@ -443,6 +472,7 @@
 		1CD91B301FD769A6007BFB45 /* web3swiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				81FECD5D211AEFCE006DA367 /* web3swift_ObjC_Tests.swift */,
 				81DFCC4B20F7546300603123 /* key.json */,
 				815C74C720ECBF3E00DE2AC4 /* web3swift_User_cases.swift */,
 				00E5FE8120EA3FF40030E0D6 /* web3swift_infura_Tests.swift */,
@@ -727,6 +757,29 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		81FECD43211ADE20006DA367 /* ObjectiveCbridge */ = {
+			isa = PBXGroup;
+			children = (
+				81FECD47211ADE5C006DA367 /* Classes */,
+			);
+			path = ObjectiveCbridge;
+			sourceTree = "<group>";
+		};
+		81FECD47211ADE5C006DA367 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				81FECD44211ADE51006DA367 /* Web3+ObjC.swift */,
+				81FECD48211ADEB1006DA367 /* Web3+Instance+ObjC.swift */,
+				81FECD4B211ADF70006DA367 /* Web3+HttpProvider+ObjC.swift */,
+				81FECD4E211AE100006DA367 /* KeystoreManager+ObjC.swift */,
+				81FECD51211AE110006DA367 /* PlainKeystore+ObjC.swift */,
+				81FECD54211AEB49006DA367 /* EthereumAddress+ObjC.swift */,
+				81FECD57211AEB56006DA367 /* BigUInt+ObjC.swift */,
+				81FECD5A211AECBD006DA367 /* Web3+Eth+ObjC.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		868F9682FE77A7BADF675F92 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -855,6 +908,7 @@
 					};
 					1CD91B2E1FD769A6007BFB45 = {
 						CreatedOnToolsVersion = 9.1;
+						LastSwiftMigration = 0940;
 						ProvisioningStyle = Automatic;
 					};
 					417715D320362916005C3E16 = {
@@ -1002,8 +1056,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81FECD58211AEB56006DA367 /* BigUInt+ObjC.swift in Sources */,
 				81C146F71FF274B200AA943E /* Web3+Structures.swift in Sources */,
 				8104E2281FE82BDC00F952CB /* Web3+Utils.swift in Sources */,
+				81FECD45211ADE51006DA367 /* Web3+ObjC.swift in Sources */,
 				818ABD5D1FE95FC9002657BB /* Web3+Contract.swift in Sources */,
 				8113D2CA1FD7E1590074282C /* KeystoreManager.swift in Sources */,
 				817EBB1F2006265400E02EAA /* Base58.swift in Sources */,
@@ -1023,6 +1079,7 @@
 				81C5DA252072E14E00424CD6 /* ABIv2Encoding.swift in Sources */,
 				81A1824220D7AA750016741F /* Promise+Web3+Eth+SendTransaction.swift in Sources */,
 				817EBB2920075D2E00E02EAA /* BIP39.swift in Sources */,
+				81FECD49211ADEB1006DA367 /* Web3+Instance+ObjC.swift in Sources */,
 				815630022007B53C00A0EC2F /* BIP32Keystore.swift in Sources */,
 				818ABD5B1FE95F8F002657BB /* Web3+Instance.swift in Sources */,
 				81D7D97220A31FB700A193EC /* ComparisonExtensions.swift in Sources */,
@@ -1033,8 +1090,12 @@
 				81A1821A20D5A6F70016741F /* Promise+HttpProvider.swift in Sources */,
 				81A1823720D6E2BB0016741F /* Promise+Web3+Eth+GetBlockByHash.swift in Sources */,
 				81C5DA0E207254D000424CD6 /* ABIv2Elements.swift in Sources */,
+				81FECD5B211AECBD006DA367 /* Web3+Eth+ObjC.swift in Sources */,
 				818D16CF204D42910084D2A4 /* Web3+EventParser.swift in Sources */,
+				81FECD52211AE110006DA367 /* PlainKeystore+ObjC.swift in Sources */,
+				81FECD4F211AE100006DA367 /* KeystoreManager+ObjC.swift in Sources */,
 				81A1824520D7B91B0016741F /* Promise+Web3+Intermediate+Send.swift in Sources */,
+				81FECD55211AEB49006DA367 /* EthereumAddress+ObjC.swift in Sources */,
 				81C5DA282072E18200424CD6 /* NativeTypesEncoding+Extensions.swift in Sources */,
 				8123E1C7200CBAC200B6D3AB /* Dictionary+Extension.swift in Sources */,
 				81D7D97820A61E3800A193EC /* EventFiltering.swift in Sources */,
@@ -1051,6 +1112,7 @@
 				8123E1C9200CBAF800B6D3AB /* Data+Extension.swift in Sources */,
 				81C5DA1B2072633300424CD6 /* ABIv2ParameterTypes.swift in Sources */,
 				817EBB23200649E000E02EAA /* RIPEMD160+StackOveflow.swift in Sources */,
+				81FECD4C211ADF70006DA367 /* Web3+HttpProvider+ObjC.swift in Sources */,
 				8116666320455E33008D8AD0 /* Web3+Wallet.swift in Sources */,
 				81DDECCF1FDF004E0063684A /* Web3.swift in Sources */,
 				81A1823420D6E1FD0016741F /* Promise+Web3+Eth+GetBlockByNumber.swift in Sources */,
@@ -1098,6 +1160,7 @@
 				00E5FE8020EA3CEA0030E0D6 /* web3swift_RLP_Tests.swift in Sources */,
 				4EFFCB6E208552F2008165FE /* web3swift_local_node_Tests.swift in Sources */,
 				81A1821D20D5C6C10016741F /* web3swift_promises_Tests.swift in Sources */,
+				81FECD5E211AEFCE006DA367 /* web3swift_ObjC_Tests.swift in Sources */,
 				E23B5ADD20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift in Sources */,
 				00E5FE8220EA3FF40030E0D6 /* web3swift_infura_Tests.swift in Sources */,
 				1CD91B321FD769A6007BFB45 /* web3swift_Tests.swift in Sources */,
@@ -1121,6 +1184,7 @@
 				41948124203630530065A83B /* Web3+Structures.swift in Sources */,
 				41948125203630530065A83B /* Web3+Methods.swift in Sources */,
 				81EB1E4C208173D7003BD47F /* Web3+Personal.swift in Sources */,
+				81FECD4D211ADF70006DA367 /* Web3+HttpProvider+ObjC.swift in Sources */,
 				81D7D97620A3240900A193EC /* EthereumFilterEncodingExtensions.swift in Sources */,
 				41948126203630530065A83B /* Web3+Eth.swift in Sources */,
 				81C5DA262072E14E00424CD6 /* ABIv2Encoding.swift in Sources */,
@@ -1129,6 +1193,7 @@
 				4194812C203630530065A83B /* KeystoreManager.swift in Sources */,
 				81DFB400210775320011DC85 /* Web3+Infura.swift in Sources */,
 				81D7D97320A31FB700A193EC /* ComparisonExtensions.swift in Sources */,
+				81FECD56211AEB49006DA367 /* EthereumAddress+ObjC.swift in Sources */,
 				81A1823E20D79C2C0016741F /* Promise+Web3+Eth+SendRawTransaction.swift in Sources */,
 				81A1823D20D79C290016741F /* Promise+Web3+Eth+Call.swift in Sources */,
 				81C5DA12207254F600424CD6 /* ABIv2.swift in Sources */,
@@ -1151,11 +1216,14 @@
 				81C5DA2F2074EBF500424CD6 /* ContractABIv2.swift in Sources */,
 				81A1824320D7AA750016741F /* Promise+Web3+Eth+SendTransaction.swift in Sources */,
 				81166666204565AD008D8AD0 /* Web3+BrowserFunctions.swift in Sources */,
+				81FECD5C211AECBD006DA367 /* Web3+Eth+ObjC.swift in Sources */,
 				41948134203630530065A83B /* BIP39+WordLists.swift in Sources */,
 				41948135203630530065A83B /* EthereumKeystoreV3.swift in Sources */,
 				41948136203630530065A83B /* KeystoreV3JSONStructure.swift in Sources */,
 				8116666420455E33008D8AD0 /* Web3+Wallet.swift in Sources */,
+				81FECD4A211ADEB1006DA367 /* Web3+Instance+ObjC.swift in Sources */,
 				81C5DA1C2072633300424CD6 /* ABIv2ParameterTypes.swift in Sources */,
+				81FECD53211AE110006DA367 /* PlainKeystore+ObjC.swift in Sources */,
 				41948137203630530065A83B /* EthereumTransaction.swift in Sources */,
 				41948138203630530065A83B /* CryptoExtensions.swift in Sources */,
 				81C0FD052044A8AE00D82FAF /* Web3+Protocols.swift in Sources */,
@@ -1166,6 +1234,7 @@
 				81A1824C20D7DF1B0016741F /* Promise+Web3+Personal+UnlockAccount.swift in Sources */,
 				41948139203630530065A83B /* LibSecp256k1Extension.swift in Sources */,
 				4194813B203630530065A83B /* NSRegularExpressionExtension.swift in Sources */,
+				81FECD46211ADE51006DA367 /* Web3+ObjC.swift in Sources */,
 				81C0FD042044A8A700D82FAF /* Web3+Options.swift in Sources */,
 				81C5DA1E207263D800424CD6 /* ABIv2Parsing.swift in Sources */,
 				81A1823220D68A110016741F /* Promise+Batching.swift in Sources */,
@@ -1177,12 +1246,14 @@
 				81A1822F20D67BC30016741F /* Promise+Web3+Eth+GetTransactionReceipt.swift in Sources */,
 				81A1824620D7B91B0016741F /* Promise+Web3+Intermediate+Send.swift in Sources */,
 				81A1822C20D67A1B0016741F /* Promise+Web3+Eth+GetTransactionDetails.swift in Sources */,
+				81FECD59211AEB56006DA367 /* BigUInt+ObjC.swift in Sources */,
 				4194813F203630530065A83B /* Dictionary+Extension.swift in Sources */,
 				81C5DA2C2074CA1400424CD6 /* ABIv2Decoding.swift in Sources */,
 				41948140203630530065A83B /* Array+Extension.swift in Sources */,
 				81A1822020D676BC0016741F /* Promise+Web3+Eth+GetTransactionCount.swift in Sources */,
 				81A1821620D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift in Sources */,
 				41948141203630530065A83B /* String+Extension.swift in Sources */,
+				81FECD50211AE100006DA367 /* KeystoreManager+ObjC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1246,6 +1317,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1269,6 +1341,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_INCLUDE_PATHS = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "web3swift/web3swift-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1311,6 +1384,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1326,6 +1400,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "web3swift/web3swift-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1415,6 +1490,7 @@
 			baseConfigurationReference = 342700493511FEB189700D13 /* Pods-web3swift-iOS_Tests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -1425,6 +1501,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = BF.web3swiftTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1436,6 +1513,7 @@
 			baseConfigurationReference = CDCB852B5E2E84636B80BB99 /* Pods-web3swift-iOS_Tests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
