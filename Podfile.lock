@@ -1,7 +1,7 @@
 PODS:
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
-  - CryptoSwift (0.10.0)
+  - CryptoSwift (0.11.0)
   - libsodium (1.0.12)
   - PromiseKit (6.3.4):
     - PromiseKit/CorePromise (= 6.3.4)
@@ -18,7 +18,7 @@ PODS:
 
 DEPENDENCIES:
   - BigInt (~> 3.1)
-  - CryptoSwift (~> 0.10)
+  - CryptoSwift (~> 0.11)
   - libsodium
   - PromiseKit (~> 6.3)
   - Result (~> 3.0)
@@ -44,13 +44,13 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
-  CryptoSwift: 6c778d69282bed3b4e975ff97a79d074f20bb011
+  CryptoSwift: ad5208dd2aae0a764ea4ce2c2d34bd067cae67f0
   libsodium: 9a8faa5ef2fa0d2d57bd7f7d79bf8fb7c1a9f0ea
   PromiseKit: e1425568123ec844a944c93f2bcb29d511d39cf5
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
   secp256k1_ios: ac9ef04e761f43c58012b28548afa91493761f17
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
 
-PODFILE CHECKSUM: 7bf3f0b4c63191f570350a917c9cf1da16215395
+PODFILE CHECKSUM: 60655198d2d5ed19e84e1ba8973ebc3091016c26
 
 COCOAPODS: 1.5.3

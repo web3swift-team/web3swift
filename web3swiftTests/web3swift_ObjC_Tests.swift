@@ -17,6 +17,5 @@ class web3swift_ObjC_Tests: XCTestCase {
         let balance = web3.web3Eth.getBalance(address: address, error: err)
         XCTAssert(err?.pointee == nil)
         XCTAssert(balance != nil)
-        print(balance!.toString())
     }
 }

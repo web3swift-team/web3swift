@@ -24,8 +24,8 @@ s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 s.frameworks = 'CoreImage'
 s.dependency 'BigInt', '~> 3.1'
 s.dependency 'Result', '~> 3.0'
-s.dependency 'CryptoSwift', '~> 0.10'
-s.dependency 'libsodium', '~> 1.0'
+s.dependency 'CryptoSwift', '~> 0.11'
 s.dependency 'secp256k1_ios', '~> 0.1'
 s.dependency 'PromiseKit', '~> 6.3'
+s.dependency 'scrypt-cryptoswift', '~> 1.2'
 end
