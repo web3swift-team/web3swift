@@ -106,4 +106,18 @@ class web3swift_User_cases: XCTestCase {
         }
     }
     
+    func testNonBatchedRequest() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        web3.requestDispatcher.policy = .NoBatching
+        let balanceResult = web3.eth.getBalance(address: address)
+        switch balanceResult {
+        case .success(let bal):
+            print(bal)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
 }

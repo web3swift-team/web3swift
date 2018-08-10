@@ -20,7 +20,7 @@ extension web3.Eth {
     }
 
     func sendRawTransactionPromise(_ transaction: EthereumTransaction) -> Promise<TransactionSendingResult>{
-        print(transaction)
+//        print(transaction)
         let queue = web3.requestDispatcher.queue
         do {
             guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {

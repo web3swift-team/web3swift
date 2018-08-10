@@ -1,0 +1,1 @@
+../../../scrypt/scrypt/scrypt.h
