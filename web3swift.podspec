@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name             = "web3swift"
-s.version          = "1.1.1"
+s.version          = "1.1.5"
 s.summary          = "Web3 implementation in vanilla Swift for iOS ans macOS"
 
 s.description      = <<-DESC
@@ -27,5 +27,5 @@ s.dependency 'Result', '~> 3.0'
 s.dependency 'CryptoSwift', '~> 0.11'
 s.dependency 'secp256k1_ios', '~> 0.1'
 s.dependency 'PromiseKit', '~> 6.3'
-s.dependency 'scrypt-cryptoswift', '~> 1.2'
+s.dependency 'scrypt', '~> 1.5'
 end
