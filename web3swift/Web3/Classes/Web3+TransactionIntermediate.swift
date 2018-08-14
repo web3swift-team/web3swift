@@ -57,7 +57,7 @@ extension web3.web3contract {
                 if let err = error as? Web3Error {
                     return Result.failure(err)
                 }
-                return Result.failure(Web3Error.generalError(error))
+                return Result.failure(Web3Error.generalError(err: error))
             }
         }
         
@@ -82,7 +82,7 @@ extension web3.web3contract {
                 if let err = error as? Web3Error {
                     return Result.failure(err)
                 }
-                return Result.failure(Web3Error.generalError(error))
+                return Result.failure(Web3Error.generalError(err: error))
             }
         }
         
@@ -107,7 +107,7 @@ extension web3.web3contract {
                 if let err = error as? Web3Error {
                     return Result.failure(err)
                 }
-                return Result.failure(Web3Error.generalError(error))
+                return Result.failure(Web3Error.generalError(err: error))
             }
         }
         
@@ -132,7 +132,7 @@ extension web3.web3contract {
                 if let err = error as? Web3Error {
                     return Result.failure(err)
                 }
-                return Result.failure(Web3Error.generalError(error))
+                return Result.failure(Web3Error.generalError(err: error))
             }
         }
    
@@ -146,11 +146,11 @@ extension web3.web3contract.TransactionIntermediate {
         let queue = self.web3.requestDispatcher.queue
         let returnPromise = Promise<EthereumTransaction> { seal in
             guard let mergedOptions = Web3Options.merge(self.options, with: options) else {
-                seal.reject(Web3Error.inputError("Provided options are invalid"))
+                seal.reject(Web3Error.inputError(desc: "Provided options are invalid"))
                 return
             }
             guard let from = mergedOptions.from else {
-                seal.reject(Web3Error.inputError("No 'from' field provided"))
+                seal.reject(Web3Error.inputError(desc: "No 'from' field provided"))
                 return
             }
             var optionsForGasEstimation = Web3Options()
@@ -165,21 +165,21 @@ extension web3.web3contract.TransactionIntermediate {
                 
                 promisesToFulfill.removeAll()
                 guard case .fulfilled(let nonce) = results[0] else {
-                    throw Web3Error.processingError("Failed to fetch nonce")
+                    throw Web3Error.processingError(desc: "Failed to fetch nonce")
                 }
                 guard case .fulfilled(let gasEstimate) = results[1] else {
-                    throw Web3Error.processingError("Failed to fetch gas estimate")
+                    throw Web3Error.processingError(desc: "Failed to fetch gas estimate")
                 }
                 guard case .fulfilled(let gasPrice) = results[2] else {
-                    throw Web3Error.processingError("Failed to fetch gas price")
+                    throw Web3Error.processingError(desc: "Failed to fetch gas price")
                 }
                 guard let estimate = Web3Options.smartMergeGasLimit(originalOptions: options, extraOptions: mergedOptions, gasEstimate: gasEstimate) else {
-                    throw Web3Error.processingError("Failed to calculate gas estimate that satisfied options")
+                    throw Web3Error.processingError(desc: "Failed to calculate gas estimate that satisfied options")
                 }
                 assembledTransaction.nonce = nonce
                 assembledTransaction.gasLimit = estimate
                 guard let finalGasPrice = Web3Options.smartMergeGasPrice(originalOptions: options, extraOptions: mergedOptions, priceEstimate: gasPrice) else {
-                    throw Web3Error.processingError("Missing parameter of gas price for transaction")
+                    throw Web3Error.processingError(desc: "Missing parameter of gas price for transaction")
                 }
                 assembledTransaction.gasPrice = finalGasPrice
 //                if assembledTransaction.gasPrice == 0 {
@@ -203,7 +203,7 @@ extension web3.web3contract.TransactionIntermediate {
         let queue = self.web3.requestDispatcher.queue
         return self.assemblePromise(options: options, onBlock: onBlock).then(on: queue) { transaction throws -> Promise<TransactionSendingResult> in
             guard let mergedOptions = Web3Options.merge(self.options, with: options) else {
-                throw Web3Error.inputError("Provided options are invalid")
+                throw Web3Error.inputError(desc: "Provided options are invalid")
             }
             var cleanedOptions = Web3Options()
             cleanedOptions.from = mergedOptions.from
@@ -217,7 +217,7 @@ extension web3.web3contract.TransactionIntermediate {
         let queue = self.web3.requestDispatcher.queue
         let returnPromise = Promise<[String:Any]> { seal in
             guard let mergedOptions = Web3Options.merge(self.options, with: options) else {
-                seal.reject(Web3Error.inputError("Provided options are invalid"))
+                seal.reject(Web3Error.inputError(desc: "Provided options are invalid"))
                 return
             }
             var optionsForCall = Web3Options()
@@ -234,7 +234,7 @@ extension web3.web3contract.TransactionIntermediate {
                         }
                         guard let decodedData = self.contract.decodeReturnData(self.method, data: data) else
                         {
-                            throw Web3Error.processingError("Can not decode returned parameters")
+                            throw Web3Error.processingError(desc: "Can not decode returned parameters")
                         }
                         seal.fulfill(decodedData)
                     } catch{
@@ -252,7 +252,7 @@ extension web3.web3contract.TransactionIntermediate {
         let queue = self.web3.requestDispatcher.queue
         let returnPromise = Promise<BigUInt> { seal in
             guard let mergedOptions = Web3Options.merge(self.options, with: options) else {
-                seal.reject(Web3Error.inputError("Provided options are invalid"))
+                seal.reject(Web3Error.inputError(desc: "Provided options are invalid"))
                 return
             }
             var optionsForGasEstimation = Web3Options()
