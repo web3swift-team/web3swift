@@ -2,9 +2,9 @@
 
 <img align="left" width="25" height="25" src="https://user-images.githubusercontent.com/28599454/41086111-af4bc3b0-6a41-11e8-9f9f-2d642b12666e.png">[Ask questions](https://stackoverflow.com/questions/tagged/web3swift)
 ## Important notices
-With the version 0.3.0 the API should be less volatile. All public functions should return a [Result](https://github.com/antitypical/Result) instead of `nil` or throwing.
+As I've left the BANKEX and was a solo enthusiast maintainer of this project, all the further work and updates will be done in my peronal repo [here](https://github.com/shamatar/web3swift) 
 
-Example is updated for 0.5.0, although please prefer to use tests as an example for your code.
+Sincerely, Alex
 
 # web3swift
 
