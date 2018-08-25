@@ -1,10 +1,6 @@
-![bkx-foundation-github-swift](https://user-images.githubusercontent.com/3356474/34412791-5b58962c-ebf0-11e7-8460-5592b12e6e9d.png)
-
 <img align="left" width="25" height="25" src="https://user-images.githubusercontent.com/28599454/41086111-af4bc3b0-6a41-11e8-9f9f-2d642b12666e.png">[Ask questions](https://stackoverflow.com/questions/tagged/web3swift)
 ## Important notices
-With the version 0.3.0 the API should be less volatile. All public functions should return a [Result](https://github.com/antitypical/Result) instead of `nil` or throwing.
-
-Example is updated for 0.5.0, although please prefer to use tests as an example for your code.
+The work for 2.0 release is about to start. Ideas for new more Swift idiomatic API are welcome in issues.
 
 # web3swift
 
@@ -76,15 +72,15 @@ You can try it yourself by running the example project:
 
 ## Requirements
 
-Web3swift requires Swift 4.1 and iOS 9.0 or macOS 10.13 although we recommend to use the latest iOS and MacOS versions for your own safety. Don't forget to set the iOS version in a Podfile, otherwise you get an error if the deployment target is less than the latest SDK.
+Web3swift requires Swift 4.1 and iOS 9.0 or macOS 10.11 although we recommend to use the latest iOS and MacOS versions for your own safety. Don't forget to set the iOS version in a Podfile, otherwise you get an error if the deployment target is less than the latest SDK.
 
 ## Communication
 
 - if you **need help**, use [Stack Overflow](https://stackoverflow.com/questions/tagged/web3swift) (tag 'web3swift')
 - If you'd like to **ask a general question**, use [Stack Overflow](http://stackoverflow.com/questions/tagged/web3swift).
-- If you **found a bug**, [open an issue](https://github.com/BANKEX/web3swift/issues).
-- If you **have a feature request**, [open an issue](https://github.com/BANKEX/web3swift/issues).
-- If you **want to contribute**, [submit a pull request](https://github.com/BANKEX/web3swift/pulls).
+- If you **found a bug**, [open an issue](https://github.com/matterinc/web3swift/issues).
+- If you **have a feature request**, [open an issue](https://github.com/matterinc/web3swift/issues).
+- If you **want to contribute**, [submit a pull request](https://github.com/matterinc/web3swift/pulls).
 
 ## Installation
 
@@ -106,7 +102,7 @@ platform :ios, '9.0'
 
 target '<Your Target Name>' do
     use_frameworks!
-    pod 'web3swift', '~> 0.8.0'
+    pod 'web3swift', '~> 1.1.5'
 end
 ```
 
@@ -204,11 +200,11 @@ switch convenienceTransferResult {
 - Full reference `web3js` functionality
 - Light Ethereum subprotocol (LES) integration
 
-## [Apps using this library](https://github.com/BANKEX/web3swift/wiki/Apps-using-web3swift) 
+## [Apps using this library](https://github.com/matterinc/web3swift/wiki/Apps-using-web3swift) 
 
 If you've used this project in a live app, please let us know!
 
-*If you are using `web3swift` in your app or know of an app that uses it, please add it to [this](https://github.com/BANKEX/web3swift/wiki/Apps-using-web3swift) list.*
+*If you are using `web3swift` in your app or know of an app that uses it, please add it to [this](https://github.com/matterinc/web3swift/wiki/Apps-using-web3swift) list.*
 
 ## Special thanks to
 
@@ -218,24 +214,24 @@ If you've used this project in a live app, please let us know!
 
 ## Contribution
 
-For the latest version, please check [develop](https://github.com/BANKEX/web3swift/tree/develop) branch.
-Changes made to this branch will be merged into the [master](https://github.com/BANKEX/web3swift/tree/master) branch at some point.
+For the latest version, please check [develop](https://github.com/matterinc/web3swift/tree/develop) branch.
+Changes made to this branch will be merged into the [master](https://github.com/matterinc/web3swift/tree/master) branch at some point.
 
-- If you want to contribute, submit a [pull request](https://github.com/BANKEX/web3swift/pulls) against a development `develop` branch.
-- If you found a bug, [open an issue](https://github.com/BANKEX/web3swift/issues).
-- If you have a feature request, [open an issue](https://github.com/BANKEX/web3swift/issues).
+- If you want to contribute, submit a [pull request](https://github.com/matterinc/web3swift/pulls) against a development `develop` branch.
+- If you found a bug, [open an issue](https://github.com/matterinc/web3swift/issues).
+- If you have a feature request, [open an issue](https://github.com/matterinc/web3swift/issues).
 
 
 ## Appreciation
 
-When using this pod, references to this repo, [BANKEX](http://bankex.com) and [BANKEX Foundation](http://bankexfoundation.org) are appreciated.
+When using this pod, please make references to this repo and give your start! :)
 
 ## Authors
 
-Alex Vlasov, [@shamatar](https://github.com/shamatar),  av@bankexfoundation.org
+Alex Vlasov, [@shamatar](https://github.com/shamatar),  alex.m.vlasov@gmail.com
 
-Petr Korolev, [@skywinder](https://github.com/skywinder), pk@bankexfoundation.org
+Petr Korolev, [@skywinder](https://github.com/skywinder)
 
 ## License
 
-web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/BankEx/web3swift/blob/master/LICENSE) file for more info.
+web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/matterinc/web3swift/blob/master/LICENSE) file for more info.
