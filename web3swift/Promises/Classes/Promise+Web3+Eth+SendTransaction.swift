@@ -20,26 +20,26 @@ extension web3.Eth {
             if self.web3.provider.attachedKeystoreManager == nil {
                 guard let request = EthereumTransaction.createRequest(method: JSONRPCmethod.sendTransaction, transaction: assembledTransaction, onBlock: nil, options: options) else
                 {
-                    throw Web3Error.processingError("Failed to create a request to send transaction")
+                    throw Web3Error.processingError(desc: "Failed to create a request to send transaction")
                 }
                 return self.web3.dispatch(request).map(on: queue) {response in
                     guard let value: String = response.getValue() else {
                         if response.error != nil {
-                            throw Web3Error.nodeError(response.error!.message)
+                            throw Web3Error.nodeError(desc: response.error!.message)
                         }
-                        throw Web3Error.nodeError("Invalid value from Ethereum node")
+                        throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
                     }
                     let result = TransactionSendingResult(transaction: assembledTransaction, hash: value)
                     return result
                 }
             }
             guard let from = options.from else {
-                throw Web3Error.inputError("No 'from' field provided")
+                throw Web3Error.inputError(desc: "No 'from' field provided")
             }
             do {
                 try Web3Signer.signTX(transaction: &assembledTransaction, keystore: self.web3.provider.attachedKeystoreManager!, account: from, password: password)
             } catch {
-                throw Web3Error.inputError("Failed to locally sign a transaction")
+                throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
             }
             return self.web3.eth.sendRawTransactionPromise(assembledTransaction)
         } catch {

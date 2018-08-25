@@ -25,14 +25,14 @@ extension web3.Personal {
                 return self.web3.dispatch(request).map(on: queue) {response in
                     guard let value: Bool = response.getValue() else {
                         if response.error != nil {
-                            throw Web3Error.nodeError(response.error!.message)
+                            throw Web3Error.nodeError(desc: response.error!.message)
                         }
-                        throw Web3Error.nodeError("Invalid value from Ethereum node")
+                        throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
                     }
                     return value
                 }
             }
-            throw Web3Error.inputError("Can not unlock a local keystore")
+            throw Web3Error.inputError(desc: "Can not unlock a local keystore")
         } catch {
             let returnPromise = Promise<Bool>.pending()
             queue.async {
