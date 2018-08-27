@@ -29,7 +29,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -52,7 +52,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -69,7 +69,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -86,7 +86,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -106,7 +106,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -126,7 +126,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -143,7 +143,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -160,7 +160,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -178,7 +178,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -196,7 +196,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -214,7 +214,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -232,7 +232,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -256,7 +256,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -274,7 +274,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -294,7 +294,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -313,7 +313,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -332,7 +332,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -351,7 +351,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -370,7 +370,7 @@ extension web3.Eth {
             if let err = error as? Web3Error {
                 return Result.failure(err)
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     

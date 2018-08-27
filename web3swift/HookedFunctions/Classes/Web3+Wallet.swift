@@ -44,9 +44,9 @@ extension web3.Web3Wallet {
             return Result(true)
         } catch {
             if error is AbstractKeystoreError {
-            return Result.failure(Web3Error.keystoreError(error as! AbstractKeystoreError))
+                return Result.failure(Web3Error.keystoreError(err: error as! AbstractKeystoreError))
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
@@ -71,9 +71,9 @@ extension web3.Web3Wallet {
         }
         catch{
             if error is AbstractKeystoreError {
-                return Result.failure(Web3Error.keystoreError(error as! AbstractKeystoreError))
+                return Result.failure(Web3Error.keystoreError(err: error as! AbstractKeystoreError))
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
 
