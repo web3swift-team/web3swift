@@ -78,6 +78,11 @@
 		815630002007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81562FFF2007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift */; };
 		815630022007B53C00A0EC2F /* BIP32Keystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815630012007B53C00A0EC2F /* BIP32Keystore.swift */; };
 		815630042007BC8F00A0EC2F /* BIP39+WordLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815630032007BC8F00A0EC2F /* BIP39+WordLists.swift */; };
+		8159C50B21352CB700197B91 /* Web3+ERC20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8159C50A21352CB700197B91 /* Web3+ERC20.swift */; };
+		8159C50C21352CB700197B91 /* Web3+ERC20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8159C50A21352CB700197B91 /* Web3+ERC20.swift */; };
+		8159C50E2135901700197B91 /* web3swift_ERC20_Class_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8159C50D2135901700197B91 /* web3swift_ERC20_Class_Tests.swift */; };
+		8159C5102135929700197B91 /* key.json in Resources */ = {isa = PBXBuildFile; fileRef = 8159C50F2135929700197B91 /* key.json */; };
+		8159C5112135929700197B91 /* key.json in Resources */ = {isa = PBXBuildFile; fileRef = 8159C50F2135929700197B91 /* key.json */; };
 		815C74C820ECBF3E00DE2AC4 /* web3swift_User_cases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815C74C720ECBF3E00DE2AC4 /* web3swift_User_cases.swift */; };
 		8160E5CE20B8245A0070070B /* IBAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8160E5CD20B8245A0070070B /* IBAN.swift */; };
 		8160E5CF20B8245A0070070B /* IBAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8160E5CD20B8245A0070070B /* IBAN.swift */; };
@@ -168,7 +173,6 @@
 		81DDECCF1FDF004E0063684A /* Web3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECCE1FDF004E0063684A /* Web3.swift */; };
 		81DFB3FF210775320011DC85 /* Web3+Infura.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DFB3FE210775320011DC85 /* Web3+Infura.swift */; };
 		81DFB400210775320011DC85 /* Web3+Infura.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DFB3FE210775320011DC85 /* Web3+Infura.swift */; };
-		81DFCC4C20F7546300603123 /* key.json in Resources */ = {isa = PBXBuildFile; fileRef = 81DFCC4B20F7546300603123 /* key.json */; };
 		81EB1E4B208173D7003BD47F /* Web3+Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EB1E4A208173D7003BD47F /* Web3+Personal.swift */; };
 		81EB1E4C208173D7003BD47F /* Web3+Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EB1E4A208173D7003BD47F /* Web3+Personal.swift */; };
 		81FA43F62044097100EE14D5 /* web3swift_macOS_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FA43F52044097100EE14D5 /* web3swift_macOS_Tests.swift */; };
@@ -177,8 +181,6 @@
 		81FB21FF207BB297007F9A83 /* EIP67Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F8207BA78B007F9A83 /* EIP67Code.swift */; };
 		81FB2201207BC58C007F9A83 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2200207BC58B007F9A83 /* CoreImage.framework */; };
 		81FB2203207BC6DB007F9A83 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2202207BC6DB007F9A83 /* ImageIO.framework */; };
-		81FB2207207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */ = {isa = PBXBuildFile; fileRef = 81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */; };
-		81FB2208207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */ = {isa = PBXBuildFile; fileRef = 81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */; };
 		81FECD45211ADE51006DA367 /* Web3+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD44211ADE51006DA367 /* Web3+ObjC.swift */; };
 		81FECD46211ADE51006DA367 /* Web3+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD44211ADE51006DA367 /* Web3+ObjC.swift */; };
 		81FECD49211ADEB1006DA367 /* Web3+Instance+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD48211ADEB1006DA367 /* Web3+Instance+ObjC.swift */; };
@@ -276,6 +278,9 @@
 		815630012007B53C00A0EC2F /* BIP32Keystore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP32Keystore.swift; sourceTree = "<group>"; };
 		815630032007BC8F00A0EC2F /* BIP39+WordLists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BIP39+WordLists.swift"; sourceTree = "<group>"; };
 		815630052008A64C00A0EC2F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		8159C50A21352CB700197B91 /* Web3+ERC20.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+ERC20.swift"; sourceTree = "<group>"; };
+		8159C50D2135901700197B91 /* web3swift_ERC20_Class_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_ERC20_Class_Tests.swift; sourceTree = "<group>"; };
+		8159C50F2135929700197B91 /* key.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = key.json; sourceTree = "<group>"; };
 		815C74C720ECBF3E00DE2AC4 /* web3swift_User_cases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_User_cases.swift; sourceTree = "<group>"; };
 		8160E5CD20B8245A0070070B /* IBAN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IBAN.swift; sourceTree = "<group>"; };
 		817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EthereumAddress.swift; sourceTree = "<group>"; };
@@ -331,7 +336,6 @@
 		81D7D97720A61E3800A193EC /* EventFiltering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFiltering.swift; sourceTree = "<group>"; };
 		81DDECCE1FDF004E0063684A /* Web3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3.swift; sourceTree = "<group>"; };
 		81DFB3FE210775320011DC85 /* Web3+Infura.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+Infura.swift"; sourceTree = "<group>"; };
-		81DFCC4B20F7546300603123 /* key.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = key.json; path = ../../../../Desktop/key.json; sourceTree = "<group>"; };
 		81EB1E4A208173D7003BD47F /* Web3+Personal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Personal.swift"; sourceTree = "<group>"; };
 		81FA43F32044097000EE14D5 /* web3swift-macOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "web3swift-macOS_Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81FA43F52044097100EE14D5 /* web3swift_macOS_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_macOS_Tests.swift; sourceTree = "<group>"; };
@@ -339,7 +343,6 @@
 		81FB21F8207BA78B007F9A83 /* EIP67Code.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIP67Code.swift; sourceTree = "<group>"; };
 		81FB2200207BC58B007F9A83 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		81FB2202207BC6DB007F9A83 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bankex-foundation-logo-coin.png"; sourceTree = "<group>"; };
 		81FECD44211ADE51006DA367 /* Web3+ObjC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+ObjC.swift"; sourceTree = "<group>"; };
 		81FECD48211ADEB1006DA367 /* Web3+Instance+ObjC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Instance+ObjC.swift"; sourceTree = "<group>"; };
 		81FECD4B211ADF70006DA367 /* Web3+HttpProvider+ObjC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+HttpProvider+ObjC.swift"; sourceTree = "<group>"; };
@@ -451,6 +454,7 @@
 		1CD91AFE1FD76910007BFB45 /* web3swift */ = {
 			isa = PBXGroup;
 			children = (
+				8159C50921343EF900197B91 /* PrecompiledContracts */,
 				81FECD43211ADE20006DA367 /* ObjectiveCbridge */,
 				0073F22320D949D7000791F1 /* BlockExplorer */,
 				81A1821220D5A2430016741F /* Promises */,
@@ -473,9 +477,10 @@
 		1CD91B301FD769A6007BFB45 /* web3swiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				8159C50F2135929700197B91 /* key.json */,
+				8159C50D2135901700197B91 /* web3swift_ERC20_Class_Tests.swift */,
 				8102F5C2211E00820032DF60 /* scrypt_Tests.swift */,
 				81FECD5D211AEFCE006DA367 /* web3swift_ObjC_Tests.swift */,
-				81DFCC4B20F7546300603123 /* key.json */,
 				815C74C720ECBF3E00DE2AC4 /* web3swift_User_cases.swift */,
 				00E5FE8120EA3FF40030E0D6 /* web3swift_infura_Tests.swift */,
 				00E5FE7F20EA3CEA0030E0D6 /* web3swift_RLP_Tests.swift */,
@@ -584,6 +589,38 @@
 				8125F06820499AC300A0F2FE /* BloomFilter.swift */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		8159C50621343ED300197B91 /* ERC20 */ = {
+			isa = PBXGroup;
+			children = (
+				8159C50A21352CB700197B91 /* Web3+ERC20.swift */,
+			);
+			path = ERC20;
+			sourceTree = "<group>";
+		};
+		8159C50721343EDD00197B91 /* ERC721 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ERC721;
+			sourceTree = "<group>";
+		};
+		8159C50821343EED00197B91 /* PrivateKeyControlledAccount */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = PrivateKeyControlledAccount;
+			sourceTree = "<group>";
+		};
+		8159C50921343EF900197B91 /* PrecompiledContracts */ = {
+			isa = PBXGroup;
+			children = (
+				8159C50821343EED00197B91 /* PrivateKeyControlledAccount */,
+				8159C50721343EDD00197B91 /* ERC721 */,
+				8159C50621343ED300197B91 /* ERC20 */,
+			);
+			path = PrecompiledContracts;
 			sourceTree = "<group>";
 		};
 		818EABD71FDC9A3800E013FC /* Contract */ = {
@@ -754,7 +791,6 @@
 		81FB2205207BCFE4007F9A83 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				81FB2206207BCFF9007F9A83 /* bankex-foundation-logo-coin.png */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -949,7 +985,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81FB2207207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */,
+				8159C5102135929700197B91 /* key.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -957,7 +993,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81DFCC4C20F7546300603123 /* key.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -965,7 +1000,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81FB2208207BCFF9007F9A83 /* bankex-foundation-logo-coin.png in Resources */,
+				8159C5112135929700197B91 /* key.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1120,6 +1155,7 @@
 				81A1823420D6E1FD0016741F /* Promise+Web3+Eth+GetBlockByNumber.swift in Sources */,
 				81A1822820D678BF0016741F /* Promise+Web3+Eth+GetAccounts.swift in Sources */,
 				81C5DA312074EC1E00424CD6 /* ContractProtocol.swift in Sources */,
+				8159C50B21352CB700197B91 /* Web3+ERC20.swift in Sources */,
 				81C5DA222072DFE600424CD6 /* ABIv2TypeParser.swift in Sources */,
 				815630002007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift in Sources */,
 				8123E1CB200CBB2200B6D3AB /* Array+Extension.swift in Sources */,
@@ -1151,6 +1187,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				815C74C820ECBF3E00DE2AC4 /* web3swift_User_cases.swift in Sources */,
+				8159C50E2135901700197B91 /* web3swift_ERC20_Class_Tests.swift in Sources */,
 				E23B5AE520EA6A0A00DC7F32 /* web3swift_contractV2_Tests.swift in Sources */,
 				E23B5AE120EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift in Sources */,
 				E23B5ADB20EA67D800DC7F32 /* web3swift_AdvancedABIv2_Tests.swift in Sources */,
@@ -1175,6 +1212,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8159C50C21352CB700197B91 /* Web3+ERC20.swift in Sources */,
 				4194811B203630530065A83B /* Web3+HttpProvider.swift in Sources */,
 				4194811E203630530065A83B /* Web3.swift in Sources */,
 				4194811F203630530065A83B /* Web3+Instance.swift in Sources */,
