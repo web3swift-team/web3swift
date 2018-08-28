@@ -225,6 +225,9 @@ Changes made to this branch will be merged into the [master](https://github.com/
 ## Appreciation
 
 When using this pod, please make references to this repo and give your start! :)
+*Nothing makes developers happier than seeing someone else use our work and go wild with it.*
+
+If you are using web3swift in your app or know of an app that uses it, please add it to [this list](https://github.com/matterinc/web3swift/wiki/Apps-using-web3swift).
 
 ## Authors
 
