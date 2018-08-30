@@ -19,7 +19,7 @@ class web3swift_transactions_Tests: XCTestCase {
     func testTransaction() {
         do {
             var transaction = EthereumTransaction(nonce: BigUInt(9),
-                                                  gasPrice: BigUInt(20000000000),
+                                                  gasPrice: BigUInt("20000000000")!,
                                                   gasLimit: BigUInt(21000),
                                                   to: EthereumAddress("0x3535353535353535353535353535353535353535")!,
                                                   value: BigUInt("1000000000000000000")!,

@@ -1,3 +1,11 @@
+//
+//  LibSecp256k1Extension.swift
+//  web3swift-iOS
+//
+//  Created by Alexander Vlasov.
+//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//
+
 
 import Foundation
 import secp256k1_ios
@@ -31,7 +39,7 @@ extension SECP256K1 {
             guard let truePublicKey = SECP256K1.privateKeyToPublicKey(privateKey: privateKey) else {continue}
             guard let recoveredPublicKey = SECP256K1.recoverPublicKey(hash: hash, recoverableSignature: &recoverableSignature) else {continue}
             if Data(toByteArray(truePublicKey.data)) != Data(toByteArray(recoveredPublicKey.data)) {
-                print("Didn't recover correctly!")
+//                print("Didn't recover correctly!")
                 continue
             }
             guard let serializedSignature = SECP256K1.serializeSignature(recoverableSignature: &recoverableSignature) else {continue}
@@ -221,7 +229,6 @@ extension SECP256K1 {
             }
         }
         if result == 0 {
-            print("Failed to sign!")
             return nil
         }
         return recoverableSignature
