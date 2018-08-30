@@ -16,7 +16,7 @@ import secp256k1_ios
 
 @testable import web3swift_iOS
 
-class web3swiftTests: XCTestCase {
+class web3swift_Tests: XCTestCase {
     
     func testBitFunctions () {
         let data = Data([0xf0, 0x02, 0x03])
@@ -145,14 +145,6 @@ class web3swiftTests: XCTestCase {
             print(allMethods)
         } catch {
             print(error)
-        }
-    }
-
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
         }
     }
     

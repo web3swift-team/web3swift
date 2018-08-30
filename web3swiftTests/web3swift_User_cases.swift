@@ -65,4 +65,59 @@ class web3swift_User_cases: XCTestCase {
         XCTAssert(assembled.gasLimit == options.gasLimit)
     }
     
+    func testProperGasPrice() {
+        guard let keystoreData = getKeystoreData() else {return XCTFail()}
+        guard let keystoreV3 = EthereumKeystoreV3.init(keystoreData) else {return XCTFail()}
+        let web3Rinkeby = Web3.InfuraRinkebyWeb3()
+        let keystoreManager = KeystoreManager.init([keystoreV3])
+        web3Rinkeby.addKeystoreManager(keystoreManager)
+        guard case .success(let gasPriceRinkeby) = web3Rinkeby.eth.getGasPrice() else {return XCTFail()}
+        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        guard let intermediate = web3Rinkeby.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
+        var options = Web3Options.defaultOptions()
+        options.from = keystoreV3.addresses?.first
+        options.gasPrice = gasPriceRinkeby * 2
+        guard case .success(let gasEstimate) = intermediate.estimateGas(options: options) else {return XCTFail()}
+        options.gasLimit = gasEstimate + 1234
+        guard case .success(let assembled) = intermediate.assemble(options: options)  else {return XCTFail()}
+        XCTAssert(assembled.gasLimit == options.gasLimit)
+        XCTAssert(assembled.gasPrice == options.gasPrice)
+    }
+    
+    func testParseTransactionDetailsForContractCreation() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let details = web3.eth.getTransactionDetails("0x1c85b9b7f7c2cbdb3fa264f6b78b226360aa2084c48cf7869b756e0762bd851b")
+        switch details {
+        case .success(let details):
+            print(details)
+            XCTAssert(details.transaction.to == .contractDeploymentAddress())
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+        let receipt = web3.eth.getTransactionReceipt("0x1c85b9b7f7c2cbdb3fa264f6b78b226360aa2084c48cf7869b756e0762bd851b")
+        switch receipt {
+        case .success(let receipt):
+            print(receipt)
+            XCTAssert(receipt.contractAddress != nil)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
+    func testNonBatchedRequest() {
+        let web3 = Web3.InfuraMainnetWeb3()
+        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        web3.requestDispatcher.policy = .NoBatching
+        let balanceResult = web3.eth.getBalance(address: address)
+        switch balanceResult {
+        case .success(let bal):
+            print(bal)
+        case .failure(let error):
+            print(error)
+            XCTFail()
+        }
+    }
+    
 }
