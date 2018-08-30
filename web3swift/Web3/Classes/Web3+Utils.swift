@@ -106,19 +106,27 @@ extension Web3.Utils {
         return addressData.toHexString().addHexPrefix().lowercased()
     }
     
-    public static func hashPersonalMessage(_ personalMessage: Data) -> Data? {
+    public static func appendPersonalMessagePrefix(for message: Data) -> Data? {
         var prefix = "\u{19}Ethereum Signed Message:\n"
-        prefix += String(personalMessage.count)
+        prefix += String(message.count)
         guard let prefixData = prefix.data(using: .ascii) else {return nil}
         var data = Data()
-        if personalMessage.count >= prefixData.count && prefixData == personalMessage[0 ..< prefixData.count] {
-            data.append(personalMessage)
+        if message.count >= prefixData.count && prefixData == message[0 ..< prefixData.count] {
+            data.append(message)
         } else {
             data.append(prefixData)
-            data.append(personalMessage)
+            data.append(message)
         }
-        let hash = data.sha3(.keccak256)
-        return hash
+        return data
+    }
+    
+    public static func hashPersonalMessage(_ personalMessage: Data) -> Data? {
+        guard let message = appendPersonalMessagePrefix(for: personalMessage) else { return nil }
+        return hashMessage(message)
+    }
+    
+    public static func hashMessage(_ message: Data) -> Data? {
+        return message.sha3(.keccak256)
     }
     
     public static func parseToBigUInt(_ amount: String, units: Web3.Utils.Units = .eth) -> BigUInt? {
@@ -273,3 +281,4 @@ extension Web3.Utils {
         return completeSignature
     }
 }
+

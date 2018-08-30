@@ -66,6 +66,20 @@ public struct Web3Signer {
             }
             return true
         }
+        
+        public static func sign(personalMessage: Data, privateKey: Data, useExtraEntropy: Bool = true) -> Data? {
+            guard let personalMessage = Web3.Utils.appendPersonalMessagePrefix(for: personalMessage) else { return nil }
+            return sign(message: personalMessage, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
+        }
+        
+        public static func sign(message: Data, privateKey: Data, useExtraEntropy: Bool = true) -> Data? {
+            guard let hash = Web3.Utils.hashMessage(message) else {return nil}
+            return signHash(hash, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
+        }
+        
+        private static func signHash(_ hash: Data, privateKey: Data, useExtraEntropy: Bool = true) -> Data? {
+            return SECP256K1.signForRecovery(hash: hash, privateKey: privateKey, useExtraEntropy: useExtraEntropy).serializedSignature
+        }
     }
     
     public struct FallbackSigner {
