@@ -283,7 +283,7 @@ class web3swift_ABI_Tests: XCTestCase {
         guard let result = res else {return XCTFail()}
         XCTAssert(result.count == 1)
         guard let firstElement = result[0] as? BigInt else {return XCTFail()}
-        XCTAssert(firstElement == BigInt(-85091238591234))
+        XCTAssert(firstElement == BigInt("-85091238591234")!)
     }
     
     func testABIv2Decoding7() {

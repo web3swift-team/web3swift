@@ -11,6 +11,7 @@ import BigInt
 import Result
 import class PromiseKit.Promise
 
+/// Protocol for generic Ethereum event parsing results
 public protocol EventParserResultProtocol {
     var eventName: String {get}
     var decodedResult: [String:Any] {get}
@@ -19,6 +20,7 @@ public protocol EventParserResultProtocol {
     var eventLog: EventLog? {get}
 }
 
+/// Protocol for generic Ethereum event parser
 public protocol EventParserProtocol {
     func parseTransaction(_ transaction: EthereumTransaction) -> Result<[EventParserResultProtocol], Web3Error>
     func parseTransactionByHash(_ hash: Data) -> Result<[EventParserResultProtocol], Web3Error>
@@ -30,6 +32,7 @@ public protocol EventParserProtocol {
     func parseBlockPromise(_ block: Block) -> Promise<[EventParserResultProtocol]>
 }
 
+/// Enum for the most-used Ethereum networks. Network ID is crucial for EIP155 support
 public enum Networks {
     case Rinkeby
     case Mainnet
