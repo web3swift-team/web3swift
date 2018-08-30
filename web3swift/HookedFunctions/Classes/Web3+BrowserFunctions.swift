@@ -41,11 +41,6 @@ extension web3.BrowserFunctions {
             guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {return nil}
             
             guard let signature = try Web3Signer.signPersonalMessage(personalMessage, keystore: keystoreManager, account: EthereumAddress(account)!, password: password) else {return nil}
-            guard let sender = self.personalECRecover(personalMessage, signature: signature) else {return nil}
-            print(sender)
-            if sender.lowercased() != account.lowercased() {
-                print("Invalid sender")
-            }
             return signature.toHexString().addHexPrefix()
         }
         catch{

@@ -1,10 +1,21 @@
 ![bkx-foundation-github-swift](https://user-images.githubusercontent.com/3356474/34412791-5b58962c-ebf0-11e7-8460-5592b12e6e9d.png)
 
 <img align="left" width="25" height="25" src="https://user-images.githubusercontent.com/28599454/41086111-af4bc3b0-6a41-11e8-9f9f-2d642b12666e.png">[Ask questions](https://stackoverflow.com/questions/tagged/web3swift)
-## Important notices
-With the version 0.3.0 the API should be less volatile. All public functions should return a [Result](https://github.com/antitypical/Result) instead of `nil` or throwing.
 
-Example is updated for 0.5.0, although please prefer to use tests as an example for your code.
+## Important notice: 
+### This version is not currently supported by founders.
+## Use [matterinc/web3swift](https://github.com/matterinc/web3swift) instead.
+
+> As we've left the company BANKEX and I was the main enthusiast maintainer of this project, all the further work and updates will be done in the new repo.
+
+>*Sincerely,*
+>*Alex (@shamatar)*
+
+> We will continue working at *web3swift* library within our core team in our new company.
+>We are committed to make it more powerful and push new updates to [matterinc/web3swift](https://github.com/matterinc/web3swift)
+
+>*Regards,*
+>*Petr Korolev (@skywinder)*
 
 # web3swift
 
@@ -232,9 +243,9 @@ When using this pod, references to this repo, [BANKEX](http://bankex.com) and [B
 
 ## Authors
 
-Alex Vlasov, [@shamatar](https://github.com/shamatar),  av@bankexfoundation.org
+Alex Vlasov, [@shamatar](https://github.com/shamatar)
 
-Petr Korolev, [@skywinder](https://github.com/skywinder), pk@bankexfoundation.org
+Petr Korolev, [@skywinder](https://github.com/skywinder)
 
 ## License
 

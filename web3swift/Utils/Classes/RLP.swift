@@ -120,11 +120,16 @@ struct RLP {
         return encoded.bytes[0]
     }
     
-    static func encode(_ elements: Array<AnyObject>) -> Data? {
+    public static func encode(_ elements: Array<AnyObject>) -> Data? {
         var encodedData = Data()
         for e in elements {
-            guard let encoded = encode(e) else {return nil}
-            encodedData.append(encoded)
+            if let encoded = encode(e) {
+                encodedData.append(encoded)
+            } else {
+                guard let asArray = e as? Array<AnyObject> else {return nil}
+                guard let encoded = encode(asArray) else {return nil}
+                encodedData.append(encoded)
+            }
         }
         guard var encodedLength = encodeLength(encodedData.count, offset: UInt8(0xc0)) else {return nil}
         if (encodedLength != Data()) {
