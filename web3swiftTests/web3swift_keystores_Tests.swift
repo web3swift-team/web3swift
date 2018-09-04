@@ -194,5 +194,14 @@ class web3swift_Keystores_tests: XCTestCase {
         XCTAssert(treeNode?.serializeToString() == "xpub6FnCn6nSzZAw5Tw7cgR9bi15UV96gLZhjDstkXXxvCLsUXBGXPdSnLFbdpq8p9HmGsApME5hQTZ3emM2rnY5agb9rXpVGyy3bdW6EEgAtqt")
         XCTAssert(treeNode?.serializeToString(serializePublic: false) == "xprvA2nrNbFZABcdryreWet9Ea4LvTJcGsqrMzxHx98MMrotbir7yrKCEXw7nadnHM8Dq38EGfSh6dqA9QWTyefMLEcBYJUuekgW4BYPJcr9E7j")
     }
+    
+    func testKeystoreDerivationTime() {
+        let privateKey = Data.randomBytes(length: 32)!
+        measure {
+            let ks = try! EthereumKeystoreV3(privateKey: privateKey, password: "TEST")!
+            let account = ks.addresses!.first!
+            let _ = try! ks.UNSAFE_getPrivateKeyData(password: "TEST", account: account)
+        }
+    }
 
 }
