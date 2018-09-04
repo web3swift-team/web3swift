@@ -10,7 +10,6 @@ import Foundation
 import BigInt
 import PromiseKit
 
-
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3: Web3OptionsInheritable {
     public var provider : Web3Provider
@@ -132,4 +131,27 @@ public class web3: Web3OptionsInheritable {
         }
     }
     
+    var erc721Instance: web3.ERC721?
+    
+    /// Public web3.browserFunctions.* namespace.
+    public var erc721: web3.ERC721 {
+        if (self.erc721Instance != nil) {
+            return self.erc721Instance!
+        }
+        self.erc721Instance = web3.ERC721(provider : self.provider, web3: self)
+        return self.erc721Instance!
+    }
+    
+    public class ERC721: Web3OptionsInheritable {
+        var provider:Web3Provider
+        //        weak var web3: web3?
+        var web3: web3
+        public var options: Web3Options {
+            return self.web3.options
+        }
+        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+            provider = prov
+            web3 = web3instance
+        }
+    }
 }
