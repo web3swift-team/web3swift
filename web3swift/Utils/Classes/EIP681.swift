@@ -35,7 +35,7 @@ extension Web3 {
         public var gasLimit: BigUInt?
         public var gasPrice: BigUInt?
         public var amount: BigUInt?
-        public var function: Function?
+        public var function: ABIv2.Element.Function?
         
         public enum TargetAddress {
             case ethereumAddress(EthereumAddress)
@@ -54,36 +54,26 @@ extension Web3 {
             self.targetAddress = targetAddress
         }
 
-        public struct Function {
-            public var method: String
-            public var parameters: [(ABIv2.Element.ParameterType, AnyObject)]
-            
-            public func toString() -> String? {
-                let encoding = method + "(" + parameters.map({ (el) -> String in
-                    if let string = el.1 as? String {
-                        return el.0.abiRepresentation + " " + string
-                    } else if let number = el.1 as? BigUInt {
-                        return el.0.abiRepresentation + " " + String(number, radix: 10)
-                    } else if let number = el.1 as? BigInt {
-                        return el.0.abiRepresentation + " " + String(number, radix: 10)
-                    } else if let data = el.1 as? Data {
-                        return el.0.abiRepresentation + " " + data.toHexString().addHexPrefix()
-                    }
-                    return ""
-                }).joined(separator: ", ") + ")"
-                return encoding
-            }
-        }
-        
-//        public init (address : EthereumAddress) {
-//            self.address = address
-//        }
+//        public struct Function {
+//            public var method: String
+//            public var parameters: [(ABIv2.Element.ParameterType, AnyObject)]
 //
-//        public init? (address : String) {
-//            guard let addr = EthereumAddress(address) else {return nil}
-//            self.address = addr
+//            public func toString() -> String? {
+//                let encoding = method + "(" + parameters.map({ (el) -> String in
+//                    if let string = el.1 as? String {
+//                        return el.0.abiRepresentation + " " + string
+//                    } else if let number = el.1 as? BigUInt {
+//                        return el.0.abiRepresentation + " " + String(number, radix: 10)
+//                    } else if let number = el.1 as? BigInt {
+//                        return el.0.abiRepresentation + " " + String(number, radix: 10)
+//                    } else if let data = el.1 as? Data {
+//                        return el.0.abiRepresentation + " " + data.toHexString().addHexPrefix()
+//                    }
+//                    return ""
+//                }).joined(separator: ", ") + ")"
+//                return encoding
+//            }
 //        }
-        
     }
     
     public struct EIP681CodeParser {
@@ -100,7 +90,7 @@ extension Web3 {
             let striped = string.components(separatedBy: "ethereum:")
             guard striped.count == 2 else {return nil}
             guard let encoding = striped[1].removingPercentEncoding else {return nil}
-            guard let url = URL.init(string: encoding) else {return nil}
+//            guard let url = URL.init(string: encoding) else {return nil}
             let matcher = try! NSRegularExpression(pattern: addressRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
             let match = matcher.matches(in: encoding, options: NSRegularExpression.MatchingOptions.anchored, range: encoding.fullNSRange)
             guard match.count == 1 else {return nil}
@@ -138,21 +128,29 @@ extension Web3 {
                 code.functionName = components.path
             }
             guard let queryItems = components.queryItems else {return code}
+            var inputNumber: Int = 0
+            var inputs = [ABIv2.Element.InOut]()
             for comp in queryItems {
                 if let inputType = try? ABIv2TypeParser.parseTypeString(comp.name) {
                     guard let value = comp.value else {continue}
+                    var nativeValue: AnyObject? = nil
                     switch inputType {
                     case .address:
                         let val = EIP681Code.TargetAddress(value)
-                        code.parameters.append(EIP681Code.EIP681Parameter(type: inputType, value: val as AnyObject))
+                        nativeValue = val as AnyObject
                     case .uint(bits: _):
                         if let val = BigUInt(value, radix: 10) {
-                            code.parameters.append(EIP681Code.EIP681Parameter(type: inputType, value: val as AnyObject))
+                            nativeValue = val as AnyObject
                         } else if let val = BigUInt(value.stripHexPrefix(), radix: 16) {
-                            code.parameters.append(EIP681Code.EIP681Parameter(type: inputType, value: val as AnyObject))
+                            nativeValue = val as AnyObject
                         }
                     default:
                         continue
+                    }
+                    if nativeValue != nil {
+                        inputs.append(ABIv2.Element.InOut(name: String(inputNumber), type: inputType))
+                        code.parameters.append(EIP681Code.EIP681Parameter(type: inputType, value: nativeValue!))
+                        inputNumber = inputNumber + 1
                     }
                 } else {
                     switch comp.name {
@@ -177,6 +175,12 @@ extension Web3 {
                     }
                 }
             }
+            
+            if code.functionName != nil {
+                let functionEncoding = ABIv2.Element.Function(name: code.functionName!, inputs: inputs, outputs: [ABIv2.Element.InOut](), constant: false, payable: code.amount != nil)
+                code.function = functionEncoding
+            }
+
             print(code)
             return code
         }
