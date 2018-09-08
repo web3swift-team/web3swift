@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc(web3Eth)
+//@objc(web3Eth)
 public final class _ObjCweb3Eth: NSObject {
     private (set) weak var web3: web3?
     

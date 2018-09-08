@@ -9,7 +9,7 @@
 import Foundation
 import BigInt
 
-@objc(BigUInt)
+//@objc(BigUInt)
 public final class _ObjCBigUInt: NSObject{
     private (set) var biguint: BigUInt?
     

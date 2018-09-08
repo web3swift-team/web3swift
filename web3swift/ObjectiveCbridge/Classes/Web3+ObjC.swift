@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc(Web3)
+//@objc(Web3)
 public final class _ObjCWeb3: NSObject {
     public static func InfuraMainnetWeb3() -> _ObjCweb3 {
         let web3 = Web3.InfuraMainnetWeb3()

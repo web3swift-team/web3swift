@@ -1,5 +1,5 @@
 def import_pods
-  pod 'scrypt', '~> 1.6'
+  pod 'scrypt', '~> 1.7'
   pod "PromiseKit", "~> 6.3"
   pod 'BigInt', '~> 3.1'
   pod 'CryptoSwift', '~> 0.11'

@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc(KeystoreManager)
+//@objc(KeystoreManager)
 public final class _ObjCKeystoreManager: NSObject{
     private (set) var keystoreManager: KeystoreManager?
     
