@@ -78,7 +78,7 @@ struct Salsa {
         B[0] ^= R(B[3] &+ B[2], 18);
     }
     
-    static func doubleround(_ x: inout Array<UInt32>) {
+    @inline(__always) static func doubleround(_ x: inout Array<UInt32>) {
         // column rounds
         x[4] ^= R(x[0] &+ x[12], 7);
         x[8] ^= R(x[4] &+ x[0], 9);
@@ -132,7 +132,7 @@ struct Salsa {
         }
     }
     
-    static func doubleround(_ x: BufferStorage<UInt32>) {
+    @inline(__always) static func doubleround(_ x: BufferStorage<UInt32>) {
         // column rounds
         x[4] ^= R(x[0] &+ x[12], 7);
         x[8] ^= R(x[4] &+ x[0], 9);

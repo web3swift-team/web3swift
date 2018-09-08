@@ -50,6 +50,13 @@ class web3swift_Keystores_tests: XCTestCase {
         XCTAssert(keystore != nil)
     }
     
+    func testSameAddressesFromTheSameMnemonics() {
+        let mnemonic = try! BIP39.generateMnemonics(bitsOfEntropy: 256)!
+        let keystore1 = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
+        let keystore2 = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
+        XCTAssert(keystore1?.addresses?.first == keystore2?.addresses?.first)
+    }
+    
     func testBIP32keystoreExportPrivateKey() {
         let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
@@ -202,6 +209,11 @@ class web3swift_Keystores_tests: XCTestCase {
             let account = ks.addresses!.first!
             let _ = try! ks.UNSAFE_getPrivateKeyData(password: "TEST", account: account)
         }
+    }
+    
+    func testSingleScryptDerivation() {
+        let privateKey = Data.randomBytes(length: 32)!
+        let _ = try! EthereumKeystoreV3(privateKey: privateKey, password: "TEST")!
     }
 
 }

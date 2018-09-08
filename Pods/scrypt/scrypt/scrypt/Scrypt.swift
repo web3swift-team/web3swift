@@ -9,7 +9,7 @@
 //  https://www.ietf.org/rfc/rfc7914.txt
 //
 import CryptoSwift
-
+import scryptC
 
 /// A key derivation function.
 ///
@@ -68,6 +68,10 @@ public struct Scrypt {
     }
     
     public func calculate() throws -> Array<UInt8> {
+        return try calculateUsingC()
+    }
+    
+    public func calculateNatively() throws -> Array<UInt8> {
         var kdf = try CryptoSwift.PKCS5.PBKDF2(password: password, salt: salt, iterations: 1, keyLength: blocksize*p, variant: .sha256)
         var B = try kdf.calculate()
         let v = BufferStorage<UInt32>(repeating: 0, count: 32*N*r)
@@ -80,6 +84,23 @@ public struct Scrypt {
         let ret = try kdf.calculate()
         return Array(ret)
     }
+    
+    public func calculateUsingC() throws -> Array<UInt8> {
+        var kdf = try CryptoSwift.PKCS5.PBKDF2(password: password, salt: salt, iterations: 1, keyLength: blocksize*p, variant: .sha256)
+        var B = try kdf.calculate()
+        
+        let extraMemoryLength = 128 * r * N + 256 * r + 64
+        var extraMemory = [UInt8](repeating: 0, count: extraMemoryLength)
+        
+        let res = escrypt_kdf_nosse(UInt64(N), UInt32(r), UInt32(p), &B, B.count, &extraMemory, extraMemoryLength)
+        if res != 0 {
+            throw Error.derivedKeyTooLong
+        }
+        kdf = try CryptoSwift.PKCS5.PBKDF2(password: self.password, salt: B, iterations: 1, keyLength: dkLen, variant: .sha256)
+        let ret = try kdf.calculate()
+        return Array(ret)
+    }
+    
 }
 
 extension Scrypt {
@@ -113,10 +134,50 @@ extension Scrypt {
         return UInt64(b[j]) | (UInt64(b[j+1]) << 32) // LE
     }
     
-    static func smix(b: inout ArraySlice<UInt8>, N: Int, r: Int, v: BufferStorage<UInt32>, xy: BufferStorage<UInt32>) {
+    @inline(__always) static func smix(b: inout ArraySlice<UInt8>, N: Int, r: Int, v: BufferStorage<UInt32>, xy: BufferStorage<UInt32>) {
         let tmp = BufferStorage<UInt32>(repeating: 0, count: 16)
         let x = xy
         let y = xy[(32*r)...]
+        
+        var j = b.startIndex
+        for i in 0 ..< 32*r {
+            x[i] = UInt32(b[j]) | UInt32(b[j+1])<<8 | UInt32(b[j+2])<<16 | UInt32(b[j+3])<<24 // decode as LE Uint32
+            j += 4
+        }
+        for i in stride(from: 0, to: N, by: 2) {
+            Scrypt.blockCopy(destination: v[(i*(32*r))...], source: x, n: 32*r)
+            // blockMix starts with copy, so tmp can be garbage
+            Scrypt.blockMix(tmp: tmp, source: x, destination: y, r: r)
+            
+            Scrypt.blockCopy(destination: v[((i+1)*(32*r))...], source: y, n: 32*r)
+            // blockMix starts with copy, so tmp can be garbage
+            Scrypt.blockMix(tmp: tmp, source: y, destination: x, r: r)
+        }
+        
+        for _ in stride(from: 0, to: N, by: 2) {
+            var j = Int(Scrypt.integerify(b: x, r: r) & UInt64(N-1) )
+            Scrypt.blockXOR(destination: x, source: v[(j*(32*r))...], n: 32*r)
+            // blockMix starts with copy, so tmp can be garbage
+            Scrypt.blockMix(tmp: tmp, source: x, destination: y, r: r)
+            
+            j = Int(Scrypt.integerify(b: y, r: r) & UInt64(N-1) )
+            Scrypt.blockXOR(destination: y, source: v[(j*(32*r))...], n: 32*r)
+            // blockMix starts with copy, so tmp can be garbage
+            Scrypt.blockMix(tmp: tmp, source: y, destination: x, r: r)
+        }
+        j = b.startIndex
+        for i in 0 ..< 32*r {
+            let v = x[i]
+            b[j+0] = UInt8(v >> 0 & 0xff)
+            b[j+1] = UInt8(v >> 8 & 0xff)
+            b[j+2] = UInt8(v >> 16 & 0xff)
+            b[j+3] = UInt8(v >> 24 & 0xff)
+            j += 4
+        }
+    }
+    
+    static func smix(b: inout ArraySlice<UInt8>, N: Int, r: Int, v: BufferStorage<UInt32>, x: BufferStorage<UInt32>, y: BufferStorage<UInt32>) {
+        let tmp = BufferStorage<UInt32>(repeating: 0, count: 16)
         
         var j = b.startIndex
         for i in 0 ..< 32*r {

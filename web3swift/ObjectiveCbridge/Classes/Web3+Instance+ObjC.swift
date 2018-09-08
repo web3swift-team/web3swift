@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc(web3)
+//@objc(web3)
 public final class _ObjCweb3: NSObject {
     private (set) var web3: web3?
     
