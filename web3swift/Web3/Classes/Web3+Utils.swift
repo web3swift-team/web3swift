@@ -133,22 +133,30 @@ extension Web3.Utils {
         return addressData.toHexString().addHexPrefix().lowercased()
     }
     
+    public static func appendPersonalMessagePrefix(for message: Data) -> Data? {
+        var prefix = "\u{19}Ethereum Signed Message:\n"
+        prefix += String(message.count)
+        guard let prefixData = prefix.data(using: .ascii) else {return nil}
+        var data = Data()
+        if message.count >= prefixData.count && prefixData == message[0 ..< prefixData.count] {
+            data.append(message)
+        } else {
+            data.append(prefixData)
+            data.append(message)
+        }
+        return data
+    }
+    
     /// Hashes a personal message by first padding it with the "\u{19}Ethereum Signed Message:\n" string and message length string.
     /// Should be used if some arbitrary information should be hashed and signed to prevent signing an Ethereum transaction
     /// by accident.
     public static func hashPersonalMessage(_ personalMessage: Data) -> Data? {
-        var prefix = "\u{19}Ethereum Signed Message:\n"
-        prefix += String(personalMessage.count)
-        guard let prefixData = prefix.data(using: .ascii) else {return nil}
-        var data = Data()
-        if personalMessage.count >= prefixData.count && prefixData == personalMessage[0 ..< prefixData.count] {
-            data.append(personalMessage)
-        } else {
-            data.append(prefixData)
-            data.append(personalMessage)
-        }
-        let hash = data.sha3(.keccak256)
-        return hash
+        guard let message = appendPersonalMessagePrefix(for: personalMessage) else { return nil }
+        return hashMessage(message)
+    }
+    
+    public static func hashMessage(_ message: Data) -> Data? {
+        return message.sha3(.keccak256)
     }
     
     /// Parse a user-supplied string using the number of decimals for particular Ethereum unit.
@@ -343,3 +351,4 @@ extension Web3.Utils {
         return completeSignature
     }
 }
+
