@@ -132,6 +132,7 @@ Here's a few use cases of our library:
 Create keystore and account with password.
 
 ```
+//TODO
 ```
 
 ### Initializing Ethereum address
@@ -162,28 +163,35 @@ let balanceResult = web3Main.eth.getBalance(address)
 guard case .success(let balance) = balanceResult else {return}
 ```
 ### Getting gas price
-```let web3Main = Web3.InfuraMainnetWeb3()
+```
+let web3Main = Web3.InfuraMainnetWeb3()
 let gasPriceResult = web3Main.eth.getGasPrice()
 guard case .success(let gasPrice) = gasPriceResult else {return}
 ```
-### Getting ERC20 token balance
-```let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")! // BKX token on Ethereum mainnet
-let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2)! // utilize precompiled ERC20 ABI for your concenience
-guard let bkxBalanceResult = contract.method("balanceOf", parameters: [coldWalletAddress] as [AnyObject], options: options)?.call(options: nil) else {return} // encode parameters for transaction
-guard case .success(let bkxBalance) = bkxBalanceResult, let bal = bkxBalance["0"] as? BigUInt else {return} // bkxBalance is [String: Any], and parameters are enumerated as "0", "1", etc in order of being returned. If returned parameter has a name in ABI, it is also duplicated
-print("BKX token balance = " + String(bal))
-```
 
 ### Sending ETH
-```let web3Rinkeby = Web3.InfuraRinkebyWeb3()
+```
+let web3Rinkeby = Web3.InfuraRinkebyWeb3()
 web3Rinkeby.addKeystoreManager(bip32keystoreManager) // attach a keystore if you want to sign locally. Otherwise unsigned request will be sent to remote node
 options.from = bip32ks?.addresses?.first! // specify from what address you want to send it
 intermediateSend = web3Rinkeby.contract(Web3.Utils.coldWalletABI, at: coldWalletAddress, abiVersion: 2)!.method(options: options)! // an address with a private key attached in not different from any other address, just has very simple ABI
 let sendResultBip32 = intermediateSend.send(password: "changeme")
 ```
 
-### Sending ERC20
-```var convenienceTransferOptions = Web3Options.defaultOptions()
+### ERC20 Iteraction:
+
+#### Getting ERC20 token balance
+```
+let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")! // BKX token on Ethereum mainnet
+let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2)! // utilize precompiled ERC20 ABI for your concenience
+guard let bkxBalanceResult = contract.method("balanceOf", parameters: [coldWalletAddress] as [AnyObject], options: options)?.call(options: nil) else {return} // encode parameters for transaction
+guard case .success(let bkxBalance) = bkxBalanceResult, let bal = bkxBalance["0"] as? BigUInt else {return} // bkxBalance is [String: Any], and parameters are enumerated as "0", "1", etc in order of being returned. If returned parameter has a name in ABI, it is also duplicated
+print("BKX token balance = " + String(bal))
+```
+
+#### Sending ERC20
+```
+var convenienceTransferOptions = Web3Options.defaultOptions()
 convenienceTransferOptions.gasPrice = gasPriceRinkeby
 let convenienceTokenTransfer = web3Rinkeby.eth.sendERC20tokensWithNaturalUnits(tokenAddress: EthereumAddress("0xa407dd0cbc9f9d20cdbd557686625e586c85b20a")!, from: (ks?.addresses?.first!)!, to: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!, amount: "0.0001", options: convenienceTransferOptions) // there are also convenience functions to send ETH and ERC20 under the .eth structure
 let gasEstimateResult = convenienceTokenTransfer!.estimateGas(options: nil)
@@ -199,15 +207,27 @@ switch convenienceTransferResult {
 }
 ```
 
-## Global plans
-- Full reference `web3js` functionality
-- Light Ethereum subprotocol (LES) integration
+## [Apps using this library](https://github.com/matterinc/web3swift/wiki/Apps-using-web3swift)
 
-## [Apps using this library](https://github.com/matterinc/web3swift/wiki/Apps-using-web3swift) 
+If you are using `web3swift` in your app or know of an app that uses it, please add it to this list. It would be much appreciated! 👍
+
+* [MEWconnect-iOS](https://github.com/MyEtherWallet/MEWconnect-iOS)
+* [Peepeth iOS client](https://github.com/matterinc/PeepethClient)
+* [Ethereum & ERC20Tokens Wallet](https://itunes.apple.com/us/app/ethereum-erc20tokens-wallet/id1386738877?ls=1&mt=8)
+* [BankexWallet](https://github.com/BANKEX/Pay-iOS)
+* [YOUR APP CAN BE THERE (click me)](https://github.com/matterinc/web3swift/issues) :wink:
 
 If you've used this project in a live app, please let us know!
 
 *If you are using `web3swift` in your app or know of an app that uses it, please add it to [this](https://github.com/matterinc/web3swift/wiki/Apps-using-web3swift) list.*
+
+
+
+## Future plans
+
+- Full reference `web3js` functionality
+- Light Ethereum subprotocol (LES) integration
+
 
 ## Special thanks to
 
