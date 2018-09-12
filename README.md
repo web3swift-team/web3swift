@@ -144,6 +144,7 @@ Ethereum addresses are checksum checked if they are not lowercased and always le
 
 
 ### Setting options
+
 ```
 var options = Web3Options.defaultOptions()
     // public var to: EthereumAddress? = nil - to what address transaction is aimed
@@ -154,6 +155,18 @@ var options = Web3Options.defaultOptions()
 options.gasPrice = gasPrice
 options.gasLimit = gasLimit
 options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
+```
+
+### Encoding Transaction
+
+```
+//TODO
+```
+
+### Signing Transaction
+
+```
+//TODO
 ```
 ### Getting ETH balance
 ```
