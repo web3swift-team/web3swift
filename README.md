@@ -215,6 +215,7 @@ If you are using `web3swift` in your app or know of an app that uses it, please 
 * [Peepeth iOS client](https://github.com/matterinc/PeepethClient)
 * [Ethereum & ERC20Tokens Wallet](https://itunes.apple.com/us/app/ethereum-erc20tokens-wallet/id1386738877?ls=1&mt=8)
 * [BankexWallet](https://github.com/BANKEX/Pay-iOS)
+* [GeoChain](https://github.com/awallish/GeoChain)
 * [YOUR APP CAN BE THERE (click me)](https://github.com/matterinc/web3swift/issues) :wink:
 
 If you've used this project in a live app, please let us know!
