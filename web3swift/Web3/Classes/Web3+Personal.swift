@@ -26,7 +26,7 @@ extension web3.Personal {
      - important: This call is synchronous
      
      */
-    public func signPersonalMessage(message: Data, from: EthereumAddress, password:String = "BANKEXFOUNDATION") -> Result<Data, Web3Error> {
+    public func signPersonalMessage(message: Data, from: EthereumAddress, password:String = "web3swift") -> Result<Data, Web3Error> {
         do {
             let result = try self.signPersonalMessagePromise(message: message, from: from, password: password).wait()
             return Result(result)
@@ -49,7 +49,7 @@ extension web3.Personal {
      - important: This call is synchronous. Does nothing if private keys are stored locally.
      
      */
-    public func unlockAccount(account: EthereumAddress, password:String = "BANKEXFOUNDATION", seconds: UInt64 = 300) -> Result<Bool, Web3Error> {
+    public func unlockAccount(account: EthereumAddress, password:String = "web3swift", seconds: UInt64 = 300) -> Result<Bool, Web3Error> {
         do {
             let result = try self.unlockAccountPromise(account: account).wait()
             return Result(result)

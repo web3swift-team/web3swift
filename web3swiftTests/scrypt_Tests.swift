@@ -30,7 +30,7 @@ class scrypt_Tests: XCTestCase {
     
     func testProfilerRun() {
         //            N: Int = 4096, R: Int = 6, P: Int = 1
-        let password = Array("BANKEXFOUNDATION".data(using: .ascii)!)
+        let password = Array("web3swift".data(using: .ascii)!)
         let salt = Array(Data.randomBytes(length: 32)!)
         let deriver = try! Scrypt(password: password, salt: salt, dkLen: 32, N: 4096, r: 6, p: 1)
         let _ = try! deriver.calculate()
@@ -39,7 +39,7 @@ class scrypt_Tests: XCTestCase {
     func testReplacement() {
         for _ in 0 ..< 5 {
             //            N: Int = 4096, R: Int = 6, P: Int = 1
-            let password = "BANKEXFOUNDATION"
+            let password = "web3swift"
             let salt = Data.randomBytes(length: 32)!
             let derivedFromLibsodium = scrypt(password: password, salt: salt, length: 32, N: 4096, R: 6, P: 1)!.bytes
             let deriver = try! Scrypt(password: Array(password.data(using: .ascii)!), salt: Array(salt), dkLen: 32, N: 4096, r: 6, p: 1)
@@ -49,7 +49,7 @@ class scrypt_Tests: XCTestCase {
     }
     
     func testLibsodiumPerformance() {
-        let password = "BANKEXFOUNDATION"
+        let password = "web3swift"
         let salt = Data.randomBytes(length: 32)!
         self.measure {
             let _ = scrypt(password: password, salt: salt, length: 32, N: 4096, R: 6, P: 1)!.bytes
@@ -57,7 +57,7 @@ class scrypt_Tests: XCTestCase {
     }
     
     func testNativePerformance() {
-        let password = "BANKEXFOUNDATION"
+        let password = "web3swift"
         let salt = Data.randomBytes(length: 32)!
         let deriver = try! Scrypt(password: password.data(using: .ascii)!.bytes, salt: salt.bytes, dkLen: 32, N: 4096, r: 6, p: 1)
         self.measure {

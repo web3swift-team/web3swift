@@ -132,16 +132,20 @@ Here's a few use cases of our library:
 Create keystore and account with password.
 
 ```
-//TODO
+	let keystore = try! EthereumKeystoreV3(password: "changeme"); // generates a private key internally if node "privateKey" parameter supplied
+        let account = keystore!.addresses![0]
+        print(account)
+        let data = try! keystore!.serialize() // internally serializes to JSON
+        print(try! JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions(rawValue:0)))
+        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "changeme", account: account) // you should rarely use this and expose a key manually
 ```
 
 ### Initializing Ethereum address
 ```
 let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
-let constractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")
+let constractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b", ignoreChecksum: true)
 ```
-Ethereum addresses are checksum checked if they are not lowercased and always length checked
-
+Ethereum addresses are checksum checked if they are not lowercased or uppercased and always length checked
 
 ### Setting options
 
