@@ -71,6 +71,11 @@ class web3swift_local_node_Tests: XCTestCase {
         }
     }
 
+    func testGetNodeAccounts() {
+        let web3 = Web3.new(URL.init(string: "http://127.0.0.1:8545")!)!
+        guard case .success(let allAddresses) = web3.eth.getAccounts() else {return XCTFail()}
+        print(allAddresses)
+    }
 
 
 
