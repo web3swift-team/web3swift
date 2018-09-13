@@ -150,6 +150,7 @@
 		81C0FD052044A8AE00D82FAF /* Web3+Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF120440EB500D82FAF /* Web3+Protocols.swift */; };
 		81C0FD062044A8D100D82FAF /* TransactionSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF520440F9900D82FAF /* TransactionSigner.swift */; };
 		81C146F71FF274B200AA943E /* Web3+Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C146F61FF274B200AA943E /* Web3+Structures.swift */; };
+		81C456FE214A54D50091FF45 /* key.json in Resources */ = {isa = PBXBuildFile; fileRef = 8159C50F2135929700197B91 /* key.json */; };
 		81C5DA0E207254D000424CD6 /* ABIv2Elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C5DA0D207254D000424CD6 /* ABIv2Elements.swift */; };
 		81C5DA0F207254D000424CD6 /* ABIv2Elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C5DA0D207254D000424CD6 /* ABIv2Elements.swift */; };
 		81C5DA11207254F600424CD6 /* ABIv2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C5DA10207254F600424CD6 /* ABIv2.swift */; };
@@ -1009,6 +1010,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81C456FE214A54D50091FF45 /* key.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

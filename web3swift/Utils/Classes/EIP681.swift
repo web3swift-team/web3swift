@@ -144,6 +144,26 @@ extension Web3 {
                         } else if let val = BigUInt(value.stripHexPrefix(), radix: 16) {
                             nativeValue = val as AnyObject
                         }
+                    case .int(bits: _):
+                        if let val = BigInt(value, radix: 10) {
+                            nativeValue = val as AnyObject
+                        } else if let val = BigInt(value.stripHexPrefix(), radix: 16) {
+                            nativeValue = val as AnyObject
+                        }
+                    case .string:
+                        nativeValue = value as AnyObject
+                    case .dynamicBytes:
+                        if let val = Data.fromHex(value) {
+                            nativeValue = val as AnyObject
+                        } else if let val = value.data(using: .utf8) {
+                            nativeValue = val as AnyObject
+                        }
+                    case .bytes(length: _):
+                        if let val = Data.fromHex(value) {
+                            nativeValue = val as AnyObject
+                        } else if let val = value.data(using: .utf8) {
+                            nativeValue = val as AnyObject
+                        }
                     default:
                         continue
                     }
@@ -151,6 +171,8 @@ extension Web3 {
                         inputs.append(ABIv2.Element.InOut(name: String(inputNumber), type: inputType))
                         code.parameters.append(EIP681Code.EIP681Parameter(type: inputType, value: nativeValue!))
                         inputNumber = inputNumber + 1
+                    } else {
+                        return nil
                     }
                 } else {
                     switch comp.name {
