@@ -49,7 +49,7 @@ extension web3.web3contract {
          - important: This call is synchronous
          
          */
-        public func send(password: String = "BANKEXFOUNDATION", options: Web3Options? = nil, onBlock: String = "pending") -> Result<TransactionSendingResult, Web3Error> {
+        public func send(password: String = "web3swift", options: Web3Options? = nil, onBlock: String = "pending") -> Result<TransactionSendingResult, Web3Error> {
             do {
                 let result = try self.sendPromise(password: password, options: options, onBlock: onBlock).wait()
                 return Result(result)
@@ -199,7 +199,7 @@ extension web3.web3contract.TransactionIntermediate {
         return returnPromise
     }
     
-    public func sendPromise(password:String = "BANKEXFOUNDATION", options: Web3Options? = nil, onBlock: String = "pending") -> Promise<TransactionSendingResult>{
+    public func sendPromise(password:String = "web3swift", options: Web3Options? = nil, onBlock: String = "pending") -> Promise<TransactionSendingResult>{
         let queue = self.web3.requestDispatcher.queue
         return self.assemblePromise(options: options, onBlock: onBlock).then(on: queue) { transaction throws -> Promise<TransactionSendingResult> in
             guard let mergedOptions = Web3Options.merge(self.options, with: options) else {

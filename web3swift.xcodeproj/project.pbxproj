@@ -1498,7 +1498,7 @@
 				MODULEMAP_PRIVATE_FILE = "";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.bankexfoundation.web3swift-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.thematter.web3swift-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
@@ -1537,7 +1537,7 @@
 				MODULEMAP_PRIVATE_FILE = "";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.bankexfoundation.web3swift-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.thematter.web3swift-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
@@ -1613,7 +1613,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.bankexfoundation.web3swift-macOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.thematter.web3swift-macOS";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -1639,7 +1639,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.bankexfoundation.web3swift-macOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.thematter.web3swift-macOS";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -1658,7 +1658,7 @@
 				DEVELOPMENT_TEAM = 62V9CKQN89;
 				INFOPLIST_FILE = "web3swift-macOS_Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.bankexfoundation.web3swift-macOS-Tests";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.thematter.web3swift-macOS-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 4.0;
@@ -1676,7 +1676,7 @@
 				DEVELOPMENT_TEAM = 62V9CKQN89;
 				INFOPLIST_FILE = "web3swift-macOS_Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.bankexfoundation.web3swift-macOS-Tests";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.thematter.web3swift-macOS-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 4.0;

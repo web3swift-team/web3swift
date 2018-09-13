@@ -34,7 +34,7 @@ extension web3.Web3Wallet {
         }
     }
     
-    public func signTX(transaction:inout EthereumTransaction, account: EthereumAddress, password: String = "BANKEXFOUNDATION") -> Result<Bool, Web3Error> {
+    public func signTX(transaction:inout EthereumTransaction, account: EthereumAddress, password: String = "web3swift") -> Result<Bool, Web3Error> {
         do {
             guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {
                 return Result.failure(Web3Error.walletError)
@@ -50,7 +50,7 @@ extension web3.Web3Wallet {
         }
     }
     
-    public func signPersonalMessage(_ personalMessage: String, account: EthereumAddress, password: String = "BANKEXFOUNDATION") -> Result<Data, Web3Error> {
+    public func signPersonalMessage(_ personalMessage: String, account: EthereumAddress, password: String = "web3swift") -> Result<Data, Web3Error> {
         guard let data = Data.fromHex(personalMessage) else
         {
             return Result.failure(Web3Error.dataError)
@@ -58,7 +58,7 @@ extension web3.Web3Wallet {
         return self.signPersonalMessage(data, account: account, password: password)
     }
     
-    public func signPersonalMessage(_ personalMessage: Data, account: EthereumAddress, password: String = "BANKEXFOUNDATION") -> Result<Data, Web3Error> {
+    public func signPersonalMessage(_ personalMessage: Data, account: EthereumAddress, password: String = "web3swift") -> Result<Data, Web3Error> {
         do {
             guard let keystoreManager = self.web3.provider.attachedKeystoreManager else
             {

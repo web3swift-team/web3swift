@@ -11,13 +11,13 @@ import BigInt
 import PromiseKit
 
 extension web3.Personal {
-    func unlockAccountPromise(account: EthereumAddress, password:String = "BANKEXFOUNDATION", seconds: UInt64 = 300) -> Promise<Bool> {
+    func unlockAccountPromise(account: EthereumAddress, password:String = "web3swift", seconds: UInt64 = 300) -> Promise<Bool> {
         let addr = account.address
         return unlockAccountPromise(account: addr, password: password, seconds: seconds)
     }
     
     
-    func unlockAccountPromise(account: String, password:String = "BANKEXFOUNDATION", seconds: UInt64 = 300) -> Promise<Bool> {
+    func unlockAccountPromise(account: String, password:String = "web3swift", seconds: UInt64 = 300) -> Promise<Bool> {
         let queue = web3.requestDispatcher.queue
         do {
             if self.web3.provider.attachedKeystoreManager == nil {
