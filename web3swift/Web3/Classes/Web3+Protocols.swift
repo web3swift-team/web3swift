@@ -40,7 +40,7 @@ public enum Networks {
     case Kovan
     case Custom(networkID: BigUInt)
     
-    var name: String {
+    public var name: String {
         switch self {
         case .Rinkeby: return "rinkeby"
         case .Ropsten: return "ropsten"
@@ -50,7 +50,7 @@ public enum Networks {
         }
     }
     
-    var chainID: BigUInt {
+    public var chainID: BigUInt {
         switch self {
         case .Custom(let networkID): return networkID
         case .Mainnet: return BigUInt(1)
