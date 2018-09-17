@@ -116,6 +116,7 @@ extension Web3 {
             
             var code = EIP681Code(targetAddress)
             if chainIDString != nil {
+                chainIDString!.remove(at: chainIDString!.startIndex)
                 code.chainID = BigUInt(chainIDString!)
             }
             if tail == nil {
@@ -137,7 +138,13 @@ extension Web3 {
                     switch inputType {
                     case .address:
                         let val = EIP681Code.TargetAddress(value)
-                        nativeValue = val as AnyObject
+                        switch val {
+                        case .ethereumAddress(let ethereumAddress):
+                            nativeValue = ethereumAddress as AnyObject
+                        case .ensAddress(let ens):
+                            //TODO: - convert ens into ethereum
+                            nativeValue = ens as AnyObject
+                        }
                     case .uint(bits: _):
                         if let val = BigUInt(value, radix: 10) {
                             nativeValue = val as AnyObject
@@ -163,6 +170,15 @@ extension Web3 {
                             nativeValue = val as AnyObject
                         } else if let val = value.data(using: .utf8) {
                             nativeValue = val as AnyObject
+                        }
+                    case .bool:
+                        switch value {
+                        case "true","True","1":
+                            nativeValue = true as AnyObject
+                        case "false", "False", "0":
+                            nativeValue = false as AnyObject
+                        default:
+                            nativeValue = true as AnyObject
                         }
                     default:
                         continue
