@@ -9,18 +9,38 @@ The work for 2.0 release is about to start. Ideas for new more Swift idiomatic A
 [![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0x6394b37Cf80A7358b38068f0CA4760ad49983a1B)
 
+**web3swift** is your toolbelt for any kind iteractions with Ethereum network.
+
+### Features:
+
 - Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
 - Interaction with remote node via JSON RPC :thought_balloon:
 - Smart-contract ABI parsing :book:
   - ABI deconding (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
   - RLP encoding
 - Interactions (read/write to Smart contracts) :arrows_counterclockwise:
-- Local keystore management (geth compatible)
+- Local keystore management (`geth` compatible)
 - Literally following the standards:
   - [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) HD Wallets: Deterministic Wallet
   - [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases)
   - [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)
   - [EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md) (Replay attacks protection) *enforced!*
+
+### What you can do:
+
+**Account Managment:**
+- [x] Create Account
+- [x] Import Account
+- [x] Manage user's private keys through encrypted keystore abstractions
+
+**Trasactions operations:**
+- [x] Sign transactions
+- [x] Send transactions, call functions of smart-contracts, estimate gas costs
+- [x] Serialize and deserialize transactions and results to native Swift types
+- [x] Check transaction results and get receipt
+- [x] Parse event logs for transaction
+- [x] Convenience functions for chain state: block number, gas price
+- [x] Batched requests in concurrent mode, checks balances of 580 tokens (from the latest MyEtherWallet repo) over 3 seconds
 
 
 ## Check this out
@@ -39,36 +59,14 @@ The work for 2.0 release is about to start. Ideas for new more Swift idiomatic A
 - Requirements for password input on every transaction are indeed a design decision. Interface designers can save user passwords with the user's consent
 - Public function for private key export is exposed for user convenience, but marked as UNSAFE_ :) Normal workflow takes care of EIP155 compatibility and proper clearing of private key data from memory
 
-### Here it is
-[https://rinkeby.etherscan.io/tx/0xc6eca60ecac004a1501a4323a10edb7fa4cd1a0896675f6b51704c84dedad056](https://rinkeby.etherscan.io/tx/0xc6eca60ecac004a1501a4323a10edb7fa4cd1a0896675f6b51704c84dedad056)
-
-```
-Transaction
-Nonce: 35
-Gas price: 5000000000
-Gas limit: 21000
-To: 0x6394b37Cf80A7358b38068f0CA4760ad49983a1B
-Value: 1000000000000000
-Data: 0x
-v: 43
-r: 73059897783840535708732471549376620878882680550447969052675399628060606060727
-s: 12280625377431973240236065453692843538037349746280474092545114784968542260859
-Intrinsic chainID: Optional(4)
-Infered chainID: Optional(4)
-sender: Optional(web3swift.EthereumAddress(_address: "0x855adf524273c14b7260a188af0ae30e82e91959"))
-
-["id": 1514485925, "result": 0xc6eca60ecac004a1501a4323a10edb7fa4cd1a0896675f6b51704c84dedad056, "jsonrpc": 2.0]
-On Rinkeby TXid = 0xc6eca60ecac004a1501a4323a10edb7fa4cd1a0896675f6b51704c84dedad056
-```
-
 ## Example
 
 You can try it yourself by running the example project:
 
-- Clone the repo
-- `cd Example/web3swiftExample`
-- run `pod install` from the `Example/web3swiftExample` directory.
-- `open ./web3swiftExample.xcworkspace`
+- Clone the repo: `git clone https://github.com/matterinc/web3swift.git`
+- Movw to the repo: `cd web3swift/Example/web3swiftExample`
+- Install Dependecies: `pod install`
+- Open: `open ./web3swiftExample.xcworkspace`
 
 ## Requirements
 
@@ -92,9 +90,7 @@ Web3swift requires Swift 4.1 and iOS 9.0 or macOS 10.11 although we recommend to
 $ sudo gem install cocoapods
 ```
 
-
 To integrate web3swift into your Xcode project using CocoaPods, specify it in your `Podfile`:
-
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
@@ -102,7 +98,7 @@ platform :ios, '9.0'
 
 target '<Your Target Name>' do
     use_frameworks!
-    pod 'web3swift', '~> 1.1.5'
+    pod 'web3swift'
 end
 ```
 
@@ -111,18 +107,6 @@ Then, run the following command:
 ```bash
 $ pod install
 ```
-## Features
-
-- [x] Create Account
-- [x] Import Account
-- [x] Sign transactions
-- [x] Send transactions, call functions of smart-contracts, estimate gas costs
-- [x] Serialize and deserialize transactions and results to native Swift types
-- [x] Convenience functions for chain state: block number, gas price
-- [x] Check transaction results and get receipt
-- [x] Parse event logs for transaction
-- [x] Manage user's private keys through encrypted keystore abstractions
-- [x] Batched requests in concurrent mode, checks balances of 580 tokens (from the latest MyEtherWallet repo) over 3 seconds
 
 ## Getting started
 
@@ -262,7 +246,8 @@ If you are using `web3swift` in your app or know of an app that uses it, please 
 * [Ethereum & ERC20Tokens Wallet](https://itunes.apple.com/us/app/ethereum-erc20tokens-wallet/id1386738877?ls=1&mt=8)
 * [BankexWallet](https://github.com/BANKEX/Pay-iOS)
 * [GeoChain](https://github.com/awallish/GeoChain)
-* [YOUR APP CAN BE THERE (click me)](https://github.com/matterinc/web3swift/issues) :wink:
+* [TRX-Wallet](https://github.com/NewHorizonLabs/TRX-Wallet)
+* [YOUR APP CAN BE THERE (click me)](https://github.com/matterinc/web3swift/wiki/Apps-using-web3swift/_edit) :wink:
 
 If you've used this project in a live app, please let us know!
 
