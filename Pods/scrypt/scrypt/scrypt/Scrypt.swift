@@ -92,7 +92,7 @@ public struct Scrypt {
         let extraMemoryLength = 128 * r * N + 256 * r + 64
         var extraMemory = [UInt8](repeating: 0, count: extraMemoryLength)
         
-        let res = escrypt_kdf_nosse(UInt64(N), UInt32(r), UInt32(p), &B, B.count, &extraMemory, extraMemoryLength)
+        let res = partial_Scrypt(UInt64(N), UInt32(r), UInt32(p), &B, B.count, &extraMemory, extraMemoryLength)
         if res != 0 {
             throw Error.derivedKeyTooLong
         }

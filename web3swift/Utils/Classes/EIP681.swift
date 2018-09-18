@@ -187,9 +187,9 @@ extension Web3 {
                         }
                     case .bool:
                         switch value {
-                        case "true","True","1":
+                        case "true","True", "TRUE", "1":
                             nativeValue = true as AnyObject
-                        case "false", "False", "0":
+                        case "false", "False", "FALSE", "0":
                             nativeValue = false as AnyObject
                         default:
                             nativeValue = true as AnyObject

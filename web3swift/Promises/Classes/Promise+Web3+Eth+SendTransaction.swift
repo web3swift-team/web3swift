@@ -49,8 +49,5 @@ extension web3.Eth {
             }
             return returnPromise.promise
         }
-        
-
-        
     }
 }

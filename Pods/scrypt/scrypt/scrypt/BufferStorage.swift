@@ -125,12 +125,12 @@ final class BufferStorage<T>{
         self.ptr.ptr.advanced(by: subrange.lowerBound).initialize(from: newElements.ptr.ptr, count: subrange.count) // copy assign
     }
     
-    func replaceSubrange(_ subrange: CountableRange<Int>, with newElements: BufferStorage<T>) {
-        precondition(subrange.lowerBound >= 0, "Subrange lowerBound is negative")
-        precondition(subrange.upperBound <= self.capacity, "Subrange upper bound is out of range")
-        precondition(subrange.count <= newElements.capacity)
-        self.ptr.ptr.advanced(by: subrange.lowerBound).initialize(from: newElements.ptr.ptr, count: subrange.count) // copy assign
-    }
+//    func replaceSubrange(_ subrange: CountableRange<Int>, with newElements: BufferStorage<T>) {
+//        precondition(subrange.lowerBound >= 0, "Subrange lowerBound is negative")
+//        precondition(subrange.upperBound <= self.capacity, "Subrange upper bound is out of range")
+//        precondition(subrange.count <= newElements.capacity)
+//        self.ptr.ptr.advanced(by: subrange.lowerBound).initialize(from: newElements.ptr.ptr, count: subrange.count) // copy assign
+//    }
     
     func replaceSubrange(_ at: Index, with: T) {
         if at < self.capacity {

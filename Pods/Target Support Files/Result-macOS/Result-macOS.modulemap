@@ -1,0 +1,7 @@
+module Result {
+  umbrella header "Result-macOS-umbrella.h"
+  exclude header "Result-iOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

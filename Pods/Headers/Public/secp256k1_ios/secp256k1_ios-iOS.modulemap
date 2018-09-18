@@ -1,7 +1,1 @@
-module secp256k1_ios {
-  umbrella header "secp256k1_ios-iOS-umbrella.h"
-  exclude header "secp256k1_ios-macOS-umbrella.h"
-
-  export *
-  module * { export * }
-}
+/Users/alexvlasov/Blockchain/web3swift/web3swift/Pods/Target Support Files/secp256k1_ios-iOS/secp256k1_ios-iOS.modulemap
