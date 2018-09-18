@@ -122,17 +122,86 @@ class ERC20 {
         }
     }
     
-//    func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) -> TransactionIntermediate? {
-//
-//    }
-//
-//    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) -> TransactionIntermediate? {
-//
-//    }
-//
-//    func setAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress, newAmount: String) -> TransactionIntermediate? {
-//
-//    }
+    func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) -> Result<TransactionIntermediate, Web3Error> {
+        let contract = self.contract
+        var basicOptions = Web3Options()
+        basicOptions.from = from
+        basicOptions.to = self.address
+        
+        // get the decimals manually
+        let intermediate = contract.method("decimals", options: basicOptions)!
+        let callResult = intermediate.call(options: basicOptions, onBlock: "latest")
+        var decimals = BigUInt(0)
+        switch callResult {
+        case .success(let response):
+            guard let dec = response["0"], let decTyped = dec as? BigUInt else {
+                return Result.failure(Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals"))}
+            decimals = decTyped
+            break
+        case .failure(let error):
+            return Result.failure(error)
+        }
+        let intDecimals = Int(decimals)
+        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+            return Result.failure(Web3Error.inputError(desc: "Can not parse inputted amount"))
+        }
+        let intermediateToSend = contract.method("transfer", parameters: [to, value] as [AnyObject], options: basicOptions)!
+        return Result(intermediateToSend)
+    }
+
+    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) -> Result<TransactionIntermediate, Web3Error> {
+        let contract = self.contract
+        var basicOptions = Web3Options()
+        basicOptions.from = from
+        basicOptions.to = self.address
+        
+        // get the decimals manually
+        let intermediate = contract.method("decimals", options: basicOptions)!
+        let callResult = intermediate.call(options: basicOptions, onBlock: "latest")
+        var decimals = BigUInt(0)
+        switch callResult {
+        case .success(let response):
+            guard let dec = response["0"], let decTyped = dec as? BigUInt else {
+                return Result.failure(Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals"))}
+            decimals = decTyped
+            break
+        case .failure(let error):
+            return Result.failure(error)
+        }
+        let intDecimals = Int(decimals)
+        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+            return Result.failure(Web3Error.inputError(desc: "Can not parse inputted amount"))
+        }
+        let intermediateToSend = contract.method("transferFrom", parameters: [originalOwner, to, value] as [AnyObject], options: basicOptions)!
+        return Result(intermediateToSend)
+    }
+
+    func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) -> Result<TransactionIntermediate, Web3Error> {
+        let contract = self.contract
+        var basicOptions = Web3Options()
+        basicOptions.from = from
+        basicOptions.to = self.address
+        
+        // get the decimals manually
+        let intermediate = contract.method("setAllowance", options: basicOptions)!
+        let callResult = intermediate.call(options: basicOptions, onBlock: "latest")
+        var decimals = BigUInt(0)
+        switch callResult {
+        case .success(let response):
+            guard let dec = response["0"], let decTyped = dec as? BigUInt else {
+                return Result.failure(Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals"))}
+            decimals = decTyped
+            break
+        case .failure(let error):
+            return Result.failure(error)
+        }
+        let intDecimals = Int(decimals)
+        guard let value = Web3.Utils.parseToBigUInt(newAmount, decimals: intDecimals) else {
+            return Result.failure(Web3Error.inputError(desc: "Can not parse inputted amount"))
+        }
+        let intermediateToSend = contract.method("setAllowance", parameters: [to, value] as [AnyObject], options: basicOptions)!
+        return Result(intermediateToSend)
+    }
     
     
 }

@@ -1,0 +1,7 @@
+module PromiseKit {
+  umbrella header "PromiseKit.root-CorePromise-Foundation-umbrella.h"
+  exclude header "PromiseKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

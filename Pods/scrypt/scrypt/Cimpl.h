@@ -45,7 +45,7 @@
 #include <limits.h>
 
 int
-escrypt_kdf_nosse(uint64_t N, uint32_t _r, uint32_t _p, uint8_t *B, size_t B_size,
+partial_Scrypt(uint64_t N, uint32_t _r, uint32_t _p, uint8_t *B, size_t B_size,
                   uint8_t *memory, size_t memory_size);
 
 #endif /* SalsaCimpl_h */
