@@ -78,7 +78,7 @@ extension Web3 {
     
     public struct EIP681CodeParser {
 //        static var addressRegex = "^(pay-)?([0-9a-zA-Z]+)(@[0-9]+)?"
-        static var addressRegex = "^(pay-)?([0-9a-zA-Z]+)(@[0-9]+)?\\/?(.*)?$"
+        static var addressRegex = "^(pay-)?([0-9a-zA-Z.]+)(@[0-9]+)?\\/?(.*)?$"
         
         public static func parse(_ data: Data) -> EIP681Code? {
             guard let string = String(data: data, encoding: .utf8) else {return nil}
@@ -142,8 +142,22 @@ extension Web3 {
                         case .ethereumAddress(let ethereumAddress):
                             nativeValue = ethereumAddress as AnyObject
                         case .ensAddress(let ens):
-                            //TODO: - convert ens into ethereum
-                            nativeValue = ens as AnyObject
+                            let web = web3(provider: InfuraProvider(Networks.fromInt(Int(code.chainID ?? 1)) ?? Networks.Mainnet)!)
+                            var ensModel = ENS(web3: web)
+                            let resolver = ensModel.resolver(forDomain: ens)
+                            switch resolver {
+                            case .failure(_):
+                                nativeValue = ens as AnyObject
+                            case .success(var res):
+                                let address = res.addr(forDomain: ens)
+                                switch address {
+                                case .failure(_):
+                                    nativeValue = ens as AnyObject
+                                case .success(let res):
+                                    nativeValue = res as AnyObject
+                                }
+                            }
+                            
                         }
                     case .uint(bits: _):
                         if let val = BigUInt(value, radix: 10) {
@@ -194,8 +208,26 @@ extension Web3 {
                     switch comp.name {
                     case "value":
                         guard let value = comp.value else {return nil}
-                        guard let val = BigUInt(value, radix: 10) else {return nil}
-                        code.amount = val
+                        let splittedValue = value.split(separator: "e")
+                        if splittedValue.count <= 1 {
+                            guard let val = BigUInt(value, radix: 10) else {return nil }
+                            code.amount = val
+                        } else if splittedValue.count == 2 {
+                            guard let power = Double(splittedValue[1]) else { return nil }
+                            let splittedNumber = String(splittedValue[0]).replacingOccurrences(of: ",", with: ".").split(separator: ".")
+                            var a = BigUInt(pow(10, power))
+                            if splittedNumber.count == 1 {
+                                guard let number = BigUInt(splittedNumber[0], radix: 10) else { return nil }
+                                code.amount = number * a
+                            } else if splittedNumber.count == 2 {
+                                let stringNumber = String(splittedNumber[0]) + String(splittedNumber[1])
+                                let am = BigUInt(pow(10, Double(splittedNumber[1].count)))
+                                a = a / am
+                                guard let number = BigUInt(stringNumber, radix: 10) else { return nil }
+                                code.amount = number * a
+                            } else { return nil }
+                        } else { return nil }
+                        
                     case "gas":
                         guard let value = comp.value else {return nil}
                         guard let val = BigUInt(value, radix: 10) else {return nil}
