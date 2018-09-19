@@ -48,10 +48,59 @@ public struct ENS {
         }
     }
     
-    //TODO: -
+    public mutating func getAddress(_ domain: String) -> Result<EthereumAddress, Web3Error> {
+        let resolver = self.resolver(forDomain: domain)
+        switch resolver {
+        case .success(var resolver):
+            let isAddrSupports = resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.addr.hash())
+            switch  isAddrSupports{
+            case .success(let isSupported):
+                if isSupported {
+                    let result = resolver.addr(forDomain: domain)
+                    switch result {
+                    case .success(let address):
+                        return Result(address)
+                    case .failure(let error):
+                        return Result.failure(error)
+                    }
+                } else {
+                    return Result.failure(Web3Error.dataError)
+                }
+            case .failure(let error):
+                return Result.failure(error)
+            }
+        case .failure(let error):
+            return Result.failure(error)
+        }
+    }
+    
     /*
-     1. Write a function that allows map domain to the name
-     */
+        TODO: -
+    */
+//
+//    public func setAddress(domain: String, address: EthereumAddress, options: Web3Options? = nil) {
+//
+//    }
+//
+//    public func getPubkey(domain: String) -> Result<[String: String], Web3Error> {
+//
+//    }
+//
+//    public func setPubkey(domain: String, x: String, y: String, options: Web3Options? = nil) {
+//
+//    }
+//
+//    public func getContent(domain: String) -> Result<String, Web3Error> {
+//
+//    }
+//
+//    public func setContent(domain: String, hash: String, optioins: Web3Options? = nil) {
+//
+//    }
+//
+//    public func getMultihash(domain: String) -> String {
+//        
+//    }
 }
 
 public struct ResolverENS {
