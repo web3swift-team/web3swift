@@ -271,21 +271,10 @@ public struct EthereumTransaction: CustomStringConvertible {
         if (transaction.inferedChainID != nil && transaction.v >= BigUInt(37)) {
             transaction.chainID = inferedChainID
         }
-//        let hash = json["hash"] as? String
-//        if hash != nil {
-//            let calculatedHash = transaction.hash
-//            let receivedHash = Data.fromHex(hash!)
-//            if (receivedHash != calculatedHash) {
-//                print("hash mismatch, dat")
-//                print(String(describing: transaction))
-//                print(json)
-//                return nil
-//            }
-//        }
         return transaction
     }
     
-    static func fromRaw(_ raw: Data) -> EthereumTransaction? {
+    public static func fromRaw(_ raw: Data) -> EthereumTransaction? {
         guard let totalItem = RLP.decode(raw) else {return nil}
         guard let rlpItem = totalItem[0] else {return nil}
         switch rlpItem.count {

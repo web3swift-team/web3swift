@@ -1,4 +1,4 @@
-framework module BigInt {
+module BigInt {
   umbrella header "BigInt-umbrella.h"
 
   export *

@@ -15,15 +15,15 @@ extension web3.Eth {
         let queue = web3.requestDispatcher.queue
         do {
             guard let request = EthereumTransaction.createRequest(method: .call, transaction: transaction, onBlock: onBlock, options: options) else {
-                throw Web3Error.processingError("Transaction is invalid")
+                throw Web3Error.processingError(desc: "Transaction is invalid")
             }
             let rp = web3.dispatch(request)
             return rp.map(on: queue ) { response in
                 guard let value: Data = response.getValue() else {
                     if response.error != nil {
-                        throw Web3Error.nodeError(response.error!.message)
+                        throw Web3Error.nodeError(desc: response.error!.message)
                     }
-                    throw Web3Error.nodeError("Invalid value from Ethereum node")
+                    throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
                 }
                 return value
             }

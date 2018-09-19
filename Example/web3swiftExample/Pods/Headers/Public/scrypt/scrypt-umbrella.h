@@ -1,0 +1,1 @@
+/Users/alexvlasov/Blockchain/web3swift/web3swift/Example/web3swiftExample/Pods/Target Support Files/scrypt/scrypt-umbrella.h

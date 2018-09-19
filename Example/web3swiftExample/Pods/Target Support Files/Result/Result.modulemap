@@ -1,4 +1,4 @@
-framework module Result {
+module Result {
   umbrella header "Result-umbrella.h"
 
   export *

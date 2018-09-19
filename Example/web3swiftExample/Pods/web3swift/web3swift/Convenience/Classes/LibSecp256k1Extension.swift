@@ -1,3 +1,11 @@
+//
+//  LibSecp256k1Extension.swift
+//  web3swift-iOS
+//
+//  Created by Alexander Vlasov.
+//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//
+
 
 import Foundation
 import secp256k1_ios
@@ -19,7 +27,7 @@ public struct SECP256K1 {
 extension SECP256K1 {
     static var context = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_SIGN|SECP256K1_CONTEXT_VERIFY))
     
-    static func signForRecovery(hash: Data, privateKey: Data, useExtraEntropy: Bool = true) -> (serializedSignature:Data?, rawSignature: Data?) {
+    static func signForRecovery(hash: Data, privateKey: Data, useExtraEntropy: Bool = false) -> (serializedSignature:Data?, rawSignature: Data?) {
         if (hash.count != 32 || privateKey.count != 32) {return (nil, nil)}
         if !SECP256K1.verifyPrivateKey(privateKey: privateKey) {
             return (nil, nil)
@@ -31,7 +39,7 @@ extension SECP256K1 {
             guard let truePublicKey = SECP256K1.privateKeyToPublicKey(privateKey: privateKey) else {continue}
             guard let recoveredPublicKey = SECP256K1.recoverPublicKey(hash: hash, recoverableSignature: &recoverableSignature) else {continue}
             if Data(toByteArray(truePublicKey.data)) != Data(toByteArray(recoveredPublicKey.data)) {
-                print("Didn't recover correctly!")
+//                print("Didn't recover correctly!")
                 continue
             }
             guard let serializedSignature = SECP256K1.serializeSignature(recoverableSignature: &recoverableSignature) else {continue}
@@ -221,7 +229,6 @@ extension SECP256K1 {
             }
         }
         if result == 0 {
-            print("Failed to sign!")
             return nil
         }
         return recoverableSignature
@@ -266,7 +273,14 @@ extension SECP256K1 {
         let bytes = signatureData.bytes
         let r = Array(bytes[0..<32])
         let s = Array(bytes[32..<64])
-        return UnmarshaledSignature(v: bytes[64], r: r, s: s)
+        var v = bytes[64]
+        if v >= 27 {
+            v = v - 27
+        }
+        if v > 3 {
+            return nil
+        }
+        return UnmarshaledSignature(v: v, r: r, s: s)
     }
     
     static func marshalSignature(v: UInt8, r: [UInt8], s: [UInt8]) -> Data? {
@@ -278,7 +292,7 @@ extension SECP256K1 {
     }
     
     static func marshalSignature(v: Data, r: Data, s: Data) -> Data? {
-        guard r.count == 32, s.count == 32 else {return nil}
+        guard r.count == 32, s.count == 32, v.count == 1 else {return nil}
         var completeSignature = Data(r)
         completeSignature.append(s)
         completeSignature.append(v)
