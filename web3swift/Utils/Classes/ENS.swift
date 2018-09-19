@@ -75,7 +75,7 @@ public struct ENS {
     }
     
     /*
-        TODO: -
+        TODO:
     */
 //
 //    public func setAddress(domain: String, address: EthereumAddress, options: Web3Options? = nil) {
@@ -138,12 +138,12 @@ public struct ResolverENS {
         self.resolverAddress = resolverAddress
     }
     
-    mutating func supportsInterface(interfaceID: Data) -> Result<Bool, Web3Error> {
+    mutating public func supportsInterface(interfaceID: Data) -> Result<Bool, Web3Error> {
         return supportsInterface(interfaceID: interfaceID.toHexString())
     }
     
     //MARK: - returns true if the contract supports given interface
-    mutating func supportsInterface(interfaceID: String) -> Result<Bool, Web3Error> {
+    mutating public func supportsInterface(interfaceID: String) -> Result<Bool, Web3Error> {
         let options = Web3Options.defaultOptions()
         guard let transaction = self.resolverContract.method("supportsInterface", parameters: [interfaceID as AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError) }
         let result = transaction.call(options: options)
@@ -157,7 +157,7 @@ public struct ResolverENS {
     }
     
     //MARK: - returns address for the given domain at given resolver
-    mutating func addr(forDomain domain: String) -> Result<EthereumAddress, Web3Error> {
+    mutating public func addr(forDomain domain: String) -> Result<EthereumAddress, Web3Error> {
         guard let nameHash = NameHash.nameHash(domain) else { return Result.failure(Web3Error.dataError) }
         let options = Web3Options.defaultOptions()
         guard let transaction = self.resolverContract.method("addr", parameters: [nameHash as AnyObject], options: options) else  { return Result.failure(Web3Error.dataError) }
@@ -171,7 +171,7 @@ public struct ResolverENS {
     }
     
     //MARK: - returns corresponding ENS to the requested node
-    mutating func name(node: String) -> Result<String, Web3Error> {
+    mutating public func name(node: String) -> Result<String, Web3Error> {
         let options = Web3Options.defaultOptions()
         guard let transaction = self.resolverContract.method("name", parameters: [node.lowercased() as AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError)}
         let result = transaction.call(options: options)
@@ -185,7 +185,7 @@ public struct ResolverENS {
     }
     
     //MARK: - returns ABI in the requested encodings
-    mutating func ABI(node: String, contentType: BigUInt) -> Result<(BigUInt, Data), Web3Error> {
+    mutating public func ABI(node: String, contentType: BigUInt) -> Result<(BigUInt, Data), Web3Error> {
         let options = Web3Options.defaultOptions()
         guard let transaction = self.resolverContract.method("ABI", parameters: [node, contentType] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError) }
         let result = transaction.call(options: options)
@@ -199,6 +199,23 @@ public struct ResolverENS {
         }
     }
     
-    //TODO: - func pubkey()
+    mutating public func pubkey(node: String) -> Result<Point, Web3Error> {
+        let options = Web3Options.defaultOptions()
+        guard let transaction = self.resolverContract.method("pubkey", parameters: [node as AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError) }
+        let result = transaction.call(options: options)
+        switch result {
+        case .success(let value):
+            guard let x = value["x"] as? String else { return Result.failure(Web3Error.dataError) }
+            guard let y = value["y"] as? String else { return Result.failure(Web3Error.dataError) }
+            return Result(Point(x: x, y: y))
+        case .failure(let error):
+            return Result.failure(error)
+        }
+    }
+}
+
+public struct Point {
+    let x: String
+    let y: String
 }
 
