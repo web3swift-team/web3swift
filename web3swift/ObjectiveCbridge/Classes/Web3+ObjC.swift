@@ -22,7 +22,7 @@ public final class _ObjCWeb3: NSObject {
     
     public static func new(providerURL: NSURL, error: NSErrorPointer) -> _ObjCweb3? {
         guard let web3 = Web3.new(providerURL as URL) else {
-            error?.pointee = Web3Error.inputError("Wrong URL") as NSError
+            error?.pointee = Web3Error.inputError(desc: "Wrong URL") as NSError
             return nil
         }
         return _ObjCweb3(web3: web3)
