@@ -66,9 +66,56 @@ class web3swift_ENS_Tests: XCTestCase {
         }
     }
     
-    func testName() {
-        //TODO
+    func testOwner() {
+        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+        var ens = ENS(web3: web)
+        let domain = "somename.eth"
+        guard case .success(let result) = ens.owner(node: domain) else { XCTAssert(false); return }
+        XCTAssertEqual("0xc67247454e720328714c4e17bec7640572657bee", result.address.lowercased())
     }
+    
+    func testTTL() {
+        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+        var ens = ENS(web3: web)
+        let domain = "somename.eth"
+        guard case .success(let result) = ens.ttl(node: domain) else { XCTAssert(false); return }
+        print(result)
+    }
+    
+    func testGetAddress() {
+        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+        var ens = ENS(web3: web)
+        let domain = "somename.eth"
+        guard case .success(let address) = ens.getAddress(domain) else { XCTAssert(false); return }
+        XCTAssertEqual(address.address.lowercased(), "0x3487acfb1479ad1df6c0eb56ae743d34897798ac")
+    }
+    
+    func testGetPubkey() {
+        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+        var ens = ENS(web3: web)
+        let domain = "somename.eth"
+        guard case .success(let point) = ens.getPubkey(domain: domain) else { XCTAssert(false); return }
+        XCTAssert(point.x == "0x0000000000000000000000000000000000000000000000000000000000000000")
+        XCTAssert(point.y == "0x0000000000000000000000000000000000000000000000000000000000000000")
+    }
+    
+    func testSetOwner() {
+        let web = web3(provider: InfuraProvider(Networks.Rinkeby)!)
+        let pk = Data.fromHex("0xc606bf70d7cbf90e8eb75050c810a4a749f8dce645f5afbe70635d1f0ebdb13b")!
+        let keystore = (try! EthereumKeystoreV3(privateKey: pk))!
+        let manager = KeystoreManager([keystore])
+        web.addKeystoreManager(manager)
+        var ens = ENS(web3: web)
+        let node = "somename.test"
+        var options = Web3Options.defaultOptions()
+        options.from = EthereumAddress("0x7792e5D9FcC8cc23D312B9062F492a7f3E9f2f98")!
+        options.value = 0
+        ens.setOwner(node: node, owner: EthereumAddress("0x7792e5D9FcC8cc23D312B9062F492a7f3E9f2f98")!, options: options)
+    }
+    
+    
+    
+    
     
     
     
