@@ -99,22 +99,8 @@ class web3swift_ENS_Tests: XCTestCase {
         XCTAssert(point.y == "0x0000000000000000000000000000000000000000000000000000000000000000")
     }
     
-    func testSetOwner() {
-        let web = web3(provider: InfuraProvider(Networks.Rinkeby)!)
-        let pk = Data.fromHex("0xc606bf70d7cbf90e8eb75050c810a4a749f8dce645f5afbe70635d1f0ebdb13b")!
-        let keystore = (try! EthereumKeystoreV3(privateKey: pk))!
-        let manager = KeystoreManager([keystore])
-        web.addKeystoreManager(manager)
-        var ens = ENS(web3: web)
-        let node = "somename.test"
-        var options = Web3Options.defaultOptions()
-        options.from = EthereumAddress("0x7792e5D9FcC8cc23D312B9062F492a7f3E9f2f98")!
-        options.value = 0
-        ens.setOwner(node: node, owner: EthereumAddress("0x7792e5D9FcC8cc23D312B9062F492a7f3E9f2f98")!, options: options)
-    }
     
-    
-    
+
     
     
     

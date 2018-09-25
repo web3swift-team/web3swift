@@ -36,6 +36,110 @@ public struct ENS {
         return Web3Options.defaultOptions()
     }()
     
+    //MARK: - Convenience methods
+    public mutating func getAddress(_ domain: String) -> Result<EthereumAddress, Web3Error> {
+        let resolver = self.resolver(forDomain: domain)
+        switch resolver {
+        case .success(var resolver):
+            let isAddrSupports = resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.addr.hash())
+            switch  isAddrSupports{
+            case .success(let isSupported):
+                if isSupported {
+                    return resolver.addr(forDomain: domain)
+                } else {
+                    return Result.failure(Web3Error.dataError)
+                }
+            case .failure(let error):
+                return Result.failure(error)
+            }
+        case .failure(let error):
+            return Result.failure(error)
+        }
+    }
+    
+    
+    public mutating func setAddress(domain: String, address: EthereumAddress, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error>{
+        let resolver = self.resolver(forDomain: domain)
+        switch resolver {
+        case .success(var resolver):
+            let isSetAddrSupported = resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.addr.hash())
+            switch isSetAddrSupported {
+            case .success(let value):
+                if value {
+                    return resolver.setAddr(node: domain, address: address, options: options, password: password)
+                } else {
+                    return Result.failure(Web3Error.dataError)
+                }
+            case .failure(let error):
+                return Result.failure(error)
+            }
+        case .failure(let error):
+            return Result.failure(error)
+        }
+    }
+    
+    public mutating func getPubkey(domain: String) -> Result<PublicKey, Web3Error> {
+        let resolver = self.resolver(forDomain: domain)
+        switch resolver {
+        case .success(var resolver):
+            let isPubkeySupports = resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.pubkey.hash())
+            switch isPubkeySupports {
+            case .success(let value):
+                if value {
+                    return resolver.pubkey(node: domain)
+                } else {
+                    return Result.failure(Web3Error.dataError)
+                }
+            case .failure(let error):
+                return Result.failure(error)
+            }
+            
+        case .failure(let error):
+            return Result.failure(error)
+        }
+    }
+    
+    mutating public func setPubkey(domain: String, x: String, y: String, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
+        let resolver = self.resolver(forDomain: domain)
+        switch resolver {
+        case .success(var value):
+            return value.setPubkey(node: domain, x: x, y: y, options: options, password: password)
+        case .failure(let error):
+            return Result.failure(error)
+        }
+    }
+    
+    mutating public func getContent(domain: String) -> Result<String, Web3Error> {
+        let resolver = self.resolver(forDomain: domain)
+        switch resolver {
+        case .success(var value):
+            return value.content(node: domain)
+        case .failure(let error):
+            return Result.failure(error)
+        }
+    }
+    
+    public mutating func setContent(domain: String, hash: String, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
+        let resolver = self.resolver(forDomain: domain)
+        switch resolver {
+        case .success(var value):
+            return value.setContent(node: domain, hash: hash, options: options, password: password)
+        case .failure(let error):
+            return Result.failure(error)
+        }
+    }
+    
+    
+    public mutating func getMultihash(domain: String) -> Result<Data, Web3Error> {
+        let resolver = self.resolver(forDomain: domain)
+        switch resolver {
+        case .success(var value):
+            return value.multihash(node: domain)
+        case .failure(let error):
+            return Result.failure(error)
+        }
+    }
+    
     
     //MARK: - Returns resolver for the given domain
     mutating func resolver(forDomain domain: String) -> Result<ResolverENS, Web3Error> {
@@ -97,7 +201,8 @@ public struct ENS {
     mutating func setSubnodeOwner(node: String, label: String, owner: EthereumAddress, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
         let options = getOptions(options)
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
-        guard let transaction = self.registryContract.method("setSubnodeOwner", parameters: [nameHash, label, owner] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError)}
+        guard let labelHash = NameHash.nameHash(label) else { return Result.failure(Web3Error.dataError) }
+        guard let transaction = self.registryContract.method("setSubnodeOwner", parameters: [nameHash, labelHash, owner] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError)}
         let result = password == nil ? transaction.send() : transaction.send(password: password!, options: options)
         switch result {
         case .success(let value):
@@ -135,111 +240,6 @@ public struct ENS {
             return Result(value)
         }
     }
-    
-    //MARK: - Convenience methods
-    
-    
-    public mutating func getAddress(_ domain: String) -> Result<EthereumAddress, Web3Error> {
-        let resolver = self.resolver(forDomain: domain)
-        switch resolver {
-        case .success(var resolver):
-            let isAddrSupports = resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.addr.hash())
-            switch  isAddrSupports{
-            case .success(let isSupported):
-                if isSupported {
-                    return resolver.addr(forDomain: domain)
-                } else {
-                    return Result.failure(Web3Error.dataError)
-                }
-            case .failure(let error):
-                return Result.failure(error)
-            }
-        case .failure(let error):
-            return Result.failure(error)
-        }
-    }
-    
-    
-    public mutating func setAddress(domain: String, address: EthereumAddress, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error>{
-        let resolver = self.resolver(forDomain: domain)
-        switch resolver {
-        case .success(var resolver):
-            let isSetAddrSupported = resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.setAddr.hash())
-            switch isSetAddrSupported {
-            case .success(let value):
-                if value {
-                    return resolver.setAddr(node: domain, address: address, options: options, password: password)
-                } else {
-                    return Result.failure(Web3Error.dataError)
-                }
-            case .failure(let error):
-                return Result.failure(error)
-            }
-        case .failure(let error):
-            return Result.failure(error)
-        }
-    }
-
-    public mutating func getPubkey(domain: String) -> Result<Point, Web3Error> {
-        let resolver = self.resolver(forDomain: domain)
-        switch resolver {
-        case .success(var resolver):
-            let isPubkeySupports = resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.pubkey.hash())
-            switch isPubkeySupports {
-            case .success(let value):
-                if value {
-                    return resolver.pubkey(node: domain)
-                } else {
-                    return Result.failure(Web3Error.dataError)
-                }
-            case .failure(let error):
-                return Result.failure(error)
-            }
-            
-        case .failure(let error):
-            return Result.failure(error)
-        }
-    }
-
-    mutating public func setPubkey(domain: String, x: String, y: String, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
-        let resolver = self.resolver(forDomain: domain)
-        switch resolver {
-        case .success(var value):
-            return value.setPubkey(node: domain, x: x, y: y, options: options, password: password)
-        case .failure(let error):
-            return Result.failure(error)
-        }
-    }
-    
-    mutating public func getContent(domain: String) -> Result<String, Web3Error> {
-        let resolver = self.resolver(forDomain: domain)
-        switch resolver {
-        case .success(var value):
-            return value.content(node: domain)
-        case .failure(let error):
-            return Result.failure(error)
-        }
-    }
-    
-
-    mutating public func setContent(domain: String, hash: String, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
-        let resolver = self.resolver(forDomain: domain)
-        switch resolver {
-        case .success(var value):
-            return value.setContent(node: domain, hash: hash, options: options, password: password)
-        case .failure(let error):
-            return Result.failure(error)
-        }
-    }
-    
-    /*
-     TODO:
-     */
-    
-//
-//    public func getMultihash(domain: String) -> String {
-//        
-//    }
     
     private func getOptions(_ options: Web3Options) -> Web3Options {
         var options = options

@@ -19,8 +19,9 @@ public struct ResolverENS {
         case name
         case ABI
         case pubkey
-        case setAddr
         case content
+        case multihash
+        case text
         
         func hash() -> String {
             switch self {
@@ -34,8 +35,10 @@ public struct ResolverENS {
                 return "0xc8690233"
             case .content:
                 return "0xd8389dc5"
-            case .setAddr:
-                return "0x01ffc9a7"
+            case .multihash:
+                return "0xe89401a1"
+            case .text:
+                return "0x59d1d43c"
             }
         }
     }
@@ -91,12 +94,7 @@ public struct ResolverENS {
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError)}
         guard let transaction = self.resolverContract.method("setAddr", parameters: [nameHash, address] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError) }
         let result = password == nil ? transaction.send() : transaction.send(password: password!, options: options)
-        switch result {
-        case .failure(let error):
-            return Result.failure(error)
-        case .success(let value):
-            return Result(value)
-        }
+        return result
     }
     
     //MARK: - returns corresponding ENS to the requested node
@@ -117,12 +115,7 @@ public struct ResolverENS {
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.resolverContract.method("setName", parameters: [nameHash, name] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError) }
         let result = password == nil ? transaction.send() : transaction.send(password: password!, options: options)
-        switch result {
-        case .success(let value):
-            return Result(value)
-        case .failure(let error):
-            return Result.failure(error)
-        }
+        return result
     }
     
     //MARK: - returns ABI in the requested encodings
@@ -145,16 +138,11 @@ public struct ResolverENS {
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.resolverContract.method("setABI", parameters: [nameHash, contentType, data] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError) }
         let result = password == nil ? transaction.send() : transaction.send(password: password!, options: options)
-        switch result {
-        case .success(let value):
-            return Result(value)
-        case .failure(let error):
-            return Result.failure(error)
-        }
+        return result
     }
     
     //MARK: - returns x and y coordinates
-    mutating public func pubkey(node: String) -> Result<Point, Web3Error> {
+    mutating public func pubkey(node: String) -> Result<PublicKey, Web3Error> {
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.resolverContract.method("pubkey", parameters: [nameHash as AnyObject], options: defaultOptions) else { return Result.failure(Web3Error.transactionSerializationError) }
         let result = transaction.call(options: defaultOptions)
@@ -163,7 +151,7 @@ public struct ResolverENS {
             print(value)
             guard let x = value["x"] as? Data else { return Result.failure(Web3Error.dataError) }
             guard let y = value["y"] as? Data else { return Result.failure(Web3Error.dataError) }
-            return Result(Point(x: "0x" + x.toHexString(), y: "0x" + y.toHexString()))
+            return Result(PublicKey(x: "0x" + x.toHexString(), y: "0x" + y.toHexString()))
         case .failure(let error):
             return Result.failure(error)
         }
@@ -174,12 +162,7 @@ public struct ResolverENS {
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.resolverContract.method("getPubkey", parameters: [nameHash, x, y] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError) }
         let result = password == nil ? transaction.send() : transaction.send(password: password!, options: options)
-        switch result {
-        case .success(let value):
-            return Result(value)
-        case .failure(let error):
-            return Result.failure(error)
-        }
+        return result
     }
     
     mutating func content(node: String) -> Result<String, Web3Error> {
@@ -195,19 +178,54 @@ public struct ResolverENS {
         }
     }
     
-    mutating func setContent(node: String, hash: String, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error>{
+    mutating func setContent(node: String, hash: String, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
         let options = getOptions(options)
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.resolverContract.method("setContent", parameters: [nameHash, hash] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError) }
         let result = password == nil ? transaction.send() : transaction.send(password: password!, options: options)
+        return result
+    }
+    //function multihash(bytes32 node) public view returns (bytes)
+    mutating public func multihash(node: String) -> Result<Data, Web3Error> {
+        guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.transactionSerializationError) }
+        guard let transaction = self.resolverContract.method("multihash", parameters: [nameHash] as [AnyObject], options: self.defaultOptions) else { return Result.failure(Web3Error.dataError) }
+        let result = transaction.call(options: defaultOptions)
         switch result {
         case .success(let value):
-            return Result(value)
+            guard let hash = value["0"] as? Data else { return Result.failure(Web3Error.dataError) }
+            return Result(hash)
         case .failure(let error):
             return Result.failure(error)
         }
     }
-    
+    //function setMultihash(bytes32 node, bytes hash) public only_owner(node)
+    mutating public func setMultihash(node: String, hash: Data, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
+        guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.transactionSerializationError) }
+        let options = getOptions(options)
+        guard let transaction = self.resolverContract.method("setMultihash", parameters: [nameHash, hash] as [AnyObject], options: options) else { return Result.failure(Web3Error.dataError) }
+        let result = password == nil ? transaction.send() : transaction.send(password: password!, options: options)
+        return result
+    }
+    //function text(bytes32 node, string key) public view returns (string)
+    mutating public func text(node: String, key: String) -> Result<String, Web3Error> {
+        guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
+        guard let transaction = self.resolverContract.method("text", parameters: [nameHash, key] as [AnyObject], options: defaultOptions) else { return Result.failure(Web3Error.transactionSerializationError) }
+        let result = transaction.call(options: defaultOptions)
+        switch result {
+        case .failure(let error):
+            return Result.failure(error)
+        case .success(let value):
+            guard let ans = value["0"] as? String else { return Result.failure(Web3Error.dataError) }
+            return Result(ans)
+        }
+    }
+    //function setText(bytes32 node, string key, string value) public only_owner(node)
+    mutating public func setText(node: String, key: String, value: String, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
+        guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
+        guard let transaction = self.resolverContract.method("setText", parameters: [nameHash, key, value] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError) }
+        let result = password == nil ? transaction.send() : transaction.send(password: password!, options: options)
+        return result
+    }
     private func getOptions(_ options: Web3Options) -> Web3Options {
         var options = options
         options.to = self.resolverAddress
@@ -215,7 +233,7 @@ public struct ResolverENS {
     }
 }
 
-public struct Point {
+public struct PublicKey {
     let x: String
     let y: String
 }
