@@ -44,7 +44,7 @@ The work for 2.0 release is about to start. Ideas for new more Swift idiomatic A
 - [x] Comprehensive Unit and Integration Test Coverage
 - [x] [Complete Documentation](https://web3swift.github.io/web3swift)
 
-## Design Desisions
+## Design Decisions
 
 - Not every JSON RPC function is exposed yet, and priority is given to the ones required for mobile devices
 - Functionality was focused on serializing and signing transactions locally on the device to send raw transactions to Ethereum network
