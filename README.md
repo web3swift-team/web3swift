@@ -143,7 +143,7 @@ If you believe you have identified a security vulnerability with web3swift, you 
 
 ## Donations
 
-The [Matter](https://github.com/orgs/matterinc/people) are charged with open-sorсe and do not require money for using their web3swift lib.
+[The Matters](https://github.com/orgs/matterinc/people) are charged with open-sorсe and do not require money for using their web3swift lib.
 We want to continue to do everything we can to move the needle forward.
 If you use any of our libraries for work, see if your employers would be interested in donating. Any amount you can donate today to help us reach our goal would be greatly appreciated.
 
