@@ -122,7 +122,7 @@ switch convenienceTransferResult {
 }
 ```
 
-### Get gas price
+### Get Transaction Gas Price
 
 ```swift
 let web3Main = Web3.InfuraMainnetWeb3()
@@ -130,13 +130,13 @@ let gasPriceResult = web3Main.eth.getGasPrice()
 guard case .success(let gasPrice) = gasPriceResult else {return}
 ```
 
-### Serialize & deserialize transactions
+### Serialize And Deserialize transactions
 
 
-### Get result
+### Get Result
 
 
 ### Get Block number
 
 
-### Get gas price
+### Get Block Gas Price
