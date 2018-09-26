@@ -147,7 +147,7 @@ If you believe you have identified a security vulnerability with web3swift, you 
 We want to continue to do everything we can to move the needle forward.
 If you use any of our libraries for work, see if your employers would be interested in donating. Any amount you can donate today to help us reach our goal would be greatly appreciated.
 
-//TODO: - Donate
+Our Ether wallet address: 0xe22b8979739d724343bd002f9f432f5990879901
 
 ## License
 
