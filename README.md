@@ -139,7 +139,7 @@ Petr Korolev, [@skywinder](https://github.com/skywinder)
 
 ### Security Disclosure
 
-If you believe you have identified a security vulnerability with web3swift, you should report it as soon as possible via email to [Alex Vlasov](alex.m.vlasov@gmail.com). Please do not post it to a public issue tracker.
+If you believe you have identified a security vulnerability with web3swift, you should report it as soon as possible via email to [Alex Vlasov](https://github.com/shamatar) alex.m.vlasov@gmail.com. Please do not post it to a public issue tracker.
 
 ## Donations
 
