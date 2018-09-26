@@ -1,4 +1,6 @@
-## Usage
+# Usage
+
+## Account Management
 
 ### Create Account
 
@@ -76,6 +78,8 @@ guard case .success(let bkxBalance) = bkxBalanceResult, let bal = bkxBalance["0"
 print("BKX token balance = " + String(bal))
 ```
 
+## Transactions Operations
+
 ### Prepare Transaction
 
 #### Setting Transaction Options
@@ -135,6 +139,8 @@ guard case .success(let gasPrice) = gasPriceResult else {return}
 
 ### Get Result
 
+
+## Chain state
 
 ### Get Block number
 
