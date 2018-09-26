@@ -17,10 +17,10 @@ The work for 2.0 release is about to start. Ideas for new more Swift idiomatic A
 - [Migration Guides](#migration-guides)
 - [Communication](#communication)
 - [Installation](#installation)
-- [Usage](https://github.com/matterinc/web3swift/blob/master/Documentation/Usage.md)
-	- **Account Management -** [Create Account](https://github.com/matterinc/web3swift/blob/master/Documentation/Usage.md#create-account), [Import Account](https://github.com/matterinc/web3swift/blob/master/Documentation/Usage.md#import-account), [Manage Keystore](https://github.com/matterinc/web3swift/blob/master/Documentation/Usage.md#manage-keystore), [Ethereum Address](https://github.com/matterinc/web3swift/blob/master/Documentation/Usage.md#ethereum-address), [Get Balance](https://github.com/matterinc/web3swift/blob/master/Documentation/Usage.md#get-balance)
-	- **Transactions Operations -** [Prepare Transaction](https://github.com/matterinc/web3swift/blob/master/Documentation/Usage.md#prepare-transaction), [Send Transaction](https://github.com/matterinc/web3swift/blob/master/Documentation/Usage.md#send-transaction), [Get gas price](https://github.com/matterinc/web3swift/blob/master/Documentation/Usage.md#transaction-gasprice), [Serialize & deserialize transactions](https://github.com/matterinc/web3swift/blob/master/Documentation/Usage.md#serialize-deserialize-transactions), [Get result](https://github.com/matterinc/web3swift/blob/master/Documentation/Usage.md#get-result)
-	- **Chain State -** [Get Block number](https://github.com/matterinc/web3swift/blob/master/Documentation/Usage.md#get-block-number), [Get gas price](https://github.com/matterinc/web3swift/blob/master/Documentation/Usage.md#block-gasprice)
+- [Usage](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md)
+	- **Account Management -** [Create Account](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#create-account), [Import Account](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#import-account), [Manage Keystore](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#manage-keystore), [Ethereum Address](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#ethereum-address), [Get Balance](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#get-balance)
+	- **Transactions Operations -** [Prepare Transaction](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#prepare-transaction), [Send Transaction](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#send-transaction), [Get gas price](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#transaction-gasprice), [Serialize & deserialize transactions](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#serialize-deserialize-transactions), [Get result](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#get-result)
+	- **Chain State -** [Get Block number](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#get-block-number), [Get gas price](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#block-gasprice)
 - [Example Project](#example-project)
 - [Credits](#credits)
 - [Donations](#donations)
@@ -37,10 +37,10 @@ The work for 2.0 release is about to start. Ideas for new more Swift idiomatic A
 - [x] Local keystore management (`geth` compatible)
 - [x] Batched requests in concurrent mode
 - [x] Literally following the standards:
-	- [x] [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) HD Wallets: Deterministic Wallet
-	- [x] [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases)
-	- [x] [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)
-	- [x] [EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md) (Replay attacks protection) *enforced!*
+	- [x] [BIP32](https://github.com/bitcoin/bips/blob/feature/readmeImprovement/bip-0032.mediawiki) HD Wallets: Deterministic Wallet
+	- [x] [BIP39](https://github.com/bitcoin/bips/blob/feature/readmeImprovement/bip-0039.mediawiki) (Seed phrases)
+	- [x] [BIP44](https://github.com/bitcoin/bips/blob/feature/readmeImprovement/bip-0044.mediawiki) (Key generation prefixes)
+	- [x] [EIP-155](https://github.com/ethereum/EIPs/blob/feature/readmeImprovement/EIPS/eip-155.md) (Replay attacks protection) *enforced!*
 - [x] Comprehensive Unit and Integration Test Coverage
 - [x] [Complete Documentation](https://web3swift.github.io/web3swift)
 
@@ -59,7 +59,7 @@ The work for 2.0 release is about to start. Ideas for new more Swift idiomatic A
 
 ## Migration Guides
 
-- [web3swift 2.0 Migration Guide](https://github.com/matterinc/web3swift/blob/master/Documentation/web3swift%202.0%20Migration%20Guide.md)
+- [web3swift 2.0 Migration Guide](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/web3swift%202.0%20Migration%20Guide.md)
 
 ## Communication
 
@@ -151,4 +151,4 @@ If you use any of our libraries for work, see if your employers would be interes
 
 ## License
 
-web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/matterinc/web3swift/blob/master/LICENSE) for details.
+web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/LICENSE) for details.
