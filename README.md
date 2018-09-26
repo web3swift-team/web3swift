@@ -149,6 +149,8 @@ If you use any of our libraries for work, see if your employers would be interes
 
 Our Ether wallet address: 0xe22b8979739d724343bd002f9f432f5990879901
 
+![Donate](http://qrcoder.ru/code/?0xe22b8979739d724343bd002f9f432f5990879901&4&0)
+
 ## License
 
 web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/LICENSE) for details.
