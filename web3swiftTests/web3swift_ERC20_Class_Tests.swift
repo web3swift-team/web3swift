@@ -29,10 +29,10 @@ class web3swift_ERC20_Class_Tests: XCTestCase {
         let web3 = Web3.InfuraMainnetWeb3()
         let SALTtokenAddress = EthereumAddress("0x4156D3342D5c385a87D264F90653733592000581")!
         let erc20token = ERC20.init(web3: web3, provider: web3.provider, address: SALTtokenAddress)
-        let userAddress = EthereumAddress("0x6394b37cf80a7358b38068f0ca4760ad49983a1b")!
+        let userAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         guard case .success(let balance) = erc20token.getBalance(account: userAddress) else {return XCTFail()}
         guard case .success(let allowance) = erc20token.getAllowance(originalOwner: userAddress, delegate: userAddress) else {return XCTFail()}
-        XCTAssert(String(balance) == "28986212")
+        XCTAssert(String(balance) == "0")
         XCTAssert(allowance == 0)
     }
 }

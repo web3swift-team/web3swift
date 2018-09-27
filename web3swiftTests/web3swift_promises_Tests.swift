@@ -17,7 +17,7 @@ class web3swift_promises_Tests: XCTestCase {
     func testGetBalancePromise() {
         do {
             let web3 = Web3.InfuraMainnetWeb3()
-            let balance = try web3.eth.getBalancePromise(address: "0x6394b37Cf80A7358b38068f0CA4760ad49983a1B").wait()
+            let balance = try web3.eth.getBalancePromise(address: "0xe22b8979739D724343bd002F9f432F5990879901").wait()
             print(balance)
         } catch {
             print(error)
@@ -38,7 +38,7 @@ class web3swift_promises_Tests: XCTestCase {
     func testEstimateGasPromise() {
         do {
             let web3 = Web3.InfuraMainnetWeb3()
-            let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+            let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")
             let tempKeystore = try! EthereumKeystoreV3(password: "")
             let keystoreManager = KeystoreManager([tempKeystore!])
             web3.addKeystoreManager(keystoreManager)
@@ -64,7 +64,7 @@ class web3swift_promises_Tests: XCTestCase {
             let keystoreManager = KeystoreManager.init([keystoreV3])
             web3Rinkeby.addKeystoreManager(keystoreManager)
             guard case .success(let gasPriceRinkeby) = web3Rinkeby.eth.getGasPrice() else {return}
-            let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+            let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
             guard let intermediate = web3Rinkeby.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
             var options = Web3Options.defaultOptions()
             options.from = keystoreV3.addresses?.first
@@ -80,8 +80,8 @@ class web3swift_promises_Tests: XCTestCase {
     func testERC20tokenBalancePromise() {
         do {
             let web3 = Web3.InfuraMainnetWeb3()
-            let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!, abiVersion: 2)
-            let addressOfUser = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+            let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress("0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1")!, abiVersion: 2)
+            let addressOfUser = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
             let tokenBalance = try contract!.method("balanceOf", parameters: [addressOfUser] as [AnyObject], options: nil)!.callPromise(options: nil).wait()
             guard let bal = tokenBalance["0"] as? BigUInt else {return XCTFail()}
             print(String(bal))
