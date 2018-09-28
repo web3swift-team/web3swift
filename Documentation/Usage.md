@@ -297,7 +297,10 @@ print("w3s token balance = " + String(bal))
 
 ## Transactions Operations
 
-#### Web3Options
+
+### Prepare Transaction
+
+#### The class created to bound provider
 
 ```swift
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
@@ -447,7 +450,16 @@ public class web3: Web3OptionsInheritable {
 }
 ```
 
-### Prepare Transaction
+#### Getting Contract By Address 
+
+```swift
+func contract(for address: String, web3: web3) -> web3.web3contract? {
+    guard let ethAddress = EthereumAddress(address) else {
+        return nil
+    }
+    return web3.contract(Web3.Utils.erc20ABI, at: ethAddress)
+}
+```
 
 #### Setting Transaction Options
 
@@ -466,7 +478,7 @@ options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
 #### Preparing Transaction For Sending Ether
 
 ```swift
-public func prepareTransactionForSendingEther(destinationAddressString: String,
+func prepareTransactionForSendingEther(destinationAddressString: String,
                                                   amountString: String,
                                                   gasLimit: BigUInt,
                                                   completion: @escaping (Result<TransactionIntermediate>) -> Void) {
@@ -537,10 +549,10 @@ public func prepareTransactionForSendingEther(destinationAddressString: String,
 }
 ```
 
-#### Preparing Transaction For Sending ERC-20 tokens
+#### Preparing Transaction For Sending ERC-20 Tokens
 
 ```swift
-public func prepareTransactionForSendingERC(destinationAddressString: String,
+func prepareTransactionForSendingERC(destinationAddressString: String,
                                             amountString: String,
                                             gasLimit: BigUInt,
                                             tokenAddress token: String,
@@ -623,7 +635,7 @@ public func prepareTransactionForSendingERC(destinationAddressString: String,
 #### Preparing Transaction For Sending To Some Contract
 
 ```swift
-public func prepareTransactionToContract(data: [AnyObject],
+func prepareTransactionToContract(data: [AnyObject],
                                          contractAbi: String,
                                          contractAddress: String,
                                          method: String,
@@ -668,31 +680,60 @@ public func prepareTransactionToContract(data: [AnyObject],
 
 ### Send Transaction 
 
-#### Sending ETH
+#### Sending Tokens
 
 ```swift
-let web3Rinkeby = Web3.InfuraRinkebyWeb3()
-web3Rinkeby.addKeystoreManager(bip32keystoreManager) // attach a keystore if you want to sign locally. Otherwise unsigned request will be sent to remote node
-options.from = bip32ks?.addresses?.first! // specify from what address you want to send it
-intermediateSend = web3Rinkeby.contract(Web3.Utils.coldWalletABI, at: coldWalletAddress, abiVersion: 2)!.method(options: options)! // an address with a private key attached in not different from any other address, just has very simple ABI
-let sendResultBip32 = intermediateSend.send(password: "changeme")
+func sendToken(transaction: TransactionIntermediate,
+                      with password: String? = "YOURPASSWORD",
+                      options: Web3Options? = nil,
+                      completion: @escaping (Result<TransactionSendingResult>) -> Void) {
+    DispatchQueue.global(qos: .userInitiated).async {
+        let result = transaction.send(password: password ?? "YOURPASSWORD",
+                                      options: options)
+        if let error = result.error {
+            DispatchQueue.main.async {
+                completion(Result.Error(error))
+            }
+            return
+        }
+        guard let value = result.value else {
+            DispatchQueue.main.async {
+                completion(Result.Error(SendErrors.emptyResult))
+            }
+            return
+        }
+        DispatchQueue.main.async {
+            completion(Result.Success(value))
+        }
+    }
+}
 ```
 
-#### Sending ERC20
+#### Sending To Contract
 ```swift
-var convenienceTransferOptions = Web3Options.defaultOptions()
-convenienceTransferOptions.gasPrice = gasPriceRinkeby
-let convenienceTokenTransfer = web3Rinkeby.eth.sendERC20tokensWithNaturalUnits(tokenAddress: EthereumAddress("0xa407dd0cbc9f9d20cdbd557686625e586c85b20a")!, from: (ks?.addresses?.first!)!, to: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!, amount: "0.0001", options: convenienceTransferOptions) // there are also convenience functions to send ETH and ERC20 under the .eth structure
-let gasEstimateResult = convenienceTokenTransfer!.estimateGas(options: nil)
-guard case .success(let gasEstimate) = gasEstimateResult else {return}
-convenienceTransferOptions.gasLimit = gasEstimate
-let convenienceTransferResult = convenienceTokenTransfer!.send(password: "changeme", options: convenienceTransferOptions)
-switch convenienceTransferResult {
-    case .success(let res):
-        print("Token transfer successful")
-        print(res)
-    case .failure(let error):
-        print(error)
+public func sendToContract(transaction: TransactionIntermediate,
+                           with password: String? = "YOURPASSWORD",
+                           options: Web3Options? = nil,
+                           completion: @escaping (Result<TransactionSendingResult>) -> Void) {
+    DispatchQueue.global(qos: .userInitiated).async {
+        let result = transaction.send(password: password ?? "YOURPASSWORD",
+                                      options: transaction.options)
+        if let error = result.error {
+            DispatchQueue.main.async {
+                completion(Result.Error(error))
+            }
+            return
+        }
+        guard let value = result.value else {
+            DispatchQueue.main.async {
+                completion(Result.Error(SendErrors.emptyResult))
+            }
+            return
+        }
+        DispatchQueue.main.async {
+            completion(Result.Success(value))
+        }
+    }
 }
 ```
 
@@ -703,12 +744,6 @@ let web3Main = Web3.InfuraMainnetWeb3()
 let gasPriceResult = web3Main.eth.getGasPrice()
 guard case .success(let gasPrice) = gasPriceResult else {return}
 ```
-
-### Serialize And Deserialize transactions
-
-
-### Get Result
-
 
 ## Chain state
 
