@@ -275,7 +275,7 @@ Ethereum addresses are checksum checked if they are not lowercased or uppercased
 #### Getting ETH balance
 
 ```swift
-let address = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")!
+let address = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
 let web3Main = Web3.InfuraMainnetWeb3()
 let balanceResult = web3Main.eth.getBalance(address)
 guard case .success(let balance) = balanceResult else {return}
@@ -283,11 +283,16 @@ guard case .success(let balance) = balanceResult else {return}
 
 #### Getting ERC20 token balance
 ```swift
-let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")! // BKX token on Ethereum mainnet
+let contractAddress = EthereumAddress("0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1")! // w3s token on Ethereum mainnet
 let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2)! // utilize precompiled ERC20 ABI for your concenience
-guard let bkxBalanceResult = contract.method("balanceOf", parameters: [coldWalletAddress] as [AnyObject], options: options)?.call(options: nil) else {return} // encode parameters for transaction
-guard case .success(let bkxBalance) = bkxBalanceResult, let bal = bkxBalance["0"] as? BigUInt else {return} // bkxBalance is [String: Any], and parameters are enumerated as "0", "1", etc in order of being returned. If returned parameter has a name in ABI, it is also duplicated
-print("BKX token balance = " + String(bal))
+guard let w3sBalanceResult = contract.method(
+                                             "balanceOf",
+					     parameters: [coldWalletAddress] as [AnyObject],
+					     options: options
+					     )?.call(options: nil)
+					     else {return} // encode parameters for transaction
+guard case .success(let w3sBalance) = w3sBalanceResult, let bal = w3sBalance["0"] as? BigUInt else {return} // w3sBalance is [String: Any], and parameters are enumerated as "0", "1", etc in order of being returned. If returned parameter has a name in ABI, it is also duplicated
+print("w3s token balance = " + String(bal))
 ```
 
 ## Transactions Operations
