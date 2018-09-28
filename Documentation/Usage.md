@@ -4,20 +4,157 @@
 
 ### Create Account
 
+#### Create Account With Private Key
 ```swift
-    // Create keystore and account with password.
+    public func createWalletWithPrivateKey(withName: String?,
+                                           password: String,
+                                           completion: @escaping (KeyWalletModel?, Error?) -> Void)
+    {
+        guard let newWallet = try? EthereumKeystoreV3(password: password) else {
+            completion(nil, WalletSavingError.couldNotCreateKeystore)
+            return
+        }
+        guard let wallet = newWallet, wallet.addresses?.count == 1 else {
+            completion(nil, WalletSavingError.couldNotCreateWalletWithAddress)
+            return
+        }
+        guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
+            completion(nil, WalletSavingError.couldNotGetKeyData)
+            return
+        }
+        guard let address = wallet.addresses?.first?.address else {
+            completion(nil, WalletSavingError.couldNotCreateAddress)
+            return
+        }
+        let walletModel = KeyWalletModel(address: address,
+	                                 data: keyData,
+					 name: withName ?? "",
+					 isHD: false)
+        completion(walletModel, nil)
+    }
+    	
+```
+
+#### Create Account With Mnemonics Phrase
+```swift
+    func generateMnemonics(bitsOfEntropy: Int) -> String? {
+        guard let mnemonics = try? BIP39.generateMnemonics(bitsOfEntropy: bitsOfEntropy),
+            let unwrapped = mnemonics else {
+                return nil
+        }
+        return unwrapped
+    }
     
-	let keystore = try! EthereumKeystoreV3(password: "changeme"); // generates a private key internally if node "privateKey" parameter supplied
-        let account = keystore!.addresses![0]
-        print(account)
+    func createHDWallet(withName name: String,
+                        password: String,
+			completion: @escaping (KeyWalletModel?, Error?) -> Void)
+    {
+    
+    	guard let mnemonics = keysService.generateMnemonics(bitsOfEntropy: 128) else {
+	    completion(nil, WalletSavingError.couldNotGenerateMnemonics)
+            return
+	}
 	
-        let data = try! keystore!.serialize() // internally serializes to JSON
-        print(try! JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions(rawValue:0)))
-        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "changeme", account: account) // you should rarely use this and expose a key manually	
+	guard let keystore = try? BIP32Keystore(
+	                                        mnemonics: mnemonics,
+                                                password: password,
+                                                mnemonicsPassword: "",
+                                                language: .english
+						),
+						let wallet = keystore else { 
+	    completion(nil, WalletSavingError.couldNotCreateKeystore)
+	    return 
+	}
+        guard let address = wallet.addresses?.first?.address else {
+            completion(nil, WalletSavingError.couldNotCreateAddress)
+            return
+        }
+        guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
+            completion(nil, WalletSavingError.couldNotGetKeyData)
+            return
+        }
+        let walletModel = KeyWalletModel(address: address,
+					 data: keyData,
+					 name: name,
+					 isHD: true)
+        completion(walletModel, nil)
+    }	
 ```
 
 ### Import Account
 
+#### Import Account With Private Key
+```swift
+    public func addWalletWithPrivateKey(withName: String?,
+                                           key: String,
+                                    	   password: String,
+                                    	   completion: @escaping (KeyWalletModel?, Error?) -> Void)
+    {
+        let text = key.trimmingCharacters(in: .whitespacesAndNewlines)
+	
+        guard let data = Data.fromHex(text) else {
+            completion(nil, WalletSavingError.wrongKey)
+            return
+        }
+        
+        guard let newWallet = try? EthereumKeystoreV3(privateKey: data, password: password) else {
+            completion(nil, WalletSavingError.couldNotSaveTheWallet)
+            return
+        }
+        
+        guard let wallet = newWallet, wallet.addresses?.count == 1 else {
+            completion(nil, WalletSavingError.couldNotCreateWalletWithAddress)
+            return
+        }
+        guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
+            completion(nil, WalletSavingError.couldNotGetKeyData)
+            return
+        }
+        guard let address = newWallet?.addresses?.first?.address else {
+            completion(nil, WalletSavingError.couldNotCreateAddress)
+            return
+        }
+        let walletModel = KeyWalletModel(address: address,
+					 data: keyData,
+					 name: withName ?? "",
+					 isHD: false)
+        completion(walletModel, nil)
+    }
+    	
+```
+
+#### Import Account With Mnemonics Phrase
+```swift
+    func addHDWallet(withName name: String,
+    		           password: String,
+			   mnemonics: String,
+			   completion: @escaping (KeyWalletModel?, Error?) -> Void)
+    {
+        guard let keystore = try? BIP32Keystore(
+	                                        mnemonics: mnemonics,
+                                                password: password,
+                                                mnemonicsPassword: "",
+                                                language: .english
+						),
+						let wallet = keystore else { 
+	    completion(nil, WalletSavingError.couldNotCreateKeystore)
+	    return 
+	}
+        guard let address = wallet.addresses?.first?.address else {
+            completion(nil, WalletSavingError.couldNotCreateAddress)
+            return
+        }
+        guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
+            completion(nil, WalletSavingError.couldNotGetKeyData)
+            return
+        }
+        let walletModel = KeyWalletModel(address: address,
+					 data: keyData,
+					 name: name,
+					 isHD: true)
+        completion(walletModel, nil)
+    }	
+```
 
 ### Manage Keystore
 
