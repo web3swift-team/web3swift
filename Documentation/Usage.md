@@ -297,6 +297,156 @@ print("w3s token balance = " + String(bal))
 
 ## Transactions Operations
 
+#### Web3Options
+
+```swift
+/// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
+public class web3: Web3OptionsInheritable {
+    public var provider : Web3Provider
+    public var options : Web3Options = Web3Options.defaultOptions()
+    public var defaultBlock = "latest"
+    public var requestDispatcher: JSONRPCrequestDispatcher
+    
+    /// Add a provider request to the dispatch queue.
+    public func dispatch(_ request: JSONRPCrequest) -> Promise<JSONRPCresponse> {
+        return self.requestDispatcher.addToQueue(request: request)
+    }
+
+    /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
+    public init(provider prov: Web3Provider, queue: OperationQueue? = nil, requestDispatcher: JSONRPCrequestDispatcher? = nil) {
+        provider = prov        
+        if requestDispatcher == nil {
+            self.requestDispatcher = JSONRPCrequestDispatcher(provider: provider, queue: DispatchQueue.global(qos: .userInteractive), policy: .Batch(32))
+        } else {
+            self.requestDispatcher = requestDispatcher!
+        }
+    }
+    
+    /// Keystore manager can be bound to Web3 instance. If some manager is bound all further account related functions, such
+    /// as account listing, transaction signing, etc. are done locally using private keys and accounts found in a manager.
+    public func addKeystoreManager(_ manager: KeystoreManager?) {
+        self.provider.attachedKeystoreManager = manager
+    }
+    
+    var ethInstance: web3.Eth?
+    
+    /// Public web3.eth.* namespace.
+    public var eth: web3.Eth {
+        if (self.ethInstance != nil) {
+            return self.ethInstance!
+        }
+        self.ethInstance = web3.Eth(provider : self.provider, web3: self)
+        return self.ethInstance!
+    }
+    
+    public class Eth:Web3OptionsInheritable {
+        var provider:Web3Provider
+//        weak var web3: web3?
+        var web3: web3
+        public var options: Web3Options {
+            return self.web3.options
+        }
+        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+            provider = prov
+            web3 = web3instance
+        }
+    }
+    
+    var personalInstance: web3.Personal?
+    
+    /// Public web3.personal.* namespace.
+    public var personal: web3.Personal {
+        if (self.personalInstance != nil) {
+            return self.personalInstance!
+        }
+        self.personalInstance = web3.Personal(provider : self.provider, web3: self)
+        return self.personalInstance!
+    }
+    
+    public class Personal:Web3OptionsInheritable {
+        var provider:Web3Provider
+        //        weak var web3: web3?
+        var web3: web3
+        public var options: Web3Options {
+            return self.web3.options
+        }
+        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+            provider = prov
+            web3 = web3instance
+        }
+    }
+
+    var walletInstance: web3.Web3Wallet?
+    
+    /// Public web3.wallet.* namespace.
+    public var wallet: web3.Web3Wallet {
+        if (self.walletInstance != nil) {
+            return self.walletInstance!
+        }
+        self.walletInstance = web3.Web3Wallet(provider : self.provider, web3: self)
+        return self.walletInstance!
+    }
+    
+    public class Web3Wallet {
+        var provider:Web3Provider
+//        weak var web3: web3?
+        var web3: web3
+        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+            provider = prov
+            web3 = web3instance
+        }
+    }
+    
+    var browserFunctionsInstance: web3.BrowserFunctions?
+    
+    /// Public web3.browserFunctions.* namespace.
+    public var browserFunctions: web3.BrowserFunctions {
+        if (self.browserFunctionsInstance != nil) {
+            return self.browserFunctionsInstance!
+        }
+        self.browserFunctionsInstance = web3.BrowserFunctions(provider : self.provider, web3: self)
+        return self.browserFunctionsInstance!
+    }
+    
+    public class BrowserFunctions:Web3OptionsInheritable {
+        var provider:Web3Provider
+        //        weak var web3: web3?
+        var web3: web3
+        public var options: Web3Options {
+            return self.web3.options
+        }
+        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+            provider = prov
+            web3 = web3instance
+        }
+    }
+    
+    var erc721Instance: web3.ERC721?
+    
+    /// Public web3.browserFunctions.* namespace.
+    public var erc721: web3.ERC721 {
+        if (self.erc721Instance != nil) {
+            return self.erc721Instance!
+        }
+        self.erc721Instance = web3.ERC721(provider : self.provider, web3: self)
+        return self.erc721Instance!
+    }
+    
+    public class ERC721: Web3OptionsInheritable {
+        var provider:Web3Provider
+        //        weak var web3: web3?
+        var web3: web3
+        public var options: Web3Options {
+            return self.web3.options
+        }
+        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+            provider = prov
+            web3 = web3instance
+        }
+    }
+}
+```
+
 ### Prepare Transaction
 
 #### Setting Transaction Options
@@ -311,6 +461,209 @@ var options = Web3Options.defaultOptions()
 options.gasPrice = gasPrice
 options.gasLimit = gasLimit
 options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
+```
+
+#### Preparing Transaction For Sending Ether
+
+```swift
+public func prepareTransactionForSendingEther(destinationAddressString: String,
+                                                  amountString: String,
+                                                  gasLimit: BigUInt,
+                                                  completion: @escaping (Result<TransactionIntermediate>) -> Void) {
+    DispatchQueue.global(qos: .userInitiated).async {
+        guard let destinationEthAddress = EthereumAddress(destinationAddressString) else {
+    	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.invalidDestinationAddress))
+	    }
+	    return
+    	}
+        guard let amount = Web3.Utils.parseToBigUInt(amountString, units: .eth) else {
+	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.invalidAmountFormat))
+	    }
+	    return
+        }
+        guard let selectedKey = KeysService().selectedWallet()?.address else {
+	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.noAvailableKeys))
+	    }
+	    return
+        }
+
+
+        let web3 = web3swift.web3(provider: InfuraProvider(CurrentNetwork.currentNetwork ?? Networks.Mainnet)!)
+        web3.addKeystoreManager(KeysService().keystoreManager())
+
+        let ethAddressFrom = EthereumAddress(selectedKey)
+        var options = Web3Options.defaultOptions()
+        options.from = ethAddressFrom
+        options.value = BigUInt(amount)
+	
+        guard let contract = web3.contract(Web3.Utils.coldWalletABI, at: destinationEthAddress) else {
+	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.contractLoadingError))
+	    }
+	    return
+        }
+
+        guard let estimatedGas = contract.method(options: options)?.estimateGas(options: nil).value else {
+	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.retrievingEstimatedGasError))
+	    }
+	    return
+        }
+        options.gasLimit = estimatedGas
+	
+        guard let gasPrice = web3.eth.getGasPrice().value else {
+	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.retrievingGasPriceError))
+	    }
+	    return
+        }
+        options.gasPrice = gasPrice
+	
+        guard let transaction = contract.method(options: options) else {
+	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.createTransactionIssue))
+	    }
+	    return
+        }
+
+        DispatchQueue.main.async {
+	    completion(Result.Success(transaction))
+        }
+
+    }
+}
+```
+
+#### Preparing Transaction For Sending ERC-20 tokens
+
+```swift
+public func prepareTransactionForSendingERC(destinationAddressString: String,
+                                            amountString: String,
+                                            gasLimit: BigUInt,
+                                            tokenAddress token: String,
+                                            completion: @escaping (Result<TransactionIntermediate>) -> Void) {
+    DispatchQueue.global(qos: .userInitiated).async {
+        guard let destinationEthAddress = EthereumAddress(destinationAddressString) else {
+            DispatchQueue.main.async {
+                completion(Result.Error(SendErrors.invalidDestinationAddress))
+            }
+            return
+        }
+        guard let amount = Web3.Utils.parseToBigUInt(amountString, units: .eth) else {
+            DispatchQueue.main.async {
+                completion(Result.Error(SendErrors.invalidAmountFormat))
+            }
+            return
+        }
+        
+        let web3 = web3swift.web3(provider: InfuraProvider(CurrentNetwork.currentNetwork ?? Networks.Mainnet)!)
+        web3.addKeystoreManager(KeysService().keystoreManager())
+        
+        let contract = self.contract(for: token, web3: web3)
+        var options = Web3Options.defaultOptions()
+        
+        guard let tokenAddress = EthereumAddress(token),
+            let fromAddress = Web3SwiftService.currentAddress,
+            let intermediate = web3.eth.sendERC20tokensWithNaturalUnits(
+                tokenAddress: tokenAddress,
+                from: fromAddress,
+                to: destinationEthAddress,
+                amount: amountString) else {
+                    DispatchQueue.main.async {
+                        completion(Result.Error(SendErrors.createTransactionIssue))
+                    }
+                    return
+        }
+        DispatchQueue.main.async {
+            completion(Result.Success(intermediate))
+        }
+        
+        //MARK: - Just to check that everything is all right
+        guard let _ = contract?.method(options: options)?.estimateGas(options: options).value else {
+            DispatchQueue.main.async {
+                completion(Result.Error(SendErrors.retrievingEstimatedGasError))
+            }
+            return
+        }
+        guard let gasPrice = web3.eth.getGasPrice().value else {
+            DispatchQueue.main.async {
+                completion(Result.Error(SendErrors.retrievingGasPriceError))
+            }
+            return
+        }
+        
+        options.from = Web3SwiftService.currentAddress
+        options.gasPrice = gasPrice
+        //options.gasLimit = estimatedGas
+        options.value = 0
+        options.to = EthereumAddress(token)
+        let parameters = [destinationEthAddress,
+                          amount] as [Any]
+        guard let transaction = contract?.method("transfer",
+                                                 parameters: parameters as [AnyObject],
+                                                 options: options) else {
+                                                    DispatchQueue.main.async {
+                                                        completion(Result.Error(SendErrors.createTransactionIssue))
+                                                    }
+                                                    
+                                                    return
+        }
+        DispatchQueue.main.async {
+            completion(Result.Success(transaction))
+        }
+        
+        return
+    }
+}
+```
+
+#### Preparing Transaction For Sending To Some Contract
+
+```swift
+public func prepareTransactionToContract(data: [AnyObject],
+                                         contractAbi: String,
+                                         contractAddress: String,
+                                         method: String,
+                                         predefinedOptions: Web3Options? = nil,
+                                         completion: @escaping (Result<TransactionIntermediate>) -> Void) {
+    let wallet = TransactionsService.keyservice.selectedWallet()
+    guard let address = wallet?.address else { return }
+    let ethAddressFrom = EthereumAddress(address)
+    let ethContractAddress = EthereumAddress(contractAddress)!
+    
+    let web3 = CurrentWeb.currentWeb ?? Web3.InfuraMainnetWeb3()
+    web3.addKeystoreManager(TransactionsService.keyservice.keystoreManager())
+    var options = predefinedOptions ?? Web3Options.defaultOptions()
+    options.from = ethAddressFrom
+    options.to = ethContractAddress
+    options.value = options.value ?? 0
+    guard let contract = web3.contract(contractAbi,
+                                       at: ethContractAddress,
+                                       abiVersion: 2) else {
+                                        return
+                                            DispatchQueue.main.async {
+                                                completion(Result.Error(TransactionErrors.init(rawValue: "Can not create a contract with given abi and address.")!))
+                                        }
+    }
+    guard let gasPrice = web3.eth.getGasPrice().value else { return }
+    options.gasPrice = predefinedOptions?.gasPrice ?? gasPrice
+    guard let transaction = contract.method(method,
+                                            parameters: data,
+                                            options: options) else { return }
+    guard case .success(let estimate) = transaction.estimateGas(options: options) else {
+        DispatchQueue.main.async {
+            completion(Result.Error(TransactionErrors.PreparingError))
+        }
+        return
+    }
+    print("estimated cost: \(estimate)")
+    DispatchQueue.main.async {
+        completion(Result.Success(transaction))
+    }
+}
 ```
 
 ### Send Transaction 
