@@ -297,7 +297,6 @@ print("w3s token balance = " + String(bal))
 
 ## Transactions Operations
 
-
 ### Prepare Transaction
 
 #### The class created to bound provider
@@ -459,20 +458,6 @@ func contract(for address: String, web3: web3) -> web3.web3contract? {
     }
     return web3.contract(Web3.Utils.erc20ABI, at: ethAddress)
 }
-```
-
-#### Setting Transaction Options
-
-```swift
-var options = Web3Options.defaultOptions()
-    // public var to: EthereumAddress? = nil - to what address transaction is aimed
-    // public var from: EthereumAddress? = nil - form what address it should be sent (either signed locally or on the node)
-    // public var gasLimit: BigUInt? = BigUInt(90000) - default gas limit
-    // public var gasPrice: BigUInt? = BigUInt(5000000000) - default gas price, quite small
-    // public var value: BigUInt? = BigUInt(0) - amount of WEI sent along the transaction
-options.gasPrice = gasPrice
-options.gasLimit = gasLimit
-options.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
 ```
 
 #### Preparing Transaction For Sending Ether
@@ -735,14 +720,6 @@ public func sendToContract(transaction: TransactionIntermediate,
         }
     }
 }
-```
-
-### Get Transaction Gas Price
-
-```swift
-let web3Main = Web3.InfuraMainnetWeb3()
-let gasPriceResult = web3Main.eth.getGasPrice()
-guard case .success(let gasPrice) = gasPriceResult else {return}
 ```
 
 ## Chain state
