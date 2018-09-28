@@ -594,5 +594,3 @@ func getBlockNumber(completion: @escaping (String?) -> Void) {
     }
 }
 ```
-
-### Get Block Gas Price
