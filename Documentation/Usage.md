@@ -17,8 +17,8 @@
 				       name: crModel.name ?? "",
 				       isHD: crModel.isHD)
 	    return model
+        }
     }
-}
 
     extension KeyWalletModel: Equatable {
         static func == (lhs: KeyWalletModel, rhs: KeyWalletModel) -> Bool {
