@@ -36,7 +36,7 @@ struct HDKey {
 
 #### Create Account With Private Key
 ```swift
-public func createWalletWithPrivateKey(withName: String?,
+func createWalletWithPrivateKey(withName: String?,
 				       password: String,
 				       completion: @escaping (KeyWalletModel?, Error?) -> Void)
 {
@@ -115,7 +115,7 @@ func createHDWallet(withName name: String?,
 
 #### Import Account With Private Key
 ```swift
-public func addWalletWithPrivateKey(withName: String?,
+func addWalletWithPrivateKey(withName: String?,
 				    key: String,
 				    password: String,
 				    completion: @escaping (KeyWalletModel?, Error?) -> Void)
@@ -299,156 +299,6 @@ print("w3s token balance = " + String(bal))
 
 ### Prepare Transaction
 
-#### The class created to bound provider
-
-```swift
-/// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
-public class web3: Web3OptionsInheritable {
-    public var provider : Web3Provider
-    public var options : Web3Options = Web3Options.defaultOptions()
-    public var defaultBlock = "latest"
-    public var requestDispatcher: JSONRPCrequestDispatcher
-    
-    /// Add a provider request to the dispatch queue.
-    public func dispatch(_ request: JSONRPCrequest) -> Promise<JSONRPCresponse> {
-        return self.requestDispatcher.addToQueue(request: request)
-    }
-
-    /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
-    public init(provider prov: Web3Provider, queue: OperationQueue? = nil, requestDispatcher: JSONRPCrequestDispatcher? = nil) {
-        provider = prov        
-        if requestDispatcher == nil {
-            self.requestDispatcher = JSONRPCrequestDispatcher(provider: provider, queue: DispatchQueue.global(qos: .userInteractive), policy: .Batch(32))
-        } else {
-            self.requestDispatcher = requestDispatcher!
-        }
-    }
-    
-    /// Keystore manager can be bound to Web3 instance. If some manager is bound all further account related functions, such
-    /// as account listing, transaction signing, etc. are done locally using private keys and accounts found in a manager.
-    public func addKeystoreManager(_ manager: KeystoreManager?) {
-        self.provider.attachedKeystoreManager = manager
-    }
-    
-    var ethInstance: web3.Eth?
-    
-    /// Public web3.eth.* namespace.
-    public var eth: web3.Eth {
-        if (self.ethInstance != nil) {
-            return self.ethInstance!
-        }
-        self.ethInstance = web3.Eth(provider : self.provider, web3: self)
-        return self.ethInstance!
-    }
-    
-    public class Eth:Web3OptionsInheritable {
-        var provider:Web3Provider
-//        weak var web3: web3?
-        var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
-        }
-        public init(provider prov: Web3Provider, web3 web3instance: web3) {
-            provider = prov
-            web3 = web3instance
-        }
-    }
-    
-    var personalInstance: web3.Personal?
-    
-    /// Public web3.personal.* namespace.
-    public var personal: web3.Personal {
-        if (self.personalInstance != nil) {
-            return self.personalInstance!
-        }
-        self.personalInstance = web3.Personal(provider : self.provider, web3: self)
-        return self.personalInstance!
-    }
-    
-    public class Personal:Web3OptionsInheritable {
-        var provider:Web3Provider
-        //        weak var web3: web3?
-        var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
-        }
-        public init(provider prov: Web3Provider, web3 web3instance: web3) {
-            provider = prov
-            web3 = web3instance
-        }
-    }
-
-    var walletInstance: web3.Web3Wallet?
-    
-    /// Public web3.wallet.* namespace.
-    public var wallet: web3.Web3Wallet {
-        if (self.walletInstance != nil) {
-            return self.walletInstance!
-        }
-        self.walletInstance = web3.Web3Wallet(provider : self.provider, web3: self)
-        return self.walletInstance!
-    }
-    
-    public class Web3Wallet {
-        var provider:Web3Provider
-//        weak var web3: web3?
-        var web3: web3
-        public init(provider prov: Web3Provider, web3 web3instance: web3) {
-            provider = prov
-            web3 = web3instance
-        }
-    }
-    
-    var browserFunctionsInstance: web3.BrowserFunctions?
-    
-    /// Public web3.browserFunctions.* namespace.
-    public var browserFunctions: web3.BrowserFunctions {
-        if (self.browserFunctionsInstance != nil) {
-            return self.browserFunctionsInstance!
-        }
-        self.browserFunctionsInstance = web3.BrowserFunctions(provider : self.provider, web3: self)
-        return self.browserFunctionsInstance!
-    }
-    
-    public class BrowserFunctions:Web3OptionsInheritable {
-        var provider:Web3Provider
-        //        weak var web3: web3?
-        var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
-        }
-        public init(provider prov: Web3Provider, web3 web3instance: web3) {
-            provider = prov
-            web3 = web3instance
-        }
-    }
-    
-    var erc721Instance: web3.ERC721?
-    
-    /// Public web3.browserFunctions.* namespace.
-    public var erc721: web3.ERC721 {
-        if (self.erc721Instance != nil) {
-            return self.erc721Instance!
-        }
-        self.erc721Instance = web3.ERC721(provider : self.provider, web3: self)
-        return self.erc721Instance!
-    }
-    
-    public class ERC721: Web3OptionsInheritable {
-        var provider:Web3Provider
-        //        weak var web3: web3?
-        var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
-        }
-        public init(provider prov: Web3Provider, web3 web3instance: web3) {
-            provider = prov
-            web3 = web3instance
-        }
-    }
-}
-```
-
 #### Getting Contract By Address 
 
 ```swift
@@ -487,8 +337,7 @@ func prepareTransactionForSendingEther(destinationAddressString: String,
 	    return
         }
 
-
-        let web3 = web3swift.web3(provider: InfuraProvider(CurrentNetwork.currentNetwork ?? Networks.Mainnet)!)
+        let web3 = web3swift.web3(provider: InfuraProvider(Networks.Mainnet)!) //or any other network
         web3.addKeystoreManager(KeysService().keystoreManager())
 
         let ethAddressFrom = EthereumAddress(selectedKey)
@@ -556,7 +405,7 @@ func prepareTransactionForSendingERC(destinationAddressString: String,
             return
         }
         
-        let web3 = web3swift.web3(provider: InfuraProvider(CurrentNetwork.currentNetwork ?? Networks.Mainnet)!)
+        let web3 = web3swift.web3(provider: InfuraProvider(Networks.Mainnet)!) //or any other network
         web3.addKeystoreManager(KeysService().keystoreManager())
         
         let contract = self.contract(for: token, web3: web3)
@@ -631,7 +480,7 @@ func prepareTransactionToContract(data: [AnyObject],
     let ethAddressFrom = EthereumAddress(address)
     let ethContractAddress = EthereumAddress(contractAddress)!
     
-    let web3 = CurrentWeb.currentWeb ?? Web3.InfuraMainnetWeb3()
+    let web3 = Web3.InfuraMainnetWeb3() //or any other web
     web3.addKeystoreManager(TransactionsService.keyservice.keystoreManager())
     var options = predefinedOptions ?? Web3Options.defaultOptions()
     options.from = ethAddressFrom
@@ -696,7 +545,7 @@ func sendToken(transaction: TransactionIntermediate,
 
 #### Sending To Contract
 ```swift
-public func sendToContract(transaction: TransactionIntermediate,
+func sendToContract(transaction: TransactionIntermediate,
                            with password: String? = "YOURPASSWORD",
                            options: Web3Options? = nil,
                            completion: @escaping (Result<TransactionSendingResult>) -> Void) {
@@ -726,5 +575,24 @@ public func sendToContract(transaction: TransactionIntermediate,
 
 ### Get Block number
 
+```swift
+func getBlockNumber(completion: @escaping (String?) -> Void) {
+    DispatchQueue.global().async {
+        let web3 = WalletWeb3Factory.web3()
+        let res = web3.eth.getBlockNumber()
+        switch res {
+        case .failure(let error):
+            print(error)
+            DispatchQueue.main.async {
+                completion(nil)
+            }
+        case .success(let number):
+            DispatchQueue.main.async {
+                completion(number.description)
+            }
+        }
+    }
+}
+```
 
 ### Get Block Gas Price
