@@ -2,6 +2,36 @@
 
 ## Account Management
 
+#### Preffered Key Wallet Model
+
+```swift
+    struct KeyWalletModel {
+        let address: String
+        let data: Data?
+        let name: String
+        let isHD: Bool
+
+        static func fromCoreData(crModel: KeyWallet) -> KeyWalletModel {
+    	    let model = KeyWalletModel(address: crModel.address ?? "",
+				       data: crModel.data,
+				       name: crModel.name ?? "",
+				       isHD: crModel.isHD)
+	    return model
+    }
+}
+
+    extension KeyWalletModel: Equatable {
+        static func == (lhs: KeyWalletModel, rhs: KeyWalletModel) -> Bool {
+	    return lhs.address == rhs.address
+        }
+    }
+
+    struct HDKey {
+        let name: String?
+        let address: String
+    }
+```
+
 ### Create Account
 
 #### Create Account With Private Key
@@ -161,28 +191,76 @@
 #### Save keystore to the memory
 
 ```swift
-//First you need a `KeystoreManager` instance:
-guard let userDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first,
-    let keystoreManager = KeystoreManager.managerForPath(userDirectory + "/keystore")
-else {
-    fatalError("Couldn't create a KeystoreManager.")
-}
+    //First you need a `KeystoreManager` instance:
+    guard let userDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first,
+        let keystoreManager = KeystoreManager.managerForPath(userDirectory + "/keystore")
+    else {
+        fatalError("Couldn't create a KeystoreManager.")
+    }
 
-//Next you create a new Keystore:
+    // Next you create a new Keystore:
 
-let newKeystore = try? EthereumKeystoreV3(password: "YOUR_PASSWORD")
+    let newKeystore = try? EthereumKeystoreV3(password: "YOUR_PASSWORD")
 
-// Then you save the created keystore to the file system:
+    // Then you save the created keystore to the file system:
 
-let newKeystoreJSON = try? JSONEncoder().encode(newKeystore.keystoreParams)
-FileManager.default.createFile(atPath: "\(keystoreManager.path)/keystore.json", contents: newKeystoreJSON, attributes: nil)
+    let newKeystoreJSON = try? JSONEncoder().encode(newKeystore.keystoreParams)
+    FileManager.default.createFile(atPath: "\(keystoreManager.path)/keystore.json", contents: newKeystoreJSON, attributes: nil)
 
-// Later you can retreive it:
+    // Later you can retreive it:
 
-if let address = keystoreManager.addresses?.first,
-let retrievedKeystore = keystoreManager.walletForAddress(address) as? EthereumKeystoreV3 {
-    return retrievedKeystore
-}
+    if let address = keystoreManager.addresses?.first,
+    let retrievedKeystore = keystoreManager.walletForAddress(address) as? EthereumKeystoreV3 {
+        return retrievedKeystore
+    }
+```
+
+#### Get Keysore Manager
+
+```swift
+
+    func getWallet() -> KeyWalletModel? {
+        let requestWallet: NSFetchRequest<KeyWallet> = KeyWallet.fetchRequest()
+        requestWallet.predicate = NSPredicate(format: "isSelected = %@", NSNumber(value: true))
+        do {
+            let results = try mainContext.fetch(requestWallet)
+            guard let result = results.first else { return nil }
+            return KeyWalletModel.fromCoreData(crModel: result)
+            
+        } catch {
+            print(error)
+            return nil
+        }
+        
+    }
+
+    func keystoreManager() -> KeystoreManager {
+	// Firstly you need to get 
+        guard let selectedWallet = getWallet(),
+	      let data = selectedWallet.data else {
+            return KeystoreManager.defaultManager!
+        }
+        if selectedWallet.isHD {
+            return KeystoreManager([BIP32Keystore(data)!])
+        } else {
+            return KeystoreManager([EthereumKeystoreV3(data)!])
+        }
+    }
+```
+
+#### Get private key data
+
+```swift
+   func getPrivateKey(forWallet wallet: KeyWalletModel, password: String) -> String? {
+        do {
+            guard let ethereumAddress = EthereumAddress(wallet.address) else { return nil }
+            let pkData = try keystoreManager().UNSAFE_getPrivateKeyData(password: password, account: ethereumAddress)
+            return pkData.toHexString()
+        } catch {
+            print(error)
+            return nil
+        }
+    }
 ```
 
 ### Ethereum Address
