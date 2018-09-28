@@ -269,7 +269,7 @@
 
 ```swift
 let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
-let constractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b", ignoreChecksum: true)
+let contractAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901", ignoreChecksum: true)
 ```
 Ethereum addresses are checksum checked if they are not lowercased or uppercased and always length checked
 
