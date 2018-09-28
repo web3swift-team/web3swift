@@ -45,7 +45,7 @@
         return unwrapped
     }
     
-    func createHDWallet(withName name: String,
+    func createHDWallet(withName name: String?,
                         password: String,
 			completion: @escaping (KeyWalletModel?, Error?) -> Void)
     {
@@ -75,7 +75,7 @@
         }
         let walletModel = KeyWalletModel(address: address,
 					 data: keyData,
-					 name: name,
+					 name: name ?? "",
 					 isHD: true)
         completion(walletModel, nil)
     }	
@@ -125,7 +125,7 @@
 
 #### Import Account With Mnemonics Phrase
 ```swift
-    func addHDWallet(withName name: String,
+    func addHDWallet(withName name: String?,
     		           password: String,
 			   mnemonics: String,
 			   completion: @escaping (KeyWalletModel?, Error?) -> Void)
@@ -150,7 +150,7 @@
         }
         let walletModel = KeyWalletModel(address: address,
 					 data: keyData,
-					 name: name,
+					 name: name ?? "",
 					 isHD: true)
         completion(walletModel, nil)
     }	
