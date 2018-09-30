@@ -16,7 +16,7 @@ class web3swift_EIP681_Tests: XCTestCase {
     
     
     //ERC20 transfer
-    //ethereum:0x45245bc59219eeaaf6cd3f382e078a461ff9de7b/transfer?address=0x6891dC3962e710f0ff711B9c6acc26133Fd35Cb4&uint256=1
+    //ethereum:0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1/transfer?address=0x6891dC3962e710f0ff711B9c6acc26133Fd35Cb4&uint256=1
     
     func testEIP681Parsing() {
         let parsed = Web3.EIP681CodeParser.parse("ethereum:0x5ffc014343cd971b7eb70732021e26c35b744cc4?value=2.014e18")
@@ -24,7 +24,7 @@ class web3swift_EIP681_Tests: XCTestCase {
     }
     
     func testEIP681Parsing2() {
-        let parsed = Web3.EIP681CodeParser.parse("ethereum:0x45245bc59219eeaaf6cd3f382e078a461ff9de7b/transfer?address=0x6891dC3962e710f0ff711B9c6acc26133Fd35Cb4&uint256=1")
+        let parsed = Web3.EIP681CodeParser.parse("ethereum:0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1/transfer?address=0x6891dC3962e710f0ff711B9c6acc26133Fd35Cb4&uint256=1")
         XCTAssert(parsed != nil)
     }
     
