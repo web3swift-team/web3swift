@@ -1,6 +1,1 @@
-module Result {
-  umbrella header "Result-umbrella.h"
-
-  export *
-  module * { export * }
-}
+/Users/petrkorolev/repo/web3swift/Example/web3swiftExample/Pods/Target Support Files/Result/Result.modulemap

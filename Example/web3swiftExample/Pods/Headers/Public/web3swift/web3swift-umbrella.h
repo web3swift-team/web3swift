@@ -1,18 +1,1 @@
-#ifdef __OBJC__
-#import <UIKit/UIKit.h>
-#else
-#ifndef FOUNDATION_EXPORT
-#if defined(__cplusplus)
-#define FOUNDATION_EXPORT extern "C"
-#else
-#define FOUNDATION_EXPORT extern
-#endif
-#endif
-#endif
-
-#import "web3swift-Bridging-Header.h"
-#import "web3swift.h"
-
-FOUNDATION_EXPORT double web3swiftVersionNumber;
-FOUNDATION_EXPORT const unsigned char web3swiftVersionString[];
-
+/Users/petrkorolev/repo/web3swift/Example/web3swiftExample/Pods/Target Support Files/web3swift/web3swift-umbrella.h
