@@ -1,1 +1,0 @@
-/Users/petrkorolev/repo/web3swift/Example/web3swiftExample/Pods/Target Support Files/web3swift/web3swift-umbrella.h
