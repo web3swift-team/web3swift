@@ -3,5 +3,6 @@ platform :ios, '11.2'
 target 'web3swiftExample' do
 #  use_frameworks!
   use_modular_headers!
-  pod 'web3swift', :git => 'https://github.com/bankex/web3swift.git'
+  pod 'web3swift', '~> 1.1.9'
+#  pod 'web3swift', :git => 'https://github.com/matterinc/web3swift.git'
 end

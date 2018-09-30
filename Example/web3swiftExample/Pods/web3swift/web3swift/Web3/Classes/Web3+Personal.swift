@@ -12,14 +12,21 @@ import Result
 
 extension web3.Personal {
     
-    @available(*, deprecated)
-    func signPersonalMessage(message: Data, from: EthereumAddress, password:String = "BANKEXFOUNDATION", callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
-        let operation = PersonalSignOperation.init(self.web3, queue: self.web3.queue, message: message, from: from, password: password)
-        operation.next = OperationChainingType.callback(callback, queue)
-        self.web3.queue.addOperation(operation)
-    }
-    
-    public func signPersonalMessage(message: Data, from: EthereumAddress, password:String = "BANKEXFOUNDATION") -> Result<Data, Web3Error> {
+    /**
+     *Locally or remotely sign a message (arbitrary data) with the private key. To avoid potential signing of a transaction the message is first prepended by a special header and then hashed.*
+     
+     - parameters:
+         - message: Message Data
+         - from: Use a private key that corresponds to this account
+         - password: Password for account if signing locally
+     
+     - returns:
+        - Result object
+     
+     - important: This call is synchronous
+     
+     */
+    public func signPersonalMessage(message: Data, from: EthereumAddress, password:String = "web3swift") -> Result<Data, Web3Error> {
         do {
             let result = try self.signPersonalMessagePromise(message: message, from: from, password: password).wait()
             return Result(result)
@@ -28,49 +35,21 @@ extension web3.Personal {
         }
     }
     
-//    public func signPersonalMessage(message: Data, from: EthereumAddress, password:String = "BANKEXFOUNDATION") -> Result<Data, Web3Error> {
-//        if let keystoreManager = self.web3.provider.attachedKeystoreManager {
-//            var signature: Data?
-//            do {
-//                signature = try Web3Signer.signPersonalMessage(message, keystore: keystoreManager, account: from, password: password)
-//            }
-//            catch {
-//                if error is AbstractKeystoreError {
-//                    return Result.failure(Web3Error.keystoreError(error as! AbstractKeystoreError))
-//                }
-//                return Result.failure(Web3Error.generalError(error))
-//            }
-//            if signature == nil {
-//                return Result.failure(Web3Error.dataError)
-//            }
-//            return Result(signature!)
-//        }
-//        let hexData = message.toHexString().addHexPrefix()
-//        let request = JSONRPCRequestFabric.prepareRequest(.personalSign, parameters: [from.address.lowercased(), hexData])
-//        let response = self.provider.send(request: request)
-//        let result = ResultUnwrapper.getResponse(response)
-//        switch result {
-//        case .failure(let error):
-//            return Result.failure(error)
-//        case .success(let payload):
-//            guard let resultString = payload as? String else {
-//                return Result.failure(Web3Error.dataError)
-//            }
-//            guard let sigData = Data.fromHex(resultString) else {
-//                return Result.failure(Web3Error.dataError)
-//            }
-//            return Result(sigData)
-//        }
-//    }
-    
-    @available(*, deprecated)
-    func unlockAccount(account: EthereumAddress, password:String = "BANKEXFOUNDATION", seconds: UInt64 = 300, callback: @escaping Callback, queue: OperationQueue = OperationQueue.main) {
-        let operation = PersonalUnlockAccountOperation.init(self.web3, queue: self.web3.queue, account: account, password: password, seconds: seconds)
-        operation.next = OperationChainingType.callback(callback, queue)
-        self.web3.queue.addOperation(operation)
-    }
-    
-    public func unlockAccount(account: EthereumAddress, password:String = "BANKEXFOUNDATION", seconds: UInt64 = 300) -> Result<Bool, Web3Error> {
+    /**
+     *Unlock an account on the remote node to be able to send transactions and sign messages.*
+     
+     - parameters:
+         - account: EthereumAddress of the account to unlock
+         - password: Password to use for the account
+         - seconds: Time inteval before automatic account lock by Ethereum node
+     
+     - returns:
+        - Result object
+     
+     - important: This call is synchronous. Does nothing if private keys are stored locally.
+     
+     */
+    public func unlockAccount(account: EthereumAddress, password:String = "web3swift", seconds: UInt64 = 300) -> Result<Bool, Web3Error> {
         do {
             let result = try self.unlockAccountPromise(account: account).wait()
             return Result(result)
@@ -79,45 +58,17 @@ extension web3.Personal {
         }
     }
     
-//    public func unlockAccount(account: EthereumAddress, password:String = "BANKEXFOUNDATION", seconds: UInt64 = 300) -> Result<Bool, Web3Error> {
-//        var externalResult: Result<Bool, Web3Error>!
-//        let semaphore = DispatchSemaphore(value: 0)
-//        let callback = { (res: Result<AnyObject, Web3Error>) -> () in
-//            switch res {
-//            case .success(let result):
-//                guard let unwrappedResult = result as? Bool else {
-//                    externalResult = Result.failure(Web3Error.dataError)
-//                    break
-//                }
-//                externalResult = Result<Bool, Web3Error>(unwrappedResult)
-//            case .failure(let error):
-//                externalResult = Result.failure(error)
-//                break
-//            }
-//            semaphore.signal()
-//        }
-//        unlockAccount(account: account, password: password, seconds: seconds, callback: callback, queue: self.web3.queue)
-//        _ = semaphore.wait(timeout: .distantFuture)
-//        return externalResult
-//
-//
-////        if let _ = self.web3.provider.attachedKeystoreManager {
-////            return Result.failure(Web3Error.walletError)
-////        }
-////        let request = JSONRPCRequestFabric.prepareRequest(.unlockAccount, parameters: [account.address.lowercased(), password, seconds])
-////        let response = self.provider.send(request: request)
-////        let result = ResultUnwrapper.getResponse(response)
-////        switch result {
-////        case .failure(let error):
-////            return Result.failure(error)
-////        case .success(let payload):
-////            guard let resultBool = payload as? Bool else {
-////                return Result.failure(Web3Error.dataError)
-////            }
-////            return Result(resultBool)
-////        }
-//    }
-    
+    /**
+     *Recovers a signer of some message. Message is first prepended by special prefix (check the "signPersonalMessage" method description) and then hashed.*
+     
+     - parameters:
+         - personalMessage: Message Data
+         - signature: Serialized signature, 65 bytes
+     
+     - returns:
+        - Result object
+     
+     */
     public func ecrecover(personalMessage: Data, signature: Data) -> Result<EthereumAddress, Web3Error> {
         guard let recovered = Web3.Utils.personalECRecover(personalMessage, signature: signature) else {
             return Result.failure(Web3Error.dataError)
@@ -125,6 +76,17 @@ extension web3.Personal {
         return Result(recovered)
     }
     
+    /**
+     *Recovers a signer of some hash. Checking what is under this hash is on behalf of the user.*
+     
+     - parameters:
+        - hash: Signed hash
+        - signature: Serialized signature, 65 bytes
+     
+     - returns:
+        - Result object
+     
+     */
     public func ecrecover(hash: Data, signature: Data) -> Result<EthereumAddress, Web3Error> {
         guard let recovered = Web3.Utils.hashECRecover(hash: hash, signature: signature) else {
             return Result.failure(Web3Error.dataError)

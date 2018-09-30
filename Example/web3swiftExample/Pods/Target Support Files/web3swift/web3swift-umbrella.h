@@ -10,6 +10,7 @@
 #endif
 #endif
 
+#import "web3swift-Bridging-Header.h"
 #import "web3swift.h"
 
 FOUNDATION_EXPORT double web3swiftVersionNumber;

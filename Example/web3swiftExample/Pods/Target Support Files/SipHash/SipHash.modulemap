@@ -1,4 +1,4 @@
-framework module SipHash {
+module SipHash {
   umbrella header "SipHash-umbrella.h"
 
   export *

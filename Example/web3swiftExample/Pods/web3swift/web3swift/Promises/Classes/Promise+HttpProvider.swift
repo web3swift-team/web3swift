@@ -18,7 +18,8 @@ extension Web3HttpProvider {
             do {
                 let encoder = JSONEncoder()
                 let requestData = try encoder.encode(request)
-                var urlRequest = try URLRequest(url: providerURL, method: .post)
+                var urlRequest = URLRequest(url: providerURL, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData)
+                urlRequest.httpMethod = "POST"
                 urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
                 urlRequest.httpBody = requestData
@@ -32,7 +33,7 @@ extension Web3HttpProvider {
                         return
                     }
                     guard data != nil else {
-                        rp.resolver.reject(Web3Error.nodeError("Node response is empty"))
+                        rp.resolver.reject(Web3Error.nodeError(desc: "Node response is empty"))
                         return
                     }
                     rp.resolver.fulfill(data!)
@@ -47,7 +48,7 @@ extension Web3HttpProvider {
             }.map(on: queue){ (data: Data) throws -> JSONRPCresponse in
                 let parsedResponse = try JSONDecoder().decode(JSONRPCresponse.self, from: data)
                 if parsedResponse.error != nil {
-                    throw Web3Error.nodeError("Received an error message from node\n" + String(describing: parsedResponse.error!))
+                    throw Web3Error.nodeError(desc: "Received an error message from node\n" + String(describing: parsedResponse.error!))
                 }
                 return parsedResponse
             }
@@ -60,7 +61,8 @@ extension Web3HttpProvider {
             do {
                 let encoder = JSONEncoder()
                 let requestData = try encoder.encode(request)
-                var urlRequest = try URLRequest(url: providerURL, method: .post)
+                var urlRequest = URLRequest(url: providerURL, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData)
+                urlRequest.httpMethod = "POST"
                 urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
                 urlRequest.httpBody = requestData
@@ -74,7 +76,7 @@ extension Web3HttpProvider {
                         return
                     }
                     guard data != nil, data!.count != 0 else {
-                        rp.resolver.reject(Web3Error.nodeError("Node response is empty"))
+                        rp.resolver.reject(Web3Error.nodeError(desc: "Node response is empty"))
                         return
                     }
                     rp.resolver.fulfill(data!)
@@ -87,8 +89,8 @@ extension Web3HttpProvider {
         return rp.promise.ensure(on: queue) {
             task = nil
             }.map(on: queue){ (data: Data) throws -> JSONRPCresponseBatch in
-                let debugValue = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions(rawValue: 0))
-                print(debugValue)
+//                let debugValue = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions(rawValue: 0))
+//                print(debugValue)
                 let parsedResponse = try JSONDecoder().decode(JSONRPCresponseBatch.self, from: data)
                 return parsedResponse
         }
@@ -96,7 +98,7 @@ extension Web3HttpProvider {
     
     public func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue = .main) -> Promise<JSONRPCresponse> {
         if request.method == nil {
-            return Promise(error: Web3Error.nodeError("RPC method is nill"))
+            return Promise(error: Web3Error.nodeError(desc: "RPC method is nill"))
         }
         
         return Web3HttpProvider.post(request, providerURL: self.url, queue: queue, session: self.session)

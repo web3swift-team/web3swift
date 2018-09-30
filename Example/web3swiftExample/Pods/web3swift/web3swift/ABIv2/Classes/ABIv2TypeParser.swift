@@ -49,7 +49,7 @@ public struct ABIv2TypeParser {
     
     public static func parseTypeString(_ string:String) throws -> ABIv2.Element.ParameterType {
         let (type, tail) = recursiveParseType(string)
-        guard let t = type, tail == nil else {throw ParsingError.elementTypeInvalid}
+        guard let t = type, tail == nil else {throw Web3Error.inputError(desc: "Failed to parse ABI element " + string)}
         return t
     }
     

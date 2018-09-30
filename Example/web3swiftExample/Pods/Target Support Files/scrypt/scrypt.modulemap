@@ -1,0 +1,6 @@
+module scrypt {
+  umbrella header "scrypt-umbrella.h"
+
+  export *
+  module * { export * }
+}

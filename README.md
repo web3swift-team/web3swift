@@ -1,47 +1,46 @@
-<img align="left" width="25" height="25" src="https://user-images.githubusercontent.com/28599454/41086111-af4bc3b0-6a41-11e8-9f9f-2d642b12666e.png">[Ask questions](https://stackoverflow.com/questions/tagged/web3swift)
-## Important notices
-The work for 2.0 release is about to start. Ideas for new more Swift idiomatic API are welcome in issues.
-
 # web3swift
 
 [![Version](https://img.shields.io/cocoapods/v/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0x6394b37Cf80A7358b38068f0CA4760ad49983a1B)
+[![Build Status](https://travis-ci.com/matterinc/web3swift.svg?branch=develop)](https://travis-ci.com/matterinc/web3swift)
+
+<img align="left" width="25" height="25" src="https://user-images.githubusercontent.com/28599454/41086111-af4bc3b0-6a41-11e8-9f9f-2d642b12666e.png">[Ask questions](https://stackoverflow.com/questions/tagged/web3swift)
 
 **web3swift** is your toolbelt for any kind interactions with Ethereum network.
 
+### Important notices:
+> The work for 2.0 release is about to start. Ideas for new more Swift idiomatic API are welcome in issues.
 
-- [web3swift](#web3swift)
-+ [Features:](#features-)
-* [Design decisions](#design-decisions)
-* [Example](#example)
++ [Features:](#features)
+  * [Design decisions](#design-decisions)
+  * [Example](#example)
 * [Installation](#installation)
-+ [Requirements](#requirements)
-+ [CocoaPods](#cocoapods)
+    + [Requirements](#requirements)
+    + [CocoaPods](#cocoapods)
 * [Getting started](#getting-started)
-+ [Create Account](#create-account)
-+ [Save keystore to the memory](#save-keystore-to-the-memory)
-+ [Initializing Ethereum address](#initializing-ethereum-address)
-+ [Setting options](#setting-options)
-+ [Encoding Transaction](#encoding-transaction)
-+ [Signing Transaction](#signing-transaction)
-+ [Getting ETH balance](#getting-eth-balance)
-+ [Getting gas price](#getting-gas-price)
-+ [Sending ETH](#sending-eth)
-+ [ERC20 Iteraction:](#erc20-iteraction-)
-- [Getting ERC20 token balance](#getting-erc20-token-balance)
-- [Sending ERC20](#sending-erc20)
+    + [Create Account](#create-account)
+    + [Save keystore to the memory](#save-keystore-to-the-memory)
+    + [Initializing Ethereum address](#initializing-ethereum-address)
+    + [Setting options](#setting-options)
+    + [Encoding Transaction](#encoding-transaction)
+    + [Signing Transaction](#signing-transaction)
+    + [Getting ETH balance](#getting-eth-balance)
+    + [Getting gas price](#getting-gas-price)
+    + [Sending ETH](#sending-eth)
+    + [ERC20 Iteraction:](#erc20-iteraction)
+      - [Getting ERC20 token balance](#getting-erc20-token-balance)
+      - [Sending ERC20](#sending-erc20)
 * [Apps using this library](#apps-using-this-library)
-* [Future plans](#future-plans)
-+ [Extra features:](#extra-features-)
+* [Plans](#plans)
+    + [Extra features:](#extra-features)
 * [Stay in touch](#stay-in-touch)
-+ [Contribution](#contribution)
-+ [Communication](#communication)
-+ [Special thanks to](#special-thanks-to)
+    + [Contribution](#contribution)
+    + [Communication](#communication)
+    + [Special thanks to](#special-thanks-to)
 * [Authors](#authors)
 * [License](#license)
-
 
 ### Features:
 

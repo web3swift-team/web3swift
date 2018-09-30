@@ -59,19 +59,19 @@ public class EthereumKeystoreV3: AbstractKeystore {
         if (keystoreParams.crypto.version != nil && keystoreParams.crypto.version != "1") {return nil}
         self.keystoreParams = keystoreParams
         if keystoreParams.address != nil {
-            self.address = EthereumAddress(keystoreParams.address!)
+            self.address = EthereumAddress(keystoreParams.address!.addHexPrefix())
         } else {
             return nil
         }
     }
     
-    public init? (password: String = "BANKEXFOUNDATION", aesMode: String = "aes-128-cbc") throws {
+    public init? (password: String = "web3swift", aesMode: String = "aes-128-cbc") throws {
         guard var newPrivateKey = SECP256K1.generatePrivateKey() else {return nil}
         defer {Data.zero(&newPrivateKey)}
         try encryptDataToStorage(password, keyData: newPrivateKey, aesMode: aesMode)
     }
     
-    public init? (privateKey: Data, password: String = "BANKEXFOUNDATION", aesMode: String = "aes-128-cbc") throws {
+    public init? (privateKey: Data, password: String = "web3swift", aesMode: String = "aes-128-cbc") throws {
         guard privateKey.count == 32 else {return nil}
         guard SECP256K1.verifyPrivateKey(privateKey: privateKey) else {return nil}
         try encryptDataToStorage(password, keyData: privateKey, aesMode: aesMode)
@@ -115,7 +115,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         self.keystoreParams = keystoreparams
     }
     
-    public func regenerate(oldPassword: String, newPassword: String, dkLen: Int=32, N: Int = 262144, R: Int = 8, P: Int = 1) throws {
+    public func regenerate(oldPassword: String, newPassword: String, dkLen: Int=32, N: Int = 4096, R: Int = 6, P: Int = 1) throws {
         var keyData = try self.getKeyData(oldPassword)
         if keyData == nil {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
