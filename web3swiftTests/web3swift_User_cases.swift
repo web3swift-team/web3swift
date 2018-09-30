@@ -54,7 +54,7 @@ class web3swift_User_cases: XCTestCase {
         let keystoreManager = KeystoreManager.init([keystoreV3])
         web3Rinkeby.addKeystoreManager(keystoreManager)
         guard case .success(let gasPriceRinkeby) = web3Rinkeby.eth.getGasPrice() else {return XCTFail()}
-        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         guard let intermediate = web3Rinkeby.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
         var options = Web3Options.defaultOptions()
         options.from = keystoreV3.addresses?.first
@@ -72,7 +72,7 @@ class web3swift_User_cases: XCTestCase {
         let keystoreManager = KeystoreManager.init([keystoreV3])
         web3Rinkeby.addKeystoreManager(keystoreManager)
         guard case .success(let gasPriceRinkeby) = web3Rinkeby.eth.getGasPrice() else {return XCTFail()}
-        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         guard let intermediate = web3Rinkeby.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
         var options = Web3Options.defaultOptions()
         options.from = keystoreV3.addresses?.first
@@ -108,7 +108,7 @@ class web3swift_User_cases: XCTestCase {
     
     func testNonBatchedRequest() {
         let web3 = Web3.InfuraMainnetWeb3()
-        let address = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        let address = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         web3.requestDispatcher.policy = .NoBatching
         let balanceResult = web3.eth.getBalance(address: address)
         switch balanceResult {

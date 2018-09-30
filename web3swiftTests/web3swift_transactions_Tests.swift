@@ -48,7 +48,7 @@ class web3swift_transactions_Tests: XCTestCase {
     
     func testEthSendExample() {
         let web3 = Web3.InfuraMainnetWeb3()
-        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let tempKeystore = try! EthereumKeystoreV3(password: "")
         let keystoreManager = KeystoreManager([tempKeystore!])
         web3.addKeystoreManager(keystoreManager)
@@ -109,7 +109,7 @@ class web3swift_transactions_Tests: XCTestCase {
         let keystoreManager = KeystoreManager.init([keystoreV3])
         web3Rinkeby.addKeystoreManager(keystoreManager)
         guard case .success(let gasPriceRinkeby) = web3Rinkeby.eth.getGasPrice() else {return}
-        let sendToAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
+        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         guard let intermediate = web3Rinkeby.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
         var options = Web3Options.defaultOptions()
         options.from = keystoreV3.addresses?.first
@@ -127,8 +127,8 @@ class web3swift_transactions_Tests: XCTestCase {
     func testTokenBalanceTransferOnMainNet() {
         // BKX TOKEN
         let web3 = Web3.InfuraMainnetWeb3()
-        let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
-        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!
+        let coldWalletAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
+        let contractAddress = EthereumAddress("0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1")!
         var options = Web3Options()
         options.from = coldWalletAddress
         let tempKeystore = try! EthereumKeystoreV3(password: "")
@@ -148,8 +148,8 @@ class web3swift_transactions_Tests: XCTestCase {
     func testTokenBalanceTransferOnMainNetUsingConvenience() {
         // BKX TOKEN
         let web3 = Web3.InfuraMainnetWeb3()
-        let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
-        let contractAddress = EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!
+        let coldWalletAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
+        let contractAddress = EthereumAddress("0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1")!
         let tempKeystore = try! EthereumKeystoreV3(password: "")
         let keystoreManager = KeystoreManager([tempKeystore!])
         web3.addKeystoreManager(keystoreManager)
