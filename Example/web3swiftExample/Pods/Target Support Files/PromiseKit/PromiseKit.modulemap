@@ -1,4 +1,4 @@
-module PromiseKit {
+framework module PromiseKit {
   umbrella header "PromiseKit-umbrella.h"
 
   export *

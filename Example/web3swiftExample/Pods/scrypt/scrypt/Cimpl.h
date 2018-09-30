@@ -1,5 +1,8 @@
+// Original work recognition
+
 /*-
- * Copyright 2005,2007,2009 Colin Percival
+ * Copyright 2009 Colin Percival
+ * Copyright 2013 Alexander Peslyak
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,23 +26,26 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
+ * This file was originally written by Colin Percival as part of the Tarsnap
+ * online backup system.
  */
 
-#ifndef pbkdf2_sha256_H
-#define pbkdf2_sha256_H
+// Cleanup and putting it all together
 
-#include <stdint.h>
+//
+//  Cimpl.h
+//  scrypt
+//
+//  Created by Alex Vlasov on 04.09.2018.
+//  Copyright © 2018 Alexander Vlasov. All rights reserved.
+//
 
-#include <sys/types.h>
+#ifndef SalsaCimpl_h
+#define SalsaCimpl_h
+#include <limits.h>
 
-#include "crypto_auth_hmacsha256.h"
+int
+partial_Scrypt(uint64_t N, uint32_t _r, uint32_t _p, uint8_t *B, size_t B_size,
+                  uint8_t *memory, size_t memory_size);
 
-/**
- * PBKDF2_SHA256(passwd, passwdlen, salt, saltlen, c, buf, dkLen):
- * Compute PBKDF2(passwd, salt, c, dkLen) using HMAC-SHA256 as the PRF, and
- * write the output to buf.  The value dkLen must be at most 32 * (2^32 - 1).
- */
-void PBKDF2_SHA256(const uint8_t *, size_t, const uint8_t *, size_t, uint64_t,
-                   uint8_t *, size_t);
-
-#endif /* !_SHA256_H_ */
+#endif /* SalsaCimpl_h */

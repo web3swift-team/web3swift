@@ -1,3 +1,5 @@
+// Original work recognition
+
 /*-
  * Copyright 2009 Colin Percival
  * Copyright 2013 Alexander Peslyak
@@ -28,21 +30,69 @@
  * online backup system.
  */
 
-#include <errno.h>
+// Cleanup and putting it all together
+
+//
+//  Cimpl.c
+//  scrypt
+//
+//  Created by Alex Vlasov on 04.09.2018.
+//  Copyright © 2018 Alexander Vlasov. All rights reserved.
+//
+
+#include <stdio.h>
 #include <limits.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "../crypto_scrypt.h"
-#include "../pbkdf2-sha256.h"
-#include "private/common.h"
+#if SIZE_MAX > 0xffffffffULL
+#define ARCH_BITS 64
+#else
+#define ARCH_BITS 32
+#endif
+
+#define LOAD32_LE(SRC) load32_le(SRC)
+static inline uint32_t
+load32_le(const uint8_t src[4])
+{
+#ifdef NATIVE_LITTLE_ENDIAN
+    uint32_t w;
+    memcpy(&w, src, sizeof w);
+    return w;
+#else
+    uint32_t w = (uint32_t) src[0];
+    w |= (uint32_t) src[1] <<  8;
+    w |= (uint32_t) src[2] << 16;
+    w |= (uint32_t) src[3] << 24;
+    return w;
+#endif
+}
+
+#define STORE32_LE(DST, W) store32_le((DST), (W))
+static inline void
+store32_le(uint8_t dst[4], uint32_t w)
+{
+#ifdef NATIVE_LITTLE_ENDIAN
+    memcpy(dst, &w, sizeof w);
+#else
+    dst[0] = (uint8_t) w; w >>= 8;
+    dst[1] = (uint8_t) w; w >>= 8;
+    dst[2] = (uint8_t) w; w >>= 8;
+    dst[3] = (uint8_t) w;
+#endif
+}
+
+typedef union {
+    uint64_t d[8];
+    uint32_t w[16];
+} escrypt_block_t;
 
 static inline void
 blkcpy_64(escrypt_block_t *dest, const escrypt_block_t *src)
 {
     int i;
-
+    
 #if (ARCH_BITS == 32)
     for (i = 0; i < 16; ++i) {
         dest->w[i] = src->w[i];
@@ -58,7 +108,7 @@ static inline void
 blkxor_64(escrypt_block_t *dest, const escrypt_block_t *src)
 {
     int i;
-
+    
 #if (ARCH_BITS == 32)
     for (i = 0; i < 16; ++i) {
         dest->w[i] ^= src->w[i];
@@ -74,7 +124,7 @@ static inline void
 blkcpy(escrypt_block_t *dest, const escrypt_block_t *src, size_t len)
 {
     size_t i, L;
-
+    
 #if (ARCH_BITS == 32)
     L = (len >> 2);
     for (i = 0; i < L; ++i) {
@@ -92,7 +142,7 @@ static inline void
 blkxor(escrypt_block_t *dest, const escrypt_block_t *src, size_t len)
 {
     size_t i, L;
-
+    
 #if (ARCH_BITS == 32)
     L = (len >> 2);
     for (i = 0; i < L; ++i) {
@@ -113,10 +163,10 @@ blkxor(escrypt_block_t *dest, const escrypt_block_t *src, size_t len)
 static void
 salsa20_8(uint32_t B[16])
 {
-    escrypt_block_t X;
-    uint32_t *      x = X.w;
-    size_t          i;
-
+    escrypt_block_t  X;
+    uint32_t        *x = X.w;
+    size_t           i;
+    
     blkcpy_64(&X, (escrypt_block_t *) B);
     for (i = 0; i < 8; i += 2) {
 #define R(a, b) (((a) << (b)) | ((a) >> (32 - (b))))
@@ -125,46 +175,47 @@ salsa20_8(uint32_t B[16])
         x[8] ^= R(x[4] + x[0], 9);
         x[12] ^= R(x[8] + x[4], 13);
         x[0] ^= R(x[12] + x[8], 18);
-
+        
         x[9] ^= R(x[5] + x[1], 7);
         x[13] ^= R(x[9] + x[5], 9);
         x[1] ^= R(x[13] + x[9], 13);
         x[5] ^= R(x[1] + x[13], 18);
-
+        
         x[14] ^= R(x[10] + x[6], 7);
         x[2] ^= R(x[14] + x[10], 9);
         x[6] ^= R(x[2] + x[14], 13);
         x[10] ^= R(x[6] + x[2], 18);
-
+        
         x[3] ^= R(x[15] + x[11], 7);
         x[7] ^= R(x[3] + x[15], 9);
         x[11] ^= R(x[7] + x[3], 13);
         x[15] ^= R(x[11] + x[7], 18);
-
+        
         /* Operate on rows. */
         x[1] ^= R(x[0] + x[3], 7);
         x[2] ^= R(x[1] + x[0], 9);
         x[3] ^= R(x[2] + x[1], 13);
         x[0] ^= R(x[3] + x[2], 18);
-
+        
         x[6] ^= R(x[5] + x[4], 7);
         x[7] ^= R(x[6] + x[5], 9);
         x[4] ^= R(x[7] + x[6], 13);
         x[5] ^= R(x[4] + x[7], 18);
-
+        
         x[11] ^= R(x[10] + x[9], 7);
         x[8] ^= R(x[11] + x[10], 9);
         x[9] ^= R(x[8] + x[11], 13);
         x[10] ^= R(x[9] + x[8], 18);
-
+        
         x[12] ^= R(x[15] + x[14], 7);
         x[13] ^= R(x[12] + x[15], 9);
         x[14] ^= R(x[13] + x[12], 13);
         x[15] ^= R(x[14] + x[13], 18);
 #undef R
     }
-    for (i = 0; i < 16; i++)
+    for (i = 0; i < 16; i++) {
         B[i] += x[i];
+    }
 }
 
 /**
@@ -177,25 +228,25 @@ static void
 blockmix_salsa8(const uint32_t *Bin, uint32_t *Bout, uint32_t *X, size_t r)
 {
     size_t i;
-
+    
     /* 1: X <-- B_{2r - 1} */
     blkcpy_64((escrypt_block_t *) X,
               (escrypt_block_t *) &Bin[(2 * r - 1) * 16]);
-
+    
     /* 2: for i = 0 to 2r - 1 do */
     for (i = 0; i < 2 * r; i += 2) {
         /* 3: X <-- H(X \xor B_i) */
         blkxor_64((escrypt_block_t *) X, (escrypt_block_t *) &Bin[i * 16]);
         salsa20_8(X);
-
+        
         /* 4: Y_i <-- X */
         /* 6: B' <-- (Y_0, Y_2 ... Y_{2r-2}, Y_1, Y_3 ... Y_{2r-1}) */
         blkcpy_64((escrypt_block_t *) &Bout[i * 8], (escrypt_block_t *) X);
-
+        
         /* 3: X <-- H(X \xor B_i) */
         blkxor_64((escrypt_block_t *) X, (escrypt_block_t *) &Bin[i * 16 + 16]);
         salsa20_8(X);
-
+        
         /* 4: Y_i <-- X */
         /* 6: B' <-- (Y_0, Y_2 ... Y_{2r-2}, Y_1, Y_3 ... Y_{2r-1}) */
         blkcpy_64((escrypt_block_t *) &Bout[i * 8 + r * 16],
@@ -211,7 +262,7 @@ static inline uint64_t
 integerify(const void *B, size_t r)
 {
     const uint32_t *X = (const uint32_t *) ((uintptr_t)(B) + (2 * r - 1) * 64);
-
+    
     return (((uint64_t)(X[1]) << 32) + X[0]);
 }
 
@@ -232,7 +283,7 @@ smix(uint8_t *B, size_t r, uint64_t N, uint32_t *V, uint32_t *XY)
     uint64_t  i;
     uint64_t  j;
     size_t    k;
-
+    
     /* 1: X <-- B */
     for (k = 0; k < 32 * r; k++) {
         X[k] = LOAD32_LE(&B[4 * k]);
@@ -242,31 +293,31 @@ smix(uint8_t *B, size_t r, uint64_t N, uint32_t *V, uint32_t *XY)
         /* 3: V_i <-- X */
         blkcpy((escrypt_block_t *) &V[i * (32 * r)], (escrypt_block_t *) X,
                128 * r);
-
+        
         /* 4: X <-- H(X) */
         blockmix_salsa8(X, Y, Z, r);
-
+        
         /* 3: V_i <-- X */
         blkcpy((escrypt_block_t *) &V[(i + 1) * (32 * r)],
                (escrypt_block_t *) Y, 128 * r);
-
+        
         /* 4: X <-- H(X) */
         blockmix_salsa8(Y, X, Z, r);
     }
-
+    
     /* 6: for i = 0 to N - 1 do */
     for (i = 0; i < N; i += 2) {
         /* 7: j <-- Integerify(X) mod N */
         j = integerify(X, r) & (N - 1);
-
+        
         /* 8: X <-- H(X \xor V_j) */
         blkxor((escrypt_block_t *) X, (escrypt_block_t *) &V[j * (32 * r)],
                128 * r);
         blockmix_salsa8(X, Y, Z, r);
-
+        
         /* 7: j <-- Integerify(X) mod N */
         j = integerify(Y, r) & (N - 1);
-
+        
         /* 8: X <-- H(X \xor V_j) */
         blkxor((escrypt_block_t *) Y, (escrypt_block_t *) &V[j * (32 * r)],
                128 * r);
@@ -278,98 +329,40 @@ smix(uint8_t *B, size_t r, uint64_t N, uint32_t *V, uint32_t *XY)
     }
 }
 
-/**
- * escrypt_kdf(local, passwd, passwdlen, salt, saltlen,
- *     N, r, p, buf, buflen):
- * Compute scrypt(passwd[0 .. passwdlen - 1], salt[0 .. saltlen - 1], N, r,
- * p, buflen) and write the result into buf.  The parameters r, p, and buflen
- * must satisfy r * p < 2^30 and buflen <= (2^32 - 1) * 32.  The parameter N
- * must be a power of 2 greater than 1.
- *
- * Return 0 on success; or -1 on error.
- */
 int
-escrypt_kdf_nosse(escrypt_local_t *local, const uint8_t *passwd,
-                  size_t passwdlen, const uint8_t *salt, size_t saltlen,
-                  uint64_t N, uint32_t _r, uint32_t _p, uint8_t *buf,
-                  size_t buflen)
+partial_Scrypt(uint64_t N, uint32_t _r, uint32_t _p, uint8_t *B, size_t B_size,
+                  uint8_t *memory, size_t memory_size)
 {
-    size_t    B_size, V_size, XY_size, need;
-    uint8_t * B;
+    size_t    V_size, XY_size, need;
     uint32_t *V, *XY;
     size_t    r = _r, p = _p;
     uint32_t  i;
-
-/* Sanity-check parameters. */
-#if SIZE_MAX > UINT32_MAX
-    if (buflen > (((uint64_t)(1) << 32) - 1) * 32) {
-        errno = EFBIG;
-        return -1;
-    }
-#endif
-    if ((uint64_t)(r) * (uint64_t)(p) >= ((uint64_t) 1 << 30)) {
-        errno = EFBIG;
-        return -1;
-    }
-    if (N > UINT32_MAX) {
-        errno = EFBIG;
-        return -1;
-    }
-    if (((N & (N - 1)) != 0) || (N < 2)) {
-        errno = EINVAL;
-        return -1;
-    }
-    if (r == 0 || p == 0) {
-        errno = EINVAL;
-        return -1;
-    }
-    if ((r > SIZE_MAX / 128 / p) ||
-#if SIZE_MAX / 256 <= UINT32_MAX
-        (r > SIZE_MAX / 256) ||
-#endif
-        (N > SIZE_MAX / 128 / r)) {
-        errno = ENOMEM;
-        return -1;
-    }
-
+    
     /* Allocate memory. */
-    B_size = (size_t) 128 * r * p;
-    V_size = (size_t) 128 * r * N;
-    need   = B_size + V_size;
+    V_size = (size_t) 128 * r * (size_t) N;
+    need   = V_size;
     if (need < V_size) {
-        errno = ENOMEM;
         return -1;
     }
     XY_size = (size_t) 256 * r + 64;
     need += XY_size;
     if (need < XY_size) {
-        errno = ENOMEM;
         return -1;
     }
-    if (local->size < need) {
-        if (free_region(local)) {
-            return -1;
-        }
-        if (!alloc_region(local, need)) {
-            return -1;
-        }
+    
+    if (memory_size < need) {
+        return -1;
     }
-    B  = (uint8_t *) local->aligned;
-    V  = (uint32_t *) ((uint8_t *) B + B_size);
+    
+    V  = (uint32_t *) ((uint8_t *) memory);
     XY = (uint32_t *) ((uint8_t *) V + V_size);
-
-    /* 1: (B_0 ... B_{p-1}) <-- PBKDF2(P, S, 1, p * MFLen) */
-    PBKDF2_SHA256(passwd, passwdlen, salt, saltlen, 1, B, B_size);
-
+    
     /* 2: for i = 0 to p - 1 do */
     for (i = 0; i < p; i++) {
         /* 3: B_i <-- MF(B_i, N) */
         smix(&B[(size_t) 128 * i * r], r, N, V, XY);
     }
-
-    /* 5: DK <-- PBKDF2(P, B, 1, dkLen) */
-    PBKDF2_SHA256(passwd, passwdlen, B, B_size, 1, buf, buflen);
-
+    
     /* Success! */
     return 0;
 }
