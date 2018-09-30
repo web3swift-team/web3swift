@@ -5,6 +5,7 @@ xcode_scheme: web3swift-iOS
 xcode_destination: platform=iOS Simulator, OS=12.0, name=iPhone X
 before_install:
   - gem install cocoapods --pre --no-rdoc --no-ri --no-document --quiet
+  - pod install
 script:
   - xcodebuild -scheme web3swift-iOS -workspace web3swift.xcworkspace -sdk iphonesimulator build test
 after_success:
