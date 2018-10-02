@@ -1,4 +1,4 @@
-module Pods_web3swiftExample {
+framework module Pods_web3swiftExample {
   umbrella header "Pods-web3swiftExample-umbrella.h"
 
   export *
