@@ -1,1 +1,1 @@
-/Users/petrkorolev/repo/web3swift/Pods/Target Support Files/secp256k1_ios-iOS/secp256k1_ios-iOS-umbrella.h
+/Users/newuser/Developer/web3swift/Pods/Target Support Files/secp256k1_ios-iOS/secp256k1_ios-iOS-umbrella.h

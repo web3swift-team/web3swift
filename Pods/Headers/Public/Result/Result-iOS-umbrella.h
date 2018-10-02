@@ -1,1 +1,1 @@
-/Users/petrkorolev/repo/web3swift/Pods/Target Support Files/Result-iOS/Result-iOS-umbrella.h
+/Users/newuser/Developer/web3swift/Pods/Target Support Files/Result-iOS/Result-iOS-umbrella.h
