@@ -20,7 +20,7 @@ PODS:
 DEPENDENCIES:
   - BigInt (~> 3.1)
   - CryptoSwift (~> 0.11)
-  - PromiseKit (~> 6.3)
+  - PromiseKit (~> 6.4.1)
   - Result (~> 4.0)
   - scrypt (~> 2.0)
   - secp256k1_ios (from `https://github.com/shamatar/secp256k1_ios.git`)
@@ -52,6 +52,6 @@ SPEC CHECKSUMS:
   secp256k1_ios: ac9ef04e761f43c58012b28548afa91493761f17
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
 
-PODFILE CHECKSUM: f6c71566157938ba8afa59f1e6a3ffc11d709d7b
+PODFILE CHECKSUM: 809fc36118e9c566db575d7ab123e35b5acc3df5
 
 COCOAPODS: 1.6.0.beta.1
