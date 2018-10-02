@@ -1,1 +1,0 @@
-../../../web3swift/web3swift/web3swift.h

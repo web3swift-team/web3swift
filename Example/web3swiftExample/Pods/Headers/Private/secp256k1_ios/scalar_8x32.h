@@ -1,1 +1,0 @@
-../../../secp256k1_ios/secp256k1_ios/src/scalar_8x32.h

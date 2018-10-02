@@ -1,6 +1,0 @@
-module SipHash {
-  umbrella header "SipHash-umbrella.h"
-
-  export *
-  module * { export * }
-}
