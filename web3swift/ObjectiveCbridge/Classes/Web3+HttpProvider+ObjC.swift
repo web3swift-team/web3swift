@@ -8,7 +8,7 @@
 
 import Foundation
 
-//@objc(Web3HttpProvider)
+@objc(Web3HttpProvider)
 final class _ObjCWeb3HttpProvider: NSObject{
     private (set) var web3Provider: Web3HttpProvider?
     

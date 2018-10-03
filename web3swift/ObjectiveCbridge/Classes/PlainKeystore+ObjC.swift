@@ -8,7 +8,7 @@
 
 import Foundation
 
-//@objc(PlainKeystore)
+@objc(PlainKeystore)
 public final class _ObjCPlainKeystore: NSObject{
     private (set) var keystore: PlainKeystore?
     
