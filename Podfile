@@ -4,7 +4,7 @@ def import_pods
   pod 'BigInt', '~> 3.1'
   pod 'CryptoSwift', '~> 0.12'
   pod 'Result', '~> 4.0'
-  pod 'secp256k1_swift', '~> 1.0.2', :modular_headers => true
+  pod 'secp256k1_swift', '~> 1.0.3', :modular_headers => true
   pod 'SwiftRLP', '~> 1.0.1'
 end
 

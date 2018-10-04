@@ -27,6 +27,6 @@ s.dependency 'Result', '~> 4.0'
 s.dependency 'CryptoSwift', '~> 0.11'
 s.dependency 'PromiseKit', '~> 6.3'
 s.dependency 'scrypt', '~> 2.0'
-s.dependency 'secp256k1_swift', '~> 1.0.2'
+s.dependency 'secp256k1_swift', '~> 1.0.3'
 s.dependency 'SwiftRLP', '~> 1.0.1'
 end
