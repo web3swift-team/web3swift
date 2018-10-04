@@ -11,7 +11,7 @@ import Foundation
 @objc(JSONRPCrequestDispatcher)
 public final class _ObjCJSONRPCrequestDispatcher: NSObject {
     
-    private (set) weak var jsonRPCrequestDispatcher: JSONRPCrequestDispatcher?
+    private (set) var jsonRPCrequestDispatcher: JSONRPCrequestDispatcher?
     
     // TODO: -DispatchQueue
     init(provider: _ObjCWeb3HttpProvider, queue: DispatchQueue, policy: _ObjCDispatchPolicy) {

@@ -1,1 +1,0 @@
-/Users/newuser/Developer/web3swift/Pods/Target Support Files/secp256k1_ios-macOS/secp256k1_ios-macOS-umbrella.h

@@ -8,6 +8,7 @@
 
 import Foundation
 import BigInt
+import secp256k1_swift
 
 extension web3.BrowserFunctions {
     

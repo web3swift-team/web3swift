@@ -1,0 +1,7 @@
+module SwiftRLP {
+  umbrella header "SwiftRLP-iOS-umbrella.h"
+  exclude header "SwiftRLP-macOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

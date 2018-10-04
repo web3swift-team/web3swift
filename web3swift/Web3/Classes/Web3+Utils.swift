@@ -9,6 +9,8 @@
 import Foundation
 import BigInt
 import CryptoSwift
+import SwiftRLP
+import secp256k1_swift
 
 public typealias Web3Utils = Web3.Utils
 
@@ -27,7 +29,7 @@ extension Web3.Utils {
     /// and the nonce of this address
     public static func calcualteContractAddress(from: EthereumAddress, nonce: BigUInt) -> EthereumAddress? {
         guard let normalizedAddress = from.addressData.setLengthLeft(32) else {return nil}
-        guard let data = RLP.encode([normalizedAddress, nonce] as [Any]) else {return nil}
+        guard let data = RLP.encode([normalizedAddress, nonce] as [AnyObject]) else {return nil}
         guard let contractAddressData = Web3.Utils.sha3(data)?[12..<32] else {return nil}
         guard let contractAddress = EthereumAddress(Data(contractAddressData)) else {return nil}
         return contractAddress
@@ -778,7 +780,7 @@ extension Web3.Utils {
         let bytes = signatureData.bytes
         let r = Array(bytes[0..<32])
         let s = Array(bytes[32..<64])
-        return SECP256K1.UnmarshaledSignature(v: bytes[64], r: r, s: s)
+        return SECP256K1.UnmarshaledSignature(v: bytes[64], r: Data(r), s: Data(s))
     }
     
     /// Marshals the V, R and S signature parameters into a 65 byte recoverable EC signature.
@@ -792,8 +794,8 @@ extension Web3.Utils {
     
     /// Marshals internal signature structure into a 65 byte recoverable EC signature.
     static func marshalSignature(unmarshalledSignature: SECP256K1.UnmarshaledSignature) -> Data {
-        var completeSignature = Data(bytes: unmarshalledSignature.r)
-        completeSignature.append(Data(bytes: unmarshalledSignature.s))
+        var completeSignature = Data(unmarshalledSignature.r)
+        completeSignature.append(Data(unmarshalledSignature.s))
         completeSignature.append(Data(bytes: [unmarshalledSignature.v]))
         return completeSignature
     }
