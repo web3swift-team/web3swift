@@ -1,7 +1,9 @@
-platform :ios, '11.2'
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
 
 target 'web3swiftExample' do
-#  use_frameworks!
-  use_modular_headers!
-  pod 'web3swift', :git => 'https://github.com/bankex/web3swift.git'
+  use_frameworks!
+  #use_modular_headers!
+    pod 'web3swift'
+#  pod 'web3swift', :git => 'https://github.com/matterinc/web3swift.git'
 end

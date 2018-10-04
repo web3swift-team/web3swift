@@ -9,6 +9,7 @@
 import Foundation
 import CryptoSwift
 import Foundation
+import secp256k1_swift
 
 public class EthereumKeystoreV3: AbstractKeystore {
     // Class

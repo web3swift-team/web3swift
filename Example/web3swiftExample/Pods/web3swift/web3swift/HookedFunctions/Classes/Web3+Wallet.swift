@@ -3,8 +3,8 @@
 //  web3swift
 //
 //  Created by Alexander Vlasov on 07.01.2018.
+//  Copyright © 2018 Bankex Foundation. All rights reserved.
 //
-
 import Foundation
 import BigInt
 import Result
@@ -34,23 +34,23 @@ extension web3.Web3Wallet {
         }
     }
     
-    public func signTX(transaction:inout EthereumTransaction, account: EthereumAddress, password: String = "BANKEXFOUNDATION") -> Result<Bool, Web3Error> {
+    public func signTX(transaction:inout EthereumTransaction, account: EthereumAddress, password: String = "web3swift") -> Result<Bool, Web3Error> {
         do {
             guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {
                 return Result.failure(Web3Error.walletError)
             }
             try Web3Signer.signTX(transaction: &transaction, keystore: keystoreManager, account: account, password: password)
-            print(transaction)
+//            print(transaction)
             return Result(true)
         } catch {
             if error is AbstractKeystoreError {
-            return Result.failure(Web3Error.keystoreError(error as! AbstractKeystoreError))
+                return Result.failure(Web3Error.keystoreError(err: error as! AbstractKeystoreError))
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
     
-    public func signPersonalMessage(_ personalMessage: String, account: EthereumAddress, password: String = "BANKEXFOUNDATION") -> Result<Data, Web3Error> {
+    public func signPersonalMessage(_ personalMessage: String, account: EthereumAddress, password: String = "web3swift") -> Result<Data, Web3Error> {
         guard let data = Data.fromHex(personalMessage) else
         {
             return Result.failure(Web3Error.dataError)
@@ -58,7 +58,7 @@ extension web3.Web3Wallet {
         return self.signPersonalMessage(data, account: account, password: password)
     }
     
-    public func signPersonalMessage(_ personalMessage: Data, account: EthereumAddress, password: String = "BANKEXFOUNDATION") -> Result<Data, Web3Error> {
+    public func signPersonalMessage(_ personalMessage: Data, account: EthereumAddress, password: String = "web3swift") -> Result<Data, Web3Error> {
         do {
             guard let keystoreManager = self.web3.provider.attachedKeystoreManager else
             {
@@ -71,9 +71,9 @@ extension web3.Web3Wallet {
         }
         catch{
             if error is AbstractKeystoreError {
-                return Result.failure(Web3Error.keystoreError(error as! AbstractKeystoreError))
+                return Result.failure(Web3Error.keystoreError(err: error as! AbstractKeystoreError))
             }
-            return Result.failure(Web3Error.generalError(error))
+            return Result.failure(Web3Error.generalError(err: error))
         }
     }
 

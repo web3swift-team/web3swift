@@ -22,7 +22,8 @@ public class JSONRPCrequestDispatcher {
         self.provider = provider
         self.queue = queue
         self.policy = policy
-        self.lockQueue = DispatchQueue(label: "batchingQueue", qos: .userInitiated)
+        self.lockQueue = DispatchQueue.init(label: "batchingQueue") // serial simplest queue
+//        DispatchQueue(label: "batchingQueue", qos: .userInitiated)
         self.batches.append(Batch(provider: self.provider, capacity: 32, queue: self.queue, lockQueue: self.lockQueue))
     }
     
@@ -37,13 +38,13 @@ public class JSONRPCrequestDispatcher {
         var triggered : Bool = false
         func add(_ request: JSONRPCrequest, maxWaitTime: TimeInterval) throws -> Promise<JSONRPCresponse> {
             if self.triggered {
-                throw Web3Error.nodeError("Batch is already in flight")
+                throw Web3Error.nodeError(desc: "Batch is already in flight")
             }
             let requestID = request.id
             let promiseToReturn = Promise<JSONRPCresponse>.pending()
-            self.queue.async {
+            self.lockQueue.async {
                 if self.promisesDict[requestID] != nil {
-                    promiseToReturn.resolver.reject(Web3Error.processingError("Request ID collision"))
+                    promiseToReturn.resolver.reject(Web3Error.processingError(desc: "Request ID collision"))
                 }
                 self.promisesDict[requestID] = promiseToReturn
                 self.requests.append(request)
@@ -70,7 +71,7 @@ public class JSONRPCrequestDispatcher {
                     for response in batch.responses {
                         if self.promisesDict[UInt64(response.id)] == nil {
                             for k in self.promisesDict.keys {
-                                self.promisesDict[k]?.resolver.reject(Web3Error.nodeError("Unknown request id"))
+                                self.promisesDict[k]?.resolver.reject(Web3Error.nodeError(desc: "Unknown request id"))
                             }
                             return
                         }
@@ -97,7 +98,7 @@ public class JSONRPCrequestDispatcher {
     
     func getBatch() throws -> Batch {
         guard case .Batch(let batchLength) = self.policy else {
-            throw Web3Error.inputError("Trying to batch a request when policy is not to batch")
+            throw Web3Error.inputError(desc: "Trying to batch a request when policy is not to batch")
         }
         let currentBatch = self.batches.last!
         if currentBatch.requests.count % batchLength == 0 || currentBatch.triggered {

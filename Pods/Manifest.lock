@@ -2,28 +2,31 @@ PODS:
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
   - CryptoSwift (0.12.0)
-  - PromiseKit (6.4.0):
-    - PromiseKit/CorePromise (= 6.4.0)
-    - PromiseKit/Foundation (= 6.4.0)
-    - PromiseKit/UIKit (= 6.4.0)
-  - PromiseKit/CorePromise (6.4.0)
-  - PromiseKit/Foundation (6.4.0):
+  - PromiseKit (6.4.1):
+    - PromiseKit/CorePromise (= 6.4.1)
+    - PromiseKit/Foundation (= 6.4.1)
+    - PromiseKit/UIKit (= 6.4.1)
+  - PromiseKit/CorePromise (6.4.1)
+  - PromiseKit/Foundation (6.4.1):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (6.4.0):
+  - PromiseKit/UIKit (6.4.1):
     - PromiseKit/CorePromise
   - Result (4.0.0)
   - scrypt (2.0):
     - CryptoSwift (~> 0.11)
-  - secp256k1_ios (0.1.3)
+  - secp256k1_swift (1.0.2)
   - SipHash (1.2.2)
+  - SwiftRLP (1.0.1):
+    - BigInt (~> 3.1)
 
 DEPENDENCIES:
   - BigInt (~> 3.1)
-  - CryptoSwift (~> 0.11)
-  - PromiseKit (~> 6.3)
+  - CryptoSwift (~> 0.12)
+  - PromiseKit (~> 6.4.1)
   - Result (~> 4.0)
   - scrypt (~> 2.0)
-  - secp256k1_ios (from `https://github.com/shamatar/secp256k1_ios.git`)
+  - secp256k1_swift (~> 1.0.2)
+  - SwiftRLP (~> 1.0.1)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -32,26 +35,20 @@ SPEC REPOS:
     - PromiseKit
     - Result
     - scrypt
+    - secp256k1_swift
     - SipHash
-
-EXTERNAL SOURCES:
-  secp256k1_ios:
-    :git: https://github.com/shamatar/secp256k1_ios.git
-
-CHECKOUT OPTIONS:
-  secp256k1_ios:
-    :commit: e3ab3e26fafc3688436528f2ca24cc679c7d746e
-    :git: https://github.com/shamatar/secp256k1_ios.git
+    - SwiftRLP
 
 SPEC CHECKSUMS:
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: 1c07ca50843dd48bc54e6ea53d7a4dba3b645716
-  PromiseKit: ae3616f45d7bb9bf4ff1e91abc9b7a8c48a340e0
+  PromiseKit: 4c76a6506638034e3d7bede97b2ff7743f7bd2dc
   Result: 7645bb3f50c2ce726dd0ff2fa7b6f42bbe6c3713
   scrypt: 3fe5b1a3b0976f97cd87488673a8f7c65708cc84
-  secp256k1_ios: ac9ef04e761f43c58012b28548afa91493761f17
+  secp256k1_swift: 1e6ac4ee77fbef7f97f87e096a918a1248b8c4f6
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
+  SwiftRLP: 9de2c9512a9a6bf0909cd84cc143a7ff1aff7820
 
-PODFILE CHECKSUM: f6c71566157938ba8afa59f1e6a3ffc11d709d7b
+PODFILE CHECKSUM: bce98dcdfceae57faa2cd3bcb3d595f16beaad0b
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.0.beta.1

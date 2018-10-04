@@ -9,7 +9,7 @@
 
 // Little-endian to big-endian
 struct Units<Unit: FixedWidthInteger, Words: RandomAccessCollection>: RandomAccessCollection
-where Words.Element: FixedWidthInteger, Words.Index == Int, Words.IndexDistance == Int {
+where Words.Element: FixedWidthInteger, Words.Index == Int {
     typealias Word = Words.Element
     let words: Words
     init(of type: Unit.Type, _ words: Words) {
@@ -122,10 +122,10 @@ extension BigInt: Codable {
             return try container.decode(UInt64.self)
         }
         let magnitude = BigUInt(words: words)
-        
+
         self.init(sign: sign, magnitude: magnitude)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
         try container.encode(sign == .plus ? "+" : "-")
@@ -148,10 +148,8 @@ extension BigUInt: Codable {
         }
         self = value.magnitude
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         try BigInt(sign: .plus, magnitude: self).encode(to: encoder)
     }
 }
-
-

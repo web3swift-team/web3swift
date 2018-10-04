@@ -27,25 +27,20 @@ extension web3.BrowserFunctions {
         return addresses[0]
     }
     
-    public func personalSign(_ personalMessage: String, account: String, password: String = "BANKEXFOUNDATION") -> String? {
+    public func personalSign(_ personalMessage: String, account: String, password: String = "web3swift") -> String? {
         return self.sign(personalMessage, account: account, password: password)
     }
     
-    public func sign(_ personalMessage: String, account: String, password: String = "BANKEXFOUNDATION") -> String? {
+    public func sign(_ personalMessage: String, account: String, password: String = "web3swift") -> String? {
         guard let data = Data.fromHex(personalMessage) else {return nil}
         return self.sign(data, account: account, password: password)
     }
     
-    public func sign(_ personalMessage: Data, account: String, password: String = "BANKEXFOUNDATION") -> String? {
+    public func sign(_ personalMessage: Data, account: String, password: String = "web3swift") -> String? {
         do {
             guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {return nil}
             
             guard let signature = try Web3Signer.signPersonalMessage(personalMessage, keystore: keystoreManager, account: EthereumAddress(account)!, password: password) else {return nil}
-            guard let sender = self.personalECRecover(personalMessage, signature: signature) else {return nil}
-            print(sender)
-            if sender.lowercased() != account.lowercased() {
-                print("Invalid sender")
-            }
             return signature.toHexString().addHexPrefix()
         }
         catch{
@@ -79,13 +74,13 @@ extension web3.BrowserFunctions {
     }
     
     
-    public func sendTransaction(_ transactionJSON: [String: Any], password: String = "BANKEXFOUNDATION") -> [String:Any]? {
+    public func sendTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") -> [String:Any]? {
         guard let transaction = EthereumTransaction.fromJSON(transactionJSON) else {return nil}
         guard let options = Web3Options.fromJSON(transactionJSON) else {return nil}
         return self.sendTransaction(transaction, options: options, password: password)
     }
     
-    public func sendTransaction(_ transaction: EthereumTransaction, options: Web3Options, password: String = "BANKEXFOUNDATION") -> [String:Any]? {
+    public func sendTransaction(_ transaction: EthereumTransaction, options: Web3Options, password: String = "web3swift") -> [String:Any]? {
         let result = self.web3.eth.sendTransaction(transaction, options: options, password: password)
         switch result {
         case .failure(_):
@@ -134,13 +129,13 @@ extension web3.BrowserFunctions {
         return (transaction, options)
     }
     
-    public func signTransaction(_ transactionJSON: [String: Any], password: String = "BANKEXFOUNDATION") -> String? {
+    public func signTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") -> String? {
         guard let transaction = EthereumTransaction.fromJSON(transactionJSON) else {return nil}
         guard let options = Web3Options.fromJSON(transactionJSON) else {return nil}
         return self.signTransaction(transaction, options: options, password: password)
     }
     
-    public func signTransaction(_ trans: EthereumTransaction, options: Web3Options, password: String = "BANKEXFOUNDATION") -> String? {
+    public func signTransaction(_ trans: EthereumTransaction, options: Web3Options, password: String = "web3swift") -> String? {
         do {
             var transaction = trans
             guard let from = options.from else {return nil}

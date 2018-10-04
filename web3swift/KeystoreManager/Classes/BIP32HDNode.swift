@@ -9,6 +9,7 @@
 import Foundation
 import BigInt
 import CryptoSwift
+import secp256k1_swift
 
 extension UInt32 {
     public func serialize32() -> Data {
