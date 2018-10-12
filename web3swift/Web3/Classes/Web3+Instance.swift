@@ -86,6 +86,30 @@ public class web3: Web3OptionsInheritable {
         }
     }
 
+    var txPoolInstance: web3.TxPool?
+    
+    /// Public web3.personal.* namespace.
+    public var txPool: web3.TxPool {
+        if (self.txPoolInstance != nil) {
+            return self.txPoolInstance!
+        }
+        self.txPoolInstance = web3.TxPool(provider : self.provider, web3: self)
+        return self.txPoolInstance!
+    }
+    
+    public class TxPool: Web3OptionsInheritable {
+        var provider:Web3Provider
+        //        weak var web3: web3?
+        var web3: web3
+        public var options: Web3Options {
+            return self.web3.options
+        }
+        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+            provider = prov
+            web3 = web3instance
+        }
+    }
+    
     var walletInstance: web3.Web3Wallet?
     
     /// Public web3.wallet.* namespace.
