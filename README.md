@@ -1,4 +1,4 @@
-![matter-github-swift](https://github.com/matterinc/web3swift/blob/feature/addingLogo/web3swift-logo.png)
+![matter-github-swift](https://github.com/matterinc/web3swift/blob/develop/web3swift-logo.png)
 
 # web3swift
 
