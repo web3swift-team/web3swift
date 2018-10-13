@@ -1,3 +1,5 @@
+![matter-github-swift](https://github.com/matterinc/web3swift/blob/feature/addingLogo/web3swift-logo.png)
+
 # web3swift
 
 [![Version](https://img.shields.io/cocoapods/v/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
