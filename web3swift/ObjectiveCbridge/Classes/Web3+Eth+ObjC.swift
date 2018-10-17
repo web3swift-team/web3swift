@@ -64,4 +64,304 @@ public final class _ObjCweb3Eth: NSObject {
             return nil
         }
     }
+    
+    public func sendTransaction(_ transaction: _ObjCEthereumTransaction, options: _ObjCWeb3Options, password: NSString = "web3swift", error: NSErrorPointer) -> _ObjCTransctionSendingResult? {
+        guard let result = self.web3?.eth.sendTransaction(transaction.transtaction, options: options.options, password: password) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let sendingResult = _ObjCTransctionSendingResult(result: res)
+            return sendingResult
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func sendRawTransaction(_ transaction: NSData, error: NSErrorPointer) -> _ObjCTransctionSendingResult? {
+        guard let result = self.web3?.eth.sendRawTransaction(transaction) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let sendingResult = _ObjCTransctionSendingResult(result: res)
+            return sendingResult
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func sendRawTransaction(_ transaction: _ObjCEthereumTransaction, error: NSErrorPointer) -> _ObjCTransctionSendingResult? {
+        guard let result = self.web3?.eth.sendRawTransaction(transaction.transaction) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let sendingResult = _ObjCTransctionSendingResult(result: res)
+            return sendingResult
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func getTransactionCount(address: _ObjCEthereumAddress, onBlock: NSString = "latest", error: NSErrorPointer) -> _ObjCBigUInt? {
+        guard let result = self.web3?.eth.getTransactionCount(address: address.address) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let count):
+            let biguint = _ObjCBigUInt(value: count)
+            return biguint
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func getTransactionDetails(_ txhash: NSData, error: NSErrorPointer) -> _ObjCTransactionDetails? {
+        guard let result = self.web3?.eth.getTransactionDetails(txhash) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let details = _ObjCTransactionDetails(details: res)
+            return details
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func getTransactionDetails(_ txhash: NSString, error: NSErrorPointer) -> _ObjCTransactionDetails? {
+        guard let result = self.web3?.eth.getTransactionDetails(txhash) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let details = _ObjCTransactionDetails(details: res)
+            return details
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func getTransactionReceipt(_ txhash: NSString, error: NSErrorPointer) -> _ObjCTransactionReceipt? {
+        guard let result = self.web3?.eth.getTransactionReceipt(txhash) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let receipt = _ObjCTransactionReceipt(receipt: res)
+            return receipt
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func getTransactionReceipt(_ txhash: NSData, error: NSErrorPointer) -> _ObjCTransactionReceipt? {
+        guard let result = self.web3?.eth.getTransactionReceipt(txhash) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let receipt = _ObjCTransactionReceipt(receipt: res)
+            return receipt
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func estimateGas(_ transaction: _ObjCEthereumTransaction, options: _ObjCWeb3Options?, onBlock: NSString = "latest", error: NSErrorPointer) -> _ObjCBigUInt? {
+        guard let result = self.web3?.eth.estimateGas(transaction.transaction, options: options.options, onBlock: onBlock) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let biguint = _ObjCBigUInt(value: res)
+            return biguint
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func getAccounts(error: NSErrorPointer) -> _ObjCEthereumAddress? {
+        guard let result = self.web3?.eth.getAccounts() else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let address = _ObjCEthereumAddress(address: res)
+            return address
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func getBlockByHash(_ hash: NSString, fullTransactions: bool = NO, error: NSErrorPointer) -> _ObjCBlock? {
+        guard let result = self.web3?.eth.getBlockByHash(hash, fullTransactions) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let block = _ObjCBlock(block: res)
+            return block
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func getBlockByHash(_ hash: NSData, fullTransactions: bool = NO, error: NSErrorPointer) -> _ObjCBlock? {
+        guard let result = self.web3?.eth.getBlockByHash(hash, fullTransactions) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let block = _ObjCBlock(block: res)
+            return block
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func getBlockByNumber(_ number: NSUInt64, fullTransactions: bool = NO, error: NSErrorPointer) -> _ObjCBlock? {
+        guard let result = self.web3?.eth.getBlockByNumber(number, fullTransactions) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let block = _ObjCBlock(block: res)
+            return block
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func getBlockByNumber(_ number: _ObjCBigUInt, fullTransactions: bool = NO, error: NSErrorPointer) -> _ObjCBlock? {
+        guard let result = self.web3?.eth.getBlockByNumber(number.biguint, fullTransactions) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let block = _ObjCBlock(block: res)
+            return block
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func getBlockByNumber(_ block: NSString, fullTransactions: bool = NO, error: NSErrorPointer) -> _ObjCBlock? {
+        guard let result = self.web3?.eth.getBlockByNumber(block, fullTransactions) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let block = _ObjCBlock(block: res)
+            return block
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func sendETH(to: _ObjCEthereumAddress, amount: _ObjCBigUInt, extraData: NSData = NSData(), options: _ObjCWeb3Options? = nil, error: NSErrorPointer) -> _ObjCTransactionIntermediate? {
+        guard let result = self.web3?.eth.sendETH(to.address, amount.biguint, extraData, options.options) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let transaction = _ObjCTransactionIntermediate(transaction: res)
+            return transaction
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func sendETH(to: _ObjCEthereumAddress, amount: NSString, units: _ObjCWeb3._ObjCUtils._ObjCUnits = .eth, extraData: NSData = NSData(), options: _ObjCWeb3Options? = nil, error: NSErrorPointer) -> _ObjCTransactionIntermediate? {
+        guard let result = self.web3?.eth.sendETH(to.address, amount, units, extraData, options) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let transaction = _ObjCTransactionIntermediate(transaction: res)
+            return transaction
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func sendETH(from: _ObjCEthereumAddress, to: _ObjCEthereumAddress, amount: NSString, units: _ObjCWeb3._ObjCUtils._ObjCUnits = .eth, extraData: NSData = NSData(), options: _ObjCWeb3Options? = nil, error: NSErrorPointer) -> _ObjCTransactionIntermediate? {
+        guard let result = self.web3?.eth.sendETH(from.address, to.address, amount, units, extraData, options) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let transaction = _ObjCTransactionIntermediate(transaction: res)
+            return transaction
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func sendERC20tokensWithKnownDecimals(tokenAddress: _ObjCEthereumAddress, from: _ObjCEthereumAddress, to: _ObjCEthereumAddress, amount: _ObjCBigUInt, options: _ObjCWeb3Options? = nil, error: NSErrorPointer) -> _ObjCTransactionIntermediate? {
+        guard let result = self.web3?.eth.sendERC20tokensWithKnownDecimals(tokenAddress.address, from.address, to.address, amount.biguint, options.options) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let transaction = _ObjCTransactionIntermediate(transaction: res)
+            return transaction
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
+    
+    public func sendERC20tokensWithNaturalUnits(tokenAddress: _ObjCEthereumAddress, from: _ObjCEthereumAddress, to: _ObjCEthereumAddress, amount: NSString, options: _ObjCWeb3Options? = nil, error: NSErrorPointer) -> _ObjCTransactionIntermediate? {
+        guard let result = self.web3?.eth.sendERC20tokensWithNaturalUnits(tokenAddress.address, from.address, to.address, amount, options.options) else {
+            error?.pointee = Web3Error.inputError(desc: "Web3 object was not properly initialized") as NSError
+            return nil
+        }
+        switch result {
+        case .success(let res):
+            let transaction = _ObjCTransactionIntermediate(transaction: res)
+            return transaction
+        case .failure(let web3error):
+            error?.pointee = web3error as NSError
+            return nil
+        }
+    }
 }
