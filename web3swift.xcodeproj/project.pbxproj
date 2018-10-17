@@ -467,7 +467,6 @@
 				81FECD43211ADE20006DA367 /* ObjectiveCbridge */,
 				0073F22320D949D7000791F1 /* BlockExplorer */,
 				81A1821220D5A2430016741F /* Promises */,
-				81FB2204207BCFD9007F9A83 /* Resources */,
 				81C5DA082072542300424CD6 /* ABIv2 */,
 				81C0FCED20440BDF00D82FAF /* HookedFunctions */,
 				81C0FCEA20440BB400D82FAF /* Web3 */,
@@ -613,25 +612,9 @@
 			path = ERC20;
 			sourceTree = "<group>";
 		};
-		8159C50721343EDD00197B91 /* ERC721 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ERC721;
-			sourceTree = "<group>";
-		};
-		8159C50821343EED00197B91 /* PrivateKeyControlledAccount */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = PrivateKeyControlledAccount;
-			sourceTree = "<group>";
-		};
 		8159C50921343EF900197B91 /* PrecompiledContracts */ = {
 			isa = PBXGroup;
 			children = (
-				8159C50821343EED00197B91 /* PrivateKeyControlledAccount */,
-				8159C50721343EDD00197B91 /* ERC721 */,
 				8159C50621343ED300197B91 /* ERC20 */,
 			);
 			path = PrecompiledContracts;
@@ -789,21 +772,6 @@
 				8123E1C6200CBAC200B6D3AB /* Dictionary+Extension.swift */,
 				8123E1CA200CBB2200B6D3AB /* Array+Extension.swift */,
 				8113D2FF1FD7F30F0074282C /* String+Extension.swift */,
-			);
-			path = Classes;
-			sourceTree = "<group>";
-		};
-		81FB2204207BCFD9007F9A83 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				81FB2205207BCFE4007F9A83 /* Classes */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		81FB2205207BCFE4007F9A83 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
 			);
 			path = Classes;
 			sourceTree = "<group>";
