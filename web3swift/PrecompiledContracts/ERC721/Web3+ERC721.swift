@@ -129,7 +129,7 @@ class ERC721 {
     
     func getOwner(tokenId: BigUInt) -> Result<EthereumAddress, Web3Error> {
         let contract = self.contract
-        let result = contract.method("ownerOf", parameters: [account] as [tokenId], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
+        let result = contract.method("ownerOf", parameters: [tokenId] as [AnyObject], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
         switch result {
         case .success(let returned):
             guard let res = returned["0"] as? EthereumAddress else {return Result.failure(Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node"))}
@@ -141,7 +141,7 @@ class ERC721 {
     
     func getApproved(tokenId: BigUInt) -> Result<EthereumAddress, Web3Error> {
         let contract = self.contract
-        let result = contract.method("getApproved", parameters: [account] as [tokenId], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
+        let result = contract.method("getApproved", parameters: [tokenId] as [AnyObject], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
         switch result {
         case .success(let returned):
             guard let res = returned["0"] as? EthereumAddress else {return Result.failure(Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node"))}
@@ -153,7 +153,7 @@ class ERC721 {
     
     func tokenByIndex(index: BigUInt) -> Result<BigUInt, Web3Error> {
         let contract = self.contract
-        let result = contract.method("tokenByIndex", parameters: [account] as [index], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
+        let result = contract.method("tokenByIndex", parameters: [index] as [AnyObject], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
         switch result {
         case .success(let returned):
             guard let res = returned["0"] as? BigUInt else {return Result.failure(Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node"))}
@@ -165,7 +165,7 @@ class ERC721 {
     
     func tokenOfOwnerByIndex(owner: EthereumAddress, index: BigUInt) -> Result<BigUInt, Web3Error> {
         let contract = self.contract
-        let result = contract.method("tokenOfOwnerByIndex", parameters: [account] as [owner, index], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
+        let result = contract.method("tokenOfOwnerByIndex", parameters: [owner, index] as [AnyObject], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
         switch result {
         case .success(let returned):
             guard let res = returned["0"] as? BigUInt else {return Result.failure(Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node"))}
