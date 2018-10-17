@@ -11,14 +11,12 @@ import BigInt
 import Result
 
 // This namespace contains functions to work with ERC721 tokens.
-// variables are lazyly evaluated or global token information (name, ticker, total supply)
 // can be imperatively read and saved
 class ERC721 {
     private var _name: String? = nil
     private var _symbol: String? = nil
     private var _tokenId: BigUInt? = nil
     private var _tokenURI: String? = nil
-    private var _owner: EthereumAddress? = nil
     private var _hasReadProperties: Bool = false
     
     public var options: Web3Options
@@ -141,17 +139,41 @@ class ERC721 {
         }
     }
     
-//    func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) -> Result<BigUInt, Web3Error> {
-//        let contract = self.contract
-//        let result = contract.method("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
-//        switch result {
-//        case .success(let returned):
-//            guard let res = returned["0"] as? BigUInt else {return Result.failure(Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node"))}
-//            return Result(res)
-//        case .failure(let error):
-//            return Result.failure(error)
-//        }
-//    }
+    func getApproved(tokenId: BigUInt) -> Result<EthereumAddress, Web3Error> {
+        let contract = self.contract
+        let result = contract.method("getApproved", parameters: [account] as [tokenId], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
+        switch result {
+        case .success(let returned):
+            guard let res = returned["0"] as? EthereumAddress else {return Result.failure(Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node"))}
+            return Result(res)
+        case .failure(let error):
+            return Result.failure(error)
+        }
+    }
+    
+    func tokenByIndex(index: BigUInt) -> Result<BigUInt, Web3Error> {
+        let contract = self.contract
+        let result = contract.method("tokenByIndex", parameters: [account] as [index], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
+        switch result {
+        case .success(let returned):
+            guard let res = returned["0"] as? BigUInt else {return Result.failure(Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node"))}
+            return Result(res)
+        case .failure(let error):
+            return Result.failure(error)
+        }
+    }
+    
+    func tokenOfOwnerByIndex(owner: EthereumAddress, index: BigUInt) -> Result<BigUInt, Web3Error> {
+        let contract = self.contract
+        let result = contract.method("tokenOfOwnerByIndex", parameters: [account] as [owner, index], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
+        switch result {
+        case .success(let returned):
+            guard let res = returned["0"] as? BigUInt else {return Result.failure(Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node"))}
+            return Result(res)
+        case .failure(let error):
+            return Result.failure(error)
+        }
+    }
     
     func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt) -> Result<TransactionIntermediate, Web3Error> {
         let contract = self.contract
@@ -172,33 +194,5 @@ class ERC721 {
         let intermediateToSend = contract.method("transferFrom", parameters: [originalOwner, to, tokenId] as [AnyObject], options: basicOptions)!
         return Result(intermediateToSend)
     }
-    
-//    func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) -> Result<TransactionIntermediate, Web3Error> {
-//        let contract = self.contract
-//        var basicOptions = Web3Options()
-//        basicOptions.from = from
-//        basicOptions.to = self.address
-//        
-//        // get the decimals manually
-//        let intermediate = contract.method("setAllowance", options: basicOptions)!
-//        let callResult = intermediate.call(options: basicOptions, onBlock: "latest")
-//        var decimals = BigUInt(0)
-//        switch callResult {
-//        case .success(let response):
-//            guard let dec = response["0"], let decTyped = dec as? BigUInt else {
-//                return Result.failure(Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals"))}
-//            decimals = decTyped
-//            break
-//        case .failure(let error):
-//            return Result.failure(error)
-//        }
-//        let intDecimals = Int(decimals)
-//        guard let value = Web3.Utils.parseToBigUInt(newAmount, decimals: intDecimals) else {
-//            return Result.failure(Web3Error.inputError(desc: "Can not parse inputted amount"))
-//        }
-//        let intermediateToSend = contract.method("setAllowance", parameters: [to, value] as [AnyObject], options: basicOptions)!
-//        return Result(intermediateToSend)
-//    }
-    
     
 }
