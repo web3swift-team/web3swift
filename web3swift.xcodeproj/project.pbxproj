@@ -200,6 +200,8 @@
 		81FECD5B211AECBD006DA367 /* Web3+Eth+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD5A211AECBD006DA367 /* Web3+Eth+ObjC.swift */; };
 		81FECD5C211AECBD006DA367 /* Web3+Eth+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD5A211AECBD006DA367 /* Web3+Eth+ObjC.swift */; };
 		81FECD5E211AEFCE006DA367 /* web3swift_ObjC_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD5D211AEFCE006DA367 /* web3swift_ObjC_Tests.swift */; };
+		985BFD4A216CE8B100B28C14 /* Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD49216CE8B100B28C14 /* Web3+TxPool.swift */; };
+		985BFD4E216E2E0A00B28C14 /* Promise+Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD4D216E2E0A00B28C14 /* Promise+Web3+TxPool.swift */; };
 		B219DC172154F3EE0035BF94 /* ENSResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B219DC162154F3EE0035BF94 /* ENSResolver.swift */; };
 		B2E668CE214F8A7B00C3CC2D /* ENS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E668CD214F8A7B00C3CC2D /* ENS.swift */; };
 		B350A445E5DB35C60E59AD70 /* libPods-web3swift-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F8C9C48884592DCF561393 /* libPods-web3swift-macOS.a */; };
@@ -362,6 +364,8 @@
 		81FECD63211AF162006DA367 /* web3swift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "web3swift-Bridging-Header.h"; sourceTree = "<group>"; };
 		8349531F1984454E50389370 /* libPods-web3swift-iOS_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-web3swift-iOS_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8675751D91DB2DBC9E7A3469 /* libPods-web3swift-macOS_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-web3swift-macOS_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		985BFD49216CE8B100B28C14 /* Web3+TxPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+TxPool.swift"; sourceTree = "<group>"; };
+		985BFD4D216E2E0A00B28C14 /* Promise+Web3+TxPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+TxPool.swift"; sourceTree = "<group>"; };
 		A5E8AF69880F5141B4AC9DF0 /* libPods-web3swift-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-web3swift-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9ADDE40292A17C21B8D5516 /* Pods-web3swift-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-iOS/Pods-web3swift-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		B219DC162154F3EE0035BF94 /* ENSResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ENSResolver.swift; sourceTree = "<group>"; };
@@ -687,6 +691,7 @@
 				81A1824720D7DDA20016741F /* Promise+Web3+Personal+Sign.swift */,
 				81A1824A20D7DF1B0016741F /* Promise+Web3+Personal+UnlockAccount.swift */,
 				81195AAF20D7FF8500ABC6B1 /* Promise+Web3+Contract+GetIndexedEvents.swift */,
+				985BFD4D216E2E0A00B28C14 /* Promise+Web3+TxPool.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -717,6 +722,7 @@
 				81C0FCFC20449D1400D82FAF /* Web3+TransactionIntermediate.swift */,
 				818D16CE204D42910084D2A4 /* Web3+EventParser.swift */,
 				81EB1E4A208173D7003BD47F /* Web3+Personal.swift */,
+				985BFD49216CE8B100B28C14 /* Web3+TxPool.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1149,6 +1155,8 @@
 				81FECD55211AEB49006DA367 /* EthereumAddress+ObjC.swift in Sources */,
 				81C5DA282072E18200424CD6 /* NativeTypesEncoding+Extensions.swift in Sources */,
 				8123E1C7200CBAC200B6D3AB /* Dictionary+Extension.swift in Sources */,
+				985BFD4E216E2E0A00B28C14 /* Promise+Web3+TxPool.swift in Sources */,
+				985BFD4A216CE8B100B28C14 /* Web3+TxPool.swift in Sources */,
 				81D7D97820A61E3800A193EC /* EventFiltering.swift in Sources */,
 				8160E5CE20B8245A0070070B /* IBAN.swift in Sources */,
 				81A7B2872143DBF6004CD2C7 /* EIP681.swift in Sources */,
