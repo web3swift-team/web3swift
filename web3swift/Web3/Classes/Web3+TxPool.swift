@@ -24,7 +24,7 @@ extension web3.TxPool {
         }
     }
     
-    public func getStatus() -> Result<[String: Int], Web3Error> {
+    public func getStatus() -> Result<TxPoolStatus, Web3Error> {
         do {
             let result = try self.getStatusPromise().wait()
             return Result(result)
@@ -36,7 +36,7 @@ extension web3.TxPool {
         }
     }
     
-    public func getContent() -> Result<[String:[String:[String:[String:String?]]]], Web3Error> {
+    public func getContent() -> Result<TxPoolContent, Web3Error> {
         do {
             let result = try self.getContentPromise().wait()
             return Result(result)

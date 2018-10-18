@@ -70,16 +70,18 @@ public class BIP32Keystore: AbstractKeystore {
         rootPrefix = keystoreParams!.rootPath!
     }
     
-    public convenience init? (mnemonics: String, password: String = "web3swift", mnemonicsPassword: String = "", language: BIP39Language = BIP39Language.english, prefixPath: String = HDNode.defaultPathMetamaskPrefix) throws {
+    public convenience init? (mnemonics: String, password: String = "web3swift", mnemonicsPassword: String = "", language: BIP39Language = BIP39Language.english, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
         guard var seed = BIP39.seedFromMmemonics(mnemonics, password: mnemonicsPassword, language: language) else {throw AbstractKeystoreError.noEntropyError}
         defer{ Data.zero(&seed) }
-        try self.init(seed: seed, password: password, prefixPath: prefixPath)
+        try self.init(seed: seed, password: password, prefixPath: prefixPath, aesMode: aesMode)
     }
     
-    public init? (seed: Data, password: String = "web3swift", prefixPath: String = HDNode.defaultPathMetamaskPrefix) throws {
-        guard let prefixNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else {return nil}
+    public init? (seed: Data, password: String = "web3swift", prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
+        guard let rootNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else {return nil}
         self.rootPrefix = prefixPath
-        try createNewAccount(parentNode: prefixNode, password: password)
+        try createNewAccount(parentNode: rootNode, password: password)
+        guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {throw AbstractKeystoreError.keyDerivationError}
+        try encryptDataToStorage(password, data: serializedRootNode, aesMode: aesMode)
     }
     
     public func createNewChildAccount(password: String = "web3swift") throws {
@@ -88,9 +90,11 @@ public class BIP32Keystore: AbstractKeystore {
         let prefixPath = self.rootPrefix
         guard rootNode.depth == prefixPath.components(separatedBy: "/").count - 1 else {throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")}
         try createNewAccount(parentNode: rootNode, password: password)
+        guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {throw AbstractKeystoreError.keyDerivationError}
+        try encryptDataToStorage(password, data: serializedRootNode, aesMode: self.keystoreParams!.crypto.cipher)
     }
     
-    public func createNewAccount(parentNode: HDNode, password: String = "web3swift", aesMode: String = "aes-128-cbc") throws {
+    func createNewAccount(parentNode: HDNode, password: String = "web3swift") throws {
         var newIndex = UInt32(0)
         for (p, _) in paths {
             guard let idx = UInt32(p.components(separatedBy: "/").last!) else {continue}
@@ -108,8 +112,6 @@ public class BIP32Keystore: AbstractKeystore {
             newPath = prefixPath + "/" + String(newNode.index)
         }
         paths[newPath] = newAddress
-        guard let serializedRootNode = parentNode.serialize(serializePublic: false) else {throw AbstractKeystoreError.keyDerivationError}
-        try encryptDataToStorage(password, data: serializedRootNode, aesMode: aesMode)
     }
     
     public func createNewCustomChildAccount(password: String = "web3swift", path: String) throws {
@@ -153,7 +155,7 @@ public class BIP32Keystore: AbstractKeystore {
         if (data == nil) {
             throw AbstractKeystoreError.encryptionError("Encryption without key data")
         }
-        if (data?.count != 82) {
+        if (data!.count != 82) {
             throw AbstractKeystoreError.encryptionError("Invalid expected data length")
         }
         let saltLen = 32;

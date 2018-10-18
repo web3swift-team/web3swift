@@ -143,6 +143,10 @@ public struct JSONRPCresponse: Decodable{
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent([TransactionDetails].self, forKey: .result) {
             result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent(TxPoolStatus.self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent(TxPoolContent.self, forKey: .result) {
+            result = rawValue
         } else if let rawValue = try? container.decodeIfPresent([Bool].self, forKey: .result) {
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent([Int].self, forKey: .result) {

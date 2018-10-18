@@ -27,31 +27,27 @@ extension web3.TxPool {
         }
     }
     
-    public func getStatusPromise() -> Promise<[String: Int]> {
+    public func getStatusPromise() -> Promise<TxPoolStatus> {
         let request = JSONRPCRequestFabric.prepareRequest(.getTxPoolStatus, parameters: [])
         let rp = web3.dispatch(request)
         let queue = web3.requestDispatcher.queue
         return rp.map(on: queue ) { response in
-            guard let value: [String: String] = response.result as? [String: String] else {
+            guard let value: TxPoolStatus = response.result as? TxPoolStatus else {
                 if response.error != nil {
                     throw Web3Error.nodeError(desc: response.error!.message)
                 }
                 throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
             }
-            var result: [String: Int] = [:]
-            for (k, v) in value {
-                result[k] = Int.init(v.stripHexPrefix(), radix: 16)
-            }
-            return result
+            return value
         }
     }
     
-    public func getContentPromise() -> Promise<[String:[String:[String:[String:String?]]]]> {
+    public func getContentPromise() -> Promise<TxPoolContent> {
         let request = JSONRPCRequestFabric.prepareRequest(.getTxPoolContent, parameters: [])
         let rp = web3.dispatch(request)
         let queue = web3.requestDispatcher.queue
         return rp.map(on: queue ) { response in
-            guard let value: [String:[String:[String:[String:String?]]]] = response.getValue() else {
+            guard let value: TxPoolContent = response.getValue() else {
                 if response.error != nil {
                     throw Web3Error.nodeError(desc: response.error!.message)
                 }

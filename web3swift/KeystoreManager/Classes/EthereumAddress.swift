@@ -127,6 +127,10 @@ public struct EthereumAddress: Equatable {
     
 }
 
+extension EthereumAddress: Hashable {
+    
+}
+
 
 
 
