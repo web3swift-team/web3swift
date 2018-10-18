@@ -108,7 +108,8 @@ public struct JSONRPCresponse: Decodable{
                                   Int.self,
                                   Bool.self,
                                   [String:String].self,
-                                  [String:Int].self]
+                                  [String:Int].self,
+                                  [String:[String:[String:[String]]]].self]
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: JSONRPCresponseKeys.self)
@@ -142,6 +143,10 @@ public struct JSONRPCresponse: Decodable{
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent([TransactionDetails].self, forKey: .result) {
             result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent(TxPoolStatus.self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent(TxPoolContent.self, forKey: .result) {
+            result = rawValue
         } else if let rawValue = try? container.decodeIfPresent([Bool].self, forKey: .result) {
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent([Int].self, forKey: .result) {
@@ -152,7 +157,11 @@ public struct JSONRPCresponse: Decodable{
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent([String: Int].self, forKey: .result) {
             result = rawValue
-        } 
+        } else if let rawValue = try? container.decodeIfPresent([String:[String:[String:String]]].self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent([String:[String:[String:[String:String?]]]].self, forKey: .result) {
+            result = rawValue
+        }
         self.init(id: id, jsonrpc: jsonrpc, result: result, error: nil)
     }
     

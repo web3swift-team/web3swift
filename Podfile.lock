@@ -14,7 +14,7 @@ PODS:
   - Result (4.0.0)
   - scrypt (2.0):
     - CryptoSwift (~> 0.11)
-  - secp256k1_swift (1.0.2)
+  - secp256k1_swift (1.0.3)
   - SipHash (1.2.2)
   - SwiftRLP (1.0.1):
     - BigInt (~> 3.1)
@@ -25,7 +25,7 @@ DEPENDENCIES:
   - PromiseKit (~> 6.4.1)
   - Result (~> 4.0)
   - scrypt (~> 2.0)
-  - secp256k1_swift (~> 1.0.2)
+  - secp256k1_swift (~> 1.0.3)
   - SwiftRLP (~> 1.0.1)
 
 SPEC REPOS:
@@ -45,10 +45,10 @@ SPEC CHECKSUMS:
   PromiseKit: 4c76a6506638034e3d7bede97b2ff7743f7bd2dc
   Result: 7645bb3f50c2ce726dd0ff2fa7b6f42bbe6c3713
   scrypt: 3fe5b1a3b0976f97cd87488673a8f7c65708cc84
-  secp256k1_swift: 1e6ac4ee77fbef7f97f87e096a918a1248b8c4f6
+  secp256k1_swift: 4fc5c4b2d2c6d21ee8ccb868cdc92da12f38bed9
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
   SwiftRLP: 9de2c9512a9a6bf0909cd84cc143a7ff1aff7820
 
-PODFILE CHECKSUM: bce98dcdfceae57faa2cd3bcb3d595f16beaad0b
+PODFILE CHECKSUM: c1d9470cb065e1f6c00709092108f522105e869f
 
-COCOAPODS: 1.6.0.beta.1
+COCOAPODS: 1.6.0.beta.2
