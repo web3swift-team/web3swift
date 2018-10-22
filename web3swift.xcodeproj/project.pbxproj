@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0073F22620D949F7000791F1 /* BlockExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0073F22520D949F7000791F1 /* BlockExplorer.swift */; };
-		0073F22820D94A11000791F1 /* BlockExplorer+GetTransactionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0073F22720D94A11000791F1 /* BlockExplorer+GetTransactionHistory.swift */; };
 		00E5FE7620EA34370030E0D6 /* web3swift_keystores_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7520EA34370030E0D6 /* web3swift_keystores_Tests.swift */; };
 		00E5FE7A20EA355D0030E0D6 /* web3swift_transactions_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7920EA355D0030E0D6 /* web3swift_transactions_Tests.swift */; };
 		00E5FE7C20EA37B50030E0D6 /* web3swift_ERC20_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7B20EA37B50030E0D6 /* web3swift_ERC20_Tests.swift */; };
@@ -232,8 +230,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0073F22520D949F7000791F1 /* BlockExplorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockExplorer.swift; sourceTree = "<group>"; };
-		0073F22720D94A11000791F1 /* BlockExplorer+GetTransactionHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BlockExplorer+GetTransactionHistory.swift"; sourceTree = "<group>"; };
 		00E5FE7520EA34370030E0D6 /* web3swift_keystores_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_keystores_Tests.swift; sourceTree = "<group>"; };
 		00E5FE7920EA355D0030E0D6 /* web3swift_transactions_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_transactions_Tests.swift; sourceTree = "<group>"; };
 		00E5FE7B20EA37B50030E0D6 /* web3swift_ERC20_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_ERC20_Tests.swift; sourceTree = "<group>"; };
@@ -426,23 +422,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0073F22320D949D7000791F1 /* BlockExplorer */ = {
-			isa = PBXGroup;
-			children = (
-				0073F22420D949E8000791F1 /* Classes */,
-			);
-			path = BlockExplorer;
-			sourceTree = "<group>";
-		};
-		0073F22420D949E8000791F1 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				0073F22520D949F7000791F1 /* BlockExplorer.swift */,
-				0073F22720D94A11000791F1 /* BlockExplorer+GetTransactionHistory.swift */,
-			);
-			path = Classes;
-			sourceTree = "<group>";
-		};
 		1CD91AF21FD76910007BFB45 = {
 			isa = PBXGroup;
 			children = (
@@ -471,7 +450,6 @@
 			children = (
 				8159C50921343EF900197B91 /* PrecompiledContracts */,
 				81FECD43211ADE20006DA367 /* ObjectiveCbridge */,
-				0073F22320D949D7000791F1 /* BlockExplorer */,
 				81A1821220D5A2430016741F /* Promises */,
 				81C5DA082072542300424CD6 /* ABIv2 */,
 				81C0FCED20440BDF00D82FAF /* HookedFunctions */,
@@ -1180,8 +1158,6 @@
 				8113D2CE1FD7E1590074282C /* EthereumTransaction.swift in Sources */,
 				81A1821F20D676BC0016741F /* Promise+Web3+Eth+GetTransactionCount.swift in Sources */,
 				81A1821520D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift in Sources */,
-				0073F22820D94A11000791F1 /* BlockExplorer+GetTransactionHistory.swift in Sources */,
-				0073F22620D949F7000791F1 /* BlockExplorer.swift in Sources */,
 				81C0FD012044A89300D82FAF /* Web3+TransactionIntermediate.swift in Sources */,
 				81A1823C20D79C270016741F /* Promise+Web3+Eth+Call.swift in Sources */,
 			);

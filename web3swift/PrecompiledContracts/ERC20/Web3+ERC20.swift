@@ -13,7 +13,7 @@ import Result
 // This namespace contains functions to work with ERC20 tokens.
 // variables are lazyly evaluated or global token information (name, ticker, total supply)
 // can be imperatively read and saved
-class ERC20 {
+public class ERC20 {
     private var _name: String? = nil
     private var _symbol: String? = nil
     private var _decimals: UInt8? = nil
@@ -110,7 +110,7 @@ class ERC20 {
         }
     }
     
-    func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) -> Result<BigUInt, Web3Error> {
+    public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) -> Result<BigUInt, Web3Error> {
         let contract = self.contract
         let result = contract.method("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
         switch result {
@@ -122,7 +122,7 @@ class ERC20 {
         }
     }
     
-    func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) -> Result<TransactionIntermediate, Web3Error> {
+    public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) -> Result<TransactionIntermediate, Web3Error> {
         let contract = self.contract
         var basicOptions = Web3Options()
         basicOptions.from = from
@@ -149,7 +149,7 @@ class ERC20 {
         return Result(intermediateToSend)
     }
 
-    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) -> Result<TransactionIntermediate, Web3Error> {
+    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) -> Result<TransactionIntermediate, Web3Error> {
         let contract = self.contract
         var basicOptions = Web3Options()
         basicOptions.from = from
@@ -176,7 +176,7 @@ class ERC20 {
         return Result(intermediateToSend)
     }
 
-    func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) -> Result<TransactionIntermediate, Web3Error> {
+    public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) -> Result<TransactionIntermediate, Web3Error> {
         let contract = self.contract
         var basicOptions = Web3Options()
         basicOptions.from = from
