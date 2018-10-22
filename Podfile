@@ -5,7 +5,7 @@ def import_pods
   pod 'CryptoSwift', '~> 0.12'
   pod 'Result', '~> 4.0'
   pod 'secp256k1_swift', '~> 1.0.3', :modular_headers => true
-  pod 'SwiftRLP', '~> 1.0.1'
+  pod 'SwiftRLP', '~> 1.1'
 end
 
 target 'web3swift-macOS' do

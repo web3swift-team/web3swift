@@ -16,7 +16,7 @@ PODS:
     - CryptoSwift (~> 0.11)
   - secp256k1_swift (1.0.3)
   - SipHash (1.2.2)
-  - SwiftRLP (1.0.1):
+  - SwiftRLP (1.1):
     - BigInt (~> 3.1)
 
 DEPENDENCIES:
@@ -26,7 +26,7 @@ DEPENDENCIES:
   - Result (~> 4.0)
   - scrypt (~> 2.0)
   - secp256k1_swift (~> 1.0.3)
-  - SwiftRLP (~> 1.0.1)
+  - SwiftRLP (~> 1.1)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -47,8 +47,8 @@ SPEC CHECKSUMS:
   scrypt: 3fe5b1a3b0976f97cd87488673a8f7c65708cc84
   secp256k1_swift: 4fc5c4b2d2c6d21ee8ccb868cdc92da12f38bed9
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
-  SwiftRLP: 9de2c9512a9a6bf0909cd84cc143a7ff1aff7820
+  SwiftRLP: 5512899925f1a9e1c78c902ed3bf857880e814a0
 
-PODFILE CHECKSUM: c1d9470cb065e1f6c00709092108f522105e869f
+PODFILE CHECKSUM: 2664c33ef7c46c222ed5963c84c7ebd86a806b9e
 
 COCOAPODS: 1.6.0.beta.2

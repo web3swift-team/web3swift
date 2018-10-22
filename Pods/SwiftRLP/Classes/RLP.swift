@@ -144,7 +144,7 @@ public struct RLP {
             return RLPItem.noItem
         }
         var outputArray = [RLPItem]()
-        var bytesToParse = raw
+        var bytesToParse = Data(raw)
         while bytesToParse.count != 0 {
             let (of, dl, t) = decodeLength(bytesToParse)
             guard let offset = of, let dataLength = dl, let type = t else {return nil}
@@ -169,7 +169,7 @@ public struct RLP {
             guard let tail = try? slice(data: bytesToParse, start: offset + dataLength) else {return nil}
             bytesToParse = tail
         }
-        return RLPItem.init(content: .list(outputArray, 0))
+        return RLPItem.init(content: .list(outputArray, 0, Data(raw)))
     }
     
     public struct RLPItem {
@@ -183,7 +183,7 @@ public struct RLP {
         public enum RLPContent {
             case noItem
             case data(Data)
-            indirect case list([RLPItem], Int)
+            indirect case list([RLPItem], Int, Data)
         }
         
         public var content: RLPContent
@@ -215,25 +215,25 @@ public struct RLP {
                 return nil
             case .data(_):
                 return nil
-            case .list(let list, _):
+            case .list(let list, _, _):
                 return list.count
             }
         }
-        public var hasNext: Bool {
-            switch self.content {
-            case .noItem:
-                return false
-            case .data(_):
-                return false
-            case .list(let list, let counter):
-                return list.count > counter
-            }
-        }
+        //        public var hasNext: Bool {
+        //            switch self.content {
+        //            case .noItem:
+        //                return false
+        //            case .data(_):
+        //                return false
+        //            case .list(let list, let counter, _):
+        //                return list.count > counter
+        //            }
+        //        }
         
         public subscript(index: Int) -> RLPItem? {
             get {
-                guard self.hasNext else {return nil}
-                guard case .list(let list, _) = self.content else {return nil}
+                //                guard self.hasNext else {return nil}
+                guard case .list(let list, _, _) = self.content else {return nil}
                 let item = list[index]
                 return item
             }
@@ -245,7 +245,8 @@ public struct RLP {
         
         public func getData() -> Data? {
             if self.isList {
-                return nil
+                guard case .list(_, _, let rawContent) = self.content else {return nil}
+                return rawContent
             }
             guard case .data(let data) = self.content else {return nil}
             return data

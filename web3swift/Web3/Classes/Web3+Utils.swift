@@ -811,4 +811,12 @@ extension Web3.Utils {
         completeSignature.append(Data(bytes: [unmarshalledSignature.v]))
         return completeSignature
     }
+    
+    public static func hexToData(_ string: String) -> Data? {
+        return Data.fromHex(string)
+    }
+    
+    public static func hexToBigUInt(_ string: String) -> BigUInt? {
+        return BigUInt(string.stripHexPrefix(), radix: 16)
+    }
 }

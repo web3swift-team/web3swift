@@ -12,7 +12,7 @@ import Result
 
 // This namespace contains functions to work with ERC721 tokens.
 // can be imperatively read and saved
-class ERC721 {
+public class ERC721 {
     private var _name: String? = nil
     private var _symbol: String? = nil
     private var _tokenId: BigUInt? = nil
@@ -115,7 +115,7 @@ class ERC721 {
         }
     }
     
-    func getBalance(account: EthereumAddress) -> Result<BigUInt, Web3Error> {
+    public func getBalance(account: EthereumAddress) -> Result<BigUInt, Web3Error> {
         let contract = self.contract
         let result = contract.method("balanceOf", parameters: [account] as [AnyObject], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
         switch result {
@@ -127,7 +127,7 @@ class ERC721 {
         }
     }
     
-    func getOwner(tokenId: BigUInt) -> Result<EthereumAddress, Web3Error> {
+    public func getOwner(tokenId: BigUInt) -> Result<EthereumAddress, Web3Error> {
         let contract = self.contract
         let result = contract.method("ownerOf", parameters: [tokenId] as [AnyObject], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
         switch result {
@@ -139,7 +139,7 @@ class ERC721 {
         }
     }
     
-    func getApproved(tokenId: BigUInt) -> Result<EthereumAddress, Web3Error> {
+    public func getApproved(tokenId: BigUInt) -> Result<EthereumAddress, Web3Error> {
         let contract = self.contract
         let result = contract.method("getApproved", parameters: [tokenId] as [AnyObject], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
         switch result {
@@ -151,7 +151,7 @@ class ERC721 {
         }
     }
     
-    func tokenByIndex(index: BigUInt) -> Result<BigUInt, Web3Error> {
+    public func tokenByIndex(index: BigUInt) -> Result<BigUInt, Web3Error> {
         let contract = self.contract
         let result = contract.method("tokenByIndex", parameters: [index] as [AnyObject], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
         switch result {
@@ -163,7 +163,7 @@ class ERC721 {
         }
     }
     
-    func tokenOfOwnerByIndex(owner: EthereumAddress, index: BigUInt) -> Result<BigUInt, Web3Error> {
+    public func tokenOfOwnerByIndex(owner: EthereumAddress, index: BigUInt) -> Result<BigUInt, Web3Error> {
         let contract = self.contract
         let result = contract.method("tokenOfOwnerByIndex", parameters: [owner, index] as [AnyObject], extraData: Data(), options: self.options)!.call(options: nil, onBlock: "latest")
         switch result {
@@ -175,7 +175,7 @@ class ERC721 {
         }
     }
     
-    func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt) -> Result<TransactionIntermediate, Web3Error> {
+    public func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt) -> Result<TransactionIntermediate, Web3Error> {
         let contract = self.contract
         var basicOptions = Web3Options()
         basicOptions.from = from
@@ -185,7 +185,7 @@ class ERC721 {
         return Result(intermediateToSend)
     }
     
-    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) -> Result<TransactionIntermediate, Web3Error> {
+    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) -> Result<TransactionIntermediate, Web3Error> {
         let contract = self.contract
         var basicOptions = Web3Options()
         basicOptions.from = from

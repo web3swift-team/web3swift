@@ -7,7 +7,7 @@ import Foundation
 import BigInt
 import Result
 
-public struct ENS {
+public class ENS {
     
     let web3: web3
     let ensContractAddress: EthereumAddress?
@@ -37,7 +37,7 @@ public struct ENS {
     }()
     
     //MARK: - Convenience methods
-    public mutating func getAddress(_ domain: String) -> Result<EthereumAddress, Web3Error> {
+    public func getAddress(_ domain: String) -> Result<EthereumAddress, Web3Error> {
         let resolver = self.resolver(forDomain: domain)
         switch resolver {
         case .success(var resolver):
@@ -58,7 +58,7 @@ public struct ENS {
     }
     
     
-    public mutating func setAddress(domain: String, address: EthereumAddress, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error>{
+    public func setAddress(domain: String, address: EthereumAddress, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error>{
         let resolver = self.resolver(forDomain: domain)
         switch resolver {
         case .success(var resolver):
@@ -78,7 +78,7 @@ public struct ENS {
         }
     }
     
-    public mutating func getPubkey(domain: String) -> Result<PublicKey, Web3Error> {
+    public func getPubkey(domain: String) -> Result<PublicKey, Web3Error> {
         let resolver = self.resolver(forDomain: domain)
         switch resolver {
         case .success(var resolver):
@@ -99,7 +99,7 @@ public struct ENS {
         }
     }
     
-    mutating public func setPubkey(domain: String, x: String, y: String, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
+    public func setPubkey(domain: String, x: String, y: String, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
         let resolver = self.resolver(forDomain: domain)
         switch resolver {
         case .success(var value):
@@ -109,7 +109,7 @@ public struct ENS {
         }
     }
     
-    mutating public func getContent(domain: String) -> Result<String, Web3Error> {
+    public func getContent(domain: String) -> Result<String, Web3Error> {
         let resolver = self.resolver(forDomain: domain)
         switch resolver {
         case .success(var value):
@@ -119,7 +119,7 @@ public struct ENS {
         }
     }
     
-    public mutating func setContent(domain: String, hash: String, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
+    public func setContent(domain: String, hash: String, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
         let resolver = self.resolver(forDomain: domain)
         switch resolver {
         case .success(var value):
@@ -130,7 +130,7 @@ public struct ENS {
     }
     
     
-    public mutating func getMultihash(domain: String) -> Result<Data, Web3Error> {
+    public func getMultihash(domain: String) -> Result<Data, Web3Error> {
         let resolver = self.resolver(forDomain: domain)
         switch resolver {
         case .success(var value):
@@ -142,7 +142,7 @@ public struct ENS {
     
     
     //MARK: - Returns resolver for the given domain
-    mutating func resolver(forDomain domain: String) -> Result<ResolverENS, Web3Error> {
+    public func resolver(forDomain domain: String) -> Result<ResolverENS, Web3Error> {
         guard let nameHash = NameHash.nameHash(domain) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.registryContract.method("resolver", parameters: [nameHash as AnyObject], options: defaultOptions) else { return Result.failure(Web3Error.transactionSerializationError) }
         let result = transaction.call(options: defaultOptions)
@@ -156,7 +156,7 @@ public struct ENS {
     }
     
     //Returns node's owner address
-    mutating func owner(node: String) -> Result<EthereumAddress, Web3Error> {
+    public func owner(node: String) -> Result<EthereumAddress, Web3Error> {
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.registryContract.method("owner", parameters: [nameHash as AnyObject], options: defaultOptions) else { return Result.failure(Web3Error.transactionSerializationError) }
         let result = transaction.call(options: defaultOptions)
@@ -170,7 +170,7 @@ public struct ENS {
     }
     
     //Untested
-    mutating func ttl(node: String) -> Result<BigUInt, Web3Error> {
+    public func ttl(node: String) -> Result<BigUInt, Web3Error> {
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.registryContract.method("ttl", parameters: [nameHash as AnyObject], options: defaultOptions) else { return Result.failure(Web3Error.transactionSerializationError) }
         let result = transaction.call(options: defaultOptions)
@@ -184,7 +184,7 @@ public struct ENS {
     }
     
     //    function setOwner(bytes32 node, address owner);
-    mutating func setOwner(node: String, owner: EthereumAddress, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
+    public func setOwner(node: String, owner: EthereumAddress, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
         let options = getOptions(options)
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.registryContract.method("setOwner", parameters: [nameHash, owner] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError)}
@@ -198,7 +198,7 @@ public struct ENS {
     }
     
     //    function setSubnodeOwner(bytes32 node, bytes32 label, address owner);
-    mutating func setSubnodeOwner(node: String, label: String, owner: EthereumAddress, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
+    public func setSubnodeOwner(node: String, label: String, owner: EthereumAddress, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
         let options = getOptions(options)
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let labelHash = NameHash.nameHash(label) else { return Result.failure(Web3Error.dataError) }
@@ -213,7 +213,7 @@ public struct ENS {
     }
     
     //    function setResolver(bytes32 node, address resolver);
-    mutating func setResolver(node: String, resolver: EthereumAddress, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
+    public func setResolver(node: String, resolver: EthereumAddress, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
         let options = getOptions(options)
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.registryContract.method("setResolver", parameters: [nameHash, resolver] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError) }
@@ -228,7 +228,7 @@ public struct ENS {
     }
     
     //    function setTTL(bytes32 node, uint64 ttl);
-    mutating func setTTL(node: String, ttl: BigUInt, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
+    public func setTTL(node: String, ttl: BigUInt, options: Web3Options, password: String? = nil) -> Result<TransactionSendingResult, Web3Error> {
         let options = getOptions(options)
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.registryContract.method("setTTL", parameters: [nameHash, ttl] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError) }
