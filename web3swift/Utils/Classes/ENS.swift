@@ -12,7 +12,7 @@ public class ENS {
     let web3: web3
     let ensContractAddress: EthereumAddress?
     
-    init(web3: web3) {
+    public init(web3: web3) {
         self.web3 = web3
         switch web3.provider.network {
         case .Mainnet?:

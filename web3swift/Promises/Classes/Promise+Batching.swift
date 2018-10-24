@@ -18,7 +18,7 @@ public class JSONRPCrequestDispatcher {
     private var lockQueue: DispatchQueue
     private var batches: [Batch] = [Batch]()
     
-    init(provider: Web3Provider, queue: DispatchQueue, policy: DispatchPolicy) {
+    public init(provider: Web3Provider, queue: DispatchQueue, policy: DispatchPolicy) {
         self.provider = provider
         self.queue = queue
         self.policy = policy
@@ -60,7 +60,7 @@ public class JSONRPCrequestDispatcher {
             return promiseToReturn.promise
         }
         
-        func trigger() {
+        public func trigger() {
             self.lockQueue.async {
                 if self.triggered {
                     return
@@ -88,7 +88,7 @@ public class JSONRPCrequestDispatcher {
             }
         }
         
-        init (provider: Web3Provider, capacity: Int, queue: DispatchQueue, lockQueue: DispatchQueue) {
+        public init (provider: Web3Provider, capacity: Int, queue: DispatchQueue, lockQueue: DispatchQueue) {
             self.provider = provider
             self.capacity = capacity
             self.queue = queue
@@ -114,7 +114,7 @@ public class JSONRPCrequestDispatcher {
         case NoBatching
     }
     
-    func addToQueue(request: JSONRPCrequest) -> Promise<JSONRPCresponse> {
+    public func addToQueue(request: JSONRPCrequest) -> Promise<JSONRPCresponse> {
         switch self.policy {
         case .NoBatching:
             return self.provider.sendAsync(request, queue: self.queue)

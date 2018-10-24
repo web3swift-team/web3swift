@@ -16,12 +16,70 @@ public extension ABIv2 {
         var type: String
         var indexed: Bool?
         var components: [Input]?
+        
+        public func parse() throws -> ABIv2.Element.InOut {
+            let name = self.name != nil ? self.name! : ""
+            let parameterType = try ABIv2TypeParser.parseTypeString(self.type)
+            if case .tuple(types: _) = parameterType {
+                let components = try self.components?.compactMap({ (inp: ABIv2.Input) throws -> ABIv2.Element.ParameterType in
+                    let input = try inp.parse()
+                    return input.type
+                })
+                let type = ABIv2.Element.ParameterType.tuple(types: components!)
+                let nativeInput = ABIv2.Element.InOut(name: name, type: type)
+                return nativeInput
+            }
+            else {
+                let nativeInput = ABIv2.Element.InOut(name: name, type: parameterType)
+                return nativeInput
+            }
+        }
+        
+        func parseForEvent() throws -> ABIv2.Element.Event.Input{
+            let name = self.name != nil ? self.name! : ""
+            let parameterType = try ABIv2TypeParser.parseTypeString(self.type)
+            let indexed = self.indexed == true
+            return ABIv2.Element.Event.Input(name:name, type: parameterType, indexed: indexed)
+        }
     }
     
     public struct Output: Decodable {
         var name: String?
         var type: String
         var components: [Output]?
+        
+        public func parse() throws -> ABIv2.Element.InOut {
+            let name = self.name != nil ? self.name! : ""
+            let parameterType = try ABIv2TypeParser.parseTypeString(self.type)
+            switch parameterType {
+            case .tuple(types: _):
+                let components = try self.components?.compactMap({ (inp: ABIv2.Output) throws -> ABIv2.Element.ParameterType in
+                    let input = try inp.parse()
+                    return input.type
+                })
+                let type = ABIv2.Element.ParameterType.tuple(types: components!)
+                let nativeInput = ABIv2.Element.InOut(name: name, type: type)
+                return nativeInput
+            case .array(type: let subtype, length: let length):
+                switch subtype {
+                case .tuple(types: _):
+                    let components = try self.components?.compactMap({ (inp: ABIv2.Output) throws -> ABIv2.Element.ParameterType in
+                        let input = try inp.parse()
+                        return input.type
+                    })
+                    let nestedSubtype = ABIv2.Element.ParameterType.tuple(types: components!)
+                    let properType = ABIv2.Element.ParameterType.array(type: nestedSubtype, length: length)
+                    let nativeInput = ABIv2.Element.InOut(name: name, type: properType)
+                    return nativeInput
+                default:
+                    let nativeInput = ABIv2.Element.InOut(name: name, type: parameterType)
+                    return nativeInput
+                }
+            default:
+                let nativeInput = ABIv2.Element.InOut(name: name, type: parameterType)
+                return nativeInput
+            }
+        }
     }
 
     public struct Record: Decodable {
@@ -33,6 +91,14 @@ public extension ABIv2 {
         var inputs: [ABIv2.Input]?
         var outputs: [ABIv2.Output]?
         var anonymous: Bool?
+        
+        public func parse() throws -> ABIv2.Element {
+            let typeString = self.type != nil ? self.type! : "function"
+            guard let type = ABIv2.ElementType(rawValue: typeString) else {
+                throw ABIv2.ParsingError.elementTypeInvalid
+            }
+            return try parseToElement(from: self, type: type)
+        }
     }
     
     public enum Element {
@@ -85,8 +151,8 @@ public extension ABIv2 {
     }
 }
 
-extension ABIv2.Element {
-    func encodeParameters(_ parameters: [AnyObject]) -> Data? {
+public extension ABIv2.Element {
+    public func encodeParameters(_ parameters: [AnyObject]) -> Data? {
         switch self {
         case .constructor(let constructor):
             guard parameters.count == constructor.inputs.count else {return nil}
@@ -105,8 +171,8 @@ extension ABIv2.Element {
     }
 }
 
-extension ABIv2.Element {
-    func decodeReturnData(_ data: Data) -> [String:Any]? {
+public extension ABIv2.Element {
+    public func decodeReturnData(_ data: Data) -> [String:Any]? {
         switch self {
         case .constructor(_):
             return nil
@@ -142,7 +208,7 @@ extension ABIv2.Element {
         }
     }
     
-    func decodeInputData(_ rawData: Data) -> [String: Any]? {
+    public func decodeInputData(_ rawData: Data) -> [String: Any]? {
         var data = rawData
         var sig: Data? = nil
         switch rawData.count % 32 {
@@ -216,8 +282,8 @@ extension ABIv2.Element {
     }
 }
 
-extension ABIv2.Element.Event {
-    func decodeReturnedLogs(_ eventLog: EventLog) -> [String:Any]? {
+public extension ABIv2.Element.Event {
+    public func decodeReturnedLogs(_ eventLog: EventLog) -> [String:Any]? {
         guard let eventContent = ABIv2Decoder.decodeLog(event: self, eventLog: eventLog) else {return nil}
         return eventContent
     }

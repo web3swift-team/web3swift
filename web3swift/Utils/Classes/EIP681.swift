@@ -143,7 +143,7 @@ extension Web3 {
                             nativeValue = ethereumAddress as AnyObject
                         case .ensAddress(let ens):
                             let web = web3(provider: InfuraProvider(Networks.fromInt(Int(code.chainID ?? 1)) ?? Networks.Mainnet)!)
-                            var ensModel = ENS(web3: web)
+                            let ensModel = ENS(web3: web)
                             let resolver = ensModel.resolver(forDomain: ens)
                             switch resolver {
                             case .failure(_):
