@@ -11,6 +11,7 @@ import BigInt
 import CryptoSwift
 import SwiftRLP
 import secp256k1_swift
+import EthereumAddress
 
 public typealias Web3Utils = Web3.Utils
 

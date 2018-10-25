@@ -28,7 +28,6 @@
 		41948125203630530065A83B /* Web3+Methods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F9B1FEC520500CF0DA2 /* Web3+Methods.swift */; };
 		41948126203630530065A83B /* Web3+Eth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810B0F9D1FEC5B9C00CF0DA2 /* Web3+Eth.swift */; };
 		4194812C203630530065A83B /* KeystoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2B81FD7E1590074282C /* KeystoreManager.swift */; };
-		4194812D203630530065A83B /* EthereumAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */; };
 		4194812E203630530065A83B /* AbstractKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB2420066E2B00E02EAA /* AbstractKeystore.swift */; };
 		41948130203630530065A83B /* BIP32Keystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815630012007B53C00A0EC2F /* BIP32Keystore.swift */; };
 		41948131203630530065A83B /* BIP32KeystoreJSONStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81562FFF2007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift */; };
@@ -81,7 +80,6 @@
 		815C74C820ECBF3E00DE2AC4 /* web3swift_User_cases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815C74C720ECBF3E00DE2AC4 /* web3swift_User_cases.swift */; };
 		8160E5CE20B8245A0070070B /* IBAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8160E5CD20B8245A0070070B /* IBAN.swift */; };
 		8160E5CF20B8245A0070070B /* IBAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8160E5CD20B8245A0070070B /* IBAN.swift */; };
-		817EBB102004FE2800E02EAA /* EthereumAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */; };
 		817EBB122004FE2F00E02EAA /* BIP32HDNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB112004FE2F00E02EAA /* BIP32HDNode.swift */; };
 		817EBB162004FE4200E02EAA /* Web3+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */; };
 		817EBB1F2006265400E02EAA /* Base58.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB1E2006265400E02EAA /* Base58.swift */; };
@@ -293,7 +291,6 @@
 		8159C50D2135901700197B91 /* web3swift_ERC20_Class_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_ERC20_Class_Tests.swift; sourceTree = "<group>"; };
 		815C74C720ECBF3E00DE2AC4 /* web3swift_User_cases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_User_cases.swift; sourceTree = "<group>"; };
 		8160E5CD20B8245A0070070B /* IBAN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IBAN.swift; sourceTree = "<group>"; };
-		817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EthereumAddress.swift; sourceTree = "<group>"; };
 		817EBB112004FE2F00E02EAA /* BIP32HDNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BIP32HDNode.swift; sourceTree = "<group>"; };
 		817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+HttpProvider.swift"; sourceTree = "<group>"; };
 		817EBB1E2006265400E02EAA /* Base58.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base58.swift; sourceTree = "<group>"; };
@@ -564,7 +561,6 @@
 			children = (
 				817EBB2420066E2B00E02EAA /* AbstractKeystore.swift */,
 				8113D2B81FD7E1590074282C /* KeystoreManager.swift */,
-				817EBB0F2004FE2800E02EAA /* EthereumAddress.swift */,
 				815630012007B53C00A0EC2F /* BIP32Keystore.swift */,
 				81562FFF2007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift */,
 				817EBB112004FE2F00E02EAA /* BIP32HDNode.swift */,
@@ -1108,7 +1104,6 @@
 				81D7D97220A31FB700A193EC /* ComparisonExtensions.swift in Sources */,
 				817EBB27200673D100E02EAA /* KeystoreV3JSONStructure.swift in Sources */,
 				81C5DA11207254F600424CD6 /* ABIv2.swift in Sources */,
-				817EBB102004FE2800E02EAA /* EthereumAddress.swift in Sources */,
 				81FB21FE207BB297007F9A83 /* EIP67Code.swift in Sources */,
 				81A1821A20D5A6F70016741F /* Promise+HttpProvider.swift in Sources */,
 				81A1823720D6E2BB0016741F /* Promise+Web3+Eth+GetBlockByHash.swift in Sources */,
@@ -1234,7 +1229,6 @@
 				81A1823E20D79C2C0016741F /* Promise+Web3+Eth+SendRawTransaction.swift in Sources */,
 				81A1823D20D79C290016741F /* Promise+Web3+Eth+Call.swift in Sources */,
 				81C5DA12207254F600424CD6 /* ABIv2.swift in Sources */,
-				4194812D203630530065A83B /* EthereumAddress.swift in Sources */,
 				81FB21FF207BB297007F9A83 /* EIP67Code.swift in Sources */,
 				81C5DA0F207254D000424CD6 /* ABIv2Elements.swift in Sources */,
 				81A1821B20D5A6F80016741F /* Promise+HttpProvider.swift in Sources */,

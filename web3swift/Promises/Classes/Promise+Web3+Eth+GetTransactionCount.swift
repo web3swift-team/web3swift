@@ -9,6 +9,7 @@
 import Foundation
 import BigInt
 import PromiseKit
+import EthereumAddress
 
 extension web3.Eth {
     public func getTransactionCountPromise(address: EthereumAddress, onBlock: String = "latest") -> Promise<BigUInt> {

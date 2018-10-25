@@ -9,6 +9,8 @@
 import Foundation
 import secp256k1_swift
 
+import EthereumAddress
+
 public class PlainKeystore: AbstractKeystore {
     private var privateKey: Data
     

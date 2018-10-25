@@ -9,7 +9,7 @@
 import Foundation
 import CryptoSwift
 import Foundation
-
+import EthereumAddress
 
 public class BIP32Keystore: AbstractKeystore {
     // Protocol

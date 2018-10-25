@@ -8,6 +8,7 @@
 import Foundation
 import BigInt
 import Result
+import EthereumAddress
 
 extension web3.Web3Wallet {
     

@@ -10,6 +10,7 @@ import Foundation
 import BigInt
 import SwiftRLP
 import secp256k1_swift
+import EthereumAddress
 
 public struct EthereumTransaction: CustomStringConvertible {
     public var nonce: BigUInt

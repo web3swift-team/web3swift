@@ -8,6 +8,7 @@
 
 import Foundation
 import BigInt
+import EthereumAddress
 
 extension BigUInt: EventFilterEncodable {
     public func eventFilterEncoded() -> String? {

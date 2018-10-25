@@ -6,6 +6,7 @@ def import_pods
   pod 'Result', '~> 4.0'
   pod 'secp256k1_swift', '~> 1.0.3', :modular_headers => true
   pod 'SwiftRLP', '~> 1.1'
+  pod 'EthereumAddress', '~> 1.0.0'
 end
 
 target 'web3swift-macOS' do

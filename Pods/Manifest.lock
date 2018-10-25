@@ -2,6 +2,8 @@ PODS:
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
   - CryptoSwift (0.13.0)
+  - EthereumAddress (1.0.0):
+    - CryptoSwift (~> 0.13)
   - PromiseKit (6.4.1):
     - PromiseKit/CorePromise (= 6.4.1)
     - PromiseKit/Foundation (= 6.4.1)
@@ -22,6 +24,7 @@ PODS:
 DEPENDENCIES:
   - BigInt (~> 3.1)
   - CryptoSwift (~> 0.12)
+  - EthereumAddress (~> 1.0.0)
   - PromiseKit (~> 6.4.1)
   - Result (~> 4.0)
   - scrypt (~> 2.0)
@@ -32,6 +35,7 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - BigInt
     - CryptoSwift
+    - EthereumAddress
     - PromiseKit
     - Result
     - scrypt
@@ -42,6 +46,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: 16e78bebf567bad1c87b2d58f6547f25b74c31aa
+  EthereumAddress: f476e1320dca3a0024431e713ede7a09c7eb7796
   PromiseKit: 4c76a6506638034e3d7bede97b2ff7743f7bd2dc
   Result: 7645bb3f50c2ce726dd0ff2fa7b6f42bbe6c3713
   scrypt: 3fe5b1a3b0976f97cd87488673a8f7c65708cc84
@@ -49,6 +54,6 @@ SPEC CHECKSUMS:
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
   SwiftRLP: 5512899925f1a9e1c78c902ed3bf857880e814a0
 
-PODFILE CHECKSUM: 2664c33ef7c46c222ed5963c84c7ebd86a806b9e
+PODFILE CHECKSUM: 9f923f3cffffde022aaef140f9cd311a152e9c49
 
 COCOAPODS: 1.6.0.beta.1

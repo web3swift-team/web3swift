@@ -9,6 +9,7 @@
 import Foundation
 import BigInt
 import Result
+import EthereumAddress
 
 // This namespace contains functions to work with ERC721 tokens.
 // can be imperatively read and saved
