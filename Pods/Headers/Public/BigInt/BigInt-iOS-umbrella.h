@@ -1,1 +1,0 @@
-/Users/antongrigorev/Developer/web3swift/Pods/Target Support Files/BigInt-iOS/BigInt-iOS-umbrella.h

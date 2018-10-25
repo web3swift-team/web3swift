@@ -1,1 +1,0 @@
-/Users/antongrigorev/Developer/web3swift/Pods/Target Support Files/SipHash-macOS/SipHash-macOS-umbrella.h

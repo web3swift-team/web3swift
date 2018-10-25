@@ -1,1 +1,0 @@
-../../../secp256k1_swift/Classes/secp256k1/include/secp256k1_recovery.h
