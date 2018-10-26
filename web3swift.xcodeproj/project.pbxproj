@@ -203,6 +203,14 @@
 		B219DC172154F3EE0035BF94 /* ENSResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B219DC162154F3EE0035BF94 /* ENSResolver.swift */; };
 		B2E668CE214F8A7B00C3CC2D /* ENS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E668CD214F8A7B00C3CC2D /* ENS.swift */; };
 		B350A445E5DB35C60E59AD70 /* libPods-web3swift-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F8C9C48884592DCF561393 /* libPods-web3swift-macOS.a */; };
+		E2065FB62181D7D700701068 /* Web3+ERC721.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E94C5F217788E0005F54A0 /* Web3+ERC721.swift */; };
+		E2065FB72181D7D700701068 /* JSONRPCrequestDispatcher+ObjC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C590752152835400FF53D3 /* JSONRPCrequestDispatcher+ObjC.swift */; };
+		E2065FB82181D7D700701068 /* Promise+Web3+Eth+EstimateGas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1823F20D79FDB0016741F /* Promise+Web3+Eth+EstimateGas.swift */; };
+		E2065FB92181D7D700701068 /* Promise+Web3+Contract+GetIndexedEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81195AAF20D7FF8500ABC6B1 /* Promise+Web3+Contract+GetIndexedEvents.swift */; };
+		E2065FBA2181D7D700701068 /* Promise+Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD4D216E2E0A00B28C14 /* Promise+Web3+TxPool.swift */; };
+		E2065FBB2181D7D700701068 /* Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD49216CE8B100B28C14 /* Web3+TxPool.swift */; };
+		E2065FBC2181D7D700701068 /* ENS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E668CD214F8A7B00C3CC2D /* ENS.swift */; };
+		E2065FBD2181D7D700701068 /* ENSResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B219DC162154F3EE0035BF94 /* ENSResolver.swift */; };
 		E23B5ADB20EA67D800DC7F32 /* web3swift_AdvancedABIv2_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5ADA20EA67D800DC7F32 /* web3swift_AdvancedABIv2_Tests.swift */; };
 		E23B5ADD20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5ADC20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift */; };
 		E23B5AE120EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5AE020EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift */; };
@@ -1194,6 +1202,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2065FB62181D7D700701068 /* Web3+ERC721.swift in Sources */,
+				E2065FB72181D7D700701068 /* JSONRPCrequestDispatcher+ObjC.swift in Sources */,
+				E2065FB82181D7D700701068 /* Promise+Web3+Eth+EstimateGas.swift in Sources */,
+				E2065FB92181D7D700701068 /* Promise+Web3+Contract+GetIndexedEvents.swift in Sources */,
+				E2065FBA2181D7D700701068 /* Promise+Web3+TxPool.swift in Sources */,
+				E2065FBB2181D7D700701068 /* Web3+TxPool.swift in Sources */,
+				E2065FBC2181D7D700701068 /* ENS.swift in Sources */,
+				E2065FBD2181D7D700701068 /* ENSResolver.swift in Sources */,
 				8159C50C21352CB700197B91 /* Web3+ERC20.swift in Sources */,
 				4194811B203630530065A83B /* Web3+HttpProvider.swift in Sources */,
 				4194811E203630530065A83B /* Web3.swift in Sources */,
