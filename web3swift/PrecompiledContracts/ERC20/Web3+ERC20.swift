@@ -9,6 +9,7 @@
 import Foundation
 import BigInt
 import Result
+import EthereumAddress
 
 // This namespace contains functions to work with ERC20 tokens.
 // variables are lazyly evaluated or global token information (name, ticker, total supply)

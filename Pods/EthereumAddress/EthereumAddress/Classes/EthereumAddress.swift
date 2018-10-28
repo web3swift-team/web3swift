@@ -1,13 +1,13 @@
 //
 //  EthereumAddress.swift
-//  web3swift
+//  EthereumAddress
 //
-//  Created by Alexander Vlasov on 07.01.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov on 25/10/2018.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
-import BigInt
+import CryptoSwift
 
 public struct EthereumAddress: Equatable {
     public enum AddressType {
@@ -30,7 +30,7 @@ public struct EthereumAddress: Equatable {
     public var type: AddressType = .normal
     public static func ==(lhs: EthereumAddress, rhs: EthereumAddress) -> Bool {
         return lhs.addressData == rhs.addressData && lhs.type == rhs.type
-//        return lhs.address.lowercased() == rhs.address.lowercased() && lhs.type == rhs.type
+        //        return lhs.address.lowercased() == rhs.address.lowercased() && lhs.type == rhs.type
     }
     
     public var addressData: Data {
@@ -39,8 +39,8 @@ public struct EthereumAddress: Equatable {
             case .normal:
                 guard let dataArray = Data.fromHex(_address) else {return Data()}
                 return dataArray
-//                guard let d = dataArray.setLengthLeft(20) else { return Data()}
-//                return d
+                //                guard let d = dataArray.setLengthLeft(20) else { return Data()}
+            //                return d
             case .contractDeployment:
                 return Data()
             }
@@ -121,9 +121,9 @@ public struct EthereumAddress: Equatable {
         return EthereumAddress("0x", type: .contractDeployment)!
     }
     
-//    public static func fromIBAN(_ iban: String) -> EthereumAddress {
-//
-//    }
+    //    public static func fromIBAN(_ iban: String) -> EthereumAddress {
+    //
+    //    }
     
 }
 

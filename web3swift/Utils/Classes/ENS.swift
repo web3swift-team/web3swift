@@ -6,6 +6,7 @@
 import Foundation
 import BigInt
 import Result
+import EthereumAddress
 
 public class ENS {
     

@@ -10,6 +10,7 @@ import Foundation
 import BigInt
 import Result
 import class PromiseKit.Promise
+import EthereumAddress
 
 /// Protocol for generic Ethereum event parsing results
 public protocol EventParserResultProtocol {

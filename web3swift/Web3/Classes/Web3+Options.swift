@@ -8,6 +8,7 @@
 
 import Foundation
 import BigInt
+import EthereumAddress
 
 public protocol Web3OptionsInheritable {
     var options: Web3Options {get}

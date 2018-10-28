@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import EthereumAddress
 
 @objc(EthereumAddress)
 public final class _ObjCEthereumAddress: NSObject{

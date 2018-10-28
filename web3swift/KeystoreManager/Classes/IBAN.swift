@@ -8,6 +8,7 @@
 
 import Foundation
 import BigInt
+import EthereumAddress
 
 public struct ICAP {
     public var asset: String
