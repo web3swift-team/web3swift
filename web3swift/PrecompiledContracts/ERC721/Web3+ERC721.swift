@@ -1,9 +1,7 @@
+//  web3swift
 //
-//  Web3+ERC721.swift
-//  web3swift-iOS
-//
-//  Created by Anton Grigorev on 17.10.2018.
-//  Copyright © 2018 The Matter Inc. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation

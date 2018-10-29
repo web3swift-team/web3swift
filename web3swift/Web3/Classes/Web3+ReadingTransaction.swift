@@ -62,7 +62,7 @@ public class ReadTransaction {
         return returnPromise
     }
     
-    public func estimateGasPromise(transactionOptions: TransactionOptions) -> Promise<BigUInt>{
+    public func estimateGasPromise(transactionOptions: TransactionOptions? = nil) -> Promise<BigUInt>{
         let assembledTransaction : EthereumTransaction = self.transaction
         let queue = self.web3.requestDispatcher.queue
         let returnPromise = Promise<BigUInt> { seal in

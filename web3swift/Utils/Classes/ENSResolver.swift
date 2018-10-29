@@ -1,9 +1,7 @@
+//  web3swift
 //
-//  ENSResolver.swift
-//  web3swift-iOS
-//
-//  Created by NewUser on 21/09/2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation

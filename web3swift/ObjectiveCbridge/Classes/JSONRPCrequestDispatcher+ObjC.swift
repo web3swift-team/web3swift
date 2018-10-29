@@ -1,9 +1,7 @@
+//  web3swift
 //
-//  JSONRPCrequestDispatcher.swift
-//  web3swift-iOS
-//
-//  Created by Anton Grigorev on 19.09.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation

@@ -7,15 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E5FE7620EA34370030E0D6 /* web3swift_keystores_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7520EA34370030E0D6 /* web3swift_keystores_Tests.swift */; };
-		00E5FE7A20EA355D0030E0D6 /* web3swift_transactions_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7920EA355D0030E0D6 /* web3swift_transactions_Tests.swift */; };
-		00E5FE7C20EA37B50030E0D6 /* web3swift_ERC20_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7B20EA37B50030E0D6 /* web3swift_ERC20_Tests.swift */; };
-		00E5FE8020EA3CEA0030E0D6 /* web3swift_RLP_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7F20EA3CEA0030E0D6 /* web3swift_RLP_Tests.swift */; };
 		00E5FE8220EA3FF40030E0D6 /* web3swift_infura_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE8120EA3FF40030E0D6 /* web3swift_infura_Tests.swift */; };
 		13AE5971A972F5B55FA6FB69 /* libPods-web3swift-iOS_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8349531F1984454E50389370 /* libPods-web3swift-iOS_Tests.a */; };
 		1CB818902160868000726CF8 /* key.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CB8188F2160867700726CF8 /* key.json */; };
 		1CB818912160871000726CF8 /* key.json in Resources */ = {isa = PBXBuildFile; fileRef = 1CB8188F2160867700726CF8 /* key.json */; };
-		1CD91B321FD769A6007BFB45 /* web3swift_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD91B311FD769A6007BFB45 /* web3swift_Tests.swift */; };
 		1CD91B341FD769A6007BFB45 /* web3swift_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CD91AFC1FD76910007BFB45 /* web3swift_iOS.framework */; };
 		4194811B203630530065A83B /* Web3+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */; };
 		4194811E203630530065A83B /* Web3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECCE1FDF004E0063684A /* Web3.swift */; };
@@ -45,8 +40,6 @@
 		41948140203630530065A83B /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8123E1CA200CBB2200B6D3AB /* Array+Extension.swift */; };
 		41948141203630530065A83B /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8113D2FF1FD7F30F0074282C /* String+Extension.swift */; };
 		4B900282EFA99F16100CC958 /* libPods-web3swift-macOS_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8675751D91DB2DBC9E7A3469 /* libPods-web3swift-macOS_Tests.a */; };
-		4EFFCB6E208552F2008165FE /* web3swift_local_node_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFFCB6D208552F2008165FE /* web3swift_local_node_Tests.swift */; };
-		4EFFCB70208554EB008165FE /* web3swift_remoteParsing_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFFCB6F208554EB008165FE /* web3swift_remoteParsing_Tests.swift */; };
 		64CF114189285D8E240C4985 /* libPods-web3swift-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E8AF69880F5141B4AC9DF0 /* libPods-web3swift-iOS.a */; };
 		8103BBCC2077B84400499769 /* PlainKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBCB2077B84400499769 /* PlainKeystore.swift */; };
 		8103BBCD2077B84400499769 /* PlainKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8103BBCB2077B84400499769 /* PlainKeystore.swift */; };
@@ -71,8 +64,6 @@
 		815630002007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81562FFF2007B48800A0EC2F /* BIP32KeystoreJSONStructure.swift */; };
 		815630022007B53C00A0EC2F /* BIP32Keystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815630012007B53C00A0EC2F /* BIP32Keystore.swift */; };
 		815630042007BC8F00A0EC2F /* BIP39+WordLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815630032007BC8F00A0EC2F /* BIP39+WordLists.swift */; };
-		8159C50E2135901700197B91 /* web3swift_ERC20_Class_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8159C50D2135901700197B91 /* web3swift_ERC20_Class_Tests.swift */; };
-		815C74C820ECBF3E00DE2AC4 /* web3swift_User_cases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815C74C720ECBF3E00DE2AC4 /* web3swift_User_cases.swift */; };
 		8160E5CE20B8245A0070070B /* IBAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8160E5CD20B8245A0070070B /* IBAN.swift */; };
 		8160E5CF20B8245A0070070B /* IBAN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8160E5CD20B8245A0070070B /* IBAN.swift */; };
 		817EBB122004FE2F00E02EAA /* BIP32HDNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB112004FE2F00E02EAA /* BIP32HDNode.swift */; };
@@ -92,11 +83,11 @@
 		81909D1621862D37007D2AE5 /* Web3+MutatingTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81909D1421862D37007D2AE5 /* Web3+MutatingTransaction.swift */; };
 		81909D1821862D5A007D2AE5 /* Web3+Eventloop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81909D1721862D5A007D2AE5 /* Web3+Eventloop.swift */; };
 		81909D1921862D5A007D2AE5 /* Web3+Eventloop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81909D1721862D5A007D2AE5 /* Web3+Eventloop.swift */; };
+		81909D1B2187B1FA007D2AE5 /* web3swift_User_cases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815C74C720ECBF3E00DE2AC4 /* web3swift_User_cases.swift */; };
 		81A1821520D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821420D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift */; };
 		81A1821620D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821420D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift */; };
 		81A1821A20D5A6F70016741F /* Promise+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821720D5A3E70016741F /* Promise+HttpProvider.swift */; };
 		81A1821B20D5A6F80016741F /* Promise+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821720D5A3E70016741F /* Promise+HttpProvider.swift */; };
-		81A1821D20D5C6C10016741F /* web3swift_promises_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821C20D5C6C10016741F /* web3swift_promises_Tests.swift */; };
 		81A1821F20D676BC0016741F /* Promise+Web3+Eth+GetTransactionCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821E20D676BC0016741F /* Promise+Web3+Eth+GetTransactionCount.swift */; };
 		81A1822020D676BC0016741F /* Promise+Web3+Eth+GetTransactionCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821E20D676BC0016741F /* Promise+Web3+Eth+GetTransactionCount.swift */; };
 		81A1822220D678060016741F /* Promise+Web3+Eth+GetBlockNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1822120D678060016741F /* Promise+Web3+Eth+GetBlockNumber.swift */; };
@@ -130,8 +121,6 @@
 		81A1824C20D7DF1B0016741F /* Promise+Web3+Personal+UnlockAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1824A20D7DF1B0016741F /* Promise+Web3+Personal+UnlockAccount.swift */; };
 		81A7B2512143C3A8004CD2C7 /* NameHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7B2502143C3A8004CD2C7 /* NameHash.swift */; };
 		81A7B2522143C3A8004CD2C7 /* NameHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7B2502143C3A8004CD2C7 /* NameHash.swift */; };
-		81A7B2792143C978004CD2C7 /* web3swift_ENS_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7B2782143C978004CD2C7 /* web3swift_ENS_Tests.swift */; };
-		81A7B28A2143DF1D004CD2C7 /* web3swift_EIP681_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7B2892143DF1D004CD2C7 /* web3swift_EIP681_Tests.swift */; };
 		81C0FCF220440EB500D82FAF /* Web3+Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF120440EB500D82FAF /* Web3+Protocols.swift */; };
 		81C0FCF420440F0900D82FAF /* Web3+Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF320440F0900D82FAF /* Web3+Options.swift */; };
 		81C0FCF720441A1D00D82FAF /* TransactionSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C0FCF520440F9900D82FAF /* TransactionSigner.swift */; };
@@ -162,7 +151,6 @@
 		81FB21FF207BB297007F9A83 /* EIP67Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F8207BA78B007F9A83 /* EIP67Code.swift */; };
 		81FB2201207BC58C007F9A83 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2200207BC58B007F9A83 /* CoreImage.framework */; };
 		81FB2203207BC6DB007F9A83 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2202207BC6DB007F9A83 /* ImageIO.framework */; };
-		81FECD5E211AEFCE006DA367 /* web3swift_ObjC_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FECD5D211AEFCE006DA367 /* web3swift_ObjC_Tests.swift */; };
 		985BFD4A216CE8B100B28C14 /* Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD49216CE8B100B28C14 /* Web3+TxPool.swift */; };
 		985BFD4E216E2E0A00B28C14 /* Promise+Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD4D216E2E0A00B28C14 /* Promise+Web3+TxPool.swift */; };
 		B350A445E5DB35C60E59AD70 /* libPods-web3swift-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F8C9C48884592DCF561393 /* libPods-web3swift-macOS.a */; };
@@ -170,11 +158,6 @@
 		E2065FB92181D7D700701068 /* Promise+Web3+Contract+GetIndexedEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81195AAF20D7FF8500ABC6B1 /* Promise+Web3+Contract+GetIndexedEvents.swift */; };
 		E2065FBA2181D7D700701068 /* Promise+Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD4D216E2E0A00B28C14 /* Promise+Web3+TxPool.swift */; };
 		E2065FBB2181D7D700701068 /* Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD49216CE8B100B28C14 /* Web3+TxPool.swift */; };
-		E23B5ADB20EA67D800DC7F32 /* web3swift_AdvancedABIv2_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5ADA20EA67D800DC7F32 /* web3swift_AdvancedABIv2_Tests.swift */; };
-		E23B5ADD20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5ADC20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift */; };
-		E23B5AE120EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5AE020EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift */; };
-		E23B5AE320EA69B900DC7F32 /* web3swift_numberFormattingUtil_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5AE220EA69B900DC7F32 /* web3swift_numberFormattingUtil_Tests.swift */; };
-		E23B5AE520EA6A0A00DC7F32 /* web3swift_contractV2_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5AE420EA6A0A00DC7F32 /* web3swift_contractV2_Tests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1083,25 +1066,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				815C74C820ECBF3E00DE2AC4 /* web3swift_User_cases.swift in Sources */,
-				8159C50E2135901700197B91 /* web3swift_ERC20_Class_Tests.swift in Sources */,
-				E23B5AE520EA6A0A00DC7F32 /* web3swift_contractV2_Tests.swift in Sources */,
-				E23B5AE120EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift in Sources */,
-				E23B5ADB20EA67D800DC7F32 /* web3swift_AdvancedABIv2_Tests.swift in Sources */,
-				81A7B28A2143DF1D004CD2C7 /* web3swift_EIP681_Tests.swift in Sources */,
-				4EFFCB70208554EB008165FE /* web3swift_remoteParsing_Tests.swift in Sources */,
-				00E5FE7C20EA37B50030E0D6 /* web3swift_ERC20_Tests.swift in Sources */,
-				E23B5AE320EA69B900DC7F32 /* web3swift_numberFormattingUtil_Tests.swift in Sources */,
-				00E5FE7A20EA355D0030E0D6 /* web3swift_transactions_Tests.swift in Sources */,
-				00E5FE7620EA34370030E0D6 /* web3swift_keystores_Tests.swift in Sources */,
-				00E5FE8020EA3CEA0030E0D6 /* web3swift_RLP_Tests.swift in Sources */,
-				4EFFCB6E208552F2008165FE /* web3swift_local_node_Tests.swift in Sources */,
-				81A1821D20D5C6C10016741F /* web3swift_promises_Tests.swift in Sources */,
-				81FECD5E211AEFCE006DA367 /* web3swift_ObjC_Tests.swift in Sources */,
-				E23B5ADD20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift in Sources */,
 				00E5FE8220EA3FF40030E0D6 /* web3swift_infura_Tests.swift in Sources */,
-				1CD91B321FD769A6007BFB45 /* web3swift_Tests.swift in Sources */,
-				81A7B2792143C978004CD2C7 /* web3swift_ENS_Tests.swift in Sources */,
+				81909D1B2187B1FA007D2AE5 /* web3swift_User_cases.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

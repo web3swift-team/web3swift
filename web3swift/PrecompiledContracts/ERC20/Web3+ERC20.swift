@@ -1,8 +1,6 @@
-//
-//  Web3+ERC721.swift
 //  web3swift
 //
-//  Created by Alex Vlasov on 28.08.2018.
+//  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 

@@ -212,11 +212,32 @@ public struct TransactionOptions {
     }
     
     public func resolveGasPrice(_ suggestedByNode: BigUInt) -> BigUInt? {
-        return suggestedByNode
+        guard let gasPricePolicy = self.gasPrice else {return nil}
+        switch gasPricePolicy {
+        case .automatic:
+            return suggestedByNode
+        case .manual(let value):
+            return value
+        case .withMargin(_):
+            return suggestedByNode
+        }
     }
     
     public func resolveGasLimit(_ suggestedByNode: BigUInt) -> BigUInt? {
-        return suggestedByNode
+        guard let gasLimitPolicy = self.gasLimit else {return nil}
+        switch gasLimitPolicy {
+        case .automatic:
+            return suggestedByNode
+        case .manual(let value):
+            return value
+        case .withMargin(_):
+            return suggestedByNode
+        case .limited(let limit):
+            if limit <= suggestedByNode {
+                return suggestedByNode
+            }
+            return nil
+        }
     }
     
     public func merge(_ otherOptions: TransactionOptions?) -> TransactionOptions {

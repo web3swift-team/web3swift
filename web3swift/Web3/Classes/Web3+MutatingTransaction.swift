@@ -12,7 +12,7 @@ import EthereumAddress
 
 public class WriteTransaction: ReadTransaction {
     
-    public func assemblePromise(transactionOptions: TransactionOptions?) -> Promise<EthereumTransaction> {
+    public func assemblePromise(transactionOptions: TransactionOptions? = nil) -> Promise<EthereumTransaction> {
         var assembledTransaction : EthereumTransaction = self.transaction
         let queue = self.web3.requestDispatcher.queue
         let returnPromise = Promise<EthereumTransaction> { seal in
@@ -147,7 +147,7 @@ public class WriteTransaction: ReadTransaction {
         return returnPromise
     }
     
-    public func sendPromise(password:String = "web3swift", transactionOptions: TransactionOptions?) -> Promise<TransactionSendingResult>{
+    public func sendPromise(password:String = "web3swift", transactionOptions: TransactionOptions? = nil) -> Promise<TransactionSendingResult>{
         let queue = self.web3.requestDispatcher.queue
         return self.assemblePromise(transactionOptions: transactionOptions).then(on: queue) { transaction throws -> Promise<TransactionSendingResult> in
             let mergedOptions = self.transactionOptions.merge(transactionOptions)

@@ -61,7 +61,35 @@ extension web3 {
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: TransactionOptions?) -> WriteTransaction? {
+        public func method(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
+            let mergedOptions = self.transactionOptions?.merge(transactionOptions)
+            guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
+            tx.chainID = self.web3.provider.network?.chainID
+            let writeTX = WriteTransaction.init(transaction: tx, web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
+            return writeTX
+        }
+        
+        /// Creates and object responsible for calling a particular function of the contract. If method name is not found in ABI - returns nil.
+        /// If extraData is supplied it is appended to encoded function parameters. Can be usefull if one wants to call
+        /// the function not listed in ABI. "Parameters" should be an array corresponding to the list of parameters of the function.
+        /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
+        ///
+        /// Returns a "Transaction intermediate" object.
+        public func read(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: TransactionOptions? = nil) -> ReadTransaction? {
+            let mergedOptions = self.transactionOptions?.merge(transactionOptions)
+            guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
+            tx.chainID = self.web3.provider.network?.chainID
+            let writeTX = ReadTransaction.init(transaction: tx, web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
+            return writeTX
+        }
+        
+        /// Creates and object responsible for calling a particular function of the contract. If method name is not found in ABI - returns nil.
+        /// If extraData is supplied it is appended to encoded function parameters. Can be usefull if one wants to call
+        /// the function not listed in ABI. "Parameters" should be an array corresponding to the list of parameters of the function.
+        /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
+        ///
+        /// Returns a "Transaction intermediate" object.
+        public func write(_ method:String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             tx.chainID = self.web3.provider.network?.chainID

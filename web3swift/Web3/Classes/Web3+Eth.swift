@@ -240,120 +240,119 @@ extension web3.Eth {
     }
     
     
-//    /**
-//     Convenience wrapper to send Ethereum to another address. Internally it creates a virtual contract and encodes all the options and data.
-//     - Parameters:
-//        - to: EthereumAddress to send funds to
-//        - amount: BigUInt indicating the amount in wei
-//        - extraData: Additional data to attach to the transaction
-//        - options: Web3Options to override the default gas price, gas limit. "Value" field of the options is ignored and the "amount" parameter is used instead
-//
-//     - returns:
-//        - TransactionIntermediate object
-//
-//     */
-//    public func sendETH(to: EthereumAddress, amount: BigUInt, extraData: Data = Data(), options: Web3Options? = nil) -> TransactionIntermediate? {
-//        let contract = self.web3.contract(Web3.Utils.coldWalletABI, at: to, abiVersion: 2)
-//        guard var mergedOptions = Web3Options.merge(self.options, with: options) else {return nil}
-//        mergedOptions.value = amount
-//        let intermediate = contract?.method("fallback", extraData: extraData, options: mergedOptions)
-//        return intermediate
-//    }
-//
-//    /**
-//     *Convenience wrapper to send Ethereum to another address. Internally it creates a virtual contract and encodes all the options and data.*
-//
-//     - parameters:
-//         - to: EthereumAddress to send funds to
-//         - amount: String in "units" demonimation. It can contain either "," or "." decimal separator.
-//         - units: Ethereum units indicating the denomination of amout about
-//         - extraData: Additional data to attach to the transaction
-//         - options: Web3Options to override the default gas price, gas limit. "Value" field of the options is ignored and the "amount" parameter is used instead
-//
-//     - returns:
-//        - TransactionIntermediate object
-//
-//     * String "1.01" and units: .eth will result in sending 1.01 ETH to another address*
-//     */
-//    public func sendETH(to: EthereumAddress, amount: String, units: Web3.Utils.Units = .eth, extraData: Data = Data(), options: Web3Options? = nil) -> TransactionIntermediate? {
-//        guard let value = Web3.Utils.parseToBigUInt(amount, units: .eth) else {return nil}
-//        return sendETH(to: to, amount: value, extraData: extraData, options: options)
-//    }
-//
-//    /**
-//     *Convenience wrapper to send Ethereum to another address. Internally it creates a virtual contract and encodes all the options and data.*
-//
-//     - parameters:
-//         - from: EthereumAddress to send funds from
-//         - to: EthereumAddress to send funds to
-//         - amount: String in "units" demonimation. It can contain either "," or "." decimal separator.
-//         - units: Ethereum units indicating the denomination of amout about
-//         - extraData: Additional data to attach to the transaction
-//         - options: Web3Options to override the default gas price, gas limit. "Value" field of the options is ignored and the "amount" parameter is used instead. "From" parameter is also ignored.
-//
-//     - returns:
-//         - TransactionIntermediate object
-//
-//     * String "1.01" and units: .eth will result in sending 1.01 ETH to another address*
-//     */
-//    public func sendETH(from: EthereumAddress, to: EthereumAddress, amount: String, units: Web3.Utils.Units = .eth, extraData: Data = Data(), options: Web3Options? = nil) -> TransactionIntermediate? {
-//        guard let value = Web3.Utils.parseToBigUInt(amount, units: .eth) else {return nil}
-//        guard var mergedOptions = Web3Options.merge(self.options, with: options) else {return nil}
-//        mergedOptions.from = from
-//        return sendETH(to: to, amount: value, extraData: extraData, options: mergedOptions)
-//    }
-//
-//    /**
-//     *Convenience wrapper to send ERC20 tokens to another address. Internally it creates a virtual contract and encodes all the options and data. Assumes that the sender knows the decimal units of the underlying token.*
-//
-//     - parameters:
-//         - tokenAddress: EthereumAddress of the token contract
-//         - from: EthereumAddress to send tokens from
-//         - to: EthereumAddress to send tokens to
-//         - amount: BigUInt indicating the number of tokens in the the smallest indivisible units (mind that sender knows the number of decimals)
-//         - options: Web3Options to override the default gas price, gas limit. "Value" field of the options is ignored and the "amount" parameter is used instead. "From" parameter is also ignored.
-//
-//     - returns:
-//        - TransactionIntermediate object
-//
-//     */
-//    public func sendERC20tokensWithKnownDecimals(tokenAddress: EthereumAddress, from: EthereumAddress, to: EthereumAddress, amount: BigUInt, options: Web3Options? = nil) -> TransactionIntermediate? {
-//        let contract = self.web3.contract(Web3.Utils.erc20ABI, at: tokenAddress, abiVersion: 2)
-//        guard var mergedOptions = Web3Options.merge(self.options, with: options) else {return nil}
-//        mergedOptions.from = from
-//        guard let intermediate = contract?.method("transfer", parameters: [to, amount] as [AnyObject], options: mergedOptions) else {return nil}
-//        return intermediate
-//    }
-//
-//    /**
-//     *Convenience wrapper to send ERC20 tokens to another address. Internally it creates a virtual contract and encodes all the options and data. Pulls the number of decimals of the token under the hood.*
-//
-//     - parameters:
-//         - tokenAddress: EthereumAddress of the token contract
-//         - from: EthereumAddress to send tokens from
-//         - to: EthereumAddress to send tokens to
-//         - amount: String in "natura" demonimation. It can contain either "," or "." decimal separator.
-//         - options: Web3Options to override the default gas price, gas limit. "Value" field of the options is ignored and the "amount" parameter is used instead. "From" parameter is also ignored.
-//
-//     - returns:
-//        - TransactionIntermediate object
-//
-//     - important: This call is synchronous
-//
-//     * If the amount is  "1.01" and token has 9 decimals it will result in sending 1010000000 of the smallest invidisible token units.*
-//     */
-//    public func sendERC20tokensWithNaturalUnits(tokenAddress: EthereumAddress, from: EthereumAddress, to: EthereumAddress, amount: String, options: Web3Options? = nil) throws -> TransactionIntermediate? {
-//        let contract = self.web3.contract(Web3.Utils.erc20ABI, at: tokenAddress, abiVersion: 2)
-//        guard var mergedOptions = Web3Options.merge(self.options, with: options) else {return nil}
-//        mergedOptions.from = from
-//        guard let intermediate = contract?.method("decimals", options: mergedOptions) else {return nil}
-//        let response = try intermediate.call(options: mergedOptions, onBlock: "latest")
-//        var decimals = BigUInt(0)
-//        guard let dec = response["0"], let decTyped = dec as? BigUInt else {return nil}
-//        decimals = decTyped
-//        let intDecimals = Int(decimals)
-//        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {return nil}
-//        return sendERC20tokensWithKnownDecimals(tokenAddress: tokenAddress, from: from, to: to, amount: value, options: options)
-//    }
-//
+    /**
+     Convenience wrapper to send Ethereum to another address. Internally it creates a virtual contract and encodes all the options and data.
+     - Parameters:
+        - to: EthereumAddress to send funds to
+        - amount: BigUInt indicating the amount in wei
+        - extraData: Additional data to attach to the transaction
+        - options: Web3Options to override the default gas price, gas limit. "Value" field of the options is ignored and the "amount" parameter is used instead
+
+     - returns:
+        - TransactionIntermediate object
+
+     */
+    public func sendETH(to: EthereumAddress, amount: BigUInt, extraData: Data = Data(), transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
+        let contract = self.web3.contract(Web3.Utils.coldWalletABI, at: to, abiVersion: 2)
+        var mergedOptions = self.web3.transactionOptions.merge(transactionOptions)
+        mergedOptions.value = amount
+        let writeTX = contract?.write("fallback", extraData: extraData, transactionOptions: mergedOptions)
+        return writeTX
+    }
+
+    /**
+     *Convenience wrapper to send Ethereum to another address. Internally it creates a virtual contract and encodes all the options and data.*
+
+     - parameters:
+         - to: EthereumAddress to send funds to
+         - amount: String in "units" demonimation. It can contain either "," or "." decimal separator.
+         - units: Ethereum units indicating the denomination of amout about
+         - extraData: Additional data to attach to the transaction
+         - options: Web3Options to override the default gas price, gas limit. "Value" field of the options is ignored and the "amount" parameter is used instead
+
+     - returns:
+        - TransactionIntermediate object
+
+     * String "1.01" and units: .eth will result in sending 1.01 ETH to another address*
+     */
+    public func sendETH(to: EthereumAddress, amount: String, units: Web3.Utils.Units = .eth, extraData: Data = Data(), transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
+        guard let value = Web3.Utils.parseToBigUInt(amount, units: .eth) else {return nil}
+        return sendETH(to: to, amount: value, extraData: extraData,  transactionOptions: transactionOptions)
+    }
+
+    /**
+     *Convenience wrapper to send Ethereum to another address. Internally it creates a virtual contract and encodes all the options and data.*
+
+     - parameters:
+         - from: EthereumAddress to send funds from
+         - to: EthereumAddress to send funds to
+         - amount: String in "units" demonimation. It can contain either "," or "." decimal separator.
+         - units: Ethereum units indicating the denomination of amout about
+         - extraData: Additional data to attach to the transaction
+         - options: Web3Options to override the default gas price, gas limit. "Value" field of the options is ignored and the "amount" parameter is used instead. "From" parameter is also ignored.
+
+     - returns:
+         - TransactionIntermediate object
+
+     * String "1.01" and units: .eth will result in sending 1.01 ETH to another address*
+     */
+    public func sendETH(from: EthereumAddress, to: EthereumAddress, amount: String, units: Web3.Utils.Units = .eth, extraData: Data = Data(),  transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
+        guard let value = Web3.Utils.parseToBigUInt(amount, units: .eth) else {return nil}
+        var mergedOptions = self.web3.transactionOptions.merge(transactionOptions)
+        mergedOptions.from = from
+        return sendETH(to: to, amount: value, extraData: extraData, transactionOptions: mergedOptions)
+    }
+
+    /**
+     *Convenience wrapper to send ERC20 tokens to another address. Internally it creates a virtual contract and encodes all the options and data. Assumes that the sender knows the decimal units of the underlying token.*
+
+     - parameters:
+         - tokenAddress: EthereumAddress of the token contract
+         - from: EthereumAddress to send tokens from
+         - to: EthereumAddress to send tokens to
+         - amount: BigUInt indicating the number of tokens in the the smallest indivisible units (mind that sender knows the number of decimals)
+         - options: Web3Options to override the default gas price, gas limit. "Value" field of the options is ignored and the "amount" parameter is used instead. "From" parameter is also ignored.
+
+     - returns:
+        - TransactionIntermediate object
+
+     */
+    public func sendERC20tokensWithKnownDecimals(tokenAddress: EthereumAddress, from: EthereumAddress, to: EthereumAddress, amount: BigUInt, transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
+        let contract = self.web3.contract(Web3.Utils.erc20ABI, at: tokenAddress, abiVersion: 2)
+        var mergedOptions = self.web3.transactionOptions.merge(transactionOptions)
+        mergedOptions.from = from
+        guard let writeTX = contract?.write("transfer", parameters: [to, amount] as [AnyObject], transactionOptions: mergedOptions) else {return nil}
+        return writeTX
+    }
+
+    /**
+     *Convenience wrapper to send ERC20 tokens to another address. Internally it creates a virtual contract and encodes all the options and data. Pulls the number of decimals of the token under the hood.*
+
+     - parameters:
+         - tokenAddress: EthereumAddress of the token contract
+         - from: EthereumAddress to send tokens from
+         - to: EthereumAddress to send tokens to
+         - amount: String in "natura" demonimation. It can contain either "," or "." decimal separator.
+         - options: Web3Options to override the default gas price, gas limit. "Value" field of the options is ignored and the "amount" parameter is used instead. "From" parameter is also ignored.
+
+     - returns:
+        - TransactionIntermediate object
+
+     - important: This call is synchronous
+
+     * If the amount is  "1.01" and token has 9 decimals it will result in sending 1010000000 of the smallest invidisible token units.*
+     */
+    public func sendERC20tokensWithNaturalUnits(tokenAddress: EthereumAddress, from: EthereumAddress, to: EthereumAddress, amount: String,  transactionOptions: TransactionOptions? = nil) throws -> WriteTransaction? {
+        let contract = self.web3.contract(Web3.Utils.erc20ABI, at: tokenAddress, abiVersion: 2)
+        var mergedOptions = self.web3.transactionOptions.merge(transactionOptions)
+        mergedOptions.from = from
+        let resp = try contract?.read("decimals", transactionOptions: mergedOptions)?.callPromise().wait()
+        var decimals = BigUInt(0)
+        guard let response = resp, let dec = response["0"], let decTyped = dec as? BigUInt else {return nil}
+        decimals = decTyped
+        let intDecimals = Int(decimals)
+        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {return nil}
+        return sendERC20tokensWithKnownDecimals(tokenAddress: tokenAddress, from: from, to: to, amount: value, transactionOptions: mergedOptions)
+    }
+
 }

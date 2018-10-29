@@ -1,6 +1,7 @@
+//  web3swift
 //
-//  ENS.swift
-//  web3swift-iOS
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
