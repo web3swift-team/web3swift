@@ -14,12 +14,11 @@ import EthereumAddress
 extension web3.BrowserFunctions {
     
     public func getAccounts() -> [String]? {
-        let result = self.web3.eth.getAccounts()
-        switch result {
-        case .failure(_):
-            return nil
-        case .success(let accounts):
+        do {
+            let accounts = try self.web3.eth.getAccounts()
             return accounts.compactMap({$0.address})
+        } catch {
+            return [String]()
         }
     }
     

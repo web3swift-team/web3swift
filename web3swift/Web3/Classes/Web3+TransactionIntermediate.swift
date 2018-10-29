@@ -1,9 +1,7 @@
+//  web3swift
 //
-//  Web3+TransactionIntermediate.swift
-//  web3swift-iOS
-//
-//  Created by Alexander Vlasov on 26.02.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
@@ -49,16 +47,9 @@ extension web3.web3contract {
          - important: This call is synchronous
          
          */
-        public func send(password: String = "web3swift", options: Web3Options? = nil, onBlock: String = "pending") -> Result<TransactionSendingResult, Web3Error> {
-            do {
-                let result = try self.sendPromise(password: password, options: options, onBlock: onBlock).wait()
-                return Result(result)
-            } catch {
-                if let err = error as? Web3Error {
-                    return Result.failure(err)
-                }
-                return Result.failure(Web3Error.generalError(err: error))
-            }
+        public func send(password: String = "web3swift", options: Web3Options? = nil, onBlock: String = "pending") throws -> TransactionSendingResult {
+            let result = try self.sendPromise(password: password, options: options, onBlock: onBlock).wait()
+            return result
         }
         
         /**
@@ -74,16 +65,9 @@ extension web3.web3contract {
          - important: This call is synchronous
          
          */
-        public func call(options: Web3Options?, onBlock: String = "latest") -> Result<[String:Any], Web3Error> {
-            do {
-                let result = try self.callPromise(options: options, onBlock: onBlock).wait()
-                return Result(result)
-            } catch {
-                if let err = error as? Web3Error {
-                    return Result.failure(err)
-                }
-                return Result.failure(Web3Error.generalError(err: error))
-            }
+        public func call(options: Web3Options?, onBlock: String = "latest") throws -> [String:Any] {
+            let result = try self.callPromise(options: options, onBlock: onBlock).wait()
+            return result
         }
         
         /**
@@ -99,16 +83,9 @@ extension web3.web3contract {
          - important: This call is synchronous
          
          */
-        public func estimateGas(options: Web3Options?, onBlock: String = "latest") -> Result<BigUInt, Web3Error> {
-            do {
-                let result = try self.estimateGasPromise(options: options, onBlock: onBlock).wait()
-                return Result(result)
-            } catch {
-                if let err = error as? Web3Error {
-                    return Result.failure(err)
-                }
-                return Result.failure(Web3Error.generalError(err: error))
-            }
+        public func estimateGas(options: Web3Options?, onBlock: String = "latest") throws -> BigUInt {
+            let result = try self.estimateGasPromise(options: options, onBlock: onBlock).wait()
+            return result
         }
         
         /**
@@ -124,16 +101,9 @@ extension web3.web3contract {
          - important: This call is synchronous
          
          */
-        public func assemble(options: Web3Options? = nil, onBlock: String = "pending") -> Result<EthereumTransaction, Web3Error> {
-            do {
-                let result = try self.assemblePromise(options: options, onBlock: onBlock).wait()
-                return Result(result)
-            } catch {
-                if let err = error as? Web3Error {
-                    return Result.failure(err)
-                }
-                return Result.failure(Web3Error.generalError(err: error))
-            }
+        public func assemble(options: Web3Options? = nil, onBlock: String = "pending") throws -> EthereumTransaction {
+            let result = try self.assemblePromise(options: options, onBlock: onBlock).wait()
+            return result
         }
    
     }

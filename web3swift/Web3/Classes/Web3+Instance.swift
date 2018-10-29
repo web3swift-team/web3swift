@@ -1,9 +1,7 @@
-//
-//  Web3+Instance.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 19.12.2017.
-//  Copyright © 2017 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
@@ -14,6 +12,7 @@ import PromiseKit
 public class web3: Web3OptionsInheritable {
     public var provider : Web3Provider
     public var options : Web3Options = Web3Options.defaultOptions()
+    public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
     public var defaultBlock = "latest"
     public var requestDispatcher: JSONRPCrequestDispatcher
     
@@ -155,21 +154,30 @@ public class web3: Web3OptionsInheritable {
         }
     }
     
-    var erc721Instance: web3.ERC721?
+    var eventLoopInstance: web3.Eventloop?
     
     /// Public web3.browserFunctions.* namespace.
-    public var erc721: web3.ERC721 {
-        if (self.erc721Instance != nil) {
-            return self.erc721Instance!
+    public var eventLoop: web3.Eventloop {
+        if (self.eventLoopInstance != nil) {
+            return self.eventLoopInstance!
         }
-        self.erc721Instance = web3.ERC721(provider : self.provider, web3: self)
-        return self.erc721Instance!
+        self.eventLoopInstance = web3.Eventloop(provider : self.provider, web3: self)
+        return self.eventLoopInstance!
     }
     
-    public class ERC721: Web3OptionsInheritable {
+    public class Eventloop: Web3OptionsInheritable {
+        public typealias FunctionCall<T> = (web3) -> Result<T>
+    
+        public struct MonitoredProperty<T> {
+            public var name: String
+            public var calledFunction: FunctionCall<T>
+        }
+        
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
+        var timer: Promise<Void>?
+        var monitoredProperties: [AnyObject] = [AnyObject]()
         public var options: Web3Options {
             return self.web3.options
         }
@@ -178,4 +186,25 @@ public class web3: Web3OptionsInheritable {
             web3 = web3instance
         }
     }
+    
+    public typealias AssemblyHookFunction = ((EthereumTransaction, EthereumContract, TransactionOptions)) -> (EthereumTransaction, EthereumContract, TransactionOptions, Bool)
+    
+    public typealias SubmissionHookFunction = ((EthereumTransaction, TransactionOptions)) -> (EthereumTransaction, TransactionOptions, Bool)
+    
+    public struct AssemblyHook {
+        public var queue: DispatchQueue
+        public var function: AssemblyHookFunction
+    }
+    
+    public struct SubmissionHook {
+        public var queue: DispatchQueue
+        public var function: SubmissionHookFunction
+    }
+    
+    public var preAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
+    public var postAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
+    
+    public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
+//    public var postSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
+    
 }

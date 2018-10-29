@@ -9,9 +9,6 @@
 import Foundation
 import EthereumAddress
 
-public typealias TransactionIntermediate = web3.web3contract.TransactionIntermediate
-
-
 public protocol AbstractKeystore {
     var addresses: [EthereumAddress]? {get}
     var isHDKeystore: Bool {get}

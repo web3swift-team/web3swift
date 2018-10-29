@@ -1,9 +1,7 @@
+//  web3swift
 //
-//  Web3+TransactionIntermediate.swift
-//  web3swift-iOS
-//
-//  Created by Alexander Vlasov on 26.02.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
@@ -278,18 +276,17 @@ extension web3.web3contract {
     public func getIndexedEventsPromise(eventName: String?, filter: EventFilter, joinWithReceipts: Bool = false) -> Promise<[EventParserResultProtocol]> {
         let queue = self.web3.requestDispatcher.queue
         do {
-            guard let rawContract = self.contract as? ContractV2 else {
+            guard let rawContract = self.contract as? EthereumContract else {
                 throw Web3Error.nodeError(desc: "ABIv1 is not supported for this method")
             }
             guard let preEncoding = encodeTopicToGetLogs(contract: rawContract, eventName: eventName, filter: filter) else {
                 throw Web3Error.processingError(desc: "Failed to encode topic for request")
             }
-            //            var event: ABIv2.Element.Event? = nil
+            
             if eventName != nil {
                 guard let _ = rawContract.events[eventName!] else {
                     throw Web3Error.processingError(desc: "No such event in a contract")
                 }
-                //                event = ev
             }
             let request = JSONRPCRequestFabric.prepareRequest(.getLogs, parameters: [preEncoding])
             let fetchLogsPromise = self.web3.dispatch(request).map(on: queue) {response throws -> [EventParserResult] in

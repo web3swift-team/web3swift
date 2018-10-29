@@ -1,28 +1,25 @@
 //
-//  ABIv2Decoding.swift
-//  web3swift
-//
-//  Created by Alexander Vlasov on 04.04.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov on 25/10/2018.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
 import BigInt
 import EthereumAddress
 
-public struct ABIv2Decoder {
+public struct ABIDecoder {
     
 }
 
-extension ABIv2Decoder {
-    public static func decode(types: [ABIv2.Element.InOut], data: Data) -> [AnyObject]? {
-        let params = types.compactMap { (el) -> ABIv2.Element.ParameterType in
+extension ABIDecoder {
+    public static func decode(types: [ABI.Element.InOut], data: Data) -> [AnyObject]? {
+        let params = types.compactMap { (el) -> ABI.Element.ParameterType in
             return el.type
         }
         return decode(types: params, data: data)
     }
     
-    public static func decode(types: [ABIv2.Element.ParameterType], data: Data) -> [AnyObject]? {
+    public static func decode(types: [ABI.Element.ParameterType], data: Data) -> [AnyObject]? {
 //        print("Full data: \n" + data.toHexString())
         var toReturn = [AnyObject]()
         var consumed: UInt64 = 0
@@ -36,7 +33,7 @@ extension ABIv2Decoder {
         return toReturn
     }
     
-    public static func decodeSignleType(type: ABIv2.Element.ParameterType, data: Data, pointer: UInt64 = 0) -> (value: AnyObject?, bytesConsumed: UInt64?) {
+    public static func decodeSignleType(type: ABI.Element.ParameterType, data: Data, pointer: UInt64 = 0) -> (value: AnyObject?, bytesConsumed: UInt64?) {
         let (elData, nextPtr) = followTheData(type: type, data: data, pointer: pointer)
         guard let elementItself = elData, let nextElementPointer = nextPtr else {
             return (nil, nil)
@@ -184,7 +181,7 @@ extension ABIv2Decoder {
         return (nil, nil)
     }
     
-    fileprivate static func followTheData(type: ABIv2.Element.ParameterType, data: Data, pointer: UInt64 = 0) -> (elementEncoding: Data?, nextElementPointer: UInt64?) {
+    fileprivate static func followTheData(type: ABI.Element.ParameterType, data: Data, pointer: UInt64 = 0) -> (elementEncoding: Data?, nextElementPointer: UInt64?) {
 //        print("Follow the data: \n" + data.toHexString())
 //        print("At pointer: \n" + String(pointer))
         if type.isStatic {
@@ -220,14 +217,14 @@ extension ABIv2Decoder {
         }
     }
     
-    public static func decodeLog(event: ABIv2.Element.Event, eventLog: EventLog) -> [String:Any]? {
-        if event.topic != eventLog.topics[0] && !event.anonymous {
+    public static func decodeLog(event: ABI.Element.Event, eventLogTopics: [Data], eventLogData: Data) -> [String:Any]? {
+        if event.topic != eventLogTopics[0] && !event.anonymous {
             return nil
         }
         var eventContent = [String: Any]()
         eventContent["name"]=event.name
-        let logs = eventLog.topics
-        let dataForProcessing = eventLog.data
+        let logs = eventLogTopics
+        let dataForProcessing = eventLogData
         let indexedInputs = event.inputs.filter { (inp) -> Bool in
             return inp.indexed
         }
@@ -237,7 +234,7 @@ extension ABIv2Decoder {
         let nonIndexedInputs = event.inputs.filter { (inp) -> Bool in
             return !inp.indexed
         }
-        let nonIndexedTypes = nonIndexedInputs.compactMap { (inp) -> ABIv2.Element.ParameterType in
+        let nonIndexedTypes = nonIndexedInputs.compactMap { (inp) -> ABI.Element.ParameterType in
             return inp.type
         }
         guard logs.count == indexedInputs.count + 1 else {return nil}
@@ -246,16 +243,16 @@ extension ABIv2Decoder {
             let data = logs[i+1]
             let input = indexedInputs[i]
             if !input.type.isStatic || input.type.isArray || input.type.memoryUsage != 32 {
-                let (v, _) = ABIv2Decoder.decodeSignleType(type: .bytes(length: 32), data: data)
+                let (v, _) = ABIDecoder.decodeSignleType(type: .bytes(length: 32), data: data)
                 guard let valueUnwrapped = v else {return nil}
                 indexedValues.append(valueUnwrapped)
             } else {
-                let (v, _) = ABIv2Decoder.decodeSignleType(type: input.type, data: data)
+                let (v, _) = ABIDecoder.decodeSignleType(type: input.type, data: data)
                 guard let valueUnwrapped = v else {return nil}
                 indexedValues.append(valueUnwrapped)
             }
         }
-        let v = ABIv2Decoder.decode(types: nonIndexedTypes, data: dataForProcessing)
+        let v = ABIDecoder.decode(types: nonIndexedTypes, data: dataForProcessing)
         guard let nonIndexedValues = v else {return nil}
         var indexedInputCounter = 0
         var nonIndexedInputCounter = 0

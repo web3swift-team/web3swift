@@ -10,7 +10,6 @@ import Foundation
 import BigInt
 import PromiseKit
 
-
 extension web3.TxPool {
     public func getInspectPromise() -> Promise<[String:[String:[String:String]]]> {
         let request = JSONRPCRequestFabric.prepareRequest(.getTxPoolInspect, parameters: [])

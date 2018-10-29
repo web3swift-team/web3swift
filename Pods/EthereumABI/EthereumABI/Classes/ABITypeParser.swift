@@ -1,14 +1,11 @@
 //
-//  ABIv2TypeParser.swift
-//  web3swift
-//
-//  Created by Alexander Vlasov on 03.04.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov on 25/10/2018.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
 
-public struct ABIv2TypeParser {
+public struct ABITypeParser {
     
     private enum BaseParameterType: String {
         case address
@@ -21,7 +18,7 @@ public struct ABIv2TypeParser {
         case tuple
     }
     
-    private static func baseTypeMatch(from string: String, length: UInt64 = 0) -> ABIv2.Element.ParameterType? {
+    static func baseTypeMatch(from string: String, length: UInt64 = 0) -> ABI.Element.ParameterType? {
         switch BaseParameterType(rawValue: string) {
         case .address?:
             return .address
@@ -41,26 +38,26 @@ public struct ABIv2TypeParser {
         case .string?:
             return .string
         case .tuple?:
-            return .tuple(types: [ABIv2.Element.ParameterType]())
+            return .tuple(types: [ABI.Element.ParameterType]())
         default:
             return nil
         }
     }
     
-    public static func parseTypeString(_ string:String) throws -> ABIv2.Element.ParameterType {
+    public static func parseTypeString(_ string:String) throws -> ABI.Element.ParameterType {
         let (type, tail) = recursiveParseType(string)
-        guard let t = type, tail == nil else {throw Web3Error.inputError(desc: "Failed to parse ABI element " + string)}
+        guard let t = type, tail == nil else {throw ABI.ParsingError.elementTypeInvalid}
         return t
     }
     
-    public static func recursiveParseType(_ string: String) -> (type: ABIv2.Element.ParameterType?, tail: String?) {
-        let matcher = try! NSRegularExpression(pattern: ABIv2.TypeParsingExpressions.typeEatingRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
+    static func recursiveParseType(_ string: String) -> (type: ABI.Element.ParameterType?, tail: String?) {
+        let matcher = try! NSRegularExpression(pattern: ABI.TypeParsingExpressions.typeEatingRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
         let match = matcher.matches(in: string, options: NSRegularExpression.MatchingOptions.anchored, range: string.fullNSRange)
         guard match.count == 1 else {
             return (nil, nil)
         }
         var tail: String = ""
-        var type: ABIv2.Element.ParameterType?
+        var type: ABI.Element.ParameterType?
         guard match[0].numberOfRanges >= 1 else {return (nil, nil)}
         guard let baseTypeRange = Range(match[0].range(at: 1), in: string) else {return (nil, nil)}
         let baseTypeString = String(string[baseTypeRange])
@@ -86,22 +83,22 @@ public struct ABIv2TypeParser {
         return recursiveParseArray(baseType: type!, string: tail)
     }
     
-    public static func recursiveParseArray(baseType: ABIv2.Element.ParameterType, string: String) -> (type: ABIv2.Element.ParameterType?, tail: String?) {
-        let matcher = try! NSRegularExpression(pattern: ABIv2.TypeParsingExpressions.arrayEatingRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
+    static func recursiveParseArray(baseType: ABI.Element.ParameterType, string: String) -> (type: ABI.Element.ParameterType?, tail: String?) {
+        let matcher = try! NSRegularExpression(pattern: ABI.TypeParsingExpressions.arrayEatingRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
         let match = matcher.matches(in: string, options: NSRegularExpression.MatchingOptions.anchored, range: string.fullNSRange)
         guard match.count == 1 else {return (nil, nil)}
         var tail: String = ""
-        var type: ABIv2.Element.ParameterType?
+        var type: ABI.Element.ParameterType?
         guard match[0].numberOfRanges >= 1 else {return (nil, nil)}
         guard let baseArrayRange = Range(match[0].range(at: 1), in: string) else {return (nil, nil)}
         let baseArrayString = String(string[baseArrayRange])
         if match[0].numberOfRanges >= 2, let exactArrayRange = Range(match[0].range(at: 2), in: string) {
             let lengthString = String(string[exactArrayRange])
             guard let arrayLength = UInt64(lengthString) else {return (nil, nil)}
-            let baseType = ABIv2.Element.ParameterType.array(type: baseType, length: arrayLength)
+            let baseType = ABI.Element.ParameterType.array(type: baseType, length: arrayLength)
             type = baseType
         } else {
-            let baseType = ABIv2.Element.ParameterType.array(type: baseType, length: 0)
+            let baseType = ABI.Element.ParameterType.array(type: baseType, length: 0)
             type = baseType
         }
         tail = string.replacingCharacters(in: string.range(of: baseArrayString)!, with: "")

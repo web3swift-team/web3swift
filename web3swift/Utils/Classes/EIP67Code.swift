@@ -10,6 +10,7 @@ import Foundation
 import CoreImage
 import BigInt
 import EthereumAddress
+import EthereumABI
 
 extension Web3 {
 
@@ -25,7 +26,7 @@ extension Web3 {
         }
         public struct Function {
             public var method: String
-            public var parameters: [(ABIv2.Element.ParameterType, AnyObject)]
+            public var parameters: [(ABI.Element.ParameterType, AnyObject)]
             
             public func toString() -> String? {
                 let encoding = method + "(" + parameters.map({ (el) -> String in

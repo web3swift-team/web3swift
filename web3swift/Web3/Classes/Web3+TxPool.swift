@@ -1,15 +1,12 @@
+//  web3swift
 //
-//  Web3+TxPool.swift
-//  web3swift-iOS
-//
-//  Created by Jun Park on 09/10/2018.
-//  Copyright © 2018 The Matter Inc. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
 import Result
 import BigInt
-
 
 extension web3.TxPool {
     public func getInspect() -> Result<[String:[String:[String:String]]], Web3Error> {

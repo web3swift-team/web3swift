@@ -12,10 +12,10 @@ import PromiseKit
 
 extension web3.Eth {
     
-    func estimateGasPromise(_ transaction: EthereumTransaction, options: Web3Options? = nil, onBlock: String = "latest") -> Promise<BigUInt>{
+    func estimateGasPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> Promise<BigUInt>{
         let queue = web3.requestDispatcher.queue
         do {
-            guard let request = EthereumTransaction.createRequest(method: .estimateGas, transaction: transaction, onBlock: onBlock, options: options) else {
+            guard let request = EthereumTransaction.createRequest(method: .estimateGas, transaction: transaction, transactionOptions: transactionOptions) else {
                 throw Web3Error.processingError(desc: "Transaction is invalid")
             }
             let rp = web3.dispatch(request)

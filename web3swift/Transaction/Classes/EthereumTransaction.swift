@@ -321,12 +321,14 @@ public struct EthereumTransaction: CustomStringConvertible {
         }
     }
     
-    static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, onBlock: String? = nil, options: Web3Options?) -> JSONRPCrequest? {
+    static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> JSONRPCrequest? {
+        let onBlock = transactionOptions?.callOnBlock?.stringValue
         var request = JSONRPCrequest()
         request.method = method
+        let from = transactionOptions?.from
 //        guard let from = options?.from else {return nil}
-        guard var txParams = transaction.encodeAsDictionary(from: options?.from) else {return nil}
-        if method == .estimateGas || options?.gasLimit == nil {
+        guard var txParams = transaction.encodeAsDictionary(from: from) else {return nil}
+        if method == .estimateGas || transactionOptions?.gasLimit == nil {
             txParams.gas = nil
         }
         var params = [txParams] as Array<Encodable>

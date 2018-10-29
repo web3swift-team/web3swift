@@ -9,6 +9,7 @@
 import Foundation
 import BigInt
 import EthereumAddress
+import EthereumABI
 
 extension Web3 {
     
@@ -25,7 +26,7 @@ extension Web3 {
     
     public struct EIP681Code {
         public struct EIP681Parameter {
-            public var type: ABIv2.Element.ParameterType
+            public var type: ABI.Element.ParameterType
             public var value: AnyObject
         }
         public var isPayRequest: Bool
@@ -36,7 +37,7 @@ extension Web3 {
         public var gasLimit: BigUInt?
         public var gasPrice: BigUInt?
         public var amount: BigUInt?
-        public var function: ABIv2.Element.Function?
+        public var function: ABI.Element.Function?
         
         public enum TargetAddress {
             case ethereumAddress(EthereumAddress)
@@ -54,27 +55,6 @@ extension Web3 {
             self.isPayRequest = isPayRequest
             self.targetAddress = targetAddress
         }
-
-//        public struct Function {
-//            public var method: String
-//            public var parameters: [(ABIv2.Element.ParameterType, AnyObject)]
-//
-//            public func toString() -> String? {
-//                let encoding = method + "(" + parameters.map({ (el) -> String in
-//                    if let string = el.1 as? String {
-//                        return el.0.abiRepresentation + " " + string
-//                    } else if let number = el.1 as? BigUInt {
-//                        return el.0.abiRepresentation + " " + String(number, radix: 10)
-//                    } else if let number = el.1 as? BigInt {
-//                        return el.0.abiRepresentation + " " + String(number, radix: 10)
-//                    } else if let data = el.1 as? Data {
-//                        return el.0.abiRepresentation + " " + data.toHexString().addHexPrefix()
-//                    }
-//                    return ""
-//                }).joined(separator: ", ") + ")"
-//                return encoding
-//            }
-//        }
     }
     
     public struct EIP681CodeParser {
@@ -131,9 +111,9 @@ extension Web3 {
             }
             guard let queryItems = components.queryItems else {return code}
             var inputNumber: Int = 0
-            var inputs = [ABIv2.Element.InOut]()
+            var inputs = [ABI.Element.InOut]()
             for comp in queryItems {
-                if let inputType = try? ABIv2TypeParser.parseTypeString(comp.name) {
+                if let inputType = try? ABITypeParser.parseTypeString(comp.name) {
                     guard let value = comp.value else {continue}
                     var nativeValue: AnyObject? = nil
                     switch inputType {
@@ -144,7 +124,7 @@ extension Web3 {
                             nativeValue = ethereumAddress as AnyObject
                         case .ensAddress(let ens):
                             let web = web3(provider: InfuraProvider(Networks.fromInt(Int(code.chainID ?? 1)) ?? Networks.Mainnet)!)
-                            var ensModel = ENS(web3: web)
+                            let ensModel = ENS(web3: web)
                             let resolver = ensModel.resolver(forDomain: ens)
                             switch resolver {
                             case .failure(_):
@@ -199,7 +179,7 @@ extension Web3 {
                         continue
                     }
                     if nativeValue != nil {
-                        inputs.append(ABIv2.Element.InOut(name: String(inputNumber), type: inputType))
+                        inputs.append(ABI.Element.InOut(name: String(inputNumber), type: inputType))
                         code.parameters.append(EIP681Code.EIP681Parameter(type: inputType, value: nativeValue!))
                         inputNumber = inputNumber + 1
                     } else {
@@ -248,7 +228,7 @@ extension Web3 {
             }
             
             if code.functionName != nil {
-                let functionEncoding = ABIv2.Element.Function(name: code.functionName!, inputs: inputs, outputs: [ABIv2.Element.InOut](), constant: false, payable: code.amount != nil)
+                let functionEncoding = ABI.Element.Function(name: code.functionName!, inputs: inputs, outputs: [ABI.Element.InOut](), constant: false, payable: code.amount != nil)
                 code.function = functionEncoding
             }
 
