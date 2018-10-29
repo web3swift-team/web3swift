@@ -16,6 +16,26 @@ public class WriteTransaction: ReadTransaction {
         var assembledTransaction : EthereumTransaction = self.transaction
         let queue = self.web3.requestDispatcher.queue
         let returnPromise = Promise<EthereumTransaction> { seal in
+            if self.method != "fallback" {
+                let m = self.contract.methods[self.method]
+                if m == nil {
+                    seal.reject(Web3Error.inputError(desc: "Contract's ABI does not have such method"))
+                    return
+                }
+                switch m! {
+                case .function(let function):
+                    if function.constant {
+                        seal.reject(Web3Error.inputError(desc: "Trying to transact to the constant function"))
+                        return
+                    }
+                case .constructor(_):
+                    break
+                default:
+                    seal.reject(Web3Error.inputError(desc: "Contract's ABI does not have such method"))
+                    return
+                }
+            }
+            
             var mergedOptions = self.transactionOptions.merge(transactionOptions)
             
             var forAssemblyPipeline : (EthereumTransaction, EthereumContract, TransactionOptions) = (assembledTransaction, self.contract, mergedOptions)
