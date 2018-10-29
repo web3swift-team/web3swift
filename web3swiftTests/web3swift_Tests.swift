@@ -1,9 +1,7 @@
+//  web3swift
 //
-//  web3swiftTests.swift
-//  web3swiftTests
-//
-//  Created by Alexander Vlasov on 04.12.2017.
-//  Copyright © 2017 Alexander Vlasov. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 

@@ -84,6 +84,10 @@
 		81909D1821862D5A007D2AE5 /* Web3+Eventloop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81909D1721862D5A007D2AE5 /* Web3+Eventloop.swift */; };
 		81909D1921862D5A007D2AE5 /* Web3+Eventloop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81909D1721862D5A007D2AE5 /* Web3+Eventloop.swift */; };
 		81909D1B2187B1FA007D2AE5 /* web3swift_User_cases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815C74C720ECBF3E00DE2AC4 /* web3swift_User_cases.swift */; };
+		81909D1C2187BB67007D2AE5 /* web3swift_RLP_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7F20EA3CEA0030E0D6 /* web3swift_RLP_Tests.swift */; };
+		81909D1D2187BBAE007D2AE5 /* web3swift_ERC20_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7B20EA37B50030E0D6 /* web3swift_ERC20_Tests.swift */; };
+		81909D1E2187BC8B007D2AE5 /* web3swift_transactions_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE7920EA355D0030E0D6 /* web3swift_transactions_Tests.swift */; };
+		81909D1F2187BD20007D2AE5 /* web3swift_numberFormattingUtil_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5AE220EA69B900DC7F32 /* web3swift_numberFormattingUtil_Tests.swift */; };
 		81A1821520D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821420D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift */; };
 		81A1821620D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821420D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift */; };
 		81A1821A20D5A6F70016741F /* Promise+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821720D5A3E70016741F /* Promise+HttpProvider.swift */; };
@@ -207,7 +211,6 @@
 		5B83FA95B72D7DA53870479B /* Pods-web3swift-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS/Pods-web3swift-macOS.release.xcconfig"; sourceTree = "<group>"; };
 		68360683136B1FE2C57D65D9 /* Pods_Web3Swift_ios_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Web3Swift_ios_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		740EB523E2A6AEE0C6916C71 /* Pods_Web3Swift_osx_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Web3Swift_osx_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8102F5C2211E00820032DF60 /* scrypt_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = scrypt_Tests.swift; sourceTree = "<group>"; };
 		8103BBCB2077B84400499769 /* PlainKeystore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainKeystore.swift; sourceTree = "<group>"; };
 		8104E2271FE82BDC00F952CB /* Web3+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Utils.swift"; sourceTree = "<group>"; };
 		810B0F991FEC446B00CF0DA2 /* Web3+JSONRPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+JSONRPC.swift"; sourceTree = "<group>"; };
@@ -317,7 +320,6 @@
 		E23B5ADC20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_EIP67_Tests.swift; sourceTree = "<group>"; };
 		E23B5AE020EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_rinkeby_personalSignature_Tests.swift; sourceTree = "<group>"; };
 		E23B5AE220EA69B900DC7F32 /* web3swift_numberFormattingUtil_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_numberFormattingUtil_Tests.swift; sourceTree = "<group>"; };
-		E23B5AE420EA6A0A00DC7F32 /* web3swift_contractV2_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_contractV2_Tests.swift; sourceTree = "<group>"; };
 		E2C590752152835400FF53D3 /* JSONRPCrequestDispatcher+ObjC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONRPCrequestDispatcher+ObjC.swift"; sourceTree = "<group>"; };
 		E2E94C5F217788E0005F54A0 /* Web3+ERC721.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+ERC721.swift"; sourceTree = "<group>"; };
 		FB43EC035C593F9E5A3644B6 /* Pods-web3swift-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS/Pods-web3swift-macOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -414,7 +416,6 @@
 				81A7B2892143DF1D004CD2C7 /* web3swift_EIP681_Tests.swift */,
 				81A7B2782143C978004CD2C7 /* web3swift_ENS_Tests.swift */,
 				8159C50D2135901700197B91 /* web3swift_ERC20_Class_Tests.swift */,
-				8102F5C2211E00820032DF60 /* scrypt_Tests.swift */,
 				81FECD5D211AEFCE006DA367 /* web3swift_ObjC_Tests.swift */,
 				815C74C720ECBF3E00DE2AC4 /* web3swift_User_cases.swift */,
 				00E5FE8120EA3FF40030E0D6 /* web3swift_infura_Tests.swift */,
@@ -431,7 +432,6 @@
 				E23B5ADC20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift */,
 				E23B5AE020EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift */,
 				E23B5AE220EA69B900DC7F32 /* web3swift_numberFormattingUtil_Tests.swift */,
-				E23B5AE420EA6A0A00DC7F32 /* web3swift_contractV2_Tests.swift */,
 			);
 			path = web3swiftTests;
 			sourceTree = "<group>";
@@ -1067,7 +1067,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E5FE8220EA3FF40030E0D6 /* web3swift_infura_Tests.swift in Sources */,
+				81909D1D2187BBAE007D2AE5 /* web3swift_ERC20_Tests.swift in Sources */,
+				81909D1C2187BB67007D2AE5 /* web3swift_RLP_Tests.swift in Sources */,
 				81909D1B2187B1FA007D2AE5 /* web3swift_User_cases.swift in Sources */,
+				81909D1F2187BD20007D2AE5 /* web3swift_numberFormattingUtil_Tests.swift in Sources */,
+				81909D1E2187BC8B007D2AE5 /* web3swift_transactions_Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

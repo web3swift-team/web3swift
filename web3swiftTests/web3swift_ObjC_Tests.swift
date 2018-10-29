@@ -1,12 +1,11 @@
+//  web3swift
 //
-//  web3swift_ObjC_Tests.swift
-//  web3swift-iOS_Tests
-//
-//  Created by Alexander Vlasov on 08.08.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import XCTest
+
 @testable import web3swift_iOS
 
 class web3swift_ObjC_Tests: XCTestCase {

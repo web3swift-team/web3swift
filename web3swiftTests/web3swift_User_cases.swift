@@ -1,9 +1,7 @@
+//  web3swift
 //
-//  web3swift_User_cases.swift
-//  web3swift-iOS_Tests
-//
-//  Created by Alexander Vlasov on 04.07.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import XCTest
