@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import enum Result.Result
 import BigInt
 import PromiseKit
 fileprivate typealias PromiseResult = PromiseKit.Result
@@ -38,16 +37,9 @@ extension web3.web3contract {
          - important: This call is synchronous
          
          */
-        public func parseBlockByNumber(_ blockNumber: UInt64) -> Result<[EventParserResultProtocol], Web3Error> {
-            do {
-                let result = try self.parseBlockByNumberPromise(blockNumber).wait()
-                return Result(result)
-            } catch {
-                if let err = error as? Web3Error {
-                    return Result.failure(err)
-                }
-                return Result.failure(Web3Error.generalError(err: error))
-            }
+        public func parseBlockByNumber(_ blockNumber: UInt64) throws -> [EventParserResultProtocol] {
+            let result = try self.parseBlockByNumberPromise(blockNumber).wait()
+            return result
         }
         
         /**
@@ -62,16 +54,9 @@ extension web3.web3contract {
          - important: This call is synchronous
          
          */
-        public func parseBlock(_ block: Block) -> Result<[EventParserResultProtocol], Web3Error> {
-            do {
-                let result = try self.parseBlockPromise(block).wait()
-                return Result(result)
-            } catch {
-                if let err = error as? Web3Error {
-                    return Result.failure(err)
-                }
-                return Result.failure(Web3Error.generalError(err: error))
-            }
+        public func parseBlock(_ block: Block) throws -> [EventParserResultProtocol] {
+            let result = try self.parseBlockPromise(block).wait()
+            return result
         }
         
         /**
@@ -86,16 +71,9 @@ extension web3.web3contract {
          - important: This call is synchronous
          
          */
-        public func parseTransactionByHash(_ hash: Data) -> Result<[EventParserResultProtocol], Web3Error> {
-            do {
-                let result = try self.parseTransactionByHashPromise(hash).wait()
-                return Result(result)
-            } catch {
-                if let err = error as? Web3Error {
-                    return Result.failure(err)
-                }
-                return Result.failure(Web3Error.generalError(err: error))
-            }
+        public func parseTransactionByHash(_ hash: Data) throws -> [EventParserResultProtocol] {
+            let result = try self.parseTransactionByHashPromise(hash).wait()
+            return result
         }
         
         /**
@@ -110,16 +88,9 @@ extension web3.web3contract {
          - important: This call is synchronous
          
          */
-        public func parseTransaction(_ transaction: EthereumTransaction) -> Result<[EventParserResultProtocol], Web3Error> {
-            do {
-                let result = try self.parseTransactionPromise(transaction).wait()
-                return Result(result)
-            } catch {
-                if let err = error as? Web3Error {
-                    return Result.failure(err)
-                }
-                return Result.failure(Web3Error.generalError(err: error))
-            }
+        public func parseTransaction(_ transaction: EthereumTransaction) throws -> [EventParserResultProtocol] {
+            let result = try self.parseTransactionPromise(transaction).wait()
+            return result
         }
     }
 }
@@ -259,16 +230,9 @@ extension web3.web3contract {
      - important: This call is synchronous
      
      */
-    public func getIndexedEvents(eventName: String?, filter: EventFilter, joinWithReceipts: Bool = false) -> Result<[EventParserResultProtocol], Web3Error> {
-        do {
-            let result = try self.getIndexedEventsPromise(eventName: eventName, filter: filter, joinWithReceipts: joinWithReceipts).wait()
-            return Result(result)
-        } catch {
-            if let err = error as? Web3Error {
-                return Result.failure(err)
-            }
-            return Result.failure(Web3Error.generalError(err: error))
-        }
+    public func getIndexedEvents(eventName: String?, filter: EventFilter, joinWithReceipts: Bool = false) throws -> [EventParserResultProtocol] {
+        let result = try self.getIndexedEventsPromise(eventName: eventName, filter: filter, joinWithReceipts: joinWithReceipts).wait()
+        return result
     }
 }
 
@@ -276,9 +240,7 @@ extension web3.web3contract {
     public func getIndexedEventsPromise(eventName: String?, filter: EventFilter, joinWithReceipts: Bool = false) -> Promise<[EventParserResultProtocol]> {
         let queue = self.web3.requestDispatcher.queue
         do {
-            guard let rawContract = self.contract as? EthereumContract else {
-                throw Web3Error.nodeError(desc: "ABIv1 is not supported for this method")
-            }
+            let rawContract = self.contract
             guard let preEncoding = encodeTopicToGetLogs(contract: rawContract, eventName: eventName, filter: filter) else {
                 throw Web3Error.processingError(desc: "Failed to encode topic for request")
             }

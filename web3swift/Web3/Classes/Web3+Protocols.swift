@@ -6,7 +6,6 @@
 
 import Foundation
 import BigInt
-import Result
 import class PromiseKit.Promise
 import EthereumAddress
 
@@ -21,10 +20,10 @@ public protocol EventParserResultProtocol {
 
 /// Protocol for generic Ethereum event parser
 public protocol EventParserProtocol {
-    func parseTransaction(_ transaction: EthereumTransaction) -> Result<[EventParserResultProtocol], Web3Error>
-    func parseTransactionByHash(_ hash: Data) -> Result<[EventParserResultProtocol], Web3Error>
-    func parseBlock(_ block: Block) -> Result<[EventParserResultProtocol], Web3Error>
-    func parseBlockByNumber(_ blockNumber: UInt64) -> Result<[EventParserResultProtocol], Web3Error>
+    func parseTransaction(_ transaction: EthereumTransaction) throws -> [EventParserResultProtocol]
+    func parseTransactionByHash(_ hash: Data) throws -> [EventParserResultProtocol]
+    func parseBlock(_ block: Block) throws -> [EventParserResultProtocol]
+    func parseBlockByNumber(_ blockNumber: UInt64) throws -> [EventParserResultProtocol]
     func parseTransactionPromise(_ transaction: EthereumTransaction) -> Promise<[EventParserResultProtocol]>
     func parseTransactionByHashPromise(_ hash: Data) -> Promise<[EventParserResultProtocol]>
     func parseBlockByNumberPromise(_ blockNumber: UInt64) -> Promise<[EventParserResultProtocol]>

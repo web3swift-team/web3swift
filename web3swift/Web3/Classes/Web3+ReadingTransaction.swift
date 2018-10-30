@@ -81,4 +81,12 @@ public class ReadTransaction {
         }
         return returnPromise
     }
+    
+    public func estimateGas(transactionOptions: TransactionOptions? = nil) throws -> BigUInt {
+        return try self.estimateGasPromise(transactionOptions: transactionOptions).wait()
+    }
+    
+    public func call(transactionOptions: TransactionOptions? = nil) throws -> [String: Any] {
+        return try self.callPromise(transactionOptions: transactionOptions).wait()
+    }
 }

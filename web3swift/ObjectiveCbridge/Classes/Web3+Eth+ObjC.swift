@@ -15,11 +15,12 @@ public final class _ObjCweb3Eth: NSObject {
     }
     
     public func getBalance(address: _ObjCEthereumAddress, onBlock: NSString = "latest", error: NSErrorPointer) -> _ObjCBigUInt? {
+        do {
         guard let addr = address.address else {
             error?.pointee = Web3Error.inputError(desc: "Address is empty") as NSError
             return nil
         }
-        guard let result = self.web3?.eth.getBalance(address: addr, onBlock: onBlock as String) else {
+        guard let balance = try self.web3?.eth.getBalance(address: addr) else {
             error?.pointee = Web3Error.processingError(desc: "Web3 object was not properly initialized") as NSError
             return nil
         }
@@ -30,6 +31,9 @@ public final class _ObjCweb3Eth: NSObject {
         case .failure(let web3error):
             error?.pointee = web3error as NSError
             return nil
+        }
+        } catch {
+            error?.pointee = error as NSError
         }
     }
     

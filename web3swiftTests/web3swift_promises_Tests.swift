@@ -7,11 +7,13 @@
 import XCTest
 import PromiseKit
 import BigInt
+import EthereumAddress
 
 @testable import web3swift_iOS
 
 class web3swift_promises_Tests: XCTestCase {
     var urlSession : URLSession?
+    
     func testGetBalancePromise() {
         do {
             let web3 = Web3.InfuraMainnetWeb3()
@@ -41,11 +43,10 @@ class web3swift_promises_Tests: XCTestCase {
             let keystoreManager = KeystoreManager([tempKeystore!])
             web3.addKeystoreManager(keystoreManager)
             let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
-            var options = Web3Options.defaultOptions()
-            options.value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
-            options.from = keystoreManager.addresses?.first
-            let intermediate = contract?.method("fallback", options: options)
-            let esimate = try intermediate!.estimateGasPromise(options: nil).wait()
+            guard let writeTX = contract?.write("fallback") else {return XCTFail()}
+            writeTX.transactionOptions.from = tempKeystore!.addresses?.first
+            writeTX.transactionOptions.value = BigUInt("1.0", .eth)
+            let esimate = try writeTX.estimateGasPromise().wait()
             print(esimate)
             XCTAssert(esimate == 21000)
         } catch{
@@ -54,33 +55,32 @@ class web3swift_promises_Tests: XCTestCase {
         }
     }
     
-    func testSendETHPromise() {
-        do {
-            guard let keystoreData = getKeystoreData() else {return}
-            guard let keystoreV3 = EthereumKeystoreV3.init(keystoreData) else {return XCTFail()}
-            let web3Rinkeby = Web3.InfuraRinkebyWeb3()
-            let keystoreManager = KeystoreManager.init([keystoreV3])
-            web3Rinkeby.addKeystoreManager(keystoreManager)
-            guard case .success(let gasPriceRinkeby) = web3Rinkeby.eth.getGasPrice() else {return}
-            let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-            guard let intermediate = web3Rinkeby.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
-            var options = Web3Options.defaultOptions()
-            options.from = keystoreV3.addresses?.first
-            options.gasPrice = gasPriceRinkeby
-            let result = try intermediate.sendPromise(options: options).wait()
-            print(result)
-        } catch {
-            print(error)
-            XCTFail()
-        }
-    }
+//    func testSendETHPromise() {
+//        do {
+//            guard let keystoreData = getKeystoreData() else {return}
+//            guard let keystoreV3 = EthereumKeystoreV3.init(keystoreData) else {return XCTFail()}
+//            let web3Rinkeby = Web3.InfuraRinkebyWeb3()
+//            let keystoreManager = KeystoreManager.init([keystoreV3])
+//            web3Rinkeby.addKeystoreManager(keystoreManager)
+//            let gasPriceRinkeby = try web3Rinkeby.eth.getGasPrice()
+//            let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
+//            guard let writeTX = web3Rinkeby.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
+//            writeTX.transactionOptions.from = keystoreV3.addresses?.first
+//            writeTX.transactionOptions.gasPrice = .manual(gasPriceRinkeby)
+//            let result = try writeTX.sendPromise().wait()
+//            print(result)
+//        } catch {
+//            print(error)
+//            XCTFail()
+//        }
+//    }
     
     func testERC20tokenBalancePromise() {
         do {
             let web3 = Web3.InfuraMainnetWeb3()
             let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress("0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1")!, abiVersion: 2)
             let addressOfUser = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-            let tokenBalance = try contract!.method("balanceOf", parameters: [addressOfUser] as [AnyObject], options: nil)!.callPromise(options: nil).wait()
+            let tokenBalance = try contract!.read("balanceOf", parameters: [addressOfUser] as [AnyObject])!.callPromise().wait()
             guard let bal = tokenBalance["0"] as? BigUInt else {return XCTFail()}
             print(String(bal))
         } catch {
@@ -134,6 +134,18 @@ class web3swift_promises_Tests: XCTestCase {
         guard let data = NSData(contentsOfFile: path) else {return nil}
         return data as Data
     }
+    
+//    func testRegenerateKeystore() {
+//        let data = getKeystoreData()!
+//        let ks = EthereumKeystoreV3.init(data)!
+//        let _ = try! ks.UNSAFE_getPrivateKeyData(password: "BANKEXFOUNDATION", account: ks.addresses!.first!)
+//        try! ks.regenerate(oldPassword: "BANKEXFOUNDATION", newPassword: "web3swift")
+//        let newData = try! ks.serialize()
+//        let bundle = Bundle(for: type(of: self))
+//        guard let path = bundle.path(forResource: "key", ofType: "json") else {return}
+//        let url = URL.init(fileURLWithPath: path)
+//        try! newData?.write(to: url)
+//    }
 }
 
 
