@@ -49,6 +49,22 @@ class web3swift_Keystores_tests: XCTestCase {
         XCTAssertNotNil(key)
     }
     
+    func testV3keystoreSerialization() {
+        let keystore = try! EthereumKeystoreV3(password: "");
+        XCTAssertNotNil(keystore)
+        let account = keystore!.addresses![0]
+        let data = try! keystore!.serialize()
+        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        XCTAssertNotNil(key)
+        
+        let restored = EthereumKeystoreV3(data!)
+        XCTAssertNotNil(restored)
+        XCTAssertEqual(keystore!.addresses!.first!, restored!.addresses!.first!)
+        let restoredKey = try! restored!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        XCTAssertNotNil(restoredKey)
+        XCTAssertEqual(key, restoredKey)
+    }
+    
     func testNewBIP32keystore() {
         let mnemonic = try! BIP39.generateMnemonics(bitsOfEntropy: 256)!
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")

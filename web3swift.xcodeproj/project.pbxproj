@@ -103,6 +103,7 @@
 		81909D2F21885B2C007D2AE5 /* Web3+ERC721.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E94C5F217788E0005F54A0 /* Web3+ERC721.swift */; };
 		81909D4A218864A8007D2AE5 /* EIP681.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7B2862143DBF6004CD2C7 /* EIP681.swift */; };
 		81909D4B218864A9007D2AE5 /* EIP681.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7B2862143DBF6004CD2C7 /* EIP681.swift */; };
+		81909D4F21887658007D2AE5 /* web3swift_Eventloop_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81909D4E21887658007D2AE5 /* web3swift_Eventloop_Tests.swift */; };
 		81A1821520D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821420D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift */; };
 		81A1821620D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821420D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift */; };
 		81A1821A20D5A6F70016741F /* Promise+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821720D5A3E70016741F /* Promise+HttpProvider.swift */; };
@@ -262,6 +263,7 @@
 		81909D1421862D37007D2AE5 /* Web3+MutatingTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+MutatingTransaction.swift"; sourceTree = "<group>"; };
 		81909D1721862D5A007D2AE5 /* Web3+Eventloop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Eventloop.swift"; sourceTree = "<group>"; };
 		81909D2021884893007D2AE5 /* BigUInt+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BigUInt+Extensions.swift"; sourceTree = "<group>"; };
+		81909D4E21887658007D2AE5 /* web3swift_Eventloop_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_Eventloop_Tests.swift; sourceTree = "<group>"; };
 		81A1821420D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Eth+GetBalance.swift"; sourceTree = "<group>"; };
 		81A1821720D5A3E70016741F /* Promise+HttpProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+HttpProvider.swift"; sourceTree = "<group>"; };
 		81A1821C20D5C6C10016741F /* web3swift_promises_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_promises_Tests.swift; sourceTree = "<group>"; };
@@ -424,6 +426,7 @@
 		1CD91B301FD769A6007BFB45 /* web3swiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				81909D4E21887658007D2AE5 /* web3swift_Eventloop_Tests.swift */,
 				1CB8188F2160867700726CF8 /* key.json */,
 				81A7B2892143DF1D004CD2C7 /* web3swift_EIP681_Tests.swift */,
 				81A7B2782143C978004CD2C7 /* web3swift_ENS_Tests.swift */,
@@ -1093,6 +1096,7 @@
 				81909D1F2187BD20007D2AE5 /* web3swift_numberFormattingUtil_Tests.swift in Sources */,
 				81909D1E2187BC8B007D2AE5 /* web3swift_transactions_Tests.swift in Sources */,
 				81909D2D218858EA007D2AE5 /* web3swift_ERC20_Class_Tests.swift in Sources */,
+				81909D4F21887658007D2AE5 /* web3swift_Eventloop_Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
