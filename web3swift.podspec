@@ -29,6 +29,6 @@ s.dependency 'PromiseKit', '~> 6.3'
 s.dependency 'scrypt', '~> 2.0'
 s.dependency 'secp256k1_swift', '~> 1.0.3'
 s.dependency 'SwiftRLP', '~> 1.1'
-s.dependency 'EthereumAddress', '~> 1.0.1'
-s.dependemcy 'EthereumABI', '~> 1.1.1'
+s.dependency 'EthereumAddress', '~> 1.0.0'
+s.dependency 'EthereumABI', '~> 1.1.1'
 end

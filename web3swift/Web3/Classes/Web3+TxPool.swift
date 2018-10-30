@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import Result
 import BigInt
 
 extension web3.TxPool {

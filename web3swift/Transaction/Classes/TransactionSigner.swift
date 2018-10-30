@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import Result
 import BigInt
 import secp256k1_swift
 import EthereumAddress
