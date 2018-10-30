@@ -101,6 +101,8 @@
 		81909D2D218858EA007D2AE5 /* web3swift_ERC20_Class_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8159C50D2135901700197B91 /* web3swift_ERC20_Class_Tests.swift */; };
 		81909D2E21885B2C007D2AE5 /* Web3+ERC721.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E94C5F217788E0005F54A0 /* Web3+ERC721.swift */; };
 		81909D2F21885B2C007D2AE5 /* Web3+ERC721.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E94C5F217788E0005F54A0 /* Web3+ERC721.swift */; };
+		81909D4A218864A8007D2AE5 /* EIP681.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7B2862143DBF6004CD2C7 /* EIP681.swift */; };
+		81909D4B218864A9007D2AE5 /* EIP681.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7B2862143DBF6004CD2C7 /* EIP681.swift */; };
 		81A1821520D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821420D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift */; };
 		81A1821620D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821420D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift */; };
 		81A1821A20D5A6F70016741F /* Promise+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821720D5A3E70016741F /* Promise+HttpProvider.swift */; };
@@ -1059,6 +1061,7 @@
 				817EBB162004FE4200E02EAA /* Web3+HttpProvider.swift in Sources */,
 				8103BBCC2077B84400499769 /* PlainKeystore.swift in Sources */,
 				81DFB3FF210775320011DC85 /* Web3+Infura.swift in Sources */,
+				81909D4A218864A8007D2AE5 /* EIP681.swift in Sources */,
 				81C0FCF220440EB500D82FAF /* Web3+Protocols.swift in Sources */,
 				81C0FCF420440F0900D82FAF /* Web3+Options.swift in Sources */,
 				81A1822E20D67BC30016741F /* Promise+Web3+Eth+GetTransactionReceipt.swift in Sources */,
@@ -1157,6 +1160,7 @@
 				81C0FD042044A8A700D82FAF /* Web3+Options.swift in Sources */,
 				81A1823220D68A110016741F /* Promise+Batching.swift in Sources */,
 				4194813C203630530065A83B /* Base58.swift in Sources */,
+				81909D4B218864A9007D2AE5 /* EIP681.swift in Sources */,
 				8103BBCD2077B84400499769 /* PlainKeystore.swift in Sources */,
 				4194813D203630530065A83B /* RIPEMD160+StackOveflow.swift in Sources */,
 				4194813E203630530065A83B /* Data+Extension.swift in Sources */,
