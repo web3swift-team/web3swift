@@ -15,7 +15,7 @@ import EthereumAddress
 class web3swift_rinkeby_personalSignature_Tests: XCTestCase {
     
     
-    func testPersonalSignature() {
+    func testPersonalSignature() throws {
         let web3 = Web3.InfuraRinkebyWeb3()
         let tempKeystore = try! EthereumKeystoreV3(password: "")
         let keystoreManager = KeystoreManager([tempKeystore!])
@@ -23,15 +23,13 @@ class web3swift_rinkeby_personalSignature_Tests: XCTestCase {
         let message = "Hello World"
         let expectedAddress = keystoreManager.addresses![0]
         print(expectedAddress)
-        let signRes = web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
-        guard case .success(let signature) = signRes else {return XCTFail()}
+        let signature = try web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
         let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: signature)!
         print("V = " + String(unmarshalledSignature.v))
         print("R = " + Data(unmarshalledSignature.r).toHexString())
         print("S = " + Data(unmarshalledSignature.s).toHexString())
         print("Personal hash = " + Web3.Utils.hashPersonalMessage(message.data(using: .utf8)!)!.toHexString())
-        let recoveredSigner = web3.personal.ecrecover(personalMessage: message.data(using: .utf8)!, signature: signature)
-        guard case .success(let signer) = recoveredSigner else {return XCTFail()}
+        let signer = try web3.personal.ecrecover(personalMessage: message.data(using: .utf8)!, signature: signature)
         XCTAssert(expectedAddress == signer, "Failed to sign personal message")
     }
     
@@ -43,8 +41,7 @@ class web3swift_rinkeby_personalSignature_Tests: XCTestCase {
         let message = "Hello World"
         let expectedAddress = keystoreManager.addresses![0]
         print(expectedAddress)
-        let signRes = web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
-        guard case .success(let signature) = signRes else {return XCTFail()}
+        let signature = try web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
         let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: signature)!
         print("V = " + String(unmarshalledSignature.v))
         print("R = " + Data(unmarshalledSignature.r).toHexString())

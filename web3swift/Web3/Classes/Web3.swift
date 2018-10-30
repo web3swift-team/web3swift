@@ -77,24 +77,24 @@ public struct Web3 {
 }
 
 struct ResultUnwrapper {
-    static func getResponse(_ response: [String: Any]?) -> Result<Any, Web3Error> {
+    static func getResponse(_ response: [String: Any]?) throws -> Any {
         guard response != nil, let res = response else {
-            return Result.failure(Web3Error.connectionError)
+            throw Web3Error.connectionError
         }
         if let error = res["error"] {
             if let errString = error as? String {
-                return Result.failure(Web3Error.nodeError(desc: errString))
+                throw Web3Error.nodeError(desc: errString)
             } else if let errDict = error as? [String:Any] {
                 if errDict["message"] != nil, let descr = errDict["message"]! as? String  {
-                    return Result.failure(Web3Error.nodeError(desc: descr))
+                    throw Web3Error.nodeError(desc: descr)
                 }
             }
-            return Result.failure(Web3Error.unknownError)
+            throw Web3Error.unknownError
         }
         guard let result = res["result"] else {
-            return Result.failure(Web3Error.dataError)
+            throw Web3Error.dataError
         }
-        return Result(result)
+        return result
     }
 }
 

@@ -17,9 +17,8 @@ s.swift_version = '4.1'
 s.module_name = 'Web3swift'
 s.ios.deployment_target = "9.0"
 s.osx.deployment_target = "10.11"
-s.source_files = "web3swift/**/*.{h,swift}", 
-s.exclude_files = "web3swift/ObjectiveCbridge/Classes/*.{swift}", "web3swift/Utils/Classes/ENS.swift", "web3swift/Utils/Classes/ENSResolver.swift"
-s.public_header_files = "web3swift/**/*.{h}"
+s.source_files = "web3swift/{PrecompiledContracts,Promises,Web3,Contract,KeystoreManager,Transaction,Convenience}/Classes/*.{h,swift}", "web3swift/Utils/Classes/{EIP67Code, EIP681}.swift", "web3swift/HookedFunctions/Classes/Web3+Wallet.swift", "web3swift/web3swift.h"
+s.public_header_files = "web3swift/web3swift.h"
 s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 
 s.frameworks = 'CoreImage'
