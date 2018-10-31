@@ -9,6 +9,7 @@
 import Foundation
 import CoreImage
 import BigInt
+import EthereumAddress
 
 extension Web3 {
 

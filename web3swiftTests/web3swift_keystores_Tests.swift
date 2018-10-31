@@ -26,6 +26,13 @@ class web3swift_Keystores_tests: XCTestCase {
         XCTAssert(seed?.toHexString() == "64c87cde7e12ecf6704ab95bb1408bef047c22db4cc7491c4271d170a1b213d20b385bc1588d9c7b38f1b39d415665b8a9030c9ec653d75e65f847d8fc1fc440")
     }
     
+    func testBIP39SeedAndMnemConversions() {
+        let seed = Data.randomBytes(length: 32)!
+        let mnemonics = BIP39.generateMnemonicsFromEntropy(entropy: seed)
+        let recoveredSeed = BIP39.mnemonicsToEntropy(mnemonics!, language: .english)
+        XCTAssert(seed == recoveredSeed)
+    }
+    
     func testHMAC() {
         let seed = Data.fromHex("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b")!
         let data = Data.fromHex("4869205468657265")!
@@ -215,5 +222,5 @@ class web3swift_Keystores_tests: XCTestCase {
         let privateKey = Data.randomBytes(length: 32)!
         let _ = try! EthereumKeystoreV3(privateKey: privateKey, password: "TEST")!
     }
-
+    
 }

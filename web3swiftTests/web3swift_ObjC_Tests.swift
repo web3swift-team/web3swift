@@ -18,4 +18,21 @@ class web3swift_ObjC_Tests: XCTestCase {
         XCTAssert(err?.pointee == nil)
         XCTAssert(balance != nil)
     }
+    
+    func testGettingBlockNumber() {
+        let web3 = _ObjCWeb3.InfuraMainnetWeb3()
+        let err: NSErrorPointer = NSErrorPointer(nilLiteral: ())
+        let blockNumber = web3.web3Eth.getBlockNumber(error: err)
+        XCTAssert(err?.pointee == nil)
+        XCTAssert(blockNumber != nil)
+        
+    }
+    
+    func testGasPrice(){
+        let web3 = _ObjCWeb3.InfuraMainnetWeb3()
+        let err: NSErrorPointer = NSErrorPointer(nilLiteral: ())
+        let gasPrice = web3.web3Eth.getGasPrice(error: err)
+        XCTAssert(err?.pointee == nil)
+        XCTAssert(gasPrice != nil)
+    }
 }
