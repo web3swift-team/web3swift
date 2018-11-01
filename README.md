@@ -15,7 +15,7 @@
 **web3swift** is your toolbelt for any kind interactions with Ethereum network.
 
 
-  * [Features](#features)
+  * [Ready Features](#features)
   * [Design Decisions](#design-decisions)
   * [Requirements](#requirements)
   * [Migration Guides](#migration-guides)
@@ -25,6 +25,7 @@
     + [Carthage](#carthage)
   * [Example Project](#example-project)
   * [Popular questions](#popular-questions)
+  * [What's next](#whats-next)
   * [Credits](#credits)
     + [Security Disclosure](#security-disclosure)
   * [Donations](#donations)
@@ -45,23 +46,30 @@
 		- [Get Block Number](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#get-block-number)
 
 
-## Features
+## Ready Features
 
 - [x] Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
 - [x] Interaction with remote node via JSON RPC :thought_balloon:
+- [x] Local keystore management (`geth` compatible)
 - [x] Smart-contract ABI parsing :book:
 - [x] ABI deconding (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
-- [x] RLP encoding
+- [x] Ethereum Name Service (ENS) support - a secure & decentralised way to address resources both on and off the blockchain using simple, human-readable names
 - [x] Interactions (read/write to Smart contracts) :arrows_counterclockwise:
-- [x] Local keystore management (`geth` compatible)
-- [x] Batched requests in concurrent mode
+- [x] Parsing TxPool content into native values (ethereum addresses and transactions) - easy to get pending transactions
 - [x] Literally following the standards:
-	- [x] [BIP32](https://github.com/bitcoin/bips/blob/feature/readmeImprovement/bip-0032.mediawiki) HD Wallets: Deterministic Wallet
-	- [x] [BIP39](https://github.com/bitcoin/bips/blob/feature/readmeImprovement/bip-0039.mediawiki) (Seed phrases)
-	- [x] [BIP44](https://github.com/bitcoin/bips/blob/feature/readmeImprovement/bip-0044.mediawiki) (Key generation prefixes)
-	- [x] [EIP-155](https://github.com/ethereum/EIPs/blob/feature/readmeImprovement/EIPS/eip-155.md) (Replay attacks protection) *enforced!*
+	- [x] [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) HD Wallets: Deterministic Wallet
+	- [x] [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases)
+	- [x] [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)
+	- [x] [EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md) (A standard interface for tokens - ERC-20)
+	- [x] [EIP-67](https://github.com/ethereum/EIPs/issues/67) (Standard URI scheme with metadata, value and byte code)
+	- [x] [EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md) (Replay attacks protection) *enforced!*
+	- [x] [EIP-681](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-681.md) (A standard way of representing various transactions, especially payment requests in Ethers and ERC-20 tokens as URLs)
+	- [x] [EIP-721](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md) (A standard interface for non-fungible tokens, also known as deeds - ERC-721)
+- [x] RLP encoding
+- [x] Batched requests in concurrent mode
+- [x] Base58 encoding scheme
+- [x] Formatting to and from Ethereum Units
 - [x] Comprehensive Unit and Integration Test Coverage
-- [x] [Complete Documentation](https://web3swift.github.io/web3swift)
 
 ## Design Decisions
 
@@ -221,6 +229,18 @@ func setLocalNode(port: Int = 8545) -> Web3? {
     return web3
 }
 ```
+
+## What's next
+
+- [x] [EIP-777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md) (A new advanced token standard - ERC-777)
+- [x] [Objective-C] - a proxy bridge to build your DApp on Objective-C using web3swift
+- [x] Support Web3View functionality - WKWebView with injected "web3" provider
+- [x] Add or remove "middleware" that intercepts, modifies and even cancel transaction workflow on stages "before assembly", "after assembly"and "before submission"
+- [x] Remove "Result" framework due to large amount if name conflicts
+- [x] Put the groundwork for implementing hooks and event loops functionality
+- [x] No more "Web3Options" - new classes "ReadTransaction" and "WriteTransaction" with a variable "transactionOptions" used to specify gas price, limit, nonce policy, value
+- [x] [Complete Documentation](https://web3swift.github.io/web3swift)
+
 
 ## Credits
 
