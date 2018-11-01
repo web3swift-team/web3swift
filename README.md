@@ -213,6 +213,15 @@ func prepareTransaction(parameters: Data, gasLimit: BigUInt = 27500, completion:
 }
 ```
 
+#### How to set test local node?
+You can write something like that:
+```swift
+func setLocalNode(port: Int = 8545) -> Web3? {
+    guard let web3 = Web3(url: URL(string: "http://127.0.0.1:\(port)")!) else { return nil }
+    return web3
+}
+```
+
 ## Credits
 
 Alex Vlasov, [@shamatar](https://github.com/shamatar),  alex.m.vlasov@gmail.com
