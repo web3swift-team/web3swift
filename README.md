@@ -56,6 +56,7 @@
 - [x] Ethereum Name Service (ENS) support - a secure & decentralised way to address resources both on and off the blockchain using simple, human-readable names
 - [x] Interactions (read/write to Smart contracts) :arrows_counterclockwise:
 - [x] Parsing TxPool content into native values (ethereum addresses and transactions) - easy to get pending transactions
+- [x] Event loops functionality
 - [x] Literally following the standards:
 	- [x] [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) HD Wallets: Deterministic Wallet
 	- [x] [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases)
@@ -232,12 +233,12 @@ func setLocalNode(port: Int = 8545) -> Web3? {
 
 ## What's next
 
+- [x] [EIP-165](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-165.md) (Creates a standard method to publish and detect what interfaces a smart contract implements - ERC-165)
 - [x] [EIP-777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md) (A new advanced token standard - ERC-777)
 - [x] [Objective-C] - a proxy bridge to build your DApp on Objective-C using web3swift
 - [x] Support Web3View functionality - WKWebView with injected "web3" provider
 - [x] Add or remove "middleware" that intercepts, modifies and even cancel transaction workflow on stages "before assembly", "after assembly"and "before submission"
-- [x] Remove "Result" framework due to large amount if name conflicts
-- [x] Put the groundwork for implementing hooks and event loops functionality
+- [x] Put the groundwork for implementing hooks functionality
 - [x] No more "Web3Options" - new classes "ReadTransaction" and "WriteTransaction" with a variable "transactionOptions" used to specify gas price, limit, nonce policy, value
 - [x] [Complete Documentation](https://web3swift.github.io/web3swift)
 
