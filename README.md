@@ -24,6 +24,7 @@
     + [CocoaPods](#cocoapods)
     + [Carthage](#carthage)
   * [Example Project](#example-project)
+  * [Popular questions](#popular-questions)
   * [Credits](#credits)
     + [Security Disclosure](#security-disclosure)
   * [Donations](#donations)
@@ -148,6 +149,61 @@ You can try lib by running the example project:
 - Move to the repo: `cd web3swift/Example/web3swiftExample`
 - Install Dependencies: `pod install`
 - Open: `open ./web3swiftExample.xcworkspace`
+
+## Popular questions
+
+#### How to interact with custom smart-contract with web3swift?
+
+For example: you want to interact with smart-contract and all you know is - its address (address example: 0xfa28eC7198028438514b49a3CF353BcA5541ce1d).
+
+You can get the ABI of your contract directly from [Remix IDE](https://remix.ethereum.org/) ([Solution](https://ethereum.stackexchange.com/questions/27536/where-to-find-contract-abi-in-new-version-of-online-remix-solidity-compiler?rq=1))
+
+Then you should use contract address and ABI in creating contract object:
+```swift
+let contract = Web3.InfuraMainnetWeb3().contract(<abiString: String>, at: <EthereumAddress?>, abiVersion: <Int>)
+```
+To create transaction you should call some contract method:
+```swift
+let transaction = contract.method(<method: String>, parameters: <[AnyObject]>, extraData: <Data>, options: <Web3Options?>)
+```
+
+Here is the function example that creates TransactionIntermediate object, that you can send to smart-contract:
+```swift
+let yourContractABI = """
+<CONTRACT JSON ABI>
+"""
+
+func prepareTransaction(parameters: Data, gasLimit: BigUInt = 27500, completion: @escaping (Result<TransactionIntermediate>) -> Void) {
+    DispatchQueue.global().async {
+        guard let addressFrom: String = <YOURS WALLET ADDRESS> else {return}
+        guard let ethAddressFrom = EthereumAddress(addressFrom) else {return}
+
+        let yourContractAddress = "<CONTRACT ETH ADDRESS>"
+        guard let ethContractAddress = EthereumAddress(contractAddress) else {return}
+
+        let web3 = Web3.InfuraMainnetWeb3() //or any test network
+        web3.addKeystoreManager(KeystoreManager.defaultManager)
+
+        var options = Web3Options.defaultOptions()
+        options.from = ethAddressFrom
+        options.value = 0 // or any other value you want to send
+
+        guard let contract = web3.contract(yourContractJsonABI, at: ethContractAddress, abiVersion: 2) else {return}
+
+        guard let gasPrice = web3.eth.getGasPrice().value else {return}
+        options.gasPrice = gasPrice
+        options.gasLimit = gasLimit
+
+        guard let transaction = contract.method("<METHOD OF CONTRACT YOU WANT TO CALL>", parameters: [parameters] as [AnyObject], options: options) else {return}
+        guard case .success(let estimate) = transaction.estimateGas(options: options) else {return} //here is estimated gas - something like confirming that you made a transaction correctly
+        print("estimated cost: \(estimate)")
+
+        DispatchQueue.main.async {
+            completion(Result.Success(transaction))
+        }
+    }
+}
+```
 
 ## Credits
 
