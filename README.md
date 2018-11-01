@@ -152,6 +152,14 @@ You can try lib by running the example project:
 
 ## Popular questions
 
+#### Is it possible to get Mnemonic Phrase (Seed Phrase) from Private key using web3swift?
+
+In web3swift there is no backward conversion from Private key to Mnemonic Phrase. Also it is theoretically impossible to recover a phrase from a Private key. After Seed Phrase is converted to some initial entropy the “master key is derived” and the initial entropy is discarded.
+
+The simplest solution is to encrypt the phrase using users pincode and save it in some other secure keystore.
+Mnemonic Phrase is very sensitive data and you must be very careful to let the user get it.
+Our advise if you want to show it to user - ask to save a Passphrase when creating BIP32Keystore. 
+
 #### How to interact with custom smart-contract with web3swift?
 
 For example: you want to interact with smart-contract and all you know is - its address (address example: 0xfa28eC7198028438514b49a3CF353BcA5541ce1d).
