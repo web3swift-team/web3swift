@@ -110,7 +110,7 @@ public struct ResolverENS {
         guard let transaction = self.resolverContract.read("ABI", parameters: [nameHash, contentType] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
         guard let result = try? transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
         guard let encoding = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Can't get encoding")}
-        guard let data = result["0"] as? Data else {throw Web3Error.processingError(desc: "Can't get data")}
+        guard let data = result["1"] as? Data else {throw Web3Error.processingError(desc: "Can't get data")}
         return (encoding, data)
     }
     
