@@ -176,6 +176,11 @@
 		E2065FB92181D7D700701068 /* Promise+Web3+Contract+GetIndexedEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81195AAF20D7FF8500ABC6B1 /* Promise+Web3+Contract+GetIndexedEvents.swift */; };
 		E2065FBA2181D7D700701068 /* Promise+Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD4D216E2E0A00B28C14 /* Promise+Web3+TxPool.swift */; };
 		E2065FBB2181D7D700701068 /* Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD49216CE8B100B28C14 /* Web3+TxPool.swift */; };
+		E2DCA653218C875100F94FBA /* web3swift_ENS_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7B2782143C978004CD2C7 /* web3swift_ENS_Tests.swift */; };
+		E2DCA654218C879900F94FBA /* ENS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E668CD214F8A7B00C3CC2D /* ENS.swift */; };
+		E2DCA655218C879900F94FBA /* ENSResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B219DC162154F3EE0035BF94 /* ENSResolver.swift */; };
+		E2DCA656218C87A500F94FBA /* ENS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E668CD214F8A7B00C3CC2D /* ENS.swift */; };
+		E2DCA657218C87A500F94FBA /* ENSResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B219DC162154F3EE0035BF94 /* ENSResolver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1004,6 +1009,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DCA654218C879900F94FBA /* ENS.swift in Sources */,
+				E2DCA655218C879900F94FBA /* ENSResolver.swift in Sources */,
 				81C146F71FF274B200AA943E /* Web3+Structures.swift in Sources */,
 				8104E2281FE82BDC00F952CB /* Web3+Utils.swift in Sources */,
 				81909D2B218852E2007D2AE5 /* Web3+ERC20.swift in Sources */,
@@ -1083,6 +1090,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DCA653218C875100F94FBA /* web3swift_ENS_Tests.swift in Sources */,
 				81909D292188504D007D2AE5 /* web3swift_AdvancedABIv2_Tests.swift in Sources */,
 				00E5FE8220EA3FF40030E0D6 /* web3swift_infura_Tests.swift in Sources */,
 				81909D2A21885067007D2AE5 /* web3swift_rinkeby_personalSignature_Tests.swift in Sources */,
@@ -1104,6 +1112,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DCA656218C87A500F94FBA /* ENS.swift in Sources */,
+				E2DCA657218C87A500F94FBA /* ENSResolver.swift in Sources */,
 				E2065FB82181D7D700701068 /* Promise+Web3+Eth+EstimateGas.swift in Sources */,
 				E2065FB92181D7D700701068 /* Promise+Web3+Contract+GetIndexedEvents.swift in Sources */,
 				81909D2C218852E2007D2AE5 /* Web3+ERC20.swift in Sources */,

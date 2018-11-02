@@ -158,5 +158,7 @@ public class WriteTransaction: ReadTransaction {
         }
     }
     
-    
+    public func send(password:String = "web3swift", transactionOptions: TransactionOptions? = nil) throws -> TransactionSendingResult {
+        return try self.sendPromise(password: password, transactionOptions: transactionOptions).wait()
+    }
 }
