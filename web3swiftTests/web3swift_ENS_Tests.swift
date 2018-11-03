@@ -22,87 +22,114 @@ class web3swift_ENS_Tests: XCTestCase {
     }
     
     func testResolverAddress() {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
-        var ens = ENS(web3: web)
-        guard case .success(let resolver) = ens.resolver(forDomain: "somename.eth") else { XCTAssert(false); return }
-        XCTAssertEqual(resolver.resolverAddress.address.lowercased(), "0x5ffc014343cd971b7eb70732021e26c35b744cc4")
+        do {
+            let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+            let ens = ENS(web3: web)
+            let domain = "somename.eth"
+            let resolver = try ens.resolver(forDomain: domain)
+            XCTAssertEqual(resolver.resolverAddress.address.lowercased(), "0x5ffc014343cd971b7eb70732021e26c35b744cc4")
+        } catch {
+            XCTFail()
+        }
     }
     
     func testResolver() {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
-        var ens = ENS(web3: web)
-        let domain = "somename.eth"
-        guard case .success(var resolver) = ens.resolver(forDomain: domain) else { XCTAssert(false); return  }
-        guard case .success(let address) = resolver.addr(forDomain: domain) else { XCTAssert(false); return  }
-        XCTAssertEqual(address.address.lowercased(), "0x3487acfb1479ad1df6c0eb56ae743d34897798ac")
-        
+        do {
+            let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+            let ens = ENS(web3: web)
+            let domain = "somename.eth"
+            var resolver = try ens.resolver(forDomain: domain)
+            let address = try resolver.addr(forDomain: domain)
+            XCTAssertEqual(address.address.lowercased(), "0x3487acfb1479ad1df6c0eb56ae743d34897798ac")
+        } catch {
+            XCTFail()
+        }
     }
     
     func testSupportsInterface() {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
-        var ens = ENS(web3: web)
-        let domain = "somename.eth"
-        guard case .success(var resolver) = ens.resolver(forDomain: domain) else { XCTAssert(false); return  }
-        guard case .success(let isAddrSupports) = resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.addr.hash()) else { XCTAssert(false); return  }
-        XCTAssertEqual(isAddrSupports, true)
-        guard case .success(let isNameSupports) = resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.name.hash()) else { XCTAssert(false); return  }
-        XCTAssertEqual(isNameSupports, true)
-        guard case .success(let isABIsupports) = resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.ABI.hash()) else { XCTAssert(false); return  }
-        XCTAssertEqual(isABIsupports, true)
-        guard case .success(let isPubkeySupports) = resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.pubkey.hash()) else { XCTAssert(false); return  }
-        XCTAssertEqual(isPubkeySupports, true)
+        do {
+            let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+            let ens = ENS(web3: web)
+            let domain = "somename.eth"
+            var resolver = try ens.resolver(forDomain: domain)
+            let isAddrSupports = try resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.addr.hash())
+            let isNameSupports = try resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.name.hash())
+            let isABIsupports = try resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.ABI.hash())
+            let isPubkeySupports = try resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.pubkey.hash())
+            XCTAssertEqual(isAddrSupports, true)
+            XCTAssertEqual(isNameSupports, true)
+            XCTAssertEqual(isABIsupports, true)
+            XCTAssertEqual(isPubkeySupports, true)
+        } catch {
+            XCTFail()
+        }
     }
     
     func testABI() {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
-        var ens = ENS(web3: web)
-        let domain = "somename.eth"
-        guard case .success(var resolver) = ens.resolver(forDomain: domain) else { XCTAssert(false); return }
-        guard case .success(let isABIsupported) = resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.ABI.hash()) else { XCTAssert(false); return }
-        if isABIsupported {
-            guard case .success(let res) = resolver.ABI(node: domain, contentType: 2) else { XCTAssert(false); return }
-            XCTAssert(res.0 == 0)
-            XCTAssert(res.1.count == 0)
+        do {
+            let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+            let ens = ENS(web3: web)
+            let domain = "somename.eth"
+            var resolver = try ens.resolver(forDomain: domain)
+            let isABIsupported = try resolver.supportsInterface(interfaceID: ResolverENS.InterfaceName.ABI.hash())
+            if isABIsupported {
+                let res = try resolver.ABI(node: domain, contentType: 2)
+                XCTAssert(res.0 == 0)
+                XCTAssert(res.1.count == 0)
+            } else {
+                XCTFail()
+            }
+        } catch {
+            XCTFail()
         }
     }
     
     func testOwner() {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
-        var ens = ENS(web3: web)
-        let domain = "somename.eth"
-        guard case .success(let result) = ens.owner(node: domain) else { XCTAssert(false); return }
-        XCTAssertEqual("0xc67247454e720328714c4e17bec7640572657bee", result.address.lowercased())
+        do {
+            let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+            let ens = ENS(web3: web)
+            let domain = "somename.eth"
+            let owner = try ens.owner(node: domain)
+            XCTAssertEqual("0xc67247454e720328714c4e17bec7640572657bee", owner.address.lowercased())
+        } catch {
+            XCTFail()
+        }
     }
     
     func testTTL() {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
-        var ens = ENS(web3: web)
-        let domain = "somename.eth"
-        guard case .success(let result) = ens.ttl(node: domain) else { XCTAssert(false); return }
-        print(result)
+        do {
+            let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+            let ens = ENS(web3: web)
+            let domain = "somename.eth"
+            let ttl = try ens.ttl(node: domain)
+            print(ttl)
+        } catch {
+            XCTFail()
+        }
     }
     
     func testGetAddress() {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
-        var ens = ENS(web3: web)
-        let domain = "somename.eth"
-        guard case .success(let address) = ens.getAddress(domain) else { XCTAssert(false); return }
-        XCTAssertEqual(address.address.lowercased(), "0x3487acfb1479ad1df6c0eb56ae743d34897798ac")
+        do {
+            let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+            let ens = ENS(web3: web)
+            let domain = "somename.eth"
+            let address = try ens.getAddress(domain)
+            XCTAssertEqual(address.address.lowercased(), "0x3487acfb1479ad1df6c0eb56ae743d34897798ac")
+        } catch {
+            XCTFail()
+        }
     }
     
     func testGetPubkey() {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
-        var ens = ENS(web3: web)
-        let domain = "somename.eth"
-        guard case .success(let point) = ens.getPubkey(domain: domain) else { XCTAssert(false); return }
-        XCTAssert(point.x == "0x0000000000000000000000000000000000000000000000000000000000000000")
-        XCTAssert(point.y == "0x0000000000000000000000000000000000000000000000000000000000000000")
+        do {
+            let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+            let ens = ENS(web3: web)
+            let domain = "somename.eth"
+            let pubkey = try ens.getPubkey(domain: domain)
+            XCTAssert(pubkey.x == "0x0000000000000000000000000000000000000000000000000000000000000000")
+            XCTAssert(pubkey.y == "0x0000000000000000000000000000000000000000000000000000000000000000")
+        } catch {
+            XCTFail()
+        }
     }
-    
-    
-
-    
-    
-    
-    
 }

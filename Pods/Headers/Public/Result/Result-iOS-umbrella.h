@@ -1,1 +1,1 @@
-/Users/alexvlasov/Blockchain/web3swift/web3swift/Pods/Target Support Files/Result-iOS/Result-iOS-umbrella.h
+/Users/antongrigorev/Developer/web3swift/Pods/Target Support Files/Result-iOS/Result-iOS-umbrella.h
