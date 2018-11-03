@@ -12,7 +12,7 @@ import EthereumAddress
 class web3swift_Eventloop_Tests: XCTestCase {
 
     func testBasicEventLoop() {
-        var ticksToWait = 10
+        var ticksToWait = 5
         let expectation = self.expectation(description: "Waiting")
         func getBlockNumber(_ web3: web3) {
             do {
@@ -30,9 +30,9 @@ class web3swift_Eventloop_Tests: XCTestCase {
         let functionToCall: web3.Eventloop.EventLoopCall = getBlockNumber
         let monitoredProperty = web3.Eventloop.MonitoredProperty.init(name: "onNewBlock", queue: web3main.requestDispatcher.queue, calledFunction: functionToCall)
         web3main.eventLoop.monitoredProperties.append(monitoredProperty)
-        web3main.eventLoop.start(1)
+        web3main.eventLoop.start(5)
         
-        waitForExpectations(timeout: 30, handler: nil)
+        waitForExpectations(timeout: 60, handler: nil)
     }
 
 }

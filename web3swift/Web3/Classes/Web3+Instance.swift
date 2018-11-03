@@ -166,7 +166,9 @@ public class web3: Web3OptionsInheritable {
     }
     
     public class Eventloop: Web3OptionsInheritable {
+        
         public typealias EventLoopCall = (web3) -> Void
+        public typealias EventLoopContractCall = (web3contract) -> Void
     
         public struct MonitoredProperty {
             public var name: String
@@ -174,11 +176,21 @@ public class web3: Web3OptionsInheritable {
             public var calledFunction: EventLoopCall
         }
         
+//        public struct MonitoredContract {
+//            public var name: String
+//            public var queue: DispatchQueue
+//            public var calledFunction: EventLoopContractCall
+//        }
+        
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
         var timer: RepeatingTimer? = nil
-        var monitoredProperties: [MonitoredProperty] = [MonitoredProperty]()
+        
+        public var monitoredProperties: [MonitoredProperty] = [MonitoredProperty]()
+//        public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
+        public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
+        
         public var options: Web3Options {
             return self.web3.options
         }

@@ -29,12 +29,19 @@ extension web3.Eventloop {
         }
     }
     
-    @objc func runnable() {
+    func runnable() {
         for prop in self.monitoredProperties {
             let queue = prop.queue
             let function = prop.calledFunction
             queue.async {
                 function(self.web3)
+            }
+        }
+        
+        for prop in self.monitoredUserFunctions {
+            let queue = prop.queue
+            queue.async {
+                prop.functionToRun()
             }
         }
     }

@@ -75,3 +75,9 @@ public enum Networks {
         }
     }
 }
+
+public protocol EventLoopRunnableProtocol {
+    var name: String {get}
+    var queue: DispatchQueue {get}
+    func functionToRun()
+}
