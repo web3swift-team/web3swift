@@ -10,19 +10,13 @@ import PromiseKit
 import EthereumAddress
 
 extension web3.Personal {
-    public func unlockAccountPromise(account: EthereumAddress, password:String = "web3swift", seconds: UInt64 = 300) -> Promise<Bool> {
-        let addr = account.address
-        return unlockAccountPromise(account: addr, password: password, seconds: seconds)
-    }
-    
-    
-    public func unlockAccountPromise(account: String, password:String = "web3swift", seconds: UInt64 = 300) -> Promise<Bool> {
+    public func createAccountPromise(password:String = "web3swift") -> Promise<EthereumAddress> {
         let queue = web3.requestDispatcher.queue
         do {
             if self.web3.provider.attachedKeystoreManager == nil {
-                let request = JSONRPCRequestFabric.prepareRequest(.unlockAccount, parameters: [account.lowercased(), password, seconds])
+                let request = JSONRPCRequestFabric.prepareRequest(.createAccount, parameters: [password])
                 return self.web3.dispatch(request).map(on: queue) {response in
-                    guard let value: Bool = response.getValue() else {
+                    guard let value: EthereumAddress = response.getValue() else {
                         if response.error != nil {
                             throw Web3Error.nodeError(desc: response.error!.message)
                         }
@@ -31,9 +25,9 @@ extension web3.Personal {
                     return value
                 }
             }
-            throw Web3Error.inputError(desc: "Can not unlock a local keystore")
+            throw Web3Error.inputError(desc: "Creating account in a local keystore with this method is not supported")
         } catch {
-            let returnPromise = Promise<Bool>.pending()
+            let returnPromise = Promise<EthereumAddress>.pending()
             queue.async {
                 returnPromise.resolver.reject(error)
             }

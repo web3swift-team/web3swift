@@ -10,7 +10,7 @@ import PromiseKit
 
 extension web3.Eth {
     
-    func estimateGasPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> Promise<BigUInt>{
+    public func estimateGasPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> Promise<BigUInt>{
         let queue = web3.requestDispatcher.queue
         do {
             guard let request = EthereumTransaction.createRequest(method: .estimateGas, transaction: transaction, transactionOptions: transactionOptions) else {

@@ -9,7 +9,7 @@ import PromiseKit
 
 extension web3.Eth {
     
-    func callPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> Promise<Data>{
+    public func callPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> Promise<Data>{
         let queue = web3.requestDispatcher.queue
         do {
             guard let request = EthereumTransaction.createRequest(method: .call, transaction: transaction, transactionOptions: transactionOptions) else {

@@ -10,7 +10,7 @@ import PromiseKit
 
 extension web3.Eth {
     
-    func sendTransactionPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?, password:String = "web3swift") -> Promise<TransactionSendingResult> {
+    public func sendTransactionPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?, password:String = "web3swift") -> Promise<TransactionSendingResult> {
 //        print(transaction)
         var assembledTransaction : EthereumTransaction = transaction // .mergedWithOptions(transactionOptions)
         let queue = web3.requestDispatcher.queue

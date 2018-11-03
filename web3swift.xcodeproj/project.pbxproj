@@ -104,6 +104,8 @@
 		81909D4A218864A8007D2AE5 /* EIP681.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7B2862143DBF6004CD2C7 /* EIP681.swift */; };
 		81909D4B218864A9007D2AE5 /* EIP681.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7B2862143DBF6004CD2C7 /* EIP681.swift */; };
 		81909D4F21887658007D2AE5 /* web3swift_Eventloop_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81909D4E21887658007D2AE5 /* web3swift_Eventloop_Tests.swift */; };
+		81909D51218DAEC0007D2AE5 /* Promise+Web3+Personal+CreateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81909D50218DAEC0007D2AE5 /* Promise+Web3+Personal+CreateAccount.swift */; };
+		81909D52218DAEC0007D2AE5 /* Promise+Web3+Personal+CreateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81909D50218DAEC0007D2AE5 /* Promise+Web3+Personal+CreateAccount.swift */; };
 		81A1821520D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821420D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift */; };
 		81A1821620D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821420D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift */; };
 		81A1821A20D5A6F70016741F /* Promise+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A1821720D5A3E70016741F /* Promise+HttpProvider.swift */; };
@@ -269,6 +271,7 @@
 		81909D1721862D5A007D2AE5 /* Web3+Eventloop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Eventloop.swift"; sourceTree = "<group>"; };
 		81909D2021884893007D2AE5 /* BigUInt+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BigUInt+Extensions.swift"; sourceTree = "<group>"; };
 		81909D4E21887658007D2AE5 /* web3swift_Eventloop_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_Eventloop_Tests.swift; sourceTree = "<group>"; };
+		81909D50218DAEC0007D2AE5 /* Promise+Web3+Personal+CreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Personal+CreateAccount.swift"; sourceTree = "<group>"; };
 		81A1821420D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Eth+GetBalance.swift"; sourceTree = "<group>"; };
 		81A1821720D5A3E70016741F /* Promise+HttpProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+HttpProvider.swift"; sourceTree = "<group>"; };
 		81A1821C20D5C6C10016741F /* web3swift_promises_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_promises_Tests.swift; sourceTree = "<group>"; };
@@ -611,6 +614,7 @@
 				81A1823F20D79FDB0016741F /* Promise+Web3+Eth+EstimateGas.swift */,
 				81A1824120D7AA750016741F /* Promise+Web3+Eth+SendTransaction.swift */,
 				81A1824720D7DDA20016741F /* Promise+Web3+Personal+Sign.swift */,
+				81909D50218DAEC0007D2AE5 /* Promise+Web3+Personal+CreateAccount.swift */,
 				81A1824A20D7DF1B0016741F /* Promise+Web3+Personal+UnlockAccount.swift */,
 				81195AAF20D7FF8500ABC6B1 /* Promise+Web3+Contract+GetIndexedEvents.swift */,
 				985BFD4D216E2E0A00B28C14 /* Promise+Web3+TxPool.swift */,
@@ -1040,6 +1044,7 @@
 				81FB21FE207BB297007F9A83 /* EIP67Code.swift in Sources */,
 				81A1821A20D5A6F70016741F /* Promise+HttpProvider.swift in Sources */,
 				81A1823720D6E2BB0016741F /* Promise+Web3+Eth+GetBlockByHash.swift in Sources */,
+				81909D51218DAEC0007D2AE5 /* Promise+Web3+Personal+CreateAccount.swift in Sources */,
 				818D16CF204D42910084D2A4 /* Web3+EventParser.swift in Sources */,
 				81C5DA282072E18200424CD6 /* NativeTypesEncoding+Extensions.swift in Sources */,
 				8123E1C7200CBAC200B6D3AB /* Dictionary+Extension.swift in Sources */,
@@ -1143,6 +1148,7 @@
 				81FB21FF207BB297007F9A83 /* EIP67Code.swift in Sources */,
 				81A1821B20D5A6F80016741F /* Promise+HttpProvider.swift in Sources */,
 				81A1823820D6E2BB0016741F /* Promise+Web3+Eth+GetBlockByHash.swift in Sources */,
+				81909D52218DAEC0007D2AE5 /* Promise+Web3+Personal+CreateAccount.swift in Sources */,
 				818D16D0204D42940084D2A4 /* Web3+EventParser.swift in Sources */,
 				4194812E203630530065A83B /* AbstractKeystore.swift in Sources */,
 				81C5DA292072E18200424CD6 /* NativeTypesEncoding+Extensions.swift in Sources */,

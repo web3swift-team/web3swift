@@ -26,10 +26,12 @@ public enum JSONRPCmethod: String, Encodable {
     case getBlockByNumber = "eth_getBlockByNumber"
     case personalSign = "eth_sign"
     case unlockAccount = "personal_unlockAccount"
+    case createAccount = "personal_createAccount"
     case getLogs = "eth_getLogs"
     case getTxPoolInspect = "txpool_inspect"
     case getTxPoolStatus = "txpool_status"
     case getTxPoolContent = "txpool_content"
+
     
     public var requiredNumOfParameters: Int {
         get {
