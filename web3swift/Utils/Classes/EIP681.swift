@@ -120,24 +120,18 @@ extension Web3 {
                         switch val {
                         case .ethereumAddress(let ethereumAddress):
                             nativeValue = ethereumAddress as AnyObject
-                        default:
-                            return nil
-//                        case .ensAddress(let ens):
-//                            let web = web3(provider: InfuraProvider(Networks.fromInt(Int(code.chainID ?? 1)) ?? Networks.Mainnet)!)
-//                            let ensModel = ENS(web3: web)
-//                            let resolver = ensModel.resolver(forDomain: ens)
-//                            switch resolver {
-//                            case .failure(_):
-//                                nativeValue = ens as AnyObject
-//                            case .success(var res):
-//                                let address = res.addr(forDomain: ens)
-//                                switch address {
-//                                case .failure(_):
-//                                    nativeValue = ens as AnyObject
-//                                case .success(let res):
-//                                    nativeValue = res as AnyObject
-//                                }
-//                            }
+//                        default:
+//                            return nil
+                        case .ensAddress(let ens):
+                            do {
+                                let web = web3(provider: InfuraProvider(Networks.fromInt(Int(code.chainID ?? 1)) ?? Networks.Mainnet)!)
+                                let ensModel = ENS(web3: web)
+                                var resolver = try ensModel.resolver(forDomain: ens)
+                                let address = try resolver.addr(forDomain: ens)
+                                nativeValue = address as AnyObject
+                            } catch {
+                                return nil
+                            }
                         }
                     case .uint(bits: _):
                         if let val = BigUInt(value, radix: 10) {
