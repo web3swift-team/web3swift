@@ -822,4 +822,8 @@ extension Web3.Utils {
     public static func hexToBigUInt(_ string: String) -> BigUInt? {
         return BigUInt(string.stripHexPrefix(), radix: 16)
     }
+    
+    public static func randomBytes(length: Int) -> Data? {
+        return Data.randomBytes(length:length)
+    }
 }

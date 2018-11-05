@@ -33,6 +33,11 @@ extension web3.Eth {
                     throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
                 }
                 let result = TransactionSendingResult(transaction: transaction, hash: value)
+                for hook in self.web3.postSubmissionHooks {
+                    hook.queue.async {
+                        hook.function(result)
+                    }
+                }
                 return result
             }
         } catch {

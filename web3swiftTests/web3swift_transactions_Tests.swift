@@ -84,4 +84,11 @@ class web3swift_transactions_Tests: XCTestCase {
         guard let data = NSData(contentsOfFile: path) else {return nil}
         return data as Data
     }
+    
+    func testGenerateDummyKeystore() {
+        let keystore = try! EthereumKeystoreV3.init(password: "web3swift")
+        let dump = try! keystore!.serialize()
+        let jsonString = String.init(data: dump!, encoding: .ascii)
+        print(jsonString)
+    }
 }

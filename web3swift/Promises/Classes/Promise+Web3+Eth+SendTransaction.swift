@@ -10,7 +10,7 @@ import PromiseKit
 
 extension web3.Eth {
     
-    public func sendTransactionPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?, password:String = "web3swift") -> Promise<TransactionSendingResult> {
+    public func sendTransactionPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions? = nil, password:String = "web3swift") -> Promise<TransactionSendingResult> {
 //        print(transaction)
         var assembledTransaction : EthereumTransaction = transaction // .mergedWithOptions(transactionOptions)
         let queue = web3.requestDispatcher.queue
@@ -30,7 +30,7 @@ extension web3.Eth {
                     }
                 }
                 let shouldContinue = try prom.wait()
-                if shouldContinue {
+                if !shouldContinue {
                     throw Web3Error.processingError(desc: "Transaction is canceled by middleware")
                 }
             }
@@ -51,6 +51,11 @@ extension web3.Eth {
                         throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
                     }
                     let result = TransactionSendingResult(transaction: assembledTransaction, hash: value)
+                    for hook in self.web3.postSubmissionHooks {
+                        hook.queue.async {
+                            hook.function(result)
+                        }
+                    }
                     return result
                 }
             }

@@ -51,7 +51,7 @@ public class WriteTransaction: ReadTransaction {
                     }
                 }
                 let shouldContinue = try prom.wait()
-                if shouldContinue {
+                if !shouldContinue {
                     seal.reject(Web3Error.processingError(desc: "Transaction is canceled by middleware"))
                     return
                 }
@@ -129,7 +129,7 @@ public class WriteTransaction: ReadTransaction {
                         }
                     }
                     let shouldContinue = try prom.wait()
-                    if shouldContinue {
+                    if !shouldContinue {
                         throw Web3Error.processingError(desc: "Transaction is canceled by middleware")
                     }
                 }
@@ -160,5 +160,9 @@ public class WriteTransaction: ReadTransaction {
     
     public func send(password:String = "web3swift", transactionOptions: TransactionOptions? = nil) throws -> TransactionSendingResult {
         return try self.sendPromise(password: password, transactionOptions: transactionOptions).wait()
+    }
+    
+    public func assemble(transactionOptions: TransactionOptions? = nil) throws -> EthereumTransaction {
+        return try self.assemblePromise(transactionOptions: transactionOptions).wait()
     }
 }

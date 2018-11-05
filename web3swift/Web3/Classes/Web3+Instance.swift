@@ -204,6 +204,8 @@ public class web3: Web3OptionsInheritable {
     
     public typealias SubmissionHookFunction = ((EthereumTransaction, TransactionOptions)) -> (EthereumTransaction, TransactionOptions, Bool)
     
+    public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> ()
+    
     public struct AssemblyHook {
         public var queue: DispatchQueue
         public var function: AssemblyHookFunction
@@ -214,10 +216,15 @@ public class web3: Web3OptionsInheritable {
         public var function: SubmissionHookFunction
     }
     
+    public struct SubmissionResultHook {
+        public var queue: DispatchQueue
+        public var function: SubmissionResultHookFunction
+    }
+    
     public var preAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
     public var postAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
     
     public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
-//    public var postSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
+    public var postSubmissionHooks: [SubmissionResultHook] = [SubmissionResultHook]()
     
 }

@@ -37,7 +37,8 @@ public extension Data {
             dataPtr.initialize(repeating: 0, count: count)
         }
     }
-    public static func randomBytes(length: Int) -> Data? {
+    
+    static func randomBytes(length: Int) -> Data? {
         for _ in 0...1024 {
             var data = Data(repeating: 0, count: length)
             let result = data.withUnsafeMutableBytes {
@@ -51,7 +52,7 @@ public extension Data {
         return nil
     }
     
-    public static func fromHex(_ hex: String) -> Data? {
+    static func fromHex(_ hex: String) -> Data? {
         let string = hex.lowercased().stripHexPrefix()
         let array = Array<UInt8>(hex: string)
         if (array.count == 0) {
