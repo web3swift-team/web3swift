@@ -1,9 +1,7 @@
-//
-//  Promise+Web3+Eth+GetAccounts.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 17.06.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
@@ -17,11 +15,10 @@ extension web3.Eth {
         if (self.web3.provider.attachedKeystoreManager != nil) {
             let promise = Promise<[EthereumAddress]>.pending()
             queue.async {
-                let result = self.web3.wallet.getAccounts()
-                switch result {
-                case .success(let allAccounts):
+                do {
+                    let allAccounts = try self.web3.wallet.getAccounts()
                     promise.resolver.fulfill(allAccounts)
-                case .failure(let error):
+                } catch {
                     promise.resolver.reject(error)
                 }
             }

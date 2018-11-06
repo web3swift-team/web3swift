@@ -1,9 +1,7 @@
+//  web3swift
 //
-//  web3swift_EIP681_Tests.swift
-//  web3swift-iOS_Tests
-//
-//  Created by Alex Vlasov on 08.09.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import XCTest

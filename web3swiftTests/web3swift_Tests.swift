@@ -1,16 +1,14 @@
+//  web3swift
 //
-//  web3swiftTests.swift
-//  web3swiftTests
-//
-//  Created by Alexander Vlasov on 04.12.2017.
-//  Copyright © 2017 Alexander Vlasov. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 
 import XCTest
 import CryptoSwift
 import BigInt
-import Result
+import EthereumAddress
 import secp256k1_swift
 
 @testable import web3swift_iOS
@@ -94,15 +92,13 @@ class web3swift_Tests: XCTestCase {
         XCTAssert(privKey != nil, "Failed to create new private key")
     }
     
-    func testUserCaseEventParsing() {
+    func testUserCaseEventParsing() throws {
         let contractAddress = EthereumAddress("0x7ff546aaccd379d2d1f241e1d29cdd61d4d50778")
         let jsonString = "[{\"constant\":false,\"inputs\":[{\"name\":\"_id\",\"type\":\"string\"}],\"name\":\"deposit\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_id\",\"type\":\"string\"},{\"indexed\":true,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Deposit\",\"type\":\"event\"}]"
         let web3 = Web3.InfuraRinkebyWeb3()
         let contract = web3.contract(jsonString, at: contractAddress, abiVersion: 2)
         guard let eventParser = contract?.createEventParser("Deposit", filter: nil) else {return XCTFail()}
-        let present = eventParser.parseBlockByNumber(UInt64(2138657))
-        guard case .success(let pres) = present else {return XCTFail()}
-        print(pres)
+        let pres = try eventParser.parseBlockByNumber(UInt64(2138657))
         XCTAssert(pres.count == 1)
     }
     
@@ -135,11 +131,11 @@ class web3swift_Tests: XCTestCase {
             let contract = web3.contract(jsonString, at: addr, abiVersion: 2)
             XCTAssert(contract != nil)
             let allMethods = contract!.contract.allMethods
-            let userDeviceCount = try contract!.method("userDeviceCount", parameters: [addr as AnyObject], options: nil)?.callPromise().wait()
+            let userDeviceCount = try contract!.read("userDeviceCount", parameters: [addr as AnyObject])?.callPromise().wait()
             print(userDeviceCount)
-            let totalUsers = try contract!.method("totalUsers", parameters: [], options: nil)?.callPromise().wait()
+            let totalUsers = try contract!.read("totalUsers", parameters: [])?.callPromise().wait()
             print(totalUsers)
-            let user = try contract!.method("users", parameters: [0 as AnyObject], options: nil)?.callPromise().wait()
+            let user = try contract!.read("users", parameters: [0 as AnyObject])?.callPromise().wait()
             print(user)
             print(allMethods)
         } catch {

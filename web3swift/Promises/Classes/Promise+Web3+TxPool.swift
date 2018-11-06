@@ -1,15 +1,12 @@
+//  web3swift
 //
-//  Promise+Web3+TxPool.swift
-//  web3swift-iOS
-//
-//  Created by Jun Park on 10/10/2018.
-//  Copyright © 2018 The Matter Inc. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
 import BigInt
 import PromiseKit
-
 
 extension web3.TxPool {
     public func getInspectPromise() -> Promise<[String:[String:[String:String]]]> {

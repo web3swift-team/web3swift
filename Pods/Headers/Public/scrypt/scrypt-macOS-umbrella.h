@@ -1,1 +1,1 @@
-/Users/antongrigorev/Developer/web3swift/Pods/Target Support Files/scrypt-macOS/scrypt-macOS-umbrella.h
+/Users/alexvlasov/Blockchain/web3swift/web3swift/Pods/Target Support Files/scrypt-macOS/scrypt-macOS-umbrella.h

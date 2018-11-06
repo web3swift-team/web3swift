@@ -1,9 +1,7 @@
-//
-//  Web3+JSONRPC.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 21.12.2017.
-//  Copyright © 2017 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name             = "web3swift"
-s.version          = "1.5.1"
+s.version          = "2.0.0"
 s.summary          = "Web3 implementation in vanilla Swift for iOS ans macOS"
 
 s.description      = <<-DESC
@@ -14,19 +14,20 @@ s.source           = { :git => 'https://github.com/matterinc/web3swift.git', :ta
 s.social_media_url = 'https://twitter.com/shamatar'
 
 s.swift_version = '4.1'
-s.module_name = 'web3swift'
+s.module_name = 'Web3swift'
 s.ios.deployment_target = "9.0"
 s.osx.deployment_target = "10.11"
-s.source_files = "web3swift/**/*.{h,swift}", 
-s.public_header_files = "web3swift/**/*.{h}"
+s.source_files = "web3swift/{PrecompiledContracts,Promises,Web3,Contract,KeystoreManager,Transaction,Convenience}/Classes/*.{h,swift}", "web3swift/Utils/Classes/{EIP67Code, EIP681}.swift", "web3swift/HookedFunctions/Classes/Web3+Wallet.swift", "web3swift/web3swift.h"
+s.public_header_files = "web3swift/web3swift.h"
 s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 
 s.frameworks = 'CoreImage'
 s.dependency 'BigInt', '~> 3.1'
-s.dependency 'Result', '~> 4.0'
-s.dependency 'CryptoSwift', '~> 0.11'
+s.dependency 'CryptoSwift', '~> 0.13'
 s.dependency 'PromiseKit', '~> 6.3'
 s.dependency 'scrypt', '~> 2.0'
 s.dependency 'secp256k1_swift', '~> 1.0.3'
 s.dependency 'SwiftRLP', '~> 1.1'
+s.dependency 'EthereumAddress', '~> 1.0.0'
+s.dependency 'EthereumABI', '~> 1.1.1'
 end
