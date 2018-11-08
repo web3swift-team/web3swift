@@ -1,16 +1,14 @@
+//  web3swift
 //
-//  Promise+Web3+Eth+SendRawTransaction.swift
-//  web3swift-iOS
-//
-//  Created by Alexander Vlasov on 18.06.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
 import PromiseKit
 
 extension web3.Eth {
-    func sendRawTransactionPromise(_ transaction: Data) -> Promise<TransactionSendingResult> {
+    public func sendRawTransactionPromise(_ transaction: Data) -> Promise<TransactionSendingResult> {
         guard let deserializedTX = EthereumTransaction.fromRaw(transaction) else {
             let promise = Promise<TransactionSendingResult>.pending()
             promise.resolver.reject(Web3Error.processingError(desc: "Serialized TX is invalid"))
@@ -19,7 +17,7 @@ extension web3.Eth {
         return sendRawTransactionPromise(deserializedTX)
     }
 
-    func sendRawTransactionPromise(_ transaction: EthereumTransaction) -> Promise<TransactionSendingResult>{
+    public func sendRawTransactionPromise(_ transaction: EthereumTransaction) -> Promise<TransactionSendingResult>{
 //        print(transaction)
         let queue = web3.requestDispatcher.queue
         do {
@@ -35,6 +33,11 @@ extension web3.Eth {
                     throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
                 }
                 let result = TransactionSendingResult(transaction: transaction, hash: value)
+                for hook in self.web3.postSubmissionHooks {
+                    hook.queue.async {
+                        hook.function(result)
+                    }
+                }
                 return result
             }
         } catch {

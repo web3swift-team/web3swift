@@ -1,9 +1,7 @@
-//
-//  BIP39.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 11.01.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
@@ -44,6 +42,29 @@ public enum BIP39Language {
             return "\u{3000}"
         default:
             return " "
+        }
+    }
+    
+    init?(language: String) {
+        switch language {
+        case "english":
+            self = .english
+        case "chinese_simplified":
+            self = .chinese_simplified
+        case "chinese_traditional":
+            self = .chinese_traditional
+        case "japanese":
+            self = .japanese
+        case "korean":
+            self = .korean
+        case "french":
+            self = .french
+        case "italian":
+            self = .italian
+        case "spanish":
+            self = .spanish
+        default:
+            return nil
         }
     }
 }
@@ -108,7 +129,7 @@ public class BIP39 {
     static public func seedFromMmemonics(_ mnemonics: String, password: String = "", language: BIP39Language = BIP39Language.english) -> Data? {
         let valid = BIP39.mnemonicsToEntropy(mnemonics, language: language) != nil
         if (!valid) {
-            print("Potentially invalid mnemonics")
+            return nil
         }
         guard let mnemData = mnemonics.decomposedStringWithCompatibilityMapping.data(using: .utf8) else {return nil}
         let salt = "mnemonic" + password
@@ -116,5 +137,12 @@ public class BIP39 {
         guard let seedArray = try? PKCS5.PBKDF2(password: mnemData.bytes, salt: saltData.bytes, iterations: 2048, keyLength: 64, variant: HMAC.Variant.sha512).calculate() else {return nil}
         let seed = Data(bytes:seedArray)
         return seed
+    }
+    
+    static public func seedFromEntropy(_ entropy: Data, password: String = "", language: BIP39Language = BIP39Language.english) -> Data? {
+        guard let mnemonics = BIP39.generateMnemonicsFromEntropy(entropy: entropy, language: language) else {
+            return nil
+        }
+        return BIP39.seedFromMmemonics(mnemonics, password: password, language: language)
     }
 }
