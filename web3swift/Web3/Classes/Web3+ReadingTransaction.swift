@@ -30,7 +30,7 @@ public class ReadTransaction {
     }
     
     public func callPromise(transactionOptions: TransactionOptions? = nil) -> Promise<[String: Any]> {
-        let assembledTransaction : EthereumTransaction = self.transaction
+        var assembledTransaction : EthereumTransaction = self.transaction
         let queue = self.web3.requestDispatcher.queue
         let returnPromise = Promise<[String:Any]> { seal in
             let mergedOptions = self.transactionOptions.merge(transactionOptions)
@@ -39,6 +39,9 @@ public class ReadTransaction {
             optionsForCall.to = mergedOptions.to
             optionsForCall.value = mergedOptions.value
             optionsForCall.callOnBlock = mergedOptions.callOnBlock
+            if mergedOptions.value != nil {
+                assembledTransaction.value = mergedOptions.value!
+            }
             let callPromise : Promise<Data> = self.web3.eth.callPromise(assembledTransaction, transactionOptions: optionsForCall)
             callPromise.done(on: queue) {(data:Data) throws in
                 do {
@@ -63,7 +66,7 @@ public class ReadTransaction {
     }
     
     public func estimateGasPromise(transactionOptions: TransactionOptions? = nil) -> Promise<BigUInt>{
-        let assembledTransaction : EthereumTransaction = self.transaction
+        var assembledTransaction : EthereumTransaction = self.transaction
         let queue = self.web3.requestDispatcher.queue
         let returnPromise = Promise<BigUInt> { seal in
             let mergedOptions = self.transactionOptions.merge(transactionOptions)
@@ -72,6 +75,9 @@ public class ReadTransaction {
             optionsForGasEstimation.to = mergedOptions.to
             optionsForGasEstimation.value = mergedOptions.value
             optionsForGasEstimation.callOnBlock = mergedOptions.callOnBlock
+            if mergedOptions.value != nil {
+                assembledTransaction.value = mergedOptions.value!
+            }
             let promise = self.web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
             promise.done(on: queue) {(estimate: BigUInt) in
                 seal.fulfill(estimate)

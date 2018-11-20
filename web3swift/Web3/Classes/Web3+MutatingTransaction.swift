@@ -37,7 +37,9 @@ public class WriteTransaction: ReadTransaction {
             }
             
             var mergedOptions = self.transactionOptions.merge(transactionOptions)
-            
+            if mergedOptions.value != nil {
+                assembledTransaction.value = mergedOptions.value!
+            }
             var forAssemblyPipeline : (EthereumTransaction, EthereumContract, TransactionOptions) = (assembledTransaction, self.contract, mergedOptions)
             
             for hook in self.web3.preAssemblyHooks {
