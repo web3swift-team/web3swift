@@ -1,9 +1,7 @@
+//  web3swift
 //
-//  Promise+Web3+Eth+Call.swift
-//  web3swift-iOS
-//
-//  Created by Alexander Vlasov on 18.06.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
@@ -11,10 +9,10 @@ import PromiseKit
 
 extension web3.Eth {
     
-    func callPromise(_ transaction: EthereumTransaction, options: Web3Options, onBlock: String = "latest") -> Promise<Data>{
+    public func callPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> Promise<Data>{
         let queue = web3.requestDispatcher.queue
         do {
-            guard let request = EthereumTransaction.createRequest(method: .call, transaction: transaction, onBlock: onBlock, options: options) else {
+            guard let request = EthereumTransaction.createRequest(method: .call, transaction: transaction, transactionOptions: transactionOptions) else {
                 throw Web3Error.processingError(desc: "Transaction is invalid")
             }
             let rp = web3.dispatch(request)

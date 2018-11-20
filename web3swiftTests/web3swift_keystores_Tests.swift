@@ -1,9 +1,7 @@
+//  web3swift
 //
-//  web3swiftKyestoresTests.swift
-//  web3swift-iOS_Tests
-//
-//  Created by Георгий Фесенко on 02/07/2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import XCTest
@@ -49,6 +47,22 @@ class web3swift_Keystores_tests: XCTestCase {
         print(try! JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions(rawValue:0)))
         let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
         XCTAssertNotNil(key)
+    }
+    
+    func testV3keystoreSerialization() {
+        let keystore = try! EthereumKeystoreV3(password: "");
+        XCTAssertNotNil(keystore)
+        let account = keystore!.addresses![0]
+        let data = try! keystore!.serialize()
+        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        XCTAssertNotNil(key)
+        
+        let restored = EthereumKeystoreV3(data!)
+        XCTAssertNotNil(restored)
+        XCTAssertEqual(keystore!.addresses!.first!, restored!.addresses!.first!)
+        let restoredKey = try! restored!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        XCTAssertNotNil(restoredKey)
+        XCTAssertEqual(key, restoredKey)
     }
     
     func testNewBIP32keystore() {

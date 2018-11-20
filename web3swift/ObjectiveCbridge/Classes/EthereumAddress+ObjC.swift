@@ -1,12 +1,11 @@
-//
-//  EthereumAddress+ObjC.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 08.08.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
+import EthereumAddress
 
 @objc(EthereumAddress)
 public final class _ObjCEthereumAddress: NSObject{

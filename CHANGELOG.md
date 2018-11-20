@@ -1,6 +1,104 @@
 # Change Log
 
-## [Unreleased](https://github.com/bankex/web3swift/tree/HEAD)
+## [Unreleased](https://github.com/matterinc/web3swift/tree/HEAD)
+
+[Full Changelog](https://github.com/matterinc/web3swift/compare/1.5.1...HEAD)
+
+**Implemented enhancements:**
+
+- ENS for wallets [\#12](https://github.com/matterinc/web3swift/issues/12)
+- Recover passphrase from BIP32 store [\#5](https://github.com/matterinc/web3swift/issues/5)
+
+**Merged pull requests:**
+
+- hotfix update pods [\#71](https://github.com/matterinc/web3swift/pull/71) ([BaldyAsh](https://github.com/BaldyAsh))
+
+## [1.5.1](https://github.com/matterinc/web3swift/tree/1.5.1) (2018-10-22)
+[Full Changelog](https://github.com/matterinc/web3swift/compare/1.5...1.5.1)
+
+**Merged pull requests:**
+
+- Function visibility fix [\#70](https://github.com/matterinc/web3swift/pull/70) ([shamatar](https://github.com/shamatar))
+
+## [1.5](https://github.com/matterinc/web3swift/tree/1.5) (2018-10-18)
+[Full Changelog](https://github.com/matterinc/web3swift/compare/1.1.10...1.5)
+
+**Implemented enhancements:**
+
+- Can you add support for ERC-721 tokens [\#7](https://github.com/matterinc/web3swift/issues/7)
+
+**Closed issues:**
+
+- Creating a new wallet is too slow [\#63](https://github.com/matterinc/web3swift/issues/63)
+- need to update for Xcode10 [\#49](https://github.com/matterinc/web3swift/issues/49)
+- Web3.Utils.formatToEthereumUnits  [\#48](https://github.com/matterinc/web3swift/issues/48)
+- Interface ideas are welcome for v2.0 [\#3](https://github.com/matterinc/web3swift/issues/3)
+
+**Merged pull requests:**
+
+- Add TxPool and ERC721 native class [\#68](https://github.com/matterinc/web3swift/pull/68) ([shamatar](https://github.com/shamatar))
+- Feature/erc721 [\#67](https://github.com/matterinc/web3swift/pull/67) ([BaldyAsh](https://github.com/BaldyAsh))
+- Feature/adding logo [\#66](https://github.com/matterinc/web3swift/pull/66) ([BaldyAsh](https://github.com/BaldyAsh))
+- adds txpool function and its local node test [\#64](https://github.com/matterinc/web3swift/pull/64) ([currybab](https://github.com/currybab))
+- License got reverted somewhere after PRs [\#60](https://github.com/matterinc/web3swift/pull/60) ([shamatar](https://github.com/shamatar))
+
+## [1.1.10](https://github.com/matterinc/web3swift/tree/1.1.10) (2018-10-04)
+[Full Changelog](https://github.com/matterinc/web3swift/compare/1.1.9...1.1.10)
+
+**Merged pull requests:**
+
+- Preliminary ENS support, start module splitting [\#59](https://github.com/matterinc/web3swift/pull/59) ([shamatar](https://github.com/shamatar))
+- Feature/readme improvement [\#55](https://github.com/matterinc/web3swift/pull/55) ([BaldyAsh](https://github.com/BaldyAsh))
+- Feature/support obj c [\#54](https://github.com/matterinc/web3swift/pull/54) ([BaldyAsh](https://github.com/BaldyAsh))
+- Feature/ENSsupport [\#53](https://github.com/matterinc/web3swift/pull/53) ([FesenkoG](https://github.com/FesenkoG))
+- Add Travis configuration [\#52](https://github.com/matterinc/web3swift/pull/52) ([skywinder](https://github.com/skywinder))
+- Added ERC-20 token for testing web3swift lib [\#50](https://github.com/matterinc/web3swift/pull/50) ([BaldyAsh](https://github.com/BaldyAsh))
+
+## [1.1.9](https://github.com/matterinc/web3swift/tree/1.1.9) (2018-09-18)
+[Full Changelog](https://github.com/matterinc/web3swift/compare/1.1.7...1.1.9)
+
+**Fixed bugs:**
+
+- eth.getAccounts\(\) function returns an empty address Array [\#24](https://github.com/matterinc/web3swift/issues/24)
+- EIP681 bug fixes, accessibility in Function changed [\#35](https://github.com/matterinc/web3swift/pull/35) ([FesenkoG](https://github.com/FesenkoG))
+
+**Closed issues:**
+
+- the version 1.1.6 couldn't from password and keystore to  get the privateKey [\#32](https://github.com/matterinc/web3swift/issues/32)
+- Need implementation of EIP-681 parsing  [\#25](https://github.com/matterinc/web3swift/issues/25)
+
+**Merged pull requests:**
+
+- Update for XCode 10 [\#39](https://github.com/matterinc/web3swift/pull/39) ([shamatar](https://github.com/shamatar))
+- Basic ENS support added, EIP681 parsing supports ENS from now. [\#38](https://github.com/matterinc/web3swift/pull/38) ([FesenkoG](https://github.com/FesenkoG))
+
+## [1.1.7](https://github.com/matterinc/web3swift/tree/1.1.7) (2018-09-13)
+[Full Changelog](https://github.com/matterinc/web3swift/compare/1.1.6...1.1.7)
+
+**Fixed bugs:**
+
+- Thread blocked [\#16](https://github.com/matterinc/web3swift/issues/16)
+
+**Closed issues:**
+
+- How to create same address and keystore by mnemonics? [\#22](https://github.com/matterinc/web3swift/issues/22)
+
+**Merged pull requests:**
+
+- Fix ethereum address parsing, add readme [\#34](https://github.com/matterinc/web3swift/pull/34) ([shamatar](https://github.com/shamatar))
+- complete EIP681, fix the most stupid Ethereum address parsing [\#33](https://github.com/matterinc/web3swift/pull/33) ([shamatar](https://github.com/shamatar))
+- Add examples to readme, prettify formatting [\#31](https://github.com/matterinc/web3swift/pull/31) ([skywinder](https://github.com/skywinder))
+- continue eip681 work [\#27](https://github.com/matterinc/web3swift/pull/27) ([shamatar](https://github.com/shamatar))
+- Implement EIP681 parser \(untested\) [\#26](https://github.com/matterinc/web3swift/pull/26) ([shamatar](https://github.com/shamatar))
+- Change access control of function fromRaw in struct EthereumTransaction [\#11](https://github.com/matterinc/web3swift/pull/11) ([Plazmathron](https://github.com/Plazmathron))
+
+## [1.1.6](https://github.com/matterinc/web3swift/tree/1.1.6) (2018-09-04)
+[Full Changelog](https://github.com/matterinc/web3swift/compare/1.1.5...1.1.6)
+
+**Merged pull requests:**
+
+- Quick fix for scrypt performance [\#17](https://github.com/matterinc/web3swift/pull/17) ([shamatar](https://github.com/shamatar))
+- adding description string to Web3Error [\#1](https://github.com/matterinc/web3swift/pull/1) ([GabCas](https://github.com/GabCas))
 
 [Full Changelog](https://github.com/bankex/web3swift/compare/0.6.0...HEAD)
 
@@ -237,43 +335,6 @@
 - Wrong conversation of the Wei. [\#2](https://github.com/BANKEX/web3swift/issues/2)
 - How to connect to a Localhost Node? [\#1](https://github.com/BANKEX/web3swift/issues/1)
 
-## [0.2.8](https://github.com/bankex/web3swift/tree/0.2.8) (2018-01-18)
-[Full Changelog](https://github.com/bankex/web3swift/compare/0.2.7...0.2.8)
-
-## [0.2.7](https://github.com/bankex/web3swift/tree/0.2.7) (2018-01-15)
-[Full Changelog](https://github.com/bankex/web3swift/compare/0.2.5...0.2.7)
-
-## [0.2.5](https://github.com/bankex/web3swift/tree/0.2.5) (2018-01-12)
-[Full Changelog](https://github.com/bankex/web3swift/compare/0.2.0...0.2.5)
-
-## [0.2.0](https://github.com/bankex/web3swift/tree/0.2.0) (2017-12-30)
-[Full Changelog](https://github.com/bankex/web3swift/compare/0.1.2...0.2.0)
-
-## [0.1.2](https://github.com/bankex/web3swift/tree/0.1.2) (2017-12-27)
-[Full Changelog](https://github.com/bankex/web3swift/compare/0.1.1...0.1.2)
-
-## [0.1.1](https://github.com/bankex/web3swift/tree/0.1.1) (2017-12-26)
-[Full Changelog](https://github.com/bankex/web3swift/compare/0.1.0...0.1.1)
-
-## [0.1.0](https://github.com/bankex/web3swift/tree/0.1.0) (2017-12-26)
-[Full Changelog](https://github.com/bankex/web3swift/compare/0.0.6...0.1.0)
-
-## [0.0.6](https://github.com/bankex/web3swift/tree/0.0.6) (2017-12-26)
-[Full Changelog](https://github.com/bankex/web3swift/compare/0.0.5...0.0.6)
-
-## [0.0.5](https://github.com/bankex/web3swift/tree/0.0.5) (2017-12-21)
-[Full Changelog](https://github.com/bankex/web3swift/compare/0.0.4...0.0.5)
-
-## [0.0.4](https://github.com/bankex/web3swift/tree/0.0.4) (2017-12-21)
-[Full Changelog](https://github.com/bankex/web3swift/compare/0.0.3...0.0.4)
-
-## [0.0.3](https://github.com/bankex/web3swift/tree/0.0.3) (2017-12-20)
-[Full Changelog](https://github.com/bankex/web3swift/compare/0.0.2...0.0.3)
-
-## [0.0.2](https://github.com/bankex/web3swift/tree/0.0.2) (2017-12-20)
-[Full Changelog](https://github.com/bankex/web3swift/compare/0.0.1...0.0.2)
-
-## [0.0.1](https://github.com/bankex/web3swift/tree/0.0.1) (2017-12-19)
 
 
 \* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*

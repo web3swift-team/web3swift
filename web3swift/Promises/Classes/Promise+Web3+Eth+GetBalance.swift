@@ -1,14 +1,13 @@
-//
-//  DataConversion.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 16.06.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
 import PromiseKit
 import BigInt
+import EthereumAddress
 
 extension web3.Eth {
     public func getBalancePromise(address: EthereumAddress, onBlock: String = "latest") -> Promise<BigUInt> {

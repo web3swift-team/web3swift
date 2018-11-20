@@ -1,0 +1,6 @@
+framework module EthereumABI {
+  umbrella header "EthereumABI-umbrella.h"
+
+  export *
+  module * { export * }
+}

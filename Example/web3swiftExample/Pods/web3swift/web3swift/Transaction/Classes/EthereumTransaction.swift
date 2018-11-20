@@ -1,13 +1,14 @@
-//
-//  EthereumTransaction.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 05.12.2017.
-//  Copyright © 2017 Alexander Vlasov. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
 import BigInt
+import SwiftRLP
+import secp256k1_swift
+import EthereumAddress
 
 public struct EthereumTransaction: CustomStringConvertible {
     public var nonce: BigUInt
@@ -298,7 +299,7 @@ public struct EthereumTransaction: CustomStringConvertible {
                 } else {
                     return nil
                 }
-            case .list(_, _):
+            case .list(_, _, _):
                 return nil
             }
             guard let valueData = rlpItem[4]!.data else {return nil}
@@ -318,12 +319,14 @@ public struct EthereumTransaction: CustomStringConvertible {
         }
     }
     
-    static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, onBlock: String? = nil, options: Web3Options?) -> JSONRPCrequest? {
+    static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> JSONRPCrequest? {
+        let onBlock = transactionOptions?.callOnBlock?.stringValue
         var request = JSONRPCrequest()
         request.method = method
+        let from = transactionOptions?.from
 //        guard let from = options?.from else {return nil}
-        guard var txParams = transaction.encodeAsDictionary(from: options?.from) else {return nil}
-        if method == .estimateGas || options?.gasLimit == nil {
+        guard var txParams = transaction.encodeAsDictionary(from: from) else {return nil}
+        if method == .estimateGas || transactionOptions?.gasLimit == nil {
             txParams.gas = nil
         }
         var params = [txParams] as Array<Encodable>

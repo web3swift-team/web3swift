@@ -1,15 +1,11 @@
-//
-//  AbstractKeystore.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 10.01.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
-
-public typealias TransactionIntermediate = web3.web3contract.TransactionIntermediate
-
+import EthereumAddress
 
 public protocol AbstractKeystore {
     var addresses: [EthereumAddress]? {get}

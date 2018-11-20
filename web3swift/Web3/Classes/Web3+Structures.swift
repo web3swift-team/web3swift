@@ -1,12 +1,12 @@
+//  web3swift
 //
-//  Web3+Structures.swift
-//
-//  Created by Alexander Vlasov on 26.12.2017.
-//  Copyright © 2017 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
 import BigInt
+import EthereumAddress
 
 fileprivate func decodeHexToData<T>(_ container: KeyedDecodingContainer<T>, key: KeyedDecodingContainer<T>.Key, allowOptional:Bool = false) throws -> Data? {
     if (allowOptional) {
