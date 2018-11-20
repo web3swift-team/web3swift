@@ -1,0 +1,6 @@
+framework module WKBridge {
+  umbrella header "WKBridge-umbrella.h"
+
+  export *
+  module * { export * }
+}

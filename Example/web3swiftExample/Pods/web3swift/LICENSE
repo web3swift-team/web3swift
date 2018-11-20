@@ -1,4 +1,4 @@
-Copyright (c) 2018 Aleksandr Vlasov, Stichting Bankex Foundation <av@bankexfoundation.org>
+Copyright (c) 2018 Aleksandr Vlasov, <alex.m.vlasov@gmail.com>
 
                                  Apache License
                            Version 2.0, January 2004
@@ -188,7 +188,7 @@ Copyright (c) 2018 Aleksandr Vlasov, Stichting Bankex Foundation <av@bankexfound
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright 2018 Stichting Bankex Foundation
+   Copyright 2018 Aleksandr Vlasov
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

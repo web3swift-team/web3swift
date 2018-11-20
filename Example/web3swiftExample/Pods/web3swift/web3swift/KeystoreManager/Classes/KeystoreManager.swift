@@ -1,12 +1,11 @@
-//
-//  KeystoreManager.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 04.12.2017.
-//  Copyright © 2017 Alexander Vlasov. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
+import EthereumAddress
 
 public class KeystoreManager: AbstractKeystore {
     public var isHDKeystore: Bool = false

@@ -1,0 +1,4 @@
+module scryptC {
+    header "Cimpl.h"
+    export *
+}
