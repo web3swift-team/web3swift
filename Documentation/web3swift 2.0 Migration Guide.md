@@ -7,7 +7,22 @@ This guide is provided in order to ease the transition of existing applications 
 
 - [Requirements](#requirements)
 - [Benefits of Upgrading](#benefits-of-upgrading)
+- [Follow naming convention](#follow-naming-convention)
+- [New pods](#new-pods)
 - [Breaking API Changes](#breaking-api-changes)
+	- [Setting Transaction Options](#setting-transaction-options)
+	- [Preparing transaction](#preparing-transaction)
+		- [For sending Ether](#for-sending-ether)
+		- [For sending ERC20](#for-sending-erc20)
+		- [For sending to contract](#for-sending-to-contract)
+	- [Send transaction](#send-transaction)
+		- [For sending ether or tokens to wallets and contracts](#for-sending-ether-or-tokens-to-wallets-and-contracts)
+		- [For calling contract methods](#for-calling-contract-methods)
+	- [Get balance](#get-balance)
+		- [Get Ether balance](#get-ether-balance)
+		- [Get ERC20 balance](#get-erc20-balance)
+	- [Chain state](#chain-state)
+		- [Get Block number](#get-block-number)
 
 ## Requirements
 
@@ -28,6 +43,14 @@ This guide is provided in order to ease the transition of existing applications 
 - **Removed "Result" framework:** usage of "Result" framework was removed due to large amount if name conflicts, now functions throw instead of returning "Result" wrapper.
 
 ---
+
+## Follow naming convention
+
+Now you have to do "import Web3swift" (capitalization!) instead of "import web3swift" to follow naming convention.
+
+## New pods
+
+Now EthereumAddress and Ethereum ABI are separate projects. Use "import EthereumAddress" and "import Ethereum ABI" everywhere you use them.
 
 ## Breaking API Changes
 
