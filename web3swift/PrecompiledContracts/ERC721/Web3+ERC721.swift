@@ -12,6 +12,10 @@ import EthereumAddress
 // This namespace contains functions to work with ERC721 tokens.
 // can be imperatively read and saved
 public class ERC721 {
+    
+    @available(*, deprecated, renamed: "transactionOptions")
+    public var options: Web3Options = .init()
+    
     private var _name: String? = nil
     private var _symbol: String? = nil
     private var _tokenId: BigUInt? = nil

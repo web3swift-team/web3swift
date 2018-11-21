@@ -21,6 +21,8 @@ extension web3 {
         var web3 : web3
         public var transactionOptions: TransactionOptions? = nil
         
+        @available(*, deprecated, message: "Use transactioinOptions instead")
+        public var options: Web3Options? = nil
         
         /// Initialize the bound contract instance by supplying the Web3 provider bound object, ABI, Ethereum address and some default
         /// options for further function calls. By default the contract inherits options from the web3 object. Additionally supplied "options"
@@ -41,6 +43,31 @@ extension web3 {
                 contract.address = addr
             }
             self.transactionOptions = mergedOptions
+        }
+        
+        
+        @available(*, deprecated, message: "Use init with transactionOptions instead")
+        public init?(web3 web3Instance:web3, abiString: String, at: EthereumAddress? = nil, options: Web3Options? = nil, abiVersion: Int = 2) {
+            self.web3 = web3Instance
+            self.options = web3.options
+            switch abiVersion {
+            case 1:
+                print("ABIv1 bound contract is now deprecated")
+                return nil
+            case 2:
+                guard let c = EthereumContract(abiString, at: at) else {return nil}
+                contract = c
+            default:
+                return nil
+            }
+            var mergedOptions = Web3Options.merge(self.options, with: options)
+            if at != nil {
+                contract.address = at
+                mergedOptions?.to = at
+            } else if let addr = mergedOptions?.to {
+                contract.address = addr
+            }
+            self.options = mergedOptions
         }
         
         /// Deploys a constact instance using the previously provided (at initialization) ABI, some bytecode, constructor parameters and options.
