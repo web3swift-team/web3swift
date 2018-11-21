@@ -50,7 +50,7 @@ extension web3.web3contract {
          - important: This call is synchronous
          
          */
-        public func send(password: String = "web3swift", options: Web3Options? = nil, onBlock: String = "pending") -> Result<TransactionSendingResult, Web3Error> {
+        public func send(password: String = "web3swift", options: Web3Options?, onBlock: String = "pending") -> Result<TransactionSendingResult, Web3Error> {
             do {
                 let result = try self.sendPromise(password: password, options: options, onBlock: onBlock).wait()
                 return Result(result)
@@ -125,7 +125,7 @@ extension web3.web3contract {
          - important: This call is synchronous
          
          */
-        public func assemble(options: Web3Options? = nil, onBlock: String = "pending") -> Result<EthereumTransaction, Web3Error> {
+        public func assemble(options: Web3Options?, onBlock: String = "pending") -> Result<EthereumTransaction, Web3Error> {
             do {
                 let result = try self.assemblePromise(options: options, onBlock: onBlock).wait()
                 return Result(result)
@@ -142,7 +142,7 @@ extension web3.web3contract {
 
 extension web3.web3contract.TransactionIntermediate {
     
-    public func assemblePromise(options: Web3Options? = nil, onBlock: String = "pending") -> Promise<EthereumTransaction> {
+    public func assemblePromise(options: Web3Options?, onBlock: String = "pending") -> Promise<EthereumTransaction> {
         var assembledTransaction : EthereumTransaction = self.transaction
         let queue = self.web3.requestDispatcher.queue
         let returnPromise = Promise<EthereumTransaction> { seal in
@@ -200,7 +200,7 @@ extension web3.web3contract.TransactionIntermediate {
         return returnPromise
     }
     
-    public func sendPromise(password:String = "web3swift", options: Web3Options? = nil, onBlock: String = "pending") -> Promise<TransactionSendingResult>{
+    public func sendPromise(password:String = "web3swift", options: Web3Options?, onBlock: String = "pending") -> Promise<TransactionSendingResult>{
         let queue = self.web3.requestDispatcher.queue
         return self.assemblePromise(options: options, onBlock: onBlock).then(on: queue) { transaction throws -> Promise<TransactionSendingResult> in
             guard let mergedOptions = Web3Options.merge(self.options, with: options) else {
@@ -213,7 +213,7 @@ extension web3.web3contract.TransactionIntermediate {
         }
     }
     
-    public func callPromise(options: Web3Options? = nil, onBlock: String = "latest") -> Promise<[String: Any]>{
+    public func callPromise(options: Web3Options?, onBlock: String = "latest") -> Promise<[String: Any]>{
         let assembledTransaction : EthereumTransaction = self.transaction
         let queue = self.web3.requestDispatcher.queue
         let returnPromise = Promise<[String:Any]> { seal in
@@ -248,7 +248,7 @@ extension web3.web3contract.TransactionIntermediate {
         return returnPromise
     }
     
-    public func estimateGasPromise(options: Web3Options? = nil, onBlock: String = "latest") -> Promise<BigUInt>{
+    public func estimateGasPromise(options: Web3Options?, onBlock: String = "latest") -> Promise<BigUInt>{
         let assembledTransaction : EthereumTransaction = self.transaction
         let queue = self.web3.requestDispatcher.queue
         let returnPromise = Promise<BigUInt> { seal in

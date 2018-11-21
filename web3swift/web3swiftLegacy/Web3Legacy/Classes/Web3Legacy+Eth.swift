@@ -95,7 +95,7 @@ extension web3.Eth {
      
      */
     @available(*, deprecated, message: "Use sendETH with TransactionOptions instead")
-    public func sendETH(to: EthereumAddress, amount: BigUInt, extraData: Data = Data(), options: Web3Options? = nil) -> TransactionIntermediate? {
+    public func sendETH(to: EthereumAddress, amount: BigUInt, extraData: Data = Data(), options: Web3Options?) -> TransactionIntermediate? {
         let contract = self.web3.contract(Web3.Utils.coldWalletABI, at: to, abiVersion: 2)
         guard var mergedOptions = Web3Options.merge(self.options, with: options) else {return nil}
         mergedOptions.value = amount
@@ -119,7 +119,7 @@ extension web3.Eth {
      * String "1.01" and units: .eth will result in sending 1.01 ETH to another address*
      */
     @available(*, deprecated, message: "Use sendETH with TransactionOptions instead")
-    public func sendETH(to: EthereumAddress, amount: String, units: Web3.Utils.Units = .eth, extraData: Data = Data(), options: Web3Options? = nil) -> TransactionIntermediate? {
+    public func sendETH(to: EthereumAddress, amount: String, units: Web3.Utils.Units = .eth, extraData: Data = Data(), options: Web3Options?) -> TransactionIntermediate? {
         guard let value = Web3.Utils.parseToBigUInt(amount, units: .eth) else {return nil}
         return sendETH(to: to, amount: value, extraData: extraData, options: options)
     }
@@ -141,7 +141,7 @@ extension web3.Eth {
      * String "1.01" and units: .eth will result in sending 1.01 ETH to another address*
      */
     @available(*, deprecated, message: "Use sendETH with TransactionOptions instead")
-    public func sendETH(from: EthereumAddress, to: EthereumAddress, amount: String, units: Web3.Utils.Units = .eth, extraData: Data = Data(), options: Web3Options? = nil) -> TransactionIntermediate? {
+    public func sendETH(from: EthereumAddress, to: EthereumAddress, amount: String, units: Web3.Utils.Units = .eth, extraData: Data = Data(), options: Web3Options?) -> TransactionIntermediate? {
         guard let value = Web3.Utils.parseToBigUInt(amount, units: .eth) else {return nil}
         guard var mergedOptions = Web3Options.merge(self.options, with: options) else {return nil}
         mergedOptions.from = from
@@ -163,7 +163,7 @@ extension web3.Eth {
      
      */
     @available(*, deprecated, message: "Use sendERC20tokensWithKnownDecimals with TransactionOptions instead")
-    public func sendERC20tokensWithKnownDecimals(tokenAddress: EthereumAddress, from: EthereumAddress, to: EthereumAddress, amount: BigUInt, options: Web3Options? = nil) -> TransactionIntermediate? {
+    public func sendERC20tokensWithKnownDecimals(tokenAddress: EthereumAddress, from: EthereumAddress, to: EthereumAddress, amount: BigUInt, options: Web3Options?) -> TransactionIntermediate? {
         let contract = self.web3.contract(Web3.Utils.erc20ABI, at: tokenAddress, abiVersion: 2)
         guard var mergedOptions = Web3Options.merge(self.options, with: options) else {return nil}
         mergedOptions.from = from
@@ -189,7 +189,7 @@ extension web3.Eth {
      * If the amount is  "1.01" and token has 9 decimals it will result in sending 1010000000 of the smallest invidisible token units.*
      */
     @available(*, deprecated, message: "Use sendERC20tokensWithNaturalUnits with TransactionOptions instead")
-    public func sendERC20tokensWithNaturalUnits(tokenAddress: EthereumAddress, from: EthereumAddress, to: EthereumAddress, amount: String, options: Web3Options? = nil) -> TransactionIntermediate? {
+    public func sendERC20tokensWithNaturalUnits(tokenAddress: EthereumAddress, from: EthereumAddress, to: EthereumAddress, amount: String, options: Web3Options?) -> TransactionIntermediate? {
         let contract = self.web3.contract(Web3.Utils.erc20ABI, at: tokenAddress, abiVersion: 2)
         guard var mergedOptions = Web3Options.merge(self.options, with: options) else {return nil}
         mergedOptions.from = from

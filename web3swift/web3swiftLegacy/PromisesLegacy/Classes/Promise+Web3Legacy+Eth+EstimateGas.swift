@@ -13,7 +13,7 @@ import PromiseKit
 extension web3.Eth {
     
     @available(*, deprecated, message: "Use TransactionOptions instead")
-    func estimateGasPromise(_ transaction: EthereumTransaction, options: Web3Options? = nil, onBlock: String = "latest") -> Promise<BigUInt>{
+    func estimateGasPromise(_ transaction: EthereumTransaction, options: Web3Options?, onBlock: String = "latest") -> Promise<BigUInt>{
         let queue = web3.requestDispatcher.queue
         do {
             guard let request = EthereumTransaction.createRequest(method: .estimateGas, transaction: transaction, onBlock: onBlock, options: options) else {

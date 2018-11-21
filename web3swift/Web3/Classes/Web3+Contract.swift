@@ -47,7 +47,7 @@ extension web3 {
         
         
         @available(*, deprecated, message: "Use init with transactionOptions instead")
-        public init?(web3 web3Instance:web3, abiString: String, at: EthereumAddress? = nil, options: Web3Options? = nil, abiVersion: Int = 2) {
+        public init?(web3 web3Instance:web3, abiString: String, at: EthereumAddress? = nil, options: Web3Options?, abiVersion: Int = 2) {
             self.web3 = web3Instance
             self.options = web3.options
             switch abiVersion {

@@ -51,7 +51,7 @@ extension ENS {
         let options = getOptions(options)
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.registryContract.method("setOwner", parameters: [nameHash, owner] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError)}
-        let result = password == nil ? transaction.send() : transaction.send(password: password!, options: options)
+        let result = password == nil ? transaction.send(options: nil) : transaction.send(password: password!, options: options)
         switch result {
         case .failure(let error):
             return Result.failure(error)
@@ -67,7 +67,7 @@ extension ENS {
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let labelHash = NameHash.nameHash(label) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.registryContract.method("setSubnodeOwner", parameters: [nameHash, labelHash, owner] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError)}
-        let result = password == nil ? transaction.send() : transaction.send(password: password!, options: options)
+        let result = password == nil ? transaction.send(options: nil) : transaction.send(password: password!, options: options)
         switch result {
         case .success(let value):
             return Result(value)
@@ -82,7 +82,7 @@ extension ENS {
         let options = getOptions(options)
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.registryContract.method("setResolver", parameters: [nameHash, resolver] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError) }
-        let result = password == nil ? transaction.send() : transaction.send(password: password!, options: options)
+        let result = password == nil ? transaction.send(options: nil) : transaction.send(password: password!, options: options)
         switch result {
         case .success(let value):
             return Result(value)
@@ -98,7 +98,7 @@ extension ENS {
         let options = getOptions(options)
         guard let nameHash = NameHash.nameHash(node) else { return Result.failure(Web3Error.dataError) }
         guard let transaction = self.registryContract.method("setTTL", parameters: [nameHash, ttl] as [AnyObject], options: options) else { return Result.failure(Web3Error.transactionSerializationError) }
-        let result = password == nil ? transaction.send() : transaction.send(password: password!, options: options)
+        let result = password == nil ? transaction.send(options: nil) : transaction.send(password: password!, options: options)
         switch result {
         case .failure(let error):
             return Result.failure(error)
