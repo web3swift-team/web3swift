@@ -1,19 +1,19 @@
-![matter-github-swift](https://github.com/matterinc/web3swift/blob/develop/web3swift-logo.png)
+![matter-github-swift](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/web3swift-logo.png)
 
 # web3swift
 
 [![Version](https://img.shields.io/cocoapods/v/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
+[![Swift](https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0xe22b8979739d724343bd002f9f432f5990879901)
 [![Build Status](https://travis-ci.com/matterinc/web3swift.svg?branch=develop)](https://travis-ci.com/matterinc/web3swift)
-
-<img align="left" width="25" height="25" src="https://user-images.githubusercontent.com/28599454/41086111-af4bc3b0-6a41-11e8-9f9f-2d642b12666e.png">[Ask questions](https://stackoverflow.com/questions/tagged/web3swift)
+[![Stackoverflow](https://img.shields.io/badge/stackoverflow-ask-blue.svg)](https://stackoverflow.com/questions/tagged/web3swift)
 
 **web3swift** is your toolbelt for any kind interactions with Ethereum network.
 
 
-  * [Features](#features)
+  * [Ready Features](#features)
   * [Design Decisions](#design-decisions)
   * [Requirements](#requirements)
   * [Migration Guides](#migration-guides)
@@ -22,6 +22,8 @@
     + [CocoaPods](#cocoapods)
     + [Carthage](#carthage)
   * [Example Project](#example-project)
+  * [Popular questions](#popular-questions)
+  * [What's next](#whats-next)
   * [Credits](#credits)
     + [Security Disclosure](#security-disclosure)
   * [Donations](#donations)
@@ -42,23 +44,31 @@
 		- [Get Block Number](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#get-block-number)
 
 
-## Features
+## Ready Features
 
 - [x] Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
 - [x] Interaction with remote node via JSON RPC :thought_balloon:
+- [x] Local keystore management (`geth` compatible)
 - [x] Smart-contract ABI parsing :book:
 - [x] ABI deconding (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
-- [x] RLP encoding
+- [x] Ethereum Name Service (ENS) support - a secure & decentralised way to address resources both on and off the blockchain using simple, human-readable names
 - [x] Interactions (read/write to Smart contracts) :arrows_counterclockwise:
-- [x] Local keystore management (`geth` compatible)
-- [x] Batched requests in concurrent mode
+- [x] Parsing TxPool content into native values (ethereum addresses and transactions) - easy to get pending transactions
+- [x] Event loops functionality
 - [x] Literally following the standards:
-	- [x] [BIP32](https://github.com/bitcoin/bips/blob/feature/readmeImprovement/bip-0032.mediawiki) HD Wallets: Deterministic Wallet
-	- [x] [BIP39](https://github.com/bitcoin/bips/blob/feature/readmeImprovement/bip-0039.mediawiki) (Seed phrases)
-	- [x] [BIP44](https://github.com/bitcoin/bips/blob/feature/readmeImprovement/bip-0044.mediawiki) (Key generation prefixes)
-	- [x] [EIP-155](https://github.com/ethereum/EIPs/blob/feature/readmeImprovement/EIPS/eip-155.md) (Replay attacks protection) *enforced!*
+	- [x] [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) HD Wallets: Deterministic Wallet
+	- [x] [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases)
+	- [x] [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)
+	- [x] [EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md) (A standard interface for tokens - ERC-20)
+	- [x] [EIP-67](https://github.com/ethereum/EIPs/issues/67) (Standard URI scheme with metadata, value and byte code)
+	- [x] [EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md) (Replay attacks protection) *enforced!*
+	- [x] [EIP-681](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-681.md) (A standard way of representing various transactions, especially payment requests in Ethers and ERC-20 tokens as URLs)
+	- [x] [EIP-721](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md) (A standard interface for non-fungible tokens, also known as deeds - ERC-721)
+- [x] RLP encoding
+- [x] Batched requests in concurrent mode
+- [x] Base58 encoding scheme
+- [x] Formatting to and from Ethereum Units
 - [x] Comprehensive Unit and Integration Test Coverage
-- [x] [Complete Documentation](https://web3swift.github.io/web3swift)
 
 ## Design Decisions
 
@@ -109,7 +119,7 @@ platform :ios, '9.0'
 
 target '<Your Target Name>' do
     use_frameworks!
-    pod 'web3swift'
+    pod 'web3swift', '~> 2.0.1'
 end
 ```
 
@@ -146,6 +156,90 @@ You can try lib by running the example project:
 - Move to the repo: `cd web3swift/Example/web3swiftExample`
 - Install Dependencies: `pod install`
 - Open: `open ./web3swiftExample.xcworkspace`
+
+## Popular questions
+
+#### Is it possible to get Mnemonic Phrase (Seed Phrase) from Private key using web3swift?
+
+In web3swift there is no backward conversion from Private key to Mnemonic Phrase. Also it is theoretically impossible to recover a phrase from a Private key. After Seed Phrase is converted to some initial entropy the “master key is derived” and the initial entropy is discarded.
+
+The simplest solution is to encrypt the phrase using users pincode and save it in some other secure keystore.
+Mnemonic Phrase is very sensitive data and you must be very careful to let the user get it.
+Our advise if you want to show it to user - ask to save a Passphrase when creating BIP32Keystore. 
+
+#### How to interact with custom smart-contract with web3swift?
+
+For example: you want to interact with smart-contract and all you know is - its address (address example: 0xfa28eC7198028438514b49a3CF353BcA5541ce1d).
+
+You can get the ABI of your contract directly from [Remix IDE](https://remix.ethereum.org/) ([Solution](https://ethereum.stackexchange.com/questions/27536/where-to-find-contract-abi-in-new-version-of-online-remix-solidity-compiler?rq=1))
+
+Then you should use contract address and ABI in creating contract object:
+```swift
+let contract = Web3.InfuraMainnetWeb3().contract(<abiString: String>, at: <EthereumAddress?>, abiVersion: <Int>)
+```
+To create transaction you should call some contract method:
+```swift
+let transaction = contract.method(<method: String>, parameters: <[AnyObject]>, extraData: <Data>, options: <Web3Options?>)
+```
+
+Here is the function example that creates TransactionIntermediate object, that you can send to smart-contract:
+```swift
+let yourContractABI = """
+<CONTRACT JSON ABI>
+"""
+
+func prepareTransaction(parameters: Data, gasLimit: BigUInt = 27500, completion: @escaping (Result<TransactionIntermediate>) -> Void) {
+    DispatchQueue.global().async {
+        guard let addressFrom: String = <YOURS WALLET ADDRESS> else {return}
+        guard let ethAddressFrom = EthereumAddress(addressFrom) else {return}
+
+        let yourContractAddress = "<CONTRACT ETH ADDRESS>"
+        guard let ethContractAddress = EthereumAddress(contractAddress) else {return}
+
+        let web3 = Web3.InfuraMainnetWeb3() //or any test network
+        web3.addKeystoreManager(KeystoreManager.defaultManager)
+
+        var options = Web3Options.defaultOptions()
+        options.from = ethAddressFrom
+        options.value = 0 // or any other value you want to send
+
+        guard let contract = web3.contract(yourContractJsonABI, at: ethContractAddress, abiVersion: 2) else {return}
+
+        guard let gasPrice = web3.eth.getGasPrice().value else {return}
+        options.gasPrice = gasPrice
+        options.gasLimit = gasLimit
+
+        guard let transaction = contract.method("<METHOD OF CONTRACT YOU WANT TO CALL>", parameters: [parameters] as [AnyObject], options: options) else {return}
+        guard case .success(let estimate) = transaction.estimateGas(options: options) else {return} //here is estimated gas - something like confirming that you made a transaction correctly
+        print("estimated cost: \(estimate)")
+
+        DispatchQueue.main.async {
+            completion(Result.Success(transaction))
+        }
+    }
+}
+```
+
+#### How to set test local node?
+You can write something like that:
+```swift
+func setLocalNode(port: Int = 8545) -> Web3? {
+    guard let web3 = Web3(url: URL(string: "http://127.0.0.1:\(port)")!) else { return nil }
+    return web3
+}
+```
+
+## What's next
+
+- [x] [EIP-165](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-165.md) (Creates a standard method to publish and detect what interfaces a smart contract implements - ERC-165)
+- [x] [EIP-777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md) (A new advanced token standard - ERC-777)
+- [x] [Objective-C] - a proxy bridge to build your DApp on Objective-C using web3swift
+- [x] Support Web3View functionality - WKWebView with injected "web3" provider
+- [x] Add or remove "middleware" that intercepts, modifies and even cancel transaction workflow on stages "before assembly", "after assembly"and "before submission"
+- [x] Put the groundwork for implementing hooks functionality
+- [x] No more "Web3Options" - new classes "ReadTransaction" and "WriteTransaction" with a variable "transactionOptions" used to specify gas price, limit, nonce policy, value
+- [x] [Complete Documentation](https://web3swift.github.io/web3swift)
+
 
 ## Credits
 
