@@ -12,14 +12,11 @@ import EthereumAddress
 
 public protocol ContractProtocol {
     var address: EthereumAddress? {get set}
-    var options: Web3Options? {get set}
     var transactionOptions: TransactionOptions? {get set}
     var allMethods: [String] {get}
     var allEvents: [String] {get}
     func deploy(bytecode:Data, parameters: [AnyObject], extraData: Data) -> EthereumTransaction?
     func method(_ method:String, parameters: [AnyObject], extraData: Data) -> EthereumTransaction?
-//    func deploy(bytecode:Data, parameters: [AnyObject], extraData: Data, options: Web3Options?) -> EthereumTransaction?
-//    func method(_ method:String, parameters: [AnyObject], extraData: Data, options: Web3Options?) -> EthereumTransaction?
     init?(_ abiString: String, at: EthereumAddress?)
     func decodeReturnData(_ method:String, data: Data) -> [String:Any]?
     func decodeInputData(_ method:String, data: Data) -> [String:Any]?
