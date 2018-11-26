@@ -1,9 +1,7 @@
-//
-//  Web3+Instance.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 19.12.2017.
-//  Copyright © 2017 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
@@ -11,9 +9,13 @@ import BigInt
 import PromiseKit
 
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
-public class web3: Web3OptionsInheritable {
-    public var provider : Web3Provider
+public class web3 {
+    
+    @available(*, deprecated, message: "Don't use Web3Options")
     public var options : Web3Options = Web3Options.defaultOptions()
+    
+    public var provider : Web3Provider
+    public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
     public var defaultBlock = "latest"
     public var requestDispatcher: JSONRPCrequestDispatcher
     
@@ -49,13 +51,12 @@ public class web3: Web3OptionsInheritable {
         return self.ethInstance!
     }
     
-    public class Eth:Web3OptionsInheritable {
+    public class Eth {
         var provider:Web3Provider
 //        weak var web3: web3?
         var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
-        }
+        @available(*, deprecated, message: "Don't use Web3Options")
+        public var options : Web3Options = Web3Options.defaultOptions()
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -73,13 +74,12 @@ public class web3: Web3OptionsInheritable {
         return self.personalInstance!
     }
     
-    public class Personal:Web3OptionsInheritable {
+    public class Personal {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
-        }
+        @available(*, deprecated, message: "Don't use Web3Options")
+        public var options : Web3Options = Web3Options.defaultOptions()
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -97,13 +97,12 @@ public class web3: Web3OptionsInheritable {
         return self.txPoolInstance!
     }
     
-    public class TxPool: Web3OptionsInheritable {
+    public class TxPool {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
-        }
+        @available(*, deprecated, message: "Don't use Web3Options")
+        public var options : Web3Options = Web3Options.defaultOptions()
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -142,40 +141,102 @@ public class web3: Web3OptionsInheritable {
         return self.browserFunctionsInstance!
     }
     
-    public class BrowserFunctions:Web3OptionsInheritable {
+    public class BrowserFunctions {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
-        }
+        @available(*, deprecated, message: "Don't use Web3Options")
+        public var options : Web3Options = Web3Options.defaultOptions()
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
         }
     }
     
+    var eventLoopInstance: web3.Eventloop?
+    
+    /// Public web3.browserFunctions.* namespace.
+    public var eventLoop: web3.Eventloop {
+        if (self.eventLoopInstance != nil) {
+            return self.eventLoopInstance!
+        }
+        self.eventLoopInstance = web3.Eventloop(provider : self.provider, web3: self)
+        return self.eventLoopInstance!
+    }
+    
+    public class Eventloop {
+        
+        @available(*, deprecated, message: "Don't use Web3Options")
+        public var options : Web3Options = Web3Options.defaultOptions()
+        
+        public typealias EventLoopCall = (web3) -> Void
+        public typealias EventLoopContractCall = (web3contract) -> Void
+    
+        public struct MonitoredProperty {
+            public var name: String
+            public var queue: DispatchQueue
+            public var calledFunction: EventLoopCall
+        }
+        
+//        public struct MonitoredContract {
+//            public var name: String
+//            public var queue: DispatchQueue
+//            public var calledFunction: EventLoopContractCall
+//        }
+        
+        var provider:Web3Provider
+        //        weak var web3: web3?
+        var web3: web3
+        var timer: RepeatingTimer? = nil
+        
+        public var monitoredProperties: [MonitoredProperty] = [MonitoredProperty]()
+//        public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
+        public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
+        
+        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+            provider = prov
+            web3 = web3instance
+        }
+    }
+    
+    public typealias AssemblyHookFunction = ((EthereumTransaction, EthereumContract, TransactionOptions)) -> (EthereumTransaction, EthereumContract, TransactionOptions, Bool)
+    
+    public typealias SubmissionHookFunction = ((EthereumTransaction, TransactionOptions)) -> (EthereumTransaction, TransactionOptions, Bool)
+    
+    public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> ()
+    
+    public struct AssemblyHook {
+        public var queue: DispatchQueue
+        public var function: AssemblyHookFunction
+    }
+    
+    public struct SubmissionHook {
+        public var queue: DispatchQueue
+        public var function: SubmissionHookFunction
+    }
+    
+    public struct SubmissionResultHook {
+        public var queue: DispatchQueue
+        public var function: SubmissionResultHookFunction
+    }
+    
+    public var preAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
+    public var postAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
+    
+    public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
+    public var postSubmissionHooks: [SubmissionResultHook] = [SubmissionResultHook]()
+    
+    #warning("Old ERC721 instance. Don't use it")
+    @available(*, deprecated, message: "Use ERC721 separate class")
     var erc721Instance: web3.ERC721?
     
     /// Public web3.browserFunctions.* namespace.
+    @available(*, deprecated, message: "Use ERC721 separate instance")
     public var erc721: web3.ERC721 {
         if (self.erc721Instance != nil) {
             return self.erc721Instance!
         }
         self.erc721Instance = web3.ERC721(provider : self.provider, web3: self)
         return self.erc721Instance!
-    }
-    
-    public class ERC721: Web3OptionsInheritable {
-        var provider:Web3Provider
-        //        weak var web3: web3?
-        var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
-        }
-        public init(provider prov: Web3Provider, web3 web3instance: web3) {
-            provider = prov
-            web3 = web3instance
-        }
     }
 }

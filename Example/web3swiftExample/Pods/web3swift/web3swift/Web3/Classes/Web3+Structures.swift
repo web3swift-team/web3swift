@@ -1,14 +1,14 @@
+//  web3swift
 //
-//  Web3+Structures.swift
-//
-//  Created by Alexander Vlasov on 26.12.2017.
-//  Copyright © 2017 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
 import BigInt
+import EthereumAddress
 
-fileprivate func decodeHexToData<T>(_ container:  KeyedDecodingContainer<T>, key: KeyedDecodingContainer<T>.Key, allowOptional:Bool = false) throws -> Data? {
+fileprivate func decodeHexToData<T>(_ container: KeyedDecodingContainer<T>, key: KeyedDecodingContainer<T>.Key, allowOptional:Bool = false) throws -> Data? {
     if (allowOptional) {
         let string = try? container.decode(String.self, forKey: key)
         if string != nil {
@@ -23,7 +23,7 @@ fileprivate func decodeHexToData<T>(_ container:  KeyedDecodingContainer<T>, key
     }
 }
 
-fileprivate func decodeHexToBigUInt<T>(_ container:  KeyedDecodingContainer<T>, key: KeyedDecodingContainer<T>.Key, allowOptional:Bool = false) throws -> BigUInt? {
+fileprivate func decodeHexToBigUInt<T>(_ container: KeyedDecodingContainer<T>, key: KeyedDecodingContainer<T>.Key, allowOptional:Bool = false) throws -> BigUInt? {
     if (allowOptional) {
         let string = try? container.decode(String.self, forKey: key)
         if string != nil {
@@ -547,4 +547,109 @@ public struct TransactionSendingResult {
     public var hash: String
 }
 
+public struct TxPoolStatus : Decodable {
+    public var pending: BigUInt
+    public var queued: BigUInt
+ 
+    enum CodingKeys: String, CodingKey
+    {
+        case pending
+        case queued
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard let pending = try decodeHexToBigUInt(container, key: .pending) else {throw Web3Error.dataError}
+        self.pending = pending
+        guard let queued = try decodeHexToBigUInt(container, key: .queued) else {throw Web3Error.dataError}
+        self.queued = queued
+    }
+}
 
+public struct TxPoolContent : Decodable {
+    public var pending: [EthereumAddress: [TxPoolContentForNonce]]
+    public var queued: [EthereumAddress: [TxPoolContentForNonce]]
+    
+    enum CodingKeys: String, CodingKey
+    {
+        case pending
+        case queued
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let pending = try TxPoolContent.decodePoolContentForKey(container: container, key: .pending)
+        self.pending = pending
+        let queued = try TxPoolContent.decodePoolContentForKey(container: container, key: .queued)
+        self.queued = queued
+    }
+    
+    fileprivate static func decodePoolContentForKey<T>(container: KeyedDecodingContainer<T>, key: KeyedDecodingContainer<T>.Key) throws -> [EthereumAddress: [TxPoolContentForNonce]] {
+        let raw = try container.nestedContainer(keyedBy: AdditionalDataCodingKeys.self, forKey: key)
+        var result = [EthereumAddress: [TxPoolContentForNonce]]()
+        for addressKey in raw.allKeys {
+            let addressString = addressKey.stringValue
+            guard let address = EthereumAddress(addressString, type: .normal, ignoreChecksum: true) else {
+                throw Web3Error.dataError
+            }
+            let nestedContainer = try raw.nestedContainer(keyedBy: AdditionalDataCodingKeys.self, forKey: addressKey)
+            var perNonceInformation = [TxPoolContentForNonce]()
+            perNonceInformation.reserveCapacity(nestedContainer.allKeys.count)
+            for nonceKey in nestedContainer.allKeys {
+                guard let nonce = BigUInt(nonceKey.stringValue) else {
+                    throw Web3Error.dataError
+                }
+                let n = try? nestedContainer.nestedUnkeyedContainer(forKey: nonceKey)
+                if n != nil {
+                    let details = try nestedContainer.decode([TransactionDetails].self, forKey: nonceKey)
+                    let content = TxPoolContentForNonce(nonce: nonce, details: details)
+                    perNonceInformation.append(content)
+                } else {
+                    let detail = try nestedContainer.decode(TransactionDetails.self, forKey: nonceKey)
+                    let content = TxPoolContentForNonce(nonce: nonce, details: [detail])
+                    perNonceInformation.append(content)
+                }
+            }
+            result[address] = perNonceInformation
+        }
+        return result
+    }
+    
+    
+    fileprivate struct AdditionalDataCodingKeys: CodingKey
+    {
+        var stringValue: String
+        init?(stringValue: String)
+        {
+            self.stringValue = stringValue
+        }
+        
+        var intValue: Int?
+        init?(intValue: Int)
+        {
+            return nil
+        }
+    }
+}
+
+//public struct TxPoolContentForAddress : Decodable {
+//    public var address: EthereumAddress
+//    public var content: [TxPoolContentForNonce]
+//
+//    public init(from decoder: Decoder) throws {
+//        let container = try decoder.singleValueContainer()
+//        let addressString = container.codingPath[0].stringValue
+//        guard let address = EthereumAddress(addressString, type: .normal, ignoreChecksum: true) else {
+//            throw Web3Error.dataError
+//        }
+//        self.address = address
+//
+//        let content = try container.decode([TxPoolContentForNonce].self)
+//        self.content = content
+//    }
+//}
+
+public struct TxPoolContentForNonce {
+    public var nonce: BigUInt
+    public var details: [TransactionDetails]
+}

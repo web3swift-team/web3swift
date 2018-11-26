@@ -1,9 +1,7 @@
-//
-//  BloomFilter.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 02.03.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
@@ -26,29 +24,6 @@ public struct EthereumBloomFilter{
         return BigUInt(self.bytes)
     }
 }
-
-
-//
-//func (b Bloom) Test(test *big.Int) bool {
-//    return BloomLookup(b, test)
-//}
-//
-//func (b Bloom) TestBytes(test []byte) bool {
-//    return b.Test(new(big.Int).SetBytes(test))
-//
-//}
-//
-//// MarshalText encodes b as a hex string with 0x prefix.
-//func (b Bloom) MarshalText() ([]byte, error) {
-//    return hexutil.Bytes(b[:]).MarshalText()
-//}
-//
-//// UnmarshalText b as a hex string with 0x prefix.
-//func (b *Bloom) UnmarshalText(input []byte) error {
-//    return hexutil.UnmarshalFixedText("Bloom", input, b[:])
-//}
-
-
 
 extension EthereumBloomFilter {
     

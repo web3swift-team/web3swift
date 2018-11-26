@@ -1,15 +1,14 @@
+//  web3swift
 //
-//  web3swiftRLPTests.swift
-//  web3swift-iOS_Tests
-//
-//  Created by Георгий Фесенко on 02/07/2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import XCTest
 import BigInt
 
 @testable import web3swift_iOS
+
 class web3swift_RLP_Tests: XCTestCase {
     
     func testRLPdecodeTransaction() {

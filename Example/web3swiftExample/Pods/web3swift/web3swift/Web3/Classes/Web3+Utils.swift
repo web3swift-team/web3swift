@@ -1,14 +1,15 @@
-//
-//  web3utils.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 18.12.2017.
-//  Copyright © 2017 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
 import BigInt
 import CryptoSwift
+import SwiftRLP
+import secp256k1_swift
+import EthereumAddress
 
 public typealias Web3Utils = Web3.Utils
 
@@ -27,7 +28,7 @@ extension Web3.Utils {
     /// and the nonce of this address
     public static func calcualteContractAddress(from: EthereumAddress, nonce: BigUInt) -> EthereumAddress? {
         guard let normalizedAddress = from.addressData.setLengthLeft(32) else {return nil}
-        guard let data = RLP.encode([normalizedAddress, nonce] as [Any]) else {return nil}
+        guard let data = RLP.encode([normalizedAddress, nonce] as [AnyObject]) else {return nil}
         guard let contractAddressData = Web3.Utils.sha3(data)?[12..<32] else {return nil}
         guard let contractAddress = EthereumAddress(Data(contractAddressData)) else {return nil}
         return contractAddress
@@ -76,8 +77,456 @@ extension Web3.Utils {
 [{"constant":true,"inputs":[{"name":"node","type":"bytes32"}],"name":"resolver","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"node","type":"bytes32"}],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"label","type":"bytes32"},{"name":"owner","type":"address"}],"name":"setSubnodeOwner","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"ttl","type":"uint64"}],"name":"setTTL","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"node","type":"bytes32"}],"name":"ttl","outputs":[{"name":"","type":"uint64"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"resolver","type":"address"}],"name":"setResolver","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"node","type":"bytes32"},{"name":"owner","type":"address"}],"name":"setOwner","outputs":[],"payable":false,"type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"node","type":"bytes32"},{"indexed":false,"name":"owner","type":"address"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"node","type":"bytes32"},{"indexed":true,"name":"label","type":"bytes32"},{"indexed":false,"name":"owner","type":"address"}],"name":"NewOwner","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"node","type":"bytes32"},{"indexed":false,"name":"resolver","type":"address"}],"name":"NewResolver","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"node","type":"bytes32"},{"indexed":false,"name":"ttl","type":"uint64"}],"name":"NewTTL","type":"event"}]
 """
 
+    //function setAddr(bytes32 node, address addr)
     public static var resolverABI = """
-[{"constant":true,"inputs":[{"name":"node","type":"bytes32"}],"name":"addr","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"interfaceID","type":"bytes4"}],"name":"supportsInterface","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"node","type":"bytes32"}],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"node","type":"bytes32"},{"name":"contentType","type": "uint256"}],"name":"ABI","outputs":[{"name":"","type":"uint256"},{"name":"","type":"bytes"}],"payable":false,"type":"function"}]
+[
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "interfaceID",
+                "type": "bytes4"
+            }
+        ],
+        "name": "supportsInterface",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "pure",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "name": "key",
+                "type": "string"
+            },
+            {
+                "name": "value",
+                "type": "string"
+            }
+        ],
+        "name": "setText",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "name": "contentTypes",
+                "type": "uint256"
+            }
+        ],
+        "name": "ABI",
+        "outputs": [
+            {
+                "name": "contentType",
+                "type": "uint256"
+            },
+            {
+                "name": "data",
+                "type": "bytes"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "name": "x",
+                "type": "bytes32"
+            },
+            {
+                "name": "y",
+                "type": "bytes32"
+            }
+        ],
+        "name": "setPubkey",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            }
+        ],
+        "name": "content",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            }
+        ],
+        "name": "addr",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "name": "key",
+                "type": "string"
+            }
+        ],
+        "name": "text",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "name": "contentType",
+                "type": "uint256"
+            },
+            {
+                "name": "data",
+                "type": "bytes"
+            }
+        ],
+        "name": "setABI",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            }
+        ],
+        "name": "name",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "name": "name",
+                "type": "string"
+            }
+        ],
+        "name": "setName",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "name": "hash",
+                "type": "bytes"
+            }
+        ],
+        "name": "setMultihash",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "name": "hash",
+                "type": "bytes32"
+            }
+        ],
+        "name": "setContent",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            }
+        ],
+        "name": "pubkey",
+        "outputs": [
+            {
+                "name": "x",
+                "type": "bytes32"
+            },
+            {
+                "name": "y",
+                "type": "bytes32"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "name": "addr",
+                "type": "address"
+            }
+        ],
+        "name": "setAddr",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "node",
+                "type": "bytes32"
+            }
+        ],
+        "name": "multihash",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bytes"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "ensAddr",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "name": "a",
+                "type": "address"
+            }
+        ],
+        "name": "AddrChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "name": "hash",
+                "type": "bytes32"
+            }
+        ],
+        "name": "ContentChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "name": "name",
+                "type": "string"
+            }
+        ],
+        "name": "NameChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "indexed": true,
+                "name": "contentType",
+                "type": "uint256"
+            }
+        ],
+        "name": "ABIChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "name": "x",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "name": "y",
+                "type": "bytes32"
+            }
+        ],
+        "name": "PubkeyChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "name": "indexedKey",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "name": "key",
+                "type": "string"
+            }
+        ],
+        "name": "TextChanged",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "node",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "name": "hash",
+                "type": "bytes"
+            }
+        ],
+        "name": "MultihashChanged",
+        "type": "event"
+    }
+]
 """
     
 }
@@ -225,8 +674,8 @@ extension Web3.Utils {
         return formatToPrecision(bigNumber, numberDecimals: toUnits.decimals, formattingDecimals: decimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific);
     }
     
-    /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
-    /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
+    /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "numberDecimals",
+    /// then limits the decimal part to "formattingDecimals" symbols and uses a "decimalSeparator" as a separator.
     /// Fallbacks to scientific format if higher precision is required.
     ///
     /// Returns nil of formatting is not possible to satisfy.
@@ -241,7 +690,7 @@ extension Web3.Utils {
         }
         let divisor = BigUInt(10).power(unitDecimals)
         let (quotient, remainder) = bigNumber.quotientAndRemainder(dividingBy: divisor)
-        let fullRemainder = String(remainder);
+        var fullRemainder = String(remainder);
         let fullPaddedRemainder = fullRemainder.leftPadding(toLength: unitDecimals, withPad: "0")
         let remainderPadded = fullPaddedRemainder[0..<toDecimals]
         if remainderPadded == String(repeating: "0", count: toDecimals) {
@@ -253,6 +702,22 @@ extension Web3.Utils {
                     if (char == "0") {
                         firstDigit = firstDigit + 1;
                     } else {
+                        let firstDecimalUnit = String(fullPaddedRemainder[firstDigit ..< firstDigit+1])
+                        var remainingDigits = ""
+                        let numOfRemainingDecimals = fullPaddedRemainder.count - firstDigit - 1
+                        if numOfRemainingDecimals <= 0 {
+                            remainingDigits = ""
+                        } else if numOfRemainingDecimals > formattingDecimals {
+                            let end = firstDigit+1+formattingDecimals > fullPaddedRemainder.count ? fullPaddedRemainder.count : firstDigit+1+formattingDecimals
+                            remainingDigits = String(fullPaddedRemainder[firstDigit+1 ..< end])
+                        } else {
+                            remainingDigits = String(fullPaddedRemainder[firstDigit+1 ..< fullPaddedRemainder.count])
+                        }
+                        if remainingDigits != "" {
+                            fullRemainder = firstDecimalUnit + decimalSeparator + remainingDigits
+                        } else {
+                            fullRemainder = firstDecimalUnit
+                        }
                         firstDigit = firstDigit + 1;
                         break
                     }
@@ -330,7 +795,7 @@ extension Web3.Utils {
         let bytes = signatureData.bytes
         let r = Array(bytes[0..<32])
         let s = Array(bytes[32..<64])
-        return SECP256K1.UnmarshaledSignature(v: bytes[64], r: r, s: s)
+        return SECP256K1.UnmarshaledSignature(v: bytes[64], r: Data(r), s: Data(s))
     }
     
     /// Marshals the V, R and S signature parameters into a 65 byte recoverable EC signature.
@@ -344,9 +809,21 @@ extension Web3.Utils {
     
     /// Marshals internal signature structure into a 65 byte recoverable EC signature.
     static func marshalSignature(unmarshalledSignature: SECP256K1.UnmarshaledSignature) -> Data {
-        var completeSignature = Data(bytes: unmarshalledSignature.r)
-        completeSignature.append(Data(bytes: unmarshalledSignature.s))
+        var completeSignature = Data(unmarshalledSignature.r)
+        completeSignature.append(Data(unmarshalledSignature.s))
         completeSignature.append(Data(bytes: [unmarshalledSignature.v]))
         return completeSignature
+    }
+    
+    public static func hexToData(_ string: String) -> Data? {
+        return Data.fromHex(string)
+    }
+    
+    public static func hexToBigUInt(_ string: String) -> BigUInt? {
+        return BigUInt(string.stripHexPrefix(), radix: 16)
+    }
+    
+    public static func randomBytes(length: Int) -> Data? {
+        return Data.randomBytes(length:length)
     }
 }

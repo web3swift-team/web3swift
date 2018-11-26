@@ -1,79 +1,72 @@
-//
-//  Web3+HookedWallet.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 07.01.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
+
 import Foundation
 import BigInt
-import Result
+import EthereumAddress
 
 extension web3.Web3Wallet {
     
-    public func getAccounts() -> Result<[EthereumAddress], Web3Error> {
+    public func getAccounts() throws -> [EthereumAddress] {
         guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {
-            return Result.failure(Web3Error.walletError)
+            throw Web3Error.walletError
         }
         guard let ethAddresses = keystoreManager.addresses else {
-            return Result.failure(Web3Error.walletError)
+            throw Web3Error.walletError
         }
-        return Result(ethAddresses)
+        return ethAddresses
     }
     
-    public func getCoinbase() -> Result<EthereumAddress, Web3Error> {
-        let result = self.getAccounts()
-        switch result {
-        case .failure(let error):
-            return Result.failure(error)
-        case .success(let addresses):
-            guard addresses.count > 0 else {
-                return Result.failure(Web3Error.walletError)
-            }
-            return Result(addresses[0])
+    public func getCoinbase() throws -> EthereumAddress {
+        let addresses = try self.getAccounts()
+        guard addresses.count > 0 else {
+            throw Web3Error.walletError
         }
+        return addresses[0]
     }
     
-    public func signTX(transaction:inout EthereumTransaction, account: EthereumAddress, password: String = "web3swift") -> Result<Bool, Web3Error> {
+    public func signTX(transaction:inout EthereumTransaction, account: EthereumAddress, password: String = "web3swift") throws -> Bool {
         do {
             guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {
-                return Result.failure(Web3Error.walletError)
+                throw Web3Error.walletError
             }
             try Web3Signer.signTX(transaction: &transaction, keystore: keystoreManager, account: account, password: password)
-//            print(transaction)
-            return Result(true)
+            return true
         } catch {
             if error is AbstractKeystoreError {
-                return Result.failure(Web3Error.keystoreError(err: error as! AbstractKeystoreError))
+                throw Web3Error.keystoreError(err: error as! AbstractKeystoreError)
             }
-            return Result.failure(Web3Error.generalError(err: error))
+            throw Web3Error.generalError(err: error)
         }
     }
     
-    public func signPersonalMessage(_ personalMessage: String, account: EthereumAddress, password: String = "web3swift") -> Result<Data, Web3Error> {
+    public func signPersonalMessage(_ personalMessage: String, account: EthereumAddress, password: String = "web3swift") throws -> Data {
         guard let data = Data.fromHex(personalMessage) else
         {
-            return Result.failure(Web3Error.dataError)
+            throw Web3Error.dataError
         }
-        return self.signPersonalMessage(data, account: account, password: password)
+        return try self.signPersonalMessage(data, account: account, password: password)
     }
     
-    public func signPersonalMessage(_ personalMessage: Data, account: EthereumAddress, password: String = "web3swift") -> Result<Data, Web3Error> {
+    public func signPersonalMessage(_ personalMessage: Data, account: EthereumAddress, password: String = "web3swift") throws -> Data {
         do {
             guard let keystoreManager = self.web3.provider.attachedKeystoreManager else
             {
-                return Result.failure(Web3Error.walletError)
+                throw Web3Error.walletError
             }
             guard let data = try Web3Signer.signPersonalMessage(personalMessage, keystore: keystoreManager, account: account, password: password) else {
-                return Result.failure(Web3Error.walletError)
+                throw Web3Error.walletError
             }
-            return Result(data)
+            return data
         }
         catch{
             if error is AbstractKeystoreError {
-                return Result.failure(Web3Error.keystoreError(err: error as! AbstractKeystoreError))
+                throw Web3Error.keystoreError(err: error as! AbstractKeystoreError)
             }
-            return Result.failure(Web3Error.generalError(err: error))
+            throw Web3Error.generalError(err: error)
         }
     }
 
