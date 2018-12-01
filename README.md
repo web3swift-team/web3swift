@@ -1,4 +1,4 @@
-![matter-github-swift](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/web3swift-logo.png)
+![matter-github-swift](https://github.com/matterinc/web3swift/blob/develop/web3swift-logo.png)
 
 # web3swift
 
@@ -30,18 +30,18 @@
   * [License](#license)
 
 ---
-  - [Usage Doc](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md)
+  - [Usage Doc](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md)
 	- **Account Management** 
-		- [Create Account](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#create-account)
-		- [Import Account](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#import-account)
-		- [Manage Keystore](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#manage-keystore)
-		- [Ethereum Address](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#ethereum-address)
-		- [Get Balance](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#get-balance)
+		- [Create Account](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#create-account)
+		- [Import Account](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#import-account)
+		- [Manage Keystore](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#manage-keystore)
+		- [Ethereum Address](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#ethereum-address)
+		- [Get Balance](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#get-balance)
 	- **Transactions Operations** 
-		- [Prepare Transaction](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#prepare-transaction)
-		- [Send Transaction](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#send-transaction)
+		- [Prepare Transaction](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#prepare-transaction)
+		- [Send Transaction](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#send-transaction)
 	- **Chain State** 
-		- [Get Block Number](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#get-block-number)
+		- [Get Block Number](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#get-block-number)
 
 
 ## Ready Features
