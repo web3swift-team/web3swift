@@ -1,4 +1,4 @@
-![matter-github-swift](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/web3swift-logo.png)
+![matter-github-swift](https://github.com/matterinc/web3swift/blob/develop/web3swift-logo.png)
 
 # web3swift
 
@@ -30,18 +30,18 @@
   * [License](#license)
 
 ---
-  - [Usage Doc](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md)
+  - [Usage Doc](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md)
 	- **Account Management** 
-		- [Create Account](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#create-account)
-		- [Import Account](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#import-account)
-		- [Manage Keystore](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#manage-keystore)
-		- [Ethereum Address](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#ethereum-address)
-		- [Get Balance](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#get-balance)
+		- [Create Account](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#create-account)
+		- [Import Account](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#import-account)
+		- [Manage Keystore](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#manage-keystore)
+		- [Ethereum Address](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#ethereum-address)
+		- [Get Balance](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#get-balance)
 	- **Transactions Operations** 
-		- [Prepare Transaction](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#prepare-transaction)
-		- [Send Transaction](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#send-transaction)
+		- [Prepare Transaction](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#prepare-transaction)
+		- [Send Transaction](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#send-transaction)
 	- **Chain State** 
-		- [Get Block Number](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/Usage.md#get-block-number)
+		- [Get Block Number](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#get-block-number)
 
 
 ## Ready Features
@@ -55,6 +55,8 @@
 - [x] Interactions (read/write to Smart contracts) :arrows_counterclockwise:
 - [x] Parsing TxPool content into native values (ethereum addresses and transactions) - easy to get pending transactions
 - [x] Event loops functionality
+- [x] Supports Web3View functionality - WKWebView with injected "web3" provider
+- [x] Possibility to add or remove "middleware" that intercepts, modifies and even cancel transaction workflow on stages "before assembly", "after assembly"and "before submission"
 - [x] Literally following the standards:
 	- [x] [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) HD Wallets: Deterministic Wallet
 	- [x] [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases)
@@ -173,51 +175,32 @@ For example: you want to interact with smart-contract and all you know is - its 
 
 You can get the ABI of your contract directly from [Remix IDE](https://remix.ethereum.org/) ([Solution](https://ethereum.stackexchange.com/questions/27536/where-to-find-contract-abi-in-new-version-of-online-remix-solidity-compiler?rq=1))
 
-Then you should use contract address and ABI in creating contract object:
+Then you should use contract address and ABI in creating contract object. In example we use Infura Mainnet:
 ```swift
-let contract = Web3.InfuraMainnetWeb3().contract(<abiString: String>, at: <EthereumAddress?>, abiVersion: <Int>)
+let yourContractABI: String = <CONTRACT JSON ABI>
+let toEthereumAddress: EthereumAddress? = <DESTINATION ETHEREUM ADDRESS>
+let abiVersion: Int = <ABI VERSION NUMBER>
+
+let contract = Web3.InfuraMainnetWeb3().contract(yourContractABI, at: toEthereumAddress, abiVersion: abiVersion)
 ```
-To create transaction you should call some contract method:
+Here is the example how you should call some contract method:
 ```swift
-let transaction = contract.method(<method: String>, parameters: <[AnyObject]>, extraData: <Data>, options: <Web3Options?>)
+let method: String = <CONTRACT METHOD NAME>
+let parameters: [AnyObject] = <PARAMETERS>
+let extraData: Data = <DATA>
+let transactionOptions: TransactionOptions = <OPTIONS>
+
+let transaction = contract.read(method, parameters: parameters, extraData: extraData, transactionOptions: transactionOptions)
 ```
 
-Here is the function example that creates TransactionIntermediate object, that you can send to smart-contract:
+Here is the example how you should send transaction to some contract method:
 ```swift
-let yourContractABI = """
-<CONTRACT JSON ABI>
-"""
+let method: String = <CONTRACT METHOD NAME>
+let parameters: [AnyObject] = <PARAMETERS>
+let extraData: Data = <DATA>
+let transactionOptions: TransactionOptions = <OPTIONS>
 
-func prepareTransaction(parameters: Data, gasLimit: BigUInt = 27500, completion: @escaping (Result<TransactionIntermediate>) -> Void) {
-    DispatchQueue.global().async {
-        guard let addressFrom: String = <YOURS WALLET ADDRESS> else {return}
-        guard let ethAddressFrom = EthereumAddress(addressFrom) else {return}
-
-        let yourContractAddress = "<CONTRACT ETH ADDRESS>"
-        guard let ethContractAddress = EthereumAddress(contractAddress) else {return}
-
-        let web3 = Web3.InfuraMainnetWeb3() //or any test network
-        web3.addKeystoreManager(KeystoreManager.defaultManager)
-
-        var options = Web3Options.defaultOptions()
-        options.from = ethAddressFrom
-        options.value = 0 // or any other value you want to send
-
-        guard let contract = web3.contract(yourContractJsonABI, at: ethContractAddress, abiVersion: 2) else {return}
-
-        guard let gasPrice = web3.eth.getGasPrice().value else {return}
-        options.gasPrice = gasPrice
-        options.gasLimit = gasLimit
-
-        guard let transaction = contract.method("<METHOD OF CONTRACT YOU WANT TO CALL>", parameters: [parameters] as [AnyObject], options: options) else {return}
-        guard case .success(let estimate) = transaction.estimateGas(options: options) else {return} //here is estimated gas - something like confirming that you made a transaction correctly
-        print("estimated cost: \(estimate)")
-
-        DispatchQueue.main.async {
-            completion(Result.Success(transaction))
-        }
-    }
-}
+let transaction = contract.write(method, parameters: parameters, extraData: extraData, transactionOptions: transactionOptions)
 ```
 
 #### How to set test local node?
@@ -233,11 +216,12 @@ func setLocalNode(port: Int = 8545) -> Web3? {
 
 - [x] [EIP-165](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-165.md) (Creates a standard method to publish and detect what interfaces a smart contract implements - ERC-165)
 - [x] [EIP-777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md) (A new advanced token standard - ERC-777)
+- [x] [EIP-888](https://github.com/ethereum/EIPs/issues/888) (MultiDimensional Token Standard - ERC-888)
+- [x] [EIP-1400](https://github.com/ethereum/EIPs/issues/1411) (Security Token Standard - ERC-1400)
+- [x] [R-Token](https://github.com/harborhq/r-token) (Smart Contracts for applying regulatory compliance to tokenized securities issuance and trading)
+- [x] [SRC-20](https://swarm.fund/swarm-basics/) (Swarm protocol that enables the tokenization of assets on the blockchain - Security Tokens)
+- [x] [ST-20](https://github.com/PolymathNetwork/polymath-core) (ST-20 token is an Ethereum-based token implemented on top of the ERC-20 protocol that adds the ability for tokens to control transfers based on specific rules)
 - [x] [Objective-C] - a proxy bridge to build your DApp on Objective-C using web3swift
-- [x] Support Web3View functionality - WKWebView with injected "web3" provider
-- [x] Add or remove "middleware" that intercepts, modifies and even cancel transaction workflow on stages "before assembly", "after assembly"and "before submission"
-- [x] Put the groundwork for implementing hooks functionality
-- [x] No more "Web3Options" - new classes "ReadTransaction" and "WriteTransaction" with a variable "transactionOptions" used to specify gas price, limit, nonce policy, value
 - [x] [Complete Documentation](https://web3swift.github.io/web3swift)
 
 
