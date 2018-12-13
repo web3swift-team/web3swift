@@ -15,10 +15,6 @@ protocol IERC721 {
     
     func getOwner(tokenId: BigUInt) throws -> EthereumAddress
     
-    func tokenByIndex(index: BigUInt) throws -> BigUInt
-
-    func tokenOfOwnerByIndex(owner: EthereumAddress, index: BigUInt) throws -> BigUInt
-    
     func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction
     
     func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction
@@ -32,18 +28,33 @@ protocol IERC721 {
     func isApprovedForAll(operator address: EthereumAddress, approved: Bool) throws -> Bool
 }
 
+protocol IERC721Metadata {
+    
+    func name() throws -> String
+    
+    func symbol() throws -> String
+    
+    func tokenURI(tokenId: BigUInt) throws -> String
+    
+}
+
+protocol IERC721Enumerable {
+    
+    func totalSupply() throws -> BigUInt
+    
+    func tokenByIndex(index: BigUInt) throws -> BigUInt
+    
+    func tokenOfOwnerByIndex(owner: EthereumAddress, index: BigUInt) throws -> BigUInt
+}
+    
 // This namespace contains functions to work with ERC721 tokens.
 // can be imperatively read and saved
-public class ERC721: IERC721 {
+public class ERC721: IERC721, IERC721Enumerable, IERC721Metadata {
     
     @available(*, deprecated, renamed: "transactionOptions")
     public var options: Web3Options = .init()
     
-    private var _name: String? = nil
-    private var _symbol: String? = nil
     private var _tokenId: BigUInt? = nil
-    private var _tokenURI: String? = nil
-    private var _totalSupply: BigUInt? = nil
     private var _hasReadProperties: Bool = false
     
     public var transactionOptions: TransactionOptions
@@ -66,42 +77,10 @@ public class ERC721: IERC721 {
         self.transactionOptions = mergedOptions
     }
     
-    public var name: String {
-        self.readProperties()
-        if self._name != nil {
-            return self._name!
-        }
-        return ""
-    }
-    
-    public var symbol: String {
-        self.readProperties()
-        if self._symbol != nil {
-            return self._symbol!
-        }
-        return ""
-    }
-    
     public var tokenId: BigUInt {
         self.readProperties()
         if self._tokenId != nil {
             return self._tokenId!
-        }
-        return 0
-    }
-    
-    public var tokenURI: String {
-        self.readProperties()
-        if self._tokenURI != nil {
-            return self._tokenURI!
-        }
-        return ""
-    }
-    
-    public var totalSupply: BigUInt {
-        self.readProperties()
-        if self._totalSupply != nil {
-            return self._totalSupply!
         }
         return 0
     }
@@ -114,38 +93,15 @@ public class ERC721: IERC721 {
         guard contract.contract.address != nil else {return}
         var transactionOptions = TransactionOptions.defaultOptions
         transactionOptions.callOnBlock = .latest
-        guard let namePromise = contract.read("name", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
-        
-        guard let symbolPromise = contract.read("symbol", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
         
         guard let tokenIdPromise = contract.read("tokenId", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
         
-        guard let tokenURIpromise = contract.read("tokenURI", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
-        
-        guard let totalSupplyPromise = contract.read("totalSupply", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
-        
-        let allPromises = [namePromise, symbolPromise, tokenIdPromise, tokenURIpromise, totalSupplyPromise]
+        let allPromises = [tokenIdPromise]
         let queue = self.web3.requestDispatcher.queue
         when(resolved: allPromises).map(on: queue) { (resolvedPromises) -> Void in
-            guard case .fulfilled(let nameResult) = resolvedPromises[0] else {return}
-            guard let name = nameResult["0"] as? String else {return}
-            self._name = name
-            
-            guard case .fulfilled(let symbolResult) = resolvedPromises[1] else {return}
-            guard let symbol = symbolResult["0"] as? String else {return}
-            self._symbol = symbol
-            
-            guard case .fulfilled(let tokenIdResult) = resolvedPromises[2] else {return}
+            guard case .fulfilled(let tokenIdResult) = resolvedPromises[0] else {return}
             guard let tokenId = tokenIdResult["0"] as? BigUInt else {return}
             self._tokenId = tokenId
-            
-            guard case .fulfilled(let tokenURIresult) = resolvedPromises[3] else {return}
-            guard let uri = tokenURIresult["0"] as? String else {return}
-            self._tokenURI = uri
-            
-            guard case .fulfilled(let totalSupplyResult) = resolvedPromises[4] else {return}
-            guard let totalSupply = totalSupplyResult["0"] as? BigUInt else {return}
-            self._totalSupply = totalSupply
             
             self._hasReadProperties = true
             }.wait()
@@ -240,6 +196,42 @@ public class ERC721: IERC721 {
         basicOptions.callOnBlock = .latest
         let result = try contract.read("isApprovedForAll", parameters: [address, approved] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
+        return res
+    }
+    
+    public func totalSupply() throws -> BigUInt {
+        let contract = self.contract
+        var transactionOptions = TransactionOptions()
+        transactionOptions.callOnBlock = .latest
+        let result = try contract.read("totalSupply", parameters: [AnyObject](), extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
+        return res
+    }
+    
+    public func name() throws -> String {
+        let contract = self.contract
+        var transactionOptions = TransactionOptions()
+        transactionOptions.callOnBlock = .latest
+        let result = try contract.read("name", parameters: [AnyObject](), extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        guard let res = result["0"] as? String else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
+        return res
+    }
+    
+    public func symbol() throws -> String {
+        let contract = self.contract
+        var transactionOptions = TransactionOptions()
+        transactionOptions.callOnBlock = .latest
+        let result = try contract.read("symbol", parameters: [AnyObject](), extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        guard let res = result["0"] as? String else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
+        return res
+    }
+    
+    public func tokenURI(tokenId: BigUInt) throws -> String {
+        let contract = self.contract
+        var transactionOptions = TransactionOptions()
+        transactionOptions.callOnBlock = .latest
+        let result = try contract.read("tokenId", parameters: [tokenId] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        guard let res = result["0"] as? String else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 }
