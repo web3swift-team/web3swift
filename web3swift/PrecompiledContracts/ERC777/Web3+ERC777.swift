@@ -76,6 +76,7 @@ public class ERC777: IERC777 {
         return ""
     }
     
+    /// Must be 18!
     public var decimals: UInt8 {
         self.readProperties()
         if self._decimals != nil {
