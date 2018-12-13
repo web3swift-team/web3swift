@@ -28,7 +28,7 @@ protocol IERC777 {
 
 // This namespace contains functions to work with ERC721 tokens.
 // can be imperatively read and saved
-public class ERC777 {
+public class ERC777: IERC777 {
     
     private var _name: String? = nil
     private var _symbol: String? = nil
