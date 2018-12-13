@@ -23,9 +23,9 @@ protocol IERC721 {
     
     func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction
     
-    func approve(approved: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction
+    func approve(from: EthereumAddress, approved: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction
     
-    func setApprovalForAll(operator address: EthereumAddress, approved: Bool) throws -> WriteTransaction
+    func setApprovalForAll(operator address: EthereumAddress, from: EthereumAddress, approved: Bool) throws -> WriteTransaction
     
     func getApproved(tokenId: BigUInt) throws -> EthereumAddress
     
