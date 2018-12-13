@@ -9,9 +9,32 @@ import BigInt
 import PromiseKit
 import EthereumAddress
 
+protocol IERC721 {
+    
+    func getBalance(account: EthereumAddress) throws -> BigUInt
+    
+    func getOwner(tokenId: BigUInt) throws -> EthereumAddress
+    
+    func tokenByIndex(index: BigUInt) throws -> BigUInt
+
+    func tokenOfOwnerByIndex(owner: EthereumAddress, index: BigUInt) throws -> BigUInt
+    
+    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction
+    
+    func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction
+    
+    func approve(approved: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction
+    
+    func setApprovalForAll(operator address: EthereumAddress, approved: Bool) throws -> WriteTransaction
+    
+    func getApproved(tokenId: BigUInt) throws -> EthereumAddress
+    
+    func isApprovedForAll(operator address: EthereumAddress, approved: Bool) throws -> Bool
+}
+
 // This namespace contains functions to work with ERC721 tokens.
 // can be imperatively read and saved
-public class ERC721 {
+public class ERC721: IERC721 {
     
     @available(*, deprecated, renamed: "transactionOptions")
     public var options: Web3Options = .init()
@@ -20,6 +43,7 @@ public class ERC721 {
     private var _symbol: String? = nil
     private var _tokenId: BigUInt? = nil
     private var _tokenURI: String? = nil
+    private var _totalSupply: BigUInt? = nil
     private var _hasReadProperties: Bool = false
     
     public var transactionOptions: TransactionOptions
@@ -74,6 +98,14 @@ public class ERC721 {
         return ""
     }
     
+    public var totalSupply: BigUInt {
+        self.readProperties()
+        if self._totalSupply != nil {
+            return self._totalSupply!
+        }
+        return 0
+    }
+    
     public func readProperties() {
         if self._hasReadProperties {
             return
@@ -90,7 +122,9 @@ public class ERC721 {
         
         guard let tokenURIpromise = contract.read("tokenURI", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
         
-        let allPromises = [namePromise, symbolPromise, tokenIdPromise, tokenURIpromise]
+        guard let totalSupplyPromise = contract.read("totalSupply", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
+        
+        let allPromises = [namePromise, symbolPromise, tokenIdPromise, tokenURIpromise, totalSupplyPromise]
         let queue = self.web3.requestDispatcher.queue
         when(resolved: allPromises).map(on: queue) { (resolvedPromises) -> Void in
             guard case .fulfilled(let nameResult) = resolvedPromises[0] else {return}
@@ -109,6 +143,10 @@ public class ERC721 {
             guard let uri = tokenURIresult["0"] as? String else {return}
             self._tokenURI = uri
             
+            guard case .fulfilled(let totalSupplyResult) = resolvedPromises[4] else {return}
+            guard let totalSupply = totalSupplyResult["0"] as? BigUInt else {return}
+            self._totalSupply = totalSupply
+            
             self._hasReadProperties = true
             }.wait()
     }
@@ -122,7 +160,7 @@ public class ERC721 {
         return res
     }
     
-    public func getOwner(tokenId: BigUInt) throws -> EthereumAddress{
+    public func getOwner(tokenId: BigUInt) throws -> EthereumAddress {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
@@ -178,4 +216,30 @@ public class ERC721 {
         return tx
     }
     
+    public func approve(approved: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction {
+        let contract = self.contract
+        var basicOptions = TransactionOptions()
+        basicOptions.callOnBlock = .latest
+        
+        let tx = contract.write("approve", parameters: [approved, tokenId] as [AnyObject], transactionOptions: basicOptions)!
+        return tx
+    }
+    
+    public func setApprovalForAll(operator address: EthereumAddress, approved: Bool) throws -> WriteTransaction {
+        let contract = self.contract
+        var basicOptions = TransactionOptions()
+        basicOptions.callOnBlock = .latest
+        
+        let tx = contract.write("setApprovalForAll", parameters: [address, approved] as [AnyObject], transactionOptions: basicOptions)!
+        return tx
+    }
+    
+    public func isApprovedForAll(operator address: EthereumAddress, approved: Bool) throws -> Bool {
+        let contract = self.contract
+        var basicOptions = TransactionOptions()
+        basicOptions.callOnBlock = .latest
+        let result = try contract.read("setApprovalForAll", parameters: [address, approved] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
+        return res
+    }
 }
