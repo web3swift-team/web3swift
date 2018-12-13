@@ -216,19 +216,19 @@ public class ERC721: IERC721 {
         return tx
     }
     
-    public func approve(approved: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction {
+    public func approve(from: EthereumAddress, approved: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
-        basicOptions.callOnBlock = .latest
+        basicOptions.from = from
         
         let tx = contract.write("approve", parameters: [approved, tokenId] as [AnyObject], transactionOptions: basicOptions)!
         return tx
     }
     
-    public func setApprovalForAll(operator address: EthereumAddress, approved: Bool) throws -> WriteTransaction {
+    public func setApprovalForAll(operator address: EthereumAddress, from: EthereumAddress, approved: Bool) throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
-        basicOptions.callOnBlock = .latest
+        basicOptions.from = from
         
         let tx = contract.write("setApprovalForAll", parameters: [address, approved] as [AnyObject], transactionOptions: basicOptions)!
         return tx
