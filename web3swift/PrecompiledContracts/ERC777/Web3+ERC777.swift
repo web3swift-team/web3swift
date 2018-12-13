@@ -11,6 +11,21 @@ import BigInt
 import PromiseKit
 import EthereumAddress
 
+protocol IERC777 {
+    func getBalance(account: EthereumAddress) throws -> BigUInt
+    func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) throws -> BigUInt
+    func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) throws -> WriteTransaction
+    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) throws -> WriteTransaction
+    func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) throws -> WriteTransaction
+    func authorize(from: EthereumAddress, operator user: EthereumAddress) throws -> WriteTransaction
+    func revoke(from: EthereumAddress, operator user: EthereumAddress) throws -> WriteTransaction
+    func isOperatorFor(operator user: EthereumAddress, tokenHolder: EthereumAddress) throws -> Bool
+    func send(from: EthereumAddress, to: EthereumAddress, amount: String, data: [UInt8]) throws -> WriteTransaction
+    func operatorSend(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String, data: [UInt8], operatorData: [UInt8]) throws -> WriteTransaction
+    func burn(from: EthereumAddress, amount: String, data: [UInt8]) throws -> WriteTransaction
+    func operatorBurn(from: EthereumAddress, amount: String, originalOwner: EthereumAddress, data: [UInt8], operatorData: [UInt8]) throws -> WriteTransaction
+}
+
 // This namespace contains functions to work with ERC721 tokens.
 // can be imperatively read and saved
 public class ERC777 {
@@ -144,7 +159,7 @@ public class ERC777 {
             }.wait()
     }
     
-    public func getBalance(account: EthereumAddress) throws -> BigUInt{
+    public func getBalance(account: EthereumAddress) throws -> BigUInt {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
