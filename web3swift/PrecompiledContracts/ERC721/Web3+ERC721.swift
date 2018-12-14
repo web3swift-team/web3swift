@@ -49,7 +49,7 @@ protocol IERC721Enumerable {
     
 // This namespace contains functions to work with ERC721 tokens.
 // can be imperatively read and saved
-public class ERC721: IERC721, IERC721Enumerable, IERC721Metadata {
+public class ERC721: IERC721 {
     
     @available(*, deprecated, renamed: "transactionOptions")
     public var options: Web3Options = .init()
@@ -134,24 +134,6 @@ public class ERC721: IERC721, IERC721Enumerable, IERC721Metadata {
         return res
     }
     
-    public func tokenByIndex(index: BigUInt) throws -> BigUInt {
-        let contract = self.contract
-        var transactionOptions = TransactionOptions()
-        transactionOptions.callOnBlock = .latest
-        let result = try contract.read("tokenByIndex", parameters: [index] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
-        guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
-        return res
-    }
-    
-    public func tokenOfOwnerByIndex(owner: EthereumAddress, index: BigUInt) throws -> BigUInt {
-        let contract = self.contract
-        var transactionOptions = TransactionOptions()
-        transactionOptions.callOnBlock = .latest
-        let result = try contract.read("tokenOfOwnerByIndex", parameters: [owner, index] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
-        guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
-        return res
-    }
-    
     public func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
@@ -199,6 +181,10 @@ public class ERC721: IERC721, IERC721Enumerable, IERC721Metadata {
         return res
     }
     
+}
+
+extension ERC721: IERC721Enumerable {
+    
     public func totalSupply() throws -> BigUInt {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
@@ -207,6 +193,28 @@ public class ERC721: IERC721, IERC721Enumerable, IERC721Metadata {
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
+    
+    public func tokenByIndex(index: BigUInt) throws -> BigUInt {
+        let contract = self.contract
+        var transactionOptions = TransactionOptions()
+        transactionOptions.callOnBlock = .latest
+        let result = try contract.read("tokenByIndex", parameters: [index] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
+        return res
+    }
+    
+    public func tokenOfOwnerByIndex(owner: EthereumAddress, index: BigUInt) throws -> BigUInt {
+        let contract = self.contract
+        var transactionOptions = TransactionOptions()
+        transactionOptions.callOnBlock = .latest
+        let result = try contract.read("tokenOfOwnerByIndex", parameters: [owner, index] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
+        return res
+    }
+    
+}
+
+extension ERC721: IERC721Metadata {
     
     public func name() throws -> String {
         let contract = self.contract
@@ -234,4 +242,5 @@ public class ERC721: IERC721, IERC721Enumerable, IERC721Metadata {
         guard let res = result["0"] as? String else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
+    
 }
