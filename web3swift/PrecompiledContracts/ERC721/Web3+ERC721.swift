@@ -21,11 +21,11 @@ protocol IERC721 {
     
     func approve(from: EthereumAddress, approved: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction
     
-    func setApprovalForAll(operator address: EthereumAddress, from: EthereumAddress, approved: Bool) throws -> WriteTransaction
+    func setApprovalForAll(from: EthereumAddress, operator user: EthereumAddress, approved: Bool) throws -> WriteTransaction
     
     func getApproved(tokenId: BigUInt) throws -> EthereumAddress
     
-    func isApprovedForAll(operator address: EthereumAddress, approved: Bool) throws -> Bool
+    func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress) throws -> Bool
 }
 
 protocol IERC721Metadata {
@@ -181,20 +181,20 @@ public class ERC721: IERC721, IERC721Enumerable, IERC721Metadata {
         return tx
     }
     
-    public func setApprovalForAll(operator address: EthereumAddress, from: EthereumAddress, approved: Bool) throws -> WriteTransaction {
+    public func setApprovalForAll(from: EthereumAddress, operator user: EthereumAddress, approved: Bool) throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.from = from
         
-        let tx = contract.write("setApprovalForAll", parameters: [address, approved] as [AnyObject], transactionOptions: basicOptions)!
+        let tx = contract.write("setApprovalForAll", parameters: [user, approved] as [AnyObject], transactionOptions: basicOptions)!
         return tx
     }
     
-    public func isApprovedForAll(operator address: EthereumAddress, approved: Bool) throws -> Bool {
+    public func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress) throws -> Bool {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.callOnBlock = .latest
-        let result = try contract.read("isApprovedForAll", parameters: [address, approved] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try contract.read("isApprovedForAll", parameters: [owner, user] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
