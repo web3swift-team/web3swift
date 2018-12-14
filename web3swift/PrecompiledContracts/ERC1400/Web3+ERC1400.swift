@@ -65,3 +65,6 @@ protocol IERC1400 {
 // This namespace contains functions to work with ERC1400 tokens.
 // variables are lazyly evaluated or global token information (name, ticker, total supply)
 // can be imperatively read and saved
+public class ERC1400: ERC20 {
+    
+}
