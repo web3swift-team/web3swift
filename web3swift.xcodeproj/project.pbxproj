@@ -171,8 +171,6 @@
 		81FB21FF207BB297007F9A83 /* EIP67Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F8207BA78B007F9A83 /* EIP67Code.swift */; };
 		81FB2201207BC58C007F9A83 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2200207BC58B007F9A83 /* CoreImage.framework */; };
 		81FB2203207BC6DB007F9A83 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2202207BC6DB007F9A83 /* ImageIO.framework */; };
-		9196A68B21B9F0DA00852ED0 /* Web3+ERC777.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9196A68A21B9F0DA00852ED0 /* Web3+ERC777.swift */; };
-		9196A68C21B9F0DA00852ED0 /* Web3+ERC777.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9196A68A21B9F0DA00852ED0 /* Web3+ERC777.swift */; };
 		985BFD4A216CE8B100B28C14 /* Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD49216CE8B100B28C14 /* Web3+TxPool.swift */; };
 		985BFD4E216E2E0A00B28C14 /* Promise+Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD4D216E2E0A00B28C14 /* Promise+Web3+TxPool.swift */; };
 		B350A445E5DB35C60E59AD70 /* libPods-web3swift-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F8C9C48884592DCF561393 /* libPods-web3swift-macOS.a */; };
@@ -363,7 +361,6 @@
 		81FECD63211AF162006DA367 /* web3swift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "web3swift-Bridging-Header.h"; sourceTree = "<group>"; };
 		8349531F1984454E50389370 /* libPods-web3swift-iOS_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-web3swift-iOS_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8675751D91DB2DBC9E7A3469 /* libPods-web3swift-macOS_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-web3swift-macOS_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9196A68A21B9F0DA00852ED0 /* Web3+ERC777.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+ERC777.swift"; sourceTree = "<group>"; };
 		985BFD49216CE8B100B28C14 /* Web3+TxPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+TxPool.swift"; sourceTree = "<group>"; };
 		985BFD4D216E2E0A00B28C14 /* Promise+Web3+TxPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+TxPool.swift"; sourceTree = "<group>"; };
 		A5E8AF69880F5141B4AC9DF0 /* libPods-web3swift-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-web3swift-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -615,7 +612,6 @@
 		8159C50921343EF900197B91 /* PrecompiledContracts */ = {
 			isa = PBXGroup;
 			children = (
-				9196A68921B9F0B100852ED0 /* ERC777 */,
 				E279C9ED21C3F2970081695F /* ERC165 */,
 				E2E94C5E2177886C005F54A0 /* ERC721 */,
 				8159C50621343ED300197B91 /* ERC20 */,
@@ -799,14 +795,6 @@
 				1E62EF5F091ED9F7B80CA8EE /* Pods-web3swift-macOS_Tests.release.xcconfig */,
 			);
 			name = Pods;
-			sourceTree = "<group>";
-		};
-		9196A68921B9F0B100852ED0 /* ERC777 */ = {
-			isa = PBXGroup;
-			children = (
-				9196A68A21B9F0DA00852ED0 /* Web3+ERC777.swift */,
-			);
-			path = ERC777;
 			sourceTree = "<group>";
 		};
 		E228BD8921A4492A0085268C /* web3swiftLegacy */ = {
@@ -1319,7 +1307,6 @@
 				81C0FCF220440EB500D82FAF /* Web3+Protocols.swift in Sources */,
 				81C0FCF420440F0900D82FAF /* Web3+Options.swift in Sources */,
 				81A1822E20D67BC30016741F /* Promise+Web3+Eth+GetTransactionReceipt.swift in Sources */,
-				9196A68B21B9F0DA00852ED0 /* Web3+ERC777.swift in Sources */,
 				81A1824020D79FDB0016741F /* Promise+Web3+Eth+EstimateGas.swift in Sources */,
 				81909D1221862D17007D2AE5 /* Web3+ReadingTransaction.swift in Sources */,
 				81A1822B20D67A1B0016741F /* Promise+Web3+Eth+GetTransactionDetails.swift in Sources */,
@@ -1441,7 +1428,6 @@
 				8103BBCD2077B84400499769 /* PlainKeystore.swift in Sources */,
 				4194813D203630530065A83B /* RIPEMD160+StackOveflow.swift in Sources */,
 				4194813E203630530065A83B /* Data+Extension.swift in Sources */,
-				9196A68C21B9F0DA00852ED0 /* Web3+ERC777.swift in Sources */,
 				81A1822F20D67BC30016741F /* Promise+Web3+Eth+GetTransactionReceipt.swift in Sources */,
 				81A1822C20D67A1B0016741F /* Promise+Web3+Eth+GetTransactionDetails.swift in Sources */,
 				81909D1321862D17007D2AE5 /* Web3+ReadingTransaction.swift in Sources */,
