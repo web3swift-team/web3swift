@@ -11,7 +11,7 @@ import EthereumAddress
 
 // This namespace contains functions to work with ERC721 tokens.
 // can be imperatively read and saved
-public class ERC721: IERC165 {
+public class ERC721 {
     
     @available(*, deprecated, renamed: "transactionOptions")
     public var options: Web3Options = .init()
@@ -177,6 +177,10 @@ public class ERC721: IERC165 {
         let tx = contract.write("transferFrom", parameters: [originalOwner, to, tokenId] as [AnyObject], transactionOptions: basicOptions)!
         return tx
     }
+    
+}
+
+extension ERC721: IERC165 {
     
     public func supportsInterface(interfaceID: [UInt8]) throws -> Bool {
         let contract = self.contract
