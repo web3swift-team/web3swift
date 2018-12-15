@@ -27,7 +27,7 @@ protocol IERC777 {
 
 // This namespace contains functions to work with ERC721 tokens.
 // can be imperatively read and saved
-public class ERC777: IERC777 {
+public class ERC777: IERC20, IERC777 {
     
     private var _name: String? = nil
     private var _symbol: String? = nil
@@ -429,5 +429,26 @@ extension ERC777: IERC820 {
         return tx
     }
     
+    public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) throws -> WriteTransaction {
+        let contract = self.contract
+        var basicOptions = TransactionOptions()
+        basicOptions.from = from
+        basicOptions.callOnBlock = .latest
+        
+        // get the decimals manually
+        let callResult = try contract.read("decimals", transactionOptions: basicOptions)!.call()
+        var decimals = BigUInt(0)
+        guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
+            throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
+        decimals = decTyped
+        
+        let intDecimals = Int(decimals)
+        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+            throw Web3Error.inputError(desc: "Can not parse inputted amount")
+        }
+        
+        let tx = contract.write("approve", parameters: [spender, value] as [AnyObject], transactionOptions: basicOptions)!
+        return tx
+    }
     
 }
