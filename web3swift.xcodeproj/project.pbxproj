@@ -216,6 +216,7 @@
 		E279C9F521C47B4A0081695F /* Web3+ERC777.swift in Sources */ = {isa = PBXBuildFile; fileRef = E279C9F421C47B4A0081695F /* Web3+ERC777.swift */; };
 		E279C9F821C47CD00081695F /* Web3+ERC820.swift in Sources */ = {isa = PBXBuildFile; fileRef = E279C9F721C47CD00081695F /* Web3+ERC820.swift */; };
 		E279C9FB21C4860F0081695F /* Web3+ERC1400.swift in Sources */ = {isa = PBXBuildFile; fileRef = E279C9FA21C4860F0081695F /* Web3+ERC1400.swift */; };
+		E279C9FE21C48A570081695F /* Web3+ERC888.swift in Sources */ = {isa = PBXBuildFile; fileRef = E279C9FD21C48A570081695F /* Web3+ERC888.swift */; };
 		E2DCA653218C875100F94FBA /* web3swift_ENS_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7B2782143C978004CD2C7 /* web3swift_ENS_Tests.swift */; };
 		E2DCA654218C879900F94FBA /* ENS.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E668CD214F8A7B00C3CC2D /* ENS.swift */; };
 		E2DCA655218C879900F94FBA /* ENSResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B219DC162154F3EE0035BF94 /* ENSResolver.swift */; };
@@ -400,6 +401,7 @@
 		E279C9F421C47B4A0081695F /* Web3+ERC777.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+ERC777.swift"; sourceTree = "<group>"; };
 		E279C9F721C47CD00081695F /* Web3+ERC820.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+ERC820.swift"; sourceTree = "<group>"; };
 		E279C9FA21C4860F0081695F /* Web3+ERC1400.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+ERC1400.swift"; sourceTree = "<group>"; };
+		E279C9FD21C48A570081695F /* Web3+ERC888.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+ERC888.swift"; sourceTree = "<group>"; };
 		E2C590752152835400FF53D3 /* JSONRPCrequestDispatcher+ObjC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONRPCrequestDispatcher+ObjC.swift"; sourceTree = "<group>"; };
 		E2E94C5F217788E0005F54A0 /* Web3+ERC721.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+ERC721.swift"; sourceTree = "<group>"; };
 		FB43EC035C593F9E5A3644B6 /* Pods-web3swift-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS/Pods-web3swift-macOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -620,6 +622,7 @@
 		8159C50921343EF900197B91 /* PrecompiledContracts */ = {
 			isa = PBXGroup;
 			children = (
+				E279C9FC21C48A430081695F /* ERC888 */,
 				E279C9F921C484400081695F /* ERC1400 */,
 				E279C9F621C47CC10081695F /* ERC820 */,
 				E279C9F321C47B3B0081695F /* ERC777 */,
@@ -991,6 +994,14 @@
 			path = ERC1400;
 			sourceTree = "<group>";
 		};
+		E279C9FC21C48A430081695F /* ERC888 */ = {
+			isa = PBXGroup;
+			children = (
+				E279C9FD21C48A570081695F /* Web3+ERC888.swift */,
+			);
+			path = ERC888;
+			sourceTree = "<group>";
+		};
 		E2E94C5E2177886C005F54A0 /* ERC721 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1352,6 +1363,7 @@
 				8113D2CE1FD7E1590074282C /* EthereumTransaction.swift in Sources */,
 				81A1821F20D676BC0016741F /* Promise+Web3+Eth+GetTransactionCount.swift in Sources */,
 				81A1821520D5A2700016741F /* Promise+Web3+Eth+GetBalance.swift in Sources */,
+				E279C9FE21C48A570081695F /* Web3+ERC888.swift in Sources */,
 				81A1823C20D79C270016741F /* Promise+Web3+Eth+Call.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
