@@ -29,6 +29,7 @@ public class ERC20: IERC20 {
     private var _name: String? = nil
     private var _symbol: String? = nil
     private var _decimals: UInt8? = nil
+    private var _totalSupply: BigUInt? = nil
     private var _hasReadProperties: Bool = false
     
     public var transactionOptions: TransactionOptions
@@ -75,6 +76,14 @@ public class ERC20: IERC20 {
         return 255
     }
     
+    public var totalSupply: BigUInt {
+        self.readProperties()
+        if self._totalSupply != nil {
+            return self._totalSupply!
+        }
+        return 0
+    }
+    
     public func readProperties() {
         if self._hasReadProperties {
             return
@@ -88,8 +97,10 @@ public class ERC20: IERC20 {
         guard let symbolPromise = contract.read("symbol", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
         
         guard let decimalPromise = contract.read("decimals", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
+        
+        guard let totalSupplyPromise = contract.read("totalSupply", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
 
-        let allPromises = [namePromise, symbolPromise, decimalPromise]
+        let allPromises = [namePromise, symbolPromise, decimalPromise, totalSupplyPromise]
         let queue = self.web3.requestDispatcher.queue
         when(resolved: allPromises).map(on: queue) { (resolvedPromises) -> Void in
             guard case .fulfilled(let nameResult) = resolvedPromises[0] else {return}
@@ -103,6 +114,10 @@ public class ERC20: IERC20 {
             guard case .fulfilled(let decimalsResult) = resolvedPromises[2] else {return}
             guard let decimals = decimalsResult["0"] as? BigUInt else {return}
             self._decimals = UInt8(decimals)
+            
+            guard case .fulfilled(let totalSupplyResult) = resolvedPromises[3] else {return}
+            guard let totalSupply = totalSupplyResult["0"] as? BigUInt else {return}
+            self._totalSupply = totalSupply
             
             self._hasReadProperties = true
         }.wait()
