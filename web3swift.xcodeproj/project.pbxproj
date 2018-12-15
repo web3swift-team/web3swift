@@ -171,6 +171,8 @@
 		81FB21FF207BB297007F9A83 /* EIP67Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FB21F8207BA78B007F9A83 /* EIP67Code.swift */; };
 		81FB2201207BC58C007F9A83 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2200207BC58B007F9A83 /* CoreImage.framework */; };
 		81FB2203207BC6DB007F9A83 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81FB2202207BC6DB007F9A83 /* ImageIO.framework */; };
+		9196A68721B9EFDA00852ED0 /* web3swift_EIP681_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7B2892143DF1D004CD2C7 /* web3swift_EIP681_Tests.swift */; };
+		9196A68821B9EFF100852ED0 /* web3swift_EIP67_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23B5ADC20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift */; };
 		985BFD4A216CE8B100B28C14 /* Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD49216CE8B100B28C14 /* Web3+TxPool.swift */; };
 		985BFD4E216E2E0A00B28C14 /* Promise+Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985BFD4D216E2E0A00B28C14 /* Promise+Web3+TxPool.swift */; };
 		B350A445E5DB35C60E59AD70 /* libPods-web3swift-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F8C9C48884592DCF561393 /* libPods-web3swift-macOS.a */; };
@@ -1358,6 +1360,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9196A68821B9EFF100852ED0 /* web3swift_EIP67_Tests.swift in Sources */,
+				9196A68721B9EFDA00852ED0 /* web3swift_EIP681_Tests.swift in Sources */,
 				E2DCA653218C875100F94FBA /* web3swift_ENS_Tests.swift in Sources */,
 				81909D292188504D007D2AE5 /* web3swift_AdvancedABIv2_Tests.swift in Sources */,
 				00E5FE8220EA3FF40030E0D6 /* web3swift_infura_Tests.swift in Sources */,
