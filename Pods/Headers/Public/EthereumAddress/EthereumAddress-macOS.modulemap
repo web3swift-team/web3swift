@@ -1,1 +1,7 @@
-/Users/baldyash/Developer/web3swift/Pods/Target Support Files/EthereumAddress-macOS/EthereumAddress-macOS.modulemap
+module EthereumAddress {
+  umbrella header "EthereumAddress-macOS-umbrella.h"
+  exclude header "EthereumAddress-iOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

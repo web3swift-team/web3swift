@@ -25,7 +25,7 @@ protocol IERC777 {
     func operatorBurn(from: EthereumAddress, amount: String, originalOwner: EthereumAddress, data: [UInt8], operatorData: [UInt8]) throws -> WriteTransaction
 }
 
-// This namespace contains functions to work with ERC721 tokens.
+// This namespace contains functions to work with ERC777 tokens.
 // can be imperatively read and saved
 public class ERC777: IERC20, IERC777 {
     
