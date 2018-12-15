@@ -7,9 +7,6 @@
 //
 
 import Foundation
-import BigInt
-import PromiseKit
-import EthereumAddress
 
 protocol IERC165 {
     
