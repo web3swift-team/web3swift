@@ -11,14 +11,12 @@ import BigInt
 import EthereumAddress
 import PromiseKit
 
+//MultiDimensional Token Standard
 protocol IERC888 {
     func getBalance(account: EthereumAddress) throws -> BigUInt
     func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) throws -> WriteTransaction
 }
 
-// This namespace contains functions to work with ERC888 tokens.
-// variables are lazyly evaluated or global token information (name, ticker, total supply)
-// can be imperatively read and saved
 public class ERC888: IERC888 {
     
     @available(*, deprecated, renamed: "transactionOptions")
@@ -33,19 +31,21 @@ public class ERC888: IERC888 {
     public var web3: web3
     public var provider: Web3Provider
     public var address: EthereumAddress
+    public var abi: String
     
     lazy var contract: web3.web3contract = {
-        let contract = self.web3.contract(Web3.Utils.erc888ABI, at: self.address, abiVersion: 2)
+        let contract = self.web3.contract(self.abi, at: self.address, abiVersion: 2)
         precondition(contract != nil)
         return contract!
     }()
     
-    public init(web3: web3, provider: Web3Provider, address: EthereumAddress) {
+    public init(web3: web3, provider: Web3Provider, address: EthereumAddress, abi: String = Web3.Utils.erc888ABI) {
         self.web3 = web3
         self.provider = provider
         self.address = address
         var mergedOptions = web3.transactionOptions
         mergedOptions.to = address
+        self.abi = abi
         self.transactionOptions = mergedOptions
     }
     
