@@ -87,7 +87,7 @@
 
 ## Migration Guides
 
-- [web3swift 2.0 Migration Guide](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/web3swift%202.0%20Migration%20Guide.md)
+- [web3swift 2.0 Migration Guide](https://github.com/matterinc/web3swift/blob/documentation/Documentation/web3swift%202.0%20Migration%20Guide.md)
 
 ## Communication
 
@@ -247,4 +247,4 @@ Our Ether wallet address: 0xe22b8979739d724343bd002f9f432f5990879901
 
 ## License
 
-web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/LICENSE) for details.
+web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/matterinc/web3swift/blob/documentation/LICENSE) for details.
