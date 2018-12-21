@@ -1,1 +1,7 @@
-/Users/antongrigorev/Developer/web3swift/Pods/Target Support Files/secp256k1_swift-iOS/secp256k1_swift-iOS.modulemap
+module secp256k1_swift {
+  umbrella header "secp256k1_swift-iOS-umbrella.h"
+  exclude header "secp256k1_swift-macOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

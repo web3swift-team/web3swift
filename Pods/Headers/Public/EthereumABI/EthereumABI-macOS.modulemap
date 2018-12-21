@@ -1,1 +1,7 @@
-/Users/antongrigorev/Developer/web3swift/Pods/Target Support Files/EthereumABI-macOS/EthereumABI-macOS.modulemap
+module EthereumABI {
+  umbrella header "EthereumABI-macOS-umbrella.h"
+  exclude header "EthereumABI-iOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

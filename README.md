@@ -66,6 +66,20 @@
 	- [x] [EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md) (Replay attacks protection) *enforced!*
 	- [x] [EIP-681](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-681.md) (A standard way of representing various transactions, especially payment requests in Ethers and ERC-20 tokens as URLs)
 	- [x] [EIP-721](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md) (A standard interface for non-fungible tokens, also known as deeds - ERC-721)
+	- [x] [EIP-165](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-165.md) (Standard Interface Detection, also known as ERC-165)
+	- [x] [EIP-777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md) (New Advanced Token Standard, also known as ERC-777)
+	- [x] [EIP-820](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-820.md) (Pseudo-introspection Registry Contract, also known as ERC-820)
+	- [x] [EIP-888](https://github.com/ethereum/EIPs/issues/888) (MultiDimensional Token Standard, also known as ERC-888)
+	- [x] [EIP-1400](https://github.com/ethereum/EIPs/issues/1411) (Security Token Standard, also known as ERC-1400)
+	- [x] [EIP-1410](https://github.com/ethereum/EIPs/issues/1410) (Partially Fungible Token Standard, also known as ERC-1410)
+	- [x] [EIP-1594](https://github.com/ethereum/EIPs/issues/1594) (Core Security Token Standard, also known as ERC-1594)
+	- [x] [EIP-1643](https://github.com/ethereum/EIPs/issues/1643) (Document Management Standard, also known as ERC-1643)
+	- [x] [EIP-1644](https://github.com/ethereum/EIPs/issues/1644) (Controller Token Operation Standard, also known as ERC-1644)
+	- [x] [EIP-1633](https://github.com/ethereum/EIPs/issues/1634) (Re-Fungible Token, also known as ERC-1633)
+	- [x] [EIP-721x](https://github.com/loomnetwork/erc721x) (An extension of ERC721 that adds support for multi-fungible tokens and batch transfers, while being fully backward-compatible, also known as ERC-721x)
+	- [x] [EIP-1155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1155.md) (Multi Token Standard, also known as ERC-1155)
+	- [x] [EIP-1376](https://github.com/ethereum/EIPs/issues/1376) (Service-Friendly Token, also known as ERC-1376)
+	
 - [x] RLP encoding
 - [x] Batched requests in concurrent mode
 - [x] Base58 encoding scheme
@@ -87,7 +101,7 @@
 
 ## Migration Guides
 
-- [web3swift 2.0 Migration Guide](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/Documentation/web3swift%202.0%20Migration%20Guide.md)
+- [web3swift 2.0 Migration Guide](https://github.com/matterinc/web3swift/blob/documentation/Documentation/web3swift%202.0%20Migration%20Guide.md)
 
 ## Communication
 
@@ -121,7 +135,7 @@ platform :ios, '9.0'
 
 target '<Your Target Name>' do
     use_frameworks!
-    pod 'web3swift', '~> 2.0.1'
+    pod 'web3swift'
 end
 ```
 
@@ -214,14 +228,12 @@ func setLocalNode(port: Int = 8545) -> Web3? {
 
 ## What's next
 
-- [x] [EIP-165](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-165.md) (Creates a standard method to publish and detect what interfaces a smart contract implements - ERC-165)
-- [x] [EIP-777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md) (A new advanced token standard - ERC-777)
-- [x] [EIP-888](https://github.com/ethereum/EIPs/issues/888) (MultiDimensional Token Standard - ERC-888)
-- [x] [EIP-1400](https://github.com/ethereum/EIPs/issues/1411) (Security Token Standard - ERC-1400)
 - [x] [R-Token](https://github.com/harborhq/r-token) (Smart Contracts for applying regulatory compliance to tokenized securities issuance and trading)
 - [x] [SRC-20](https://swarm.fund/swarm-basics/) (Swarm protocol that enables the tokenization of assets on the blockchain - Security Tokens)
 - [x] [ST-20](https://github.com/PolymathNetwork/polymath-core) (ST-20 token is an Ethereum-based token implemented on top of the ERC-20 protocol that adds the ability for tokens to control transfers based on specific rules)
 - [x] [Objective-C] - a proxy bridge to build your DApp on Objective-C using web3swift
+- [x] [Performance Improvements]
+- [x] [More convenient methods for basic namespaces]
 - [x] [Complete Documentation](https://web3swift.github.io/web3swift)
 
 
@@ -247,4 +259,4 @@ Our Ether wallet address: 0xe22b8979739d724343bd002f9f432f5990879901
 
 ## License
 
-web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/matterinc/web3swift/blob/feature/readmeImprovement/LICENSE) for details.
+web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/matterinc/web3swift/blob/documentation/LICENSE) for details.

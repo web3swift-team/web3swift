@@ -1,1 +1,7 @@
-/Users/antongrigorev/Developer/web3swift/Pods/Target Support Files/SwiftRLP-macOS/SwiftRLP-macOS.modulemap
+module SwiftRLP {
+  umbrella header "SwiftRLP-macOS-umbrella.h"
+  exclude header "SwiftRLP-iOS-umbrella.h"
+
+  export *
+  module * { export * }
+}
