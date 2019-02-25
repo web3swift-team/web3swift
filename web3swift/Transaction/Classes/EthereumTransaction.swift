@@ -253,6 +253,15 @@ public struct EthereumTransaction: CustomStringConvertible {
         if transactionOptions != nil, transactionOptions!.value != nil {
             tx.value = transactionOptions!.value!
         }
+        // MARK: - Fixing estimate gas problem: gas price param shouldn't be nil
+        if transactionOptions != nil, let gasPricePolicy = transactionOptions!.gasPrice {
+            switch gasPricePolicy {
+            case .manual(let value):
+                tx.gasPrice = value
+            default:
+                tx.gasPrice = BigUInt(1) // 1 wei to fix wrong estimating gas problem
+            }
+        }
         guard var txParams = tx.encodeAsDictionary(from: from) else {return nil}
         if method == .estimateGas || transactionOptions?.gasLimit == nil {
             txParams.gas = nil

@@ -55,6 +55,27 @@ class web3swift_promises_Tests: XCTestCase {
         }
     }
     
+    func testEstimateGasFixPromise() {
+        do {
+            let web3 = Web3.InfuraMainnetWeb3()
+            let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")
+            let tempKeystore = try! EthereumKeystoreV3(password: "")
+            let keystoreManager = KeystoreManager([tempKeystore!])
+            web3.addKeystoreManager(keystoreManager)
+            let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
+            guard let writeTX = contract?.write("fallback") else {return XCTFail()}
+            writeTX.transactionOptions.from = tempKeystore!.addresses?.first
+            writeTX.transactionOptions.value = BigUInt("1.0", .eth)
+            writeTX.transactionOptions.gasPrice = .manual(BigUInt(100000000))
+            let esimate = try writeTX.estimateGasPromise().wait()
+            print(esimate)
+            XCTAssert(esimate == 21000)
+        } catch{
+            print(error)
+            XCTFail()
+        }
+    }
+    
 //    func testSendETHPromise() {
 //        do {
 //            guard let keystoreData = getKeystoreData() else {return}

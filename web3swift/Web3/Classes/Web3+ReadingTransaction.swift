@@ -71,6 +71,7 @@ public class ReadTransaction {
             optionsForGasEstimation.from = mergedOptions.from
             optionsForGasEstimation.to = mergedOptions.to
             optionsForGasEstimation.value = mergedOptions.value
+            optionsForGasEstimation.gasPrice = mergedOptions.gasPrice
             optionsForGasEstimation.callOnBlock = mergedOptions.callOnBlock
             let promise = self.web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
             promise.done(on: queue) {(estimate: BigUInt) in
