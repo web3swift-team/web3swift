@@ -254,7 +254,9 @@ public struct EthereumTransaction: CustomStringConvertible {
             tx.value = transactionOptions!.value!
         }
         // MARK: - Fixing estimate gas problem: gas price param shouldn't be nil
-        if transactionOptions != nil, let gasPricePolicy = transactionOptions!.gasPrice {
+        if transactionOptions != nil,
+            let gasPricePolicy = transactionOptions!.gasPrice,
+            method == .estimateGas {
             switch gasPricePolicy {
             case .manual(let value):
                 tx.gasPrice = value
