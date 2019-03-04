@@ -46,6 +46,8 @@ extension TransactionOptions: Decodable {
         case gasPrice
         case gas
         case value
+        case nonce
+        case callOnBlock
     }
     
     public init(from decoder: Decoder) throws {
@@ -83,8 +85,17 @@ extension TransactionOptions: Decodable {
         let value = try decodeHexToBigUInt(container, key: .value)
         self.value = value
         
-        self.nonce = .pending
-        self.callOnBlock = .pending
+        if let nonce = try decodeHexToBigUInt(container, key: .nonce) {
+            self.nonce = .manual(nonce)
+        } else {
+            self.nonce = .pending
+        }
+        
+        if let callOnBlock = try decodeHexToBigUInt(container, key: .nonce) {
+            self.callOnBlock = .exactBlockNumber(callOnBlock)
+        } else {
+            self.callOnBlock = .pending
+        }
     }
 }
 

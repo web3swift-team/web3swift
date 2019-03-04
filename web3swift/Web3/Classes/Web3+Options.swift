@@ -136,6 +136,16 @@ public struct TransactionOptions {
             guard let addressFrom = EthereumAddress(fromString) else {return nil}
             options.from = addressFrom
         }
+        if let nonceString = json["nonce"] as? String, let nonce = BigUInt(nonceString.stripHexPrefix(), radix: 16) {
+            options.nonce = .manual(nonce)
+        } else {
+            options.nonce = .pending
+        }
+        if let callOnBlockString = json["callOnBlock"] as? String, let callOnBlock = BigUInt(callOnBlockString.stripHexPrefix(), radix: 16) {
+            options.callOnBlock = .exactBlockNumber(callOnBlock)
+        } else {
+            options.callOnBlock = .pending
+        }
         return options
     }
 
