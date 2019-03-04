@@ -66,6 +66,11 @@ extension Web3.Utils {
         }
     }
     
+    // Precoded API for testing estimate gas fix
+    public static var estimateGasTestABI = """
+[{"constant":true,"inputs":[],"name":"a","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"foo","type":"uint256"}],"name":"test","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"b","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]
+"""
+    
     /// Precoded "cold wallet" (private key controlled) address. Basically - only a payable fallback function.
     public static var coldWalletABI = "[{\"payable\":true,\"type\":\"fallback\"}]"
     

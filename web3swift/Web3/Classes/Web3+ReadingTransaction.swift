@@ -71,6 +71,17 @@ public class ReadTransaction {
             optionsForGasEstimation.from = mergedOptions.from
             optionsForGasEstimation.to = mergedOptions.to
             optionsForGasEstimation.value = mergedOptions.value
+            
+            // MARK: - Fixing estimate gas problem: gas price param shouldn't be nil
+            if let gasPricePolicy = mergedOptions.gasPrice {
+                switch gasPricePolicy {
+                case .manual( _):
+                    optionsForGasEstimation.gasPrice = gasPricePolicy
+                default:
+                    optionsForGasEstimation.gasPrice = .manual(1) // 1 wei to fix wrong estimating gas problem
+                }
+            }
+            
             optionsForGasEstimation.callOnBlock = mergedOptions.callOnBlock
             let promise = self.web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
             promise.done(on: queue) {(estimate: BigUInt) in
