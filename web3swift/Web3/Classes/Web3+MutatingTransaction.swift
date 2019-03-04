@@ -89,7 +89,7 @@ public class WriteTransaction: ReadTransaction {
             }
 
             let gasPricePromise : Promise<BigUInt> = self.web3.eth.getGasPricePromise()
-            var promisesToFulfill: [Promise<BigUInt>] = [getNoncePromise!, gasPricePromise, gasPricePromise]
+            var promisesToFulfill: [Promise<BigUInt>] = [getNoncePromise!, gasEstimatePromise, gasPricePromise]
             when(resolved: getNoncePromise!, gasEstimatePromise, gasPricePromise).map(on: queue, { (results:[PromiseResult<BigUInt>]) throws -> EthereumTransaction in
                 
                 promisesToFulfill.removeAll()

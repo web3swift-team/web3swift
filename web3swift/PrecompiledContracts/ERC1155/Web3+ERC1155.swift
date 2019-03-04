@@ -32,9 +32,6 @@ protocol IERC1155Metadata {
 
 public class ERC1155: IERC1155 {
     
-    @available(*, deprecated, renamed: "transactionOptions")
-    public var options: Web3Options = .init()
-    
     private var _tokenId: BigUInt? = nil
     private var _hasReadProperties: Bool = false
     

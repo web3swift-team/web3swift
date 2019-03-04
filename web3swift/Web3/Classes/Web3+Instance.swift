@@ -11,9 +11,6 @@ import PromiseKit
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
     
-    @available(*, deprecated, message: "Don't use Web3Options")
-    public var options : Web3Options = Web3Options.defaultOptions()
-    
     public var provider : Web3Provider
     public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
     public var defaultBlock = "latest"
@@ -55,8 +52,6 @@ public class web3 {
         var provider:Web3Provider
 //        weak var web3: web3?
         var web3: web3
-        @available(*, deprecated, message: "Don't use Web3Options")
-        public var options : Web3Options = Web3Options.defaultOptions()
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -78,8 +73,6 @@ public class web3 {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        @available(*, deprecated, message: "Don't use Web3Options")
-        public var options : Web3Options = Web3Options.defaultOptions()
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -101,8 +94,6 @@ public class web3 {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        @available(*, deprecated, message: "Don't use Web3Options")
-        public var options : Web3Options = Web3Options.defaultOptions()
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -145,8 +136,6 @@ public class web3 {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        @available(*, deprecated, message: "Don't use Web3Options")
-        public var options : Web3Options = Web3Options.defaultOptions()
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -165,9 +154,6 @@ public class web3 {
     }
     
     public class Eventloop {
-        
-        @available(*, deprecated, message: "Don't use Web3Options")
-        public var options : Web3Options = Web3Options.defaultOptions()
         
         public typealias EventLoopCall = (web3) -> Void
         public typealias EventLoopContractCall = (web3contract) -> Void
@@ -226,17 +212,17 @@ public class web3 {
     public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
     public var postSubmissionHooks: [SubmissionResultHook] = [SubmissionResultHook]()
     
-    #warning("Old ERC721 instance. Don't use it")
-    @available(*, deprecated, message: "Use ERC721 separate class")
-    var erc721Instance: web3.ERC721?
-    
-    /// Public web3.browserFunctions.* namespace.
-    @available(*, deprecated, message: "Use ERC721 separate instance")
-    public var erc721: web3.ERC721 {
-        if (self.erc721Instance != nil) {
-            return self.erc721Instance!
-        }
-        self.erc721Instance = web3.ERC721(provider : self.provider, web3: self)
-        return self.erc721Instance!
-    }
+//    #warning("Old ERC721 instance. Don't use it")
+//    @available(*, deprecated, message: "Use ERC721 separate class")
+//    var erc721Instance: web3.ERC721?
+//    
+//    /// Public web3.browserFunctions.* namespace.
+//    @available(*, deprecated, message: "Use ERC721 separate instance")
+//    public var erc721: web3.ERC721 {
+//        if (self.erc721Instance != nil) {
+//            return self.erc721Instance!
+//        }
+//        self.erc721Instance = web3.ERC721(provider : self.provider, web3: self)
+//        return self.erc721Instance!
+//    }
 }
