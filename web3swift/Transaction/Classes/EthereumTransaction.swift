@@ -292,7 +292,7 @@ extension EthereumTransaction {
             case .manual(let value):
                 self.gasPrice = value
             default:
-                self.gasPrice = BigUInt(5000000000)
+                self.gasPrice = BigUInt(UInt64(5000000000))
             }
         }
         
@@ -301,7 +301,7 @@ extension EthereumTransaction {
             case .manual(let value):
                 self.gasLimit = value
             default:
-                self.gasLimit = BigUInt(21000)
+                self.gasLimit = BigUInt(UInt64(21000))
             }
         }
         
@@ -318,7 +318,7 @@ extension EthereumTransaction {
             case .manual(let value):
                 tx.gasPrice = value
             default:
-                tx.gasPrice = BigUInt(5000000000)
+                tx.gasPrice = BigUInt(UInt64(5000000000))
             }
         }
         
@@ -327,7 +327,7 @@ extension EthereumTransaction {
             case .manual(let value):
                 tx.gasLimit = value
             default:
-                tx.gasLimit = BigUInt(21000)
+                tx.gasLimit = BigUInt(UInt64(21000))
             }
         }
         
