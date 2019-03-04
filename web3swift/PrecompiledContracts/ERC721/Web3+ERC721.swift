@@ -52,9 +52,6 @@ protocol IERC721Enumerable {
 // can be imperatively read and saved
 public class ERC721: IERC721 {
     
-    @available(*, deprecated, renamed: "transactionOptions")
-    public var options: Web3Options = .init()
-    
     private var _tokenId: BigUInt? = nil
     private var _hasReadProperties: Bool = false
     

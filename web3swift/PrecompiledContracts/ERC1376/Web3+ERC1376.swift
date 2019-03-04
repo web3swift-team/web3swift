@@ -69,9 +69,6 @@ protocol IERC1376: IERC20 {
 
 public class ERC1376: IERC1376 {
     
-    @available(*, deprecated, renamed: "transactionOptions")
-    public var options: Web3Options = .init()
-    
     private var _name: String? = nil
     private var _symbol: String? = nil
     private var _decimals: UInt8? = nil
