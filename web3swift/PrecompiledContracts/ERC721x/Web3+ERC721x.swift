@@ -38,9 +38,6 @@ protocol IERC721x: IERC721, IERC721Metadata, IERC721Enumerable {
 
 public class ERC721x: IERC721x {
     
-    @available(*, deprecated, renamed: "transactionOptions")
-    public var options: Web3Options = .init()
-    
     private var _tokenId: BigUInt? = nil
     private var _hasReadProperties: Bool = false
     

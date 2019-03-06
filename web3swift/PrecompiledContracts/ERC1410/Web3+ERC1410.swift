@@ -44,9 +44,6 @@ protocol IERC1410: IERC20 {
 
 public class ERC1410: IERC1410 {
     
-    @available(*, deprecated, renamed: "transactionOptions")
-    public var options: Web3Options = .init()
-    
     private var _name: String? = nil
     private var _symbol: String? = nil
     private var _decimals: UInt8? = nil

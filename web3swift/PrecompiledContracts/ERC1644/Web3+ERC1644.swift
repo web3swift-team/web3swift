@@ -22,8 +22,6 @@ protocol IERC1644: IERC20 {
 }
 
 public class ERC1644: IERC1644 {
-    @available(*, deprecated, renamed: "transactionOptions")
-    public var options: Web3Options = .init()
     
     private var _name: String? = nil
     private var _symbol: String? = nil
