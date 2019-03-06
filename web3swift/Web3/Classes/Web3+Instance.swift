@@ -9,9 +9,9 @@ import BigInt
 import PromiseKit
 
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
-public class web3: Web3OptionsInheritable {
+public class web3 {
+    
     public var provider : Web3Provider
-    public var options : Web3Options = Web3Options.defaultOptions()
     public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
     public var defaultBlock = "latest"
     public var requestDispatcher: JSONRPCrequestDispatcher
@@ -48,13 +48,10 @@ public class web3: Web3OptionsInheritable {
         return self.ethInstance!
     }
     
-    public class Eth:Web3OptionsInheritable {
+    public class Eth {
         var provider:Web3Provider
 //        weak var web3: web3?
         var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -72,13 +69,10 @@ public class web3: Web3OptionsInheritable {
         return self.personalInstance!
     }
     
-    public class Personal:Web3OptionsInheritable {
+    public class Personal {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -96,13 +90,10 @@ public class web3: Web3OptionsInheritable {
         return self.txPoolInstance!
     }
     
-    public class TxPool: Web3OptionsInheritable {
+    public class TxPool {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -141,13 +132,10 @@ public class web3: Web3OptionsInheritable {
         return self.browserFunctionsInstance!
     }
     
-    public class BrowserFunctions:Web3OptionsInheritable {
+    public class BrowserFunctions {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -165,7 +153,7 @@ public class web3: Web3OptionsInheritable {
         return self.eventLoopInstance!
     }
     
-    public class Eventloop: Web3OptionsInheritable {
+    public class Eventloop {
         
         public typealias EventLoopCall = (web3) -> Void
         public typealias EventLoopContractCall = (web3contract) -> Void
@@ -191,9 +179,6 @@ public class web3: Web3OptionsInheritable {
 //        public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
         public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
         
-        public var options: Web3Options {
-            return self.web3.options
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -227,4 +212,17 @@ public class web3: Web3OptionsInheritable {
     public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
     public var postSubmissionHooks: [SubmissionResultHook] = [SubmissionResultHook]()
     
+//    #warning("Old ERC721 instance. Don't use it")
+//    @available(*, deprecated, message: "Use ERC721 separate class")
+//    var erc721Instance: web3.ERC721?
+//    
+//    /// Public web3.browserFunctions.* namespace.
+//    @available(*, deprecated, message: "Use ERC721 separate instance")
+//    public var erc721: web3.ERC721 {
+//        if (self.erc721Instance != nil) {
+//            return self.erc721Instance!
+//        }
+//        self.erc721Instance = web3.ERC721(provider : self.provider, web3: self)
+//        return self.erc721Instance!
+//    }
 }
