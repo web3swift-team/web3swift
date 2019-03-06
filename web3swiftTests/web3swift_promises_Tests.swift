@@ -46,56 +46,10 @@ class web3swift_promises_Tests: XCTestCase {
             guard let writeTX = contract?.write("fallback") else {return XCTFail()}
             writeTX.transactionOptions.from = tempKeystore!.addresses?.first
             writeTX.transactionOptions.value = BigUInt("1.0", .eth)
-            let estimate = try writeTX.estimateGasPromise().wait()
-            print(estimate)
-            XCTAssert(estimate == 21000)
+            let esimate = try writeTX.estimateGasPromise().wait()
+            print(esimate)
+            XCTAssert(esimate == 21000)
         } catch{
-            print(error)
-            XCTFail()
-        }
-    }
-    
-    func testEstimateGasFixPromise() {
-        do {
-            let web3 = Web3.InfuraMainnetWeb3()
-            let tempKeystore = try! EthereumKeystoreV3(password: "")
-            let keystoreManager = KeystoreManager([tempKeystore!])
-            web3.addKeystoreManager(keystoreManager)
-            
-            guard let contractAddress = EthereumAddress("0x28a958cD020efeA3734a0bb36DDdc5F9B872cEa8"),
-                let contract = web3.contract(Web3.Utils.estimateGasTestABI,
-                                             at: contractAddress,
-                                             abiVersion: 2) else {
-                    return
-            }
-            
-            var options = TransactionOptions.defaultOptions
-            let fromAddress = tempKeystore!.addresses?.first
-            options.from = fromAddress
-            
-            let amount1 = Web3.Utils.parseToBigUInt("0.000000000000000001", units: .eth) // 1 wei
-            
-            guard let tx1 = contract.write("test",
-                                           parameters: [amount1] as [AnyObject],
-                                           extraData: Data(),
-                                           transactionOptions: options) else {
-                                            return
-            }
-            let estimate1 = try tx1.estimateGasPromise().wait()
-            print(estimate1)
-            
-            let amount2 = Web3.Utils.parseToBigUInt("0.00000005", units: .eth) // 50 gwei
-
-            guard let tx2 = contract.write("test",
-                                           parameters: [amount2] as [AnyObject],
-                                           extraData: Data(),
-                                           transactionOptions: options) else {
-                                            return
-            }
-            let estimate2 = try tx2.estimateGasPromise().wait()
-            print(estimate2)
-            XCTAssert(estimate2 - estimate1 <= 22000)
-        } catch {
             print(error)
             XCTFail()
         }

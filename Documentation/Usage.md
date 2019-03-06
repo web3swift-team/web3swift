@@ -2,26 +2,26 @@
 
 ## Account Management
 
-#### Preffered keys Wallet Model
+#### Preffered Key Wallet Model
 
 ```swift
-struct WalletModel {
+struct KeyWalletModel {
     let address: String
     let data: Data?
     let name: String
     let isHD: Bool
 
-    static func fromCoreData(crModel: Wallet) -> WalletModel {
-		let model = KeyWalletModel(address: crModel.address ?? "",
-								   data: crModel.data,
-								   name: crModel.name ?? "",
-								   isHD: crModel.isHD)
-		return model
+    static func fromCoreData(crModel: KeyWallet) -> KeyWalletModel {
+        let model = KeyWalletModel(address: crModel.address ?? "",
+			           data: crModel.data,
+			           name: crModel.name ?? "",
+			           isHD: crModel.isHD)
+        return model
     }
 }
 
-extension WalletModel: Equatable {
-    static func == (lhs: WalletModel, rhs: WalletModel) -> Bool {
+extension KeyWalletModel: Equatable {
+    static func == (lhs: KeyWalletModel, rhs: KeyWalletModel) -> Bool {
         return lhs.address == rhs.address
     }
 }
@@ -32,107 +32,82 @@ struct HDKey {
 }
 ```
 
-#### Preffered ERC-20 Model
-```swift
-class ERC20TokenModel {
-    var name: String
-    var address: String
-    var decimals: String
-    var symbol: String
-
-    init(token: ERC20Token) {
-        self.name = token.name ?? ""
-        self.address = token.address ?? ""
-        self.decimals = token.decimals ?? ""
-        self.symbol = token.symbol ?? ""
-    }
-
-    init(name: String,
-         address: String,
-         decimals: String,
-         symbol: String) {
-        self.name = name
-        self.address = address
-        self.decimals = decimals
-        self.symbol = symbol
-    }
-
-    init(isEther: Bool) {
-        self.name = isEther ? "Ether" : ""
-        self.address = isEther ? "" : ""
-        self.decimals = isEther ? "18" : "18"
-        self.symbol = isEther ? "Eth" : ""
-    }
-
-    static func fromCoreData(crModel: ERC20Token) -> ERC20TokenModel {
-        let model = ERC20TokenModel(name: crModel.name ?? "",
-                address: crModel.address ?? "",
-                decimals: crModel.decimals ?? "",
-                symbol: crModel.symbol ?? "")
-        return model
-    }
-}
-
-extension ERC20TokenModel: Equatable {
-    public static func ==(lhs: ERC20TokenModel, rhs: ERC20TokenModel) -> Bool {
-        return lhs.name == rhs.name &&
-            lhs.address == rhs.address &&
-            lhs.decimals == rhs.decimals &&
-            lhs.symbol == rhs.symbol
-    }
-}
-```
-
 ### Create Account
 
 #### Create Account With Private Key
 ```swift
-func createWallet(name: String?,
-		     	  password: String) throws -> WalletModel {
-	guard let newWallet = try? EthereumKeystoreV3(password: password) else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let wallet = newWallet, wallet.addresses?.count == 1 else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let address = wallet.addresses?.first?.address else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	let walletModel = WalletModel(address: address, data: keyData, name: name ?? "", isHD: false)
-	return walletModel
-}	
+func createWalletWithPrivateKey(withName: String?,
+				       password: String,
+				       completion: @escaping (KeyWalletModel?, Error?) -> Void)
+{
+    guard let newWallet = try? EthereumKeystoreV3(password: password) else {
+        completion(nil, WalletSavingError.couldNotCreateKeystore)
+        return
+    }
+    guard let wallet = newWallet, wallet.addresses?.count == 1 else {
+        completion(nil, WalletSavingError.couldNotCreateWalletWithAddress)
+        return
+    }
+    guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
+        completion(nil, WalletSavingError.couldNotGetKeyData)
+        return
+    }
+    guard let address = wallet.addresses?.first?.address else {
+        completion(nil, WalletSavingError.couldNotCreateAddress)
+        return
+    }
+    let walletModel = KeyWalletModel(address: address,
+    				     data: keyData,
+    				     name: withName ?? "",
+				     isHD: false)
+    completion(walletModel, nil)
+}
+    	
 ```
 
 #### Create Account With Mnemonics Phrase
 ```swift
-func generateMnemonics(bitsOfEntropy: Int) throws -> String {
-	guard let mnemonics = try? BIP39.generateMnemonics(bitsOfEntropy: bitsOfEntropy),
-		let unwrapped = mnemonics else {
-			throw Web3Error.keystoreError(err: .noEntropyError)
-	}
-	return unwrapped
+func generateMnemonics(bitsOfEntropy: Int) -> String? {
+    guard let mnemonics = try? BIP39.generateMnemonics(bitsOfEntropy: bitsOfEntropy),
+        let unwrapped = mnemonics else {
+	    return nil
+    }
+    return unwrapped
 }
 
-func createHDWallet(name: String?,
-				    password: String,
-                    mnemonics: String) throws -> WalletModel {
-	guard let keystore = try? BIP32Keystore(mnemonics: mnemonics,
-											password: password,
-											mnemonicsPassword: "",
-											language: .english), let wallet = keystore else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let address = wallet.addresses?.first?.address else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	let walletModel = WalletModel(address: address, data: keyData, name: name ?? "", isHD: false)
-	return walletModel
+func createHDWallet(withName name: String?,
+		    password: String,
+		    completion: @escaping (KeyWalletModel?, Error?) -> Void)
+{
+
+    guard let mnemonics = keysService.generateMnemonics(bitsOfEntropy: 128) else {
+        completion(nil, WalletSavingError.couldNotGenerateMnemonics)
+        return
+    }
+
+    guard let keystore = try? BIP32Keystore(
+					    mnemonics: mnemonics,
+					    password: password,
+					    mnemonicsPassword: "",
+					    language: .english
+					    ),
+					    let wallet = keystore else { 
+        completion(nil, WalletSavingError.couldNotCreateKeystore)
+        return 
+    }
+    guard let address = wallet.addresses?.first?.address else {
+        completion(nil, WalletSavingError.couldNotCreateAddress)
+        return
+    }
+    guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
+        completion(nil, WalletSavingError.couldNotGetKeyData)
+        return
+    }
+    let walletModel = KeyWalletModel(address: address,
+				     data: keyData,
+				     name: name ?? "",
+				     isHD: true)
+    completion(walletModel, nil)
 }	
 ```
 
@@ -140,52 +115,75 @@ func createHDWallet(name: String?,
 
 #### Import Account With Private Key
 ```swift
-func importWalletWithPrivateKey(name: String?,
-							    key: String,
-								password: String) throws -> WalletModel {
-	let text = key.trimmingCharacters(in: .whitespacesAndNewlines)
-	guard let data = Data.fromHex(text) else {
-		throw Errors.StorageErrors.cantImportWallet
-	}
+func addWalletWithPrivateKey(withName: String?,
+				    key: String,
+				    password: String,
+				    completion: @escaping (KeyWalletModel?, Error?) -> Void)
+{
+    let text = key.trimmingCharacters(in: .whitespacesAndNewlines)
 
-	guard let newWallet = try? EthereumKeystoreV3(privateKey: data, password: password) else {
-		throw Errors.StorageErrors.cantImportWallet
-	}
+    guard let data = Data.fromHex(text) else {
+        completion(nil, WalletSavingError.wrongKey)
+        return
+    }
 
-	guard let wallet = newWallet, wallet.addresses?.count == 1 else {
-		throw Errors.StorageErrors.cantImportWallet
-	}
-	guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
-		throw Errors.StorageErrors.cantImportWallet
-	}
-	guard let address = newWallet?.addresses?.first?.address else {
-		throw Errors.StorageErrors.cantImportWallet
-	}
-	let walletModel = WalletModel(address: address, data: keyData, name: name ?? "", isHD: false)
-	return walletModel
-}  	
+    guard let newWallet = try? EthereumKeystoreV3(privateKey: data, password: password) else {
+        completion(nil, WalletSavingError.couldNotSaveTheWallet)
+        return
+    }
+
+    guard let wallet = newWallet, wallet.addresses?.count == 1 else {
+        completion(nil, WalletSavingError.couldNotCreateWalletWithAddress)
+        return
+    }
+    guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
+        completion(nil, WalletSavingError.couldNotGetKeyData)
+        return
+    }
+    guard let address = newWallet?.addresses?.first?.address else {
+        completion(nil, WalletSavingError.couldNotCreateAddress)
+        return
+    }
+    let walletModel = KeyWalletModel(address: address,
+				     data: keyData,
+				     name: withName ?? "",
+				     isHD: false)
+    completion(walletModel, nil)
+}
+    	
 ```
 
 #### Import Account With Mnemonics Phrase
 ```swift
-func importHDWallet(name: String?,
-				    password: String,
-                    mnemonics: String) throws -> WalletModel {
-	guard let keystore = try? BIP32Keystore(mnemonics: mnemonics,
-											password: password,
-											mnemonicsPassword: "",
-											language: .english), let wallet = keystore else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let address = wallet.addresses?.first?.address else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	let walletModel = WalletModel(address: address, data: keyData, name: name ?? "", isHD: false)
-	return walletModel
-}
+func addHDWallet(withName name: String?,
+		 password: String,
+		 mnemonics: String,
+	         completion: @escaping (KeyWalletModel?, Error?) -> Void)
+{
+    guard let keystore = try? BIP32Keystore(
+					    mnemonics: mnemonics,
+					    password: password,
+					    mnemonicsPassword: "",
+					    language: .english
+					    ),
+					    let wallet = keystore else { 
+        completion(nil, WalletSavingError.couldNotCreateKeystore)
+        return 
+    }
+    guard let address = wallet.addresses?.first?.address else {
+        completion(nil, WalletSavingError.couldNotCreateAddress)
+        return
+    }
+    guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
+        completion(nil, WalletSavingError.couldNotGetKeyData)
+        return
+    }
+    let walletModel = KeyWalletModel(address: address,
+				     data: keyData,
+				     name: name ?? "",
+				     isHD: true)
+    completion(walletModel, nil)
+}	
 ```
 
 ### Manage Keystore
@@ -220,64 +218,45 @@ let retrievedKeystore = keystoreManager.walletForAddress(address) as? EthereumKe
 #### Get Keysore Manager
 
 ```swift
-// 1st - Get wallet, that is saved in some storage
-
-func getWalletFromStorage() throws -> WalletModel {
-	guard let wallet = try? walletsStorage.getSelectedWallet() else {
-		throw Errors.StorageErrors.noSelectedWallet
-	}
-	return wallet
+func getWallet() -> KeyWalletModel? {
+    let requestWallet: NSFetchRequest<KeyWallet> = KeyWallet.fetchRequest()
+    requestWallet.predicate = NSPredicate(format: "isSelected = %@", NSNumber(value: true))
+    do {
+        let results = try mainContext.fetch(requestWallet)
+        guard let result = results.first else { return nil }
+        return KeyWalletModel.fromCoreData(crModel: result)
+    } catch {
+        print(error)
+        return nil
+    }
 }
 
-// 2nd - Get keystore manager from wallet
-
-func keystoreManager() throws -> KeystoreManager {
-	guard let wallet = try? self.getSelectedWallet(),
-		let data = wallet.data else {
-			if let defaultKeystore = KeystoreManager.defaultManager {
-				return defaultKeystore
-			} else {
-				throw Web3Error.keystoreError(err: .invalidAccountError)
-			}
-	}
-	if wallet.isHD {
-		guard let keystore = BIP32Keystore(data) else {
-			if let defaultKeystore = KeystoreManager.defaultManager {
-				return defaultKeystore
-			} else {
-				throw Web3Error.keystoreError(err: .invalidAccountError)
-			}
-		}
-		return KeystoreManager([keystore])
-	} else {
-		guard let keystore = EthereumKeystoreV3(data) else {
-			if let defaultKeystore = KeystoreManager.defaultManager {
-				return defaultKeystore
-			} else {
-				throw Web3Error.keystoreError(err: .invalidAccountError)
-			}
-		}
-		return KeystoreManager([keystore])
-	}
+func keystoreManager() -> KeystoreManager {
+// Firstly you need to get 
+    guard let selectedWallet = getWallet(),
+          let data = selectedWallet.data else {
+        return KeystoreManager.defaultManager!
+    }
+    if selectedWallet.isHD {
+        return KeystoreManager([BIP32Keystore(data)!])
+    } else {
+        return KeystoreManager([EthereumKeystoreV3(data)!])
+    }
 }
 ```
 
-#### Get wallet private key
+#### Get private key data
 
 ```swift
-func getPrivateKey(for wallet: WalletModel, password: String) throws -> String {
-	do {
-		guard let ethereumAddress = EthereumAddress(wallet.address) else {
-			throw Web3Error.walletError
-		}
-		guard let manager = try? keystoreManager() else {
-			throw Web3Error.keystoreError(err: .invalidAccountError)
-		}
-		let pkData = try manager.UNSAFE_getPrivateKeyData(password: password, account: ethereumAddress)
-		return pkData.toHexString()
-	} catch let error {
-		throw error
-	}
+func getPrivateKey(forWallet wallet: KeyWalletModel, password: String) -> String? {
+    do {
+        guard let ethereumAddress = EthereumAddress(wallet.address) else { return nil }
+        let pkData = try keystoreManager().UNSAFE_getPrivateKeyData(password: password, account: ethereumAddress)
+        return pkData.toHexString()
+    } catch {
+        print(error)
+        return nil
+    }
 }
 ```
 
@@ -286,8 +265,8 @@ func getPrivateKey(for wallet: WalletModel, password: String) throws -> String {
 #### Initializing Ethereum Address
 
 ```swift
-let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
-let contractAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901", ignoreChecksum: true)!
+let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")
+let contractAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901", ignoreChecksum: true)
 ```
 Ethereum addresses are checksum checked if they are not lowercased or uppercased and always length checked
 
@@ -296,206 +275,299 @@ Ethereum addresses are checksum checked if they are not lowercased or uppercased
 #### Getting ETH balance
 
 ```swift
-func getETHbalance(for wallet: WalletModel) throws -> String {
-	do {
-		guard let walletAddress = EthereumAddress(wallet.address) else {
-			throw Web3Error.walletError
-		}
-		let web3 = self.web3Instance
-		let balanceResult = try web3.eth.getBalance(address: walletAddress)
-		guard let balanceString = Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3) else {
-			throw Web3Error.dataError
-		}
-		return balanceString
-	} catch let error {
-		throw error
-	}
-}
+let address = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
+let web3Main = Web3.InfuraMainnetWeb3()
+let balanceResult = web3Main.eth.getBalance(address)
+guard case .success(let balance) = balanceResult else {return}
 ```
 
 #### Getting ERC20 token balance
 ```swift
-func getERC20balance(for wallet: WalletModel,
-					 token: ERC20TokenModel) throws -> String {
-	do {
-		guard let walletAddress = EthereumAddress(wallet.address) else {
-			throw Web3Error.walletError
-		}
-		let tx = try self.prepareReadContractTx(contractABI: Web3.Utils.erc20ABI,
-												contractAddress: token.address,
-												contractMethod: "balanceOf",
-												gasLimit: .automatic,
-												gasPrice: .automatic,
-												parameters: [walletAddress] as [AnyObject],
-												extraData: Data())
-		let tokenBalance = try self.callTx(transaction: tx)
-		guard let balanceResult = tokenBalance["0"] as? BigUInt else {
-			throw Web3Error.dataError
-		}
-		guard let balanceString = Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3) else {
-			throw Web3Error.dataError
-		}
-		return balanceString
-	} catch let error {
-		throw error
-	}
-}
+let contractAddress = EthereumAddress("0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1")! // w3s token on Ethereum mainnet
+let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2)! // utilize precompiled ERC20 ABI for your concenience
+guard let w3sBalanceResult = contract.method(
+                                             "balanceOf",
+					     parameters: [coldWalletAddress] as [AnyObject],
+					     options: options
+					     )?.call(options: nil)
+					     else {return} // encode parameters for transaction
+guard case .success(let w3sBalance) = w3sBalanceResult, let bal = w3sBalance["0"] as? BigUInt else {return} // w3sBalance is [String: Any], and parameters are enumerated as "0", "1", etc in order of being returned. If returned parameter has a name in ABI, it is also duplicated
+print("w3s token balance = " + String(bal))
 ```
 
 ## Transactions Operations
 
 ### Prepare Transaction
 
+#### Getting Contract By Address 
+
+```swift
+func contract(for address: String, web3: web3) -> web3.web3contract? {
+    guard let ethAddress = EthereumAddress(address) else {
+        return nil
+    }
+    return web3.contract(Web3.Utils.erc20ABI, at: ethAddress)
+}
+```
+
 #### Preparing Transaction For Sending Ether
 
 ```swift
-func prepareSendEthTx(toAddress: String,
-					  value: String = "0.0",
-					  gasLimit: TransactionOptions.GasLimitPolicy = .automatic,
-					  gasPrice: TransactionOptions.GasPricePolicy = .automatic) throws -> WriteTransaction {
-	guard let ethAddress = EthereumAddress(toAddress) else {
-		throw Web3Error.dataError
-	}
-	guard let contract = web3Instance.contract(Web3.Utils.coldWalletABI, at: ethAddress, abiVersion: 2) else {
-		throw Web3Error.dataError
-	}
-	let amount = Web3.Utils.parseToBigUInt(value, units: .eth)
-	var options = defaultOptions()
-	options.value = amount
-	options.gasPrice = gasPrice
-	options.gasLimit = gasLimit
-	guard let tx = contract.write("fallback",
-								  parameters: [AnyObject](),
-								  extraData: Data(),
-								  transactionOptions: options) else {
-										throw Web3Error.transactionSerializationError
-	}
-	return tx
+func prepareTransactionForSendingEther(destinationAddressString: String,
+                                                  amountString: String,
+                                                  gasLimit: BigUInt,
+                                                  completion: @escaping (Result<TransactionIntermediate>) -> Void) {
+    DispatchQueue.global(qos: .userInitiated).async {
+        guard let destinationEthAddress = EthereumAddress(destinationAddressString) else {
+    	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.invalidDestinationAddress))
+	    }
+	    return
+    	}
+        guard let amount = Web3.Utils.parseToBigUInt(amountString, units: .eth) else {
+	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.invalidAmountFormat))
+	    }
+	    return
+        }
+        guard let selectedKey = KeysService().selectedWallet()?.address else {
+	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.noAvailableKeys))
+	    }
+	    return
+        }
+
+        let web3 = web3swift.web3(provider: InfuraProvider(Networks.Mainnet)!) //or any other network
+        web3.addKeystoreManager(KeysService().keystoreManager())
+
+        let ethAddressFrom = EthereumAddress(selectedKey)
+        var options = Web3Options.defaultOptions()
+        options.from = ethAddressFrom
+        options.value = BigUInt(amount)
+	
+        guard let contract = web3.contract(Web3.Utils.coldWalletABI, at: destinationEthAddress) else {
+	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.contractLoadingError))
+	    }
+	    return
+        }
+
+        guard let estimatedGas = contract.method(options: options)?.estimateGas(options: nil).value else {
+	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.retrievingEstimatedGasError))
+	    }
+	    return
+        }
+        options.gasLimit = estimatedGas
+	
+        guard let gasPrice = web3.eth.getGasPrice().value else {
+	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.retrievingGasPriceError))
+	    }
+	    return
+        }
+        options.gasPrice = gasPrice
+	
+        guard let transaction = contract.method(options: options) else {
+	    DispatchQueue.main.async {
+	        completion(Result.Error(SendErrors.createTransactionIssue))
+	    }
+	    return
+        }
+
+        DispatchQueue.main.async {
+	    completion(Result.Success(transaction))
+        }
+
+    }
 }
 ```
 
 #### Preparing Transaction For Sending ERC-20 Tokens
 
 ```swift
-public func prepareSendERC20Tx(tokenAddress: String,
-							   toAddress: String,
-							   tokenAmount: String = "0.0",
-							   gasLimit: TransactionOptions.GasLimitPolicy = .automatic,
-							   gasPrice: TransactionOptions.GasPricePolicy = .automatic) throws -> WriteTransaction {
-	guard let ethTokenAddress = EthereumAddress(tokenAddress) else {
-		throw Web3Error.dataError
-	}
-	guard let ethToAddress = EthereumAddress(toAddress) else {
-		throw Web3Error.dataError
-	}
-	guard let contract = web3Instance.contract(Web3.Utils.erc20ABI, at: ethTokenAddress, abiVersion: 2) else {
-		throw Web3Error.dataError
-	}
-	let amount = Web3.Utils.parseToBigUInt(tokenAmount, units: .eth)
-	var options = defaultOptions()
-	options.gasPrice = gasPrice
-	options.gasLimit = gasLimit
-	guard let tx = contract.write("transfer",
-								  parameters: [ethToAddress, amount] as [AnyObject],
-								  extraData: Data(),
-								  transactionOptions: options) else {
-		throw Web3Error.transactionSerializationError
-	}
-	return tx
+func prepareTransactionForSendingERC(destinationAddressString: String,
+                                            amountString: String,
+                                            gasLimit: BigUInt,
+                                            tokenAddress token: String,
+                                            completion: @escaping (Result<TransactionIntermediate>) -> Void) {
+    DispatchQueue.global(qos: .userInitiated).async {
+        guard let destinationEthAddress = EthereumAddress(destinationAddressString) else {
+            DispatchQueue.main.async {
+                completion(Result.Error(SendErrors.invalidDestinationAddress))
+            }
+            return
+        }
+        guard let amount = Web3.Utils.parseToBigUInt(amountString, units: .eth) else {
+            DispatchQueue.main.async {
+                completion(Result.Error(SendErrors.invalidAmountFormat))
+            }
+            return
+        }
+        
+        let web3 = web3swift.web3(provider: InfuraProvider(Networks.Mainnet)!) //or any other network
+        web3.addKeystoreManager(KeysService().keystoreManager())
+        
+        let contract = self.contract(for: token, web3: web3)
+        var options = Web3Options.defaultOptions()
+        
+        guard let tokenAddress = EthereumAddress(token),
+            let fromAddress = Web3SwiftService.currentAddress,
+            let intermediate = web3.eth.sendERC20tokensWithNaturalUnits(
+                tokenAddress: tokenAddress,
+                from: fromAddress,
+                to: destinationEthAddress,
+                amount: amountString) else {
+                    DispatchQueue.main.async {
+                        completion(Result.Error(SendErrors.createTransactionIssue))
+                    }
+                    return
+        }
+        DispatchQueue.main.async {
+            completion(Result.Success(intermediate))
+        }
+        
+        //MARK: - Just to check that everything is all right
+        guard let _ = contract?.method(options: options)?.estimateGas(options: options).value else {
+            DispatchQueue.main.async {
+                completion(Result.Error(SendErrors.retrievingEstimatedGasError))
+            }
+            return
+        }
+        guard let gasPrice = web3.eth.getGasPrice().value else {
+            DispatchQueue.main.async {
+                completion(Result.Error(SendErrors.retrievingGasPriceError))
+            }
+            return
+        }
+        
+        options.from = Web3SwiftService.currentAddress
+        options.gasPrice = gasPrice
+        //options.gasLimit = estimatedGas
+        options.value = 0
+        options.to = EthereumAddress(token)
+        let parameters = [destinationEthAddress,
+                          amount] as [Any]
+        guard let transaction = contract?.method("transfer",
+                                                 parameters: parameters as [AnyObject],
+                                                 options: options) else {
+                                                    DispatchQueue.main.async {
+                                                        completion(Result.Error(SendErrors.createTransactionIssue))
+                                                    }
+                                                    
+                                                    return
+        }
+        DispatchQueue.main.async {
+            completion(Result.Success(transaction))
+        }
+        
+        return
+    }
 }
 ```
 
-#### Preparing Write Transaction for sending to some Contract and use its method
+#### Preparing Transaction For Sending To Some Contract
 
 ```swift
-func prepareWriteContractTx(contractABI: String,
-						    contractAddress: String,
-						    contractMethod: String,
-						    value: String = "0.0",
-						    gasLimit: TransactionOptions.GasLimitPolicy = .automatic,
-						    gasPrice: TransactionOptions.GasPricePolicy = .automatic,
-						    parameters: [AnyObject] = [AnyObject](),
-						    extraData: Data = Data()) throws -> WriteTransaction {
-	guard let ethContractAddress = EthereumAddress(contractAddress) else {
-		throw Web3Error.dataError
-	}
-	guard let contract = web3Instance.contract(contractABI, at: ethContractAddress, abiVersion: 2) else {
-		throw Web3Error.dataError
-	}
-	let amount = Web3.Utils.parseToBigUInt(value, units: .eth)
-	var options = defaultOptions()
-	options.gasPrice = gasPrice
-	options.gasLimit = gasLimit
-	options.value = amount
-	guard let tx = contract.write(contractMethod,
-								  parameters: parameters,
-								  extraData: extraData,
-								  transactionOptions: options) else {
-									throw Web3Error.transactionSerializationError
-	}
-	return tx
-}
-```
-
-#### Preparing Read Transaction to call some Contract method
-
-```swift
-func prepareReadContractTx(contractABI: String,
-						   contractAddress: String,
-						   contractMethod: String,
-						   gasLimit: TransactionOptions.GasLimitPolicy = .automatic,
-						   gasPrice: TransactionOptions.GasPricePolicy = .automatic,
-						   parameters: [AnyObject] = [AnyObject](),
-						   extraData: Data = Data()) throws -> ReadTransaction {
-	guard let ethContractAddress = EthereumAddress(contractAddress) else {
-		throw Web3Error.dataError
-	}
-	guard let contract = web3Instance.contract(contractABI, at: ethContractAddress, abiVersion: 2) else {
-		throw Web3Error.dataError
-	}
-	var options = defaultOptions()
-	options.gasPrice = gasPrice
-	options.gasLimit = gasLimit
-	guard let tx = contract.read(contractMethod,
-								 parameters: parameters,
-								 extraData: extraData,
-								 transactionOptions: options) else {
-									throw Web3Error.transactionSerializationError
-	}
-	return tx
+func prepareTransactionToContract(data: [AnyObject],
+                                         contractAbi: String,
+                                         contractAddress: String,
+                                         method: String,
+                                         predefinedOptions: Web3Options? = nil,
+                                         completion: @escaping (Result<TransactionIntermediate>) -> Void) {
+    let wallet = TransactionsService.keyservice.selectedWallet()
+    guard let address = wallet?.address else { return }
+    let ethAddressFrom = EthereumAddress(address)
+    let ethContractAddress = EthereumAddress(contractAddress)!
+    
+    let web3 = Web3.InfuraMainnetWeb3() //or any other web
+    web3.addKeystoreManager(TransactionsService.keyservice.keystoreManager())
+    var options = predefinedOptions ?? Web3Options.defaultOptions()
+    options.from = ethAddressFrom
+    options.to = ethContractAddress
+    options.value = options.value ?? 0
+    guard let contract = web3.contract(contractAbi,
+                                       at: ethContractAddress,
+                                       abiVersion: 2) else {
+                                        return
+                                            DispatchQueue.main.async {
+                                                completion(Result.Error(TransactionErrors.init(rawValue: "Can not create a contract with given abi and address.")!))
+                                        }
+    }
+    guard let gasPrice = web3.eth.getGasPrice().value else { return }
+    options.gasPrice = predefinedOptions?.gasPrice ?? gasPrice
+    guard let transaction = contract.method(method,
+                                            parameters: data,
+                                            options: options) else { return }
+    guard case .success(let estimate) = transaction.estimateGas(options: options) else {
+        DispatchQueue.main.async {
+            completion(Result.Error(TransactionErrors.PreparingError))
+        }
+        return
+    }
+    print("estimated cost: \(estimate)")
+    DispatchQueue.main.async {
+        completion(Result.Success(transaction))
+    }
 }
 ```
 
 ### Send Transaction 
 
-#### Writing
+#### Sending Tokens
 
 ```swift
-func sendTx(transaction: WriteTransaction,
-		    options: TransactionOptions? = nil,
-		    password: String) throws -> TransactionSendingResult {
-	do {
-		let txOptions = options ?? transaction.transactionOptions
-		let result = try transaction.send(password: password, transactionOptions: txOptions)
-		return result
-	} catch let error {
-		throw error
-	}
+func sendToken(transaction: TransactionIntermediate,
+                      with password: String? = "YOURPASSWORD",
+                      options: Web3Options? = nil,
+                      completion: @escaping (Result<TransactionSendingResult>) -> Void) {
+    DispatchQueue.global(qos: .userInitiated).async {
+        let result = transaction.send(password: password ?? "YOURPASSWORD",
+                                      options: options)
+        if let error = result.error {
+            DispatchQueue.main.async {
+                completion(Result.Error(error))
+            }
+            return
+        }
+        guard let value = result.value else {
+            DispatchQueue.main.async {
+                completion(Result.Error(SendErrors.emptyResult))
+            }
+            return
+        }
+        DispatchQueue.main.async {
+            completion(Result.Success(value))
+        }
+    }
 }
 ```
 
-#### Reading
-  
+#### Sending To Contract
 ```swift
-func callTx(transaction: ReadTransaction,
-		    options: TransactionOptions? = nil) throws -> [String : Any] {
-	do {
-		let txOptions = options ?? transaction.transactionOptions
-		let result = try transaction.call(transactionOptions: txOptions)
-		return result
-	} catch let error {
-		throw error
-	}
+func sendToContract(transaction: TransactionIntermediate,
+                           with password: String? = "YOURPASSWORD",
+                           options: Web3Options? = nil,
+                           completion: @escaping (Result<TransactionSendingResult>) -> Void) {
+    DispatchQueue.global(qos: .userInitiated).async {
+        let result = transaction.send(password: password ?? "YOURPASSWORD",
+                                      options: transaction.options)
+        if let error = result.error {
+            DispatchQueue.main.async {
+                completion(Result.Error(error))
+            }
+            return
+        }
+        guard let value = result.value else {
+            DispatchQueue.main.async {
+                completion(Result.Error(SendErrors.emptyResult))
+            }
+            return
+        }
+        DispatchQueue.main.async {
+            completion(Result.Success(value))
+        }
+    }
 }
 ```
 
@@ -504,12 +576,21 @@ func callTx(transaction: ReadTransaction,
 ### Get Block number
 
 ```swift
-func getBlockNumber(_ web3: web3) throws -> BigUInt {
-    do {
-		let blockNumber = try web3.eth.getBlockNumber()
-		return blockNumber
-    } catch let error {
-		throw error 
+func getBlockNumber(completion: @escaping (String?) -> Void) {
+    DispatchQueue.global().async {
+        let web3 = WalletWeb3Factory.web3()
+        let res = web3.eth.getBlockNumber()
+        switch res {
+        case .failure(let error):
+            print(error)
+            DispatchQueue.main.async {
+                completion(nil)
+            }
+        case .success(let number):
+            DispatchQueue.main.async {
+                completion(number.description)
+            }
+        }
     }
 }
 ```

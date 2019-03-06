@@ -9,22 +9,10 @@ import BigInt
 import EthereumAddress
 import PromiseKit
 
-//Token Standard
-protocol IERC20 {
-    func getBalance(account: EthereumAddress) throws -> BigUInt
-    func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) throws -> BigUInt
-    func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) throws -> WriteTransaction
-    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) throws -> WriteTransaction
-    func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) throws -> WriteTransaction
-    func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) throws -> WriteTransaction
-    func totalSupply() throws -> BigUInt
-}
-
 // This namespace contains functions to work with ERC20 tokens.
 // variables are lazyly evaluated or global token information (name, ticker, total supply)
 // can be imperatively read and saved
-public class ERC20: IERC20 {
-    
+public class ERC20 {
     private var _name: String? = nil
     private var _symbol: String? = nil
     private var _decimals: UInt8? = nil
@@ -107,7 +95,7 @@ public class ERC20: IERC20 {
         }.wait()
     }
     
-    public func getBalance(account: EthereumAddress) throws -> BigUInt {
+    func getBalance(account: EthereumAddress) throws -> BigUInt{
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
@@ -193,36 +181,5 @@ public class ERC20: IERC20 {
         return tx
     }
     
-    public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) throws -> WriteTransaction {
-        let contract = self.contract
-        var basicOptions = TransactionOptions()
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
-        
-        // get the decimals manually
-        let callResult = try contract.read("decimals", transactionOptions: basicOptions)!.call()
-        var decimals = BigUInt(0)
-        guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
-            throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
-        decimals = decTyped
-        
-        let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
-            throw Web3Error.inputError(desc: "Can not parse inputted amount")
-        }
-        
-        let tx = contract.write("approve", parameters: [spender, value] as [AnyObject], transactionOptions: basicOptions)!
-        return tx
-    }
-    
-    public func totalSupply() throws -> BigUInt {
-        let contract = self.contract
-        var transactionOptions = TransactionOptions()
-        transactionOptions.callOnBlock = .latest
-        let result = try contract.read("totalSupply", parameters: [AnyObject](), extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
-        guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
-        return res
-    }
     
 }

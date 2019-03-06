@@ -1,17 +1,1 @@
-#ifdef __OBJC__
-#import <Cocoa/Cocoa.h>
-#else
-#ifndef FOUNDATION_EXPORT
-#if defined(__cplusplus)
-#define FOUNDATION_EXPORT extern "C"
-#else
-#define FOUNDATION_EXPORT extern
-#endif
-#endif
-#endif
-
-#import "scrypt.h"
-
-FOUNDATION_EXPORT double scryptVersionNumber;
-FOUNDATION_EXPORT const unsigned char scryptVersionString[];
-
+/Users/alexvlasov/Blockchain/web3swift/web3swift/Pods/Target Support Files/scrypt-macOS/scrypt-macOS-umbrella.h

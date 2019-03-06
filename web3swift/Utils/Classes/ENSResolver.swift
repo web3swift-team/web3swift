@@ -41,13 +41,13 @@ public struct ResolverENS {
         }
     }
     
-    lazy var resolverContract: web3.web3contract = {
+    private lazy var resolverContract: web3.web3contract = {
         let contract = self.web3.contract(Web3.Utils.resolverABI, at: self.resolverAddress, abiVersion: 2)
         precondition(contract != nil)
         return contract!
     }()
     
-    lazy var defaultOptions: TransactionOptions = {
+    private lazy var defaultOptions: TransactionOptions = {
         return TransactionOptions.defaultOptions
     }()
     

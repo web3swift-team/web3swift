@@ -1,7 +1,1 @@
-module scrypt {
-  umbrella header "scrypt-iOS-umbrella.h"
-  exclude header "scrypt-macOS-umbrella.h"
-
-  export *
-  module * { export * }
-}
+/Users/alexvlasov/Blockchain/web3swift/web3swift/Pods/Target Support Files/scrypt-iOS/scrypt-iOS.modulemap
