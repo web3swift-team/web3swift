@@ -9,7 +9,6 @@ import EthereumAddress
 import EthereumABI
 
 public struct EthereumContract:ContractProtocol {
-    public var options: Web3Options? = Web3Options.defaultOptions()
     public var transactionOptions: TransactionOptions? = TransactionOptions.defaultOptions
     public var address: EthereumAddress? = nil
     

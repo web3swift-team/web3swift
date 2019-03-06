@@ -38,7 +38,7 @@ fileprivate func decodeHexToBigUInt<T>(_ container: KeyedDecodingContainer<T>, k
     }
 }
 
-extension Web3Options:Decodable {
+extension TransactionOptions: Decodable {
     enum CodingKeys: String, CodingKey
     {
         case from
@@ -46,15 +46,23 @@ extension Web3Options:Decodable {
         case gasPrice
         case gas
         case value
+        case nonce
+        case callOnBlock
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let gasLimit = try decodeHexToBigUInt(container, key: .gas)
-        self.gasLimit = gasLimit
+        if let gasLimit = try decodeHexToBigUInt(container, key: .gas) {
+            self.gasLimit = .manual(gasLimit)
+        } else {
+            self.gasLimit = .automatic
+        }
         
-        let gasPrice = try decodeHexToBigUInt(container, key: .gasPrice)
-        self.gasPrice = gasPrice
+        if let gasPrice = try decodeHexToBigUInt(container, key: .gasPrice) {
+            self.gasPrice = .manual(gasPrice)
+        } else {
+            self.gasPrice = .automatic
+        }
         
         let toString = try container.decode(String?.self, forKey: .to)
         var to: EthereumAddress?
@@ -67,19 +75,31 @@ extension Web3Options:Decodable {
         }
         self.to = to
         let from = try container.decodeIfPresent(EthereumAddress.self, forKey: .to)
-//        var from: EthereumAddress?
-//        if fromString != nil {
-//            guard let ethAddr = EthereumAddress(toString) else {throw Web3Error.dataError}
-//            from = ethAddr
-//        }
+        //        var from: EthereumAddress?
+        //        if fromString != nil {
+        //            guard let ethAddr = EthereumAddress(toString) else {throw Web3Error.dataError}
+        //            from = ethAddr
+        //        }
         self.from = from
         
         let value = try decodeHexToBigUInt(container, key: .value)
         self.value = value
+        
+        if let nonce = try decodeHexToBigUInt(container, key: .nonce) {
+            self.nonce = .manual(nonce)
+        } else {
+            self.nonce = .pending
+        }
+        
+        if let callOnBlock = try decodeHexToBigUInt(container, key: .nonce) {
+            self.callOnBlock = .exactBlockNumber(callOnBlock)
+        } else {
+            self.callOnBlock = .pending
+        }
     }
 }
 
-extension EthereumTransaction:Decodable {
+extension EthereumTransaction: Decodable {
     enum CodingKeys: String, CodingKey
     {
         case to
@@ -93,7 +113,7 @@ extension EthereumTransaction:Decodable {
     }
     
     public init(from decoder: Decoder) throws {
-        let options = try Web3Options(from: decoder)
+        let options = try TransactionOptions(from: decoder)
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         var data = try decodeHexToData(container, key: .data, allowOptional: true)
@@ -125,8 +145,24 @@ extension EthereumTransaction:Decodable {
         }
         self.value = options.value!
         self.to = options.to!
-        self.gasPrice = options.gasPrice!
-        self.gasLimit = options.gasLimit!
+        
+        if let gP = options.gasPrice {
+            switch gP {
+            case .manual(let value):
+                self.gasPrice = value
+            default:
+                self.gasPrice = BigUInt("5000000000")!
+            }
+        }
+        
+        if let gL = options.gasLimit {
+            switch gL {
+            case .manual(let value):
+                self.gasLimit = value
+            default:
+                self.gasLimit = BigUInt(21000)
+            }
+        }
         
         let inferedChainID = self.inferedChainID
         if (self.inferedChainID != nil && self.v >= BigUInt(37)) {

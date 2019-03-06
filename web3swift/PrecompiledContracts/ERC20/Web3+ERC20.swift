@@ -25,9 +25,6 @@ protocol IERC20 {
 // can be imperatively read and saved
 public class ERC20: IERC20 {
     
-    @available(*, deprecated, renamed: "transactionOptions")
-    public var options: Web3Options = .init()
-    
     private var _name: String? = nil
     private var _symbol: String? = nil
     private var _decimals: UInt8? = nil
