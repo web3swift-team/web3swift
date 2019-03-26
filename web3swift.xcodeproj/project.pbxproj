@@ -30,6 +30,8 @@
 		3AC3BD7E222EA70500656EC7 /* Web3+ST20.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC3BD7C222EA70500656EC7 /* Web3+ST20.swift */; };
 		3AC3BD80222EC6C900656EC7 /* Web3+SecurityToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC3BD7F222EC6C900656EC7 /* Web3+SecurityToken.swift */; };
 		3AC3BD81222EC6C900656EC7 /* Web3+SecurityToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC3BD7F222EC6C900656EC7 /* Web3+SecurityToken.swift */; };
+		3AE494F7224A23C300AB2972 /* NonceMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ED4EA72190D922003E932E /* NonceMiddleware.swift */; };
+		3AE494F8224A23CD00AB2972 /* NonceMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ED4EA72190D922003E932E /* NonceMiddleware.swift */; };
 		4194811B203630530065A83B /* Web3+HttpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817EBB142004FE4200E02EAA /* Web3+HttpProvider.swift */; };
 		4194811E203630530065A83B /* Web3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDECCE1FDF004E0063684A /* Web3.swift */; };
 		4194811F203630530065A83B /* Web3+Instance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818ABD5A1FE95F8F002657BB /* Web3+Instance.swift */; };
@@ -1188,6 +1190,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AE494F7224A23C300AB2972 /* NonceMiddleware.swift in Sources */,
 				3AC1E7CB222D6A8C004F43D8 /* Web3+BrowserFunctions.swift in Sources */,
 				E2DCA654218C879900F94FBA /* ENS.swift in Sources */,
 				E2DCA655218C879900F94FBA /* ENSResolver.swift in Sources */,
@@ -1311,6 +1314,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AE494F8224A23CD00AB2972 /* NonceMiddleware.swift in Sources */,
 				3AC1E7D9222D6AA0004F43D8 /* Web3+BrowserFunctions.swift in Sources */,
 				3AC1E7CC222D6A99004F43D8 /* Web3+ERC1376.swift in Sources */,
 				3AC1E7CD222D6A99004F43D8 /* Web3+ERC1155.swift in Sources */,
