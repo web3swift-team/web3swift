@@ -372,20 +372,20 @@ public struct RIPEMD160 {
 
 public extension RIPEMD160 {
     
-    public static func hash(message: Data) -> Data {
+    static func hash(message: Data) -> Data {
         var md = RIPEMD160()
         md.update(data: message)
         return md.finalize()
     }
     
-    public static func hash(message: String) -> Data {
+    static func hash(message: String) -> Data {
         return RIPEMD160.hash(message: message.data(using: .utf8)!)
     }
 }
 
 public extension RIPEMD160 {
     
-    public static func hmac(key: Data, message: Data) -> Data {
+    static func hmac(key: Data, message: Data) -> Data {
         
         var key = key
         key.count = 64 // Truncate to 64 bytes or fill-up with zeros.
@@ -404,11 +404,11 @@ public extension RIPEMD160 {
         return outerMd.finalize()
     }
     
-    public static func hmac(key: Data, message: String) -> Data {
+    static func hmac(key: Data, message: String) -> Data {
         return RIPEMD160.hmac(key: key, message: message.data(using: .utf8)!)
     }
     
-    public static func hmac(key: String, message: String) -> Data {
+    static func hmac(key: String, message: String) -> Data {
         return RIPEMD160.hmac(key: key.data(using: .utf8)!, message: message)
     }
 }

@@ -19,7 +19,7 @@ public extension Data {
         }
     }
     
-    public func constantTimeComparisonTo(_ other:Data?) -> Bool {
+    func constantTimeComparisonTo(_ other:Data?) -> Bool {
         guard let rhs = other else {return false}
         guard self.count == rhs.count else {return false}
         var difference = UInt8(0x00)
@@ -29,7 +29,7 @@ public extension Data {
         return difference == UInt8(0x00)
     }
     
-    public static func zero(_ data: inout Data) {
+    static func zero(_ data: inout Data) {
         let count = data.count
         data.withUnsafeMutableBytes { (dataPtr: UnsafeMutablePointer<UInt8>) in
 //            var rawPtr = UnsafeMutableRawPointer(dataPtr)
