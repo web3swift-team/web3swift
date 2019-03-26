@@ -46,7 +46,7 @@ public enum Web3Error: Error {
 }
 
 /// An arbitary Web3 object. Is used only to construct provider bound fully functional object by either supplying provider URL
-/// or using pre-coded Infura nodes
+/// or using pre-coded Infura or Nodesmith nodes
 public struct Web3 {
     
     /// Initialized provider-bound Web3 instance using a provider's URL. Under the hood it performs a synchronous call to get
