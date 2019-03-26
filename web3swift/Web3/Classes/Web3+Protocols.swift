@@ -36,6 +36,7 @@ public enum Networks {
     case Mainnet
     case Ropsten
     case Kovan
+    case Goerli
     case Custom(networkID: BigUInt)
     
     public var name: String {
@@ -44,6 +45,7 @@ public enum Networks {
         case .Ropsten: return "ropsten"
         case .Mainnet: return "mainnet"
         case .Kovan: return "kovan"
+        case .Goerli: return "goerli"
         case .Custom: return ""
         }
     }
@@ -55,10 +57,11 @@ public enum Networks {
         case .Ropsten: return BigUInt(3)
         case .Rinkeby: return BigUInt(4)
         case .Kovan: return BigUInt(42)
+        case .Goerli: return BigUInt(5)
         }
     }
     
-    static let allValues = [Mainnet, Ropsten, Kovan, Rinkeby]
+    static let allValues = [Mainnet, Ropsten, Kovan, Rinkeby, Goerli]
     
     static func fromInt(_ networkID:Int) -> Networks? {
         switch networkID {
@@ -70,6 +73,8 @@ public enum Networks {
             return Networks.Rinkeby
         case 42:
             return Networks.Kovan
+        case 5:
+            return Networks.Goerli
         default:
             return Networks.Custom(networkID: BigUInt(networkID))
         }

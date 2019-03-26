@@ -74,6 +74,30 @@ public struct Web3 {
         return web3(provider: infura)
     }
     
+    // Initialized Web3 instance bound to Nodesmith's mainnet nodes.
+    public static func NodesmithMainnetWeb3(apiKey: String) -> web3 {
+        return web3(provider: NodesmithProvider(Networks.Mainnet, apiKey: apiKey)!)
+    }
+    
+    // Initialized Web3 instance bound to Nodesmith's kovan nodes.
+    public static func NodesmithKovanWeb3(apiKey: String) -> web3 {
+        return web3(provider: NodesmithProvider(Networks.Kovan, apiKey: apiKey)!)
+    }
+    
+    // Initialized Web3 instance bound to Nodesmith's goerli nodes.
+    public static func NodesmithGoerliWeb3(apiKey: String) -> web3 {
+        return web3(provider: NodesmithProvider(Networks.Goerli, apiKey: apiKey)!)
+    }
+    
+    // Initialized Web3 instance bound to Nodesmith's rinkeby nodes.
+    public static func NodesmithRinkebyWeb3(apiKey: String) -> web3 {
+        return web3(provider: NodesmithProvider(Networks.Rinkeby, apiKey: apiKey)!)
+    }
+    
+    // Initialized Web3 instance bound to Nodesmith's ropsten nodes.
+    public static func NodesmithRopstenWeb3(apiKey: String) -> web3 {
+        return web3(provider: NodesmithProvider(Networks.Ropsten, apiKey: apiKey)!)
+    }
 }
 
 struct ResultUnwrapper {

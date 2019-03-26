@@ -218,6 +218,9 @@
 		E2F8083021CB096D00B6BF15 /* Web3+ERC721x.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F8082F21CB096D00B6BF15 /* Web3+ERC721x.swift */; };
 		E2F8083321CB0EF300B6BF15 /* Web3+ERC1155.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F8083221CB0EF300B6BF15 /* Web3+ERC1155.swift */; };
 		E2F8083621CB142000B6BF15 /* Web3+ERC1376.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F8083521CB142000B6BF15 /* Web3+ERC1376.swift */; };
+		ECC63DA722498544000798BF /* Web3+Nodesmith.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC63DA622498544000798BF /* Web3+Nodesmith.swift */; };
+		ECC63DA822498564000798BF /* Web3+Nodesmith.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC63DA622498544000798BF /* Web3+Nodesmith.swift */; };
+		ECC63DAB224988ED000798BF /* web3siwft_nodesmith_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC63DA9224988E4000798BF /* web3siwft_nodesmith_Tests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -395,6 +398,8 @@
 		E2F8082F21CB096D00B6BF15 /* Web3+ERC721x.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+ERC721x.swift"; sourceTree = "<group>"; };
 		E2F8083221CB0EF300B6BF15 /* Web3+ERC1155.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+ERC1155.swift"; sourceTree = "<group>"; };
 		E2F8083521CB142000B6BF15 /* Web3+ERC1376.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+ERC1376.swift"; sourceTree = "<group>"; };
+		ECC63DA622498544000798BF /* Web3+Nodesmith.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Nodesmith.swift"; sourceTree = "<group>"; };
+		ECC63DA9224988E4000798BF /* web3siwft_nodesmith_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3siwft_nodesmith_Tests.swift; sourceTree = "<group>"; };
 		FB43EC035C593F9E5A3644B6 /* Pods-web3swift-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swift-macOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swift-macOS/Pods-web3swift-macOS.debug.xcconfig"; sourceTree = "<group>"; };
 		FC1E6C115639177F2629E42A /* Pods_web3swift_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swift_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -506,6 +511,7 @@
 				E23B5ADC20EA685D00DC7F32 /* web3swift_EIP67_Tests.swift */,
 				E23B5AE020EA695400DC7F32 /* web3swift_rinkeby_personalSignature_Tests.swift */,
 				E23B5AE220EA69B900DC7F32 /* web3swift_numberFormattingUtil_Tests.swift */,
+				ECC63DA9224988E4000798BF /* web3siwft_nodesmith_Tests.swift */,
 			);
 			path = web3swiftTests;
 			sourceTree = "<group>";
@@ -726,6 +732,7 @@
 				81909D1121862D17007D2AE5 /* Web3+ReadingTransaction.swift */,
 				81909D1421862D37007D2AE5 /* Web3+MutatingTransaction.swift */,
 				81909D1721862D5A007D2AE5 /* Web3+Eventloop.swift */,
+				ECC63DA622498544000798BF /* Web3+Nodesmith.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1246,6 +1253,7 @@
 				81C5DA2E2074EBF500424CD6 /* EthereumContract.swift in Sources */,
 				810B0F9E1FEC5B9C00CF0DA2 /* Web3+Eth.swift in Sources */,
 				81531AA01FE7C07A002192CC /* EthereumKeystoreV3.swift in Sources */,
+				ECC63DA722498544000798BF /* Web3+Nodesmith.swift in Sources */,
 				81A1824820D7DDA20016741F /* Promise+Web3+Personal+Sign.swift in Sources */,
 				8123E1C9200CBAF800B6D3AB /* Data+Extension.swift in Sources */,
 				817EBB23200649E000E02EAA /* RIPEMD160+StackOveflow.swift in Sources */,
@@ -1297,6 +1305,7 @@
 				00E5FE8220EA3FF40030E0D6 /* web3swift_infura_Tests.swift in Sources */,
 				81909D2A21885067007D2AE5 /* web3swift_rinkeby_personalSignature_Tests.swift in Sources */,
 				81909D2821884FF8007D2AE5 /* web3swift_remoteParsing_Tests.swift in Sources */,
+				ECC63DAB224988ED000798BF /* web3siwft_nodesmith_Tests.swift in Sources */,
 				81909D2721884FA4007D2AE5 /* web3swift_Tests.swift in Sources */,
 				81909D252188494C007D2AE5 /* web3swift_keystores_Tests.swift in Sources */,
 				81909D2621884968007D2AE5 /* web3swift_promises_Tests.swift in Sources */,
@@ -1370,6 +1379,7 @@
 				41948132203630530065A83B /* BIP32HDNode.swift in Sources */,
 				81A7B2522143C3A8004CD2C7 /* NameHash.swift in Sources */,
 				81ED4EA92190D922003E932E /* NonceMiddleware.swift in Sources */,
+				ECC63DA822498564000798BF /* Web3+Nodesmith.swift in Sources */,
 				81A1824920D7DDA20016741F /* Promise+Web3+Personal+Sign.swift in Sources */,
 				81A1822620D678590016741F /* Promise+Web3+Eth+GetGasPrice.swift in Sources */,
 				81909D1621862D37007D2AE5 /* Web3+MutatingTransaction.swift in Sources */,
