@@ -24,10 +24,10 @@ public struct Counter {
 
 /// JSON RPC request structure for serialization and deserialization purposes.
 public struct JSONRPCrequest: Encodable {
-    var jsonrpc: String = "2.0"
-    var method: JSONRPCmethod?
-    var params: JSONRPCparams?
-    var id: UInt64 = Counter.increment()
+    public var jsonrpc: String = "2.0"
+    public var method: JSONRPCmethod?
+    public var params: JSONRPCparams?
+    public var id: UInt64 = Counter.increment()
     
     enum CodingKeys: String, CodingKey {
         case jsonrpc
