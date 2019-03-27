@@ -1,7 +1,1 @@
-module BigInt {
-  umbrella header "BigInt-iOS-umbrella.h"
-  exclude header "BigInt-macOS-umbrella.h"
-
-  export *
-  module * { export * }
-}
+../../../Target Support Files/BigInt-iOS/BigInt-iOS.modulemap

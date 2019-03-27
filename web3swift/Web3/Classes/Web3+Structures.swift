@@ -151,7 +151,7 @@ extension EthereumTransaction: Decodable {
             case .manual(let value):
                 self.gasPrice = value
             default:
-                self.gasPrice = BigUInt("5000000000")!
+                self.gasPrice = BigUInt("5000000000")
             }
         }
         

@@ -1,6 +1,0 @@
-module Pods_web3swift_iOS_Tests {
-  umbrella header "Pods-web3swift-iOS_Tests-umbrella.h"
-
-  export *
-  module * { export * }
-}
