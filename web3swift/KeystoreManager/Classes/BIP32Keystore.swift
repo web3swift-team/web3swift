@@ -238,7 +238,7 @@ public class BIP32Keystore: AbstractKeystore {
         let derivedKeyLast16bytes = derivedKey[(derivedKey.count - 16)...(derivedKey.count - 1)]
         dataForMAC.append(derivedKeyLast16bytes)
         guard let cipherText = Data.fromHex(keystorePars.crypto.ciphertext) else {return nil}
-        guard (cipherText.count % 32 == 0) else {return nil}
+        guard (cipherText.count.isMultiple(of: 32)) else {return nil}
         dataForMAC.append(cipherText)
         let mac = dataForMAC.sha3(.keccak256)
         guard let calculatedMac = Data.fromHex(keystorePars.crypto.mac), mac.constantTimeComparisonTo(calculatedMac) else {return nil}
