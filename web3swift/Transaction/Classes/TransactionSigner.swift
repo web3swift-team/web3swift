@@ -16,7 +16,7 @@ public enum TransactionSignerError: Error {
 public struct Web3Signer {
     public static func signTX(transaction:inout EthereumTransaction, keystore: AbstractKeystore, account: EthereumAddress, password: String, useExtraEntropy: Bool = false) throws {
         var privateKey = try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
-        defer {Data.zero(&privateKey)}
+        defer { Data.zero(&privateKey) }
         if (transaction.chainID != nil) {
             try EIP155Signer.sign(transaction: &transaction, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
         } else {
@@ -26,7 +26,7 @@ public struct Web3Signer {
 
     public static func signPersonalMessage(_ personalMessage: Data, keystore: AbstractKeystore, account: EthereumAddress, password: String, useExtraEntropy: Bool = false) throws -> Data? {
         var privateKey = try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
-        defer {Data.zero(&privateKey)}
+        defer { Data.zero(&privateKey) }
         guard let hash = Web3.Utils.hashPersonalMessage(personalMessage) else {return nil}
         let (compressedSignature, _) = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
         return compressedSignature

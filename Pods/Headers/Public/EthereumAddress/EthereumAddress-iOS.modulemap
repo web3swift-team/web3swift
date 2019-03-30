@@ -1,7 +1,1 @@
-module EthereumAddress {
-  umbrella header "EthereumAddress-iOS-umbrella.h"
-  exclude header "EthereumAddress-macOS-umbrella.h"
-
-  export *
-  module * { export * }
-}
+../../../Target Support Files/EthereumAddress-iOS/EthereumAddress-iOS.modulemap

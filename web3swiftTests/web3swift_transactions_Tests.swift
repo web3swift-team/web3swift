@@ -16,10 +16,10 @@ class web3swift_transactions_Tests: XCTestCase {
     func testTransaction() {
         do {
             var transaction = EthereumTransaction(nonce: BigUInt(9),
-                                                  gasPrice: BigUInt("20000000000")!,
+                                                  gasPrice: BigUInt("20000000000"),
                                                   gasLimit: BigUInt(21000),
-                                                  to: EthereumAddress("0x3535353535353535353535353535353535353535")!,
-                                                  value: BigUInt("1000000000000000000")!,
+                                                  to: EthereumAddress("0x3535353535353535353535353535353535353535"),
+                                                  value: BigUInt("1000000000000000000"),
                                                   data: Data(),
                                                   v: BigUInt(0),
                                                   r: BigUInt(0),
@@ -46,7 +46,7 @@ class web3swift_transactions_Tests: XCTestCase {
     func testEthSendExample() {
         do {
             let web3 = Web3.InfuraMainnetWeb3()
-            let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
+            let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")
             let tempKeystore = try! EthereumKeystoreV3(password: "")
             let keystoreManager = KeystoreManager([tempKeystore!])
             web3.addKeystoreManager(keystoreManager)

@@ -1,7 +1,1 @@
-module SipHash {
-  umbrella header "SipHash-iOS-umbrella.h"
-  exclude header "SipHash-macOS-umbrella.h"
-
-  export *
-  module * { export * }
-}
+../../../Target Support Files/SipHash-iOS/SipHash-iOS.modulemap
