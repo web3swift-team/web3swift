@@ -181,7 +181,9 @@ extension HDNode {
                 newNode.publicKey = pubKeyCandidate
                 newNode.privateKey = privKeyCandidate
                 newNode.childNumber = trueIndex
-                let fprint = RIPEMD160.hash(message: self.publicKey.sha256())[0..<4]
+                guard let fprint = try? RIPEMD160.hash(message: self.publicKey.sha256())[0..<4] else {
+                    return nil
+                }
                 newNode.parentFingerprint = fprint
                 var newPath = String()
                 if newNode.isHardened {
@@ -231,7 +233,9 @@ extension HDNode {
             newNode.depth = self.depth + 1
             newNode.publicKey = pubKeyCandidate
             newNode.childNumber = index
-            let fprint = RIPEMD160.hash(message: self.publicKey.sha256())[0..<4]
+            guard let fprint = try? RIPEMD160.hash(message: self.publicKey.sha256())[0..<4] else {
+                return nil
+            }
             newNode.parentFingerprint = fprint
             var newPath = String()
             if newNode.isHardened {

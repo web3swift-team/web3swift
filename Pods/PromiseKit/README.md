@@ -45,17 +45,41 @@ In your [Podfile]:
 use_frameworks!
 
 target "Change Me!" do
-  pod "PromiseKit", "~> 6.0"
+  pod "PromiseKit", "~> 6.8"
 end
 ```
 
+> The above gives an Xcode warning? See our [Installation Guide].
+
 PromiseKit 6, 5 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1,
-3.2, 3.3, 3.4, 4.0, 4.1 and 4.2; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods,
-Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
+3.2, 3.3, 3.4, 4.0, 4.1, 4.2 and 5.0 (development snapshots); iOS, macOS, tvOS,
+watchOS, Linux and Android; CocoaPods, Carthage and SwiftPM;
+([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
 
 For Carthage, SwiftPM, etc., or for instructions when using older Swifts or
-Xcodes, see our [Installation Guide](Documentation/Installation.md). We 
+Xcodes, see our [Installation Guide]. We 
 recommend [Carthage](https://github.com/Carthage/Carthage).
+
+# Professionally Supported PromiseKit is Now Available
+
+Tidelift gives software development teams a single source for purchasing
+and maintaining their software, with professional grade assurances from
+the experts who know it best, while seamlessly integrating with existing
+tools.
+
+[Get Professional Support for PromiseKit with TideLift](https://tidelift.com/subscription/pkg/cocoapods-promisekit?utm_source=cocoapods-promisekit&utm_medium=referral&utm_campaign=readme).
+
+# PromiseKit is Thousands of Hours of Work
+
+Hi, I’m Max Howell and I have written a lot of open source software, and
+probably you already use some of it (Homebrew anyone?). Please help me so I
+can continue to make tools and software you need and love. I appreciate it x.
+
+<a href="https://www.patreon.com/mxcl">
+	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
+</a>
+
+[Other donation/tipping options](http://mxcl.github.io/donate/)
 
 # Documentation
 
@@ -90,7 +114,7 @@ All our extensions are separate repositories at the [PromiseKit organization].
 Then don’t have them:
 
 ```ruby
-pod "PromiseKit/CorePromise", "~> 6.0"
+pod "PromiseKit/CorePromise", "~> 6.8"
 ```
 
 > *Note:* Carthage installations come with no extensions by default.
@@ -169,3 +193,4 @@ if after that you still have a question, ask at our [Gitter chat channel] or on 
 [our bug tracker]: https://github.com/mxcl/PromiseKit/issues/new
 [Podfile]: https://guides.cocoapods.org/syntax/podfile.html
 [PMK6]: http://promisekit.org/news/2018/02/PromiseKit-6.0-Released/
+[Installation Guide]: Documentation/Installation.md

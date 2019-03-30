@@ -4313,9 +4313,9 @@ extension Web3.Utils {
     /// Marshals the V, R and S signature parameters into a 65 byte recoverable EC signature.
     static func marshalSignature(v: UInt8, r: [UInt8], s: [UInt8]) -> Data? {
         guard r.count == 32, s.count == 32 else {return nil}
-        var completeSignature = Data(bytes: r)
-        completeSignature.append(Data(bytes: s))
-        completeSignature.append(Data(bytes: [v]))
+        var completeSignature = Data(r)
+        completeSignature.append(Data(s))
+        completeSignature.append(Data([v]))
         return completeSignature
     }
     
@@ -4323,7 +4323,7 @@ extension Web3.Utils {
     static func marshalSignature(unmarshalledSignature: SECP256K1.UnmarshaledSignature) -> Data {
         var completeSignature = Data(unmarshalledSignature.r)
         completeSignature.append(Data(unmarshalledSignature.s))
-        completeSignature.append(Data(bytes: [unmarshalledSignature.v]))
+        completeSignature.append(Data([unmarshalledSignature.v]))
         return completeSignature
     }
     

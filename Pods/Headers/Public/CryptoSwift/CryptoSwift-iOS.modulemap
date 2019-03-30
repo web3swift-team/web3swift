@@ -1,7 +1,1 @@
-module CryptoSwift {
-  umbrella header "CryptoSwift-iOS-umbrella.h"
-  exclude header "CryptoSwift-macOS-umbrella.h"
-
-  export *
-  module * { export * }
-}
+../../../Target Support Files/CryptoSwift-iOS/CryptoSwift-iOS.modulemap

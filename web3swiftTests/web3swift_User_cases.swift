@@ -25,7 +25,7 @@ class web3swift_User_cases: XCTestCase {
         let contractAddress = EthereumAddress("0x0f90969738c7a3088907c052cb96bd4d184a9fcf")
         let contract = web3.contract(jsonString, at: contractAddress)
         XCTAssert(contract != nil, "Failed to create ERC20 contract from ABI")
-        let account = EthereumAddress("0xb870065718919ac4f9572ffc4bde0b2516f4e723")!
+        let account = EthereumAddress("0xb870065718919ac4f9572ffc4bde0b2516f4e723")
         let readTransaction = contract!.read("balanceOf", parameters:[account] as [AnyObject])!
         readTransaction.transactionOptions.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
         let response = try readTransaction.callPromise().wait()
@@ -46,7 +46,7 @@ class web3swift_User_cases: XCTestCase {
         let keystoreManager = KeystoreManager.init([keystoreV3])
         web3Rinkeby.addKeystoreManager(keystoreManager)
         let gasPriceRinkeby = try web3Rinkeby.eth.getGasPrice()
-        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
+        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")
         guard let writeTX = web3Rinkeby.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
         writeTX.transactionOptions.from = keystoreV3.addresses?.first
         writeTX.transactionOptions.gasPrice = .manual(gasPriceRinkeby)
@@ -63,7 +63,7 @@ class web3swift_User_cases: XCTestCase {
         let keystoreManager = KeystoreManager.init([keystoreV3])
         web3Rinkeby.addKeystoreManager(keystoreManager)
         let gasPriceRinkeby = try web3Rinkeby.eth.getGasPrice()
-        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
+        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")
         guard let writeTX = web3Rinkeby.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
         writeTX.transactionOptions.from = keystoreV3.addresses?.first
         writeTX.transactionOptions.gasPrice = .manual(gasPriceRinkeby * 2)
@@ -86,7 +86,7 @@ class web3swift_User_cases: XCTestCase {
     
     func testNonBatchedRequest() throws {
         let web3 = Web3.InfuraMainnetWeb3()
-        let address = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
+        let address = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")
         web3.requestDispatcher.policy = .NoBatching
         let balanceResult = try web3.eth.getBalance(address: address)
         print(balanceResult)

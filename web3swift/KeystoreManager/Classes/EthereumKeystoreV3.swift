@@ -32,7 +32,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
     public func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data {
         if self.addresses?.count == 1 && account == self.addresses?.last {
             guard let pk = try? self.getKeyData(password) else {throw AbstractKeystoreError.invalidPasswordError}
-            guard let privateKey = pk else {throw AbstractKeystoreError.invalidAccountError}
+            let privateKey = pk
             return privateKey
         }
         throw AbstractKeystoreError.invalidAccountError
@@ -67,7 +67,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
     
     public init? (password: String = "web3swift", aesMode: String = "aes-128-cbc") throws {
         guard var newPrivateKey = SECP256K1.generatePrivateKey() else {return nil}
-        defer {Data.zero(&newPrivateKey)}
+        defer { Data.zero(&newPrivateKey) }
         try encryptDataToStorage(password, keyData: newPrivateKey, aesMode: aesMode)
     }
     
@@ -100,7 +100,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
             throw AbstractKeystoreError.aesError
         }
         guard let encryptedKey = try aesCipher?.encrypt(keyData!.bytes) else {throw AbstractKeystoreError.aesError}
-        let encryptedKeyData = Data(bytes:encryptedKey)
+        let encryptedKeyData = Data(encryptedKey)
         var dataForMAC = Data()
         dataForMAC.append(last16bytes)
         dataForMAC.append(encryptedKeyData)
@@ -120,7 +120,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         if keyData == nil {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
-        defer {Data.zero(&keyData!)}
+        defer { Data.zero(&keyData!) }
         try self.encryptDataToStorage(newPassword, keyData: keyData!, aesMode: self.keystoreParams!.crypto.cipher)
     }
     
@@ -152,7 +152,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
             guard let c = keystoreParams.crypto.kdfparams.c else {return nil}
             guard let passData = password.data(using: .utf8) else {return nil}
             guard let derivedArray = try? PKCS5.PBKDF2(password: passData.bytes, salt: saltData.bytes, iterations: c, keyLength: derivedLen, variant: hashVariant!).calculate() else {return nil}
-            passwordDerivedKey = Data(bytes:derivedArray)
+            passwordDerivedKey = Data(derivedArray)
         default:
             return nil
         }
@@ -180,7 +180,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
             return nil
         }
         guard decryptedPK != nil else {return nil}
-        return Data(bytes:decryptedPK!)
+        return Data(decryptedPK!)
     }
     
     public func serialize() throws -> Data? {

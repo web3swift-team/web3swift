@@ -164,7 +164,7 @@ class web3swift_Keystores_tests: XCTestCase {
     
     func testRIPEMD() {
         let data = "message digest".data(using: .ascii)
-        let hash = RIPEMD160.hash(message: data!)
+        let hash = try! RIPEMD160.hash(message: data!)
         XCTAssert(hash.toHexString() == "5d0689ef49d2fae572b881b123a85ffa21595f36")
     }
     

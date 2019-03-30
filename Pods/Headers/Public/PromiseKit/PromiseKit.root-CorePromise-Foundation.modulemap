@@ -1,7 +1,1 @@
-module PromiseKit {
-  umbrella header "PromiseKit.root-CorePromise-Foundation-umbrella.h"
-  exclude header "PromiseKit-umbrella.h"
-
-  export *
-  module * { export * }
-}
+../../../Target Support Files/PromiseKit.root-CorePromise-Foundation/PromiseKit.root-CorePromise-Foundation.modulemap
