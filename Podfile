@@ -9,7 +9,7 @@ def import_pods
 end
 
 target 'web3swift-macOS' do
-  platform :osx, '10.11'
+  platform :osx, '10.12'
 #  use_frameworks!
   use_modular_headers!
   import_pods
@@ -20,7 +20,7 @@ target 'web3swift-macOS' do
 end
 
 target 'web3swift-iOS' do
-  platform :ios, '9.0'
+  platform :ios, '10.0'
 #  use_frameworks!
   use_modular_headers! 
   import_pods
