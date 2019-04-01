@@ -31,7 +31,9 @@ public enum JSONRPCmethod: String, Encodable {
     case getTxPoolInspect = "txpool_inspect"
     case getTxPoolStatus = "txpool_status"
     case getTxPoolContent = "txpool_content"
-
+    
+    // Websocket methods
+    case newPendingTransactionFilter = "eth_newPendingTransactionFilter"
     
     public var requiredNumOfParameters: Int {
         get {
@@ -63,6 +65,8 @@ public enum JSONRPCmethod: String, Encodable {
             case .getTxPoolContent:
                 return 0
             case .getTxPoolInspect:
+                return 0
+            case .newPendingTransactionFilter:
                 return 0
             default:
                 return 1
