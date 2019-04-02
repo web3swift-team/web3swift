@@ -11,12 +11,9 @@ import PromiseKit
 import BigInt
 import Foundation
 
-public protocol WebsocketProvider {
+public protocol IWebsocketProvider {
     var socket: WebSocket {get}
     var delegate: Web3SocketDelegate {get set}
-    static func connectToSocket(endpoint: URL,
-                                delegate: Web3SocketDelegate,
-                                keystoreManager manager: KeystoreManager?) -> Web3SocketProvider
     func connectSocket() throws
     func disconnectSocket() throws
 }
@@ -74,7 +71,7 @@ public protocol Web3SocketDelegate {
     func received(message: Any)
 }
 
-public final class InfuraWeb3SocketProvider: Web3SocketProvider {
+public final class InfuraWebsocketProvider: WebsocketProvider {
     public var subscriptionKey: String?
     private var subscriptionTimer: Timer?
     
@@ -95,8 +92,8 @@ public final class InfuraWeb3SocketProvider: Web3SocketProvider {
     
     public static func connectToSocket(_ network: Networks,
                                        delegate: Web3SocketDelegate,
-                                       keystoreManager manager: KeystoreManager?) -> Web3SocketProvider? {
-        guard let socketProvider = InfuraWeb3SocketProvider(network,
+                                       keystoreManager manager: KeystoreManager?) -> InfuraWebsocketProvider? {
+        guard let socketProvider = InfuraWebsocketProvider(network,
                                                             delegate: delegate,
                                                             keystoreManager: manager) else {return nil}
         socketProvider.socket.connect()
@@ -132,10 +129,6 @@ public final class InfuraWeb3SocketProvider: Web3SocketProvider {
                 if let requestData = try? encoder.encode(request) {
                     self.socket.write(data: requestData)
                 }
-                
-//                // TODO: - This should be in another way, but only this works
-//                self.socket.write(string: "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getFilterChanges\",\"params\":[\"\(key)\"],\"id\":1}")
-//                self.subscriptionTimer?.invalidate()
             }
         }
     }
@@ -155,7 +148,7 @@ public final class InfuraWeb3SocketProvider: Web3SocketProvider {
 }
 
 /// The default websocket provider.
-public class Web3SocketProvider: Web3Provider, WebsocketProvider, WebSocketDelegate {
+public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDelegate {
     public func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse> {
         if request.method == nil {
             return Promise(error: Web3Error.nodeError(desc: "RPC method is nil"))
@@ -216,8 +209,8 @@ public class Web3SocketProvider: Web3Provider, WebsocketProvider, WebSocketDeleg
     
     public static func connectToSocket(endpoint: URL,
                                        delegate: Web3SocketDelegate,
-                                       keystoreManager manager: KeystoreManager?) -> Web3SocketProvider {
-        let socketProvider = Web3SocketProvider(endpoint: endpoint,
+                                       keystoreManager manager: KeystoreManager?) -> WebsocketProvider {
+        let socketProvider = WebsocketProvider(endpoint: endpoint,
                                                 delegate: delegate,
                                                 keystoreManager: manager)
         socketProvider.connectSocket()
