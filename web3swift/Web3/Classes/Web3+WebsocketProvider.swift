@@ -11,6 +11,25 @@ import PromiseKit
 import BigInt
 import Foundation
 
+extension web3.Eth {
+    public func getLatestPendingTransactions(forDelegate delegate: Web3SocketDelegate) throws {
+        var infuraWSProvider: InfuraWebsocketProvider
+        if !(provider is InfuraWebsocketProvider) {
+            guard let infuraNetwork = provider.network else {
+                throw Web3Error.processingError(desc: "Wrong network")
+            }
+            guard let infuraProvider = InfuraWebsocketProvider(infuraNetwork, delegate: delegate, keystoreManager: provider.attachedKeystoreManager) else {
+                throw Web3Error.processingError(desc: "Wrong network")
+            }
+            infuraWSProvider = infuraProvider
+        } else {
+            infuraWSProvider = provider as! InfuraWebsocketProvider
+        }
+        infuraWSProvider.connectSocket()
+        try infuraWSProvider.subscribeOn(method: .newPendingTransactionFilter)
+    }
+}
+
 public protocol IWebsocketProvider {
     var socket: WebSocket {get}
     var delegate: Web3SocketDelegate {get set}
@@ -77,7 +96,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     
     public init?(_ network: Networks,
                  delegate: Web3SocketDelegate,
-                 keystoreManager manager: KeystoreManager?) {
+                 keystoreManager manager: KeystoreManager? = nil) {
         guard network == Networks.Kovan
             || network == Networks.Rinkeby
             || network == Networks.Ropsten
@@ -92,7 +111,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     
     public static func connectToSocket(_ network: Networks,
                                        delegate: Web3SocketDelegate,
-                                       keystoreManager manager: KeystoreManager?) -> InfuraWebsocketProvider? {
+                                       keystoreManager manager: KeystoreManager? = nil) -> InfuraWebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(network,
                                                             delegate: delegate,
                                                             keystoreManager: manager) else {return nil}
@@ -175,7 +194,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     
     public init(endpoint: URL,
                 delegate wsdelegate: Web3SocketDelegate,
-                keystoreManager manager: KeystoreManager?,
+                keystoreManager manager: KeystoreManager? = nil,
                 network net: Networks? = nil) {
         delegate = wsdelegate
         attachedKeystoreManager = manager
@@ -209,10 +228,12 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     
     public static func connectToSocket(endpoint: URL,
                                        delegate: Web3SocketDelegate,
-                                       keystoreManager manager: KeystoreManager?) -> WebsocketProvider {
+                                       keystoreManager manager: KeystoreManager? = nil,
+                                       network net: Networks? = nil) -> WebsocketProvider {
         let socketProvider = WebsocketProvider(endpoint: endpoint,
                                                 delegate: delegate,
-                                                keystoreManager: manager)
+                                                keystoreManager: manager,
+                                                network: net)
         socketProvider.connectSocket()
         return socketProvider
     }
