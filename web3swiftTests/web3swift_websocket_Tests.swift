@@ -11,27 +11,55 @@ import Starscream
 
 @testable import web3swift_iOS
 
-class web3swift_websocket_Tests: XCTestCase {
+class SpyDelegate: Web3SocketDelegate {
     
-    var socketProvider: Web3SocketProvider?
-
-    func test() {
-        let provider = Web3.InfuraMainnetWeb3().provider
-        guard let socketProvider = Web3SocketProvider.connectToSocket(provider, delegate: self) else {
-            return XCTFail()
+    // Setting .None is unnecessary, but helps with clarity imho
+    var somethingWithDelegateResult: String? = nil
+    
+    // Async test code needs to fulfill the XCTestExpecation used for the test
+    // when all the async operations have been completed. For this reason we need
+    // to store a reference to the expectation
+    var asyncExpectation: XCTestExpectation?
+    
+    func received(message: Any) {
+        guard let expectation = asyncExpectation else {
+            XCTFail("SpyDelegate was not setup correctly. Missing XCTExpectation reference")
+            return
         }
-        self.socketProvider = socketProvider
-        do {
-            try self.socketProvider!.subscribeOn(method: .pendingTransactions)
-            sleep(1000000000)
-        } catch {
-            XCTFail()
-        }
+        
+        print(message as? String)
+        expectation.fulfill()
+    }
+    
+    func gotError(error: Error) {
+        XCTFail(error.localizedDescription)
     }
 }
 
-extension web3swift_websocket_Tests: Web3SocketDelegate {
-    func received(message: Any) {
-        print("received: \(message)")
+class web3swift_websocket_Tests: XCTestCase {
+    
+    let spyDelegate = SpyDelegate()
+    var socketProvider: InfuraWebsocketProvider?
+
+    func testSubscribeOnPendingTXs() {
+        guard let socketProvider = InfuraWebsocketProvider.connectToSocket(.Mainnet, delegate: spyDelegate) else {
+            return XCTFail()
+        }
+        spyDelegate.asyncExpectation = expectation(description: "Delegate called")
+        try! socketProvider.filter(method: .newPendingTransactionFilter)
+        
+        waitForExpectations(timeout: 100000) { error in
+            if let error = error {
+                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+            }
+            
+            guard let result = self.spyDelegate.somethingWithDelegateResult else {
+                XCTFail("Expected delegate to be called")
+                return
+            }
+            print(result)
+            
+            XCTAssert(true)
+        }
     }
 }

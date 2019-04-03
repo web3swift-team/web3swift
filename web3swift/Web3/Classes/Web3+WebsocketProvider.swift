@@ -10,9 +10,11 @@ import Starscream
 import PromiseKit
 import BigInt
 import Foundation
+import EthereumAddress
 
 extension web3.Eth {
-    public func getLatestPendingTransactions(forDelegate delegate: Web3SocketDelegate) throws {
+    
+    public func getWebsocketProvider(forDelegate delegate: Web3SocketDelegate) throws -> InfuraWebsocketProvider {
         var infuraWSProvider: InfuraWebsocketProvider
         if !(provider is InfuraWebsocketProvider) {
             guard let infuraNetwork = provider.network else {
@@ -26,7 +28,17 @@ extension web3.Eth {
             infuraWSProvider = provider as! InfuraWebsocketProvider
         }
         infuraWSProvider.connectSocket()
-        try infuraWSProvider.subscribeOn(method: .newPendingTransactionFilter)
+        return infuraWSProvider
+    }
+    
+    public func getLatestPendingTransactions(forDelegate delegate: Web3SocketDelegate) throws {
+        let provider = try getWebsocketProvider(forDelegate: delegate)
+        try provider.filter(method: .newPendingTransactionFilter)
+    }
+    
+    public func subscribeOnPendingTransactions(forDelegate delegate: Web3SocketDelegate) throws {
+        let provider = try getWebsocketProvider(forDelegate: delegate)
+        try provider.subscribeOnNewPendingTransactions()
     }
 }
 
@@ -35,19 +47,39 @@ public protocol IWebsocketProvider {
     var delegate: Web3SocketDelegate {get set}
     func connectSocket() throws
     func disconnectSocket() throws
+    func writeMessage(string: String)
+    func writeMessage(data: Data)
 }
 
 public enum InfuraWebsocketMethod: String, Encodable {
     
     case newPendingTransactionFilter = "eth_newPendingTransactionFilter"
     case getFilterChanges = "eth_getFilterChanges"
+    case newFilter = "eth_newFilter"
+    case newBlockFilter = "eth_newBlockFilter"
+    case getFilterLogs = "eth_getFilterLogs"
+    case uninstallFilter = "eth_uninstallFilter"
+    case subscribe = "eth_subscribe"
+    case unsubscribe = "eth_unsubscribe"
     
-    public var requiredNumOfParameters: Int {
+    public var requiredNumOfParameters: Int? {
         get {
             switch self {
             case .newPendingTransactionFilter:
                 return 0
             case .getFilterChanges:
+                return 1
+            case .newFilter:
+                return nil
+            case .newBlockFilter:
+                return 0
+            case .getFilterLogs:
+                return nil
+            case .uninstallFilter:
+                return 1
+            case .subscribe:
+                return nil
+            case .unsubscribe:
                 return 1
             }
         }
@@ -88,11 +120,14 @@ public struct InfuraWebsocketRequest: Encodable {
 
 public protocol Web3SocketDelegate {
     func received(message: Any)
+    func gotError(error: Error)
 }
 
 public final class InfuraWebsocketProvider: WebsocketProvider {
-    public var subscriptionKey: String?
-    private var subscriptionTimer: Timer?
+    public var filterID: String?
+    public var subscriptionIDs = Set<String>()
+    private var subscriptionIDforUnsubscribing: String? = nil
+    private var filterTimer: Timer?
     
     public init?(_ network: Networks,
                  delegate: Web3SocketDelegate,
@@ -115,52 +150,110 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         guard let socketProvider = InfuraWebsocketProvider(network,
                                                             delegate: delegate,
                                                             keystoreManager: manager) else {return nil}
-        socketProvider.socket.connect()
+        socketProvider.connectSocket()
         return socketProvider
     }
     
-    public func subscribeOn(method: InfuraWebsocketMethod, params: [Encodable]? = nil) throws {
-        do {
-            subscriptionTimer?.invalidate()
-            subscriptionKey = nil
-            let params = params ?? []
-            let paramsCount = params.count
-            guard method.requiredNumOfParameters == paramsCount else {
-                throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters), got - \(paramsCount)")
-            }
-            let request = JSONRPCRequestFabric.prepareRequest(method, parameters: params)
-            let encoder = JSONEncoder()
-            let requestData = try encoder.encode(request)
-            socket.write(data: requestData)
-            subscriptionTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.getSubscriptionChanges), userInfo: nil, repeats: true)
-        } catch {
-            throw Web3Error.connectionError
+    public func writeMessage(method: InfuraWebsocketMethod, params: [Encodable]) throws {
+        let request = JSONRPCRequestFabric.prepareRequest(method, parameters: params)
+        let encoder = JSONEncoder()
+        let requestData = try encoder.encode(request)
+        writeMessage(data: requestData)
+    }
+    
+    public func filter(method: InfuraWebsocketMethod, params: [Encodable]? = nil) throws {
+        filterTimer?.invalidate()
+        filterID = nil
+        let params = params ?? []
+        let paramsCount = params.count
+        guard method.requiredNumOfParameters == paramsCount || method.requiredNumOfParameters == nil else {
+            throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters!), got - \(paramsCount)")
+        }
+        try writeMessage(method: method, params: params)
+        filterTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(getFilterChanges), userInfo: nil, repeats: true)
+    }
+    
+    @objc public func getFilterChanges() throws {
+        if let id = self.filterID {
+            filterTimer?.invalidate()
+            let method = InfuraWebsocketMethod.getFilterChanges
+            try writeMessage(method: method, params: [id])
         }
     }
     
-    @objc public func getSubscriptionChanges() {
-        DispatchQueue.global().async { [unowned self] in
-            if let key = self.subscriptionKey {
-                self.subscriptionTimer?.invalidate()
-                let method = InfuraWebsocketMethod.getFilterChanges
-                let request = JSONRPCRequestFabric.prepareRequest(method, parameters: [key])
-                let encoder = JSONEncoder()
-                if let requestData = try? encoder.encode(request) {
-                    self.socket.write(data: requestData)
-                }
-            }
+    public func getFilterLogs() throws {
+        if let id = self.filterID {
+            let method = InfuraWebsocketMethod.getFilterLogs
+            try writeMessage(method: method, params: [id])
         }
+    }
+    
+    public func unistallFilter() throws {
+        if let id = self.filterID {
+            let method = InfuraWebsocketMethod.uninstallFilter
+            try writeMessage(method: method, params: [id])
+        }
+    }
+    
+    public func subscribe(params: [Encodable]) throws {
+        let method = InfuraWebsocketMethod.subscribe
+        try writeMessage(method: method, params: params)
+    }
+    
+    public func unsubscribe(subscriptionID: String) throws {
+        let method = InfuraWebsocketMethod.unsubscribe
+        subscriptionIDforUnsubscribing = subscriptionID
+        try writeMessage(method: method, params: [subscriptionID])
+    }
+    
+    public func subscribeOnNewHeads() throws {
+        let method = InfuraWebsocketMethod.subscribe
+        let params = ["newHeads"]
+        try writeMessage(method: method, params: params)
+    }
+    
+    public func subscribeOnNewPendingTransactions() throws {
+        let method = InfuraWebsocketMethod.subscribe
+        let params = ["newPendingTransactions"]
+        try writeMessage(method: method, params: params)
+    }
+    
+    public func subscribeOnSyncing() throws {
+        guard network != Networks.Kovan else {
+            throw Web3Error.inputError(desc: "Can't sync on Kovan")
+        }
+        let method = InfuraWebsocketMethod.subscribe
+        let params = ["syncing"]
+        try writeMessage(method: method, params: params)
     }
     
     override public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         if let data = text.data(using: String.Encoding.utf8),
-            let dictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [String:AnyObject] {
-            if subscriptionKey == nil,
+            let dictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            if filterID == nil,
                 let result = dictionary["result"] as? String {
-                subscriptionKey = result
-            } else {
-                let result = dictionary["result"] as Any
+                // setting filter id
+                filterID = result
+            } else if let params = dictionary["params"] as? [String: Any],
+                let subscription = params["subscription"] as? String,
+                let result = params["result"] {
+                // subscription result
+                subscriptionIDs.insert(subscription)
                 delegate.received(message: result)
+            } else if let unsubscribed = dictionary["result"] as? Bool {
+                // unsubsribe result
+                if unsubscribed == true, let id = subscriptionIDforUnsubscribing {
+                    subscriptionIDs.remove(id)
+                } else if let id = subscriptionIDforUnsubscribing {
+                    delegate.gotError(error: Web3Error.processingError(desc: "Can\'t unsubscribe \(id)"))
+                } else {
+                    delegate.received(message: unsubscribed)
+                }
+            } else if let message = dictionary["result"] {
+                // filter result
+                delegate.received(message: message)
+            } else {
+                delegate.gotError(error: Web3Error.processingError(desc: "Can\'t get known result. Message is: \(text)"))
             }
         }
     }
@@ -169,15 +262,11 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
 /// The default websocket provider.
 public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDelegate {
     public func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse> {
-        if request.method == nil {
-            return Promise(error: Web3Error.nodeError(desc: "RPC method is nil"))
-        }
-        
-        return Web3HttpProvider.post(request, providerURL: self.url, queue: queue, session: self.session)
+        return Promise(error: Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'"))
     }
     
     public func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue) -> Promise<JSONRPCresponseBatch> {
-        return Web3HttpProvider.post(requests, providerURL: self.url, queue: queue, session: self.session)
+        return Promise(error: Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'"))
     }
     
     public var network: Networks?
@@ -202,16 +291,22 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         socket = WebSocket(url: endpoint)
         socket.delegate = self
         if net == nil {
-            let request = JSONRPCRequestFabric.prepareRequest(.getNetwork, parameters: [])
-            
-            if let response = try? Web3HttpProvider.post(request,
-                                                            providerURL: endpoint,
-                                                            queue: DispatchQueue.global(qos: .userInteractive),
-                                                            session: session).wait(),
-                response.error == nil,
-                let result: String = response.getValue(),
-                let intNetworkNumber = Int(result) {
-                network = Networks.fromInt(intNetworkNumber)
+            let endpointString = endpoint.absoluteString
+            if endpointString.hasPrefix("wss://") && endpointString.hasSuffix(".infura.io/ws") {
+                let networkString = endpointString.replacingOccurrences(of: "wss://", with: "")
+                    .replacingOccurrences(of: ".infura.io/ws", with: "")
+                switch networkString {
+                case "mainnet":
+                    network = Networks.Mainnet
+                case "rinkeby":
+                    network = Networks.Rinkeby
+                case "ropsten":
+                    network = Networks.Ropsten
+                case "kovan":
+                    network = Networks.Kovan
+                default:
+                    break
+                }
             }
         } else {
             network = net
@@ -231,11 +326,19 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
                                        keystoreManager manager: KeystoreManager? = nil,
                                        network net: Networks? = nil) -> WebsocketProvider {
         let socketProvider = WebsocketProvider(endpoint: endpoint,
-                                                delegate: delegate,
-                                                keystoreManager: manager,
-                                                network: net)
+                                               delegate: delegate,
+                                               keystoreManager: manager,
+                                               network: net)
         socketProvider.connectSocket()
         return socketProvider
+    }
+    
+    public func writeMessage(string: String) {
+        socket.write(string: string)
+    }
+    
+    public func writeMessage(data: Data) {
+        socket.write(data: data)
     }
     
     public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
