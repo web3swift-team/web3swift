@@ -62,11 +62,11 @@ class web3swift_promises_Tests: XCTestCase {
             let keystoreManager = KeystoreManager([tempKeystore!])
             web3.addKeystoreManager(keystoreManager)
             
-            let contractAddress = EthereumAddress("0x28a958cD020efeA3734a0bb36DDdc5F9B872cEa8")
-            guard let contract = web3.contract(Web3.Utils.estimateGasTestABI,
+            guard let contractAddress = EthereumAddress("0x28a958cD020efeA3734a0bb36DDdc5F9B872cEa8"),
+                let contract = web3.contract(Web3.Utils.estimateGasTestABI,
                                              at: contractAddress,
                                              abiVersion: 2) else {
-                    return
+                                                return
             }
             
             var options = TransactionOptions.defaultOptions
@@ -85,7 +85,6 @@ class web3swift_promises_Tests: XCTestCase {
             print(estimate1)
             
             let amount2 = Web3.Utils.parseToBigUInt("0.00000005", units: .eth) // 50 gwei
-
             guard let tx2 = contract.write("test",
                                            parameters: [amount2] as [AnyObject],
                                            extraData: Data(),
@@ -124,8 +123,8 @@ class web3swift_promises_Tests: XCTestCase {
     func testERC20tokenBalancePromise() {
         do {
             let web3 = Web3.InfuraMainnetWeb3()
-            let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress("0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1"), abiVersion: 2)
-            let addressOfUser = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")
+            let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress("0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1")!, abiVersion: 2)
+            let addressOfUser = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
             let tokenBalance = try contract!.read("balanceOf", parameters: [addressOfUser] as [AnyObject])!.callPromise().wait()
             guard let bal = tokenBalance["0"] as? BigUInt else {return XCTFail()}
             print(String(bal))
@@ -143,8 +142,8 @@ class web3swift_promises_Tests: XCTestCase {
             var filter = EventFilter()
             filter.fromBlock = .blockNumber(UInt64(5200120))
             filter.toBlock = .blockNumber(UInt64(5200120))
-            filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")]
-            filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")] as [EventFilterable]), (nil as [EventFilterable]?)]
+            filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
+            filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), (nil as [EventFilterable]?)]
             let eventParserResult = try contract!.getIndexedEventsPromise(eventName: "Transfer", filter: filter, joinWithReceipts: true).wait()
             print(eventParserResult)
             XCTAssert(eventParserResult.count == 2)
@@ -162,8 +161,8 @@ class web3swift_promises_Tests: XCTestCase {
             let web3 = Web3.InfuraMainnetWeb3()
             let contract = web3.contract(jsonString, at: nil, abiVersion: 2)
             var filter = EventFilter()
-            filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")]
-            filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")] as [EventFilterable])]
+            filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
+            filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")!] as [EventFilterable])]
             guard let eventParser = contract?.createEventParser("Transfer", filter: filter) else {return XCTFail()}
             let present = try eventParser.parseBlockByNumberPromise(UInt64(5200120)).wait()
             print(present)

@@ -99,7 +99,7 @@ extension TransactionOptions: Decodable {
     }
 }
 
-extension EthereumTransaction: Decodable {
+extension EthereumTransaction:Decodable {
     enum CodingKeys: String, CodingKey
     {
         case to
@@ -130,7 +130,7 @@ extension EthereumTransaction: Decodable {
         
         guard let nonce = try decodeHexToBigUInt(container, key: .nonce) else {throw Web3Error.dataError}
         self.nonce = nonce
-
+        
         guard let v = try decodeHexToBigUInt(container, key: .v) else {throw Web3Error.dataError}
         self.v = v
         

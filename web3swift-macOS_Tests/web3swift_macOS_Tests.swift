@@ -2,8 +2,8 @@
 //  web3swift_macOS_Tests.swift
 //  web3swift-macOS_Tests
 //
-//  Created by Alexander Vlasov on 26.02.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import XCTest

@@ -5,7 +5,7 @@ import Dispatch
  A `Promise` is a functional abstraction around a failable asynchronous operation.
  - See: `Thenable`
  */
-public final class Promise<T>: Thenable, CatchMixin {
+public class Promise<T>: Thenable, CatchMixin {
     let box: Box<Result<T>>
 
     fileprivate init(box: SealedBox<Result<T>>) {
@@ -109,7 +109,7 @@ public extension Promise {
     func wait() throws -> T {
 
         if Thread.isMainThread {
-            conf.logHandler(LogEvent.waitOnMainThread)
+            Swift.print("PromiseKit: warning: `wait()` called on main thread!")
         }
 
         var result = self.result

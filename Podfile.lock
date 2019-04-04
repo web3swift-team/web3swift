@@ -2,36 +2,36 @@ PODS:
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
   - CryptoSwift (0.15.0)
-  - EthereumABI (1.2.0):
+  - EthereumABI (1.1.1):
     - BigInt (~> 3.1)
     - CryptoSwift (~> 0.13)
-    - EthereumAddress (~> 1.1.0)
-  - EthereumAddress (1.1.0):
+    - EthereumAddress (~> 1.0.0)
+  - EthereumAddress (1.0.0):
     - CryptoSwift (~> 0.13)
-  - PromiseKit (6.8.3):
-    - PromiseKit/CorePromise (= 6.8.3)
-    - PromiseKit/Foundation (= 6.8.3)
-    - PromiseKit/UIKit (= 6.8.3)
-  - PromiseKit/CorePromise (6.8.3)
-  - PromiseKit/Foundation (6.8.3):
+  - PromiseKit (6.4.1):
+    - PromiseKit/CorePromise (= 6.4.1)
+    - PromiseKit/Foundation (= 6.4.1)
+    - PromiseKit/UIKit (= 6.4.1)
+  - PromiseKit/CorePromise (6.4.1)
+  - PromiseKit/Foundation (6.4.1):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (6.8.3):
+  - PromiseKit/UIKit (6.4.1):
     - PromiseKit/CorePromise
   - secp256k1_swift (1.0.3)
   - SipHash (1.2.2)
   - Starscream (3.0.6)
-  - SwiftRLP (1.2):
+  - SwiftRLP (1.1):
     - BigInt (~> 3.1)
 
 DEPENDENCIES:
-  - BigInt (~> 3.1.0)
-  - CryptoSwift (~> 0.15.0)
-  - EthereumABI (~> 1.2.0)
-  - EthereumAddress (~> 1.1.0)
-  - PromiseKit (~> 6.8.3)
-  - secp256k1_swift (~> 1.0.3)
+  - BigInt (= 3.1)
+  - CryptoSwift (= 0.15.0)
+  - EthereumABI (= 1.1.1)
+  - EthereumAddress (= 1.0.0)
+  - PromiseKit (= 6.4.1)
+  - secp256k1_swift (= 1.0.3)
   - Starscream (~> 3.0.2)
-  - SwiftRLP (~> 1.2)
+  - SwiftRLP (= 1.1)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -48,14 +48,14 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: 769f58a9e89f64e8796c2e59ce5f002dc81a2438
-  EthereumABI: 3e7b3916d8c516c690e3b661ead56652a937cd79
-  EthereumAddress: 7a948eff69b004daffe719860c772496af4f4fd7
-  PromiseKit: 94c6e781838c5bf4717677d0d882b0e7250c80fc
+  EthereumABI: f040f5429e5a4366d028c88b88d9441e137593af
+  EthereumAddress: f476e1320dca3a0024431e713ede7a09c7eb7796
+  PromiseKit: 4c76a6506638034e3d7bede97b2ff7743f7bd2dc
   secp256k1_swift: 4fc5c4b2d2c6d21ee8ccb868cdc92da12f38bed9
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
-  SwiftRLP: 98a02b2210128353ca02e4c2f4d83e2a9796db4f
+  SwiftRLP: 5512899925f1a9e1c78c902ed3bf857880e814a0
 
-PODFILE CHECKSUM: b52cd940f4a572dd780df78154b78dd9b9a03cb9
+PODFILE CHECKSUM: f6bd64afcf880b538c28f14d7d04eee536ec1a2f
 
 COCOAPODS: 1.7.0.beta.3

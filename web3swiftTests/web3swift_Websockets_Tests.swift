@@ -5,7 +5,6 @@
 //  Created by Anton on 01/04/2019.
 //  Copyright © 2019 The Matter Inc. All rights reserved.
 //
-
 import XCTest
 import Starscream
 
@@ -40,7 +39,7 @@ class web3swift_websocket_Tests: XCTestCase {
     
     let spyDelegate = SpyDelegate()
     var socketProvider: InfuraWebsocketProvider?
-
+    
     func testSubscribeOnPendingTXs() {
         guard let socketProvider = InfuraWebsocketProvider.connectToSocket(.Mainnet, delegate: spyDelegate) else {
             return XCTFail()
@@ -48,7 +47,7 @@ class web3swift_websocket_Tests: XCTestCase {
         spyDelegate.asyncExpectation = expectation(description: "Delegate called")
         try! socketProvider.filter(method: .newPendingTransactionFilter)
         
-        waitForExpectations(timeout: 100000) { error in
+        waitForExpectations(timeout: 100) { error in
             if let error = error {
                 XCTFail("waitForExpectationsWithTimeout errored: \(error)")
             }

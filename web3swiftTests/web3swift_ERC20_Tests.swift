@@ -28,10 +28,10 @@ class web3swift_ERC20_Tests: XCTestCase {
     
     func testERC20tokenBalance() throws {
         let web3 = Web3.InfuraMainnetWeb3()
-        let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress("0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1"), abiVersion: 2)
-        let addressOfUser = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")
+        let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress("0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1")!, abiVersion: 2)
+        let addressOfUser = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         guard let readTX = contract?.read("balanceOf", parameters: [addressOfUser] as [AnyObject]) else {return XCTFail()}
-        readTX.transactionOptions.from = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")
+        readTX.transactionOptions.from = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let tokenBalance = try readTX.callPromise().wait()
         guard let bal = tokenBalance["0"] as? BigUInt else {return XCTFail()}
         print(String(bal))

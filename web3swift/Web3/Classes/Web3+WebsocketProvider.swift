@@ -5,7 +5,6 @@
 //  Created by Anton on 01/04/2019.
 //  Copyright © 2019 The Matter Inc. All rights reserved.
 //
-
 import Starscream
 import PromiseKit
 import BigInt
@@ -114,7 +113,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     public var socket: WebSocket
     public var delegate: Web3SocketDelegate
     
-    public init(endpoint: URL,
+    public init?(endpoint: URL,
                 delegate wsdelegate: Web3SocketDelegate,
                 keystoreManager manager: KeystoreManager? = nil,
                 network net: Networks? = nil) {
@@ -123,8 +122,11 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         url = endpoint
         socket = WebSocket(url: endpoint)
         socket.delegate = self
+        let endpointString = endpoint.absoluteString
+        if !(endpointString.hasPrefix("wss://") || endpointString.hasPrefix("ws://")) {
+            return nil
+        }
         if net == nil {
-            let endpointString = endpoint.absoluteString
             if endpointString.hasPrefix("wss://") && endpointString.hasSuffix(".infura.io/ws") {
                 let networkString = endpointString.replacingOccurrences(of: "wss://", with: "")
                     .replacingOccurrences(of: ".infura.io/ws", with: "")
@@ -157,11 +159,13 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     public static func connectToSocket(endpoint: URL,
                                        delegate: Web3SocketDelegate,
                                        keystoreManager manager: KeystoreManager? = nil,
-                                       network net: Networks? = nil) -> WebsocketProvider {
-        let socketProvider = WebsocketProvider(endpoint: endpoint,
+                                       network net: Networks? = nil) -> WebsocketProvider? {
+        guard let socketProvider = WebsocketProvider(endpoint: endpoint,
                                                delegate: delegate,
                                                keystoreManager: manager,
-                                               network: net)
+                                               network: net) else {
+                                                return nil
+        }
         socketProvider.connectSocket()
         return socketProvider
     }
@@ -196,4 +200,3 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         print("Got pong! Maybe some data: \(data?.count)")
     }
 }
-
