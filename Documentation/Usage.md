@@ -1,5 +1,7 @@
 # Usage
 
+# Account
+
 ## Account Management
 
 #### Preffered keys Wallet Model
@@ -12,10 +14,10 @@ struct WalletModel {
     let isHD: Bool
 
     static func fromCoreData(crModel: Wallet) -> WalletModel {
-		let model = KeyWalletModel(address: crModel.address ?? "",
-								   data: crModel.data,
-								   name: crModel.name ?? "",
-								   isHD: crModel.isHD)
+        let model = KeyWalletModel(address: crModel.address ?? "",
+				   				   data: crModel.data,
+				                   name: crModel.name ?? "",
+				                   isHD: crModel.isHD)
 		return model
     }
 }
@@ -66,9 +68,9 @@ class ERC20TokenModel {
 
     static func fromCoreData(crModel: ERC20Token) -> ERC20TokenModel {
         let model = ERC20TokenModel(name: crModel.name ?? "",
-                address: crModel.address ?? "",
-                decimals: crModel.decimals ?? "",
-                symbol: crModel.symbol ?? "")
+        							address: crModel.address ?? "",
+               					    decimals: crModel.decimals ?? "",
+                					symbol: crModel.symbol ?? "")
         return model
     }
 }
@@ -281,6 +283,42 @@ func getPrivateKey(for wallet: WalletModel, password: String) throws -> String {
 }
 ```
 
+# Web3 and Web2 actions
+
+## web3 instance
+
+Firstly you need to initialize 'web3' instance for almost all further operations:
+```swift
+// common Http/Https provider
+let web3instance = web3(provider: Web3HttpProvider(<http/https provider url>)
+// precompiled Infura providers
+let web3instance = Web3.InfuraMainnetWeb3() // Mainnet Infura Provider
+let web3instance = Web3.InfuraRinkebyWeb3() // Mainnet Rinkeby Provider
+let web3instance = Web3.InfuraRopstenWeb3() // Mainnet Ropsten Provider
+```
+
+Then you will need to attach keystore manager to web3 instance:
+```swift
+web3.addKeystoreManager(keystoreManager)
+```
+
+You can get it from wallet model we've previosly created:
+```swift
+var keystoreManager: KeystoreManager? {
+	if self.isHD {
+		guard let keystore = BIP32Keystore(wallet.data) else {
+			return nil
+		}
+		return KeystoreManager([keystore])
+	} else {
+		guard let keystore = EthereumKeystoreV3(wallet.data) else {
+			return nil
+		}
+		return KeystoreManager([keystore])
+	}
+}
+```
+
 ### Ethereum Address
 
 #### Initializing Ethereum Address
@@ -301,7 +339,7 @@ func getETHbalance(for wallet: WalletModel) throws -> String {
 		guard let walletAddress = EthereumAddress(wallet.address) else {
 			throw Web3Error.walletError
 		}
-		let web3 = self.web3Instance
+		let web3 = web3Instance
 		let balanceResult = try web3.eth.getBalance(address: walletAddress)
 		guard let balanceString = Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3) else {
 			throw Web3Error.dataError
@@ -512,4 +550,22 @@ func getBlockNumber(_ web3: web3) throws -> BigUInt {
 		throw error 
     }
 }
+```
+
+## Infura Websockets
+
+### Subscribe on new pending transactions
+
+```swift
+let delegate: Web3SocketDelegate = <some delegate class which will receive messages from endpoint>
+let socketProvider = InfuraWebsocketProvider.connectToSocket(.Mainnet, delegate: delegate)
+try! socketProvider.subscribeOnNewPendingTransactions()
+```
+
+### Get latest new pending transactions
+
+```swift
+let delegate: Web3SocketDelegate = <some delegate class which will receive messages from endpoint>
+let socketProvider = InfuraWebsocketProvider.connectToSocket(.Mainnet, delegate: delegate)
+try! socketProvider.filter(method: .newPendingTransactionFilter)
 ```
