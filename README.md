@@ -1,4 +1,4 @@
-![matter-github-swift](https://github.com/matterinc/web3swift/blob/develop/web3swift-logo.png)
+![matter-github-swift](https://github.com/matter-labs/web3swift/blob/develop/web3swift-logo.png)
 
 # web3swift
 
@@ -31,18 +31,18 @@
   * [License](#license)
 
 ---
-  - [Usage Doc](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md)
+  - [Usage Doc](https://github.com/matter-labs/web3swift/blob/develop/Documentation/Usage.md)
 	- **Account Management** 
-		- [Create Account](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#create-account)
-		- [Import Account](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#import-account)
-		- [Manage Keystore](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#manage-keystore)
-		- [Ethereum Address](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#ethereum-address)
-		- [Get Balance](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#get-balance)
+		- [Create Account](https://github.com/matter-labs/web3swift/blob/develop/Documentation/Usage.md#create-account)
+		- [Import Account](https://github.com/matter-labs/web3swift/blob/develop/Documentation/Usage.md#import-account)
+		- [Manage Keystore](https://github.com/matter-labs/web3swift/blob/develop/Documentation/Usage.md#manage-keystore)
+		- [Ethereum Address](https://github.com/matter-labs/web3swift/blob/develop/Documentation/Usage.md#ethereum-address)
+		- [Get Balance](https://github.com/matter-labs/web3swift/blob/develop/Documentation/Usage.md#get-balance)
 	- **Transactions Operations** 
-		- [Prepare Transaction](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#prepare-transaction)
-		- [Send Transaction](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#send-transaction)
+		- [Prepare Transaction](https://github.com/matter-labs/web3swift/blob/develop/Documentation/Usage.md#prepare-transaction)
+		- [Send Transaction](https://github.com/matter-labs/web3swift/blob/develop/Documentation/Usage.md#send-transaction)
 	- **Chain State** 
-		- [Get Block Number](https://github.com/matterinc/web3swift/blob/develop/Documentation/Usage.md#get-block-number)
+		- [Get Block Number](https://github.com/matter-labs/web3swift/blob/develop/Documentation/Usage.md#get-block-number)
 
 
 ## Ready Features
@@ -54,6 +54,7 @@
 - [x] ABI deconding (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
 - [x] Ethereum Name Service (ENS) support - a secure & decentralised way to address resources both on and off the blockchain using simple, human-readable names
 - [x] Interactions (read/write to Smart contracts) :arrows_counterclockwise:
+- [x] Complete Infura Ethereum API support, patial Websockets API support
 - [x] Parsing TxPool content into native values (ethereum addresses and transactions) - easy to get pending transactions
 - [x] Event loops functionality
 - [x] Supports Web3View functionality - WKWebView with injected "web3" provider
@@ -80,6 +81,7 @@
 	- [x] [EIP-721x](https://github.com/loomnetwork/erc721x) (An extension of ERC721 that adds support for multi-fungible tokens and batch transfers, while being fully backward-compatible, also known as ERC-721x)
 	- [x] [EIP-1155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1155.md) (Multi Token Standard, also known as ERC-1155)
 	- [x] [EIP-1376](https://github.com/ethereum/EIPs/issues/1376) (Service-Friendly Token, also known as ERC-1376)
+	- [x] [ST-20](https://github.com/PolymathNetwork/polymath-core) - ST-20 token is an Ethereum-based token implemented on top of the ERC-20 protocol that adds the ability for tokens to control transfers based on specific rules
 	
 - [x] RLP encoding
 - [x] Batched requests in concurrent mode
@@ -97,8 +99,8 @@
 ## Requirements
 
 - iOS 9.0+ / macOS 10.11+
-- Xcode 9.0+
-- Swift 4.1+
+- Xcode 10.2+
+- Swift 5.0+
 
 ## Migration Guides
 
@@ -109,14 +111,14 @@
 When using this lib, please make references to this repo and give your start! :)
 *Nothing makes developers happier than seeing someone else use our work and go wild with it.*
 
-If you are using web3swift in your app or know of an app that uses it, please add it to [this list](https://github.com/matterinc/web3swift/wiki/Apps-using-web3swift).
+If you are using web3swift in your app or know of an app that uses it, please add it to [this list](https://github.com/matter-labs/web3swift/wiki/Apps-using-web3swift).
 
 - If you **need help**, use [Stack Overflow](https://stackoverflow.com/questions/tagged/web3swift) and tag `web3swift`.
 - If you need to **find or understand an API**, check [our documentation](http://web3swift.github.io/web3swift/).
-- If you'd like to **see web3swift best practices**, check [Apps using this library](https://github.com/matterinc/web3swift/wiki/Apps-using-web3swift).
-- If you **found a bug**, [open an issue](https://github.com/matterinc/web3swift/issues).
-- If you **have a feature request**, [open an issue](https://github.com/matterinc/web3swift/issues).
-- If you **want to contribute**, [submit a pull request](https://github.com/matterinc/web3swift/pulls).
+- If you'd like to **see web3swift best practices**, check [Apps using this library](https://github.com/matter-labs/web3swift/wiki/Apps-using-web3swift).
+- If you **found a bug**, [open an issue](https://github.com/matter-labs/web3swift/issues).
+- If you **have a feature request**, [open an issue](https://github.com/matter-labs/web3swift/issues).
+- If you **want to contribute**, [submit a pull request](https://github.com/matter-labs/web3swift/pulls).
 
 ## Installation
 
@@ -136,7 +138,7 @@ platform :ios, '9.0'
 
 target '<Your Target Name>' do
     use_frameworks!
-    pod 'web3swift'
+    pod 'web3swift', '~> 2.1.3'
 end
 ```
 
@@ -157,19 +159,27 @@ $ brew update
 $ brew install carthage
 ```
 
-To integrate web3swift into your Xcode project using Carthage, specify it in your `Cartfile`:
+To integrate web3swift into your Xcode project using Carthage, specify it in your `Cartfile`.
+Create an empty Cartfile with the touch command and open it:
 
-```ogdl
-github "matterinc/web3swift" "carthage"
+```bash
+$ touch Cartfile
+$ open -a Xcode Cartfile
 ```
 
-Run `carthage update` to build the framework and drag the built `web3swift.framework` into your Xcode project.
+Add the following line to the Cartfile and save it:
+
+```ogdl
+github "matter-labs/web3swift" "carthage"
+```
+
+Run `carthage update` to build the framework. By default, Carthage performs checkouts and builds in a new directory 'Carthage' in the same location as your Cartfile. Open this directory, go to 'Build' directory, choose iOS or macOS directory and use framework from chosen directory in your Xcode project.
 
 ## Example Project
 
 You can try lib by running the example project:
 
-- Clone the repo: `git clone https://github.com/matterinc/web3swift.git`
+- Clone the repo: `git clone https://github.com/matter-labs/web3swift.git`
 - Move to the repo: `cd web3swift/Example/web3swiftExample`
 - Install Dependencies: `pod install`
 - Open: `open ./web3swiftExample.xcworkspace`
@@ -193,7 +203,7 @@ You can get the ABI of your contract directly from [Remix IDE](https://remix.eth
 Then you should use contract address and ABI in creating contract object. In example we use Infura Mainnet:
 ```swift
 let yourContractABI: String = <CONTRACT JSON ABI>
-let toEthereumAddress: EthereumAddress? = <DESTINATION ETHEREUM ADDRESS>
+let toEthereumAddress: EthereumAddress = <DESTINATION ETHEREUM ADDRESS>
 let abiVersion: Int = <ABI VERSION NUMBER>
 
 let contract = Web3.InfuraMainnetWeb3().contract(yourContractABI, at: toEthereumAddress, abiVersion: abiVersion)
@@ -229,20 +239,23 @@ func setLocalNode(port: Int = 8545) -> Web3? {
 
 ## What's next
 
-- [x] [R-Token](https://github.com/harborhq/r-token) (Smart Contracts for applying regulatory compliance to tokenized securities issuance and trading)
-- [x] [SRC-20](https://swarm.fund/swarm-basics/) (Swarm protocol that enables the tokenization of assets on the blockchain - Security Tokens)
-- [x] [ST-20](https://github.com/PolymathNetwork/polymath-core) (ST-20 token is an Ethereum-based token implemented on top of the ERC-20 protocol that adds the ability for tokens to control transfers based on specific rules)
-- [x] [Objective-C] - a proxy bridge to build your DApp on Objective-C using web3swift
-- [x] [Performance Improvements]
-- [x] [More convenient methods for basic namespaces]
-- [x] [Complete Documentation](https://web3swift.github.io/web3swift)
-
+- [x] Objective-C - a proxy bridge to build your DApp on Objective-C using web3swift 
+- [x] Complete Documentation (https://web3swift.github.io/web3swift)
+- [x] Modularity with the basic Web3 subspec/SPM (the most basic functions like transaction signing and interacting with an http rpc server) and other modules with additional functionality
+- [x] [R-Token](https://github.com/harborhq/r-token) - Smart Contracts for applying regulatory compliance to tokenized securities issuance and trading
+- [x] Complete support Infura Websockets API
+- [x] Support IPFS via Infura public IPFS gateway
+- [x] Support more blockchains - Ripple, Bitcoin, EOS, etc.
+- [x] Performance Improvements
+- [x] More convenient methods for basic namespaces
 
 ## Credits
 
 Alex Vlasov, [@shamatar](https://github.com/shamatar),  alex.m.vlasov@gmail.com
 
 Petr Korolev, [@skywinder](https://github.com/skywinder)
+
+Anton Grigorev [@baldyash](https://github.com/BaldyAsh), antongrigorjev2010@gmail.com
 
 ### Security Disclosure
 
@@ -260,4 +273,4 @@ Our Ether wallet address: 0xe22b8979739d724343bd002f9f432f5990879901
 
 ## License
 
-web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/matterinc/web3swift/blob/documentation/LICENSE) for details.
+web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/matter-labs/web3swift/blob/documentation/LICENSE) for details.
