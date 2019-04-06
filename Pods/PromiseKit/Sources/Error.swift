@@ -83,12 +83,7 @@ extension Error {
         } catch CocoaError.userCancelled {
             return true
         } catch {
-        #if os(macOS) || os(iOS) || os(tvOS)
-            let pair = { ($0.domain, $0.code) }(error as NSError)
-            return ("SKErrorDomain", 2) == pair
-        #else
             return false
-        #endif
         }
     }
 }

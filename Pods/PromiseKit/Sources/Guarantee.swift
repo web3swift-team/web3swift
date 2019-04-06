@@ -5,8 +5,8 @@ import Dispatch
  A `Guarantee` is a functional abstraction around an asynchronous operation that cannot error.
  - See: `Thenable`
 */
-public final class Guarantee<T>: Thenable {
-    let box: PromiseKit.Box<T>
+public class Guarantee<T>: Thenable {
+    let box: Box<T>
 
     fileprivate init(box: SealedBox<T>) {
         self.box = box
@@ -19,7 +19,7 @@ public final class Guarantee<T>: Thenable {
 
     /// Returns a pending `Guarantee` that can be resolved with the provided closure’s parameter.
     public init(resolver body: (@escaping(T) -> Void) -> Void) {
-        box = Box()
+        box = EmptyBox()
         body(box.seal)
     }
 
@@ -54,19 +54,8 @@ public final class Guarantee<T>: Thenable {
         }
     }
 
-    final private class Box<T>: EmptyBox<T> {
-        deinit {
-            switch inspect() {
-            case .pending:
-                PromiseKit.conf.logHandler(.pendingGuaranteeDeallocated)
-            case .resolved:
-                break
-            }
-        }
-    }
-
     init(_: PMKUnambiguousInitializer) {
-        box = Box()
+        box = EmptyBox()
     }
 
     /// Returns a tuple of a pending `Guarantee` and a function that resolves it.
@@ -116,7 +105,7 @@ public extension Guarantee {
         return rg
     }
 
-    func asVoid() -> Guarantee<Void> {
+    public func asVoid() -> Guarantee<Void> {
         return map(on: nil) { _ in }
     }
     
@@ -124,10 +113,10 @@ public extension Guarantee {
      Blocks this thread, so you know, don’t call this on a serial thread that
      any part of your chain may use. Like the main thread for example.
      */
-    func wait() -> T {
+    public func wait() -> T {
 
         if Thread.isMainThread {
-            conf.logHandler(.waitOnMainThread)
+            print("PromiseKit: warning: `wait()` called on main thread!")
         }
 
         var result = value

@@ -1,0 +1,7 @@
+module Starscream {
+  umbrella header "Starscream-macOS-umbrella.h"
+  exclude header "Starscream-iOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

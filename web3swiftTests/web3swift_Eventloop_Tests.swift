@@ -62,7 +62,6 @@ class web3swift_Eventloop_Tests: XCTestCase {
 //        let hookNewNonce2 = middleware.nonceLookups[tempKeystore!.addresses!.first!]!
 //        XCTAssert(newNonce2 == hookNewNonce2)
 //    }
-
     
     func getKeystoreData() -> Data? {
         let bundle = Bundle(for: type(of: self))

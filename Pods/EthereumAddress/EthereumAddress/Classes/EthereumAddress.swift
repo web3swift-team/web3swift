@@ -9,9 +9,7 @@
 import Foundation
 import CryptoSwift
 
-public struct EthereumAddress: Equatable, ExpressibleByStringLiteral {
-    public typealias StringLiteralType = String
-    
+public struct EthereumAddress: Equatable {
     public enum AddressType {
         case normal
         case contractDeployment
@@ -75,10 +73,6 @@ public struct EthereumAddress: Equatable, ExpressibleByStringLiteral {
             }
         }
         return ret
-    }
-    
-    public init(stringLiteral value: EthereumAddress.StringLiteralType) {
-        self.init(value, type: .normal, ignoreChecksum: true)!
     }
     
     public init?(_ addressString:String, type: AddressType = .normal, ignoreChecksum: Bool = false) {

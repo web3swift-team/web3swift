@@ -2,8 +2,8 @@
 //  ContractProtocol.swift
 //  web3swift
 //
-//  Created by Alexander Vlasov on 04.04.2018.
-//  Copyright © 2018 Bankex Foundation. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
