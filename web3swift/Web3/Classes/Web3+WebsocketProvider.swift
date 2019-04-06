@@ -15,8 +15,8 @@ public protocol IWebsocketProvider {
     var delegate: Web3SocketDelegate {get set}
     func connectSocket() throws
     func disconnectSocket() throws
-    func writeMessage(string: String)
-    func writeMessage(data: Data)
+    func writeMessage(_ string: String)
+    func writeMessage(_ data: Data)
 }
 
 public enum InfuraWebsocketMethod: String, Encodable {
@@ -113,16 +113,52 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     public var socket: WebSocket
     public var delegate: Web3SocketDelegate
     
-    public init?(endpoint: URL,
-                delegate wsdelegate: Web3SocketDelegate,
-                keystoreManager manager: KeystoreManager? = nil,
-                network net: Networks? = nil) {
+    public init?(_ endpoint: URL,
+                 delegate wsdelegate: Web3SocketDelegate,
+                 keystoreManager manager: KeystoreManager? = nil,
+                 network net: Networks? = nil) {
         delegate = wsdelegate
         attachedKeystoreManager = manager
         url = endpoint
         socket = WebSocket(url: endpoint)
         socket.delegate = self
         let endpointString = endpoint.absoluteString
+        if !(endpointString.hasPrefix("wss://") || endpointString.hasPrefix("ws://")) {
+            return nil
+        }
+        if net == nil {
+            if endpointString.hasPrefix("wss://") && endpointString.hasSuffix(".infura.io/ws") {
+                let networkString = endpointString.replacingOccurrences(of: "wss://", with: "")
+                    .replacingOccurrences(of: ".infura.io/ws", with: "")
+                switch networkString {
+                case "mainnet":
+                    network = Networks.Mainnet
+                case "rinkeby":
+                    network = Networks.Rinkeby
+                case "ropsten":
+                    network = Networks.Ropsten
+                case "kovan":
+                    network = Networks.Kovan
+                default:
+                    break
+                }
+            }
+        } else {
+            network = net
+        }
+    }
+    
+    public init?(_ endpoint: String,
+                 delegate wsdelegate: Web3SocketDelegate,
+                 keystoreManager manager: KeystoreManager? = nil,
+                 network net: Networks? = nil) {
+        guard let endpointUrl = URL(string: endpoint) else {return nil}
+        delegate = wsdelegate
+        attachedKeystoreManager = manager
+        url = endpointUrl
+        socket = WebSocket(url: endpointUrl)
+        socket.delegate = self
+        let endpointString = endpointUrl.absoluteString
         if !(endpointString.hasPrefix("wss://") || endpointString.hasPrefix("ws://")) {
             return nil
         }
@@ -156,25 +192,39 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         socket.disconnect()
     }
     
-    public static func connectToSocket(endpoint: URL,
-                                       delegate: Web3SocketDelegate,
-                                       keystoreManager manager: KeystoreManager? = nil,
-                                       network net: Networks? = nil) -> WebsocketProvider? {
-        guard let socketProvider = WebsocketProvider(endpoint: endpoint,
-                                               delegate: delegate,
-                                               keystoreManager: manager,
-                                               network: net) else {
+    public class func connectToSocket(_ endpoint: String,
+                                      delegate: Web3SocketDelegate,
+                                      keystoreManager manager: KeystoreManager? = nil,
+                                      network net: Networks? = nil) -> WebsocketProvider? {
+        guard let socketProvider = WebsocketProvider(endpoint,
+                                                     delegate: delegate,
+                                                     keystoreManager: manager,
+                                                     network: net) else {
                                                 return nil
         }
         socketProvider.connectSocket()
         return socketProvider
     }
     
-    public func writeMessage(string: String) {
+    public class func connectToSocket(_ endpoint: URL,
+                                      delegate: Web3SocketDelegate,
+                                      keystoreManager manager: KeystoreManager? = nil,
+                                      network net: Networks? = nil) -> WebsocketProvider? {
+        guard let socketProvider = WebsocketProvider(endpoint,
+                                                     delegate: delegate,
+                                                     keystoreManager: manager,
+                                                     network: net) else {
+                                                        return nil
+        }
+        socketProvider.connectSocket()
+        return socketProvider
+    }
+    
+    public func writeMessage(_ string: String) {
         socket.write(string: string)
     }
     
-    public func writeMessage(data: Data) {
+    public func writeMessage(_ data: Data) {
         socket.write(data: data)
     }
     
@@ -197,6 +247,6 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     }
     
     public func websocketDidReceivePong(socket: WebSocketClient, data: Data?) {
-        print("Got pong! Maybe some data: \(data?.count)")
+        print("Got pong! Maybe some data: \(String(describing: data?.count))")
     }
 }

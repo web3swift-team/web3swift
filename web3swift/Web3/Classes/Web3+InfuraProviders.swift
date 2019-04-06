@@ -35,15 +35,55 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
             || network == Networks.Mainnet else {return nil}
         let networkName = network.name
         let urlString = "wss://\(networkName).infura.io/ws"
-        guard let socketURL = URL(string: urlString) else {return nil}
-        super.init(endpoint: socketURL,
+        guard URL(string: urlString) != nil else {return nil}
+        super.init(urlString,
+                   delegate: delegate,
+                   keystoreManager: manager,
+                   network: network)
+    }
+    
+    public init?(_ endpoint: String,
+                 delegate: Web3SocketDelegate,
+                 keystoreManager manager: KeystoreManager? = nil) {
+        guard URL(string: endpoint) != nil else {return nil}
+        super.init(endpoint,
                    delegate: delegate,
                    keystoreManager: manager)
     }
     
-    public static func connectToSocket(_ network: Networks,
-                                       delegate: Web3SocketDelegate,
-                                       keystoreManager manager: KeystoreManager? = nil) -> InfuraWebsocketProvider? {
+    public init?(_ endpoint: URL,
+                 delegate: Web3SocketDelegate,
+                 keystoreManager manager: KeystoreManager? = nil) {
+        super.init(endpoint,
+                   delegate: delegate,
+                   keystoreManager: manager)
+    }
+    
+    override public class func connectToSocket(_ endpoint: String,
+                                               delegate: Web3SocketDelegate,
+                                               keystoreManager manager: KeystoreManager? = nil,
+                                               network net: Networks? = nil) -> WebsocketProvider? {
+        guard let socketProvider = InfuraWebsocketProvider(endpoint,
+                                                           delegate: delegate,
+                                                           keystoreManager: manager) else {return nil}
+        socketProvider.connectSocket()
+        return socketProvider
+    }
+    
+    override public class func connectToSocket(_ endpoint: URL,
+                                               delegate: Web3SocketDelegate,
+                                               keystoreManager manager: KeystoreManager? = nil,
+                                               network net: Networks? = nil) -> WebsocketProvider? {
+        guard let socketProvider = InfuraWebsocketProvider(endpoint,
+                                                           delegate: delegate,
+                                                           keystoreManager: manager) else {return nil}
+        socketProvider.connectSocket()
+        return socketProvider
+    }
+    
+    public static func connectToInfuraSocket(_ network: Networks,
+                                             delegate: Web3SocketDelegate,
+                                             keystoreManager manager: KeystoreManager? = nil) -> InfuraWebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(network,
                                                            delegate: delegate,
                                                            keystoreManager: manager) else {return nil}
@@ -55,7 +95,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         let request = JSONRPCRequestFabric.prepareRequest(method, parameters: params)
         let encoder = JSONEncoder()
         let requestData = try encoder.encode(request)
-        writeMessage(data: requestData)
+        writeMessage(requestData)
     }
     
     public func filter(method: InfuraWebsocketMethod, params: [Encodable]? = nil) throws {

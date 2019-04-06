@@ -41,7 +41,7 @@ class web3swift_websocket_Tests: XCTestCase {
     var socketProvider: InfuraWebsocketProvider?
     
     func testSubscribeOnPendingTXs() {
-        guard let socketProvider = InfuraWebsocketProvider.connectToSocket(.Mainnet, delegate: spyDelegate) else {
+        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
             return XCTFail()
         }
         spyDelegate.asyncExpectation = expectation(description: "Delegate called")
