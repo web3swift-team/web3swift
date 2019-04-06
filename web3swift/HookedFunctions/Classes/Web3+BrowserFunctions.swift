@@ -108,23 +108,27 @@ extension web3.BrowserFunctions {
         }
     }
     
-    public func prepareTxForApproval(_ transactionJSON: [String: Any]) -> (transaction: EthereumTransaction?, options: Web3Options?) {
+    public func prepareTxForApproval(_ transactionJSON: [String: Any]) -> (transaction: EthereumTransaction?, options: TransactionOptions?) {
         guard let transaction = EthereumTransaction.fromJSON(transactionJSON) else {return (nil, nil)}
         guard let options = TransactionOptions.fromJSON(transactionJSON) else {return (nil, nil)}
-        return self.prepareTxForApproval(transaction, options: options)
+        do {
+            return try self.prepareTxForApproval(transaction, options: options)
+        } catch {
+            return (nil, nil)
+        }
     }
 
-    public func prepareTxForApproval(_ trans: EthereumTransaction, options  opts: TransactionOptions) throws -> (transaction: EthereumTransaction?, options: TransactionOptions?) {
+    public func prepareTxForApproval(_ trans: EthereumTransaction, options opts: TransactionOptions) throws -> (transaction: EthereumTransaction?, options: TransactionOptions?) {
         do {
             var transaction = trans
             var options = opts
             guard let _ = options.from else {return (nil, nil)}
             let gasPrice = try self.web3.eth.getGasPrice()
             transaction.gasPrice = gasPrice
-            options.gasPrice = gasPrice
-            guard let gasEstimate = self.estimateGas(transaction, options: options) else {return (nil, nil)}
+            options.gasPrice = .manual(gasPrice)
+            guard let gasEstimate = self.estimateGas(transaction, transactionOptions: options) else {return (nil, nil)}
             transaction.gasLimit = gasEstimate
-            options.gasLimit = gasEstimate
+            options.gasLimit = .limited(gasEstimate)
             print(transaction)
             return (transaction, options)
         } catch {
