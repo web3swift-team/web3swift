@@ -28,9 +28,19 @@
 		- [Send write transaction](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#writing)
 		- [Send read transaction](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#reading)
 	- [Get Block number](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-block-number)
-- **[Infura Websockets](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#infura-websockets)**
-	- [Subscribe on new pending transactions](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#subscribe-on-new-pending-transactions)
+- **[Websockets](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#websockets)**
+	- [Web3socketDelegate](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#web3socketdelegate)
 	- [Get latest new pending transactions](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-latest-new-pending-transactions)
+	- *[Custom Websocket Provider](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#custom-websocket-provider)*
+		- [Connect to custom endpoint](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#connect-to-custom-endpoint)
+		- [Send message](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#send-message)
+	- *[Infura Websocket Provider](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#infura-websocket-provider)*
+		- [Connect to Infura endpoint](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#connect-to-infura-endpoint)
+		- [Connect to custom endpoint with API similar to Infura WSS endpoint](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#connect-to-custom-endpoint-with-api-similar-to-infura-wss-endpoint)
+		- [Create a filter in the node to notify when something happened](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-a-filter-in-the-node-to-notify-when-something-happened)
+		- [Get new pending transactions](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-new-pending-transactions)
+		- [Create a new subscription over particular events](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-a-new-subscription-over-particular-events)
+		- [Subscribe on new pending transactions](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#subscribe-on-new-pending-transactions)
 
 ## Introduction
 
@@ -149,7 +159,7 @@ if wallet.isHD {
 }
 ```
 
-#### Get wallet Private key
+### Get wallet Private key
 
 ```swift
 let password = "web3swift"
@@ -335,20 +345,83 @@ let result = try! transaction.call()
 let blockNumber = try! web3.eth.getBlockNumber()
 ```
 
-## Infura Websockets
+## Websockets
 
-### Subscribe on new pending transactions
+### Web3socketDelegate
 
+To receive messages from endpoint you need to create a class that adopt to Web3SocketDelegate protocol.
 ```swift
 let delegate: Web3SocketDelegate = DelegateClass() // Some delegate class which will receive messages from endpoint
-let socketProvider = InfuraWebsocketProvider.connectToSocket(.Mainnet, delegate: delegate)
+``` 
+
+### Custom Websocket Provider
+
+#### Connect to custom endpoint
+
+You can create WebsocketProvider and connect/disconnect it.
+```swift
+let socketProvider = WebsocketProvider("ws://your.endpoint", delegate: delegate)
+socketProvider.connectSocket()
+/// Some code
+/// ...
+socketProvider.disconnectSocket()
+``` 
+
+Or you can create already connected WebsocketProvider
+```swift
+let socketProvider = WebsocketProvider.connectToSocket("ws://your.endpoint", delegate: delegate)
+```
+
+#### Send message 
+
+```swift
+// String message
+socketProvider.writeMessage(String()) 
+// Data message
+socketProvider.writeMessage(Data())
+```
+
+### Infura Websocket Provider
+
+#### Connect to Infura endpoint 
+
+```swift
+let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: delegate)
+```
+
+#### Connect to custom endpoint with API similar to Infura WSS endpoint
+
+```swift
+let socketProvider = InfuraWebsocketProvider.connectToSocket("ws://your.endpoint", delegate: delegate)
+```
+
+#### Create a filter in the node to notify when something happened
+
+To study possible filters read [Infura WSS filters documentation](https://infura.io/docs/ethereum/wss/introduction)
+
+```swift
+try! socketProvider.filter(method: <InfuraWebsocketMethod>, params: <[Encodable]?>)
+```
+
+####  Get new pending transactions
+
+```swift
+try! socketProvider.filter(method: .newPendingTransactionFilter)
+```
+
+#### Create a new subscription over particular events
+
+To study possible subscriptions read [Infura WSS subscriptions documentation](https://infura.io/docs/ethereum/wss/eth_subscribe)
+
+```swift
+try! socketProvider.subscribe(params: <[Encodable]>)
+```
+
+#### Subscribe on new pending transactions
+
+```swift
 try! socketProvider.subscribeOnNewPendingTransactions()
 ```
 
-### Get latest new pending transactions
 
-```swift
-let delegate: Web3SocketDelegate = DelegateClass() // Some delegate class which will receive messages from endpoint
-let socketProvider = InfuraWebsocketProvider.connectToSocket(.Mainnet, delegate: delegate)
-try! socketProvider.filter(method: .newPendingTransactionFilter)
-```
+
