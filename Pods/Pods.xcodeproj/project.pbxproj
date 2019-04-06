@@ -3831,30 +3831,32 @@
 			};
 			name = Release;
 		};
-		1F6B0395224C145ADFC04D624CE218F1 /* Debug */ = {
+		27363A7E28FB2AE6330E81F827638BC9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9959A387FE97F5EE015FF46981A32E87 /* Starscream-iOS.xcconfig */;
+			baseConfigurationReference = 35674E85190CB95B6997F482987E6708 /* Starscream-macOS.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/Starscream-iOS/Starscream-iOS-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MODULEMAP_FILE = "Headers/Public/Starscream/Starscream-iOS.modulemap";
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREFIX_HEADER = "Target Support Files/Starscream-macOS/Starscream-macOS-prefix.pch";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "Headers/Public/Starscream/Starscream-macOS.modulemap";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "";
 				PRODUCT_MODULE_NAME = Starscream;
-				PRODUCT_NAME = "Starscream-iOS";
+				PRODUCT_NAME = "Starscream-macOS";
 				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SWIFT_VERSION = 5.0;
 			};
-			name = Debug;
+			name = Release;
 		};
 		27421C8A06B618FBA32213E5DC590A5D /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -3930,6 +3932,32 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 4.1;
+			};
+			name = Release;
+		};
+		33B4DF79E0BD2377248EA1EDE24F60EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9959A387FE97F5EE015FF46981A32E87 /* Starscream-iOS.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/Starscream-iOS/Starscream-iOS-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MODULEMAP_FILE = "Headers/Public/Starscream/Starscream-iOS.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = Starscream;
+				PRODUCT_NAME = "Starscream-iOS";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -4182,33 +4210,6 @@
 			};
 			name = Release;
 		};
-		5712CCCC7984D10323262CE3DAAFF0EC /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 35674E85190CB95B6997F482987E6708 /* Starscream-macOS.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "-";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				EXECUTABLE_PREFIX = lib;
-				GCC_PREFIX_HEADER = "Target Support Files/Starscream-macOS/Starscream-macOS-prefix.pch";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MODULEMAP_FILE = "Headers/Public/Starscream/Starscream-macOS.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = Starscream;
-				PRODUCT_NAME = "Starscream-macOS";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.2;
-			};
-			name = Release;
-		};
 		5D6537AC3C57BCCF4F90869A9B58575B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 71FC5A5D817B5A6A2E37821A24E1B72C /* CryptoSwift-macOS.xcconfig */;
@@ -4374,31 +4375,32 @@
 			};
 			name = Debug;
 		};
-		71DE6C9C3333EACB8A1C0FB6B71DCE5B /* Release */ = {
+		72ED51C6AE0C201415B1EE4126A28A61 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9959A387FE97F5EE015FF46981A32E87 /* Starscream-iOS.xcconfig */;
+			baseConfigurationReference = 35674E85190CB95B6997F482987E6708 /* Starscream-macOS.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/Starscream-iOS/Starscream-iOS-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				MODULEMAP_FILE = "Headers/Public/Starscream/Starscream-iOS.modulemap";
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREFIX_HEADER = "Target Support Files/Starscream-macOS/Starscream-macOS-prefix.pch";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "Headers/Public/Starscream/Starscream-macOS.modulemap";
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "";
 				PRODUCT_MODULE_NAME = Starscream;
-				PRODUCT_NAME = "Starscream-iOS";
+				PRODUCT_NAME = "Starscream-macOS";
 				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
+				SWIFT_VERSION = 5.0;
 			};
-			name = Release;
+			name = Debug;
 		};
 		804D7EC0985D020630D326134F179448 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -4745,33 +4747,6 @@
 			};
 			name = Release;
 		};
-		BCB5F3D567AA7EA913E4C4A7DABB8E7C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 35674E85190CB95B6997F482987E6708 /* Starscream-macOS.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "-";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				EXECUTABLE_PREFIX = lib;
-				GCC_PREFIX_HEADER = "Target Support Files/Starscream-macOS/Starscream-macOS-prefix.pch";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MODULEMAP_FILE = "Headers/Public/Starscream/Starscream-macOS.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = Starscream;
-				PRODUCT_NAME = "Starscream-macOS";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.2;
-			};
-			name = Debug;
-		};
 		BE736F0D333A3BAC7C8C2E1CCAE09871 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3764F8359667BB549CE9192C8A1D3AA0 /* SipHash-iOS.xcconfig */;
@@ -4900,6 +4875,31 @@
 				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
+		};
+		D79A821D19CA873F0DA01768F9ECEEDA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9959A387FE97F5EE015FF46981A32E87 /* Starscream-iOS.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/Starscream-iOS/Starscream-iOS-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MODULEMAP_FILE = "Headers/Public/Starscream/Starscream-iOS.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = Starscream;
+				PRODUCT_NAME = "Starscream-iOS";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 		F970760BB76772D6E1A5CCB7E7AD242F /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -5031,8 +5031,8 @@
 		40B6941F0D5B67C32633A317007FED48 /* Build configuration list for PBXNativeTarget "Starscream-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BCB5F3D567AA7EA913E4C4A7DABB8E7C /* Debug */,
-				5712CCCC7984D10323262CE3DAAFF0EC /* Release */,
+				72ED51C6AE0C201415B1EE4126A28A61 /* Debug */,
+				27363A7E28FB2AE6330E81F827638BC9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -5094,8 +5094,8 @@
 		912B25F0D3E13E6B69F3D9ED2DA0115C /* Build configuration list for PBXNativeTarget "Starscream-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1F6B0395224C145ADFC04D624CE218F1 /* Debug */,
-				71DE6C9C3333EACB8A1C0FB6B71DCE5B /* Release */,
+				D79A821D19CA873F0DA01768F9ECEEDA /* Debug */,
+				33B4DF79E0BD2377248EA1EDE24F60EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
