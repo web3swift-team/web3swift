@@ -1,5 +1,5 @@
 def import_pods
-  pod 'Starscream', '3.0.2'
+  pod 'Starscream', '3.1.0'
   pod 'PromiseKit', '6.4.1'
   pod 'BigInt', '3.1'
   pod 'CryptoSwift', '0.15.0'

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name             = "web3swift"
-s.version          = "2.1.3"
+s.version          = "2.1.4"
 s.summary          = "Web3 implementation in vanilla Swift for iOS ans macOS"
 
 s.description      = <<-DESC
@@ -24,10 +24,10 @@ s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 s.frameworks = 'CoreImage'
 s.dependency 'BigInt', '3.1'
 s.dependency 'CryptoSwift', '0.15.0'
-s.dependency 'PromiseKit', '6.3'
+s.dependency 'PromiseKit', '6.4.1'
 s.dependency 'secp256k1_swift', '1.0.3'
 s.dependency 'SwiftRLP', '1.1'
 s.dependency 'EthereumAddress', '1.0.0'
 s.dependency 'EthereumABI', '1.1.1'
-s.dependency 'Starscream', '3.0.2'
+s.dependency 'Starscream', '3.1.0'
 end
