@@ -102,6 +102,7 @@ public class BIP39 {
         guard wordList.count >= 12 && wordList.count.isMultiple(of: 4) else {return nil}
         var bitString = ""
         for word in wordList {
+//            let idx = language.words.index(of: word)
             let idx = language.words.firstIndex(of: word)
             if (idx == nil) {
                 return nil
@@ -135,6 +136,7 @@ public class BIP39 {
         let salt = "mnemonic" + password
         guard let saltData = salt.decomposedStringWithCompatibilityMapping.data(using: .utf8) else {return nil}
         guard let seedArray = try? PKCS5.PBKDF2(password: mnemData.bytes, salt: saltData.bytes, iterations: 2048, keyLength: 64, variant: HMAC.Variant.sha512).calculate() else {return nil}
+//        let seed = Data(bytes:seedArray)
         let seed = Data(seedArray)
         return seed
     }

@@ -37,20 +37,7 @@
                 resolve([NSError errorWithDomain:PMKErrorDomain code:PMKTaskError userInfo:info]);
             }
         };
-
-    #if __clang_major__ >= 9
-        if (@available(macOS 10.13, *)) {
-            NSError *error = nil;
-            
-            if (![self launchAndReturnError:&error]) {
-                resolve(error);
-            }
-        } else {
-            [self launch];
-        }
-    #else
-        [self launch];  // might @throw
-    #endif
+        [self launch];
     }];
 }
 

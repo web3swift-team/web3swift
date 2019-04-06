@@ -1,5 +1,5 @@
 /// An object for resolving promises
-public final class Resolver<T> {
+public class Resolver<T> {
     let box: Box<Result<T>>
 
     init(_ box: Box<Result<T>>) {
@@ -8,7 +8,7 @@ public final class Resolver<T> {
 
     deinit {
         if case .pending = box.inspect() {
-            conf.logHandler(.pendingPromiseDeallocated)
+            print("PromiseKit: warning: pending promise deallocated")
         }
     }
 }
@@ -25,12 +25,12 @@ public extension Resolver {
     }
 
     /// Resolves the promise with the provided result
-    func resolve(_ result: Result<T>) {
+    public func resolve(_ result: Result<T>) {
         box.seal(result)
     }
 
     /// Resolves the promise with the provided value or error
-    func resolve(_ obj: T?, _ error: Error?) {
+    public func resolve(_ obj: T?, _ error: Error?) {
         if let error = error {
             reject(error)
         } else if let obj = obj {
@@ -41,7 +41,7 @@ public extension Resolver {
     }
 
     /// Fulfills the promise with the provided value unless the provided error is non-nil
-    func resolve(_ obj: T, _ error: Error?) {
+    public func resolve(_ obj: T, _ error: Error?) {
         if let error = error {
             reject(error)
         } else {
@@ -50,7 +50,7 @@ public extension Resolver {
     }
 
     /// Resolves the promise, provided for non-conventional value-error ordered completion handlers.
-    func resolve(_ error: Error?, _ obj: T?) {
+    public func resolve(_ error: Error?, _ obj: T?) {
         resolve(obj, error)
     }
 }
@@ -65,20 +65,6 @@ extension Resolver where T == Void {
             fulfill(())
         }
     }
-#if false
-    // disabled ∵ https://github.com/mxcl/PromiseKit/issues/990
-
-    /// Fulfills the promise
-    public func fulfill() {
-        self.fulfill(())
-    }
-#else
-    /// Fulfills the promise
-    /// - Note: underscore is present due to: https://github.com/mxcl/PromiseKit/issues/990
-    public func fulfill_() {
-        self.fulfill(())
-    }
-#endif
 }
 #endif
 

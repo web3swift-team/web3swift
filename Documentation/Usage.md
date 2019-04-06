@@ -1,29 +1,67 @@
 # Usage
 
-## Account Management
+---
+- **[Introduction](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#introduction)**
+	- *[Preffered models](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preffered-models)*
+		- [Preffered keys Wallet Model](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preffered-keys-wallet-model-account)
+		- [Preffered ERC-20 Model](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preffered-erc-20-model)
+- **[Account Management](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#account-management)**
+	- *[Create Account](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-account)*
+		- [Create Account With Private Key](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-account-with-private-key)
+		- [Create Account With Mnemonics Phrase](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-account-with-mnemonics-phrase)
+	- *[Import Account](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-account)*
+		- [Import Account With Private Key](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#import-account-with-private-key)
+		- [Import Account With Mnemonics Phrase](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#import-account-with-mnemonics-phrase)
+	- [Get Keystore Manager from wallet data](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-keystore-manager-from-wallet-data)
+	- [Get wallet Private key](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-wallet-private-key)
+- **[Ethereum Endpoints interaction](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#ethereum-endpoints-interaction)**
+	- [web3 instance](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#web3-instance)
+	- [Ethereum Address](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#ethereum-address)
+	- *[Get Balance](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-balance)*
+		- [Getting ETH balance](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#getting-eth-balance)
+		- [Getting ERC20 token balance](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#getting-erc20-token-balance)
+	- *[Transactions Operations](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#transactions-operations)*
+		- [Preparing Transaction For Sending Ether](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preparing-transaction-for-sending-ether)
+		- [Preparing Transaction For Sending ERC-20 Tokens](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preparing-transaction-for-sending-erc-20-tokens)
+		- [Preparing Write Transaction for sending to some Contract and use its method](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preparing-write-transaction-for-sending-to-some-contract-and-use-its-method)
+		- [Preparing Read Transaction to call some Contract method](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preparing-read-transaction-to-call-some-contract-method)
+		- [Send write transaction](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#writing)
+		- [Send read transaction](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#reading)
+	- [Get Block number](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-block-number)
+- **[Websockets](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#websockets)**
+	- [Web3socketDelegate](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#web3socketdelegate)
+	- [Get latest new pending transactions](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-latest-new-pending-transactions)
+	- *[Custom Websocket Provider](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#custom-websocket-provider)*
+		- [Connect to custom endpoint](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#connect-to-custom-endpoint)
+		- [Send message](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#send-message)
+	- *[Infura Websocket Provider](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#infura-websocket-provider)*
+		- [Connect to Infura endpoint](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#connect-to-infura-endpoint)
+		- [Connect to custom endpoint with API similar to Infura WSS endpoint](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#connect-to-custom-endpoint-with-api-similar-to-infura-wss-endpoint)
+		- [Create a filter in the node to notify when something happened](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-a-filter-in-the-node-to-notify-when-something-happened)
+		- [Get new pending transactions](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-new-pending-transactions)
+		- [Create a new subscription over particular events](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-a-new-subscription-over-particular-events)
+		- [Subscribe on new pending transactions](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#subscribe-on-new-pending-transactions)
 
-#### Preffered keys Wallet Model
+## Introduction
+
+To work with platforms based on blockchain technology, in particular with Ethereum-like blockchains, developer must be fluent in concepts such as a crypto wallet, private and public key, smart contract, token and others. We will use these concepts without explaining their meanings. For more information about Ethereum, we recommend reading the book [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook), by Andreas M. Antonopoulos and Gavin Wood.
+
+**To create keystore we forced our users to use some password, which will be used in some operations, like transactions sending. We believe that security is important for such operations and this increases its level. You are free to use a pre-compiled password in your code, that is not set by the keystore user, at your own risk.**
+
+*In code examples we used force-unwrapped Swift optionals for better readability of example code. We recommend that you do not use this method to get rid of optional values.*
+
+### Preffered models
+
+To describe the library's capabilities, we will use the models described below, however you can use the models that are convenient for you.
+
+#### Preffered keys Wallet Model (Account)
 
 ```swift
-struct WalletModel {
+struct Wallet {
     let address: String
-    let data: Data?
+    let data: Data
     let name: String
     let isHD: Bool
-
-    static func fromCoreData(crModel: Wallet) -> WalletModel {
-		let model = KeyWalletModel(address: crModel.address ?? "",
-								   data: crModel.data,
-								   name: crModel.name ?? "",
-								   isHD: crModel.isHD)
-		return model
-    }
-}
-
-extension WalletModel: Equatable {
-    static func == (lhs: WalletModel, rhs: WalletModel) -> Bool {
-        return lhs.address == rhs.address
-    }
 }
 
 struct HDKey {
@@ -33,252 +71,120 @@ struct HDKey {
 ```
 
 #### Preffered ERC-20 Model
+
 ```swift
-class ERC20TokenModel {
+class ERC20Token {
     var name: String
     var address: String
     var decimals: String
     var symbol: String
-
-    init(token: ERC20Token) {
-        self.name = token.name ?? ""
-        self.address = token.address ?? ""
-        self.decimals = token.decimals ?? ""
-        self.symbol = token.symbol ?? ""
-    }
-
-    init(name: String,
-         address: String,
-         decimals: String,
-         symbol: String) {
-        self.name = name
-        self.address = address
-        self.decimals = decimals
-        self.symbol = symbol
-    }
-
-    init(isEther: Bool) {
-        self.name = isEther ? "Ether" : ""
-        self.address = isEther ? "" : ""
-        self.decimals = isEther ? "18" : "18"
-        self.symbol = isEther ? "Eth" : ""
-    }
-
-    static func fromCoreData(crModel: ERC20Token) -> ERC20TokenModel {
-        let model = ERC20TokenModel(name: crModel.name ?? "",
-                address: crModel.address ?? "",
-                decimals: crModel.decimals ?? "",
-                symbol: crModel.symbol ?? "")
-        return model
-    }
-}
-
-extension ERC20TokenModel: Equatable {
-    public static func ==(lhs: ERC20TokenModel, rhs: ERC20TokenModel) -> Bool {
-        return lhs.name == rhs.name &&
-            lhs.address == rhs.address &&
-            lhs.decimals == rhs.decimals &&
-            lhs.symbol == rhs.symbol
-    }
 }
 ```
+
+## Account Management
 
 ### Create Account
 
 #### Create Account With Private Key
+
 ```swift
-func createWallet(name: String?,
-		     	  password: String) throws -> WalletModel {
-	guard let newWallet = try? EthereumKeystoreV3(password: password) else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let wallet = newWallet, wallet.addresses?.count == 1 else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let address = wallet.addresses?.first?.address else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	let walletModel = WalletModel(address: address, data: keyData, name: name ?? "", isHD: false)
-	return walletModel
-}	
+let password = "web3swift" // We recommend here and everywhere to use the password set by the user.
+let keystore = try! EthereumKeystoreV3(password: password)!
+let name = "New Wallet"
+let keyData = try! JSONEncoder().encode(keystore.keystoreParams)
+let address = keystore.addresses!.first!.address
+let wallet = Wallet(address: address, data: keyData, name: name, isHD: false)
 ```
 
 #### Create Account With Mnemonics Phrase
-```swift
-func generateMnemonics(bitsOfEntropy: Int) throws -> String {
-	guard let mnemonics = try? BIP39.generateMnemonics(bitsOfEntropy: bitsOfEntropy),
-		let unwrapped = mnemonics else {
-			throw Web3Error.keystoreError(err: .noEntropyError)
-	}
-	return unwrapped
-}
 
-func createHDWallet(name: String?,
-				    password: String,
-                    mnemonics: String) throws -> WalletModel {
-	guard let keystore = try? BIP32Keystore(mnemonics: mnemonics,
-											password: password,
-											mnemonicsPassword: "",
-											language: .english), let wallet = keystore else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let address = wallet.addresses?.first?.address else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	let walletModel = WalletModel(address: address, data: keyData, name: name ?? "", isHD: false)
-	return walletModel
-}	
+```swift
+let password = "web3swift"
+let bitsOfEntropy: Int = 128 // Entropy is a measure of password strength. Usually used 128 or 256 bits.
+let mnemonics = try! BIP39.generateMnemonics(bitsOfEntropy: bitsOfEntropy)!
+let keystore = try! BIP32Keystore(
+	mnemonics: mnemonics,
+	password: password,
+	mnemonicsPassword: "",
+	language: .english)!
+let name = "New HD Wallet"
+let keyData = try! JSONEncoder().encode(keystore.keystoreParams)
+let address = keystore.addresses!.first!.address
+let wallet = Wallet(address: address, data: keyData, name: name, isHD: true)
 ```
 
 ### Import Account
 
 #### Import Account With Private Key
+
 ```swift
-func importWalletWithPrivateKey(name: String?,
-							    key: String,
-								password: String) throws -> WalletModel {
-	let text = key.trimmingCharacters(in: .whitespacesAndNewlines)
-	guard let data = Data.fromHex(text) else {
-		throw Errors.StorageErrors.cantImportWallet
-	}
-
-	guard let newWallet = try? EthereumKeystoreV3(privateKey: data, password: password) else {
-		throw Errors.StorageErrors.cantImportWallet
-	}
-
-	guard let wallet = newWallet, wallet.addresses?.count == 1 else {
-		throw Errors.StorageErrors.cantImportWallet
-	}
-	guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
-		throw Errors.StorageErrors.cantImportWallet
-	}
-	guard let address = newWallet?.addresses?.first?.address else {
-		throw Errors.StorageErrors.cantImportWallet
-	}
-	let walletModel = WalletModel(address: address, data: keyData, name: name ?? "", isHD: false)
-	return walletModel
-}  	
+let password = "web3swift"
+let key = "L2HRewdY7SSpB2jjKq6mwLes86umkWBuUSPZWE35Q8Pbbr8wVyss124sf124dfsf" // Some private key
+let formattedKey = key.trimmingCharacters(in: .whitespacesAndNewlines)
+let dataKey = Data.fromHex(formattedKey)!
+let keystore = try! EthereumKeystoreV3(privateKey: dataKey, password: password)!
+let name = "New Wallet"
+let keyData = try! JSONEncoder().encode(keystore.keystoreParams)
+let address = keystore.addresses!.first!.address
+let wallet = Wallet(address: address, data: keyData, name: name, isHD: false)
 ```
 
 #### Import Account With Mnemonics Phrase
+
 ```swift
-func importHDWallet(name: String?,
-				    password: String,
-                    mnemonics: String) throws -> WalletModel {
-	guard let keystore = try? BIP32Keystore(mnemonics: mnemonics,
-											password: password,
-											mnemonicsPassword: "",
-											language: .english), let wallet = keystore else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let address = wallet.addresses?.first?.address else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	guard let keyData = try? JSONEncoder().encode(wallet.keystoreParams) else {
-		throw Errors.StorageErrors.cantCreateWallet
-	}
-	let walletModel = WalletModel(address: address, data: keyData, name: name ?? "", isHD: false)
-	return walletModel
+let password = "web3swift"
+let mnemonics = "fine have legal roof fury bread egg knee wrong idea must edit" // Some mnemonic phrase
+let keystore = try! BIP32Keystore(
+	mnemonics: mnemonics,
+	password: password,
+	mnemonicsPassword: "",
+	language: .english)!
+let name = "New HD Wallet"
+let keyData = try! JSONEncoder().encode(keystore.keystoreParams)
+let address = keystore.addresses!.first!.address
+let wallet = Wallet(address: address, data: keyData, name: name, isHD: true)
+```
+
+### Get Keystore Manager from wallet data
+
+```swift
+let data = wallet.data
+let keystoreManager: KeystoreManager
+if wallet.isHD {
+	let keystore = BIP32Keystore(data)!
+	keystoreManager = KeystoreManager([keystore])
+} else {
+	let keystore = EthereumKeystoreV3(data)!
+	keystoreManager = KeystoreManager([keystore])
 }
 ```
 
-### Manage Keystore
-
-#### Save keystore to the memory
+### Get wallet Private key
 
 ```swift
-//First you need a `KeystoreManager` instance:
-guard let userDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first,
-      let keystoreManager = KeystoreManager.managerForPath(userDirectory + "/keystore")
-      else {
-    fatalError("Couldn't create a KeystoreManager.")
-}
-
-// Next you create a new Keystore:
-
-let newKeystore = try? EthereumKeystoreV3(password: "YOUR_PASSWORD")
-
-// Then you save the created keystore to the file system:
-
-let newKeystoreJSON = try? JSONEncoder().encode(newKeystore.keystoreParams)
-FileManager.default.createFile(atPath: "\(keystoreManager.path)/keystore.json", contents: newKeystoreJSON, attributes: nil)
-
-// Later you can retreive it:
-
-if let address = keystoreManager.addresses?.first,
-let retrievedKeystore = keystoreManager.walletForAddress(address) as? EthereumKeystoreV3 {
-    return retrievedKeystore
-}
+let password = "web3swift"
+let ethereumAddress = EthereumAddress(wallet.address)!
+let pkData = try! keysoreManager.UNSAFE_getPrivateKeyData(password: password, account: ethereumAddress).toHexString()
 ```
 
-#### Get Keysore Manager
+## Ethereum Endpoints interaction
 
+### web3 instance
+
+Firstly you need to initialize 'web3' instance for almost all further operations:
 ```swift
-// 1st - Get wallet, that is saved in some storage
-
-func getWalletFromStorage() throws -> WalletModel {
-	guard let wallet = try? walletsStorage.getSelectedWallet() else {
-		throw Errors.StorageErrors.noSelectedWallet
-	}
-	return wallet
-}
-
-// 2nd - Get keystore manager from wallet
-
-func keystoreManager() throws -> KeystoreManager {
-	guard let wallet = try? self.getSelectedWallet(),
-		let data = wallet.data else {
-			if let defaultKeystore = KeystoreManager.defaultManager {
-				return defaultKeystore
-			} else {
-				throw Web3Error.keystoreError(err: .invalidAccountError)
-			}
-	}
-	if wallet.isHD {
-		guard let keystore = BIP32Keystore(data) else {
-			if let defaultKeystore = KeystoreManager.defaultManager {
-				return defaultKeystore
-			} else {
-				throw Web3Error.keystoreError(err: .invalidAccountError)
-			}
-		}
-		return KeystoreManager([keystore])
-	} else {
-		guard let keystore = EthereumKeystoreV3(data) else {
-			if let defaultKeystore = KeystoreManager.defaultManager {
-				return defaultKeystore
-			} else {
-				throw Web3Error.keystoreError(err: .invalidAccountError)
-			}
-		}
-		return KeystoreManager([keystore])
-	}
-}
+// common Http/Https provider
+let endpoint = "https://some.endpoint"
+let web3 = web3(provider: Web3HttpProvider(URL(string: endpoint)!)!)
+// precompiled Infura providers
+let web3 = Web3.InfuraMainnetWeb3() // Mainnet Infura Endpoint Provider
+let web3 = Web3.InfuraRinkebyWeb3() // Rinkeby Infura Endpoint Provider
+let web3 = Web3.InfuraRopstenWeb3() // Ropsten Infura Endpoint Provider
 ```
 
-#### Get wallet private key
-
+Then you will need to attach keystore manager to web3 instance:
 ```swift
-func getPrivateKey(for wallet: WalletModel, password: String) throws -> String {
-	do {
-		guard let ethereumAddress = EthereumAddress(wallet.address) else {
-			throw Web3Error.walletError
-		}
-		guard let manager = try? keystoreManager() else {
-			throw Web3Error.keystoreError(err: .invalidAccountError)
-		}
-		let pkData = try manager.UNSAFE_getPrivateKeyData(password: password, account: ethereumAddress)
-		return pkData.toHexString()
-	} catch let error {
-		throw error
-	}
-}
+web3.addKeystoreManager(keystoreManager)
 ```
 
 ### Ethereum Address
@@ -296,220 +202,235 @@ Ethereum addresses are checksum checked if they are not lowercased or uppercased
 #### Getting ETH balance
 
 ```swift
-func getETHbalance(for wallet: WalletModel) throws -> String {
-	do {
-		guard let walletAddress = EthereumAddress(wallet.address) else {
-			throw Web3Error.walletError
-		}
-		let web3 = self.web3Instance
-		let balanceResult = try web3.eth.getBalance(address: walletAddress)
-		guard let balanceString = Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3) else {
-			throw Web3Error.dataError
-		}
-		return balanceString
-	} catch let error {
-		throw error
-	}
-}
+let walletAddress = EthereumAddress(wallet.address)! // Address which balance we want to know
+let balanceResult = try! web3.eth.getBalance(address: walletAddress)
+let balanceString = Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3)!
 ```
 
 #### Getting ERC20 token balance
-```swift
-func getERC20balance(for wallet: WalletModel,
-					 token: ERC20TokenModel) throws -> String {
-	do {
-		guard let walletAddress = EthereumAddress(wallet.address) else {
-			throw Web3Error.walletError
-		}
-		let tx = try self.prepareReadContractTx(contractABI: Web3.Utils.erc20ABI,
-												contractAddress: token.address,
-												contractMethod: "balanceOf",
-												gasLimit: .automatic,
-												gasPrice: .automatic,
-												parameters: [walletAddress] as [AnyObject],
-												extraData: Data())
-		let tokenBalance = try self.callTx(transaction: tx)
-		guard let balanceResult = tokenBalance["0"] as? BigUInt else {
-			throw Web3Error.dataError
-		}
-		guard let balanceString = Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3) else {
-			throw Web3Error.dataError
-		}
-		return balanceString
-	} catch let error {
-		throw error
-	}
-}
-```
-
-## Transactions Operations
-
-### Prepare Transaction
-
-#### Preparing Transaction For Sending Ether
 
 ```swift
-func prepareSendEthTx(toAddress: String,
-					  value: String = "0.0",
-					  gasLimit: TransactionOptions.GasLimitPolicy = .automatic,
-					  gasPrice: TransactionOptions.GasPricePolicy = .automatic) throws -> WriteTransaction {
-	guard let ethAddress = EthereumAddress(toAddress) else {
-		throw Web3Error.dataError
-	}
-	guard let contract = web3Instance.contract(Web3.Utils.coldWalletABI, at: ethAddress, abiVersion: 2) else {
-		throw Web3Error.dataError
-	}
-	let amount = Web3.Utils.parseToBigUInt(value, units: .eth)
-	var options = defaultOptions()
-	options.value = amount
-	options.gasPrice = gasPrice
-	options.gasLimit = gasLimit
-	guard let tx = contract.write("fallback",
-								  parameters: [AnyObject](),
-								  extraData: Data(),
-								  transactionOptions: options) else {
-										throw Web3Error.transactionSerializationError
-	}
-	return tx
-}
+let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
+let exploredAddress = EthereumAddress(wallet.address)! // Address which balance we want to know. Here we used same wallet address
+let erc20ContractAddress = EthereumAddress(token.address)!
+let contract = web3.contract(Web3.Utils.erc20ABI, at: erc20ContractAddress, abiVersion: 2)!
+var options = TransactionOptions.defaultOptions
+options.from = walletAddress
+options.gasPrice = .automatic
+options.gasLimit = .automatic
+let method = "balanceOf"
+let tx = contract.read(
+	method,
+	parameters: [exploredAddress] as [AnyObject],
+	extraData: Data(),
+	transactionOptions: options)!
+let tokenBalance = try! tx.call()
+let balanceBigUInt = tokenBalance["0"] as! BigUInt
+let balanceString = Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3)!
 ```
 
-#### Preparing Transaction For Sending ERC-20 Tokens
+### Transactions Operations
+
+#### Prepare Transaction
+
+##### Preparing Transaction For Sending Ether
 
 ```swift
-public func prepareSendERC20Tx(tokenAddress: String,
-							   toAddress: String,
-							   tokenAmount: String = "0.0",
-							   gasLimit: TransactionOptions.GasLimitPolicy = .automatic,
-							   gasPrice: TransactionOptions.GasPricePolicy = .automatic) throws -> WriteTransaction {
-	guard let ethTokenAddress = EthereumAddress(tokenAddress) else {
-		throw Web3Error.dataError
-	}
-	guard let ethToAddress = EthereumAddress(toAddress) else {
-		throw Web3Error.dataError
-	}
-	guard let contract = web3Instance.contract(Web3.Utils.erc20ABI, at: ethTokenAddress, abiVersion: 2) else {
-		throw Web3Error.dataError
-	}
-	let amount = Web3.Utils.parseToBigUInt(tokenAmount, units: .eth)
-	var options = defaultOptions()
-	options.gasPrice = gasPrice
-	options.gasLimit = gasLimit
-	guard let tx = contract.write("transfer",
-								  parameters: [ethToAddress, amount] as [AnyObject],
-								  extraData: Data(),
-								  transactionOptions: options) else {
-		throw Web3Error.transactionSerializationError
-	}
-	return tx
-}
+let value: String = "1.0" // In Ether
+let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
+let toAddress = EthereumAddress(toAddressString)!
+let contract = web3.contract(Web3.Utils.coldWalletABI, at: toAddress, abiVersion: 2)!
+let amount = Web3.Utils.parseToBigUInt(value, units: .eth)
+var options = TransactionOptions.defaultOptions
+options.value = amount
+options.from = walletAddress
+options.gasPrice = .automatic
+options.gasLimit = .automatic
+let tx = contract.write(
+	"fallback",
+	parameters: [AnyObject](),
+	extraData: Data(),
+	transactionOptions: options)!
 ```
 
-#### Preparing Write Transaction for sending to some Contract and use its method
+##### Preparing Transaction For Sending ERC-20 Tokens
 
 ```swift
-func prepareWriteContractTx(contractABI: String,
-						    contractAddress: String,
-						    contractMethod: String,
-						    value: String = "0.0",
-						    gasLimit: TransactionOptions.GasLimitPolicy = .automatic,
-						    gasPrice: TransactionOptions.GasPricePolicy = .automatic,
-						    parameters: [AnyObject] = [AnyObject](),
-						    extraData: Data = Data()) throws -> WriteTransaction {
-	guard let ethContractAddress = EthereumAddress(contractAddress) else {
-		throw Web3Error.dataError
-	}
-	guard let contract = web3Instance.contract(contractABI, at: ethContractAddress, abiVersion: 2) else {
-		throw Web3Error.dataError
-	}
-	let amount = Web3.Utils.parseToBigUInt(value, units: .eth)
-	var options = defaultOptions()
-	options.gasPrice = gasPrice
-	options.gasLimit = gasLimit
-	options.value = amount
-	guard let tx = contract.write(contractMethod,
-								  parameters: parameters,
-								  extraData: extraData,
-								  transactionOptions: options) else {
-									throw Web3Error.transactionSerializationError
-	}
-	return tx
-}
+let value: String = "1.0" // In Tokens
+let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
+let toAddress = EthereumAddress(toAddressString)!
+let erc20ContractAddress = EthereumAddress(token.address)!
+let contract = web3.contract(Web3.Utils.erc20ABI, at: erc20ContractAddress, abiVersion: 2)!
+let amount = Web3.Utils.parseToBigUInt(value, units: .eth)
+var options = TransactionOptions.defaultOptions
+options.value = amount
+options.from = walletAddress
+options.gasPrice = .automatic
+options.gasLimit = .automatic
+let method = "transfer"
+let tx = contract.write(
+	method,
+	parameters: [toAddress, amount] as [AnyObject],
+	extraData: Data(),
+	transactionOptions: options)!
 ```
 
-#### Preparing Read Transaction to call some Contract method
+##### Preparing Write Transaction for sending to some Contract and use its method
 
 ```swift
-func prepareReadContractTx(contractABI: String,
-						   contractAddress: String,
-						   contractMethod: String,
-						   gasLimit: TransactionOptions.GasLimitPolicy = .automatic,
-						   gasPrice: TransactionOptions.GasPricePolicy = .automatic,
-						   parameters: [AnyObject] = [AnyObject](),
-						   extraData: Data = Data()) throws -> ReadTransaction {
-	guard let ethContractAddress = EthereumAddress(contractAddress) else {
-		throw Web3Error.dataError
-	}
-	guard let contract = web3Instance.contract(contractABI, at: ethContractAddress, abiVersion: 2) else {
-		throw Web3Error.dataError
-	}
-	var options = defaultOptions()
-	options.gasPrice = gasPrice
-	options.gasLimit = gasLimit
-	guard let tx = contract.read(contractMethod,
-								 parameters: parameters,
-								 extraData: extraData,
-								 transactionOptions: options) else {
-									throw Web3Error.transactionSerializationError
-	}
-	return tx
-}
+let value: String = "0.0" // Any amount of Ether you need to send
+let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
+let contractMethod = "SOMECONTRACTMETHOD" // Contract method you want to write
+let contractABI = "..." // Contract ABI
+let contractAddress = EthereumAddress(contractAddressString)!
+let abiVersion = 2 // Contract ABI version
+let parameters: [AnyObject] = [...]() // Parameters for contract method
+let extraData: Data = Data() // Extra data for contract method
+let contract = web3.contract(contractABI, at: contractAddress, abiVersion: abiVersion)!
+let amount = Web3.Utils.parseToBigUInt(value, units: .eth)
+var options = TransactionOptions.defaultOptions
+options.value = amount
+options.from = walletAddress
+options.gasPrice = .automatic
+options.gasLimit = .automatic
+let tx = contract.write(
+	contractMethod,
+	parameters: parameters,
+	extraData: extraData,
+	transactionOptions: options)!
 ```
 
-### Send Transaction 
-
-#### Writing
+##### Preparing Read Transaction to call some Contract method
 
 ```swift
-func sendTx(transaction: WriteTransaction,
-		    options: TransactionOptions? = nil,
-		    password: String) throws -> TransactionSendingResult {
-	do {
-		let txOptions = options ?? transaction.transactionOptions
-		let result = try transaction.send(password: password, transactionOptions: txOptions)
-		return result
-	} catch let error {
-		throw error
-	}
-}
+let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
+let contractMethod = "SOMECONTRACTMETHOD" // Contract method you want to call
+let contractABI = "..." // Contract ABI
+let contractAddress = EthereumAddress(contractAddressString)!
+let abiVersion = 2 // Contract ABI version
+let parameters: [AnyObject] = [...]() // Parameters for contract method
+let extraData: Data = Data() // Extra data for contract method
+let contract = web3.contract(contractABI, at: contractAddress, abiVersion: abiVersion)!
+var options = TransactionOptions.defaultOptions
+options.from = walletAddress
+options.gasPrice = .automatic
+options.gasLimit = .automatic
+let tx = contract.read(
+	contractMethod,
+	parameters: parameters,
+	extraData: extraData,
+	transactionOptions: options)!
 ```
 
-#### Reading
+#### Send Transaction 
+
+##### Writing
+
+```swift
+let password = "web3swift"
+let result = try! transaction.send(password: password)
+```
+
+##### Reading
   
 ```swift
-func callTx(transaction: ReadTransaction,
-		    options: TransactionOptions? = nil) throws -> [String : Any] {
-	do {
-		let txOptions = options ?? transaction.transactionOptions
-		let result = try transaction.call(transactionOptions: txOptions)
-		return result
-	} catch let error {
-		throw error
-	}
-}
+let result = try! transaction.call()
 ```
 
-## Chain state
+### Chain state
 
-### Get Block number
+#### Get Block number
 
 ```swift
-func getBlockNumber(_ web3: web3) throws -> BigUInt {
-    do {
-		let blockNumber = try web3.eth.getBlockNumber()
-		return blockNumber
-    } catch let error {
-		throw error 
-    }
-}
+let blockNumber = try! web3.eth.getBlockNumber()
 ```
+
+## Websockets
+
+### Web3socketDelegate
+
+To receive messages from endpoint you need to create a class that adopt to Web3SocketDelegate protocol.
+Later, in order to open a connection to WebSocket server, you will use socket provider (WebsocketProvider or InfuraWebsocketProvider). And we recommend you to make it a property, so it doesn't get deallocated right after being setup.
+```swift
+class DelegateClass: Web3SocketDelegate {
+	var socketProvider: WebsocketProvider? = nil // WebSocket Provider
+	var socketProvider: InfuraWebsocketProvider? = nil // Infura WebSocket Provider
+	
+	// Protocol method, here will be messages, received from WebSocket server
+	func received(message: Any) {
+        	// Make something with message
+    	}
+}
+``` 
+
+### Custom Websocket Provider
+
+#### Connect to custom endpoint
+
+You can create WebsocketProvider and connect/disconnect it.
+```swift
+socketProvider = WebsocketProvider("ws://your.endpoint", delegate: delegate)
+socketProvider.connectSocket()
+/// Some code
+/// ...
+socketProvider.disconnectSocket()
+``` 
+
+Or you can create already connected WebsocketProvider
+```swift
+socketProvider = WebsocketProvider.connectToSocket("ws://your.endpoint", delegate: delegate)
+```
+
+#### Send message 
+
+```swift
+// String message
+socketProvider.writeMessage(String()) 
+// Data message
+socketProvider.writeMessage(Data())
+```
+
+### Infura Websocket Provider
+
+#### Connect to Infura endpoint 
+
+```swift
+socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: delegate)
+```
+
+#### Connect to custom endpoint with API similar to Infura WSS endpoint
+
+```swift
+socketProvider = InfuraWebsocketProvider.connectToSocket("ws://your.endpoint", delegate: delegate)
+```
+
+#### Create a filter in the node to notify when something happened
+
+To study possible filters read [Infura WSS filters documentation](https://infura.io/docs/ethereum/wss/introduction)
+
+```swift
+try! socketProvider.filter(method: <InfuraWebsocketMethod>, params: <[Encodable]?>)
+```
+
+####  Get new pending transactions
+
+```swift
+try! socketProvider.filter(method: .newPendingTransactionFilter)
+```
+
+#### Create a new subscription over particular events
+
+To study possible subscriptions read [Infura WSS subscriptions documentation](https://infura.io/docs/ethereum/wss/eth_subscribe)
+
+```swift
+try! socketProvider.subscribe(params: <[Encodable]>)
+```
+
+#### Subscribe on new pending transactions
+
+```swift
+try! socketProvider.subscribeOnNewPendingTransactions()
+```
+
+
+

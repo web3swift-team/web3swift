@@ -8,6 +8,10 @@ import Foundation
 import BigInt
 import EthereumAddress
 
+public protocol TransactionOptionsInheritable {
+    var transactionOptions: TransactionOptions {get}
+}
+
 /// Options for sending or calling a particular Ethereum transaction
 public struct TransactionOptions {
     /// Sets the transaction destination. It can either be a contract address or a private key controlled wallet address.
@@ -116,11 +120,16 @@ public struct TransactionOptions {
         opts.callOnBlock = mergeIfNotNil(first: self.callOnBlock, second: other.callOnBlock)
         return opts
     }
-
+    
     public static func fromJSON(_ json: [String: Any]) -> TransactionOptions? {
         var options = TransactionOptions()
         if let gas = json["gas"] as? String, let gasBiguint = BigUInt(gas.stripHexPrefix().lowercased(), radix: 16) {
-            options.gasLimit = .manual(gasBiguint)
+            options.gasLimit = .limited(gasBiguint)
+        } else {
+            options.gasLimit = .automatic
+        }
+        if let gasLimit = json["gasLimit"] as? String, let gasgasLimitBiguint = BigUInt(gasLimit.stripHexPrefix().lowercased(), radix: 16) {
+            options.gasLimit = .limited(gasgasLimitBiguint)
         } else {
             options.gasLimit = .automatic
         }
@@ -131,6 +140,10 @@ public struct TransactionOptions {
         }
         if let value = json["value"] as? String, let valueBiguint = BigUInt(value.stripHexPrefix().lowercased(), radix: 16) {
             options.value = valueBiguint
+        }
+        if let toString = json["to"] as? String {
+            guard let addressTo = EthereumAddress(toString) else {return nil}
+            options.to = addressTo
         }
         if let fromString = json["from"] as? String {
             guard let addressFrom = EthereumAddress(fromString) else {return nil}
@@ -148,7 +161,7 @@ public struct TransactionOptions {
         }
         return options
     }
-
+    
     /// Merges two sets of topions by overriding the parameters from the first set by parameters from the second
     /// set if those are not nil.
     ///
@@ -185,12 +198,12 @@ public struct TransactionOptions {
         }
         return newOptions
     }
-
+//
 //    /// merges two sets of options along with a gas estimate to try to guess the final gas limit value required by user.
 //    ///
 //    /// Please refer to the source code for a logic.
-//    public static func smartMergeGasLimit(originalOptions: TransactionOptions?, extraOptions: TransactionOptions?, gasEstimate: BigUInt) -> BigUInt? {
-//        guard let mergedOptions = TransactionOptions.merge(originalOptions, with: extraOptions) else {return nil} //just require any non-nils
+//    public static func smartMergeGasLimit(originalOptions: Web3Options?, extraOptions: Web3Options?, gasEstimate: BigUInt) -> BigUInt? {
+//        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} //just require any non-nils
 //        if mergedOptions.gasLimit == nil {
 //            return gasEstimate // for user's convenience we just use an estimate
 //            //            return nil // there is no opinion from user, so we can not proceed
@@ -212,7 +225,7 @@ public struct TransactionOptions {
 //            }
 //        }
 //    }
-
+//
 //    public static func smartMergeGasPrice(originalOptions: Web3Options?, extraOptions: Web3Options?, priceEstimate: BigUInt) -> BigUInt? {
 //        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} //just require any non-nils
 //        if mergedOptions.gasPrice == nil {

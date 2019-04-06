@@ -37,7 +37,9 @@ public class WriteTransaction: ReadTransaction {
             }
             
             var mergedOptions = self.transactionOptions.merge(transactionOptions)
-            
+            if mergedOptions.value != nil {
+                assembledTransaction.value = mergedOptions.value!
+            }
             var forAssemblyPipeline : (EthereumTransaction, EthereumContract, TransactionOptions) = (assembledTransaction, self.contract, mergedOptions)
             
             for hook in self.web3.preAssemblyHooks {
@@ -89,7 +91,7 @@ public class WriteTransaction: ReadTransaction {
             }
 
             let gasPricePromise : Promise<BigUInt> = self.web3.eth.getGasPricePromise()
-            var promisesToFulfill: [Promise<BigUInt>] = [getNoncePromise!, gasEstimatePromise, gasPricePromise]
+            var promisesToFulfill: [Promise<BigUInt>] = [getNoncePromise!, gasPricePromise, gasPricePromise]
             when(resolved: getNoncePromise!, gasEstimatePromise, gasPricePromise).map(on: queue, { (results:[PromiseResult<BigUInt>]) throws -> EthereumTransaction in
                 
                 promisesToFulfill.removeAll()

@@ -67,6 +67,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         self.to = to
     }
     
+    
     public init (nonce: BigUInt, gasPrice: BigUInt, gasLimit: BigUInt, to: EthereumAddress, value: BigUInt, data: Data, v: BigUInt, r: BigUInt, s: BigUInt) {
         self.nonce = nonce
         self.gasPrice = gasPrice
@@ -247,13 +248,10 @@ public struct EthereumTransaction: CustomStringConvertible {
     static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> JSONRPCrequest? {
         let onBlock = transactionOptions?.callOnBlock?.stringValue
         var request = JSONRPCrequest()
-        var tx = transaction
+//        var tx = transaction
         request.method = method
         let from = transactionOptions?.from
-        if transactionOptions != nil, transactionOptions!.value != nil {
-            tx.value = transactionOptions!.value!
-        }
-        guard var txParams = tx.encodeAsDictionary(from: from) else {return nil}
+        guard var txParams = transaction.encodeAsDictionary(from: from) else {return nil}
         if method == .estimateGas || transactionOptions?.gasLimit == nil {
             txParams.gas = nil
         }
@@ -281,7 +279,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     }
 }
 
-extension EthereumTransaction {
+public extension EthereumTransaction {
     public init(to: EthereumAddress, data: Data, options: TransactionOptions) {
         let defaults = TransactionOptions.defaultOptions
         let merged = defaults.merge(options)

@@ -10,7 +10,6 @@ import PromiseKit
 
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
-    
     public var provider : Web3Provider
     public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
     public var defaultBlock = "latest"
@@ -48,10 +47,13 @@ public class web3 {
         return self.ethInstance!
     }
     
-    public class Eth {
+    public class Eth:TransactionOptionsInheritable {
         var provider:Web3Provider
 //        weak var web3: web3?
         var web3: web3
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
+        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -69,10 +71,13 @@ public class web3 {
         return self.personalInstance!
     }
     
-    public class Personal {
+    public class Personal:TransactionOptionsInheritable {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
+        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -90,10 +95,13 @@ public class web3 {
         return self.txPoolInstance!
     }
     
-    public class TxPool {
+    public class TxPool: TransactionOptionsInheritable {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
+        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -132,10 +140,13 @@ public class web3 {
         return self.browserFunctionsInstance!
     }
     
-    public class BrowserFunctions {
+    public class BrowserFunctions:TransactionOptionsInheritable {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
+        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -153,7 +164,7 @@ public class web3 {
         return self.eventLoopInstance!
     }
     
-    public class Eventloop {
+    public class Eventloop: TransactionOptionsInheritable {
         
         public typealias EventLoopCall = (web3) -> Void
         public typealias EventLoopContractCall = (web3contract) -> Void
@@ -179,6 +190,9 @@ public class web3 {
 //        public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
         public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
         
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
+        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -212,17 +226,4 @@ public class web3 {
     public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
     public var postSubmissionHooks: [SubmissionResultHook] = [SubmissionResultHook]()
     
-//    #warning("Old ERC721 instance. Don't use it")
-//    @available(*, deprecated, message: "Use ERC721 separate class")
-//    var erc721Instance: web3.ERC721?
-//    
-//    /// Public web3.browserFunctions.* namespace.
-//    @available(*, deprecated, message: "Use ERC721 separate instance")
-//    public var erc721: web3.ERC721 {
-//        if (self.erc721Instance != nil) {
-//            return self.erc721Instance!
-//        }
-//        self.erc721Instance = web3.ERC721(provider : self.provider, web3: self)
-//        return self.erc721Instance!
-//    }
 }

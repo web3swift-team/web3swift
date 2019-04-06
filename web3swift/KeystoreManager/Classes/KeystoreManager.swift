@@ -51,8 +51,8 @@ public class KeystoreManager: AbstractKeystore {
     }
     
     public static func managerForPath(_ path: String, scanForHDwallets: Bool = false, suffix: String? = nil) -> KeystoreManager? {
-        guard let newManager = try? KeystoreManager(path, scanForHDwallets: scanForHDwallets, suffix: suffix) else {return nil}
-        return newManager
+        guard let manager = try? KeystoreManager(path, scanForHDwallets: scanForHDwallets, suffix: suffix) else {return nil}
+        return manager
     }
     
     public var path: String
