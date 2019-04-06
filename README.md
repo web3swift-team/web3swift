@@ -31,47 +31,47 @@
   * [License](#license)
 
 ---
-  - [Usage Doc](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md)
-  	- **[Introduction](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#introduction)**
-	- *[Preffered models](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preffered-models)*
-		- [Preffered keys Wallet Model](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preffered-keys-wallet-model-account)
-		- [Preffered ERC-20 Model](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preffered-erc-20-model)
-- **[Account Management](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#account-management)**
-	- *[Create Account](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-account)*
-		- [Create Account With Private Key](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-account-with-private-key)
-		- [Create Account With Mnemonics Phrase](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-account-with-mnemonics-phrase)
-	- *[Import Account](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-account)*
-		- [Import Account With Private Key](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#import-account-with-private-key)
-		- [Import Account With Mnemonics Phrase](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#import-account-with-mnemonics-phrase)
-	- [Get Keystore Manager from wallet data](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-keystore-manager-from-wallet-data)
-	- [Get wallet Private key](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-wallet-private-key)
-- **[Ethereum Endpoints interaction](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#ethereum-endpoints-interaction)**
-	- [web3 instance](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#web3-instance)
-	- [Ethereum Address](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#ethereum-address)
-	- *[Get Balance](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-balance)*
-		- [Getting ETH balance](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#getting-eth-balance)
-		- [Getting ERC20 token balance](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#getting-erc20-token-balance)
-	- *[Transactions Operations](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#transactions-operations)*
-		- [Preparing Transaction For Sending Ether](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preparing-transaction-for-sending-ether)
-		- [Preparing Transaction For Sending ERC-20 Tokens](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preparing-transaction-for-sending-erc-20-tokens)
-		- [Preparing Write Transaction for sending to some Contract and use its method](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preparing-write-transaction-for-sending-to-some-contract-and-use-its-method)
-		- [Preparing Read Transaction to call some Contract method](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#preparing-read-transaction-to-call-some-contract-method)
-		- [Send write transaction](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#writing)
-		- [Send read transaction](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#reading)
-	- [Get Block number](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-block-number)
-- **[Websockets](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#websockets)**
-	- [Web3socketDelegate](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#web3socketdelegate)
-	- [Get latest new pending transactions](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-latest-new-pending-transactions)
-	- *[Custom Websocket Provider](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#custom-websocket-provider)*
-		- [Connect to custom endpoint](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#connect-to-custom-endpoint)
-		- [Send message](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#send-message)
-	- *[Infura Websocket Provider](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#infura-websocket-provider)*
-		- [Connect to Infura endpoint](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#connect-to-infura-endpoint)
-		- [Connect to custom endpoint with API similar to Infura WSS endpoint](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#connect-to-custom-endpoint-with-api-similar-to-infura-wss-endpoint)
-		- [Create a filter in the node to notify when something happened](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-a-filter-in-the-node-to-notify-when-something-happened)
-		- [Get new pending transactions](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#get-new-pending-transactions)
-		- [Create a new subscription over particular events](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#create-a-new-subscription-over-particular-events)
-		- [Subscribe on new pending transactions](https://github.com/matter-labs/web3swift/blob/documentation/Documentation/Usage.md#subscribe-on-new-pending-transactions)
+  - [Usage Doc](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md)
+  	- **[Introduction](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#introduction)**
+	- *[Preffered models](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preffered-models)*
+		- [Preffered keys Wallet Model](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preffered-keys-wallet-model-account)
+		- [Preffered ERC-20 Model](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preffered-erc-20-model)
+- **[Account Management](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#account-management)**
+	- *[Create Account](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-account)*
+		- [Create Account With Private Key](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-account-with-private-key)
+		- [Create Account With Mnemonics Phrase](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-account-with-mnemonics-phrase)
+	- *[Import Account](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-account)*
+		- [Import Account With Private Key](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#import-account-with-private-key)
+		- [Import Account With Mnemonics Phrase](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#import-account-with-mnemonics-phrase)
+	- [Get Keystore Manager from wallet data](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-keystore-manager-from-wallet-data)
+	- [Get wallet Private key](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-wallet-private-key)
+- **[Ethereum Endpoints interaction](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ethereum-endpoints-interaction)**
+	- [web3 instance](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#web3-instance)
+	- [Ethereum Address](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ethereum-address)
+	- *[Get Balance](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-balance)*
+		- [Getting ETH balance](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#getting-eth-balance)
+		- [Getting ERC20 token balance](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#getting-erc20-token-balance)
+	- *[Transactions Operations](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#transactions-operations)*
+		- [Preparing Transaction For Sending Ether](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preparing-transaction-for-sending-ether)
+		- [Preparing Transaction For Sending ERC-20 Tokens](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preparing-transaction-for-sending-erc-20-tokens)
+		- [Preparing Write Transaction for sending to some Contract and use its method](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preparing-write-transaction-for-sending-to-some-contract-and-use-its-method)
+		- [Preparing Read Transaction to call some Contract method](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preparing-read-transaction-to-call-some-contract-method)
+		- [Send write transaction](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#writing)
+		- [Send read transaction](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#reading)
+	- [Get Block number](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-block-number)
+- **[Websockets](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#websockets)**
+	- [Web3socketDelegate](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#web3socketdelegate)
+	- [Get latest new pending transactions](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-latest-new-pending-transactions)
+	- *[Custom Websocket Provider](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#custom-websocket-provider)*
+		- [Connect to custom endpoint](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#connect-to-custom-endpoint)
+		- [Send message](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#send-message)
+	- *[Infura Websocket Provider](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#infura-websocket-provider)*
+		- [Connect to Infura endpoint](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#connect-to-infura-endpoint)
+		- [Connect to custom endpoint with API similar to Infura WSS endpoint](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#connect-to-custom-endpoint-with-api-similar-to-infura-wss-endpoint)
+		- [Create a filter in the node to notify when something happened](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-a-filter-in-the-node-to-notify-when-something-happened)
+		- [Get new pending transactions](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-new-pending-transactions)
+		- [Create a new subscription over particular events](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-a-new-subscription-over-particular-events)
+		- [Subscribe on new pending transactions](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#subscribe-on-new-pending-transactions)
 ## Ready Features
 
 - [x] Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
@@ -131,7 +131,7 @@
 
 ## Migration Guides
 
-- [web3swift 2.0 Migration Guide](https://github.com/matterinc/web3swift/blob/documentation/Documentation/web3swift%202.0%20Migration%20Guide.md)
+- [web3swift 2.0 Migration Guide](https://github.com/matterinc/web3swift/blob/master/Documentation/web3swift%202.0%20Migration%20Guide.md)
 
 ## Communication
 
@@ -197,7 +197,7 @@ $ open -a Xcode Cartfile
 Add the following line to the Cartfile and save it:
 
 ```ogdl
-github "matter-labs/web3swift" "carthage"
+github "matter-labs/web3swift" "master"
 ```
 
 Run `carthage update` to build the framework. By default, Carthage performs checkouts and builds in a new directory 'Carthage' in the same location as your Cartfile. Open this directory, go to 'Build' directory, choose iOS or macOS directory and use framework from chosen directory in your Xcode project.
@@ -290,7 +290,7 @@ If you believe you have identified a security vulnerability with web3swift, you 
 
 ## Donations
 
-[The Matters](https://github.com/orgs/matterinc/people) are charged with open-sourсe and do not require money for using their web3swift lib.
+[The Matters](https://github.com/orgs/matter-labs/people) are charged with open-sourсe and do not require money for using their web3swift lib.
 We want to continue to do everything we can to move the needle forward.
 If you use any of our libraries for work, see if your employers would be interested in donating. Any amount you can donate today to help us reach our goal would be greatly appreciated.
 
@@ -300,4 +300,4 @@ Our Ether wallet address: 0xe22b8979739d724343bd002f9f432f5990879901
 
 ## License
 
-web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/matter-labs/web3swift/blob/documentation/LICENSE) for details.
+web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/matter-labs/web3swift/blob/master/LICENSE) for details.
