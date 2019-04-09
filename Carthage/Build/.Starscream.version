@@ -1,0 +1,31 @@
+{
+  "Mac" : [
+    {
+      "name" : "Starscream",
+      "hash" : "3f8390285a3fecda8a7da11ef4c9d82bd10007aaba05f15073eac0625fc746b5",
+      "swiftToolchainVersion" : "5.0 (swiftlang-1001.0.69.5 clang-1001.0.46.3)"
+    }
+  ],
+  "watchOS" : [
+    {
+      "name" : "Starscream",
+      "hash" : "fcfe22940e7efa9be91aaf9a889a0f689480e1fb7cd24350143d930404d2bcec",
+      "swiftToolchainVersion" : "5.0 (swiftlang-1001.0.69.5 clang-1001.0.46.3)"
+    }
+  ],
+  "tvOS" : [
+    {
+      "name" : "Starscream",
+      "hash" : "bfc105d78fd934a4e180498071f44452bcbceda5c2da7559206e90183107369c",
+      "swiftToolchainVersion" : "5.0 (swiftlang-1001.0.69.5 clang-1001.0.46.3)"
+    }
+  ],
+  "commitish" : "3.1.0",
+  "iOS" : [
+    {
+      "name" : "Starscream",
+      "hash" : "ec214c3bee3187df5fc9b8b49fb2608275295399886ab8c4338de31db7675c3b",
+      "swiftToolchainVersion" : "5.0 (swiftlang-1001.0.69.5 clang-1001.0.46.3)"
+    }
+  ]
+}
