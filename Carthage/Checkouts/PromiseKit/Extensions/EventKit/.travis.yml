@@ -1,0 +1,76 @@
+os: osx
+language: swift
+xcode_project: PMKEventKit.xcodeproj
+xcode_scheme: PMKEventKit
+
+jobs:
+  include:
+    - &macOS
+      stage: macOS
+      osx_image: xcode8.3
+      name: Swift 3.1
+      env: SWIFT=3.0
+      xcode_destination: platform=OS X,arch=x86_64
+      install: carthage bootstrap --cache-builds --no-use-binaries --platform macOS
+    - <<: *macOS
+      osx_image: xcode9.2
+      name: Swift 3.2
+    - <<: *macOS
+      osx_image: xcode9.4
+      name: Swift 3.3
+    - <<: *macOS
+      osx_image: xcode10.1
+      name: Swift 3.4
+    - <<: *macOS
+      osx_image: xcode9.2
+      name: Swift 4.0.3
+      env: SWIFT=4.0
+    - <<: *macOS
+      osx_image: xcode9.4
+      name: Swift 4.1.2
+      env: SWIFT=4.0
+    - <<: *macOS
+      osx_image: xcode10.1
+      name: Swift 4.2.1
+      env: SWIFT=4.2
+
+    - &iOS
+      stage: iOS
+      osx_image: xcode8.3
+      name: Swift 3.1
+      env: SWIFT=3.0
+      xcode_destination: 'OS=10.3.1,name=iPhone SE'
+      install: carthage bootstrap --cache-builds --no-use-binaries --platform iOS
+    - <<: *iOS
+      osx_image: xcode9.2
+      name: Swift 3.2
+      xcode_destination: 'OS=11.2,name=iPhone SE'
+    - <<: *iOS
+      osx_image: xcode9.4
+      name: Swift 3.3
+      xcode_destination: 'OS=11.4,name=iPhone SE'
+    - <<: *iOS
+      osx_image: xcode10.1
+      name: Swift 3.4
+      xcode_destination: 'OS=12.1,name=iPhone SE'
+    - <<: *iOS
+      osx_image: xcode9.2
+      name: Swift 4.0.3
+      env: SWIFT=4.0
+      xcode_destination: 'OS=11.2,name=iPhone SE'
+    - <<: *iOS
+      osx_image: xcode9.4
+      name: Swift 4.1.2
+      env: SWIFT=4.0
+      xcode_destination: 'OS=11.4,name=iPhone SE'
+    - <<: *iOS
+      osx_image: xcode10.1
+      name: Swift 4.2.1
+      env: SWIFT=4.2
+      xcode_destination: 'OS=12.1,name=iPhone SE'
+cache:
+  directories:
+    - Carthage
+before_script: |
+  sed -i '' "s/SWIFT_VERSION = 4.0;/SWIFT_VERSION = $SWIFT;/" *.xcodeproj/project.pbxproj
+  sed -i '' "s/SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;/SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;/" *.xcodeproj/project.pbxproj

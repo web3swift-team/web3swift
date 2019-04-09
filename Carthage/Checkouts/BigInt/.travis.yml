@@ -1,0 +1,10 @@
+language: objective-c
+osx_image: xcode9.3
+script:
+- swift build
+- swift test
+- xcrun xcodebuild -workspace BigInt.xcworkspace -scheme BigInt-macOS test
+- xcrun xcodebuild -workspace BigInt.xcworkspace -scheme BigInt-iOS
+- xcrun xcodebuild -workspace BigInt.xcworkspace -scheme BigInt-watchOS
+- xcrun xcodebuild -workspace BigInt.xcworkspace -scheme BigInt-tvOS
+after_success: bash <(curl -s https://codecov.io/bash)

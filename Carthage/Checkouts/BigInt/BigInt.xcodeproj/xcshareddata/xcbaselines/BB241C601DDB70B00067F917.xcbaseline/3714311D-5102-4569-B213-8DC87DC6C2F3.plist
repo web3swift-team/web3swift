@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>classNames</key>
+	<dict>
+		<key>ProfileTests</key>
+		<dict>
+			<key>testBalancedMultiplication()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.41604</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>2016-11-15 18:19:04</string>
+				</dict>
+			</dict>
+			<key>testDivision()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.70161</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>2016-11-15 18:19:04</string>
+				</dict>
+			</dict>
+			<key>testFibonacciAddition()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>2.3569</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>2016-11-15 18:19:04</string>
+				</dict>
+			</dict>
+			<key>testGCD()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>1.801</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>2016-11-15 18:19:04</string>
+				</dict>
+			</dict>
+			<key>testMersennePrimes()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>4.184</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>2016-11-15 18:19:04</string>
+				</dict>
+			</dict>
+			<key>testModularExponentiation()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>2.1938</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>2016-11-15 18:19:04</string>
+				</dict>
+			</dict>
+			<key>testMultiplicationByDigit()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.91891</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>2016-11-15 18:19:04</string>
+				</dict>
+			</dict>
+			<key>testSquareRoot()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.48118</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>2016-11-15 18:19:04</string>
+				</dict>
+			</dict>
+		</dict>
+	</dict>
+</dict>
+</plist>

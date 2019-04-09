@@ -1,0 +1,4 @@
+github "mxcl/PromiseKit" ~> 6.8
+github "attaswift/BigInt" ~> 3.1
+github "daltoniam/Starscream" ~> 3.1.0
+github "krzyzanowskim/CryptoSwift" ~> 0.15.0
