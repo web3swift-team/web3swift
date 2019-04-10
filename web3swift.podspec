@@ -1,17 +1,17 @@
 Pod::Spec.new do |s|
-s.name             = "web3swift"
-s.version          = "2.1.3"
-s.summary          = "Web3 implementation in vanilla Swift for iOS ans macOS"
+s.name             = "pocket-web3swift"
+s.version          = "2.1.4"
+s.summary          = "Same web3swift pod version with minor changes for Pocket"
 
 s.description      = <<-DESC
-Web3 implementation in vanilla Swift, intended for mobile developers of wallets, Dapps and Web3.0
+Web3 implementation in vanilla Swift, intended for mobile developers of wallets, Dapps and Web3.0.
 DESC
 
-s.homepage         = "https://github.com/matter-labs/web3swift"
+s.homepage         = "https://github.com/pokt-network/web3swift"
 s.license          = 'Apache License 2.0'
-s.author           = { "Alex Vlasov" => "alex.m.vlasov@gmail.com" }
-s.source           = { :git => 'https://github.com/matter-labs/web3swift.git', :tag => s.version.to_s }
-s.social_media_url = 'https://twitter.com/shamatar'
+s.author           = { "Pabel Nunez" => "pabel@pokt.network" }
+# s.source           = { :git => 'https://github.com/pokt-network/web3swift.git', :tag => s.version.to_s }
+s.source           = { :git => 'https://github.com/pokt-network/web3swift.git', :branch => 'swift-5' }
 
 s.swift_version = '5.0'
 s.module_name = 'Web3swift'
