@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name             = "pocket-web3swift"
-s.version          = "2.1.4"
+s.version          = "2.1.5"
 s.summary          = "Same web3swift pod version with minor changes for Pocket"
 
 s.description      = <<-DESC
@@ -10,8 +10,7 @@ DESC
 s.homepage         = "https://github.com/pokt-network/web3swift"
 s.license          = 'Apache License 2.0'
 s.author           = { "Pabel Nunez" => "pabel@pokt.network" }
-# s.source           = { :git => 'https://github.com/pokt-network/web3swift.git', :tag => s.version.to_s }
-s.source           = { :git => 'https://github.com/pokt-network/web3swift.git', :branch => 'swift-5' }
+s.source           = { :git => 'https://github.com/pokt-network/web3swift.git', :tag => s.version.to_s }
 
 s.swift_version = '5.0'
 s.module_name = 'Web3swift'
