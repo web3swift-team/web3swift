@@ -29,9 +29,14 @@ extension web3 {
             self.web3 = web3Instance
             self.transactionOptions = web3.transactionOptions
             switch abiVersion {
-            default:
+            case 1:
+                print("ABIv1 bound contract is now deprecated")
+                return nil
+            case 2:
                 guard let c = EthereumContract(abiString, at: at) else {return nil}
                 contract = c
+            default:
+                return nil
             }
             var mergedOptions = self.transactionOptions?.merge(transactionOptions)
             if at != nil {

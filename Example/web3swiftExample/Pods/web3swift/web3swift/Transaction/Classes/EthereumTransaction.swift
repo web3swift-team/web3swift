@@ -67,17 +67,6 @@ public struct EthereumTransaction: CustomStringConvertible {
         self.to = to
     }
     
-    public init(to: EthereumAddress, data: Data, options: Web3Options) {
-        let defaults = Web3Options.defaultOptions()
-        let merged = Web3Options.merge(defaults, with: options)
-        self.nonce = BigUInt(0)
-        self.gasLimit = merged!.gasLimit!
-        self.gasPrice = merged!.gasPrice!
-        self.value = merged!.value!
-        self.to = to
-        self.data = data
-    }
-    
     
     public init (nonce: BigUInt, gasPrice: BigUInt, gasLimit: BigUInt, to: EthereumAddress, value: BigUInt, data: Data, v: BigUInt, r: BigUInt, s: BigUInt) {
         self.nonce = nonce
@@ -89,23 +78,6 @@ public struct EthereumTransaction: CustomStringConvertible {
         self.v = v
         self.r = r
         self.s = s
-    }
-    
-    public func mergedWithOptions(_ options: Web3Options) -> EthereumTransaction {
-        var tx = self;
-        if options.gasPrice != nil {
-            tx.gasPrice = options.gasPrice!
-        }
-        if options.gasLimit != nil {
-            tx.gasLimit = options.gasLimit!
-        }
-        if options.value != nil {
-            tx.value = options.value!
-        }
-        if options.to != nil {
-            tx.to = options.to!
-        }
-        return tx
     }
     
     public var description: String {
@@ -229,52 +201,6 @@ public struct EthereumTransaction: CustomStringConvertible {
         return hash
     }
     
-    static func fromJSON(_ json: [String: Any]) -> EthereumTransaction? {
-        guard let options = Web3Options.fromJSON(json) else {return nil}
-        guard let toString = json["to"] as? String else {return nil}
-        var to: EthereumAddress
-        if toString == "0x" || toString == "0x0" {
-            to = EthereumAddress.contractDeploymentAddress()
-        } else {
-            guard let ethAddr = EthereumAddress(toString) else {return nil}
-            to = ethAddr
-        }
-//        if (!to.isValid) {
-//            return nil
-//        }
-        var dataString = json["data"] as? String
-        if (dataString == nil) {
-            dataString = json["input"] as? String
-        }
-        guard dataString != nil, let data = Data.fromHex(dataString!) else {return nil}
-        var transaction = EthereumTransaction(to: to, data: data, options: options)
-        if let nonceString = json["nonce"] as? String {
-            guard let nonce = BigUInt(nonceString.stripHexPrefix(), radix: 16) else {return nil}
-            transaction.nonce = nonce
-        }
-        if let vString = json["v"] as? String {
-            guard let v = BigUInt(vString.stripHexPrefix(), radix: 16) else {return nil}
-            transaction.v = v
-        }
-        if let rString = json["r"] as? String {
-            guard let r = BigUInt(rString.stripHexPrefix(), radix: 16) else {return nil}
-            transaction.r = r
-        }
-        if let sString = json["s"] as? String {
-            guard let s = BigUInt(sString.stripHexPrefix(), radix: 16) else {return nil}
-            transaction.s = s
-        }
-        if let valueString = json["value"] as? String {
-            guard let value = BigUInt(valueString.stripHexPrefix(), radix: 16) else {return nil}
-            transaction.value = value
-        }
-        let inferedChainID = transaction.inferedChainID
-        if (transaction.inferedChainID != nil && transaction.v >= BigUInt(37)) {
-            transaction.chainID = inferedChainID
-        }
-        return transaction
-    }
-    
     public static func fromRaw(_ raw: Data) -> EthereumTransaction? {
         guard let totalItem = RLP.decode(raw) else {return nil}
         guard let rlpItem = totalItem[0] else {return nil}
@@ -322,9 +248,9 @@ public struct EthereumTransaction: CustomStringConvertible {
     static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> JSONRPCrequest? {
         let onBlock = transactionOptions?.callOnBlock?.stringValue
         var request = JSONRPCrequest()
+//        var tx = transaction
         request.method = method
         let from = transactionOptions?.from
-//        guard let from = options?.from else {return nil}
         guard var txParams = transaction.encodeAsDictionary(from: from) else {return nil}
         if method == .estimateGas || transactionOptions?.gasLimit == nil {
             txParams.gas = nil
@@ -351,4 +277,111 @@ public struct EthereumTransaction: CustomStringConvertible {
         if !request.isValid {return nil}
         return request
     }
+}
+
+public extension EthereumTransaction {
+    public init(to: EthereumAddress, data: Data, options: TransactionOptions) {
+        let defaults = TransactionOptions.defaultOptions
+        let merged = defaults.merge(options)
+        self.nonce = BigUInt(0)
+        
+        if let gP = merged.gasPrice {
+            switch gP {
+            case .manual(let value):
+                self.gasPrice = value
+            default:
+                self.gasPrice = BigUInt("5000000000")
+            }
+        }
+        
+        if let gL = merged.gasLimit {
+            switch gL {
+            case .manual(let value):
+                self.gasLimit = value
+            default:
+                self.gasLimit = BigUInt(UInt64(21000))
+            }
+        }
+        
+        self.value = merged.value!
+        self.to = to
+        self.data = data
+    }
+    
+    public func mergedWithOptions(_ options: TransactionOptions) -> EthereumTransaction {
+        var tx = self;
+        
+        if let gP = options.gasPrice {
+            switch gP {
+            case .manual(let value):
+                tx.gasPrice = value
+            default:
+                tx.gasPrice = BigUInt("5000000000")
+            }
+        }
+        
+        if let gL = options.gasLimit {
+            switch gL {
+            case .manual(let value):
+                tx.gasLimit = value
+            default:
+                tx.gasLimit = BigUInt(UInt64(21000))
+            }
+        }
+        
+        if options.value != nil {
+            tx.value = options.value!
+        }
+        if options.to != nil {
+            tx.to = options.to!
+        }
+        return tx
+    }
+    
+    static func fromJSON(_ json: [String: Any]) -> EthereumTransaction? {
+        guard let options = TransactionOptions.fromJSON(json) else {return nil}
+        guard let toString = json["to"] as? String else {return nil}
+        var to: EthereumAddress
+        if toString == "0x" || toString == "0x0" {
+            to = EthereumAddress.contractDeploymentAddress()
+        } else {
+            guard let ethAddr = EthereumAddress(toString) else {return nil}
+            to = ethAddr
+        }
+        //        if (!to.isValid) {
+        //            return nil
+        //        }
+        var dataString = json["data"] as? String
+        if (dataString == nil) {
+            dataString = json["input"] as? String
+        }
+        guard dataString != nil, let data = Data.fromHex(dataString!) else {return nil}
+        var transaction = EthereumTransaction(to: to, data: data, options: options)
+        if let nonceString = json["nonce"] as? String {
+            guard let nonce = BigUInt(nonceString.stripHexPrefix(), radix: 16) else {return nil}
+            transaction.nonce = nonce
+        }
+        if let vString = json["v"] as? String {
+            guard let v = BigUInt(vString.stripHexPrefix(), radix: 16) else {return nil}
+            transaction.v = v
+        }
+        if let rString = json["r"] as? String {
+            guard let r = BigUInt(rString.stripHexPrefix(), radix: 16) else {return nil}
+            transaction.r = r
+        }
+        if let sString = json["s"] as? String {
+            guard let s = BigUInt(sString.stripHexPrefix(), radix: 16) else {return nil}
+            transaction.s = s
+        }
+        if let valueString = json["value"] as? String {
+            guard let value = BigUInt(valueString.stripHexPrefix(), radix: 16) else {return nil}
+            transaction.value = value
+        }
+        let inferedChainID = transaction.inferedChainID
+        if (transaction.inferedChainID != nil && transaction.v >= BigUInt(37)) {
+            transaction.chainID = inferedChainID
+        }
+        return transaction
+    }
+    
 }
