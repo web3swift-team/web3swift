@@ -19,7 +19,7 @@ public extension PKCS5 {
     /// PBKDF1 is recommended only for compatibility with existing
     /// applications since the keys it produces may not be large enough for
     /// some applications.
-    public struct PBKDF1 {
+    struct PBKDF1 {
         public enum Error: Swift.Error {
             case invalidInput
             case derivedKeyTooLong
@@ -37,7 +37,7 @@ public extension PKCS5 {
                 }
             }
 
-            fileprivate func calculateHash(_ bytes: Array<UInt8>) -> Array<UInt8>? {
+            fileprivate func calculateHash(_ bytes: Array<UInt8>) -> Array<UInt8> {
                 switch self {
                 case .sha1:
                     return Digest.sha1(bytes)
@@ -67,9 +67,7 @@ public extension PKCS5 {
                 throw Error.derivedKeyTooLong
             }
 
-            guard let t1 = variant.calculateHash(password + salt) else {
-                throw Error.invalidInput
-            }
+            let t1 = variant.calculateHash(password + salt)
 
             self.iterations = iterations
             self.variant = variant
@@ -81,7 +79,7 @@ public extension PKCS5 {
         public func calculate() -> Array<UInt8> {
             var t = t1
             for _ in 2...iterations {
-                t = variant.calculateHash(t)!
+                t = variant.calculateHash(t)
             }
             return Array(t[0..<self.keyLength])
         }

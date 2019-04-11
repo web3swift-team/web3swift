@@ -1,4 +1,4 @@
-[![Platform](https://img.shields.io/badge/Platforms-iOS%20%7C%20macOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-4E4E4E.svg?colorA=28a745)](#installation)
+[![Platform](https://img.shields.io/badge/Platforms-iOS%20%7C%20Android%20%7CmacOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-4E4E4E.svg?colorA=28a745)](#installation)
 
 [![Swift support](https://img.shields.io/badge/Swift-3.1%20%7C%203.2%20%7C%204.0%20%7C%204.1-lightgrey.svg?colorA=28a745&colorB=4E4E4E)](#swift-versions-support)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/CryptoSwift.svg?style=flat&label=CocoaPods&colorA=28a745&&colorB=4E4E4E)](https://cocoapods.org/pods/CryptoSwift)
@@ -11,7 +11,7 @@
 
 Crypto related functions and helpers for [Swift](https://swift.org) implemented in Swift. ([#PureSwift](https://twitter.com/hashtag/pureswift))
 
-**Note**: The `master` branch follows the latest currently released **version of Swift**. If you need an version for older version of Swift, you can specify it's version in your Podfile or use the code on the branch for that version. Older branches are unsupported. Check [versions](#swift-versions-support) for details.
+**Note**: The `master` branch follows the latest currently released **version of Swift**. If you need an earlier version for an older version of Swift, you can specify its version in your Podfile or use the code on the branch for that version. Older branches are unsupported. Check [versions](#swift-versions-support) for details.
 
 ---
 
@@ -37,7 +37,7 @@ Good mood
 - Easy to use
 - Convenient extensions for String and Data
 - Support for incremental updates (stream, ...)
-- iOS, macOS, AppleTV, watchOS, Linux support
+- iOS, Android, macOS, AppleTV, watchOS, Linux support
 
 #### Hash (Digest)
   [MD5](http://tools.ietf.org/html/rfc1321)
@@ -79,6 +79,7 @@ Good mood
 - [PBKDF1](http://tools.ietf.org/html/rfc2898#section-5.1) (Password-Based Key Derivation Function 1)
 - [PBKDF2](http://tools.ietf.org/html/rfc2898#section-5.2) (Password-Based Key Derivation Function 2)
 - [HKDF](https://tools.ietf.org/html/rfc5869) (HMAC-based Extract-and-Expand Key Derivation Function)
+- [Scrypt](https://tools.ietf.org/html/rfc7914) (The scrypt Password-Based Key Derivation Function)
 
 #### Data padding
   PKCS#5
@@ -216,12 +217,12 @@ CryptoSwift uses array of bytes aka `Array<UInt8>` as a base type for all operat
 
 ##### Data types conversion
 
-For you convenience **CryptoSwift** provides two functions to easily convert array of bytes to `Data` and another way around:
+For your convenience, **CryptoSwift** provides two functions to easily convert an array of bytes to `Data` or `Data` to an array of bytes:
 
 Data from bytes:
 
 ```swift
-let data = Data(bytes: [0x01, 0x02, 0x03])
+let data = Data( [0x01, 0x02, 0x03])
 ```
 
 `Data` to `Array<UInt8>`
@@ -260,7 +261,7 @@ let digest = Digest.md5(bytes)
 ```
 
 ```swift
-let data = Data(bytes: [0x01, 0x02, 0x03])
+let data = Data( [0x01, 0x02, 0x03])
 
 let hash = data.md5()
 let hash = data.sha1()
@@ -314,6 +315,14 @@ let salt: Array<UInt8> = Array("nacllcan".utf8)
 let key = try PKCS5.PBKDF2(password: password, salt: salt, iterations: 4096, variant: .sha256).calculate()
 ```
 
+```swift
+let password: Array<UInt8> = Array("s33krit".utf8)
+let salt: Array<UInt8> = Array("nacllcan".utf8)
+// Scrypt implementation does not implement work parallelization, so `p` parameter will
+// increase the work time even in multicore systems
+let key = try Scrypt(password: password, salt: salt, dkLen: 64, N: 16384, r: 8, p: 1).calculate()
+```
+
 ##### HMAC-based Key Derivation Function
 
 ```swift
@@ -322,6 +331,7 @@ let salt: Array<UInt8> = Array("nacllcan".utf8)
 
 let key = try HKDF(password: password, salt: salt, variant: .sha256).calculate()
 ```
+
 
 ##### Data Padding
     
@@ -354,7 +364,7 @@ let decrypted = try Blowfish(key: key, blockMode: CBC(iv: iv), padding: .pkcs7).
 
 ##### AES
 
-Notice regarding padding: *Manual padding of data is optional, and CryptoSwift is using PKCS7 padding by default. If you need manually disable/enable padding, you can do this by setting parameter for __AES__ class*
+Notice regarding padding: *Manual padding of data is optional, and CryptoSwift is using PKCS7 padding by default. If you need to manually disable/enable padding, you can do this by setting parameter for __AES__ class*
 
 Variant of AES encryption (AES-128, AES-192, AES-256) depends on given key length:
 
@@ -424,7 +434,7 @@ let encrypted: Array<UInt8> = try! AES(key: Array("secret0key000000".utf8), bloc
 Using convenience extensions
     
 ```swift
-let plain = Data(bytes: [0x01, 0x02, 0x03])
+let plain = Data( [0x01, 0x02, 0x03])
 let encrypted = try! plain.encrypt(ChaCha20(key: key, iv: iv))
 let decrypted = try! encrypted.decrypt(ChaCha20(key: key, iv: iv))
 ```
@@ -460,13 +470,13 @@ do {
 }
 ```
 
-**Note**: GCM instance is not intended to be reused. So you can't use the `GCM` from encoding, do decoding.
+**Note**: GCM instance is not intended to be reused. So you can't use the same `GCM` instance from encoding to also perform decoding.
 
 ##### AES-CCM
 
 The result of Counter with Cipher Block Chaining-Message Authentication Code encryption is ciphertext and **authentication tag**, that is later used to decryption.
 
-```
+```swift
 do {
     // The authentication tag is appended to the encrypted message.
 	let tagLength = 8

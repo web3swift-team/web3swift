@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import scrypt
+import CryptoSwift
 
 func toByteArray<T>(_ value: T) -> [UInt8] {
     var value = value
