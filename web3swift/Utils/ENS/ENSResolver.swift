@@ -17,26 +17,26 @@ public struct ResolverENS {
         case name
         case ABI
         case pubkey
+        case text
         case content
         case multihash
-        case text
         
         func hash() -> String {
             switch self {
-            case .ABI:
-                return "0x2203ab56"
             case .addr:
                 return "0x3b3b57de"
             case .name:
                 return "0x691f3431"
+            case .ABI:
+                return "0x2203ab56"
             case .pubkey:
                 return "0xc8690233"
-            case .content:
-                return "0xd8389dc5"
-            case .multihash:
-                return "0xe89401a1"
             case .text:
                 return "0x59d1d43c"
+            case .content:
+                return "0xbc1c58d1"
+            case .multihash:
+                return "0xe89401a1"
             }
         }
     }

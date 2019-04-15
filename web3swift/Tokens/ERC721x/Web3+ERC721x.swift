@@ -140,6 +140,26 @@ public class ERC721x: IERC721x {
         return tx
     }
     
+    public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction {
+        let contract = self.contract
+        var basicOptions = TransactionOptions()
+        basicOptions.from = from
+        basicOptions.to = self.address
+        
+        let tx = contract.write("safeTransferFrom", parameters: [originalOwner, to, tokenId] as [AnyObject], transactionOptions: basicOptions)!
+        return tx
+    }
+    
+    public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, data: [UInt8]) throws -> WriteTransaction {
+        let contract = self.contract
+        var basicOptions = TransactionOptions()
+        basicOptions.from = from
+        basicOptions.to = self.address
+        
+        let tx = contract.write("safeTransferFrom", parameters: [originalOwner, to, tokenId, data] as [AnyObject], transactionOptions: basicOptions)!
+        return tx
+    }
+    
     public func approve(from: EthereumAddress, approved: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()

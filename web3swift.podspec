@@ -17,7 +17,7 @@ s.swift_version = '5.0'
 s.module_name = 'Web3swift'
 s.ios.deployment_target = "9.0"
 s.osx.deployment_target = "10.11"
-s.source_files = "web3swift/{Promises,Web3,Contract,KeystoreManager,Transaction,Convenience,HookedFunctions}/Classes/*.{h,swift}", "web3swift/Utils/Classes/{EIP67Code, EIP681, ENS, ENSResolver, NonceMiddleware}.swift", "web3swift/PrecompiledContracts/**/*.swift", "web3swift/web3swift.h"
+s.source_files = "web3swift/{Promises,Web3,Contract,KeystoreManager,Transaction,Convenience,HookedFunctions}/*.{h,swift}", "web3swift/Utils/**/*.swift" "web3swift/PrecompiledContracts/**/*.swift", "web3swift/web3swift.h"
 s.public_header_files = "web3swift/web3swift.h"
 s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 
