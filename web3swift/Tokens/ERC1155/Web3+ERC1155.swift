@@ -135,7 +135,7 @@ public class ERC1155: IERC1155 {
         return res
     }
     
-    func supportsInterface(interfaceID: [UInt8]) throws -> Bool {
+    func supportsInterface(interfaceID: String) throws -> Bool {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest

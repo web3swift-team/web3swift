@@ -126,8 +126,10 @@ extension Web3 {
                             do {
                                 let web = web3(provider: InfuraProvider(Networks.fromInt(Int(code.chainID ?? 1)) ?? Networks.Mainnet)!)
                                 let ensModel = ENS(web3: web)
-                                var resolver = try ensModel.resolver(forDomain: ens)
-                                let address = try resolver.addr(forDomain: ens)
+                                guard let address = try ensModel?.useENSResolver(withDomain: ens)
+                                    .getAddress(forNode: ens) else {
+                                        return nil
+                                }
                                 nativeValue = address as AnyObject
                             } catch {
                                 return nil

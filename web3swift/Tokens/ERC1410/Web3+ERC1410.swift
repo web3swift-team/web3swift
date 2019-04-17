@@ -517,7 +517,7 @@ extension ERC1410: IERC777 {
         return tx
     }
     
-    public func supportsInterface(interfaceID: [UInt8]) throws -> Bool {
+    public func supportsInterface(interfaceID: String) throws -> Bool {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
