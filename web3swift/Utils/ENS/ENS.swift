@@ -74,240 +74,204 @@ public class ENS {
     
     //MARK: - Convenience resolver methods
     public func getAddress(forNode node: String) throws -> EthereumAddress {
-        if resolver == nil{
-            guard let res = try? self.registry.getResolver(forDomain: node) else {
-                throw Web3Error.processingError(desc: "Failed to get resolver for domain")
-            }
-            self.resolver = res
+        guard let resolver = try? self.registry.getResolver(forDomain: node) else {
+            throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isAddrSupports = try? resolver?.supportsInterface(interfaceID: Resolver.InterfaceName.addr.hash()) else {
+        guard let isAddrSupports = try? resolver.supportsInterface(interfaceID: Resolver.InterfaceName.addr.hash()) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isAddrSupports else {
             throw Web3Error.processingError(desc: "Address isn't supported")
         }
-        guard let addr = try? resolver?.getAddress(forNode: node) else {
+        guard let addr = try? resolver.getAddress(forNode: node) else {
             throw Web3Error.processingError(desc: "Can't get address")
         }
         return addr
     }
     
     public func setAddress(forNode node: String, address: EthereumAddress, options: TransactionOptions? = nil, password: String? = nil) throws -> TransactionSendingResult {
-        if resolver == nil{
-            guard let res = try? self.registry.getResolver(forDomain: node) else {
-                throw Web3Error.processingError(desc: "Failed to get resolver for domain")
-            }
-            self.resolver = res
+        guard let resolver = try? self.registry.getResolver(forDomain: node) else {
+            throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isAddrSupports = try? resolver?.supportsInterface(interfaceID: Resolver.InterfaceName.addr.hash()) else {
+        guard let isAddrSupports = try? resolver.supportsInterface(interfaceID: Resolver.InterfaceName.addr.hash()) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isAddrSupports else {
             throw Web3Error.processingError(desc: "Address isn't supported")
         }
         var options = options ?? defaultOptions
-        options.to = self.resolver?.resolverContractAddress
-        guard let result = try? resolver?.setAddress(forNode: node, address: address, options: options, password: password) else {
+        options.to = resolver.resolverContractAddress
+        guard let result = try? resolver.setAddress(forNode: node, address: address, options: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
         }
         return result
     }
     
     public func getName(forNode node: String) throws -> String {
-        if resolver == nil{
-            guard let res = try? self.registry.getResolver(forDomain: node) else {
-                throw Web3Error.processingError(desc: "Failed to get resolver for domain")
-            }
-            self.resolver = res
+        guard let resolver = try? self.registry.getResolver(forDomain: node) else {
+            throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isNameSupports = try? resolver?.supportsInterface(interfaceID: Resolver.InterfaceName.name.hash()) else {
+        guard let isNameSupports = try? resolver.supportsInterface(interfaceID: Resolver.InterfaceName.name.hash()) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isNameSupports else {
             throw Web3Error.processingError(desc: "Name isn't supported")
         }
-        guard let name = try? resolver?.getCanonicalName(forNode: node) else {
+        guard let name = try? resolver.getCanonicalName(forNode: node) else {
             throw Web3Error.processingError(desc: "Can't get name")
         }
         return name
     }
     
     public func setName(forNode node: String, name: String, options: TransactionOptions? = nil, password: String? = nil) throws -> TransactionSendingResult {
-        if resolver == nil{
-            guard let res = try? self.registry.getResolver(forDomain: node) else {
-                throw Web3Error.processingError(desc: "Failed to get resolver for domain")
-            }
-            self.resolver = res
+        guard let resolver = try? self.registry.getResolver(forDomain: node) else {
+            throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isNameSupports = try? resolver?.supportsInterface(interfaceID: Resolver.InterfaceName.name.hash()) else {
+        guard let isNameSupports = try? resolver.supportsInterface(interfaceID: Resolver.InterfaceName.name.hash()) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isNameSupports else {
             throw Web3Error.processingError(desc: "Name isn't supported")
         }
         var options = options ?? defaultOptions
-        options.to = self.resolver?.resolverContractAddress
-        guard let result = try? resolver?.setCanonicalName(forNode: node, name: name, options: options, password: password) else {
+        options.to = resolver.resolverContractAddress
+        guard let result = try? resolver.setCanonicalName(forNode: node, name: name, options: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
         }
         return result
     }
     
     public func getContent(forNode node: String) throws -> String {
-        if resolver == nil{
-            guard let res = try? self.registry.getResolver(forDomain: node) else {
-                throw Web3Error.processingError(desc: "Failed to get resolver for domain")
-            }
-            self.resolver = res
+        guard let resolver = try? self.registry.getResolver(forDomain: node) else {
+            throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isContentSupports = try? resolver?.supportsInterface(interfaceID: Resolver.InterfaceName.content.hash()) else {
+        guard let isContentSupports = try? resolver.supportsInterface(interfaceID: Resolver.InterfaceName.content.hash()) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isContentSupports else {
             throw Web3Error.processingError(desc: "Content isn't supported")
         }
-        guard let content = try? resolver?.getContentHash(forNode: node) else {
+        guard let content = try? resolver.getContentHash(forNode: node) else {
             throw Web3Error.processingError(desc: "Can't get content")
         }
         return content
     }
     
     public func setContent(forNode node: String, hash: String, options: TransactionOptions? = nil, password: String? = nil) throws -> TransactionSendingResult {
-        if resolver == nil{
-            guard let res = try? self.registry.getResolver(forDomain: node) else {
-                throw Web3Error.processingError(desc: "Failed to get resolver for domain")
-            }
-            self.resolver = res
+        guard let resolver = try? self.registry.getResolver(forDomain: node) else {
+            throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isContentSupports = try? resolver?.supportsInterface(interfaceID: Resolver.InterfaceName.content.hash()) else {
+        guard let isContentSupports = try? resolver.supportsInterface(interfaceID: Resolver.InterfaceName.content.hash()) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isContentSupports else {
             throw Web3Error.processingError(desc: "Content isn't supported")
         }
         var options = options ?? defaultOptions
-        options.to = self.resolver?.resolverContractAddress
-        guard let result = try? resolver?.setContentHash(forNode: node, hash: hash, options: options, password: password) else {
+        options.to = resolver.resolverContractAddress
+        guard let result = try? resolver.setContentHash(forNode: node, hash: hash, options: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
         }
         return result
     }
     
     public func getABI(forNode node: String, contentType: ENS.Resolver.ContentType) throws -> (BigUInt, Data) {
-        if resolver == nil{
-            guard let res = try? self.registry.getResolver(forDomain: node) else {
-                throw Web3Error.processingError(desc: "Failed to get resolver for domain")
-            }
-            self.resolver = res
+        guard let resolver = try? self.registry.getResolver(forDomain: node) else {
+            throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isABISupports = try? resolver?.supportsInterface(interfaceID: Resolver.InterfaceName.ABI.hash()) else {
+        guard let isABISupports = try? resolver.supportsInterface(interfaceID: Resolver.InterfaceName.ABI.hash()) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isABISupports else {
             throw Web3Error.processingError(desc: "ABI isn't supported")
         }
-        guard let abi = try? resolver?.getContractABI(forNode: node, contentType: contentType) else {
+        guard let abi = try? resolver.getContractABI(forNode: node, contentType: contentType) else {
             throw Web3Error.processingError(desc: "Can't get ABI")
         }
         return abi
     }
     
     public func setABI(forNode node: String, contentType: ENS.Resolver.ContentType, data: Data, options: TransactionOptions? = nil, password: String? = nil) throws -> TransactionSendingResult {
-        if resolver == nil{
-            guard let res = try? self.registry.getResolver(forDomain: node) else {
-                throw Web3Error.processingError(desc: "Failed to get resolver for domain")
-            }
-            self.resolver = res
+        guard let resolver = try? self.registry.getResolver(forDomain: node) else {
+            throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isABISupports = try? resolver?.supportsInterface(interfaceID: Resolver.InterfaceName.ABI.hash()) else {
+        guard let isABISupports = try? resolver.supportsInterface(interfaceID: Resolver.InterfaceName.ABI.hash()) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isABISupports else {
             throw Web3Error.processingError(desc: "ABI isn't supported")
         }
         var options = options ?? defaultOptions
-        options.to = self.resolver?.resolverContractAddress
-        guard let result = try? resolver?.setContractABI(forNode: node, contentType: contentType, data: data, options: options, password: password) else {
+        options.to = resolver.resolverContractAddress
+        guard let result = try? resolver.setContractABI(forNode: node, contentType: contentType, data: data, options: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
         }
         return result
     }
     
     public func getPublicKey(forNode node: String) throws -> PublicKey {
-        if resolver == nil{
-            guard let res = try? self.registry.getResolver(forDomain: node) else {
-                throw Web3Error.processingError(desc: "Failed to get resolver for domain")
-            }
-            self.resolver = res
+        guard let resolver = try? self.registry.getResolver(forDomain: node) else {
+            throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isPKSupports = try? resolver?.supportsInterface(interfaceID: Resolver.InterfaceName.pubkey.hash()) else {
+        guard let isPKSupports = try? resolver.supportsInterface(interfaceID: Resolver.InterfaceName.pubkey.hash()) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isPKSupports else {
             throw Web3Error.processingError(desc: "Public Key isn't supported")
         }
-        guard let pk = try? resolver?.getPublicKey(forNode: node) else {
+        guard let pk = try? resolver.getPublicKey(forNode: node) else {
             throw Web3Error.processingError(desc: "Can't get Public Key")
         }
         return pk
     }
     
     public func setPublicKey(forNode node: String, publicKey: PublicKey, options: TransactionOptions? = nil, password: String? = nil) throws -> TransactionSendingResult {
-        if resolver == nil{
-            guard let res = try? self.registry.getResolver(forDomain: node) else {
-                throw Web3Error.processingError(desc: "Failed to get resolver for domain")
-            }
-            self.resolver = res
+        guard let resolver = try? self.registry.getResolver(forDomain: node) else {
+            throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isPKSupports = try? resolver?.supportsInterface(interfaceID: Resolver.InterfaceName.pubkey.hash()) else {
+        guard let isPKSupports = try? resolver.supportsInterface(interfaceID: Resolver.InterfaceName.pubkey.hash()) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isPKSupports else {
             throw Web3Error.processingError(desc: "Public Key isn't supported")
         }
         var options = options ?? defaultOptions
-        options.to = self.resolver?.resolverContractAddress
-        guard let result = try? resolver?.setPublicKey(forNode: node, publicKey: publicKey, options: options, password: password) else {
+        options.to = resolver.resolverContractAddress
+        guard let result = try? resolver.setPublicKey(forNode: node, publicKey: publicKey, options: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
         }
         return result
     }
     
     public func getText(forNode node: String, key: String) throws -> String {
-        if resolver == nil{
-            guard let res = try? self.registry.getResolver(forDomain: node) else {
-                throw Web3Error.processingError(desc: "Failed to get resolver for domain")
-            }
-            self.resolver = res
+        guard let resolver = try? self.registry.getResolver(forDomain: node) else {
+            throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isTextSupports = try? resolver?.supportsInterface(interfaceID: Resolver.InterfaceName.text.hash()) else {
+        guard let isTextSupports = try? resolver.supportsInterface(interfaceID: Resolver.InterfaceName.text.hash()) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isTextSupports else {
             throw Web3Error.processingError(desc: "Text isn't supported")
         }
-        guard let text = try? resolver?.getTextData(forNode: node, key: key) else {
+        guard let text = try? resolver.getTextData(forNode: node, key: key) else {
             throw Web3Error.processingError(desc: "Can't get text")
         }
         return text
     }
     
     public func setText(forNode node: String, key: String, value: String, options: TransactionOptions? = nil, password: String? = nil) throws -> TransactionSendingResult {
-        if resolver == nil{
-            guard let res = try? self.registry.getResolver(forDomain: node) else {
-                throw Web3Error.processingError(desc: "Failed to get resolver for domain")
-            }
-            self.resolver = res
+        guard let resolver = try? self.registry.getResolver(forDomain: node) else {
+            throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isTextSupports = try? resolver?.supportsInterface(interfaceID: Resolver.InterfaceName.text.hash()) else {
+        guard let isTextSupports = try? resolver.supportsInterface(interfaceID: Resolver.InterfaceName.text.hash()) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isTextSupports else {
             throw Web3Error.processingError(desc: "Text isn't supported")
         }
         var options = options ?? defaultOptions
-        options.to = self.resolver?.resolverContractAddress
-        guard let result = try? resolver?.setTextData(forNode: node, key: key, value: value, options: options, password: password) else {
+        options.to = resolver.resolverContractAddress
+        guard let result = try? resolver.setTextData(forNode: node, key: key, value: value, options: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
         }
         return result
