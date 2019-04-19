@@ -24,48 +24,42 @@ public class ENS {
         self.registry = registry
     }
     
-    func useENSResolver(_ resolver: Resolver) throws -> ENS {
+    func setENSResolver(_ resolver: Resolver) throws {
         guard resolver.web3.provider.url == self.web3.provider.url else {
             throw Web3Error.processingError(desc: "Resolver should use same provider as ENS")
         }
         self.resolver = resolver
-        return self
     }
     
-    func useENSResolver(withDomain domain: String) throws -> ENS {
+    func setENSResolver(withDomain domain: String) throws {
         guard let resolver = try? self.registry.getResolver(forDomain: domain) else {
             throw Web3Error.processingError(desc: "No resolver for this domain")
         }
         self.resolver = resolver
-        return self
     }
     
-    func useBaseRegistrar(_ baseRegistrar: BaseRegistrar) throws -> ENS {
+    func setBaseRegistrar(_ baseRegistrar: BaseRegistrar) throws {
         guard baseRegistrar.web3.provider.url == self.web3.provider.url else {
             throw Web3Error.processingError(desc: "Base registrar should use same provider as ENS")
         }
         self.baseRegistrar = baseRegistrar
-        return self
     }
     
-    func useBaseRegistrar(withAddress address: EthereumAddress) -> ENS {
+    func setBaseRegistrar(withAddress address: EthereumAddress) {
         let baseRegistrar = BaseRegistrar(web3: web3, address: address)
         self.baseRegistrar = baseRegistrar
-        return self
     }
     
-    func useRegistrarController(_ registrarController: ETHRegistrarController) throws -> ENS {
+    func setRegistrarController(_ registrarController: ETHRegistrarController) throws {
         guard registrarController.web3.provider.url == self.web3.provider.url else {
             throw Web3Error.processingError(desc: "Registrar controller should use same provider as ENS")
         }
         self.registrarController = registrarController
-        return self
     }
     
-    func useRegistrarController(withAddress address: EthereumAddress) -> ENS {
+    func setRegistrarController(withAddress address: EthereumAddress) {
         let registrarController = ETHRegistrarController(web3: web3, address: address)
         self.registrarController = registrarController
-        return self
     }
     
     lazy var defaultOptions: TransactionOptions = {
