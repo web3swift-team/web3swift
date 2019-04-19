@@ -1,9 +1,7 @@
+//  web3swift
 //
-//  Web3+ERC721x.swift
-//  web3swift-iOS
-//
-//  Created by Anton Grigorev on 20/12/2018.
-//  Copyright © 2018 The Matter Inc. All rights reserved.
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
@@ -11,32 +9,52 @@ import BigInt
 import PromiseKit
 import EthereumAddress
 
-///A Smarter Token for the Future of Crypto Collectibles
-///ERC721x is an extension of ERC721 that adds support for multi-fungible tokens and batch transfers, while being fully backward-compatible.
-
-protocol IERC721x: IERC721, IERC721Metadata, IERC721Enumerable {
-    func implementsERC721X() throws -> Bool
-    func getOwner(tokenId: BigUInt) throws -> EthereumAddress
+//Non-Fungible Token Standard 
+protocol IERC721: IERC165 {
+    
     func getBalance(account: EthereumAddress) throws -> BigUInt
-    func getBalance(account: EthereumAddress, tokenId: BigUInt) throws -> BigUInt
     
-    func tokensOwned(account: EthereumAddress) throws -> ([BigUInt], [BigUInt])
+    func getOwner(tokenId: BigUInt) throws -> EthereumAddress
     
-    func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) throws -> WriteTransaction
-    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) throws -> WriteTransaction
+    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction
     
-    // Fungible Safe Transfer From
-    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt) throws -> WriteTransaction
-    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt, data: [UInt8]) throws -> WriteTransaction
+    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction
     
-    // Batch Safe Transfer From
-    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenIds: [BigUInt], amounts: [BigUInt], data: [UInt8]) throws -> WriteTransaction
+    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, data: [UInt8]) throws -> WriteTransaction
     
-    func name() throws -> String
-    func symbol() throws -> String
+    func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction
+    
+    func approve(from: EthereumAddress, approved: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction
+    
+    func setApprovalForAll(from: EthereumAddress, operator user: EthereumAddress, approved: Bool) throws -> WriteTransaction
+    
+    func getApproved(tokenId: BigUInt) throws -> EthereumAddress
+    
+    func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress) throws -> Bool
 }
 
-public class ERC721x: IERC721x {
+protocol IERC721Metadata {
+    
+    func name() throws -> String
+    
+    func symbol() throws -> String
+    
+    func tokenURI(tokenId: BigUInt) throws -> String
+    
+}
+
+protocol IERC721Enumerable {
+    
+    func totalSupply() throws -> BigUInt
+    
+    func tokenByIndex(index: BigUInt) throws -> BigUInt
+    
+    func tokenOfOwnerByIndex(owner: EthereumAddress, index: BigUInt) throws -> BigUInt
+}
+    
+// This namespace contains functions to work with ERC721 tokens.
+// can be imperatively read and saved
+public class ERC721: IERC721 {
     
     private var _tokenId: BigUInt? = nil
     private var _hasReadProperties: Bool = false
@@ -45,21 +63,19 @@ public class ERC721x: IERC721x {
     public var web3: web3
     public var provider: Web3Provider
     public var address: EthereumAddress
-    public var abi: String
     
     lazy var contract: web3.web3contract = {
-        let contract = self.web3.contract(self.abi, at: self.address, abiVersion: 2)
+        let contract = self.web3.contract(Web3.Utils.erc721ABI, at: self.address, abiVersion: 2)
         precondition(contract != nil)
         return contract!
     }()
     
-    public init(web3: web3, provider: Web3Provider, address: EthereumAddress, abi: String = Web3.Utils.erc721xABI) {
+    public init(web3: web3, provider: Web3Provider, address: EthereumAddress) {
         self.web3 = web3
         self.provider = provider
         self.address = address
         var mergedOptions = web3.transactionOptions
         mergedOptions.to = address
-        self.abi = abi
         self.transactionOptions = mergedOptions
     }
     
@@ -140,6 +156,26 @@ public class ERC721x: IERC721x {
         return tx
     }
     
+    public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction {
+        let contract = self.contract
+        var basicOptions = TransactionOptions()
+        basicOptions.from = from
+        basicOptions.to = self.address
+        
+        let tx = contract.write("safeTransferFrom", parameters: [originalOwner, to, tokenId] as [AnyObject], transactionOptions: basicOptions)!
+        return tx
+    }
+    
+    public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, data: [UInt8]) throws -> WriteTransaction {
+        let contract = self.contract
+        var basicOptions = TransactionOptions()
+        basicOptions.from = from
+        basicOptions.to = self.address
+        
+        let tx = contract.write("safeTransferFrom", parameters: [originalOwner, to, tokenId, data] as [AnyObject], transactionOptions: basicOptions)!
+        return tx
+    }
+    
     public func approve(from: EthereumAddress, approved: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
@@ -169,7 +205,7 @@ public class ERC721x: IERC721x {
         return res
     }
     
-    public func supportsInterface(interfaceID: [UInt8]) throws -> Bool {
+    public func supportsInterface(interfaceID: String) throws -> Bool {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
@@ -178,6 +214,10 @@ public class ERC721x: IERC721x {
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
+    
+}
+
+extension ERC721: IERC721Enumerable {
     
     public func totalSupply() throws -> BigUInt {
         let contract = self.contract
@@ -206,6 +246,10 @@ public class ERC721x: IERC721x {
         return res
     }
     
+}
+
+extension ERC721: IERC721Metadata {
+    
     public func name() throws -> String {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
@@ -233,80 +277,4 @@ public class ERC721x: IERC721x {
         return res
     }
     
-    func implementsERC721X() throws -> Bool {
-        let contract = self.contract
-        var transactionOptions = TransactionOptions()
-        transactionOptions.callOnBlock = .latest
-        let result = try contract.read("implementsERC721X", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
-        guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
-        return res
-    }
-    
-    func getBalance(account: EthereumAddress, tokenId: BigUInt) throws -> BigUInt {
-        let contract = self.contract
-        var transactionOptions = TransactionOptions()
-        transactionOptions.callOnBlock = .latest
-        let result = try contract.read("balanceOf", parameters: [account, tokenId] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
-        guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
-        return res
-    }
-    
-    func tokensOwned(account: EthereumAddress) throws -> ([BigUInt], [BigUInt]) {
-        let contract = self.contract
-        var transactionOptions = TransactionOptions()
-        transactionOptions.callOnBlock = .latest
-        let result = try contract.read("tokensOwned", parameters: [account] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
-        guard let res = result["0"] as? ([BigUInt], [BigUInt]) else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
-        return res
-    }
-    
-    func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) throws -> WriteTransaction {
-        let contract = self.contract
-        var basicOptions = TransactionOptions()
-        basicOptions.from = from
-        basicOptions.to = self.address
-        
-        let tx = contract.write("transfer", parameters: [to, tokenId, quantity] as [AnyObject], transactionOptions: basicOptions)!
-        return tx
-    }
-    
-    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) throws -> WriteTransaction {
-        let contract = self.contract
-        var basicOptions = TransactionOptions()
-        basicOptions.from = from
-        basicOptions.to = self.address
-        
-        let tx = contract.write("transferFrom", parameters: [originalOwner, to, tokenId, quantity] as [AnyObject], transactionOptions: basicOptions)!
-        return tx
-    }
-    
-    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt) throws -> WriteTransaction {
-        let contract = self.contract
-        var basicOptions = TransactionOptions()
-        basicOptions.from = from
-        basicOptions.to = self.address
-        
-        let tx = contract.write("safeTransferFrom", parameters: [originalOwner, to, tokenId, amount] as [AnyObject], transactionOptions: basicOptions)!
-        return tx
-    }
-    
-    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt, data: [UInt8]) throws -> WriteTransaction {
-        let contract = self.contract
-        var basicOptions = TransactionOptions()
-        basicOptions.from = from
-        basicOptions.to = self.address
-        
-        let tx = contract.write("safeTransferFrom", parameters: [originalOwner, to, tokenId, amount, data] as [AnyObject], transactionOptions: basicOptions)!
-        return tx
-    }
-    
-    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenIds: [BigUInt], amounts: [BigUInt], data: [UInt8]) throws -> WriteTransaction {
-        let contract = self.contract
-        var basicOptions = TransactionOptions()
-        basicOptions.from = from
-        basicOptions.to = self.address
-        
-        let tx = contract.write("safeTransferFrom", parameters: [originalOwner, to, tokenIds, amounts, data] as [AnyObject], transactionOptions: basicOptions)!
-        return tx
-    }
 }

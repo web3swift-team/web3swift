@@ -41,6 +41,11 @@
 		- [Get new pending transactions](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-new-pending-transactions)
 		- [Create a new subscription over particular events](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-a-new-subscription-over-particular-events)
 		- [Subscribe on new pending transactions](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#subscribe-on-new-pending-transactions)
+- **[ENS](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ens)**
+	- [Registry](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#registry)
+	- [Resolver](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#resolver)
+	- [BaseRegistrar](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#baseregistrar)
+	- [RegistrarController](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#registrarcontroller)
 
 ## Introduction
 
@@ -431,4 +436,67 @@ try! socketProvider.subscribe(params: <[Encodable]>)
 ```swift
 try! socketProvider.subscribeOnNewPendingTransactions()
 ```
+
+## ENS
+
+You need ENS instance for future actions:
+```swift
+let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+let ens = ENS(web3: web)!
+```
+
+### Registry
+
+You can get/set owner, resolver, ttl via ENS property registry:
+```swift
+let owner = try! ens.registry.getOwner(node: node)
+let resultSettingOwner = try! ens.registry.setOwner(node: node, owner: owner, options: options, password: password)
+...
+```
+
+### Resolver
+
+You use convenient resolver methods from ENS instance:
+```swift
+let address = try! ens.getAddress(forNode: node)
+let name = try! ens.getName(forNode: node)
+let content = try! ens.getContent(forNode: node)
+let abi = try! ens.getABI(forNode: node)
+let pubkey = try! ens.getPublicKey(forNode: node)
+let text = try! ens.getText(forNode: node, key: key)
+
+let result = try! ens.setAddress(forNode: node, address: address, options: options, password: password)
+let result = try! ens.setName(forNode: node, name: name, options: options, password: password)
+let result = try! ens.setContent(forNode: node, hash: hash, options: options, password: password)
+let result = try! ens.setABI(forNode: node, contentType: .JSON, data: data, options: options, password: password)
+let result = try! ens.setPublicKey(forNode: node, publicKey: publicKey, options: options, password: password)
+let result = try! ens.setText(forNode: node, key: key, value: value, options: options, password: password)
+```
+or you can get resolver to use its methods directly:
+```swift
+let resolver = try! ens.registry.getResolver(forDomain: domain)
+let doSomething = try! resolver. ...
+```
+or set it as ENS instance property and use its methods from it:
+```swift
+try! ens.setENSResolver(withDomain: domain)
+let doSomething = try! ens.resolver!. ... 
+```
+
+### BaseRegistrar
+You can set BaseRegistrar as ENS instance property and use its methods from it:
+```swift
+ens.setBaseRegistrar(withAddress: address)
+let doSomething = try! ens.baseRegistrar!. ...
+```
+
+### RegistrarController
+You can set RegistrarController as ENS instance property and use its methods from it:
+```swift
+ens.setRegistrarController(withAddresss: address)
+let doSomething = try! ens.registrarController!. ...
+```
+
+
+
 

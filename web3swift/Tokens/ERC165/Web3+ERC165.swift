@@ -11,6 +11,6 @@ import Foundation
 //Standard Interface Detection
 protocol IERC165 {
     
-    func supportsInterface(interfaceID: [UInt8]) throws -> Bool
+    func supportsInterface(interfaceID: String) throws -> Bool
     
 }
