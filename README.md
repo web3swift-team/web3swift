@@ -140,8 +140,8 @@ When using this lib, please make references to this repo and give your start! :)
 
 If you are using web3swift in your app or know of an app that uses it, please add it to [this list](https://github.com/matter-labs/web3swift/wiki/Apps-using-web3swift).
 
-- If you **need help**, use [Stack Overflow](https://stackoverflow.com/questions/tagged/web3swift) and tag `web3swift`.
-- If you need to **find or understand an API**, check [our documentation](http://web3swift.github.io/web3swift/).
+- If you **need help**, [open an issue](https://github.com/matter-labs/web3swift/issues).
+- If you need to **find or understand an API**, check [our documentation](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md).
 - If you'd like to **see web3swift best practices**, check [Apps using this library](https://github.com/matter-labs/web3swift/wiki/Apps-using-web3swift).
 - If you **found a bug**, [open an issue](https://github.com/matter-labs/web3swift/issues).
 - If you **have a feature request**, [open an issue](https://github.com/matter-labs/web3swift/issues).
@@ -270,7 +270,6 @@ func setLocalNode(port: Int = 8545) -> Web3? {
 - [x] Complete Documentation (https://web3swift.github.io/web3swift)
 - [x] Modularity with the basic Web3 subspec/SPM (the most basic functions like transaction signing and interacting with an http rpc server) and other modules with additional functionality
 - [x] [R-Token](https://github.com/harborhq/r-token) - Smart Contracts for applying regulatory compliance to tokenized securities issuance and trading
-- [x] Complete support Infura Websockets API
 - [x] Support IPFS via Infura public IPFS gateway
 - [x] Support more blockchains - Ripple, Bitcoin, EOS, etc.
 - [x] Performance Improvements
