@@ -46,6 +46,7 @@
 	- [Resolver](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#resolver)
 	- [BaseRegistrar](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#baseregistrar)
 	- [RegistrarController](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#registrarcontroller)
+	- [ReverseRegistrar](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#reverseregistrar)
 
 ## Introduction
 
@@ -497,6 +498,11 @@ ens.setRegistrarController(withAddresss: address)
 let doSomething = try! ens.registrarController!. ...
 ```
 
-
+### ReverseRegistrar
+You can set ReverseRegistrar as ENS instance property and use its methods from it:
+```swift
+ens.setReverseRegistrar(withAddresss: address)
+let doSomething = try! ens.reverseRegistrar!. ...
+```
 
 
