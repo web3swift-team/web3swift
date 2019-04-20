@@ -15,6 +15,7 @@ public class ENS {
     var resolver: Resolver? = nil
     var baseRegistrar: BaseRegistrar? = nil
     var registrarController: ETHRegistrarController? = nil
+    var reverseRegistrar: ReverseRegistrar? = nil
     
     init?(web3: web3) {
         self.web3 = web3
@@ -62,11 +63,23 @@ public class ENS {
         self.registrarController = registrarController
     }
     
+    func setReverseRegistrar(_ reverseRegistrar: ReverseRegistrar) throws {
+        guard reverseRegistrar.web3.provider.url == self.web3.provider.url else {
+            throw Web3Error.processingError(desc: "Registrar controller should use same provider as ENS")
+        }
+        self.reverseRegistrar = reverseRegistrar
+    }
+    
+    func setReverseRegistrar(withAddress address: EthereumAddress) {
+        let reverseRegistrar = ReverseRegistrar(web3: web3, address: address)
+        self.reverseRegistrar = reverseRegistrar
+    }
+    
     lazy var defaultOptions: TransactionOptions = {
         return TransactionOptions.defaultOptions
     }()
     
-    //MARK: - Convenience resolver methods
+    //MARK: - Convenience public resolver methods
     public func getAddress(forNode node: String) throws -> EthereumAddress {
         guard let resolver = try? self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
