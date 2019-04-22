@@ -1,4 +1,0 @@
-framework module BigInt {
-  header "BigInt-Swift.h"
-  requires objc
-}
