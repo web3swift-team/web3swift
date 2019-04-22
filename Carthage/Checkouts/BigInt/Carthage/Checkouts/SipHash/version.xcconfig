@@ -1,0 +1,20 @@
+//
+//  version.xcconfig
+//
+//  Created by Károly Lőrentey on 2016-03-08.
+//  Copyright © 2016-2017 Károly Lőrentey.
+//
+
+// Increment the build number whenever you modify the version string.
+VERSION_STRING = 1.2.0
+BUILD_NUMBER = 5
+
+PROJECT_NAME = SipHash
+BUNDLE_IDENTIFIER_BASE = org.attaswift.$(PROJECT_NAME)
+
+IPHONEOS_DEPLOYMENT_TARGET = 8.0
+MACOSX_DEPLOYMENT_TARGET = 10.9
+WATCHOS_DEPLOYMENT_TARGET = 2.0
+TVOS_DEPLOYMENT_TARGET = 9.0
+
+APPLICATION_EXTENSION_API_ONLY = YES

@@ -1,0 +1,73 @@
+PODS:
+  - BigInt (3.1.0):
+    - SipHash (~> 1.2)
+  - CryptoSwift (0.13.0)
+  - EthereumABI (1.1.1):
+    - BigInt (~> 3.1)
+    - CryptoSwift (~> 0.13)
+    - EthereumAddress (~> 1.0.0)
+  - EthereumAddress (1.0.0):
+    - CryptoSwift (~> 0.13)
+  - PromiseKit (6.5.2):
+    - PromiseKit/CorePromise (= 6.5.2)
+    - PromiseKit/Foundation (= 6.5.2)
+    - PromiseKit/UIKit (= 6.5.2)
+  - PromiseKit/CorePromise (6.5.2)
+  - PromiseKit/Foundation (6.5.2):
+    - PromiseKit/CorePromise
+  - PromiseKit/UIKit (6.5.2):
+    - PromiseKit/CorePromise
+  - scrypt (2.0):
+    - CryptoSwift (~> 0.11)
+  - secp256k1_swift (1.0.3)
+  - SipHash (1.2.2)
+  - SwiftRLP (1.2):
+    - BigInt (~> 3.1)
+  - web3swift (2.0.1):
+    - BigInt (~> 3.1)
+    - CryptoSwift (~> 0.13)
+    - EthereumABI (~> 1.1.1)
+    - EthereumAddress (~> 1.0.0)
+    - PromiseKit (~> 6.3)
+    - scrypt (~> 2.0)
+    - secp256k1_swift (~> 1.0.3)
+    - SwiftRLP (~> 1.1)
+  - WKBridge (0.2.4)
+
+DEPENDENCIES:
+  - web3swift (from `../../`)
+  - WKBridge
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - BigInt
+    - CryptoSwift
+    - EthereumABI
+    - EthereumAddress
+    - PromiseKit
+    - scrypt
+    - secp256k1_swift
+    - SipHash
+    - SwiftRLP
+    - WKBridge
+
+EXTERNAL SOURCES:
+  web3swift:
+    :path: "../../"
+
+SPEC CHECKSUMS:
+  BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
+  CryptoSwift: 16e78bebf567bad1c87b2d58f6547f25b74c31aa
+  EthereumABI: f040f5429e5a4366d028c88b88d9441e137593af
+  EthereumAddress: f476e1320dca3a0024431e713ede7a09c7eb7796
+  PromiseKit: 27c1601bfb73405871b805bcb8cf7e55c4dad3db
+  scrypt: 3fe5b1a3b0976f97cd87488673a8f7c65708cc84
+  secp256k1_swift: 4fc5c4b2d2c6d21ee8ccb868cdc92da12f38bed9
+  SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
+  SwiftRLP: 98a02b2210128353ca02e4c2f4d83e2a9796db4f
+  web3swift: aadc7a9b0c3b0384227eff181e39ba24ebfcd76c
+  WKBridge: 677fc36b9a9e4a80b6f9c4e915480d8fd91f5ad5
+
+PODFILE CHECKSUM: ed17f63e9fc4feec3b3d9d88971f86da22d55a1f
+
+COCOAPODS: 1.6.0.beta.2
