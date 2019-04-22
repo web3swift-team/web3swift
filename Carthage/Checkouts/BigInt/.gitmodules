@@ -1,3 +1,0 @@
-[submodule "Carthage/Checkouts/SipHash"]
-	path = Carthage/Checkouts/SipHash
-	url = https://github.com/attaswift/SipHash.git
