@@ -26,7 +26,7 @@ class SpyDelegate: Web3SocketDelegate {
             return
         }
         
-        print(message as? String)
+        print(message as! String)
         expectation.fulfill()
     }
     

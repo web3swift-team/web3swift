@@ -10,8 +10,8 @@ import UIKit
 import BigInt
 import Web3swift
 import Foundation
-import EthereumABI
-import EthereumAddress
+//import EthereumABI
+//import EthereumAddress
 import BigInt
 
 class ViewController: UIViewController, Web3SocketDelegate {

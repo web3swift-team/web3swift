@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import EthereumAddress
+//import EthereumAddress
 
 public class KeystoreManager: AbstractKeystore {
     public var isHDKeystore: Bool = false

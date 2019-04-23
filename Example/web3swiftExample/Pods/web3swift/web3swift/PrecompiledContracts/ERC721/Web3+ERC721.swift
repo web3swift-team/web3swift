@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 import PromiseKit
-import EthereumAddress
+//import EthereumAddress
 
 //Non-Fungible Token Standard 
 protocol IERC721: IERC165 {

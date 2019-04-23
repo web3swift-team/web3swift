@@ -1,7 +1,0 @@
-module EthereumABI {
-  umbrella header "EthereumABI-macOS-umbrella.h"
-  exclude header "EthereumABI-iOS-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -6,9 +6,9 @@
 
 import Foundation
 import BigInt
-import SwiftRLP
+//import SwiftRLP
 import secp256k1_swift
-import EthereumAddress
+//import EthereumAddress
 
 public struct EthereumTransaction: CustomStringConvertible {
     public var nonce: BigUInt
@@ -280,7 +280,7 @@ public struct EthereumTransaction: CustomStringConvertible {
 }
 
 public extension EthereumTransaction {
-    public init(to: EthereumAddress, data: Data, options: TransactionOptions) {
+    init(to: EthereumAddress, data: Data, options: TransactionOptions) {
         let defaults = TransactionOptions.defaultOptions
         let merged = defaults.merge(options)
         self.nonce = BigUInt(0)
@@ -308,7 +308,7 @@ public extension EthereumTransaction {
         self.data = data
     }
     
-    public func mergedWithOptions(_ options: TransactionOptions) -> EthereumTransaction {
+    func mergedWithOptions(_ options: TransactionOptions) -> EthereumTransaction {
         var tx = self;
         
         if let gP = options.gasPrice {

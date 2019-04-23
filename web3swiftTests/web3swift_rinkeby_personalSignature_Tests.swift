@@ -8,7 +8,7 @@ import XCTest
 import CryptoSwift
 import BigInt
 import secp256k1_swift
-import EthereumAddress
+//import EthereumAddress
 
 @testable import web3swift_iOS
 

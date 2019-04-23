@@ -8,7 +8,7 @@
 
 import Foundation
 import BigInt
-import EthereumAddress
+//import EthereumAddress
 
 public extension ENS {
     class ReverseRegistrar {

@@ -12,7 +12,7 @@ class web3swift_ENS_Tests: XCTestCase {
     
     func testDomainNormalization() {
         let normalizedString = NameHash.normalizeDomainName("example.ens")
-        print(normalizedString)
+        print(normalizedString!)
     }
     
     func testNameHash() {
@@ -101,7 +101,7 @@ class web3swift_ENS_Tests: XCTestCase {
             let ens = ENS(web3: web)
             let domain = "somename.eth"
             let ttl = try ens?.registry.getTTL(node: domain)
-            print(ttl)
+            print(ttl!.description)
         } catch {
             XCTFail()
         }

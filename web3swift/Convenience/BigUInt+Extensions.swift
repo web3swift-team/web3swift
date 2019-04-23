@@ -9,7 +9,7 @@ import Foundation
 import struct BigInt.BigUInt
 
 public extension BigUInt {
-    public init?(_ naturalUnits: String, _ ethereumUnits: Web3.Utils.Units) {
+    init?(_ naturalUnits: String, _ ethereumUnits: Web3.Utils.Units) {
         guard let value = Web3.Utils.parseToBigUInt(naturalUnits, units: ethereumUnits) else {return nil}
         self = value
     }
