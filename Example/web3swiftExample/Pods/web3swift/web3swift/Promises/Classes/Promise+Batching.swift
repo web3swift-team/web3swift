@@ -16,7 +16,7 @@ public class JSONRPCrequestDispatcher {
     private var lockQueue: DispatchQueue
     private var batches: [Batch] = [Batch]()
     
-    init(provider: Web3Provider, queue: DispatchQueue, policy: DispatchPolicy) {
+    public init(provider: Web3Provider, queue: DispatchQueue, policy: DispatchPolicy) {
         self.provider = provider
         self.queue = queue
         self.policy = policy
@@ -99,7 +99,7 @@ public class JSONRPCrequestDispatcher {
             throw Web3Error.inputError(desc: "Trying to batch a request when policy is not to batch")
         }
         let currentBatch = self.batches.last!
-        if currentBatch.requests.count % batchLength == 0 || currentBatch.triggered {
+        if currentBatch.requests.count.isMultiple(of: batchLength) || currentBatch.triggered {
             let newBatch = Batch(provider: self.provider, capacity: Int(batchLength), queue: self.queue, lockQueue: self.lockQueue)
             self.batches.append(newBatch)
             return newBatch

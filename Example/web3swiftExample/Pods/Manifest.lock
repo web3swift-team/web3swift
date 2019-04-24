@@ -1,37 +1,36 @@
 PODS:
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
-  - CryptoSwift (0.13.0)
+  - CryptoSwift (0.15.0)
   - EthereumABI (1.1.1):
     - BigInt (~> 3.1)
     - CryptoSwift (~> 0.13)
     - EthereumAddress (~> 1.0.0)
   - EthereumAddress (1.0.0):
     - CryptoSwift (~> 0.13)
-  - PromiseKit (6.5.2):
-    - PromiseKit/CorePromise (= 6.5.2)
-    - PromiseKit/Foundation (= 6.5.2)
-    - PromiseKit/UIKit (= 6.5.2)
-  - PromiseKit/CorePromise (6.5.2)
-  - PromiseKit/Foundation (6.5.2):
+  - PromiseKit (6.4.1):
+    - PromiseKit/CorePromise (= 6.4.1)
+    - PromiseKit/Foundation (= 6.4.1)
+    - PromiseKit/UIKit (= 6.4.1)
+  - PromiseKit/CorePromise (6.4.1)
+  - PromiseKit/Foundation (6.4.1):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (6.5.2):
+  - PromiseKit/UIKit (6.4.1):
     - PromiseKit/CorePromise
-  - scrypt (2.0):
-    - CryptoSwift (~> 0.11)
   - secp256k1_swift (1.0.3)
   - SipHash (1.2.2)
-  - SwiftRLP (1.2):
+  - Starscream (3.1.0)
+  - SwiftRLP (1.1):
     - BigInt (~> 3.1)
-  - web3swift (2.0.1):
-    - BigInt (~> 3.1)
-    - CryptoSwift (~> 0.13)
-    - EthereumABI (~> 1.1.1)
-    - EthereumAddress (~> 1.0.0)
-    - PromiseKit (~> 6.3)
-    - scrypt (~> 2.0)
-    - secp256k1_swift (~> 1.0.3)
-    - SwiftRLP (~> 1.1)
+  - web3swift (2.1.3):
+    - BigInt (= 3.1)
+    - CryptoSwift (= 0.15.0)
+    - EthereumABI (= 1.1.1)
+    - EthereumAddress (= 1.0.0)
+    - PromiseKit (= 6.4.1)
+    - secp256k1_swift (= 1.0.3)
+    - Starscream (= 3.1.0)
+    - SwiftRLP (= 1.1)
 
 DEPENDENCIES:
   - web3swift
@@ -43,24 +42,24 @@ SPEC REPOS:
     - EthereumABI
     - EthereumAddress
     - PromiseKit
-    - scrypt
     - secp256k1_swift
     - SipHash
+    - Starscream
     - SwiftRLP
     - web3swift
 
 SPEC CHECKSUMS:
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
-  CryptoSwift: 16e78bebf567bad1c87b2d58f6547f25b74c31aa
+  CryptoSwift: 769f58a9e89f64e8796c2e59ce5f002dc81a2438
   EthereumABI: f040f5429e5a4366d028c88b88d9441e137593af
   EthereumAddress: f476e1320dca3a0024431e713ede7a09c7eb7796
-  PromiseKit: 27c1601bfb73405871b805bcb8cf7e55c4dad3db
-  scrypt: 3fe5b1a3b0976f97cd87488673a8f7c65708cc84
+  PromiseKit: 4c76a6506638034e3d7bede97b2ff7743f7bd2dc
   secp256k1_swift: 4fc5c4b2d2c6d21ee8ccb868cdc92da12f38bed9
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
-  SwiftRLP: 98a02b2210128353ca02e4c2f4d83e2a9796db4f
-  web3swift: 33f30ca0e061e0f89117dfb46f5ee9f626eff6d6
+  Starscream: 08172b481e145289c4930cb567230fb55897cfa4
+  SwiftRLP: 5512899925f1a9e1c78c902ed3bf857880e814a0
+  web3swift: 23cc365dd3b28e9b990813965af4bd031e108f64
 
-PODFILE CHECKSUM: 6d9e2706704c1b04a380df8a28b2457bc4f325b1
+PODFILE CHECKSUM: 7d59dcb370ef0a49f93b0ae5e632bd4a6841c169
 
-COCOAPODS: 1.6.0.beta.2
+COCOAPODS: 1.7.0.beta.3

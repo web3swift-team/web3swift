@@ -7,7 +7,7 @@
 import XCTest
 import PromiseKit
 import BigInt
-import EthereumAddress
+//import EthereumAddress
 
 @testable import web3swift_iOS
 

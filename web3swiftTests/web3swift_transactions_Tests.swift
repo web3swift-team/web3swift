@@ -7,7 +7,7 @@
 import XCTest
 import CryptoSwift
 import BigInt
-import EthereumAddress
+//import EthereumAddress
 
 @testable import web3swift_iOS
 
@@ -89,6 +89,6 @@ class web3swift_transactions_Tests: XCTestCase {
         let keystore = try! EthereumKeystoreV3.init(password: "web3swift")
         let dump = try! keystore!.serialize()
         let jsonString = String.init(data: dump!, encoding: .ascii)
-        print(jsonString)
+        print(jsonString!)
     }
 }

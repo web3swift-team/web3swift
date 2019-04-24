@@ -151,10 +151,10 @@ class web3swift_Keystores_tests: XCTestCase {
         let recreatedStore = BIP32Keystore.init(data!)
         XCTAssert(keystore?.addresses?.count == recreatedStore?.addresses?.count)
         XCTAssert(keystore?.rootPrefix == recreatedStore?.rootPrefix)
-        print(keystore?.addresses![0])
-        print(keystore?.addresses![1])
-        print(recreatedStore?.addresses![0])
-        print(recreatedStore?.addresses![1])
+        print(keystore!.addresses![0].address)
+        print(keystore!.addresses![1].address)
+        print(recreatedStore!.addresses![0].address)
+        print(recreatedStore!.addresses![1].address)
         // This will fail. It wont fail if use scrypt from pod 'scrypt', '2.0', not from CryptoSwift
         XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![0])
         XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![1])
@@ -169,7 +169,7 @@ class web3swift_Keystores_tests: XCTestCase {
     
     func testRIPEMD() {
         let data = "message digest".data(using: .ascii)
-        let hash = RIPEMD160.hash(message: data!)
+        let hash = try! RIPEMD160.hash(message: data!)
         XCTAssert(hash.toHexString() == "5d0689ef49d2fae572b881b123a85ffa21595f36")
     }
     

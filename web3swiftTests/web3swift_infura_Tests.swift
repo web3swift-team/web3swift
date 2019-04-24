@@ -5,7 +5,7 @@
 //
 
 import XCTest
-import EthereumAddress
+//import EthereumAddress
 
 @testable import web3swift_iOS
 

@@ -9,9 +9,8 @@ import BigInt
 import PromiseKit
 
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
-public class web3: Web3OptionsInheritable {
+public class web3 {
     public var provider : Web3Provider
-    public var options : Web3Options = Web3Options.defaultOptions()
     public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
     public var defaultBlock = "latest"
     public var requestDispatcher: JSONRPCrequestDispatcher
@@ -48,12 +47,12 @@ public class web3: Web3OptionsInheritable {
         return self.ethInstance!
     }
     
-    public class Eth:Web3OptionsInheritable {
+    public class Eth:TransactionOptionsInheritable {
         var provider:Web3Provider
 //        weak var web3: web3?
         var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
@@ -72,12 +71,12 @@ public class web3: Web3OptionsInheritable {
         return self.personalInstance!
     }
     
-    public class Personal:Web3OptionsInheritable {
+    public class Personal:TransactionOptionsInheritable {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
@@ -96,12 +95,12 @@ public class web3: Web3OptionsInheritable {
         return self.txPoolInstance!
     }
     
-    public class TxPool: Web3OptionsInheritable {
+    public class TxPool: TransactionOptionsInheritable {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
@@ -141,12 +140,12 @@ public class web3: Web3OptionsInheritable {
         return self.browserFunctionsInstance!
     }
     
-    public class BrowserFunctions:Web3OptionsInheritable {
+    public class BrowserFunctions:TransactionOptionsInheritable {
         var provider:Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var options: Web3Options {
-            return self.web3.options
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
@@ -165,7 +164,7 @@ public class web3: Web3OptionsInheritable {
         return self.eventLoopInstance!
     }
     
-    public class Eventloop: Web3OptionsInheritable {
+    public class Eventloop: TransactionOptionsInheritable {
         
         public typealias EventLoopCall = (web3) -> Void
         public typealias EventLoopContractCall = (web3contract) -> Void
@@ -191,8 +190,8 @@ public class web3: Web3OptionsInheritable {
 //        public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
         public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
         
-        public var options: Web3Options {
-            return self.web3.options
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
