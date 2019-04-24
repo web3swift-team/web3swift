@@ -6,7 +6,7 @@
 
 import Foundation
 import BigInt
-import EthereumAddress
+//import EthereumAddress
 
 /// Global counter object to enumerate JSON RPC requests.
 public struct Counter {

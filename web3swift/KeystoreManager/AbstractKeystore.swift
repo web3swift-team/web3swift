@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import EthereumAddress
+//import EthereumAddress
 
 public protocol AbstractKeystore {
     var addresses: [EthereumAddress]? {get}

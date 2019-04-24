@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 import secp256k1_swift
-import EthereumAddress
+//import EthereumAddress
 
 extension web3.BrowserFunctions {
     

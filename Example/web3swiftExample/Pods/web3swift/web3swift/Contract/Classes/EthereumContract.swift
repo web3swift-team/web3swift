@@ -5,8 +5,8 @@
 
 import Foundation
 import BigInt
-import EthereumAddress
-import EthereumABI
+//import EthereumAddress
+//import EthereumABI
 
 public struct EthereumContract:ContractProtocol {
     public var transactionOptions: TransactionOptions? = TransactionOptions.defaultOptions

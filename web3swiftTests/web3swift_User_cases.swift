@@ -6,7 +6,7 @@
 
 import XCTest
 import BigInt
-import EthereumAddress
+//import EthereumAddress
 
 @testable import web3swift_iOS
 
@@ -30,7 +30,7 @@ class web3swift_User_cases: XCTestCase {
         readTransaction.transactionOptions.from = EthereumAddress("0xE6877A4d8806e9A9F12eB2e8561EA6c1db19978d")
         let response = try readTransaction.callPromise().wait()
         let balance = response["0"] as? BigUInt
-        print(balance)
+        print(balance!.description)
     }
     
     func testUserCase2() {

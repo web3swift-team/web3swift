@@ -8,7 +8,7 @@ import Foundation
 import BigInt
 import PromiseKit
 fileprivate typealias PromiseResult = PromiseKit.Result
-import EthereumAddress
+//import EthereumAddress
 
 public class ReadTransaction {
     public var transaction:EthereumTransaction

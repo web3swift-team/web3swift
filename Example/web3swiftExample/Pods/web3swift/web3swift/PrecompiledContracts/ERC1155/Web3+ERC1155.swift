@@ -9,7 +9,7 @@
 import Foundation
 import BigInt
 import PromiseKit
-import EthereumAddress
+//import EthereumAddress
 
 //Multi Token Standard
 protocol IERC1155: IERC165 {

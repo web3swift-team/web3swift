@@ -50,7 +50,7 @@ Now you have to do "import Web3swift" (capitalization!) instead of "import web3s
 
 ## New pods
 
-Now EthereumAddress and Ethereum ABI are separate projects. Use "import EthereumAddress" and "import Ethereum ABI" everywhere you use them.
+Now EthereumAddress and Ethereum ABI are separate projects. Use "//import EthereumAddress" and "import Ethereum ABI" everywhere you use them.
 
 ## Breaking API Changes
 

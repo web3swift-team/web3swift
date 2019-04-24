@@ -8,7 +8,7 @@
 import XCTest
 import CryptoSwift
 import BigInt
-import EthereumAddress
+//import EthereumAddress
 import secp256k1_swift
 
 @testable import web3swift_iOS
@@ -132,11 +132,11 @@ class web3swift_Tests: XCTestCase {
             XCTAssert(contract != nil)
             let allMethods = contract!.contract.allMethods
             let userDeviceCount = try contract!.read("userDeviceCount", parameters: [addr as AnyObject])?.callPromise().wait()
-            print(userDeviceCount)
+            print(userDeviceCount!)
             let totalUsers = try contract!.read("totalUsers", parameters: [])?.callPromise().wait()
-            print(totalUsers)
+            print(totalUsers!)
             let user = try contract!.read("users", parameters: [0 as AnyObject])?.callPromise().wait()
-            print(user)
+            print(user!)
             print(allMethods)
         } catch {
             print(error)

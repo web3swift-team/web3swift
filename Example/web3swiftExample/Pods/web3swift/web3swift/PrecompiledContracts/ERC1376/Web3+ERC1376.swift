@@ -8,7 +8,7 @@
 
 import Foundation
 import BigInt
-import EthereumAddress
+//import EthereumAddress
 import PromiseKit
 
 public enum IERC1376DelegateMode: UInt {

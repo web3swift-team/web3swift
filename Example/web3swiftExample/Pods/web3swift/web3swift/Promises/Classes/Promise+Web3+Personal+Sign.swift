@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 import PromiseKit
-import EthereumAddress
+//import EthereumAddress
 
 extension web3.Personal {
     

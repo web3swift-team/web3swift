@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 import CryptoSwift
-import EthereumAddress
+//import EthereumAddress
 
 public struct EthereumBloomFilter{
     public var bytes = Data(repeatElement(UInt8(0), count: 256))

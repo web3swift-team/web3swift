@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import EthereumAddress
+//import EthereumAddress
 import BigInt
 import PromiseKit
 

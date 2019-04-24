@@ -8,7 +8,7 @@
 import Foundation
 import BigInt
 import PromiseKit
-import EthereumAddress
+//import EthereumAddress
 
 //A New Advanced Token Standard
 protocol IERC777: IERC20, IERC820 {

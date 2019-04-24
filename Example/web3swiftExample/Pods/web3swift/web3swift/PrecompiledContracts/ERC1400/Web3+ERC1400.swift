@@ -7,7 +7,7 @@
 //
 import Foundation
 import BigInt
-import EthereumAddress
+//import EthereumAddress
 import PromiseKit
 
 //Security Token Standard

@@ -9,7 +9,7 @@
 import Foundation
 import BigInt
 import PromiseKit
-import EthereumAddress
+//import EthereumAddress
 
 //NPolymath Token Standard
 protocol IST20: IERC20 {

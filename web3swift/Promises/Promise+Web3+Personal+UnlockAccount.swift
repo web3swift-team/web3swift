@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 import PromiseKit
-import EthereumAddress
+//import EthereumAddress
 
 extension web3.Personal {
     public func unlockAccountPromise(account: EthereumAddress, password:String = "web3swift", seconds: UInt64 = 300) -> Promise<Bool> {
