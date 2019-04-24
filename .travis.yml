@@ -1,11 +1,11 @@
-language: objective-c
+language: swift
 osx_image: xcode10.2
 cache: bundler
 xcode_project: web3swift.xcworkspace
 xcode_scheme: web3swift-iOS
 xcode_destination: platform=iOS Simulator, OS=12.2, name=iPhone X
 before_install:
-  - gem install cocoapods --pre --no-rdoc --no-ri --no-document --quiet
+  - gem install cocoapods --pre
   - pod install --repo-update
 script:
   - xcodebuild -scheme web3swift-iOS -workspace web3swift.xcworkspace -sdk iphonesimulator build test
