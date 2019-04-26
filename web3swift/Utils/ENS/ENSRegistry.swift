@@ -12,10 +12,10 @@ import BigInt
 
 public extension ENS {
     class Registry {
-        let web3: web3
-        let registryContractAddress: EthereumAddress?
+        public let web3: web3
+        public let registryContractAddress: EthereumAddress?
         
-        init?(web3: web3) {
+        public init?(web3: web3) {
             self.web3 = web3
             switch web3.provider.network {
             case .Mainnet?:
