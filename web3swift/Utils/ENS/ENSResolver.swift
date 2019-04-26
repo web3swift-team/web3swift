@@ -10,8 +10,8 @@ import BigInt
 
 public extension ENS {
     class Resolver {
-        let web3: web3
-        let resolverContractAddress: EthereumAddress
+        public let web3: web3
+        public let resolverContractAddress: EthereumAddress
         
         public enum ContentType: BigUInt {
             case JSON = 1
@@ -56,7 +56,7 @@ public extension ENS {
             return TransactionOptions.defaultOptions
         }()
         
-        init(web3: web3, resolverContractAddress: EthereumAddress) {
+        public init(web3: web3, resolverContractAddress: EthereumAddress) {
             self.web3 = web3
             self.resolverContractAddress = resolverContractAddress
         }

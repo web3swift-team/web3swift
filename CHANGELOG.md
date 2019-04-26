@@ -1,8 +1,14 @@
 # Change Log
 
-## [Unreleased](https://github.com/matter-labs/web3swift/tree/HEAD)
+## [2.1.5](https://github.com/matter-labs/web3swift/tree/2.1.5) (2019-04-24)
+[Full Changelog](https://github.com/matter-labs/web3swift/compare/2.1.4...2.1.5)
 
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/2.1.3...HEAD)
+**Merged pull requests:**
+
+- 2.1.4 [\#170](https://github.com/matter-labs/web3swift/pull/170) ([BaldyAsh](https://github.com/BaldyAsh))
+
+## [2.1.4](https://github.com/matter-labs/web3swift/tree/2.1.4) (2019-04-24)
+[Full Changelog](https://github.com/matter-labs/web3swift/compare/2.1.3...2.1.4)
 
 **Fixed bugs:**
 
@@ -10,6 +16,8 @@
 
 **Closed issues:**
 
+- How to convert 21000 BigUInt estimated gas price into Wei ? [\#163](https://github.com/matter-labs/web3swift/issues/163)
+- ENS Permanent Registrar Support [\#159](https://github.com/matter-labs/web3swift/issues/159)
 - web3swift 2.1.3 [\#154](https://github.com/matter-labs/web3swift/issues/154)
 - Sending ETH always results in zero value [\#149](https://github.com/matter-labs/web3swift/issues/149)
 - WebSockets subscriptions [\#145](https://github.com/matter-labs/web3swift/issues/145)
@@ -18,6 +26,10 @@
 
 **Merged pull requests:**
 
+- Fix travis [\#169](https://github.com/matter-labs/web3swift/pull/169) ([BaldyAsh](https://github.com/BaldyAsh))
+- Fix warnings [\#168](https://github.com/matter-labs/web3swift/pull/168) ([BaldyAsh](https://github.com/BaldyAsh))
+- Added reverse registrar [\#165](https://github.com/matter-labs/web3swift/pull/165) ([BaldyAsh](https://github.com/BaldyAsh))
+- WIP: ENS BaseRegistrar and RegistrarController support [\#162](https://github.com/matter-labs/web3swift/pull/162) ([BaldyAsh](https://github.com/BaldyAsh))
 - Updated example to 2.1.3 [\#158](https://github.com/matter-labs/web3swift/pull/158) ([BaldyAsh](https://github.com/BaldyAsh))
 - Documentation update [\#153](https://github.com/matter-labs/web3swift/pull/153) ([BaldyAsh](https://github.com/BaldyAsh))
 
