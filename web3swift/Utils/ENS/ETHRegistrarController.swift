@@ -12,8 +12,8 @@ import BigInt
 
 public extension ENS {
     class ETHRegistrarController {
-        let web3: web3
-        let address: EthereumAddress
+        public let web3: web3
+        public let address: EthereumAddress
         
         lazy var contract: web3.web3contract = {
             let contract = self.web3.contract(Web3.Utils.ethRegistrarControllerABI, at: self.address, abiVersion: 2)
@@ -25,7 +25,7 @@ public extension ENS {
             return TransactionOptions.defaultOptions
         }()
         
-        init(web3: web3, address: EthereumAddress) {
+        public init(web3: web3, address: EthereumAddress) {
             self.web3 = web3
             self.address = address
         }

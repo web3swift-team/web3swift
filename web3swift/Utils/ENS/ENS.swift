@@ -10,14 +10,14 @@ import BigInt
 
 public class ENS {
     
-    let web3: web3
-    var registry: Registry
-    var resolver: Resolver? = nil
-    var baseRegistrar: BaseRegistrar? = nil
-    var registrarController: ETHRegistrarController? = nil
-    var reverseRegistrar: ReverseRegistrar? = nil
+    public let web3: web3
+    public var registry: Registry
+    public var resolver: Resolver? = nil
+    public var baseRegistrar: BaseRegistrar? = nil
+    public var registrarController: ETHRegistrarController? = nil
+    public var reverseRegistrar: ReverseRegistrar? = nil
     
-    init?(web3: web3) {
+    public init?(web3: web3) {
         self.web3 = web3
         guard let registry = Registry(web3: web3) else {
             return nil
@@ -25,52 +25,52 @@ public class ENS {
         self.registry = registry
     }
     
-    func setENSResolver(_ resolver: Resolver) throws {
+    public func setENSResolver(_ resolver: Resolver) throws {
         guard resolver.web3.provider.url == self.web3.provider.url else {
             throw Web3Error.processingError(desc: "Resolver should use same provider as ENS")
         }
         self.resolver = resolver
     }
     
-    func setENSResolver(withDomain domain: String) throws {
+    public func setENSResolver(withDomain domain: String) throws {
         guard let resolver = try? self.registry.getResolver(forDomain: domain) else {
             throw Web3Error.processingError(desc: "No resolver for this domain")
         }
         self.resolver = resolver
     }
     
-    func setBaseRegistrar(_ baseRegistrar: BaseRegistrar) throws {
+    public func setBaseRegistrar(_ baseRegistrar: BaseRegistrar) throws {
         guard baseRegistrar.web3.provider.url == self.web3.provider.url else {
             throw Web3Error.processingError(desc: "Base registrar should use same provider as ENS")
         }
         self.baseRegistrar = baseRegistrar
     }
     
-    func setBaseRegistrar(withAddress address: EthereumAddress) {
+    public func setBaseRegistrar(withAddress address: EthereumAddress) {
         let baseRegistrar = BaseRegistrar(web3: web3, address: address)
         self.baseRegistrar = baseRegistrar
     }
     
-    func setRegistrarController(_ registrarController: ETHRegistrarController) throws {
+    public func setRegistrarController(_ registrarController: ETHRegistrarController) throws {
         guard registrarController.web3.provider.url == self.web3.provider.url else {
             throw Web3Error.processingError(desc: "Registrar controller should use same provider as ENS")
         }
         self.registrarController = registrarController
     }
     
-    func setRegistrarController(withAddress address: EthereumAddress) {
+    public func setRegistrarController(withAddress address: EthereumAddress) {
         let registrarController = ETHRegistrarController(web3: web3, address: address)
         self.registrarController = registrarController
     }
     
-    func setReverseRegistrar(_ reverseRegistrar: ReverseRegistrar) throws {
+    public func setReverseRegistrar(_ reverseRegistrar: ReverseRegistrar) throws {
         guard reverseRegistrar.web3.provider.url == self.web3.provider.url else {
             throw Web3Error.processingError(desc: "Registrar controller should use same provider as ENS")
         }
         self.reverseRegistrar = reverseRegistrar
     }
     
-    func setReverseRegistrar(withAddress address: EthereumAddress) {
+    public func setReverseRegistrar(withAddress address: EthereumAddress) {
         let reverseRegistrar = ReverseRegistrar(web3: web3, address: address)
         self.reverseRegistrar = reverseRegistrar
     }
