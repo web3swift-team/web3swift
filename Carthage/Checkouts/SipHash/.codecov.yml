@@ -1,0 +1,14 @@
+ignore:
+- "/tests/*"
+comment:
+  layout: "header, diff"
+  behavior: default
+  require_changes: no
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: null
+        base: auto
+        paths: "sources/*"
