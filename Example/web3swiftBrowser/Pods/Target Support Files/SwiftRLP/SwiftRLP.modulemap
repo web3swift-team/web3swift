@@ -1,6 +1,0 @@
-framework module SwiftRLP {
-  umbrella header "SwiftRLP-umbrella.h"
-
-  export *
-  module * { export * }
-}
