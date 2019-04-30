@@ -1,0 +1,71 @@
+branches:
+  only: 
+    - master
+stages:
+  - lint
+  - carthage
+  - test
+os: osx
+language: swift
+jobs:
+  include:
+    - &pod
+      env: SWIFT=3.1
+      name: pod lib lint --swift-version=3.1
+      stage: lint
+      osx_image: xcode8.3
+      before_install:
+        gem install cocoapods --prerelease --version 1.7.0.beta.2
+      install:
+        carthage bootstrap --no-build PromiseKit
+      script: |
+        cd Carthage/Checkouts/PromiseKit
+        mv .github/PromiseKit.podspec .
+        rm -rf Extensions/UIKit/Sources
+        cp -R ../../../Sources Extensions/UIKit
+        pod lib lint --subspec=PromiseKit/UIKit --fail-fast --swift-version=$SWIFT
+    - <<: *pod
+      osx_image: xcode9.2
+      env: SWIFT=3.2
+      name: pod lib lint --swift-version=3.2
+    - <<: *pod
+      osx_image: xcode9.4
+      env: SWIFT=3.3
+      name: pod lib lint --swift-version=3.3
+    - <<: *pod
+      osx_image: xcode10.1
+      env: SWIFT=3.4
+      name: pod lib lint --swift-version=3.4
+    - <<: *pod
+      osx_image: xcode9.2
+      env: SWIFT=4.0
+      name: pod lib lint --swift-version=4.0
+    - <<: *pod
+      osx_image: xcode9.4
+      env: SWIFT=4.1
+      name: pod lib lint --swift-version=4.1
+    - <<: *pod
+      osx_image: xcode10.1
+      env: SWIFT=4.2
+      name: pod lib lint --swift-version=4.2
+    - <<: *pod
+      osx_image: xcode10.2
+      env: SWIFT=5.0
+      name: pod lib lint --swift-version=5.0
+
+    - &test
+      name: iOS Tests
+      stage: test
+      osx_image: xcode10.2
+      xcode_scheme: PMKUIKit
+      xcode_project: PMKUIKit.xcodeproj
+      before_install: carthage bootstrap --cache-builds --no-use-binaries
+      xcode_destination: 'platform=iOS Simulator,OS=12.2,name=iPhone SE'
+      cache:
+        directories:
+        - Carthage
+      before_script:
+        sed -i '' 's/SWIFT_TREAT_WARNINGS_AS_ERRORS = NO/SWIFT_TREAT_WARNINGS_AS_ERRORS = YES/g' PMKUIKit.xcodeproj/project.pbxproj
+    - <<: *test
+      name: tvOS Tests
+      xcode_destination: 'platform=tvOS Simulator,OS=12.2,name=Apple TV'

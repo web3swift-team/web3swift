@@ -1,7 +1,0 @@
-platform :ios, '12.0'
-
-target 'web3swiftBrowser' do
-  use_frameworks!
-   pod 'web3swift', :path => '../../'
-   pod "WKBridge"
-end
