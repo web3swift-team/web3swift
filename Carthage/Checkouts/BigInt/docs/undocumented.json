@@ -1,0 +1,124 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/andrew/work/BigInt/sources/BigInt.swift",
+      "line": 32,
+      "symbol": "BigInt.Sign",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/BigInt.swift",
+      "line": 33,
+      "symbol": "BigInt.Sign.plus",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/BigInt.swift",
+      "line": 34,
+      "symbol": "BigInt.Sign.minus",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/Bitwise Ops.swift",
+      "line": 59,
+      "symbol": "BigInt.&(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/Bitwise Ops.swift",
+      "line": 76,
+      "symbol": "BigInt.|(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/Bitwise Ops.swift",
+      "line": 93,
+      "symbol": "BigInt.^(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/Data Conversion.swift",
+      "line": 14,
+      "symbol": "BigUInt.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/Floating Point Conversion.swift",
+      "line": 45,
+      "symbol": "BinaryFloatingPoint.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/Floating Point Conversion.swift",
+      "line": 70,
+      "symbol": "BinaryFloatingPoint.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/Integer Conversion.swift",
+      "line": 42,
+      "symbol": "BigInt.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/Shifts.swift",
+      "line": 168,
+      "symbol": "BigInt.&<<(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/Shifts.swift",
+      "line": 172,
+      "symbol": "BigInt.&<<=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/Shifts.swift",
+      "line": 176,
+      "symbol": "BigInt.&>>(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/Shifts.swift",
+      "line": 180,
+      "symbol": "BigInt.&>>=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/String Conversion.swift",
+      "line": 44,
+      "symbol": "BigUInt.init(_:radix:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/Words and Bits.swift",
+      "line": 105,
+      "symbol": "BigUInt.init(words:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/andrew/work/BigInt/sources/Words and Bits.swift",
+      "line": 192,
+      "symbol": "BigInt.init(words:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/andrew/work/BigInt"
+}

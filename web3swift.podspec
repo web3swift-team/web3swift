@@ -1,30 +1,19 @@
-Pod::Spec.new do |s|
-s.name             = "web3swift"
-s.version          = "2.1.6"
-s.summary          = "Web3 implementation in vanilla Swift for iOS ans macOS"
-
-s.description      = <<-DESC
-Web3 implementation in vanilla Swift, intended for mobile developers of wallets, Dapps and Web3.0
-DESC
-
-s.homepage         = "https://github.com/matter-labs/web3swift"
-s.license          = 'Apache License 2.0'
-s.author           = { "Alex Vlasov" => "alex.m.vlasov@gmail.com" }
-s.source           = { :git => 'https://github.com/matter-labs/web3swift.git', :tag => s.version.to_s }
-s.social_media_url = 'https://twitter.com/shamatar'
-
-s.swift_version = '5.0'
-s.module_name = 'Web3swift'
-s.ios.deployment_target = "9.0"
-s.osx.deployment_target = "10.11"
-s.source_files = "web3swift/{Promises,Web3,Contract,KeystoreManager,Transaction,Convenience,HookedFunctions,SwiftRLP,EthereumAddress,EthereumABI}/*.{h,swift}", "web3swift/Utils/{ENS,EIP,Hooks}/*.swift" "web3swift/PrecompiledContracts/**/*.swift", "web3swift/web3swift.h"
-s.public_header_files = "web3swift/web3swift.h"
-s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
-
-s.frameworks = 'CoreImage'
-s.dependency 'BigInt', '3.1'
-s.dependency 'CryptoSwift', '1.0.0'
-s.dependency 'PromiseKit', '6.8.4'
-s.dependency 'secp256k1_swift', '1.0.3'
-s.dependency 'Starscream', '3.1.0'
+Pod::Spec.new do |spec|
+    spec.name         = 'web3swift'
+    spec.version      = '2.2.0'
+    spec.ios.deployment_target = "9.0"
+    spec.osx.deployment_target = "10.11"
+    spec.license      = { :type => 'Apache License 2.0', :file => 'LICENSE.md' }
+    spec.summary      = 'Web3 implementation in vanilla Swift for iOS, macOS, and Linux'
+    spec.homepage     = 'https://github.com/matter-labs/web3swift'
+    spec.author       = { "Alex Vlasov" => "alex.m.vlasov@gmail.com", "Anton Grigorev" => "antongrigorjev2010@gmail.com" }
+    spec.source       = { :git => 'https://github.com/matter-labs/web3swift.git', :tag => spec.version.to_s }
+    spec.source_files = "Sources/web3swift/{Contract,Convenience,EthereumABI,EthereumAddress,HookedFunctions,KeystoreManager,Promises,SwiftRLP,Transaction,Web3}/*.swift", "Sources/web3swift/{Tokens,Utils}/**/*.swift"
+    spec.swift_version = '5.0'
+    spec.frameworks = 'CoreImage'
+    spec.dependency 'PromiseKit', '~> 6.8.4'
+    spec.dependency 'BigInt', '~> 3.1'
+    spec.dependency 'Starscream', '~> 3.1.0'
+    spec.dependency 'CryptoSwift', '~> 1.0.0'
+    spec.dependency 'secp256k1.c', '~> 0.1'
 end

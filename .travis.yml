@@ -5,9 +5,11 @@ xcode_project: web3swift.xcworkspace
 xcode_scheme: web3swift-iOS
 xcode_destination: platform=iOS Simulator, OS=12.2, name=iPhone X
 before_install:
-  - gem install cocoapods --pre
-  - pod install --repo-update
+  - brew install carthage || true
+  - brew outdated carthage || brew upgrade carthage
+before_script:
+  - carthage bootstrap --platform iOS --no-use-binaries --cache-builds
 script:
-  - xcodebuild -scheme web3swift-iOS -workspace web3swift.xcworkspace -sdk iphonesimulator build test
+  - xcodebuild -scheme web3swift -project web3swift.xcodeproj -sdk iphonesimulator build test
 after_success:
   - bash <(curl -s https://codecov.io/bash)
