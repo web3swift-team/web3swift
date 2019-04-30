@@ -7,6 +7,6 @@ xcode_destination: platform=iOS Simulator, OS=12.2, name=iPhone X
 before_install:
   - carthage update
 script:
-  - xcodebuild -scheme web3swift -workspace web3swift.xcworkspace -sdk iphonesimulator build test
+  - xcodebuild -scheme web3swift -project web3swift.xcodeproj -sdk iphonesimulator build test
 after_success:
   - bash <(curl -s https://codecov.io/bash)
