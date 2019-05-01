@@ -73,7 +73,7 @@ public extension ENS {
             return supports
         }
 
-        public func interfaceImplementer(forNode node: String, interfaceID: InterfaceID) throws -> EthereumAddress {
+        public func interfaceImplementer(forNode node: String, interfaceID: String) throws -> EthereumAddress {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.read("interfaceImplementer", parameters: [nameHash, interfaceID] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             guard let result = try? transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
