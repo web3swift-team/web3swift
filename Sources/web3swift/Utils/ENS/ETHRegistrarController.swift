@@ -30,10 +30,10 @@ public extension ENS {
             self.address = address
         }
         
-        public func getRentPrice(name: String, duration: UInt) throws -> UInt {
+        public func getRentPrice(name: String, duration: UInt) throws -> BigUInt {
             guard let transaction = self.contract.read("rentPrice", parameters: [name, duration] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             guard let result = try? transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
-            guard let price = result["0"] as? UInt else {throw Web3Error.processingError(desc: "Can't get answer")}
+            guard let price = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Can't get answer")}
             return price
         }
         
