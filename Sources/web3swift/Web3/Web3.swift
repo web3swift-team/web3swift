@@ -18,7 +18,7 @@ public enum Web3Error: Error {
     case generalError(err:Error)
     case unknownError
     
-    var errorDescription: String {
+    public var errorDescription: String {
         switch self {
             
         case .transactionSerializationError:
