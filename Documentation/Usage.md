@@ -170,7 +170,7 @@ if wallet.isHD {
 ```swift
 let password = "web3swift"
 let ethereumAddress = EthereumAddress(wallet.address)!
-let pkData = try! keysoreManager.UNSAFE_getPrivateKeyData(password: password, account: ethereumAddress).toHexString()
+let pkData = try! keystoreManager.UNSAFE_getPrivateKeyData(password: password, account: ethereumAddress).toHexString()
 ```
 
 ## Ethereum Endpoints interaction
