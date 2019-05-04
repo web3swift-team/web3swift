@@ -1,5 +1,40 @@
 # Change Log
 
+## [Unreleased](https://github.com/matter-labs/web3swift/tree/HEAD)
+
+[Full Changelog](https://github.com/matter-labs/web3swift/compare/2.2.0...HEAD)
+
+**Closed issues:**
+
+- EIP67Code missing in web3swift 2.1.6 [\#176](https://github.com/matter-labs/web3swift/issues/176)
+- ENS initializer is inaccessible due to `internal` protection level [\#171](https://github.com/matter-labs/web3swift/issues/171)
+
+**Merged pull requests:**
+
+- Update ETHRegistrarController.swift [\#183](https://github.com/matter-labs/web3swift/pull/183) ([barrasso](https://github.com/barrasso))
+- Fix typo in Usage [\#182](https://github.com/matter-labs/web3swift/pull/182) ([sweepty](https://github.com/sweepty))
+- Expose errorDescription. [\#181](https://github.com/matter-labs/web3swift/pull/181) ([andresousa](https://github.com/andresousa))
+- Update ENS Resolver [\#180](https://github.com/matter-labs/web3swift/pull/180) ([barrasso](https://github.com/barrasso))
+
+## [2.2.0](https://github.com/matter-labs/web3swift/tree/2.2.0) (2019-04-30)
+[Full Changelog](https://github.com/matter-labs/web3swift/compare/2.1.6...2.2.0)
+
+**Closed issues:**
+
+- Failed to fetch gas estimate [\#178](https://github.com/matter-labs/web3swift/issues/178)
+
+**Merged pull requests:**
+
+- 2.2.0 [\#179](https://github.com/matter-labs/web3swift/pull/179) ([BaldyAsh](https://github.com/BaldyAsh))
+
+## [2.1.6](https://github.com/matter-labs/web3swift/tree/2.1.6) (2019-04-26)
+[Full Changelog](https://github.com/matter-labs/web3swift/compare/2.1.5...2.1.6)
+
+**Merged pull requests:**
+
+- 2.1.6 [\#175](https://github.com/matter-labs/web3swift/pull/175) ([BaldyAsh](https://github.com/BaldyAsh))
+- Quickfix ens [\#174](https://github.com/matter-labs/web3swift/pull/174) ([BaldyAsh](https://github.com/BaldyAsh))
+
 ## [2.1.5](https://github.com/matter-labs/web3swift/tree/2.1.5) (2019-04-24)
 [Full Changelog](https://github.com/matter-labs/web3swift/compare/2.1.4...2.1.5)
 
