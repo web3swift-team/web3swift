@@ -7,6 +7,26 @@ import Foundation
 import BigInt
 import Starscream
 
+public enum BlockNumber {
+    case pending
+    case latest
+    case earliest
+    case exact(BigUInt)
+    
+    public var stringValue: String {
+        switch self {
+        case .pending:
+            return "pending"
+        case .latest:
+            return "latest"
+        case .earliest:
+            return "earliest"
+        case .exact(let number):
+            return String(number, radix: 16).addHexPrefix()
+        }
+    }
+}
+
 /// Custom Web3 HTTP provider of Infura nodes.
 public final class InfuraProvider: Web3HttpProvider {
     public init?(_ net:Networks, accessToken token: String? = nil, keystoreManager manager: KeystoreManager? = nil) {
@@ -28,43 +48,51 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     
     public init?(_ network: Networks,
                  delegate: Web3SocketDelegate,
+                 projectId: String? = nil,
                  keystoreManager manager: KeystoreManager? = nil) {
         guard network == Networks.Kovan
             || network == Networks.Rinkeby
             || network == Networks.Ropsten
             || network == Networks.Mainnet else {return nil}
         let networkName = network.name
-        let urlString = "wss://\(networkName).infura.io/ws"
+        let urlString = "wss://\(networkName).infura.io/ws/v3/"
         guard URL(string: urlString) != nil else {return nil}
         super.init(urlString,
                    delegate: delegate,
+                   projectId: projectId,
                    keystoreManager: manager,
                    network: network)
     }
     
     public init?(_ endpoint: String,
                  delegate: Web3SocketDelegate,
+                 projectId: String? = nil,
                  keystoreManager manager: KeystoreManager? = nil) {
         guard URL(string: endpoint) != nil else {return nil}
         super.init(endpoint,
                    delegate: delegate,
+                   projectId: projectId,
                    keystoreManager: manager)
     }
     
     public init?(_ endpoint: URL,
                  delegate: Web3SocketDelegate,
+                 projectId: String? = nil,
                  keystoreManager manager: KeystoreManager? = nil) {
         super.init(endpoint,
                    delegate: delegate,
+                   projectId: projectId,
                    keystoreManager: manager)
     }
     
     override public class func connectToSocket(_ endpoint: String,
                                                delegate: Web3SocketDelegate,
+                                               projectId: String? = nil,
                                                keystoreManager manager: KeystoreManager? = nil,
                                                network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(endpoint,
                                                            delegate: delegate,
+                                                           projectId: projectId,
                                                            keystoreManager: manager) else {return nil}
         socketProvider.connectSocket()
         return socketProvider
@@ -72,10 +100,12 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     
     override public class func connectToSocket(_ endpoint: URL,
                                                delegate: Web3SocketDelegate,
+                                               projectId: String? = nil,
                                                keystoreManager manager: KeystoreManager? = nil,
                                                network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(endpoint,
                                                            delegate: delegate,
+                                                           projectId: projectId,
                                                            keystoreManager: manager) else {return nil}
         socketProvider.connectSocket()
         return socketProvider
@@ -83,9 +113,11 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     
     public static func connectToInfuraSocket(_ network: Networks,
                                              delegate: Web3SocketDelegate,
+                                             projectId: String? = nil,
                                              keystoreManager manager: KeystoreManager? = nil) -> InfuraWebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(network,
                                                            delegate: delegate,
+                                                           projectId: projectId,
                                                            keystoreManager: manager) else {return nil}
         socketProvider.connectSocket()
         return socketProvider
@@ -95,10 +127,11 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         let request = JSONRPCRequestFabric.prepareRequest(method, parameters: params)
         let encoder = JSONEncoder()
         let requestData = try encoder.encode(request)
+        print(String(decoding: requestData, as: UTF8.self))
         writeMessage(requestData)
     }
     
-    public func filter(method: InfuraWebsocketMethod, params: [Encodable]? = nil) throws {
+    public func setFilterAndGetChanges(method: InfuraWebsocketMethod, params: [Encodable]? = nil) throws {
         filterTimer?.invalidate()
         filterID = nil
         let params = params ?? []
@@ -110,25 +143,59 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         filterTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(getFilterChanges), userInfo: nil, repeats: true)
     }
     
+    public func setFilterAndGetChanges(method: InfuraWebsocketMethod, address: EthereumAddress? = nil, fromBlock: BlockNumber? = nil, toBlock: BlockNumber? = nil, topics: [String]? = nil) throws {
+        let filterParams = EventFilterParameters(fromBlock: fromBlock?.stringValue, toBlock: toBlock?.stringValue, topics: [topics], address: [address?.address])
+        try setFilterAndGetChanges(method: method, params: [filterParams])
+    }
+    
+    public func setFilterAndGetLogs(method: InfuraWebsocketMethod, params: [Encodable]? = nil) throws {
+        filterTimer?.invalidate()
+        filterID = nil
+        let params = params ?? []
+        let paramsCount = params.count
+        guard method.requiredNumOfParameters == paramsCount || method.requiredNumOfParameters == nil else {
+            throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters!), got - \(paramsCount)")
+        }
+        try writeMessage(method: method, params: params)
+        filterTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(getFilterLogs), userInfo: nil, repeats: true)
+    }
+    
+    public func setFilterAndGetLogs(method: InfuraWebsocketMethod, address: EthereumAddress? = nil, fromBlock: BlockNumber? = nil, toBlock: BlockNumber? = nil, topics: [String]? = nil) throws {
+        let filterParams = EventFilterParameters(fromBlock: fromBlock?.stringValue, toBlock: toBlock?.stringValue, topics: [topics], address: [address?.address])
+        try setFilterAndGetLogs(method: method, params: [filterParams])
+    }
+    
     @objc public func getFilterChanges() throws {
-        if let id = self.filterID {
+        if let id = filterID {
             filterTimer?.invalidate()
             let method = InfuraWebsocketMethod.getFilterChanges
             try writeMessage(method: method, params: [id])
         }
     }
     
-    public func getFilterLogs() throws {
-        if let id = self.filterID {
+    @objc public func getFilterLogs() throws {
+        if let id = filterID {
+            filterTimer?.invalidate()
             let method = InfuraWebsocketMethod.getFilterLogs
             try writeMessage(method: method, params: [id])
         }
     }
     
+    public func getFilterLogs(address: EthereumAddress? = nil, fromBlock: BlockNumber? = nil, toBlock: BlockNumber? = nil, topics: [String]? = nil) throws {
+        if let id = filterID {
+            let filterParams = EventFilterParameters(fromBlock: fromBlock?.stringValue, toBlock: toBlock?.stringValue, topics: [topics], address: [address?.address])
+            let method = InfuraWebsocketMethod.getFilterLogs
+            try writeMessage(method: method, params: [id, filterParams])
+        }
+    }
+    
     public func unistallFilter() throws {
-        if let id = self.filterID {
+        if let id = filterID {
+            filterID = nil
             let method = InfuraWebsocketMethod.uninstallFilter
             try writeMessage(method: method, params: [id])
+        } else {
+            throw Web3Error.nodeError(desc: "No filter set")
         }
     }
     
@@ -147,6 +214,19 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         let method = InfuraWebsocketMethod.subscribe
         let params = ["newHeads"]
         try writeMessage(method: method, params: params)
+    }
+    
+    public func subscribeOnLogs(addresses: [EthereumAddress]? = nil, topics: [String]? = nil) throws {
+        let method = InfuraWebsocketMethod.subscribe
+        var stringAddresses = [String]()
+        if let addrs = addresses {
+            for addr in addrs {
+                stringAddresses.append(addr.address)
+            }
+        }
+//        let ts = topics == nil ? nil : [topics!]
+        let filterParams = EventFilterParameters(fromBlock: nil, toBlock: nil, topics: [topics], address: stringAddresses)
+        try writeMessage(method: method, params: ["logs", filterParams])
     }
     
     public func subscribeOnNewPendingTransactions() throws {
