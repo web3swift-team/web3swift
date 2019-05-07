@@ -37,10 +37,12 @@
 	- *[Infura Websocket Provider](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#infura-websocket-provider)*
 		- [Connect to Infura endpoint](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#connect-to-infura-endpoint)
 		- [Connect to custom endpoint with API similar to Infura WSS endpoint](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#connect-to-custom-endpoint-with-api-similar-to-infura-wss-endpoint)
-		- [Create a filter in the node to notify when something happened](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-a-filter-in-the-node-to-notify-when-something-happened)
+		- [Set a filter in the node to notify when something happened](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#set-a-filter-in-the-node-to-notify-when-something-happened)
 		- [Get new pending transactions](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-new-pending-transactions)
 		- [Create a new subscription over particular events](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-a-new-subscription-over-particular-events)
 		- [Subscribe on new pending transactions](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#subscribe-on-new-pending-transactions)
+		- [Subscribe on logs](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#subscribe-on-logs)
+		- [Subscribe on new heads](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#subscribe-on-new-heads)
 - **[ENS](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ens)**
 	- [Registry](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#registry)
 	- [Resolver](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#resolver)
@@ -410,18 +412,28 @@ socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegat
 socketProvider = InfuraWebsocketProvider.connectToSocket("ws://your.endpoint", delegate: delegate)
 ```
 
-#### Create a filter in the node to notify when something happened
+#### Set a filter in the node to notify when something happened
 
 To study possible filters read [Infura WSS filters documentation](https://infura.io/docs/ethereum/wss/introduction)
 
 ```swift
-try! socketProvider.filter(method: <InfuraWebsocketMethod>, params: <[Encodable]?>)
+// Getting logs
+try! socketProvider.setFilterAndGetLogs(method: <InfuraWebsocketMethod>, params: <[Encodable]?>)
+// Getting changes
+try! socketProvider.setFilterAndGetChanges(method: <InfuraWebsocketMethod>, params: <[Encodable]?>)
+```
+Or you can provide parameters in more convenient way:
+```swift
+// Getting logs
+try! socketProvider.setFilterAndGetLogs(method: <InfuraWebsocketMethod>, address: <EthereumAddress?>, fromBlock: <BlockNumber?>, toBlock: <BlockNumber?>, topics: <[String]?>)
+// Getting changes
+try! socketProvider.setFilterAndGetChanges(method: <InfuraWebsocketMethod>, address: <EthereumAddress?>, fromBlock: <BlockNumber?>, toBlock: <BlockNumber?>, topics: <[String]?>)
 ```
 
 ####  Get new pending transactions
 
 ```swift
-try! socketProvider.filter(method: .newPendingTransactionFilter)
+try! socketProvider.setFilterAndGetLogs(method: .newPendingTransactionFilter)
 ```
 
 #### Create a new subscription over particular events
@@ -436,6 +448,18 @@ try! socketProvider.subscribe(params: <[Encodable]>)
 
 ```swift
 try! socketProvider.subscribeOnNewPendingTransactions()
+```
+
+#### Subscribe on logs
+
+```swift
+try! socketProvider.subscribeOnLogs(addresses: <[EthereumAddress]?>, topics: <[String]?>)
+```
+
+#### Subscribe on new heads
+
+```swift
+try! socketProvider.subscribeOnNewHeads()
 ```
 
 ## ENS

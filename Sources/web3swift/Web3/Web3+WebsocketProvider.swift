@@ -15,8 +15,7 @@ public protocol IWebsocketProvider {
     var delegate: Web3SocketDelegate {get set}
     func connectSocket() throws
     func disconnectSocket() throws
-    func writeMessage(_ string: String)
-    func writeMessage(_ data: Data)
+    func writeMessage<T>(_ message: T)
 }
 
 public enum InfuraWebsocketMethod: String, Encodable {
@@ -113,16 +112,18 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     public var socket: WebSocket
     public var delegate: Web3SocketDelegate
     
+    private var websocketConnected: Bool = false
+    private var writeTimer: Timer? = nil
+    private var messagesStringToWrite: [String] = []
+    private var messagesDataToWrite: [Data] = []
+    
     public init?(_ endpoint: URL,
                  delegate wsdelegate: Web3SocketDelegate,
+                 projectId: String? = nil,
                  keystoreManager manager: KeystoreManager? = nil,
                  network net: Networks? = nil) {
-        delegate = wsdelegate
-        attachedKeystoreManager = manager
-        url = endpoint
-        socket = WebSocket(url: endpoint)
-        socket.delegate = self
-        let endpointString = endpoint.absoluteString
+        websocketConnected = false
+        var endpointString = endpoint.absoluteString
         if !(endpointString.hasPrefix("wss://") || endpointString.hasPrefix("ws://")) {
             return nil
         }
@@ -146,25 +147,36 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         } else {
             network = net
         }
+        if network != nil {
+            endpointString += projectId ?? "4406c3acf862426c83991f1752c46dd8"
+        }
+        url = URL(string: endpointString)!
+        delegate = wsdelegate
+        attachedKeystoreManager = manager
+        socket = WebSocket(url: endpoint)
+        socket.delegate = self
     }
     
     public init?(_ endpoint: String,
                  delegate wsdelegate: Web3SocketDelegate,
+                 projectId: String? = nil,
                  keystoreManager manager: KeystoreManager? = nil,
                  network net: Networks? = nil) {
-        guard let endpointUrl = URL(string: endpoint) else {return nil}
-        delegate = wsdelegate
-        attachedKeystoreManager = manager
-        url = endpointUrl
-        socket = WebSocket(url: endpointUrl)
-        socket.delegate = self
-        let endpointString = endpointUrl.absoluteString
+        websocketConnected = false
+        var endpointString = endpoint
         if !(endpointString.hasPrefix("wss://") || endpointString.hasPrefix("ws://")) {
             return nil
         }
         if net == nil {
-            if endpointString.hasPrefix("wss://") && endpointString.hasSuffix(".infura.io/ws") {
+            if endpointString.hasPrefix("wss://")
+                && (endpointString.hasSuffix(".infura.io/ws/v3/")
+                || endpointString.hasSuffix(".infura.io/ws/v3")
+                || endpointString.hasSuffix(".infura.io/ws/")
+                || endpointString.hasSuffix(".infura.io/ws")) {
                 let networkString = endpointString.replacingOccurrences(of: "wss://", with: "")
+                    .replacingOccurrences(of: ".infura.io/ws/v3/", with: "")
+                    .replacingOccurrences(of: ".infura.io/ws/v3", with: "")
+                    .replacingOccurrences(of: ".infura.io/ws/", with: "")
                     .replacingOccurrences(of: ".infura.io/ws", with: "")
                 switch networkString {
                 case "mainnet":
@@ -182,22 +194,42 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         } else {
             network = net
         }
+        if network != nil {
+            if endpointString.hasSuffix(".infura.io/ws/v3") { endpointString += "/"}
+            else if endpointString.hasSuffix(".infura.io/ws/") { endpointString += "v3/"}
+            else if endpointString.hasSuffix(".infura.io/ws") { endpointString += "/v3/"}
+            endpointString += projectId ?? "4406c3acf862426c83991f1752c46dd8"
+        }
+        guard let endpointUrl = URL(string: endpointString) else {return nil}
+        url = endpointUrl
+        delegate = wsdelegate
+        attachedKeystoreManager = manager
+        socket = WebSocket(url: endpointUrl)
+        socket.delegate = self
+    }
+    
+    deinit {
+        writeTimer?.invalidate()
     }
     
     public func connectSocket() {
+        writeTimer?.invalidate()
         socket.connect()
     }
     
     public func disconnectSocket() {
+        writeTimer?.invalidate()
         socket.disconnect()
     }
     
     public class func connectToSocket(_ endpoint: String,
                                       delegate: Web3SocketDelegate,
+                                      projectId: String? = nil,
                                       keystoreManager manager: KeystoreManager? = nil,
                                       network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = WebsocketProvider(endpoint,
                                                      delegate: delegate,
+                                                     projectId: projectId,
                                                      keystoreManager: manager,
                                                      network: net) else {
                                                 return nil
@@ -208,10 +240,12 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     
     public class func connectToSocket(_ endpoint: URL,
                                       delegate: Web3SocketDelegate,
+                                      projectId: String? = nil,
                                       keystoreManager manager: KeystoreManager? = nil,
                                       network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = WebsocketProvider(endpoint,
                                                      delegate: delegate,
+                                                     projectId: projectId,
                                                      keystoreManager: manager,
                                                      network: net) else {
                                                         return nil
@@ -220,12 +254,34 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         return socketProvider
     }
     
-    public func writeMessage(_ string: String) {
-        socket.write(string: string)
+    public func writeMessage<T>(_ message: T) {
+        var sMessage: String? = nil
+        var dMessage: Data? = nil
+        if !(message.self is String) && !(message.self is Data) {
+            sMessage = "\(message)"
+        } else if message.self is String {
+            sMessage = message as? String
+        } else if message.self is Data {
+            dMessage = message as? Data
+        }
+        if sMessage != nil {
+            self.messagesStringToWrite.append(sMessage!)
+        } else if dMessage != nil {
+            self.messagesDataToWrite.append(dMessage!)
+        }
+        writeTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(performWriteOperations), userInfo: nil, repeats: true)
     }
     
-    public func writeMessage(_ data: Data) {
-        socket.write(data: data)
+    @objc private func performWriteOperations() {
+        if websocketConnected {
+            writeTimer?.invalidate()
+            for s in messagesStringToWrite {
+                socket.write(string: s)
+            }
+            for d in messagesDataToWrite {
+                socket.write(data: d)
+            }
+        }
     }
     
     public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
@@ -240,10 +296,12 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     
     public func websocketDidConnect(socket: WebSocketClient) {
         print("websocket is connected")
+        websocketConnected = true
     }
     
     public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("websocket is disconnected with \(error?.localizedDescription ?? "no error")")
+        websocketConnected = false
     }
     
     public func websocketDidReceivePong(socket: WebSocketClient, data: Data?) {

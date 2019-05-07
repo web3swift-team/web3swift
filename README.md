@@ -68,10 +68,12 @@
 		- *[Infura Websocket Provider](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#infura-websocket-provider)*
 			- [Connect to Infura endpoint](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#connect-to-infura-endpoint)
 			- [Connect to custom endpoint with API similar to Infura WSS endpoint](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#connect-to-custom-endpoint-with-api-similar-to-infura-wss-endpoint)
-			- [Create a filter in the node to notify when something happened](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-a-filter-in-the-node-to-notify-when-something-happened)
+			- [Set a filter in the node to notify when something happened](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#set-a-filter-in-the-node-to-notify-when-something-happened)
 			- [Get new pending transactions](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-new-pending-transactions)
 			- [Create a new subscription over particular events](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-a-new-subscription-over-particular-events)
 			- [Subscribe on new pending transactions](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#subscribe-on-new-pending-transactions)
+			- [Subscribe on logs](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#subscribe-on-logs)
+			- [Subscribe on new heads](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#subscribe-on-new-heads)
 	- **[ENS](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ens)**
 		- [Registry](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#registry)
 		- [Resolver](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#resolver)
