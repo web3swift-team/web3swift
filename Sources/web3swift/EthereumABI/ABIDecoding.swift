@@ -67,7 +67,11 @@ extension ABIDecoder {
             let dataSlice = elementItself[0 ..< 32]
             let v = BigUInt(dataSlice)
             //            print("Address element is: \n" + String(v))
-            if v == BigUInt(1) {
+            if v == BigUInt(28) {
+                return (true as AnyObject, type.memoryUsage)
+            } else if (v == BigUInt(27)) {
+                return (false as AnyObject, type.memoryUsage)
+            } else if (v == BigUInt(1)) {
                 return (true as AnyObject, type.memoryUsage)
             } else if (v == BigUInt(0)) {
                 return (false as AnyObject, type.memoryUsage)
