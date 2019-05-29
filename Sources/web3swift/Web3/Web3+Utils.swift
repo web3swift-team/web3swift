@@ -6118,6 +6118,8 @@ extension Web3.Utils {
             vData -= 27
         } else if vData >= 31 && vData <= 34 {
             vData -= 31
+        } else if vData >= 35 && vData <= 38 {
+            vData -= 35
         }
         
         guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else {return nil}
@@ -6140,6 +6142,8 @@ extension Web3.Utils {
             vData -= 27
         } else if vData >= 31 && vData <= 34 {
             vData -= 31
+        } else if vData >= 35 && vData <= 38 {
+            vData -= 35
         }
         guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else {return nil}
         guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
