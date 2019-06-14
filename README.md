@@ -312,7 +312,9 @@ func setLocalNode(port: Int = 8545) -> Web3? {
 ## Credits
 
 Alex Vlasov, [@shamatar](https://github.com/shamatar)
+
 Petr Korolev, [@skywinder](https://github.com/skywinder)
+
 Anton Grigorev, [@baldyash](https://github.com/BaldyAsh)
 
 ### Security Disclosure
