@@ -1,6 +1,65 @@
 # Usage
 
 ---
+## Table of contents:
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+- [About source and GitHub repositories](#about-source-and-github-repositories)
+
+- [Introduction](#introduction)
+  - [Preffered models](#preffered-models)
+    - [Preffered keys Wallet Model (Account)](#preffered-keys-wallet-model-account)
+    - [Preffered ERC-20 Model](#preffered-erc-20-model)
+- [Account Management](#account-management)
+  - [Create Account](#create-account)
+    - [With Private Key](#with-private-key)
+    - [With Mnemonics Phrase](#with-mnemonics-phrase)
+  - [Import Account](#import-account)
+    - [With Private Key](#with-private-key-1)
+    - [With Mnemonics Phrase](#with-mnemonics-phrase-1)
+  - [Get Keystore Manager from wallet data](#get-keystore-manager-from-wallet-data)
+  - [Get wallet private key](#get-wallet-private-key)
+- [Ethereum Endpoints interaction](#ethereum-endpoints-interaction)
+  - [web3 instance](#web3-instance)
+  - [Ethereum Address](#ethereum-address)
+    - [Initializing](#initializing)
+  - [Get Balance](#get-balance)
+    - [Get ETH balance](#get-eth-balance)
+    - [Get ERC20 token balance](#get-erc20-token-balance)
+  - [Transactions Operations](#transactions-operations)
+    - [Prepare Transaction](#prepare-transaction)
+      - [Send Ether](#send-ether)
+      - [Send ERC-20 Token](#send-erc-20-token)
+      - [Write Transaction and call smart contract method](#write-transaction-and-call-smart-contract-method)
+      - [Read Transaction to call smart contract method](#read-transaction-to-call-smart-contract-method)
+    - [Send Transaction](#send-transaction)
+      - [Write](#write)
+      - [Read](#read)
+  - [Chain state](#chain-state)
+    - [Get Block number](#get-block-number)
+- [Websockets](#websockets)
+  - [Web3socketDelegate](#web3socketdelegate)
+  - [Custom Websocket Provider](#custom-websocket-provider)
+    - [Connect to custom endpoint](#connect-to-custom-endpoint)
+    - [Send message](#send-message)
+  - [Infura Websocket interactions](#infura-websocket-interactions)
+    - [Connect to Infura endpoint](#connect-to-infura-endpoint)
+    - [Connect to custom Infura-like endpoint](#connect-to-custom-infura-like-endpoint)
+    - [Create a filter in the node to notify when something happened](#create-a-filter-in-the-node-to-notify-when-something-happened)
+    - [Get new pending transactions](#get-new-pending-transactions)
+    - [Create a new subscription over particular events](#create-a-new-subscription-over-particular-events)
+    - [Subscribe on new pending transactions](#subscribe-on-new-pending-transactions)
+- [ENS](#ens)
+  - [Registry](#registry)
+  - [Resolver](#resolver)
+  - [BaseRegistrar](#baseregistrar)
+  - [RegistrarController](#registrarcontroller)
+  - [ReverseRegistrar](#reverseregistrar)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+---
 - **[Introduction](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#introduction)**
 	- *[Preffered models](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preffered-models)*
 		- [Preffered keys Wallet Model](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preffered-keys-wallet-model-account)
