@@ -91,7 +91,7 @@ class ERC20Token {
 
 ### Create Account
 
-#### Create Account With Private Key
+#### With Private Key
 
 ```swift
 let password = "web3swift" // We recommend here and everywhere to use the password set by the user.
@@ -102,7 +102,7 @@ let address = keystore.addresses!.first!.address
 let wallet = Wallet(address: address, data: keyData, name: name, isHD: false)
 ```
 
-#### Create Account With Mnemonics Phrase
+#### With Mnemonics Phrase
 
 ```swift
 let password = "web3swift"
@@ -121,7 +121,7 @@ let wallet = Wallet(address: address, data: keyData, name: name, isHD: true)
 
 ### Import Account
 
-#### Import Account With Private Key
+#### With Private Key
 
 ```swift
 let password = "web3swift"
@@ -135,7 +135,7 @@ let address = keystore.addresses!.first!.address
 let wallet = Wallet(address: address, data: keyData, name: name, isHD: false)
 ```
 
-#### Import Account With Mnemonics Phrase
+#### With Mnemonics Phrase
 
 ```swift
 let password = "web3swift"
@@ -165,7 +165,7 @@ if wallet.isHD {
 }
 ```
 
-### Get wallet Private key
+### Get wallet private key
 
 ```swift
 let password = "web3swift"
@@ -195,7 +195,7 @@ web3.addKeystoreManager(keystoreManager)
 
 ### Ethereum Address
 
-#### Initializing Ethereum Address
+#### Initializing
 
 ```swift
 let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
@@ -205,7 +205,7 @@ Ethereum addresses are checksum checked if they are not lowercased or uppercased
 
 ### Get Balance
 
-#### Getting ETH balance
+#### Get ETH balance
 
 ```swift
 let walletAddress = EthereumAddress(wallet.address)! // Address which balance we want to know
@@ -213,7 +213,7 @@ let balanceResult = try! web3.eth.getBalance(address: walletAddress)
 let balanceString = Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3)!
 ```
 
-#### Getting ERC20 token balance
+#### Get ERC20 token balance
 
 ```swift
 let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
@@ -239,7 +239,7 @@ let balanceString = Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .et
 
 #### Prepare Transaction
 
-##### Preparing Transaction For Sending Ether
+##### Send Ether
 
 ```swift
 let value: String = "1.0" // In Ether
@@ -259,7 +259,7 @@ let tx = contract.write(
 	transactionOptions: options)!
 ```
 
-##### Preparing Transaction For Sending ERC-20 Tokens
+##### Send ERC-20 Token
 
 ```swift
 let value: String = "1.0" // In Tokens
@@ -281,7 +281,7 @@ let tx = contract.write(
 	transactionOptions: options)!
 ```
 
-##### Preparing Write Transaction for sending to some Contract and use its method
+##### Write Transaction and call smart contract method
 
 ```swift
 let value: String = "0.0" // Any amount of Ether you need to send
@@ -306,7 +306,7 @@ let tx = contract.write(
 	transactionOptions: options)!
 ```
 
-##### Preparing Read Transaction to call some Contract method
+##### Read Transaction to call smart contract method
 
 ```swift
 let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
@@ -328,17 +328,17 @@ let tx = contract.read(
 	transactionOptions: options)!
 ```
 
-#### Send Transaction 
+#### Send Transaction
 
-##### Writing
+##### Write
 
 ```swift
 let password = "web3swift"
 let result = try! transaction.send(password: password)
 ```
 
-##### Reading
-  
+##### Read
+
 ```swift
 let result = try! transaction.call()
 ```
@@ -361,13 +361,13 @@ Later, in order to open a connection to WebSocket server, you will use socket pr
 class DelegateClass: Web3SocketDelegate {
 	var socketProvider: WebsocketProvider? = nil // WebSocket Provider
 	var socketProvider: InfuraWebsocketProvider? = nil // Infura WebSocket Provider
-	
+
 	// Protocol method, here will be messages, received from WebSocket server
 	func received(message: Any) {
         	// Make something with message
     	}
 }
-``` 
+```
 
 ### Custom Websocket Provider
 
@@ -380,31 +380,31 @@ socketProvider.connectSocket()
 /// Some code
 /// ...
 socketProvider.disconnectSocket()
-``` 
+```
 
 Or you can create already connected WebsocketProvider
 ```swift
 socketProvider = WebsocketProvider.connectToSocket("ws://your.endpoint", delegate: delegate)
 ```
 
-#### Send message 
+#### Send message
 
 ```swift
 // String message
-socketProvider.writeMessage(String()) 
+socketProvider.writeMessage(String())
 // Data message
 socketProvider.writeMessage(Data())
 ```
 
-### Infura Websocket Provider
+### Infura Websocket interactions
 
-#### Connect to Infura endpoint 
+#### Connect to Infura endpoint
 
 ```swift
 socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: delegate)
 ```
 
-#### Connect to custom endpoint with API similar to Infura WSS endpoint
+#### Connect to custom Infura-like endpoint
 
 ```swift
 socketProvider = InfuraWebsocketProvider.connectToSocket("ws://your.endpoint", delegate: delegate)
@@ -481,7 +481,7 @@ let doSomething = try! resolver. ...
 or set it as ENS instance property and use its methods from it:
 ```swift
 try! ens.setENSResolver(withDomain: domain)
-let doSomething = try! ens.resolver!. ... 
+let doSomething = try! ens.resolver!. ...
 ```
 
 ### BaseRegistrar
@@ -504,5 +504,3 @@ You can set ReverseRegistrar as ENS instance property and use its methods from i
 ens.setReverseRegistrar(withAddresss: address)
 let doSomething = try! ens.reverseRegistrar!. ...
 ```
-
-
