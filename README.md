@@ -23,13 +23,13 @@
   - [Requirements](#requirements)
   - [Migration Guides](#migration-guides)
 - [Documentation](#documentation)
-- [Example Project](#example-project)
+  - [Example](#example)
 - [FAQ](#faq)
-- [What we have already done](#what-we-have-already-done)
-- [Future steps](#future-steps)
 - [Credits](#credits)
-- [Security Disclosure](#security-disclosure)
+  - [What we have already done](#what-we-have-already-done)
+  - [Future steps](#future-steps)
 - [Contribute](#contribute)
+- [Security Disclosure](#security-disclosure)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -188,7 +188,7 @@ Here are quick references for basic features:
   - [ReverseRegistrar](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#reverseregistrar)
 
 
-## Example Project
+### Example
 
 You can try lib by running the example project:
 
@@ -250,7 +250,16 @@ func setLocalNode(port: Int = 8545) -> Web3? {
 }
 ```
 
-## What we have already done
+## Credits
+
+Alex Vlasov, [@shamatar](https://github.com/shamatar)
+
+Petr Korolev, [@skywinder](https://github.com/skywinder)
+
+Anton Grigorev, [@baldyash](https://github.com/BaldyAsh)
+
+
+### What we have already done
 
 - [x] Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
 - [x] Interaction with remote node via JSON RPC :thought_balloon:
@@ -295,7 +304,7 @@ func setLocalNode(port: Int = 8545) -> Web3? {
 - [x] Comprehensive Unit and Integration Test Coverage
 
 
-## Future steps
+### Future steps
 
 - [x] Objective-C - a proxy bridge to build your DApp on Objective-C using web3swift
 - [x] Complete Documentation (https://web3swift.github.io/web3swift)
@@ -305,22 +314,6 @@ func setLocalNode(port: Int = 8545) -> Web3? {
 - [x] Support more blockchains - Ripple, Bitcoin, EOS, etc.
 - [x] Performance Improvements
 - [x] More convenient methods for basic namespaces
-
-## Credits
-
-Alex Vlasov, [@shamatar](https://github.com/shamatar)
-
-Petr Korolev, [@skywinder](https://github.com/skywinder)
-
-Anton Grigorev, [@baldyash](https://github.com/BaldyAsh)
-
-## Security Disclosure
-
-If you believe you have identified a security vulnerability with web3swift, you should report it as soon as possible via email to [hello@matter-labs.io](mailto:hello@matter-labs.io). Please do not post it to a public issue tracker.
-
-[Matter Labs](https://github.com/orgs/matter-labs/people) are charged with open-sourсe and do not require money for using their web3swift lib.
-We want to continue to do everything we can to move the needle forward.
-If you use any of our libraries for work, see if your employers would be interested in donating. Any amount you can donate today to help us reach our goal would be greatly appreciated.
 
 ## Contribute
 
@@ -333,6 +326,15 @@ If you use any of our libraries for work, see if your employers would be interes
 - Donation Our Ether wallet address: 0xe22b8979739d724343bd002f9f432f5990879901
 
 ![Donate](http://qrcoder.ru/code/?0xe22b8979739d724343bd002f9f432f5990879901&4&0)
+
+
+## Security Disclosure
+
+If you believe you have identified a security vulnerability with web3swift, you should report it as soon as possible via email to [hello@matter-labs.io](mailto:hello@matter-labs.io). Please do not post it to a public issue tracker.
+
+[Matter Labs](https://github.com/orgs/matter-labs/people) are charged with open-sourсe and do not require money for using their web3swift lib.
+We want to continue to do everything we can to move the needle forward.
+If you use any of our libraries for work, see if your employers would be interested in donating. Any amount you can donate today to help us reach our goal would be greatly appreciated.
 
 ## License
 
