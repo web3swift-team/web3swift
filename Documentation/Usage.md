@@ -1,68 +1,79 @@
 # Usage
 
 ---
-- **[Introduction](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#introduction)**
-	- *[Preffered models](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preffered-models)*
-		- [Preffered keys Wallet Model](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preffered-keys-wallet-model-account)
-		- [Preffered ERC-20 Model](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preffered-erc-20-model)
-- **[Account Management](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#account-management)**
-	- *[Create Account](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-account)*
-		- [Create Account With Private Key](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-account-with-private-key)
-		- [Create Account With Mnemonics Phrase](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-account-with-mnemonics-phrase)
-	- *[Import Account](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-account)*
-		- [Import Account With Private Key](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#import-account-with-private-key)
-		- [Import Account With Mnemonics Phrase](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#import-account-with-mnemonics-phrase)
-	- [Get Keystore Manager from wallet data](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-keystore-manager-from-wallet-data)
-	- [Get wallet Private key](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-wallet-private-key)
-- **[Ethereum Endpoints interaction](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ethereum-endpoints-interaction)**
-	- [web3 instance](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#web3-instance)
-	- [Ethereum Address](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ethereum-address)
-	- *[Get Balance](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-balance)*
-		- [Getting ETH balance](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#getting-eth-balance)
-		- [Getting ERC20 token balance](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#getting-erc20-token-balance)
-	- *[Transactions Operations](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#transactions-operations)*
-		- [Preparing Transaction For Sending Ether](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preparing-transaction-for-sending-ether)
-		- [Preparing Transaction For Sending ERC-20 Tokens](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preparing-transaction-for-sending-erc-20-tokens)
-		- [Preparing Write Transaction for sending to some Contract and use its method](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preparing-write-transaction-for-sending-to-some-contract-and-use-its-method)
-		- [Preparing Read Transaction to call some Contract method](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preparing-read-transaction-to-call-some-contract-method)
-		- [Send write transaction](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#writing)
-		- [Send read transaction](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#reading)
-	- [Get Block number](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-block-number)
-- **[Websockets](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#websockets)**
-	- [Web3socketDelegate](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#web3socketdelegate)
-	- [Get latest new pending transactions](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-latest-new-pending-transactions)
-	- *[Custom Websocket Provider](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#custom-websocket-provider)*
-		- [Connect to custom endpoint](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#connect-to-custom-endpoint)
-		- [Send message](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#send-message)
-	- *[Infura Websocket Provider](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#infura-websocket-provider)*
-		- [Connect to Infura endpoint](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#connect-to-infura-endpoint)
-		- [Connect to custom endpoint with API similar to Infura WSS endpoint](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#connect-to-custom-endpoint-with-api-similar-to-infura-wss-endpoint)
-		- [Set a filter in the node to notify when something happened](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#set-a-filter-in-the-node-to-notify-when-something-happened)
-		- [Get new pending transactions](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-new-pending-transactions)
-		- [Create a new subscription over particular events](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-a-new-subscription-over-particular-events)
-		- [Subscribe on new pending transactions](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#subscribe-on-new-pending-transactions)
+## Table of contents:
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+- [About source and GitHub repositories](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#about-source-and-github-repositories)
+
+- [Introduction](#introduction)
+  - [Preffered models](#preffered-models)
+    - [Preferred keys Wallet Model (Account)](#preferred-keys-wallet-model-account)
+    - [Preffered ERC-20 Model](#preffered-erc-20-model)
+- [Account Management](#account-management)
+  - [Create Account](#create-account)
+    - [With Private Key](#with-private-key)
+    - [With Mnemonics Phrase](#with-mnemonics-phrase)
+  - [Import Account](#import-account)
+    - [With Private Key](#with-private-key-1)
+    - [With Mnemonics Phrase](#with-mnemonics-phrase-1)
+  - [Get Keystore Manager from wallet data](#get-keystore-manager-from-wallet-data)
+  - [Get private key](#get-private-key)
+- [Ethereum Endpoints interaction](#ethereum-endpoints-interaction)
+  - [web3 instance](#web3-instance)
+  - [Ethereum Address](#ethereum-address)
+    - [Initializing](#initializing)
+  - [Get Balance](#get-balance)
+    - [Get ETH balance](#get-eth-balance)
+    - [Get ERC20 token balance](#get-erc20-token-balance)
+  - [Transactions Operations](#transactions-operations)
+    - [Prepare Transaction](#prepare-transaction)
+      - [Send Ether](#send-ether)
+      - [Send ERC-20 Token](#send-erc-20-token)
+      - [Write Transaction and call smart contract method](#write-transaction-and-call-smart-contract-method)
+      - [Read Transaction to call smart contract method](#read-transaction-to-call-smart-contract-method)
+    - [Send Transaction](#send-transaction)
+      - [Write](#write)
+      - [Read](#read)
+  - [Chain state](#chain-state)
+    - [Get Block number](#get-block-number)
+- [Websockets](#websockets)
+  - [Web3socketDelegate](#web3socketdelegate)
+  - [Custom Websocket Provider](#custom-websocket-provider)
+    - [Connect to custom endpoint](#connect-to-custom-endpoint)
+    - [Send message](#send-message)
+  - [Infura Websocket interactions](#infura-websocket-interactions)
+    - [Connect to Infura endpoint](#connect-to-infura-endpoint)
+    - [Connect to custom Infura-like endpoint](#connect-to-custom-infura-like-endpoint)
+    - [Set a filter in the node to notify when something happened](#set-a-filter-in-the-node-to-notify-when-something-happened)
+    - [Get new pending transactions](#get-new-pending-transactions)
+    - [Create a new subscription over particular events](#create-a-new-subscription-over-particular-events)
+    - [Subscribe on new pending transactions](#subscribe-on-new-pending-transactions)
 		- [Subscribe on logs](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#subscribe-on-logs)
 		- [Subscribe on new heads](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#subscribe-on-new-heads)
-- **[ENS](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ens)**
-	- [Registry](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#registry)
-	- [Resolver](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#resolver)
-	- [BaseRegistrar](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#baseregistrar)
-	- [RegistrarController](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#registrarcontroller)
-	- [ReverseRegistrar](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#reverseregistrar)
+- [ENS](#ens)
+  - [Registry](#registry)
+  - [Resolver](#resolver)
+  - [BaseRegistrar](#baseregistrar)
+  - [RegistrarController](#registrarcontroller)
+  - [ReverseRegistrar](#reverseregistrar)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Introduction
 
-To work with platforms based on blockchain technology, in particular with Ethereum-like blockchains, developer must be fluent in concepts such as a crypto wallet, private and public key, smart contract, token and others. We will use these concepts without explaining their meanings. For more information about Ethereum, we recommend reading the book [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook), by Andreas M. Antonopoulos and Gavin Wood.
+To work with platforms based on blockchain technology, in particular with Ethereum-like blockchains, a developer must be fluent in concepts such as a crypto wallet, private and public key, smart contract, token and others. We will use these concepts without explaining their meanings. For more information about Ethereum, we recommend reading the book [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook), by Andreas M. Antonopoulos and Gavin Wood.
 
-**To create keystore we forced our users to use some password, which will be used in some operations, like transactions sending. We believe that security is important for such operations and this increases its level. You are free to use a pre-compiled password in your code, that is not set by the keystore user, at your own risk.**
+**To create keystore we forced our users to use some password, which will be used in some operations, like transactions sending. We believe that security is essential for such, and this increases its level. You are free to use a pre-compiled password in your code, that is not set by the keystore user, at your own risk.**
 
 *In code examples we used force-unwrapped Swift optionals for better readability of example code. We recommend that you do not use this method to get rid of optional values.*
 
 ### Preffered models
 
-To describe the library's capabilities, we will use the models described below, however you can use the models that are convenient for you.
+To describe the library's capabilities, we will use the models described below. However, you can use the models that are convenient for you.
 
-#### Preffered keys Wallet Model (Account)
+#### Preferred keys Wallet Model (Account)
 
 ```swift
 struct Wallet {
@@ -93,7 +104,7 @@ class ERC20Token {
 
 ### Create Account
 
-#### Create Account With Private Key
+#### With Private Key
 
 ```swift
 let password = "web3swift" // We recommend here and everywhere to use the password set by the user.
@@ -104,17 +115,17 @@ let address = keystore.addresses!.first!.address
 let wallet = Wallet(address: address, data: keyData, name: name, isHD: false)
 ```
 
-#### Create Account With Mnemonics Phrase
+#### With Mnemonics Phrase
 
 ```swift
 let password = "web3swift"
 let bitsOfEntropy: Int = 128 // Entropy is a measure of password strength. Usually used 128 or 256 bits.
 let mnemonics = try! BIP39.generateMnemonics(bitsOfEntropy: bitsOfEntropy)!
 let keystore = try! BIP32Keystore(
-	mnemonics: mnemonics,
-	password: password,
-	mnemonicsPassword: "",
-	language: .english)!
+    mnemonics: mnemonics,
+    password: password,
+    mnemonicsPassword: "",
+    language: .english)!
 let name = "New HD Wallet"
 let keyData = try! JSONEncoder().encode(keystore.keystoreParams)
 let address = keystore.addresses!.first!.address
@@ -123,7 +134,7 @@ let wallet = Wallet(address: address, data: keyData, name: name, isHD: true)
 
 ### Import Account
 
-#### Import Account With Private Key
+#### With Private Key
 
 ```swift
 let password = "web3swift"
@@ -137,16 +148,16 @@ let address = keystore.addresses!.first!.address
 let wallet = Wallet(address: address, data: keyData, name: name, isHD: false)
 ```
 
-#### Import Account With Mnemonics Phrase
+#### With Mnemonics Phrase
 
 ```swift
 let password = "web3swift"
 let mnemonics = "fine have legal roof fury bread egg knee wrong idea must edit" // Some mnemonic phrase
 let keystore = try! BIP32Keystore(
-	mnemonics: mnemonics,
-	password: password,
-	mnemonicsPassword: "",
-	language: .english)!
+    mnemonics: mnemonics,
+    password: password,
+    mnemonicsPassword: "",
+    language: .english)!
 let name = "New HD Wallet"
 let keyData = try! JSONEncoder().encode(keystore.keystoreParams)
 let address = keystore.addresses!.first!.address
@@ -159,15 +170,15 @@ let wallet = Wallet(address: address, data: keyData, name: name, isHD: true)
 let data = wallet.data
 let keystoreManager: KeystoreManager
 if wallet.isHD {
-	let keystore = BIP32Keystore(data)!
-	keystoreManager = KeystoreManager([keystore])
+    let keystore = BIP32Keystore(data)!
+    keystoreManager = KeystoreManager([keystore])
 } else {
-	let keystore = EthereumKeystoreV3(data)!
-	keystoreManager = KeystoreManager([keystore])
+    let keystore = EthereumKeystoreV3(data)!
+    keystoreManager = KeystoreManager([keystore])
 }
 ```
 
-### Get wallet Private key
+### Get private key
 
 ```swift
 let password = "web3swift"
@@ -197,7 +208,7 @@ web3.addKeystoreManager(keystoreManager)
 
 ### Ethereum Address
 
-#### Initializing Ethereum Address
+#### Initializing
 
 ```swift
 let coldWalletAddress = EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!
@@ -207,7 +218,7 @@ Ethereum addresses are checksum checked if they are not lowercased or uppercased
 
 ### Get Balance
 
-#### Getting ETH balance
+#### Get ETH balance
 
 ```swift
 let walletAddress = EthereumAddress(wallet.address)! // Address which balance we want to know
@@ -215,7 +226,7 @@ let balanceResult = try! web3.eth.getBalance(address: walletAddress)
 let balanceString = Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3)!
 ```
 
-#### Getting ERC20 token balance
+#### Get ERC20 token balance
 
 ```swift
 let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
@@ -228,10 +239,10 @@ options.gasPrice = .automatic
 options.gasLimit = .automatic
 let method = "balanceOf"
 let tx = contract.read(
-	method,
-	parameters: [exploredAddress] as [AnyObject],
-	extraData: Data(),
-	transactionOptions: options)!
+    method,
+    parameters: [exploredAddress] as [AnyObject],
+    extraData: Data(),
+    transactionOptions: options)!
 let tokenBalance = try! tx.call()
 let balanceBigUInt = tokenBalance["0"] as! BigUInt
 let balanceString = Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3)!
@@ -241,7 +252,7 @@ let balanceString = Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .et
 
 #### Prepare Transaction
 
-##### Preparing Transaction For Sending Ether
+##### Send Ether
 
 ```swift
 let value: String = "1.0" // In Ether
@@ -255,13 +266,13 @@ options.from = walletAddress
 options.gasPrice = .automatic
 options.gasLimit = .automatic
 let tx = contract.write(
-	"fallback",
-	parameters: [AnyObject](),
-	extraData: Data(),
-	transactionOptions: options)!
+    "fallback",
+    parameters: [AnyObject](),
+    extraData: Data(),
+    transactionOptions: options)!
 ```
 
-##### Preparing Transaction For Sending ERC-20 Tokens
+##### Send ERC-20 Token
 
 ```swift
 let value: String = "1.0" // In Tokens
@@ -277,13 +288,13 @@ options.gasPrice = .automatic
 options.gasLimit = .automatic
 let method = "transfer"
 let tx = contract.write(
-	method,
-	parameters: [toAddress, amount] as [AnyObject],
-	extraData: Data(),
-	transactionOptions: options)!
+    method,
+    parameters: [toAddress, amount] as [AnyObject],
+    extraData: Data(),
+    transactionOptions: options)!
 ```
 
-##### Preparing Write Transaction for sending to some Contract and use its method
+##### Write Transaction and call smart contract method
 
 ```swift
 let value: String = "0.0" // Any amount of Ether you need to send
@@ -302,13 +313,13 @@ options.from = walletAddress
 options.gasPrice = .automatic
 options.gasLimit = .automatic
 let tx = contract.write(
-	contractMethod,
-	parameters: parameters,
-	extraData: extraData,
-	transactionOptions: options)!
+    contractMethod,
+    parameters: parameters,
+    extraData: extraData,
+    transactionOptions: options)!
 ```
 
-##### Preparing Read Transaction to call some Contract method
+##### Read Transaction to call smart contract method
 
 ```swift
 let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
@@ -324,23 +335,23 @@ options.from = walletAddress
 options.gasPrice = .automatic
 options.gasLimit = .automatic
 let tx = contract.read(
-	contractMethod,
-	parameters: parameters,
-	extraData: extraData,
-	transactionOptions: options)!
+    contractMethod,
+    parameters: parameters,
+    extraData: extraData,
+    transactionOptions: options)!
 ```
 
-#### Send Transaction 
+#### Send Transaction
 
-##### Writing
+##### Write
 
 ```swift
 let password = "web3swift"
 let result = try! transaction.send(password: password)
 ```
 
-##### Reading
-  
+##### Read
+
 ```swift
 let result = try! transaction.call()
 ```
@@ -357,19 +368,19 @@ let blockNumber = try! web3.eth.getBlockNumber()
 
 ### Web3socketDelegate
 
-To receive messages from endpoint you need to create a class that adopt to Web3SocketDelegate protocol.
-Later, in order to open a connection to WebSocket server, you will use socket provider (WebsocketProvider or InfuraWebsocketProvider). And we recommend you to make it a property, so it doesn't get deallocated right after being setup.
+To receive messages from endpoint you need to create a class that adopts to Web3SocketDelegate protocol.
+Later, to open a connection to WebSocket server, you will use socket provider (`WebsocketProvider` or `InfuraWebsocketProvider`). And we recommend you to make it a property, so it doesn't get deallocated right after being setup.
 ```swift
 class DelegateClass: Web3SocketDelegate {
-	var socketProvider: WebsocketProvider? = nil // WebSocket Provider
-	var socketProvider: InfuraWebsocketProvider? = nil // Infura WebSocket Provider
-	
-	// Protocol method, here will be messages, received from WebSocket server
-	func received(message: Any) {
-        	// Make something with message
-    	}
+    var socketProvider: WebsocketProvider? = nil // WebSocket Provider
+    var socketProvider: InfuraWebsocketProvider? = nil // Infura WebSocket Provider
+
+    // Protocol method, here will be messages, received from WebSocket server
+    func received(message: Any) {
+            // Make something with message
+        }
 }
-``` 
+```
 
 ### Custom Websocket Provider
 
@@ -382,31 +393,31 @@ socketProvider.connectSocket()
 /// Some code
 /// ...
 socketProvider.disconnectSocket()
-``` 
+```
 
 Or you can create already connected WebsocketProvider
 ```swift
 socketProvider = WebsocketProvider.connectToSocket("ws://your.endpoint", delegate: delegate)
 ```
 
-#### Send message 
+#### Send message
 
 ```swift
 // String message
-socketProvider.writeMessage(String()) 
+socketProvider.writeMessage(String())
 // Data message
 socketProvider.writeMessage(Data())
 ```
 
-### Infura Websocket Provider
+### Infura Websocket interactions
 
-#### Connect to Infura endpoint 
+#### Connect to Infura endpoint
 
 ```swift
 socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: delegate)
 ```
 
-#### Connect to custom endpoint with API similar to Infura WSS endpoint
+#### Connect to custom Infura-like endpoint
 
 ```swift
 socketProvider = InfuraWebsocketProvider.connectToSocket("ws://your.endpoint", delegate: delegate)
@@ -505,7 +516,7 @@ let doSomething = try! resolver. ...
 or set it as ENS instance property and use its methods from it:
 ```swift
 try! ens.setENSResolver(withDomain: domain)
-let doSomething = try! ens.resolver!. ... 
+let doSomething = try! ens.resolver!. ...
 ```
 
 ### BaseRegistrar
@@ -528,5 +539,3 @@ You can set ReverseRegistrar as ENS instance property and use its methods from i
 ens.setReverseRegistrar(withAddresss: address)
 let doSomething = try! ens.reverseRegistrar!. ...
 ```
-
-
