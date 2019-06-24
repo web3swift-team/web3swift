@@ -30,10 +30,8 @@ public enum BlockNumber {
 /// Custom Web3 HTTP provider of Infura nodes.
 public final class InfuraProvider: Web3HttpProvider {
     public init?(_ net:Networks, accessToken token: String? = nil, keystoreManager manager: KeystoreManager? = nil) {
-        var requestURLstring = "https://" + net.name + ".infura.io/"
-        if token != nil {
-            requestURLstring = requestURLstring + token!
-        }
+        var requestURLstring = "https://" + net.name + Constants.infuraHttpScheme
+        requestURLstring += token != nil ? token! : Constants.infuraToken
         let providerURL = URL(string: requestURLstring)
         super.init(providerURL!, network: net, keystoreManager: manager)
     }
@@ -55,7 +53,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
             || network == Networks.Ropsten
             || network == Networks.Mainnet else {return nil}
         let networkName = network.name
-        let urlString = "wss://\(networkName).infura.io/ws/v3/"
+        let urlString = "wss://" + networkName + Constants.infuraWsScheme
         guard URL(string: urlString) != nil else {return nil}
         super.init(urlString,
                    delegate: delegate,

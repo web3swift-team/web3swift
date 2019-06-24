@@ -127,10 +127,10 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         if !(endpointString.hasPrefix("wss://") || endpointString.hasPrefix("ws://")) {
             return nil
         }
-        if net == nil {
-            if endpointString.hasPrefix("wss://") && endpointString.hasSuffix(".infura.io/ws") {
+        if endpointString.hasPrefix("wss://") && endpointString.hasSuffix(Constants.infuraWsScheme) {
+            if net == nil {
                 let networkString = endpointString.replacingOccurrences(of: "wss://", with: "")
-                    .replacingOccurrences(of: ".infura.io/ws", with: "")
+                    .replacingOccurrences(of: Constants.infuraWsScheme, with: "")
                 switch networkString {
                 case "mainnet":
                     network = Networks.Mainnet
@@ -143,17 +143,17 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
                 default:
                     break
                 }
+            } else {
+                network = net
             }
-        } else {
-            network = net
-        }
-        if network != nil {
-            endpointString += projectId ?? "4406c3acf862426c83991f1752c46dd8"
+            if network != nil {
+                endpointString += projectId ?? Constants.infuraToken
+            }
         }
         url = URL(string: endpointString)!
         delegate = wsdelegate
         attachedKeystoreManager = manager
-        socket = WebSocket(url: endpoint)
+        socket = WebSocket(url: url)
         socket.delegate = self
     }
     
@@ -162,22 +162,16 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
                  projectId: String? = nil,
                  keystoreManager manager: KeystoreManager? = nil,
                  network net: Networks? = nil) {
+        guard URL(string: endpoint) != nil else {return nil}
+        var finalEndpoint = endpoint
         websocketConnected = false
-        var endpointString = endpoint
-        if !(endpointString.hasPrefix("wss://") || endpointString.hasPrefix("ws://")) {
+        if !(endpoint.hasPrefix("wss://") || endpoint.hasPrefix("ws://")) {
             return nil
         }
-        if net == nil {
-            if endpointString.hasPrefix("wss://")
-                && (endpointString.hasSuffix(".infura.io/ws/v3/")
-                || endpointString.hasSuffix(".infura.io/ws/v3")
-                || endpointString.hasSuffix(".infura.io/ws/")
-                || endpointString.hasSuffix(".infura.io/ws")) {
-                let networkString = endpointString.replacingOccurrences(of: "wss://", with: "")
-                    .replacingOccurrences(of: ".infura.io/ws/v3/", with: "")
-                    .replacingOccurrences(of: ".infura.io/ws/v3", with: "")
-                    .replacingOccurrences(of: ".infura.io/ws/", with: "")
-                    .replacingOccurrences(of: ".infura.io/ws", with: "")
+        if endpoint.hasPrefix("wss://") && endpoint.hasSuffix(Constants.infuraWsScheme) {
+            if net == nil {
+                let networkString = endpoint.replacingOccurrences(of: "wss://", with: "")
+                    .replacingOccurrences(of: Constants.infuraWsScheme, with: "")
                 switch networkString {
                 case "mainnet":
                     network = Networks.Mainnet
@@ -190,21 +184,17 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
                 default:
                     break
                 }
+            } else {
+                network = net
             }
-        } else {
-            network = net
+            if network != nil {
+                finalEndpoint += projectId ?? Constants.infuraToken
+            }
         }
-        if network != nil {
-            if endpointString.hasSuffix(".infura.io/ws/v3") { endpointString += "/"}
-            else if endpointString.hasSuffix(".infura.io/ws/") { endpointString += "v3/"}
-            else if endpointString.hasSuffix(".infura.io/ws") { endpointString += "/v3/"}
-            endpointString += projectId ?? "4406c3acf862426c83991f1752c46dd8"
-        }
-        guard let endpointUrl = URL(string: endpointString) else {return nil}
-        url = endpointUrl
+        url = URL(string: finalEndpoint)!
         delegate = wsdelegate
         attachedKeystoreManager = manager
-        socket = WebSocket(url: endpointUrl)
+        socket = WebSocket(url: url)
         socket.delegate = self
     }
     
