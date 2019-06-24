@@ -179,7 +179,14 @@ extension SECP256K1 {
         guard signature.count == 65 else {return nil}
         var recoverableSignature: secp256k1_ecdsa_recoverable_signature = secp256k1_ecdsa_recoverable_signature()
         let serializedSignature = Data(signature[0..<64])
-        let v = Int32(signature[64])
+        var v = Int32(signature[64])
+        if v >= 27 && v <= 30 {
+            v -= 27
+        } else if v >= 31 && v <= 34 {
+            v -= 31
+        } else if v >= 35 && v <= 38 {
+            v -= 35
+        }
         let result = serializedSignature.withUnsafeBytes { (serRawBufferPtr: UnsafeRawBufferPointer) -> Int32? in
             if let serRawPtr = serRawBufferPtr.baseAddress, serRawBufferPtr.count > 0 {
                 let serPtr = serRawPtr.assumingMemoryBound(to: UInt8.self)
@@ -216,10 +223,10 @@ extension SECP256K1 {
         guard let res = result, res != 0 else {
             return nil
         }
-        if (v == 0) {
-            serializedSignature.append(0x00)
-        } else if (v == 1) {
-            serializedSignature.append(0x01)
+        if (v == 0 || v == 27 || v == 31 || v == 35) {
+            serializedSignature.append(0x1b)
+        } else if (v == 1 || v == 28 || v == 32 || v == 36) {
+            serializedSignature.append(0x1c)
         } else {
             return nil
         }

@@ -8,7 +8,6 @@
 
 import Foundation
 import BigInt
-//import EthereumAddress
 
 public extension ENS {
     class ETHRegistrarController {
@@ -30,10 +29,10 @@ public extension ENS {
             self.address = address
         }
         
-        public func getRentPrice(name: String, duration: UInt) throws -> UInt {
+        public func getRentPrice(name: String, duration: UInt) throws -> BigUInt {
             guard let transaction = self.contract.read("rentPrice", parameters: [name, duration] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             guard let result = try? transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
-            guard let price = result["0"] as? UInt else {throw Web3Error.processingError(desc: "Can't get answer")}
+            guard let price = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Can't get answer")}
             return price
         }
         
@@ -51,26 +50,26 @@ public extension ENS {
             return available
         }
         
-        public func calculateCommitmentHash(name: String, owner: EthereumAddress, secret: [UInt32]) throws -> [UInt32] {
-            guard let transaction = self.contract.read("makeCommitment", parameters: [name, owner, secret] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+        public func calculateCommitmentHash(name: String, owner: EthereumAddress, secret: String) throws -> Data {
+            guard let transaction = self.contract.read("makeCommitment", parameters: [name, owner.address, secret] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             guard let result = try? transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
-            guard let hash = result["0"] as? [UInt32] else {throw Web3Error.processingError(desc: "Can't get answer")}
+            guard let hash = result["0"] as? Data else {throw Web3Error.processingError(desc: "Can't get answer")}
             return hash
         }
         
-        public func sumbitCommitment(from: EthereumAddress, commitment: [UInt32]) throws -> WriteTransaction {
+        public func sumbitCommitment(from: EthereumAddress, commitment: Data) throws -> WriteTransaction {
             defaultOptions.from = from
             defaultOptions.to = self.address
             guard let transaction = self.contract.write("commit", parameters: [commitment as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
         
-        public func registerName(from: EthereumAddress, name: String, owner: EthereumAddress, duration: UInt32, secret: [UInt32], price: String) throws -> WriteTransaction {
+        public func registerName(from: EthereumAddress, name: String, owner: EthereumAddress, duration: UInt, secret: String, price: String) throws -> WriteTransaction {
             guard let amount = Web3.Utils.parseToBigUInt(price, units: .eth) else {throw Web3Error.inputError(desc: "Wrong price: no way for parsing to ether units")}
             defaultOptions.value = amount
             defaultOptions.from = from
             defaultOptions.to = self.address
-            guard let transaction = self.contract.write("register", parameters: [name, owner, duration, secret] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.write("register", parameters: [name, owner.address, duration, secret] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
         

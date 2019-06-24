@@ -56,10 +56,10 @@ public extension ENS {
             return transaction
         }
         
-        public func getNameExpirity(name: BigUInt) throws -> UInt {
+        public func getNameExpirity(name: BigUInt) throws -> BigUInt {
             guard let transaction = self.contract.read("nameExpires", parameters: [name as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             guard let result = try? transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
-            guard let expirity = result["0"] as? UInt else {throw Web3Error.processingError(desc: "Can't get answer")}
+            guard let expirity = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Can't get answer")}
             return expirity
         }
         

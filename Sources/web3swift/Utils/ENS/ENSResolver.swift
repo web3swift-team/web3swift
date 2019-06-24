@@ -19,7 +19,7 @@ public extension ENS {
             case CBOR = 4
             case URI = 8
         }
-        
+
         public enum InterfaceName {
             case addr
             case name
@@ -71,6 +71,14 @@ public extension ENS {
             guard let result = try? transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let supports = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Can't get answer")}
             return supports
+        }
+
+        public func interfaceImplementer(forNode node: String, interfaceID: String) throws -> EthereumAddress {
+            guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
+            guard let transaction = self.resolverContract.read("interfaceImplementer", parameters: [nameHash, interfaceID] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+            guard let result = try? transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
+            guard let address = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Can't get address")}
+            return address
         }
         
         public func getAddress(forNode node: String) throws -> EthereumAddress {

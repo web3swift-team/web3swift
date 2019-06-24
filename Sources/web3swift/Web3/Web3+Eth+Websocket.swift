@@ -31,7 +31,7 @@ extension web3.Eth {
     
     public func getLatestPendingTransactions(forDelegate delegate: Web3SocketDelegate) throws {
         let provider = try getWebsocketProvider(forDelegate: delegate)
-        try provider.filter(method: .newPendingTransactionFilter)
+        try provider.setFilterAndGetChanges(method: .newPendingTransactionFilter)
     }
     
     public func subscribeOnPendingTransactions(forDelegate delegate: Web3SocketDelegate) throws {

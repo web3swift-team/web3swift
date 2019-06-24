@@ -4,10 +4,10 @@
 
 [![Build Status](https://travis-ci.com/matter-labs/web3swift.svg?branch=develop)](https://travis-ci.com/matter-labs/web3swift)
 [![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
-[![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
+[![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/web3.swift.pod.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
+[![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
 [![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0xe22b8979739d724343bd002f9f432f5990879901)
 [![Stackoverflow](https://img.shields.io/badge/stackoverflow-ask-blue.svg)](https://stackoverflow.com/questions/tagged/web3swift)
 
@@ -17,72 +17,23 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Documentation](#documentation)
-- [What we have already done:](#what-we-have-already-done)
 - [Design Decisions](#design-decisions)
-- [Requirements](#requirements)
-- [Migration Guides](#migration-guides)
-- [Communication](#communication)
+- [Projects that using web3swift](#projects-that-using-web3swift)
 - [Installation](#installation)
-  - [CocoaPods](#cocoapods)
-  - [Carthage](#carthage)
-- [Example Project](#example-project)
-- [Popular questions](#popular-questions)
-    - [Is it possible to get Mnemonic Phrase (Seed Phrase) from Private key using web3swift?](#is-it-possible-to-get-mnemonic-phrase-seed-phrase-from-private-key-using-web3swift)
-    - [How to interact with custom smart-contract with web3swift?](#how-to-interact-with-custom-smart-contract-with-web3swift)
-    - [How to set test local node?](#how-to-set-test-local-node)
-- [What's next](#whats-next)
+  - [Requirements](#requirements)
+  - [Migration Guides](#migration-guides)
+- [Documentation](#documentation)
+  - [Example](#example)
+- [FAQ](#faq)
 - [Credits](#credits)
-  - [Security Disclosure](#security-disclosure)
-- [Donations](#donations)
+  - [What we have already done](#what-we-have-already-done)
+  - [Future steps](#future-steps)
+- [Contribute](#contribute)
+- [Security Disclosure](#security-disclosure)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-
-## What we have already done:
-
-- [x] Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
-- [x] Interaction with remote node via JSON RPC :thought_balloon:
-- [x] Local keystore management (`geth` compatible)
-- [x] Smart-contract ABI parsing :book:
-- [x] ABI deconding (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
-- [x] Ethereum Name Service (ENS) support - a secure & decentralised way to address resources both on and off the blockchain using simple, human-readable names
-- [x] Interactions (read/write to Smart contracts) :arrows_counterclockwise:
-- [x] Complete Infura Ethereum API support, patial Websockets API support
-- [x] Parsing TxPool content into native values (ethereum addresses and transactions) - easy to get pending transactions
-- [x] Event loops functionality
-- [x] Supports Web3View functionality - WKWebView with injected "web3" provider
-- [x] Possibility to add or remove "middleware" that intercepts, modifies and even cancel transaction workflow on stages "before assembly", "after assembly"and "before submission"
-- [x] Literally following the standards:
-    - [x] [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) HD Wallets: Deterministic Wallet
-    - [x] [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases)
-    - [x] [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)
-    - [x] [EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md) (A standard interface for tokens - ERC-20)
-    - [x] [EIP-67](https://github.com/ethereum/EIPs/issues/67) (Standard URI scheme with metadata, value and byte code)
-    - [x] [EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md) (Replay attacks protection) *enforced!*
-    - [x] [EIP-681](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-681.md) (A standard way of representing various transactions, especially payment requests in Ethers and ERC-20 tokens as URLs)
-    - [x] [EIP-721](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md) (A standard interface for non-fungible tokens, also known as deeds - ERC-721)
-    - [x] [EIP-165](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-165.md) (Standard Interface Detection, also known as ERC-165)
-    - [x] [EIP-777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md) (New Advanced Token Standard, also known as ERC-777)
-    - [x] [EIP-820](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-820.md) (Pseudo-introspection Registry Contract, also known as ERC-820)
-    - [x] [EIP-888](https://github.com/ethereum/EIPs/issues/888) (MultiDimensional Token Standard, also known as ERC-888)
-    - [x] [EIP-1400](https://github.com/ethereum/EIPs/issues/1411) (Security Token Standard, also known as ERC-1400)
-    - [x] [EIP-1410](https://github.com/ethereum/EIPs/issues/1410) (Partially Fungible Token Standard, also known as ERC-1410)
-    - [x] [EIP-1594](https://github.com/ethereum/EIPs/issues/1594) (Core Security Token Standard, also known as ERC-1594)
-    - [x] [EIP-1643](https://github.com/ethereum/EIPs/issues/1643) (Document Management Standard, also known as ERC-1643)
-    - [x] [EIP-1644](https://github.com/ethereum/EIPs/issues/1644) (Controller Token Operation Standard, also known as ERC-1644)
-    - [x] [EIP-1633](https://github.com/ethereum/EIPs/issues/1634) (Re-Fungible Token, also known as ERC-1633)
-    - [x] [EIP-721x](https://github.com/loomnetwork/erc721x) (An extension of ERC721 that adds support for multi-fungible tokens and batch transfers, while being fully backward-compatible, also known as ERC-721x)
-    - [x] [EIP-1155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1155.md) (Multi Token Standard, also known as ERC-1155)
-    - [x] [EIP-1376](https://github.com/ethereum/EIPs/issues/1376) (Service-Friendly Token, also known as ERC-1376)
-    - [x] [ST-20](https://github.com/PolymathNetwork/polymath-core) - ST-20 token is an Ethereum-based token implemented on top of the ERC-20 protocol that adds the ability for tokens to control transfers based on specific rules
-
-- [x] RLP encoding
-- [x] Batched requests in concurrent mode
-- [x] Base58 encoding scheme
-- [x] Formatting to and from Ethereum Units
-- [x] Comprehensive Unit and Integration Test Coverage
 
 ## Design Decisions
 
@@ -90,16 +41,6 @@
 - Functionality was focused on serializing and signing transactions locally on the device to send raw transactions to Ethereum network
 - Requirements for password input on every transaction are indeed a design decision. Interface designers can save user passwords with the user's consent
 - Public function for private key export is exposed for user convenience but marked as UNSAFE_ :) Normal workflow takes care of EIP155 compatibility and proper clearing of private key data from memory
-
-## Requirements
-
-- iOS 9.0+ / macOS 10.11+
-- Xcode 10.2+
-- Swift 5.0+
-
-## Migration Guides
-
-- [web3swift 2.0 Migration Guide](https://github.com/matterinc/web3swift/blob/master/Documentation/web3swift%202.0%20Migration%20Guide.md)
 
 ## Projects that using web3swift
 
@@ -125,7 +66,7 @@ If you are using this library in your project, please [add a link](https://githu
 
 ## Installation
 
-### CocoaPods
+- CocoaPods
 
 [CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
 
@@ -141,7 +82,7 @@ platform :ios, '9.0'
 
 target '<Your Target Name>' do
     use_frameworks!
-    pod 'web3swift', '~> 2.1.3'
+    pod 'web3.swift.pod', '~> 2.2.0'
 end
 ```
 
@@ -151,7 +92,7 @@ Then, run the following command:
 $ pod install
 ```
 
-### Carthage
+- Carthage
 
 [Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.
 
@@ -177,6 +118,17 @@ github "matter-labs/web3swift" "master"
 ```
 
 Run `carthage update` to build the framework. By default, Carthage performs checkouts and builds in a new directory 'Carthage' in the same location as your Cartfile. Open this directory, go to 'Build' directory, choose iOS or macOS directory and use the framework from the chosen directory in your Xcode project.
+
+
+### Requirements
+
+- iOS 9.0+ / macOS 10.11+
+- Xcode 10.2+
+- Swift 5.0+
+
+### Migration Guides
+
+- [web3swift 2.0 Migration Guide](https://github.com/matterinc/web3swift/blob/master/Documentation/web3swift%202.0%20Migration%20Guide.md)
 
 
 ---
@@ -236,7 +188,7 @@ Here are quick references for basic features:
   - [ReverseRegistrar](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#reverseregistrar)
 
 
-## Example Project
+### Example
 
 You can try lib by running the example project:
 
@@ -245,9 +197,9 @@ You can try lib by running the example project:
 - Install Dependencies: `pod install`
 - Open: `open ./web3swiftExample.xcworkspace`
 
-## Popular questions
+## FAQ
 
-#### Is it possible to get a Mnemonic Phrase (Seed Phrase) from Private key using web3swift?
+> Is it possible to get a Mnemonic Phrase (Seed Phrase) from Private key using web3swift?
 
 In web3swift there is no backward conversion from Private key to Mnemonic Phrase. Also it is theoretically impossible to recover a phrase from a Private key. After Seed Phrase is converted to some initial entropy the “master key is derived” and the initial entropy is discarded.
 
@@ -255,7 +207,7 @@ The simplest solution is to encrypt the phrase using users pincode and save it i
 Mnemonic Phrase is very sensitive data and you must be very careful to let the user get it.
 Our advise if you want to show it to a user - ask to save a Passphrase when creating BIP32Keystore.
 
-#### How to interact with custom smart-contract with web3swift?
+> How to interact with custom smart-contract with web3swift?
 
 For example: you want to interact with smart-contract and all you know is - its address (address example: 0xfa28eC7198028438514b49a3CF353BcA5541ce1d).
 
@@ -289,7 +241,7 @@ let transactionOptions: TransactionOptions = <OPTIONS>
 let transaction = contract.write(method, parameters: parameters, extraData: extraData, transactionOptions: transactionOptions)
 ```
 
-#### How to set test local node?
+> How to set test local node?
 You can write something like that:
 ```swift
 func setLocalNode(port: Int = 8545) -> Web3? {
@@ -298,7 +250,61 @@ func setLocalNode(port: Int = 8545) -> Web3? {
 }
 ```
 
-## What's next
+## Credits
+
+Alex Vlasov, [@shamatar](https://github.com/shamatar)
+
+Petr Korolev, [@skywinder](https://github.com/skywinder)
+
+Anton Grigorev, [@baldyash](https://github.com/BaldyAsh)
+
+
+### What we have already done
+
+- [x] Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
+- [x] Interaction with remote node via JSON RPC :thought_balloon:
+- [x] Local keystore management (`geth` compatible)
+- [x] Smart-contract ABI parsing :book:
+- [x] ABI deconding (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
+- [x] Ethereum Name Service (ENS) support - a secure & decentralised way to address resources both on and off the blockchain using simple, human-readable names
+- [x] Interactions (read/write to Smart contracts) :arrows_counterclockwise:
+- [x] Complete Infura Ethereum API support, patial Websockets API support
+- [x] Parsing TxPool content into native values (ethereum addresses and transactions) - easy to get pending transactions
+- [x] Event loops functionality
+- [x] Supports Web3View functionality - WKWebView with injected "web3" provider
+- [x] Possibility to add or remove "middleware" that intercepts, modifies and even cancel transaction workflow on stages "before assembly", "after assembly"and "before submission"
+- [x] Literally following the standards:
+    - [x] [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) HD Wallets: Deterministic Wallet
+    - [x] [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases)
+    - [x] [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)
+    - [x] [EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md) (A standard interface for tokens - ERC-20)
+    - [x] [EIP-67](https://github.com/ethereum/EIPs/issues/67) (Standard URI scheme with metadata, value and byte code)
+    - [x] [EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md) (Replay attacks protection) *enforced!*
+    - [x] [EIP-681](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-681.md) (A standard way of representing various transactions, especially payment requests in Ethers and ERC-20 tokens as URLs)
+    - [x] [EIP-721](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md) (A standard interface for non-fungible tokens, also known as deeds - ERC-721)
+    - [x] [EIP-165](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-165.md) (Standard Interface Detection, also known as ERC-165)
+    - [x] [EIP-777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md) (New Advanced Token Standard, also known as ERC-777)
+    - [x] [EIP-820](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-820.md) (Pseudo-introspection Registry Contract, also known as ERC-820)
+    - [x] [EIP-888](https://github.com/ethereum/EIPs/issues/888) (MultiDimensional Token Standard, also known as ERC-888)
+    - [x] [EIP-1400](https://github.com/ethereum/EIPs/issues/1411) (Security Token Standard, also known as ERC-1400)
+    - [x] [EIP-1410](https://github.com/ethereum/EIPs/issues/1410) (Partially Fungible Token Standard, also known as ERC-1410)
+    - [x] [EIP-1594](https://github.com/ethereum/EIPs/issues/1594) (Core Security Token Standard, also known as ERC-1594)
+    - [x] [EIP-1643](https://github.com/ethereum/EIPs/issues/1643) (Document Management Standard, also known as ERC-1643)
+    - [x] [EIP-1644](https://github.com/ethereum/EIPs/issues/1644) (Controller Token Operation Standard, also known as ERC-1644)
+    - [x] [EIP-1633](https://github.com/ethereum/EIPs/issues/1634) (Re-Fungible Token, also known as ERC-1633)
+    - [x] [EIP-721x](https://github.com/loomnetwork/erc721x) (An extension of ERC721 that adds support for multi-fungible tokens and batch transfers, while being fully backward-compatible, also known as ERC-721x)
+    - [x] [EIP-1155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1155.md) (Multi Token Standard, also known as ERC-1155)
+    - [x] [EIP-1376](https://github.com/ethereum/EIPs/issues/1376) (Service-Friendly Token, also known as ERC-1376)
+    - [x] [ST-20](https://github.com/PolymathNetwork/polymath-core) - ST-20 token is an Ethereum-based token implemented on top of the ERC-20 protocol that adds the ability for tokens to control transfers based on specific rules
+
+- [x] RLP encoding
+- [x] Batched requests in concurrent mode
+- [x] Base58 encoding scheme
+- [x] Formatting to and from Ethereum Units
+- [x] Comprehensive Unit and Integration Test Coverage
+
+
+### Future steps
 
 - [x] Objective-C - a proxy bridge to build your DApp on Objective-C using web3swift
 - [x] Complete Documentation (https://web3swift.github.io/web3swift)
@@ -308,20 +314,6 @@ func setLocalNode(port: Int = 8545) -> Web3? {
 - [x] Support more blockchains - Ripple, Bitcoin, EOS, etc.
 - [x] Performance Improvements
 - [x] More convenient methods for basic namespaces
-
-## Credits
-
-Alex Vlasov, [@shamatar](https://github.com/shamatar)
-Petr Korolev, [@skywinder](https://github.com/skywinder)
-Anton Grigorev, [@baldyash](https://github.com/BaldyAsh)
-
-### Security Disclosure
-
-If you believe you have identified a security vulnerability with web3swift, you should report it as soon as possible via email to [Alex Vlasov](https://github.com/shamatar) alex.m.vlasov@gmail.com. Please do not post it to a public issue tracker.
-
-[Matter Labs](https://github.com/orgs/matter-labs/people) are charged with open-sourсe and do not require money for using their web3swift lib.
-We want to continue to do everything we can to move the needle forward.
-If you use any of our libraries for work, see if your employers would be interested in donating. Any amount you can donate today to help us reach our goal would be greatly appreciated.
 
 ## Contribute
 
@@ -334,6 +326,15 @@ If you use any of our libraries for work, see if your employers would be interes
 - Donation Our Ether wallet address: 0xe22b8979739d724343bd002f9f432f5990879901
 
 ![Donate](http://qrcoder.ru/code/?0xe22b8979739d724343bd002f9f432f5990879901&4&0)
+
+
+## Security Disclosure
+
+If you believe you have identified a security vulnerability with web3swift, you should report it as soon as possible via email to [hello@matter-labs.io](mailto:hello@matter-labs.io). Please do not post it to a public issue tracker.
+
+[Matter Labs](https://github.com/orgs/matter-labs/people) are charged with open-sourсe and do not require money for using their web3swift lib.
+We want to continue to do everything we can to move the needle forward.
+If you use any of our libraries for work, see if your employers would be interested in donating. Any amount you can donate today to help us reach our goal would be greatly appreciated.
 
 ## License
 
