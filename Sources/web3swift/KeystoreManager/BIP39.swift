@@ -16,7 +16,7 @@ public enum BIP39Language {
     case french
     case italian
     case spanish
-    var words: [String] {
+    public var words: [String] {
         switch self {
         case .english:
             return englishWords
@@ -36,7 +36,7 @@ public enum BIP39Language {
             return spanishWords
         }
     }
-    var separator: String {
+    public var separator: String {
         switch self {
         case .japanese:
             return "\u{3000}"
