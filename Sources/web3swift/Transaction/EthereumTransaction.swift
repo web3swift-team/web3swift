@@ -332,6 +332,8 @@ public extension EthereumTransaction {
             switch gL {
             case .manual(let value):
                 tx.gasLimit = value
+            case .limited(let value):
+                tx.gasLimit = value
             default:
                 tx.gasLimit = BigUInt(UInt64(21000))
             }
