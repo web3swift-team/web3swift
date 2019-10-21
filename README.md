@@ -1,3 +1,10 @@
+## Important notice: 
+### This library will not be actively updated by its owners in the nearest future.
+> Hello everyone, I, Anton Grigorev, was the main contributor to this library for a while. However, since June I am too immersed in other projects and cannot actively support this library. I sincerely apologize if this negatively affected your work. If web3swift is important to you and you want to help develop it, **I will be happy to review and accept your PRs**.
+
+> *Sincerely,*
+> *Anton Grigorev (@baldyash)*
+
 ![matter-github-swift](https://github.com/matter-labs/web3swift/blob/develop/web3swift-logo.png)
 
 # web3swift
