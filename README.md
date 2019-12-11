@@ -1,9 +1,11 @@
 ## Important notice: 
-### This library will not be actively updated by its owners in the nearest future.
-> Hello everyone, I, Anton Grigorev, was the main contributor to this library for a while. However, since June I am too immersed in other projects and cannot actively support this library. I sincerely apologize if this negatively affected your work. If web3swift is important to you and you want to help develop it, **I will be happy to review and accept your PRs**.
+### We have been supporting this library for the [last 2 years](https://github.com/matter-labs/web3swift/graphs/contributors), and now we are moving forward with our main tasks and need help with the future [support of this side project](https://github.com/matter-labs/web3swift/issues/231). 
+
+>If you are interested  to help - please [**drop a comment into  issue #231 🙏**](https://github.com/matter-labs/web3swift/issues/231). 
+
 
 > *Sincerely,*
-> *Anton Grigorev (@baldyash)*
+> *Anton Grigorev (@baldyash) & Petr Korolev (@skywinder)*
 
 ![matter-github-swift](https://github.com/matter-labs/web3swift/blob/develop/web3swift-logo.png)
 
