@@ -1,3 +1,10 @@
+## Important notice: 
+### This library will not be actively updated by its owners in the nearest future.
+> Hello everyone, I, Anton Grigorev, was the main contributor to this library for a while. However, since June I am too immersed in other projects and cannot actively support this library. I sincerely apologize if this negatively affected your work. If web3swift is important to you and you want to help develop it, **I will be happy to review and accept your PRs**.
+
+> *Sincerely,*
+> *Anton Grigorev (@baldyash)*
+
 ![matter-github-swift](https://github.com/matter-labs/web3swift/blob/develop/web3swift-logo.png)
 
 # web3swift
@@ -59,6 +66,7 @@ If you are using this library in your project, please [add a link](https://githu
 * [AlphaWallet](https://github.com/AlphaWallet/alpha-wallet-ios)
 * [Follow_iOS](https://github.com/FollowInc/Follow_iOS)
 * [Biomedical Data Sharing dApp - Geolocation](https://github.com/HD2i/Geolocation-iOS)
+* [Alice Wallet](https://github.com/alicedapp/AliceX)
 * [YOUR APP CAN BE THERE (click me)](https://github.com/matter-labs/web3swift/edit/develop/README.md) :wink:
 
 *Nothing makes developers happier than seeing someone else use our work and go wild with it.*
