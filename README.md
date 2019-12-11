@@ -1,11 +1,12 @@
-## Important notice: 
-### We have been supporting this library for the [last 2 years](https://github.com/matter-labs/web3swift/graphs/contributors), and now we are moving forward with our main tasks and need help with the future [support of this side project](https://github.com/matter-labs/web3swift/issues/231). 
+## Important notice:
+### We have been supporting this library for the [last 2 years](https://github.com/matter-labs/web3swift/graphs/contributors), and now we are moving forward with our main tasks and need help with the future [support of this side project](https://github.com/matter-labs/web3swift/issues/231).
 
->If you are interested  to help - please [**drop a comment into  issue #231 🙏**](https://github.com/matter-labs/web3swift/issues/231). 
+>If you are interested  to help - please [**drop a comment into  issue #231 🙏**](https://github.com/matter-labs/web3swift/issues/231).
 
 
-> *Sincerely,*
-> *Anton Grigorev (@baldyash) & Petr Korolev (@skywinder)*
+> Sincerely,
+>
+> **Alex Vlasov** (@shamatar), **Anton Grigorev** (@baldyash) & **Petr Korolev** (@skywinder)
 
 ![matter-github-swift](https://github.com/matter-labs/web3swift/blob/develop/web3swift-logo.png)
 
