@@ -1,14 +1,14 @@
-## Important notice: 
-### This library will not be actively updated by its owners in the nearest future.
-> Hello everyone, I, Anton Grigorev, was the main contributor to this library for a while. However, since June I am too immersed in other projects and cannot actively support this library. I sincerely apologize if this negatively affected your work. If web3swift is important to you and you want to help develop it, **I will be happy to review and accept your PRs**.
-
-> *Sincerely,*
-> *Anton Grigorev (@baldyash)*
-
-![matter-github-swift](https://github.com/matter-labs/web3swift/blob/develop/web3swift-logo.png)
-
 # web3swift
 
+## Important notice:
+
+### [We’re participating in the @gitcoin Grants CLR Round 4](https://gitcoin.co/grants/358/web3swift )
+
+### Drop a few $ into this grant and leverage your power to help. #QuadraticFunding makes every donated DAI count! 💸
+
+Cheers! <https://gitcoin.co/grants/358/web3swift >
+
+![matter-github-swift](https://github.com/matter-labs/web3swift/blob/develop/web3swift-logo.png)
 [![Build Status](https://travis-ci.com/matter-labs/web3swift.svg?branch=develop)](https://travis-ci.com/matter-labs/web3swift)
 [![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
