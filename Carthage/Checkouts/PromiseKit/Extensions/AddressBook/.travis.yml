@@ -43,11 +43,9 @@ jobs:
     - <<: *pod
       osx_image: xcode10.1
       env: SWIFT=4.2
-    # Fails at PromiseKit level currently
-    # - <<: *pod
-    #   osx_image: xcode10.2
-    #   env: SWIFT=4.3
-    #   name: pod lib lint --swift-version=4.3
+    - <<: *pod
+      osx_image: xcode10.2
+      env: SWIFT=4.3
     - <<: *pod
       osx_image: xcode10.2
       env: SWIFT=5.0
@@ -55,11 +53,11 @@ jobs:
     - &carthage
       stage: carthage
       osx_image: xcode9.2
-      script:
+      script: |
         carthage bootstrap --cache-builds --platform iOS
+        sed -i '' "s/SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;/SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;/" *.xcodeproj/project.pbxproj
         carthage build --no-skip-current
-      cache:
-        directories:
+      cache.directories:
         - Carthage
     - <<: *carthage
       osx_image: xcode9.4
@@ -72,9 +70,7 @@ jobs:
       xcode_scheme: PMKAddressBook
       xcode_project: PMKAddressBook.xcodeproj
       xcode_destination: 'platform=iOS Simulator,OS=12.2,name=iPhone SE'
-      cache:
-        directories:
+      cache.directories:
         - Carthage
-      before_install: |
+      before_install:
         carthage bootstrap --cache-builds --no-use-binaries --platform iOS
-        sed -i '' "s/SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;/SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;/" *.xcodeproj/project.pbxproj

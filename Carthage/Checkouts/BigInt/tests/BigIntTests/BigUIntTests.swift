@@ -1317,19 +1317,20 @@ class BigUIntTests: XCTestCase {
     func testConversionFromString() {
         let sample = "123456789ABCDEFEDCBA98765432123456789ABCDEF"
 
-        XCTAssertEqual(BigUInt("1")!, 1)
+        XCTAssertEqual(BigUInt("1"), 1)
         XCTAssertEqual(BigUInt("123456789ABCDEF", radix: 16)!, 0x123456789ABCDEF)
         XCTAssertEqual(BigUInt("1000000000000000000000"), BigUInt("3635C9ADC5DEA00000", radix: 16))
         XCTAssertEqual(BigUInt("10000000000000000", radix: 16), BigUInt("18446744073709551616"))
-        XCTAssertEqual(BigUInt(sample, radix: 16)!, BigUInt("425693205796080237694414176550132631862392541400559")!)
+        XCTAssertEqual(BigUInt(sample, radix: 16)!, BigUInt("425693205796080237694414176550132631862392541400559"))
 
-        XCTAssertNil(BigUInt("Not a number"))
-        XCTAssertNil(BigUInt("X"))
-        XCTAssertNil(BigUInt("12349A"))
-        XCTAssertNil(BigUInt("000000000000000000000000A000"))
-        XCTAssertNil(BigUInt("00A0000000000000000000000000"))
-        XCTAssertNil(BigUInt("00 0000000000000000000000000"))
-        XCTAssertNil(BigUInt("\u{4e00}\u{4e03}")) // Chinese numerals "1", "7"
+        // We have to call BigUInt.init here because we don't want Literal initialization via coercion (SE-0213)
+        XCTAssertNil(BigUInt.init("Not a number"))
+        XCTAssertNil(BigUInt.init("X"))
+        XCTAssertNil(BigUInt.init("12349A"))
+        XCTAssertNil(BigUInt.init("000000000000000000000000A000"))
+        XCTAssertNil(BigUInt.init("00A0000000000000000000000000"))
+        XCTAssertNil(BigUInt.init("00 0000000000000000000000000"))
+        XCTAssertNil(BigUInt.init("\u{4e00}\u{4e03}")) // Chinese numerals "1", "7"
 
         XCTAssertEqual(BigUInt("u", radix: 31)!, 30)
         XCTAssertEqual(BigUInt("10", radix: 31)!, 31)

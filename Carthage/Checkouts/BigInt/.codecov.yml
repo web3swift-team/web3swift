@@ -1,5 +1,5 @@
 ignore:
-- "/tests/*"
+- "/Tests/*"
 comment:
   layout: "header, diff"
   behavior: default
@@ -11,4 +11,4 @@ coverage:
         target: auto
         threshold: null
         base: auto
-        paths: "sources/*"
+        paths: "Sources/*"

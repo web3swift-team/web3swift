@@ -6,23 +6,21 @@
 //  Copyright © 2016-2017 Károly Lőrentey.
 //
 
-import SipHash
-
-extension BigUInt: SipHashable {
+extension BigUInt: Hashable {
     //MARK: Hashing
 
     /// Append this `BigUInt` to the specified hasher.
-    public func appendHashes(to hasher: inout SipHasher) {
+    public func hash(into hasher: inout Hasher) {
         for word in self.words {
-            hasher.append(word)
+            hasher.combine(word)
         }
     }
 }
 
-extension BigInt: SipHashable {
+extension BigInt: Hashable {
     /// Append this `BigInt` to the specified hasher.
-    public func appendHashes(to hasher: inout SipHasher) {
-        hasher.append(sign)
-        hasher.append(magnitude)
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(sign)
+        hasher.combine(magnitude)
     }
 }

@@ -1,6 +1,6 @@
 // Increment the build number whenever you modify the version string.
-VERSION_STRING = 3.1.0
-BUILD_NUMBER = 11
+VERSION_STRING = 4.0.0
+BUILD_NUMBER = 12
 
 PROJECT_NAME = BigInt
 BUNDLE_IDENTIFIER_BASE = org.attaswift.$(PROJECT_NAME)

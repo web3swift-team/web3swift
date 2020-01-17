@@ -55,8 +55,8 @@ class BigIntTests: XCTestCase {
         XCTAssertEqual(b3.magnitude, 300)
         XCTAssertEqual(b3.sign, .minus)
 
-        XCTAssertNil(BigInt("Not a number"))
-
+        // We have to call BigInt.init here because we don't want Literal initialization via coercion (SE-0213)
+        XCTAssertNil(BigInt.init("Not a number"))
         XCTAssertEqual(BigInt(unicodeScalarLiteral: UnicodeScalar(52)), BigInt(4))
         XCTAssertEqual(BigInt(extendedGraphemeClusterLiteral: "4"), BigInt(4))
 
