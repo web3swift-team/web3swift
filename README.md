@@ -90,7 +90,7 @@ platform :ios, '9.0'
 
 target '<Your Target Name>' do
     use_frameworks!
-    pod 'web3.swift.pod', '~> 2.2.0'
+    pod 'web3swift'
 end
 ```
 
