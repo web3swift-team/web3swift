@@ -187,6 +187,7 @@
 		3AA816382276E48400F5DB52 /* web3swift_Websockets_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816232276E48400F5DB52 /* web3swift_Websockets_Tests.swift */; };
 		3AA8163A2276E4AE00F5DB52 /* SECP256k1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816392276E4AE00F5DB52 /* SECP256k1.swift */; };
 		3AEF4ABF22C0B6BE00AC7929 /* Web3+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEF4ABE22C0B6BE00AC7929 /* Web3+Constants.swift */; };
+		4EAB034423FAAA72005D8E5D /* Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB034323FAAA72005D8E5D /* Wallet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -385,6 +386,7 @@
 		3AA816402276E5A800F5DB52 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		3AA816412276E5A900F5DB52 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3AEF4ABE22C0B6BE00AC7929 /* Web3+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Constants.swift"; sourceTree = "<group>"; };
+		4EAB034323FAAA72005D8E5D /* Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -719,6 +721,7 @@
 			isa = PBXGroup;
 			children = (
 				3AA816392276E4AE00F5DB52 /* SECP256k1.swift */,
+				4EAB034323FAAA72005D8E5D /* Wallet.swift */,
 				3AA815632276E44100F5DB52 /* RIPEMD160+StackOveflow.swift */,
 				3AA815642276E44100F5DB52 /* BigUInt+Extensions.swift */,
 				3AA815652276E44100F5DB52 /* CryptoExtensions.swift */,
@@ -1168,6 +1171,7 @@
 				3AA815F82276E44100F5DB52 /* Promise+Web3+Contract+GetIndexedEvents.swift in Sources */,
 				3AA815E42276E44100F5DB52 /* Data+Extension.swift in Sources */,
 				3AA815C62276E44100F5DB52 /* ABI.swift in Sources */,
+				4EAB034423FAAA72005D8E5D /* Wallet.swift in Sources */,
 				3AA815D02276E44100F5DB52 /* Web3+Utils.swift in Sources */,
 				3AA815B82276E44100F5DB52 /* EthereumKeystoreV3.swift in Sources */,
 				3AA815EB2276E44100F5DB52 /* Promise+Web3+Personal+Sign.swift in Sources */,
