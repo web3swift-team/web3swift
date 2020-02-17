@@ -1061,7 +1061,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1010;
-				ORGANIZATIONNAME = "Bankex Foundation";
+				ORGANIZATIONNAME = "Matter Labs";
 				TargetAttributes = {
 					1317BCE2218C50D100D6D095 = {
 						CreatedOnToolsVersion = 10.1;

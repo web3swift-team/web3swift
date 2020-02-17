@@ -3,7 +3,7 @@
 //  web3swift
 //
 //  Created by Anton on 24/06/2019.
-//  Copyright © 2019 Bankex Foundation. All rights reserved.
+//  Copyright © 2019 Matter Labs. All rights reserved.
 //
 
 import Foundation
