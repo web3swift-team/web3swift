@@ -19,11 +19,11 @@ public extension ENS {
             self.web3 = web3
             switch web3.provider.network {
             case .Mainnet?:
-                registryContractAddress = EthereumAddress("0x314159265dd8dbb310642f98f50c066173c1259b")
+                registryContractAddress = EthereumAddress("0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e")
             case .Rinkeby?:
-                registryContractAddress = EthereumAddress("0xe7410170f87102df0055eb195163a03b7f2bff4a")
+                registryContractAddress = EthereumAddress("0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e")
             case .Ropsten?:
-                registryContractAddress = EthereumAddress("0x112234455c3a32fd11230c42e7bccd4a84e02010")
+                registryContractAddress = EthereumAddress("0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e")
             default:
                 let url = web3.provider.url.absoluteString
                 if url.contains("https://rpc.goerli.mudit.blog")
