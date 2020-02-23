@@ -1,9 +1,0 @@
-language: objective-c
-osx_image: xcode9.3
-script:
-- xcrun xcodebuild -project SipHash.xcodeproj -scheme SipHash-macOS test
-- xcrun xcodebuild -project SipHash.xcodeproj -scheme SipHash-iOS
-- xcrun xcodebuild -project SipHash.xcodeproj -scheme SipHash-watchOS
-- xcrun xcodebuild -project SipHash.xcodeproj -scheme SipHash-tvOS
-- swift test
-after_success: bash <(curl -s https://codecov.io/bash)

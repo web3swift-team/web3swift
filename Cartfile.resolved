@@ -1,4 +1,4 @@
-github "attaswift/BigInt" "v3.1.0"
+github "attaswift/BigInt" "v4.0.0"
 github "attaswift/SipHash" "v1.2.2"
 github "daltoniam/Starscream" "3.1.0"
 github "krzyzanowskim/CryptoSwift" "1.0.0"
