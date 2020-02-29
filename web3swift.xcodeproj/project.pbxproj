@@ -385,6 +385,7 @@
 		3AA816402276E5A800F5DB52 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		3AA816412276E5A900F5DB52 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3AEF4ABE22C0B6BE00AC7929 /* Web3+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Constants.swift"; sourceTree = "<group>"; };
+		E2D081C72402F6900082EA93 /* CONTRIBUTION_POLICY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTION_POLICY.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -928,6 +929,7 @@
 			children = (
 				3AA8163D2276E56D00F5DB52 /* Usage.md */,
 				3AA8163C2276E56D00F5DB52 /* web3swift 2.0 Migration Guide.md */,
+				E2D081C72402F6900082EA93 /* CONTRIBUTION_POLICY.md */,
 				13CE02B021FC846800CE7148 /* RELEASE_GUIDE.md */,
 				13CE02B121FC846900CE7148 /* BUILD_GUIDE.md */,
 			);

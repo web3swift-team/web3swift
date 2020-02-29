@@ -330,7 +330,7 @@ Anton Grigorev, [@baldyash](https://github.com/BaldyAsh)
 - If you'd like to **see web3swift best practices**, check [Apps using this library](https://github.com/matter-labs/web3swift/wiki/Apps-using-web3swift).
 - If you **found a bug**, [open an issue](https://github.com/matter-labs/web3swift/issues).
 - If you **have a feature request**, [open an issue](https://github.com/matter-labs/web3swift/issues).
-- If you **want to contribute**, [submit a pull request](https://github.com/matter-labs/web3swift/pulls).
+- If you **want to contribute**, read [contribution policy](https://github.com/matter-labs/web3swift/blob/master/Documentation/CONTRIBUTION_POLICY.md) & [submit a pull request](https://github.com/matter-labs/web3swift/pulls).
 - Donation Our Ether wallet address: 0xe22b8979739d724343bd002f9f432f5990879901
 
 ![Donate](http://qrcoder.ru/code/?0xe22b8979739d724343bd002f9f432f5990879901&4&0)
