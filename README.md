@@ -1,13 +1,5 @@
 # web3swift
 
-## Important notice:
-
-### [We’re participating in the @gitcoin Grants CLR Round 4](https://gitcoin.co/grants/358/web3swift )
-
-### Drop a few $ into this grant and leverage your power to help. #QuadraticFunding makes every donated DAI count! 💸
-
-Cheers! <https://gitcoin.co/grants/358/web3swift >
-
 ![matter-github-swift](https://github.com/matter-labs/web3swift/blob/develop/web3swift-logo.png)
 [![Build Status](https://travis-ci.com/matter-labs/web3swift.svg?branch=develop)](https://travis-ci.com/matter-labs/web3swift)
 [![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
@@ -19,6 +11,17 @@ Cheers! <https://gitcoin.co/grants/358/web3swift >
 [![Stackoverflow](https://img.shields.io/badge/stackoverflow-ask-blue.svg)](https://stackoverflow.com/questions/tagged/web3swift)
 
 **web3swift** is your toolbelt for any kind interactions with Ethereum network.
+
+### Update:
+
+Thank you for all your support in the [@gitcoin Grant CLR Round 4](https://gitcoin.co/grants/358/web3swift)
+
+> TOTAL FUNDED: 1,047 DAI  💸
+
+We will use this donation to improve this library.
+
+Cheers! 🚀
+
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
