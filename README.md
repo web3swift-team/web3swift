@@ -1,4 +1,5 @@
 # web3swift
+**web3swift** is your toolbelt for any kind interactions with Ethereum network.
 
 ![matter-github-swift](https://github.com/matter-labs/web3swift/blob/develop/web3swift-logo.png)
 [![Build Status](https://travis-ci.com/matter-labs/web3swift.svg?branch=develop)](https://travis-ci.com/matter-labs/web3swift)
@@ -10,7 +11,7 @@
 [![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0xe22b8979739d724343bd002f9f432f5990879901)
 [![Stackoverflow](https://img.shields.io/badge/stackoverflow-ask-blue.svg)](https://stackoverflow.com/questions/tagged/web3swift)
 
-**web3swift** is your toolbelt for any kind interactions with Ethereum network.
+---
 
 ### Update:
 
@@ -22,6 +23,7 @@ We will use this donation to improve this library.
 
 Cheers! 🚀
 
+---
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
