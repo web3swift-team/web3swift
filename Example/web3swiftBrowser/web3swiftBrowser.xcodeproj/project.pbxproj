@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		81BD7DDF21944880006F9D6D /* Web3Swift.js in Resources */ = {isa = PBXBuildFile; fileRef = 81BD7DDE21944880006F9D6D /* Web3Swift.js */; };
-		81BD7DE1219448B5006F9D6D /* Web3Swift.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 81BD7DE0219448B5006F9D6D /* Web3Swift.min.js */; };
 		81E09B202002623A005DF51D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E09B1F2002623A005DF51D /* AppDelegate.swift */; };
 		81E09B222002623A005DF51D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E09B212002623A005DF51D /* ViewController.swift */; };
 		81E09B252002623A005DF51D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81E09B232002623A005DF51D /* Main.storyboard */; };
@@ -18,6 +16,7 @@
 		81E09B382002623B005DF51D /* web3swiftBrowserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E09B372002623B005DF51D /* web3swiftBrowserTests.swift */; };
 		81E09B432002623B005DF51D /* web3swiftBrowserUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E09B422002623B005DF51D /* web3swiftBrowserUITests.swift */; };
 		C2C40799AB45A254C5B8B694 /* Pods_web3swiftBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2B1946592C2F6161DF2A16 /* Pods_web3swiftBrowser.framework */; };
+		E2EDC5F0241EECFD00410EA6 /* browser.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E2EDC5EF241EECFD00410EA6 /* browser.min.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,8 +39,6 @@
 /* Begin PBXFileReference section */
 		2F89255F9B9DFBDF61D676C1 /* Pods-web3swiftBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftBrowser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swiftBrowser/Pods-web3swiftBrowser.debug.xcconfig"; sourceTree = "<group>"; };
 		3D2B1946592C2F6161DF2A16 /* Pods_web3swiftBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		81BD7DDE21944880006F9D6D /* Web3Swift.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Web3Swift.js; sourceTree = "<group>"; };
-		81BD7DE0219448B5006F9D6D /* Web3Swift.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Web3Swift.min.js; sourceTree = "<group>"; };
 		81E09B1C2002623A005DF51D /* web3swiftBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = web3swiftBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E09B1F2002623A005DF51D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		81E09B212002623A005DF51D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +53,7 @@
 		81E09B3E2002623B005DF51D /* web3swiftBrowserUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = web3swiftBrowserUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E09B422002623B005DF51D /* web3swiftBrowserUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftBrowserUITests.swift; sourceTree = "<group>"; };
 		81E09B442002623B005DF51D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E2EDC5EF241EECFD00410EA6 /* browser.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.min.js; sourceTree = "<group>"; };
 		FE32BFE26D945D8D376882BB /* Pods-web3swiftBrowser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftBrowser.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swiftBrowser/Pods-web3swiftBrowser.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,9 +116,8 @@
 		81E09B1E2002623A005DF51D /* web3swiftBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				E2EDC5EF241EECFD00410EA6 /* browser.min.js */,
 				81E09B1F2002623A005DF51D /* AppDelegate.swift */,
-				81BD7DDE21944880006F9D6D /* Web3Swift.js */,
-				81BD7DE0219448B5006F9D6D /* Web3Swift.min.js */,
 				81E09B212002623A005DF51D /* ViewController.swift */,
 				81E09B232002623A005DF51D /* Main.storyboard */,
 				81E09B292002623A005DF51D /* Assets.xcassets */,
@@ -267,11 +264,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81BD7DE1219448B5006F9D6D /* Web3Swift.min.js in Resources */,
 				81E09B2D2002623A005DF51D /* LaunchScreen.storyboard in Resources */,
-				81BD7DDF21944880006F9D6D /* Web3Swift.js in Resources */,
 				81E09B2A2002623A005DF51D /* Assets.xcassets in Resources */,
 				81E09B252002623A005DF51D /* Main.storyboard in Resources */,
+				E2EDC5F0241EECFD00410EA6 /* browser.min.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,7 +299,6 @@
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
-				"${BUILT_PRODUCTS_DIR}/WKBridge/WKBridge.framework",
 				"${BUILT_PRODUCTS_DIR}/secp256k1.c/secp256k1.framework",
 				"${BUILT_PRODUCTS_DIR}/web3swift/web3swift.framework",
 			);
@@ -313,7 +308,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WKBridge.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/web3swift.framework",
 			);
