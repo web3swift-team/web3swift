@@ -74,19 +74,32 @@ internal func encodeTopicToGetLogs(contract: EthereumContract, eventName: String
     }
     if filter.parameterFilters != nil {
         if event == nil {return nil}
-        var lastNonemptyFilter = 0
+        var lastNonemptyFilter = -1
         for i in 0 ..< filter.parameterFilters!.count {
             let filterValue = filter.parameterFilters![i]
             if filterValue != nil {
                 lastNonemptyFilter = i
             }
         }
-        if lastNonemptyFilter != 0 {
+        if lastNonemptyFilter >= 0 {
             guard lastNonemptyFilter <= event!.inputs.count else {return nil}
             for i in 0 ... lastNonemptyFilter {
                 let filterValues = filter.parameterFilters![i]
-                let input = event!.inputs[i]
-                if filterValues != nil && !input.indexed {return nil}
+                if filterValues != nil {
+                    var isFound = false
+                    var targetIndexedPosition = i
+                    for j in 0 ..< event!.inputs.count{
+                        if event!.inputs[j].indexed {
+                            if targetIndexedPosition == 0 {
+                                isFound = true
+                                break
+                            }
+                            targetIndexedPosition -= 1
+                        }
+                    }
+                    
+                    if !isFound {return nil}
+                }
                 if filterValues == nil {
                     topics.append(nil as [String?]?)
                     continue
