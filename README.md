@@ -35,7 +35,7 @@ Cheers! 🚀
   - [Requirements](#requirements)
   - [Migration Guides](#migration-guides)
 - [Documentation](#documentation)
-  - [Example](#example)
+  - [Examples](#examples)
 - [FAQ](#faq)
 - [Credits](#credits)
   - [What we have already done](#what-we-have-already-done)
@@ -166,14 +166,16 @@ Here are quick references for basic features:
 - [Websockets](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#websockets)
 - [ENS](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ens)
 
-### Example
+### Examples
 
-You can try lib by running the example project:
+#### Web3View example
+
+You can see how to use WKWebView with injected "web3" provider by running the example project:
 
 - Clone the repo: `git clone https://github.com/matter-labs/web3swift.git`
-- Move to the repo: `cd web3swift/Example/web3swiftExample`
+- Move to the repo: `cd web3swift/Example/web3swiftBrowser`
 - Install Dependencies: `pod install`
-- Open: `open ./web3swiftExample.xcworkspace`
+- Open: `open ./web3swiftBrowser.xcworkspace`
 
 ## FAQ
 
