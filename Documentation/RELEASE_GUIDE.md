@@ -1,7 +1,13 @@
 ## Release
 Update version in:
-* Web3swift.podspec
-* Web3swift.pod.podspec
+* web3swift.podspec
+
+Then push it to the server:
+
 ```
-pod trunk push Web3swift.pod.podspec
+pod trunk push web3swift.podspec
 ```
+
+---
+
+For any updates, please feel free to contacts the owners of the repo or open an issue.
