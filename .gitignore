@@ -3,7 +3,6 @@
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
 ## Build generated
-Carthage/
 build/
 DerivedData/
 .build
@@ -46,8 +45,8 @@ playground.xcworkspace
 # you should judge for yourself, the pros and cons are mentioned at:
 # https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
 #
-Pods/
-Example/web3swiftBrowser/Pods
+# Pods/
+# Example/web3swiftBrowser/Pods
 
 # Carthage
 #
