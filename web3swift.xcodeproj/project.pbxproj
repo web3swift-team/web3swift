@@ -187,6 +187,27 @@
 		3AA816382276E48400F5DB52 /* web3swift_Websockets_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816232276E48400F5DB52 /* web3swift_Websockets_Tests.swift */; };
 		3AA8163A2276E4AE00F5DB52 /* SECP256k1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816392276E4AE00F5DB52 /* SECP256k1.swift */; };
 		3AEF4ABF22C0B6BE00AC7929 /* Web3+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEF4ABE22C0B6BE00AC7929 /* Web3+Constants.swift */; };
+		4E6AFAFB2435B9E200194676 /* web3swift_ObjC_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816192276E48300F5DB52 /* web3swift_ObjC_Tests.swift */; };
+		4E6AFAFC2435B9E200194676 /* web3swift_Eventloop_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816222276E48400F5DB52 /* web3swift_Eventloop_Tests.swift */; };
+		4E6AFAFD2435B9E200194676 /* web3swift_local_node_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816102276E48300F5DB52 /* web3swift_local_node_Tests.swift */; };
+		4E6AFAFE2435B9E200194676 /* web3swift_ERC20_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816132276E48300F5DB52 /* web3swift_ERC20_Tests.swift */; };
+		4E6AFAFF2435B9E200194676 /* web3swift_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816152276E48300F5DB52 /* web3swift_Tests.swift */; };
+		4E6AFB002435B9E200194676 /* web3swift_promises_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8161C2276E48300F5DB52 /* web3swift_promises_Tests.swift */; };
+		4E6AFB012435B9E200194676 /* web3swift_RLP_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816112276E48300F5DB52 /* web3swift_RLP_Tests.swift */; };
+		4E6AFB022435B9E200194676 /* web3swift_keystores_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8161B2276E48300F5DB52 /* web3swift_keystores_Tests.swift */; };
+		4E6AFB032435B9E200194676 /* web3swift_numberFormattingUtil_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816182276E48300F5DB52 /* web3swift_numberFormattingUtil_Tests.swift */; };
+		4E6AFB042435B9E200194676 /* web3swift_infura_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8161F2276E48400F5DB52 /* web3swift_infura_Tests.swift */; };
+		4E6AFB052435B9E200194676 /* web3swift_ST20AndSecurityToken_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816142276E48300F5DB52 /* web3swift_ST20AndSecurityToken_Tests.swift */; };
+		4E6AFB062435B9E200194676 /* web3swift_rinkeby_personalSignature_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816212276E48400F5DB52 /* web3swift_rinkeby_personalSignature_Tests.swift */; };
+		4E6AFB072435B9E200194676 /* web3swift_ENS_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8161E2276E48300F5DB52 /* web3swift_ENS_Tests.swift */; };
+		4E6AFB082435B9E200194676 /* web3swift_EIP67_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8160F2276E48300F5DB52 /* web3swift_EIP67_Tests.swift */; };
+		4E6AFB092435B9E200194676 /* web3swift_ERC20_Class_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816172276E48300F5DB52 /* web3swift_ERC20_Class_Tests.swift */; };
+		4E6AFB0A2435B9E200194676 /* web3swift_Websockets_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816232276E48400F5DB52 /* web3swift_Websockets_Tests.swift */; };
+		4E6AFB0B2435B9E200194676 /* web3swift_remoteParsing_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8161D2276E48300F5DB52 /* web3swift_remoteParsing_Tests.swift */; };
+		4E6AFB0C2435B9E200194676 /* web3swift_AdvancedABIv2_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816122276E48300F5DB52 /* web3swift_AdvancedABIv2_Tests.swift */; };
+		4E6AFB0D2435B9E200194676 /* web3swift_User_cases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816162276E48300F5DB52 /* web3swift_User_cases.swift */; };
+		4E6AFB0E2435B9E200194676 /* web3swift_EIP681_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8161A2276E48300F5DB52 /* web3swift_EIP681_Tests.swift */; };
+		4E6AFB0F2435B9E200194676 /* web3swift_transactions_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816202276E48400F5DB52 /* web3swift_transactions_Tests.swift */; };
 		E22A911F241ED71A00EC1021 /* browser.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E22A911E241ED71A00EC1021 /* browser.min.js */; };
 		E2B76710241ED479007EBFE3 /* browser.js in Resources */ = {isa = PBXBuildFile; fileRef = E2B7670F241ED479007EBFE3 /* browser.js */; };
 		E2EDC5EA241EDE3600410EA6 /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */; };
@@ -390,6 +411,8 @@
 		3AA816402276E5A800F5DB52 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		3AA816412276E5A900F5DB52 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3AEF4ABE22C0B6BE00AC7929 /* Web3+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Constants.swift"; sourceTree = "<group>"; };
+		4E6AFB162435B9E200194676 /* TestsEssential.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestsEssential.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E6AFB172435B9E200194676 /* Tests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Tests copy-Info.plist"; path = "/Users/pk/repo/_MATTER/web3swift/Tests copy-Info.plist"; sourceTree = "<absolute>"; };
 		E22A911E241ED71A00EC1021 /* browser.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.min.js; sourceTree = "<group>"; };
 		E2B7670F241ED479007EBFE3 /* browser.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.js; sourceTree = "<group>"; };
 		E2D081C72402F6900082EA93 /* CONTRIBUTION_POLICY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTION_POLICY.md; sourceTree = "<group>"; };
@@ -415,6 +438,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		13C3388B21B6C2DD00F33F5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E6AFB102435B9E200194676 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -468,6 +498,7 @@
 				1317BDD2218C526C00D6D095 /* Tests */,
 				1317BCE4218C50D100D6D095 /* Products */,
 				13C3392721B6C68900F33F5E /* Frameworks */,
+				4E6AFB172435B9E200194676 /* Tests copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -477,6 +508,7 @@
 				1317BCE3218C50D100D6D095 /* web3swift.framework */,
 				139751B7219AF76D0044D2B0 /* Tests.xctest */,
 				13C3388E21B6C2DD00F33F5E /* secp256k1.framework */,
+				4E6AFB162435B9E200194676 /* TestsEssential.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1078,6 +1110,24 @@
 			productReference = 13C3388E21B6C2DD00F33F5E /* secp256k1.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		4E6AFAF92435B9E200194676 /* TestsEssential */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E6AFB132435B9E200194676 /* Build configuration list for PBXNativeTarget "TestsEssential" */;
+			buildPhases = (
+				4E6AFAFA2435B9E200194676 /* Sources */,
+				4E6AFB102435B9E200194676 /* Frameworks */,
+				4E6AFB112435B9E200194676 /* Resources */,
+				4E6AFB122435B9E200194676 /* Carthage */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestsEssential;
+			productName = Tests;
+			productReference = 4E6AFB162435B9E200194676 /* TestsEssential.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1115,6 +1165,7 @@
 				1317BCE2218C50D100D6D095 /* web3swift */,
 				139751B6219AF76D0044D2B0 /* Tests */,
 				13C3388D21B6C2DD00F33F5E /* secp256k1 */,
+				4E6AFAF92435B9E200194676 /* TestsEssential */,
 			);
 		};
 /* End PBXProject section */
@@ -1144,6 +1195,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4E6AFB112435B9E200194676 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -1166,6 +1224,24 @@
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nfor path in $FRAMEWORK_SEARCH_PATHS\ndo\nif [ -d \"${path}/Dip.framework\" ] && [[ $path == *\"Carthage\"* ]]; then\nexport SCRIPT_INPUT_FILE_COUNT=1\nexport SCRIPT_INPUT_FILE_0=\"${path}/Dip.framework\"\n/usr/local/bin/carthage copy-frameworks\nbreak\nfi\ndone\n";
 		};
 		139751F0219AFA500044D2B0 /* Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Carthage;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nfor path in $FRAMEWORK_SEARCH_PATHS\ndo\nif [ -d \"${path}/Dip.framework\" ] && [[ $path == *\"Carthage\"* ]]; then\nexport SCRIPT_INPUT_FILE_COUNT=1\nexport SCRIPT_INPUT_FILE_0=\"${path}/Dip.framework\"\n/usr/local/bin/carthage copy-frameworks\nbreak\nfi\ndone\n";
+		};
+		4E6AFB122435B9E200194676 /* Carthage */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1341,6 +1417,34 @@
 			buildActionMask = 2147483647;
 			files = (
 				13C3391721B6C62400F33F5E /* secp256k1.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E6AFAFA2435B9E200194676 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E6AFAFB2435B9E200194676 /* web3swift_ObjC_Tests.swift in Sources */,
+				4E6AFAFC2435B9E200194676 /* web3swift_Eventloop_Tests.swift in Sources */,
+				4E6AFAFD2435B9E200194676 /* web3swift_local_node_Tests.swift in Sources */,
+				4E6AFAFE2435B9E200194676 /* web3swift_ERC20_Tests.swift in Sources */,
+				4E6AFAFF2435B9E200194676 /* web3swift_Tests.swift in Sources */,
+				4E6AFB002435B9E200194676 /* web3swift_promises_Tests.swift in Sources */,
+				4E6AFB012435B9E200194676 /* web3swift_RLP_Tests.swift in Sources */,
+				4E6AFB022435B9E200194676 /* web3swift_keystores_Tests.swift in Sources */,
+				4E6AFB032435B9E200194676 /* web3swift_numberFormattingUtil_Tests.swift in Sources */,
+				4E6AFB042435B9E200194676 /* web3swift_infura_Tests.swift in Sources */,
+				4E6AFB052435B9E200194676 /* web3swift_ST20AndSecurityToken_Tests.swift in Sources */,
+				4E6AFB062435B9E200194676 /* web3swift_rinkeby_personalSignature_Tests.swift in Sources */,
+				4E6AFB072435B9E200194676 /* web3swift_ENS_Tests.swift in Sources */,
+				4E6AFB082435B9E200194676 /* web3swift_EIP67_Tests.swift in Sources */,
+				4E6AFB092435B9E200194676 /* web3swift_ERC20_Class_Tests.swift in Sources */,
+				4E6AFB0A2435B9E200194676 /* web3swift_Websockets_Tests.swift in Sources */,
+				4E6AFB0B2435B9E200194676 /* web3swift_remoteParsing_Tests.swift in Sources */,
+				4E6AFB0C2435B9E200194676 /* web3swift_AdvancedABIv2_Tests.swift in Sources */,
+				4E6AFB0D2435B9E200194676 /* web3swift_User_cases.swift in Sources */,
+				4E6AFB0E2435B9E200194676 /* web3swift_EIP681_Tests.swift in Sources */,
+				4E6AFB0F2435B9E200194676 /* web3swift_transactions_Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1707,6 +1811,72 @@
 			};
 			name = Release;
 		};
+		4E6AFB142435B9E200194676 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8DB897QKJA;
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = "$(SRCROOT)/Carthage/Build/iOS";
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(SRCROOT)/Carthage/Build/iOS";
+				"FRAMEWORK_SEARCH_PATHS[sdk=macosx*]" = "$(SRCROOT)/Carthage/Build/Mac";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Tests copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.matter-labsTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4E6AFB152435B9E200194676 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8DB897QKJA;
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = "$(SRCROOT)/Carthage/Build/iOS";
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(SRCROOT)/Carthage/Build/iOS";
+				"FRAMEWORK_SEARCH_PATHS[sdk=macosx*]" = "$(SRCROOT)/Carthage/Build/Mac";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Tests copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.matter-labsTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1742,6 +1912,15 @@
 			buildConfigurations = (
 				13C3389421B6C2DD00F33F5E /* Debug */,
 				13C3389521B6C2DD00F33F5E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4E6AFB132435B9E200194676 /* Build configuration list for PBXNativeTarget "TestsEssential" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E6AFB142435B9E200194676 /* Debug */,
+				4E6AFB152435B9E200194676 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
