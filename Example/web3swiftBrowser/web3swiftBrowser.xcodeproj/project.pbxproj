@@ -221,7 +221,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 0920;
-				ORGANIZATIONNAME = "Alexander Vlasov";
+				ORGANIZATIONNAME = "Matter Labs";
 				TargetAttributes = {
 					81E09B1B2002623A005DF51D = {
 						CreatedOnToolsVersion = 9.2;
