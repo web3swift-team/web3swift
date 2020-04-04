@@ -54,7 +54,13 @@
                   Identifier = "web3swift_ST20AndSecurityToken_Tests">
                </Test>
                <Test
+                  Identifier = "web3swift_User_cases">
+               </Test>
+               <Test
                   Identifier = "web3swift_infura_Tests">
+               </Test>
+               <Test
+                  Identifier = "web3swift_remoteParsing_Tests">
                </Test>
                <Test
                   Identifier = "web3swift_transactions_Tests">
