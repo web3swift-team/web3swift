@@ -187,6 +187,11 @@
 		3AA816382276E48400F5DB52 /* web3swift_Websockets_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816232276E48400F5DB52 /* web3swift_Websockets_Tests.swift */; };
 		3AA8163A2276E4AE00F5DB52 /* SECP256k1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA816392276E4AE00F5DB52 /* SECP256k1.swift */; };
 		3AEF4ABF22C0B6BE00AC7929 /* Web3+Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEF4ABE22C0B6BE00AC7929 /* Web3+Constants.swift */; };
+		E22A911F241ED71A00EC1021 /* browser.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E22A911E241ED71A00EC1021 /* browser.min.js */; };
+		E2B76710241ED479007EBFE3 /* browser.js in Resources */ = {isa = PBXBuildFile; fileRef = E2B7670F241ED479007EBFE3 /* browser.js */; };
+		E2EDC5EA241EDE3600410EA6 /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */; };
+		E2EDC5EC241EE18700410EA6 /* wk.bridge.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E2EDC5EB241EE18700410EA6 /* wk.bridge.min.js */; };
+		E2EDC5EE241EE1E600410EA6 /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5ED241EE1E600410EA6 /* Bridge.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -385,6 +390,12 @@
 		3AA816402276E5A800F5DB52 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		3AA816412276E5A900F5DB52 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3AEF4ABE22C0B6BE00AC7929 /* Web3+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Constants.swift"; sourceTree = "<group>"; };
+		E22A911E241ED71A00EC1021 /* browser.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.min.js; sourceTree = "<group>"; };
+		E2B7670F241ED479007EBFE3 /* browser.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.js; sourceTree = "<group>"; };
+		E2D081C72402F6900082EA93 /* CONTRIBUTION_POLICY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTION_POLICY.md; sourceTree = "<group>"; };
+		E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
+		E2EDC5EB241EE18700410EA6 /* wk.bridge.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = wk.bridge.min.js; sourceTree = "<group>"; };
+		E2EDC5ED241EE1E600410EA6 /* Bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bridge.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -558,6 +569,7 @@
 		3AA815152276E3FF00F5DB52 /* web3swift */ = {
 			isa = PBXGroup;
 			children = (
+				E2B7670E241ED424007EBFE3 /* Browser */,
 				3AA815162276E42F00F5DB52 /* Contract */,
 				3AA815622276E44100F5DB52 /* Convenience */,
 				3AA815432276E44100F5DB52 /* EthereumABI */,
@@ -928,10 +940,23 @@
 			children = (
 				3AA8163D2276E56D00F5DB52 /* Usage.md */,
 				3AA8163C2276E56D00F5DB52 /* web3swift 2.0 Migration Guide.md */,
+				E2D081C72402F6900082EA93 /* CONTRIBUTION_POLICY.md */,
 				13CE02B021FC846800CE7148 /* RELEASE_GUIDE.md */,
 				13CE02B121FC846900CE7148 /* BUILD_GUIDE.md */,
 			);
 			path = Documentation;
+			sourceTree = "<group>";
+		};
+		E2B7670E241ED424007EBFE3 /* Browser */ = {
+			isa = PBXGroup;
+			children = (
+				E2B7670F241ED479007EBFE3 /* browser.js */,
+				E22A911E241ED71A00EC1021 /* browser.min.js */,
+				E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */,
+				E2EDC5EB241EE18700410EA6 /* wk.bridge.min.js */,
+				E2EDC5ED241EE1E600410EA6 /* Bridge.swift */,
+			);
+			path = Browser;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1061,7 +1086,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1010;
-				ORGANIZATIONNAME = "Bankex Foundation";
+				ORGANIZATIONNAME = "Matter Labs";
 				TargetAttributes = {
 					1317BCE2218C50D100D6D095 = {
 						CreatedOnToolsVersion = 10.1;
@@ -1099,6 +1124,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2B76710241ED479007EBFE3 /* browser.js in Resources */,
+				E2EDC5EC241EE18700410EA6 /* wk.bridge.min.js in Resources */,
+				E22A911F241ED71A00EC1021 /* browser.min.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1235,6 +1263,7 @@
 				3AA815CB2276E44100F5DB52 /* Web3.swift in Sources */,
 				3AA815B62276E44100F5DB52 /* BIP39+WordLists.swift in Sources */,
 				3AA816032276E44100F5DB52 /* Web3+ERC20.swift in Sources */,
+				E2EDC5EA241EDE3600410EA6 /* BrowserViewController.swift in Sources */,
 				3AA8160C2276E44100F5DB52 /* Web3+ERC1410.swift in Sources */,
 				3AA816042276E44100F5DB52 /* Web3+ERC1400.swift in Sources */,
 				3AA815ED2276E44100F5DB52 /* Promise+Web3+Eth+GetBlockByHash.swift in Sources */,
@@ -1266,6 +1295,7 @@
 				3AA815A72276E44100F5DB52 /* ENS.swift in Sources */,
 				3AA815F32276E44100F5DB52 /* Promise+Web3+Eth+GetTransactionReceipt.swift in Sources */,
 				3AA815B32276E44100F5DB52 /* IBAN.swift in Sources */,
+				E2EDC5EE241EE1E600410EA6 /* Bridge.swift in Sources */,
 				3AA815F92276E44100F5DB52 /* Promise+Web3+TxPool.swift in Sources */,
 				3AA816052276E44100F5DB52 /* Web3+SecurityToken.swift in Sources */,
 				3AA815E02276E44100F5DB52 /* CryptoExtensions.swift in Sources */,
@@ -1547,9 +1577,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8DB897QKJA;
+				DEVELOPMENT_TEAM = "";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = "$(SRCROOT)/Carthage/Build/iOS";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(SRCROOT)/Carthage/Build/iOS";
 				"FRAMEWORK_SEARCH_PATHS[sdk=macosx*]" = "$(SRCROOT)/Carthage/Build/Mac";
@@ -1579,9 +1609,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8DB897QKJA;
+				DEVELOPMENT_TEAM = "";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = "$(SRCROOT)/Carthage/Build/iOS";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(SRCROOT)/Carthage/Build/iOS";
 				"FRAMEWORK_SEARCH_PATHS[sdk=macosx*]" = "$(SRCROOT)/Carthage/Build/Mac";

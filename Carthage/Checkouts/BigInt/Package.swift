@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:4.2
 //
 //  Package.swift
 //  BigInt
@@ -14,12 +14,9 @@ let package = Package(
     products: [
         .library(name: "BigInt", targets: ["BigInt"])
     ],
-    dependencies: [
-        .package(url: "https://github.com/attaswift/SipHash", from: "1.2.1")
-    ],
     targets: [
-        .target(name: "BigInt", dependencies: ["SipHash"], path: "sources"),
-        .testTarget(name: "BigIntTests", dependencies: ["BigInt"], path: "tests")
+        .target(name: "BigInt", path: "Sources"),
+        .testTarget(name: "BigIntTests", dependencies: ["BigInt"], path: "Tests")
     ],
-    swiftLanguageVersions: [4]
+    swiftLanguageVersions: [.v4_2, .version("5")]
 )

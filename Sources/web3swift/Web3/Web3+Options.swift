@@ -16,7 +16,7 @@ public protocol TransactionOptionsInheritable {
 public struct TransactionOptions {
     /// Sets the transaction destination. It can either be a contract address or a private key controlled wallet address.
     ///
-    /// Usually should never be nil.
+    /// Usually should never be nil, left undefined for a contract-creation transaction.
     public var to: EthereumAddress? = nil
     /// Sets from what account a transaction should be sent. Used only internally as the sender of Ethereum transaction
     /// is determined purely from the transaction signature. Indicates to the Ethereum node or to the local keystore what private key
@@ -40,6 +40,7 @@ public struct TransactionOptions {
     }
     public var gasPrice: GasPricePolicy?
 
+    /// The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
     public var value: BigUInt? = nil
     
     public enum NoncePolicy {

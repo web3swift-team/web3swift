@@ -1,0 +1,47 @@
+PODS:
+  - BigInt (4.0.0)
+  - CryptoSwift (1.0.0)
+  - PromiseKit (6.8.5):
+    - PromiseKit/CorePromise (= 6.8.5)
+    - PromiseKit/Foundation (= 6.8.5)
+    - PromiseKit/UIKit (= 6.8.5)
+  - PromiseKit/CorePromise (6.8.5)
+  - PromiseKit/Foundation (6.8.5):
+    - PromiseKit/CorePromise
+  - PromiseKit/UIKit (6.8.5):
+    - PromiseKit/CorePromise
+  - secp256k1.c (0.1.2)
+  - Starscream (3.1.1)
+  - web3swift (2.2.2):
+    - BigInt (~> 4.0)
+    - CryptoSwift (~> 1.0.0)
+    - PromiseKit (~> 6.8.4)
+    - secp256k1.c (~> 0.1)
+    - Starscream (~> 3.1.0)
+
+DEPENDENCIES:
+  - web3swift (from `../../`)
+
+SPEC REPOS:
+  trunk:
+    - BigInt
+    - CryptoSwift
+    - PromiseKit
+    - secp256k1.c
+    - Starscream
+
+EXTERNAL SOURCES:
+  web3swift:
+    :path: "../../"
+
+SPEC CHECKSUMS:
+  BigInt: 2aad1a9942dc932ec8b84290d2c564a3d76f97ab
+  CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
+  PromiseKit: 9616b0afef31eae56ab9ce044c8ec2b8612a15cd
+  secp256k1.c: db47b726585d80f027423682eb369729e61b3b20
+  Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
+  web3swift: 209ce2db88e40f35f0809234846171ec38119d9b
+
+PODFILE CHECKSUM: 0fdcb66c1e21400e017387d14550cd6ae5ef8aaa
+
+COCOAPODS: 1.9.1

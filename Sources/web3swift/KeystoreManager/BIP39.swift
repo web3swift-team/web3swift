@@ -90,6 +90,20 @@ public class BIP39 {
         return wordList.joined(separator: separator)
     }
     
+    /**
+    Initializes a new mnemonics set with the provided bitsOfEntropy.
+
+    - Parameters:
+       - bitsOfEntropy: 128 - 12 words, 192 - 18 words , 256 - 24 words in output.
+       - language: words language, default english
+
+    - Returns: random 12-24 words, that represent new Mnemonic phrase.
+    */
+    
+    /// Initializes a new mnemonics set with the provided bitsOfEntropy.
+    /// - Parameters:
+    ///   - bitsOfEntropy: 128 - 12 words, 192 - 18 words , 256 - 24 words in output.
+    ///   - language: words language, default english
     static public func generateMnemonics(bitsOfEntropy: Int, language: BIP39Language = BIP39Language.english) throws -> String? {
         guard bitsOfEntropy >= 128 && bitsOfEntropy <= 256 && bitsOfEntropy.isMultiple(of: 32) else {return nil}
         guard let entropy = Data.randomBytes(length: bitsOfEntropy/8) else {throw AbstractKeystoreError.noEntropyError}

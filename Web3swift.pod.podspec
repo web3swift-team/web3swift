@@ -8,7 +8,8 @@ Pod::Spec.new do |spec|
     spec.homepage     = 'https://github.com/matter-labs/web3swift'
     spec.author       = { "Alex Vlasov" => "alex.m.vlasov@gmail.com", "Anton Grigorev" => "antongrigorjev2010@gmail.com" }
     spec.source       = { :git => 'https://github.com/matter-labs/web3swift.git', :tag => spec.version.to_s }
-    spec.source_files = "Sources/web3swift/{Contract,Convenience,EthereumABI,EthereumAddress,HookedFunctions,KeystoreManager,Promises,SwiftRLP,Transaction,Web3}/*.swift", "Sources/web3swift/{Tokens,Utils}/**/*.swift"
+    spec.source_files = "Sources/web3swift/{Contract,Convenience,EthereumABI,EthereumAddress,HookedFunctions,KeystoreManager,Promises,SwiftRLP,Transaction,Web3,Browser}/*.swift", "Sources/web3swift/{Tokens,Utils}/**/*.swift"
+    spec.resource_bundle = { "Browser" => "Sources/web3swift/Browser/*.js" }
     spec.swift_version = '5.0'
     spec.module_name = 'web3swift'
     spec.frameworks = 'CoreImage'
