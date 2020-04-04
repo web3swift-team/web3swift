@@ -24,6 +24,7 @@
 
 **Merged pull requests:**
 
+- value as optional parameter [\#256](https://github.com/matter-labs/web3swift/pull/256) ([skywinder](https://github.com/skywinder))
 - \#248 [\#250](https://github.com/matter-labs/web3swift/pull/250) ([hakumai-iida](https://github.com/hakumai-iida))
 - Baldyash/webview [\#249](https://github.com/matter-labs/web3swift/pull/249) ([BaldyAsh](https://github.com/BaldyAsh))
 - policy [\#247](https://github.com/matter-labs/web3swift/pull/247) ([BaldyAsh](https://github.com/BaldyAsh))
@@ -35,6 +36,7 @@
 - correct gasLimit [\#222](https://github.com/matter-labs/web3swift/pull/222) ([luqz](https://github.com/luqz))
 - Change BIP39 word list extension from array of strings to one string … [\#217](https://github.com/matter-labs/web3swift/pull/217) ([husamettinor](https://github.com/husamettinor))
 - Expose BIP39 words and separator [\#212](https://github.com/matter-labs/web3swift/pull/212) ([dawiddr](https://github.com/dawiddr))
+- infura v3 complete update [\#209](https://github.com/matter-labs/web3swift/pull/209) ([BaldyAsh](https://github.com/BaldyAsh))
 
 ## [2.2.1](https://github.com/matter-labs/web3swift/tree/2.2.1) (2019-06-24)
 
@@ -65,7 +67,6 @@
 **Merged pull requests:**
 
 - 2.2.1 [\#210](https://github.com/matter-labs/web3swift/pull/210) ([BaldyAsh](https://github.com/BaldyAsh))
-- infura v3 complete update [\#209](https://github.com/matter-labs/web3swift/pull/209) ([BaldyAsh](https://github.com/BaldyAsh))
 - merge Master -\> develop [\#205](https://github.com/matter-labs/web3swift/pull/205) ([skywinder](https://github.com/skywinder))
 - update documentation, prettify doc style [\#204](https://github.com/matter-labs/web3swift/pull/204) ([skywinder](https://github.com/skywinder))
 - V handle fix [\#201](https://github.com/matter-labs/web3swift/pull/201) ([BaldyAsh](https://github.com/BaldyAsh))
@@ -102,11 +103,6 @@
 
 [Full Changelog](https://github.com/matter-labs/web3swift/compare/2.1.4...2.1.5)
 
-**Merged pull requests:**
-
-- WIP: ENS BaseRegistrar and RegistrarController support [\#162](https://github.com/matter-labs/web3swift/pull/162) ([BaldyAsh](https://github.com/BaldyAsh))
-- Documentation update [\#153](https://github.com/matter-labs/web3swift/pull/153) ([BaldyAsh](https://github.com/BaldyAsh))
-
 ## [2.1.4](https://github.com/matter-labs/web3swift/tree/2.1.4) (2019-04-24)
 
 [Full Changelog](https://github.com/matter-labs/web3swift/compare/2.1.3...2.1.4)
@@ -130,6 +126,10 @@
 - Fix travis [\#169](https://github.com/matter-labs/web3swift/pull/169) ([BaldyAsh](https://github.com/BaldyAsh))
 - Fix warnings [\#168](https://github.com/matter-labs/web3swift/pull/168) ([BaldyAsh](https://github.com/BaldyAsh))
 - Added reverse registrar [\#165](https://github.com/matter-labs/web3swift/pull/165) ([BaldyAsh](https://github.com/BaldyAsh))
+- WIP: ENS BaseRegistrar and RegistrarController support [\#162](https://github.com/matter-labs/web3swift/pull/162) ([BaldyAsh](https://github.com/BaldyAsh))
+- Updated example to 2.1.3 [\#158](https://github.com/matter-labs/web3swift/pull/158) ([BaldyAsh](https://github.com/BaldyAsh))
+- Documentation update [\#153](https://github.com/matter-labs/web3swift/pull/153) ([BaldyAsh](https://github.com/BaldyAsh))
+- 2.1.3 fix No2 [\#152](https://github.com/matter-labs/web3swift/pull/152) ([BaldyAsh](https://github.com/BaldyAsh))
 
 ## [2.1.3](https://github.com/matter-labs/web3swift/tree/2.1.3) (2019-04-06)
 
@@ -148,7 +148,6 @@
 
 **Merged pull requests:**
 
-- 2.1.3 fix No2 [\#152](https://github.com/matter-labs/web3swift/pull/152) ([BaldyAsh](https://github.com/BaldyAsh))
 - 2.1.3 fix [\#151](https://github.com/matter-labs/web3swift/pull/151) ([BaldyAsh](https://github.com/BaldyAsh))
 - 2.1.3 [\#150](https://github.com/matter-labs/web3swift/pull/150) ([BaldyAsh](https://github.com/BaldyAsh))
 
@@ -160,6 +159,7 @@
 
 - Swift 5 update [\#141](https://github.com/matter-labs/web3swift/pull/141) ([BaldyAsh](https://github.com/BaldyAsh))
 - Swift 5 update [\#139](https://github.com/matter-labs/web3swift/pull/139) ([BaldyAsh](https://github.com/BaldyAsh))
+- 2.1.1 [\#136](https://github.com/matter-labs/web3swift/pull/136) ([BaldyAsh](https://github.com/BaldyAsh))
 
 ## [2.1.1](https://github.com/matter-labs/web3swift/tree/2.1.1) (2019-03-26)
 
@@ -177,10 +177,10 @@
 
 **Merged pull requests:**
 
-- 2.1.1 [\#136](https://github.com/matter-labs/web3swift/pull/136) ([BaldyAsh](https://github.com/BaldyAsh))
-- Fix/podspec [\#135](https://github.com/matter-labs/web3swift/pull/135) ([BaldyAsh](https://github.com/BaldyAsh))
+- Swift 5 update [\#142](https://github.com/matter-labs/web3swift/pull/142) ([BaldyAsh](https://github.com/BaldyAsh))
 - let some functions public for customization [\#132](https://github.com/matter-labs/web3swift/pull/132) ([scottphc](https://github.com/scottphc))
 - WIP: ST-20 and Security Token support [\#130](https://github.com/matter-labs/web3swift/pull/130) ([BaldyAsh](https://github.com/BaldyAsh))
+- Recent updates [\#125](https://github.com/matter-labs/web3swift/pull/125) ([BaldyAsh](https://github.com/BaldyAsh))
 - Fix/remove deprecated [\#120](https://github.com/matter-labs/web3swift/pull/120) ([BaldyAsh](https://github.com/BaldyAsh))
 
 ## [2.1.0](https://github.com/matter-labs/web3swift/tree/2.1.0) (2019-03-06)
@@ -235,6 +235,7 @@
 - Master to develop for 2.0.2 [\#94](https://github.com/matter-labs/web3swift/pull/94) ([shamatar](https://github.com/shamatar))
 - Feature/readme improvement [\#85](https://github.com/matter-labs/web3swift/pull/85) ([BaldyAsh](https://github.com/BaldyAsh))
 - Get recent develop changes [\#80](https://github.com/matter-labs/web3swift/pull/80) ([BaldyAsh](https://github.com/BaldyAsh))
+- Carthage [\#75](https://github.com/matter-labs/web3swift/pull/75) ([BaldyAsh](https://github.com/BaldyAsh))
 
 ## [2.0.4](https://github.com/matter-labs/web3swift/tree/2.0.4) (2018-11-20)
 
@@ -265,10 +266,6 @@
 
 - ENS Functionality [\#56](https://github.com/matter-labs/web3swift/issues/56)
 
-**Merged pull requests:**
-
-- ENS fix [\#83](https://github.com/matter-labs/web3swift/pull/83) ([BaldyAsh](https://github.com/BaldyAsh))
-
 ## [2.0.0](https://github.com/matter-labs/web3swift/tree/2.0.0) (2018-10-30)
 
 [Full Changelog](https://github.com/matter-labs/web3swift/compare/1.5.1...2.0.0)
@@ -292,7 +289,6 @@
 
 **Merged pull requests:**
 
-- Carthage [\#75](https://github.com/matter-labs/web3swift/pull/75) ([BaldyAsh](https://github.com/BaldyAsh))
 - Carthage fixes [\#74](https://github.com/matter-labs/web3swift/pull/74) ([BaldyAsh](https://github.com/BaldyAsh))
 
 ## [1.5.1](https://github.com/matter-labs/web3swift/tree/1.5.1) (2018-10-22)
