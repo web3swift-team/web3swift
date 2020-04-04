@@ -22,7 +22,10 @@ class ViewController: BrowserViewController {
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             ])
         
-        webView.load(URLRequest(url: URL(string: "https://app.compound.finance")!))
+
+        let urlToOpen = "https://1inch.exchange/"
+//        let urlToOpen = "https://app.compound.finance"
+        webView.load(URLRequest(url: URL(string: urlToOpen)!))
         
         do {
             let userDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]

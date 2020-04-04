@@ -14,8 +14,10 @@ public struct EthereumTransaction: CustomStringConvertible {
     public var nonce: BigUInt
     public var gasPrice: BigUInt = BigUInt(0)
     public var gasLimit: BigUInt = BigUInt(0)
+    // The destination address of the message, left undefined for a contract-creation transaction.
     public var to: EthereumAddress
-    public var value: BigUInt
+    // (optional) The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
+    public var value: BigUInt?
     public var data: Data
     public var v: BigUInt = BigUInt(1)
     public var r: BigUInt = BigUInt(0)
@@ -87,8 +89,8 @@ public struct EthereumTransaction: CustomStringConvertible {
             toReturn = toReturn + "Nonce: " + String(self.nonce) + "\n"
             toReturn = toReturn + "Gas price: " + String(self.gasPrice) + "\n"
             toReturn = toReturn + "Gas limit: " + String(describing: self.gasLimit) + "\n"
-            toReturn = toReturn + "To: " + self.to.address  + "\n"
-            toReturn = toReturn + "Value: " + String(self.value) + "\n"
+            toReturn = toReturn + "To: " + self.to.address + "\n"
+            toReturn = toReturn + "Value: " + String(self.value ?? "nil") + "\n"
             toReturn = toReturn + "Data: " + self.data.toHexString().addHexPrefix().lowercased() + "\n"
             toReturn = toReturn + "v: " + String(self.v) + "\n"
             toReturn = toReturn + "r: " + String(self.r) + "\n"
@@ -193,7 +195,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
         let gasPriceEncoding = self.gasPrice.abiEncode(bits: 256)
         params.gasPrice = gasPriceEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let valueEncoding = self.value.abiEncode(bits: 256)
+        let valueEncoding = self.value?.abiEncode(bits: 256)
         params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
         if (self.data != Data()) {
             params.data = self.data.toHexString().addHexPrefix()
@@ -310,8 +312,11 @@ public extension EthereumTransaction {
                 self.gasLimit = BigUInt(UInt64(21000))
             }
         }
-        
-        self.value = merged.value!
+
+        if let value = merged.value {
+            self.value = value
+        }
+
         self.to = to
         self.data = data
     }

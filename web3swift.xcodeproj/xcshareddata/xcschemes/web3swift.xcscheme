@@ -41,29 +41,35 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4E6AFAF92435B9E200194676"
-               BuildableName = "TestsEssential.xctest"
-               BlueprintName = "TestsEssential"
+               BlueprintIdentifier = "139751B6219AF76D0044D2B0"
+               BuildableName = "Tests.xctest"
+               BlueprintName = "Tests"
                ReferencedContainer = "container:web3swift.xcodeproj">
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "web3swift_ENS_Tests">
-               </Test>
-               <Test
-                  Identifier = "web3swift_ERC20_Class_Tests">
-               </Test>
-               <Test
-                  Identifier = "web3swift_ERC20_Tests">
+                  Identifier = "web3swift_Eventloop_Tests">
                </Test>
                <Test
                   Identifier = "web3swift_ST20AndSecurityToken_Tests">
+               </Test>
+               <Test
+                  Identifier = "web3swift_User_cases">
                </Test>
                <Test
                   Identifier = "web3swift_infura_Tests">
                </Test>
                <Test
                   Identifier = "web3swift_promises_Tests">
+               </Test>
+               <Test
+                  Identifier = "web3swift_remoteParsing_Tests">
+               </Test>
+               <Test
+                  Identifier = "web3swift_transactions_Tests">
+               </Test>
+               <Test
+                  Identifier = "web3swift_websocket_Tests">
                </Test>
             </SkippedTests>
          </TestableReference>
