@@ -155,8 +155,9 @@ class web3swift_Keystores_tests: XCTestCase {
         print(keystore!.addresses![1].address)
         print(recreatedStore!.addresses![0].address)
         print(recreatedStore!.addresses![1].address)
-        XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![0])
-        XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![1])
+        // This will fail. It wont fail if use scrypt from pod 'scrypt', '2.0', not from CryptoSwift
+        XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![1])
+        XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![0])
     }
     
     //    func testPBKDF2() {

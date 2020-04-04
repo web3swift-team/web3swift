@@ -60,6 +60,9 @@
                   Identifier = "web3swift_infura_Tests">
                </Test>
                <Test
+                  Identifier = "web3swift_promises_Tests">
+               </Test>
+               <Test
                   Identifier = "web3swift_remoteParsing_Tests">
                </Test>
                <Test
