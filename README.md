@@ -72,6 +72,7 @@ If you are using this library in your project, please [add a link](https://githu
 * [Follow_iOS](https://github.com/FollowInc/Follow_iOS)
 * [Biomedical Data Sharing dApp - Geolocation](https://github.com/HD2i/Geolocation-iOS)
 * [Alice Wallet](https://github.com/alicedapp/AliceX)
+* [web3-react-native](https://github.com/cawfree/web3-react-native)
 * [YOUR APP CAN BE THERE (click me)](https://github.com/matter-labs/web3swift/edit/develop/README.md) :wink:
 
 *Nothing makes developers happier than seeing someone else use our work and go wild with it.*
