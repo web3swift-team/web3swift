@@ -137,7 +137,7 @@ class web3swift_Keystores_tests: XCTestCase {
         let account = keystore!.addresses![1]
         let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
         XCTAssertNotNil(key)
-        print(keystore!.paths)
+        print(keystore!.addressStorage.paths)
     }
     
     func testByBIP32keystoreSaveAndDeriva() {
@@ -155,9 +155,8 @@ class web3swift_Keystores_tests: XCTestCase {
         print(keystore!.addresses![1].address)
         print(recreatedStore!.addresses![0].address)
         print(recreatedStore!.addresses![1].address)
-        // This will fail. It wont fail if use scrypt from pod 'scrypt', '2.0', not from CryptoSwift
-        XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![1])
-        XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![0])
+        XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![0])
+        XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![1])
     }
     
     //    func testPBKDF2() {
