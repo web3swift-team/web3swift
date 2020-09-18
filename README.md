@@ -17,18 +17,19 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Design Decisions](#design-decisions)
-- [Projects that using web3swift](#projects-that-using-web3swift)
 - [Installation](#installation)
   - [Requirements](#requirements)
   - [Migration Guides](#migration-guides)
 - [Documentation](#documentation)
   - [Examples](#examples)
+    - [Web3View example](#web3view-example)
 - [FAQ](#faq)
-- [Credits](#credits)
-  - [What we have already done](#what-we-have-already-done)
-  - [Future steps](#future-steps)
+  - [Core features:](#core-features)
+- [Projects that are using web3swift](#projects-that-are-using-web3swift)
+- [Support](#support)
 - [Contribute](#contribute)
+  - [Future steps](#future-steps)
+- [Credits](#credits)
 - [Security Disclosure](#security-disclosure)
 - [License](#license)
 

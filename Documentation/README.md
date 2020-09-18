@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Design Decisions](#design-decisions)
+- [Core features:](#core-features)
+- [FAQ](#faq)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Design Decisions
 
 - Functionality was focused on serializing and **signing transactions locally** on the device to **send raw transactions** to the Ethereum network
@@ -5,7 +15,7 @@
 - Public function for **private key export** is exposed for user convenience but marked as `UNSAFE_`. Typical workflow takes care of EIP155 compatibility and proper clearing of private key data from memory
 
 
-### Core features:
+## Core features:
 
 - [x] Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
 - [x] Interaction with remote node via **JSON RPC** :thought_balloon:
