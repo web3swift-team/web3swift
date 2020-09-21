@@ -58,6 +58,7 @@
 				63CCF8121D5C0C4E00503216 /* Cartfile */,
 				63CCF8131D5C0C4E00503216 /* Cartfile.private */,
 				63CCF8171D5C11B500503216 /* Carthage.xcconfig */,
+				63C700091D5C0253003BAE60 /* Info.plist */,
 				63C7FFA91D5BEE09003BAE60 /* Sources */,
 				63C7FFF31D5C020D003BAE60 /* Tests */,
 				63C7FFA81D5BEE09003BAE60 /* Products */,
@@ -76,7 +77,6 @@
 		63C7FFA91D5BEE09003BAE60 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				63C700091D5C0253003BAE60 /* Info.plist */,
 				63C7FFDB1D5C00F2003BAE60 /* Alamofire+Promise.swift */,
 			);
 			path = Sources;

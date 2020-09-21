@@ -1,5 +1,6 @@
 os: osx
 language: swift
+osx_image: xcode10.2
 
 branches:
   only: 
@@ -16,7 +17,7 @@ jobs:
       osx_image: xcode8.3
       env: SWIFT=3.1
       before_install:
-        gem install cocoapods --prerelease --version 1.7.0.beta.3
+        gem install cocoapods --version '~> 1.8.0'
       install:
         carthage bootstrap --no-build PromiseKit
       script: |
@@ -31,9 +32,9 @@ jobs:
     - <<: *pod
       osx_image: xcode9.4
       env: SWIFT=3.3
-    # - <<: *pod
-    #   osx_image: xcode10
-    #   env: SWIFT=3.4
+    - <<: *pod
+      osx_image: xcode10.1
+      env: SWIFT=3.4
     - <<: *pod
       osx_image: xcode9.2
       env: SWIFT=4.0
@@ -41,12 +42,15 @@ jobs:
       osx_image: xcode9.4
       env: SWIFT=4.1
     - <<: *pod
-      osx_image: xcode10
+      osx_image: xcode10.1
       env: SWIFT=4.2
     - <<: *pod
       osx_image: xcode10.2
       env: SWIFT=5.0
-
+    - <<: *pod
+      osx_image: xcode11
+      env: SWIFT=5.1
+      
     - &linux
       stage: swiftpm
       env: SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0
@@ -85,7 +89,10 @@ jobs:
     - <<: *linux
       env: SWIFT_BUILD_VERSION=5 SWIFT_VERSION=5.0
       name: Linux / Swift 5.0
-
+    - <<: *linux
+      env: SWIFT_BUILD_VERSION=5 SWIFT_VERSION=5.1
+      name: Linux / Swift 5.1
+      
     - &swiftpm
       stage: swiftpm
       name: Xcode 8.3 / SwiftPM
@@ -99,12 +106,16 @@ jobs:
     - <<: *swiftpm
       name: Xcode 10.0 / SwiftPM
       osx_image: xcode10
-    
+    - <<: *swiftpm
+      name: Xcode 11.0 / SwiftPM
+      osx_image: xcode11
+
     - &carthage
       stage: carthage
       osx_image: xcode9.2
       script: |
         carthage bootstrap --cache-builds
+        sed -i '' "s/SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;/SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;/" *.xcodeproj/project.pbxproj
         carthage build --no-skip-current
       cache:
         directories:
@@ -115,7 +126,9 @@ jobs:
       osx_image: xcode10.1
     - <<: *carthage
       osx_image: xcode10.2
-
+    - <<: *carthage
+      osx_image: xcode11
+      
     - &test
       stage: test
       xcode_scheme: PMKFoundation
@@ -126,10 +139,9 @@ jobs:
         - Carthage
       before_install: |
         carthage bootstrap --cache-builds --no-use-binaries
-        sed -i '' "s/SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;/SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;/" *.xcodeproj/project.pbxproj
       after_success:
         bash <(curl -s https://codecov.io/bash);
     - <<: *test
-      xcode_destination: 'platform=iOS Simulator,OS=12.0,name=iPhone SE'
+      xcode_destination: 'platform=iOS Simulator,OS=12.2,name=iPhone SE'
     - <<: *test
-      xcode_destination: 'platform=Apple TV Simulator,OS=12.0,name=Apple TV'
+      xcode_destination: 'platform=tvOS Simulator,OS=12.2,name=Apple TV'

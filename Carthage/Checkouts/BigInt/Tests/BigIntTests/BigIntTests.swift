@@ -66,6 +66,9 @@ class BigIntTests: XCTestCase {
         XCTAssertEqual(BigInt(words: [0, Word.max]), -(BigInt(1) << Word.bitWidth))
         XCTAssertEqual(BigInt(words: [1, Word.max]), -BigInt(Word.max))
         XCTAssertEqual(BigInt(words: [1, Word.max, Word.max]), -BigInt(Word.max))
+        
+        XCTAssertEqual(BigInt(exactly: 1), BigInt(1))
+        XCTAssertEqual(BigInt(exactly: -1), BigInt(-1))
     }
 
     func testInit_FloatingPoint() {
@@ -86,6 +89,29 @@ class BigIntTests: XCTestCase {
         XCTAssertEqual(BigInt(clamping: 42), 42)
         XCTAssertEqual(BigInt(truncatingIfNeeded: -42), -42)
         XCTAssertEqual(BigInt(truncatingIfNeeded: 42), 42)
+    }
+    
+    func testInit_Buffer() {
+        func test(_ b: BigInt, _ d: Array<UInt8>, file: StaticString = #file, line: UInt = #line) {
+            d.withUnsafeBytes { buffer in
+                let initialized = BigInt(buffer)
+                XCTAssertEqual(initialized, b, file: file, line: line)
+            }
+        }
+        
+        // Positive integers
+        test(BigInt(), [])
+        test(BigInt(1), [0x00, 0x01])
+        test(BigInt(2), [0x00, 0x02])
+        test(BigInt(0x0102030405060708), [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08])
+        test(BigInt(0x01) << 64 + BigInt(0x0203040506070809), [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09])
+        
+        // Negative integers
+        test(BigInt(), [])
+        test(BigInt(-1), [0x01, 0x01])
+        test(BigInt(-2), [0x01, 0x02])
+        test(BigInt(0x0102030405060708) * BigInt(-1), [0x01, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08])
+        test((BigInt(0x01) << 64 + BigInt(0x0203040506070809)) * BigInt(-1), [0x01, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09])
     }
 
     func testConversionToFloatingPoint() {
@@ -584,6 +610,31 @@ class BigIntTests: XCTestCase {
             XCTAssertEqual(context.debugDescription, "Invalid big integer sign")
         }
     }
+    
+    func testConversionToData() {
+        func test(_ b: BigInt, _ d: Array<UInt8>, file: StaticString = #file, line: UInt = #line) {
+            let expected = Data(d)
+            let actual = b.serialize()
+            XCTAssertEqual(actual, expected, file: file, line: line)
+            XCTAssertEqual(BigInt(actual), b, file: file, line: line)
+        }
+        
+        // Positive integers
+        test(BigInt(), [])
+        test(BigInt(1), [0x00, 0x01])
+        test(BigInt(2), [0x00, 0x02])
+        test(BigInt(0x0102030405060708), [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08])
+        test(BigInt(0x01) << 64 + BigInt(0x0203040506070809), [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 09])
+        
+        // Negative integers
+        test(BigInt(), [])
+        test(BigInt(-1), [0x01, 0x01])
+        test(BigInt(-2), [0x01, 0x02])
+        test(BigInt(0x0102030405060708) * BigInt(-1), [0x01, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08])
+        test((BigInt(0x01) << 64 + BigInt(0x0203040506070809)) * BigInt(-1), [0x01, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 09])
+
+    }
+    
     //
     // you have to manually register linux tests here :-(
     //
@@ -591,6 +642,7 @@ class BigIntTests: XCTestCase {
         ("testSigns", testSigns),
         ("testInit", testInit),
         ("testInit_FloatingPoint", testInit_FloatingPoint),
+        ("testInit_Buffer", testInit_Buffer),
         ("testConversionToFloatingPoint", testConversionToFloatingPoint),
         ("testTwosComplement", testTwosComplement),
         ("testSign", testSign),
@@ -626,5 +678,6 @@ class BigIntTests: XCTestCase {
         ("testShifts", testShifts),
         ("testShiftAssignments", testShiftAssignments),
         ("testCodable", testCodable),
+        ("testConversionToData", testConversionToData)
     ]
 }

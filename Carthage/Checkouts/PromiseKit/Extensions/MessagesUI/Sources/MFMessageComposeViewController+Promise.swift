@@ -73,6 +73,10 @@ private class PMKMessageComposeViewControllerDelegate: NSObject, MFMessageCompos
             seal.reject(MFMessageComposeViewController.PMKError.failed)
         case .cancelled:
             seal.reject(MFMessageComposeViewController.PMKError.cancelled)
+      #if swift(>=5)
+        @unknown default:
+            seal.reject(MFMessageComposeViewController.PMKError.cancelled)
+      #endif
         }
     }
 }

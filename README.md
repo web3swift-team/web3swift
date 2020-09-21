@@ -128,6 +128,12 @@ cd web3swift/Example/web3swiftBrowser
 pod install
 open ./web3swiftBrowser.xcworkspace
 ```
+
+### Build from source:
+
+- Clone repo
+- Instal dependencies via  `./carthage-build.sh --platform iOS` (temo workaround, foe of Carthage bug.For  more details please look at https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323)
+
 ### Requirements
 
 - iOS 9.0+ / macOS 10.11+
@@ -207,10 +213,6 @@ We want to continue to do everything we can to move the needle forward.
 ### Future steps 
 
 You are more than welcome to participate! **Your contribution will be paid via  [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift).**
-
-- [ ] [**Objective-C - a proxy bridge** to build your DApp on Objective-C using web3swift](https://github.com/matter-labs/web3swift/issues/10) (help needed)
-
-- [ ] **Support IPFS** via Infura public IPFS gateway
 
 - [ ] **L2 support** (such as [ZkSync](https://zksync.io/))
 

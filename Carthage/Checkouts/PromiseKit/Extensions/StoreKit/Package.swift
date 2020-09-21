@@ -1,4 +1,4 @@
-// swift-tools-version:4.2
+// swift-tools-version:4.0
 import PackageDescription
 
 let name = "PMKStoreKit"
@@ -7,7 +7,7 @@ let pkg = Package(name: name)
 pkg.products = [
     .library(name: name, targets: [name]),
 ]
-pkg.swiftLanguageVersions = [.v3, .v4, .v4_2]
+pkg.swiftLanguageVersions = [3, 4]
 pkg.dependencies = [
 	.package(url: "https://github.com/mxcl/PromiseKit.git", from: "6.0.0")
 ]
