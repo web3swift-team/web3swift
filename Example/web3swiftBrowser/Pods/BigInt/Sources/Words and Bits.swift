@@ -69,7 +69,7 @@ extension BigUInt {
     /// - Complexity: O(count)
     public var trailingZeroBitCount: Int {
         guard count > 0 else { return 0 }
-        let i = self.words.index { $0 != 0 }!
+        let i = self.words.firstIndex { $0 != 0 }!
         return i * Word.bitWidth + self[i].trailingZeroBitCount
     }
 }
@@ -149,7 +149,7 @@ extension BigInt {
                 self.decrementLimit = 0
             case .minus:
                 assert(!value.magnitude.isZero)
-                self.decrementLimit = value.magnitude.words.index(where: { $0 != 0 })!
+                self.decrementLimit = value.magnitude.words.firstIndex(where: { $0 != 0 })!
             }
         }
 

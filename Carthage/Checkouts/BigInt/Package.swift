@@ -1,4 +1,4 @@
-// swift-tools-version:4.2
+// swift-tools-version:5.0
 //
 //  Package.swift
 //  BigInt
@@ -17,6 +17,5 @@ let package = Package(
     targets: [
         .target(name: "BigInt", path: "Sources"),
         .testTarget(name: "BigIntTests", dependencies: ["BigInt"], path: "Tests")
-    ],
-    swiftLanguageVersions: [.v4_2, .version("5")]
+    ]
 )

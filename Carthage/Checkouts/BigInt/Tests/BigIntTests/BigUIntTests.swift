@@ -156,6 +156,22 @@ class BigUIntTests: XCTestCase {
         check(BigUInt(Double(sign: .plus, exponent: 2 * Word.bitWidth, significand: 1.0)),
               nil, [0, 0, 1])
     }
+    
+    func testInit_Buffer() {
+        func test(_ b: BigUInt, _ d: Array<UInt8>, file: StaticString = #file, line: UInt = #line) {
+            d.withUnsafeBytes { buffer in
+                let initialized = BigUInt(buffer)
+                XCTAssertEqual(initialized, b, file: file, line: line)
+            }
+        }
+        
+        // Positive integers
+        test(BigUInt(), [])
+        test(BigUInt(1), [0x01])
+        test(BigUInt(2), [0x02])
+        test(BigUInt(0x0102030405060708), [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08])
+        test(BigUInt(0x01) << 64 + BigUInt(0x0203040506070809), [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 09])
+    }
 
     func testConversionToFloatingPoint() {
         func test<F: BinaryFloatingPoint>(_ a: BigUInt, _ b: F, file: StaticString = #file, line: UInt = #line)
@@ -598,7 +614,7 @@ class BigUIntTests: XCTestCase {
     }
 
     func checkData(_ bytes: [UInt8], _ value: BigUInt, file: StaticString = #file, line: UInt = #line) {
-        XCTAssertEqual(BigUInt(Data(bytes: bytes)), value, file: file, line: line)
+        XCTAssertEqual(BigUInt(Data(bytes)), value, file: file, line: line)
         XCTAssertEqual(bytes.withUnsafeBytes { buffer in BigUInt(buffer) }, value, file: file, line: line)
     }
 
@@ -634,7 +650,7 @@ class BigUIntTests: XCTestCase {
         test(BigUInt(1), [0x01])
         test(BigUInt(2), [0x02])
         test(BigUInt(0x0102030405060708), [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08])
-        test(BigUInt(0x01) << 64 + BigUInt(0x0203040506070809), [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 09])
+        test(BigUInt(0x01) << 64 + BigUInt(0x0203040506070809), [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09])
     }
 
     func testCodable() {
@@ -1428,6 +1444,40 @@ class BigUIntTests: XCTestCase {
         XCTAssertEqual(zeroBits, [])
     }
 
+    func testRandomFunctionsUseProvidedGenerator() {
+        // Here I verify that each of the randomInteger functions uses the provided RNG, and not SystemRandomNumberGenerator.
+        // This is important because all but BigUInt.randomInteger(withMaximumWidth:using:) are built on that base function, and it is easy to forget to pass along the provided generator and get a default SystemRandomNumberGenerator instead.
+
+        // Since SystemRandomNumberGenerator is seeded randomly, repeated uses should give varying results.
+        // So here I pass the same deterministic RNG repeatedly and verify that I get the same result each time.
+
+        struct CountingRNG: RandomNumberGenerator {
+            var i: UInt64 = 12345
+            mutating func next() -> UInt64 {
+                i += 1
+                return i
+            }
+        }
+
+        func gen(_ body: (inout CountingRNG) -> BigUInt) -> BigUInt {
+            var rng = CountingRNG()
+            return body(&rng)
+        }
+
+        func check(_ body: (inout CountingRNG) -> BigUInt) {
+            let expected = gen(body)
+            for _ in 0 ..< 100 {
+                let actual = gen(body)
+                XCTAssertEqual(expected, actual)
+            }
+        }
+
+        check { BigUInt.randomInteger(withMaximumWidth: 200, using: &$0) }
+        check { BigUInt.randomInteger(withExactWidth: 200, using: &$0) }
+        let limit = BigUInt(UInt64.max) * BigUInt(UInt64.max) * BigUInt(UInt64.max)
+        check { BigUInt.randomInteger(lessThan: limit, using: &$0) }
+    }
+
     //
     // you have to manually register linux tests here :-(
     //
@@ -1435,6 +1485,7 @@ class BigUIntTests: XCTestCase {
         ("testInit_WordBased", testInit_WordBased),
         ("testInit_BinaryInteger", testInit_BinaryInteger),
         ("testInit_FloatingPoint", testInit_FloatingPoint),
+        ("testInit_Buffer", testInit_Buffer),
         ("testConversionToFloatingPoint", testConversionToFloatingPoint),
         ("testInit_Misc", testInit_Misc),
         ("testEnsureArray", testEnsureArray),
@@ -1480,5 +1531,6 @@ class BigUIntTests: XCTestCase {
         ("testRandomIntegerWithMaximumWidth", testRandomIntegerWithMaximumWidth),
         ("testRandomIntegerWithExactWidth", testRandomIntegerWithExactWidth),
         ("testRandomIntegerLessThan", testRandomIntegerLessThan),
+        ("testRandomFunctionsUseProvidedGenerator", testRandomFunctionsUseProvidedGenerator),
     ]
 }

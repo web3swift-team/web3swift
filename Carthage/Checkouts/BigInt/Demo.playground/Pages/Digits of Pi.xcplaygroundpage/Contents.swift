@@ -11,16 +11,16 @@ func digitsOfPi() -> AnyIterator<Int> {
     var q: BigUInt = 1
     var r: BigUInt = 180
     var t: BigUInt = 60
-    var i: UInt64 = 2 // Works until digit #826_566_842
+    var i: UInt = 2 // Works until digit #826_566_842
     return AnyIterator {
-        let u: UInt64 = 3 * (3 * i + 1) * (3 * i + 2)
-        let y = (q.multiplied(byDigit: 27 * i - 12) + 5 * r) / (5 * t)
+        let u: UInt = 3 * (3 * i + 1) * (3 * i + 2)
+        let y = (q.multiplied(byWord: 27 * i - 12) + 5 * r) / (5 * t)
         (q, r, t) = (
-            10 * q.multiplied(byDigit: i * (2 * i - 1)),
-            10 * (q.multiplied(byDigit: 5 * i - 2) + r - y * t).multiplied(byDigit: u),
-            t.multiplied(byDigit: u))
+            10 * q.multiplied(byWord: i * (2 * i - 1)),
+            10 * (q.multiplied(byWord: 5 * i - 2) + r - y * t).multiplied(byWord: u),
+            t.multiplied(byWord: u))
         i += 1
-        return Int(y[0])
+        return Int(y.words[0])
     }
 }
 //: Well, that was surprisingly easy. Does it work? You bet:

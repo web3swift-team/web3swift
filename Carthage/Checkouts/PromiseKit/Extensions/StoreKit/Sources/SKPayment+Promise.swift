@@ -23,7 +23,7 @@ private class PaymentObserver: NSObject, SKPaymentTransactionObserver {
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        guard let transaction = transactions.first(where: { $0.payment == payment }) else {
+        guard let transaction = transactions.first(where: { $0.payment.productIdentifier == payment.productIdentifier }) else {
             return
         }
         switch transaction.transactionState {

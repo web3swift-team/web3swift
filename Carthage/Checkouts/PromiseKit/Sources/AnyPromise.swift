@@ -3,7 +3,7 @@ import Foundation
 /**
  __AnyPromise is an implementation detail.
 
- Because of how ObjC/Swift compatability work we have to compose our AnyPromise
+ Because of how ObjC/Swift compatibility work we have to compose our AnyPromise
  with this internal object, however this is still part of the public interface.
  Sadly. Please don’t use it.
 */
@@ -61,6 +61,26 @@ import Foundation
         }))
     }
 
+    @objc public func __wait() -> Any? {
+        if Thread.isMainThread {
+            conf.logHandler(.waitOnMainThread)
+        }
+        
+        var result = __value
+        
+        if result == nil {
+            let group = DispatchGroup()
+            group.enter()
+            self.__pipe { obj in
+                result = obj
+                group.leave()
+            }
+            group.wait()
+        }
+        
+        return result
+    }
+ 
     /// Internal, do not use! Some behaviors undefined.
     @objc public func __pipe(_ to: @escaping (Any?) -> Void) {
         let to = { (obj: Any?) -> Void in

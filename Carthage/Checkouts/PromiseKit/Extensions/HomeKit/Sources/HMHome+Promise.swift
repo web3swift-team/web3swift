@@ -14,7 +14,9 @@ extension HMHome {
             self.updateName(name, completionHandler: seal.resolve)
         }
     }
-    
+
+    // MARK: Accessories
+
     /// Add and setup a new HMAccessory.  Displays it's own UI
     @available(iOS 11.3, *)
     public func addAndSetupAccessories(with payload: HMAccessorySetupPayload) -> Promise<[HMAccessory]> {
@@ -62,9 +64,8 @@ extension HMHome {
         }
     }
     
-    /**
-        Rooms
-    */
+    // MARK: Rooms
+
     @available(iOS 8.0, *)
     public func addRoom(withName name: String) -> Promise<HMRoom> {
         return Promise { seal in
@@ -78,5 +79,38 @@ extension HMHome {
             self.removeRoom(room, completionHandler: seal.resolve)
         }
     }
+
+    // MARK: Action Sets
+
+    @available(iOS 8.0, *)
+    public func addActionSet(withName name: String) -> Promise<HMActionSet> {
+        return Promise { seal in
+            self.addActionSet(withName: name, completionHandler: seal.resolve)
+        }
+    }
+
+    @available(iOS 8.0, *)
+    public func removeActionSet(_ actionSet: HMActionSet) -> Promise<Void> {
+        return Promise { seal in
+            self.removeActionSet(actionSet, completionHandler: seal.resolve)
+        }
+    }
+
+    // MARK: Triggers
+    
+    @available(iOS 8.0, *)
+    public func addTrigger(_ trigger: HMTrigger) -> Promise<Void> {
+        return Promise { seal in
+            self.addTrigger(trigger, completionHandler: seal.resolve)
+        }
+    }
+
+    @available(iOS 8.0, *)
+    public func removeTrigger(_ trigger: HMTrigger) -> Promise<Void> {
+        return Promise { seal in
+            self.removeTrigger(trigger, completionHandler: seal.resolve)
+        }
+    }
 }
+
 #endif

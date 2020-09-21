@@ -1,3 +1,31 @@
+# 5.2.0 (2020-08-24)
+
+This release contains the following changes:
+
+- Added support for the use of RandomNumberGenerator
+
+# 5.1.0 (2020-03-17)
+
+This release contains the following changes:
+
+- Added support to serialize/deserialize BigInt in a manner similar to BigUInt
+
+# 5.0.0 (2019-08-24)
+
+This release contains the following changes:
+
+- Swift 5 compatibility
+
+There were no functional changes.
+
+# 4.0.1 (2019-05-09)
+
+This release contains the following changes:
+
+- Cleaned warnings on Swift 5
+
+There were no functional changes.
+
 # 4.0.0 (2019-04-03)
 
 This release contains the following changes:

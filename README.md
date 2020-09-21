@@ -17,22 +17,47 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Design Decisions](#design-decisions)
-- [Projects that using web3swift](#projects-that-using-web3swift)
+- [Core features](#core-features)
 - [Installation](#installation)
+  - [Example usage](#example-usage)
   - [Requirements](#requirements)
   - [Migration Guides](#migration-guides)
 - [Documentation](#documentation)
-  - [Examples](#examples)
-- [FAQ](#faq)
-- [Credits](#credits)
-  - [What we have already done](#what-we-have-already-done)
-  - [Future steps](#future-steps)
+- [Projects that are using web3swift](#projects-that-are-using-web3swift)
+- [Support](#support)
 - [Contribute](#contribute)
+  - [Future steps](#future-steps)
+- [Credits](#credits)
 - [Security Disclosure](#security-disclosure)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Core features
+
+- [x] :zap: Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality 
+- [x] :thought_balloon: Interaction with remote node via **JSON RPC** 
+- [x] 🔐 Local **keystore management** (`geth` compatible)
+- [x] 🤖 Smart-contract **ABI parsing** 
+- [x] 🔓**ABI deconding** (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
+- [x] 🕸Ethereum Name Service **(ENS) support** - a secure & decentralised way to address resources both on and off the blockchain using simple, human-readable names
+- [x] :arrows_counterclockwise: **Smart contracts interactions** (read/write) 
+- [x]  ⛩ **Infura support**, patial Websockets API support
+- [x] ⚒  **Parsing TxPool** content into native values (ethereum addresses and transactions) - easy to get pending transactions
+- [x] 🖇 **Event loops** functionality
+- [x] 📱Supports Web3View functionality (WKWebView with **injected "web3" provider**)
+- [x] 🕵️‍♂️ Possibility to **add or remove "middleware" that intercepts**, modifies and even **cancel transaction** workflow on stages "before assembly", "after assembly"and "before submission"
+- [x] ✅**Literally following the standards** (BIP, EIP, etc):
+
+    - [x] **[BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) (HD Wallets), [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases), [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)**
+- [x] **[EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)** (Standart interface for tokens - ERC-20), **[EIP-67](https://github.com/ethereum/EIPs/issues/67)** (Standard URI scheme), **[EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md)** (Replay attacks protection)
+    - [x] **And many others ** *(For more details about this EIP's look at [Documentation page](https://github.com/matter-labs/web3swift/blob/master/Documentation/))*: EIP-681, EIP-721, EIP-165, EIP-777, EIP-820, EIP-888, EIP-1400, EIP-1410, EIP-1594, EIP-1643, EIP-1644, EIP-1633, EIP-721, EIP-1155, EIP-1376, ST-20
+
+- [x] 🗜 **Batched requests** in concurrent mode
+- [x] **RLP encoding**
+- [x] Base58 encoding scheme
+- [x] Formatting to and from Ethereum Units
+- [x] Comprehensive Unit and Integration Test Coverage
 
 ## Installation
 
@@ -91,6 +116,23 @@ github "matter-labs/web3swift" "master"
 
 Run `carthage update` to build the framework. By default, Carthage performs checkouts and creates a new directory 'Carthage' in the same location as your Cartfile. Open this directory, go to 'Build' directory, choose iOS or macOS directory, and use the selected directory framework in your Xcode project.
 
+### Example usage
+
+**Web3View example:**
+
+You can see how to our demo project: **WKWebView with injected "web3" provider**:
+
+``` bash
+git clone https://github.com/matter-labs/web3swift.git
+cd web3swift/Example/web3swiftBrowser
+pod install
+open ./web3swiftBrowser.xcworkspace
+```
+
+### Build from source:
+
+- Clone repo
+- Instal dependencies via  `./carthage-build.sh --platform iOS` (temo workaround, foe of Carthage bug.For  more details please look at https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323)
 
 ### Requirements
 
@@ -102,13 +144,13 @@ Run `carthage update` to build the framework. By default, Carthage performs chec
 
 - [web3swift 2.0 Migration Guide](https://github.com/matterinc/web3swift/blob/master/Documentation/web3swift%202.0%20Migration%20Guide.md)
 
-
----
 ## Documentation
 
 For full documentation details and FAQ, please look at [Documentation](https://github.com/matter-labs/web3swift/blob/master/Documentation/)
 
 *If you need to find or understand an API, check [Usage.md](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md).*
+
+ **FAQ moved [Documentation Page](https://github.com/matter-labs/web3swift/blob/master/Documentation/)**
 
 Here are quick references for essential features:
 
@@ -117,49 +159,6 @@ Here are quick references for essential features:
 - [Ethereum Endpoints interaction (web3, balance, tx's operations, chain state)](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ethereum-endpoints-interaction)
 - [Websockets](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#websockets)
 - [ENS](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ens)
-
-### Examples
-
-#### Web3View example
-
-You can see how to our demo project: **WKWebView with injected "web3" provider**:
-
-- Clone: `git clone https://github.com/matter-labs/web3swift.git`
-  -  `cd web3swift/Example/web3swiftBrowser`
-- Install Dependencies: `pod install`
-- Open: `open ./web3swiftBrowser.xcworkspace`
-
-## FAQ
-(Moved [Documentation Page](https://github.com/matter-labs/web3swift/blob/master/Documentation/))
-
-
-### Core features:
-
-- [x] Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality :zap:
-- [x] Interaction with remote node via **JSON RPC** :thought_balloon:
-- [x] Local **keystore management** (`geth` compatible)
-- [x] Smart-contract **ABI parsing** :book:
-- [x] **ABI deconding** (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
-- [x] Ethereum Name Service **(ENS) support** - a secure & decentralised way to address resources both on and off the blockchain using simple, human-readable names
-- [x] **Smart contracts interactions** (read/write) :arrows_counterclockwise:
-- [x] Complete **Infura support**, patial Websockets API support
-- [x] **Parsing TxPool** content into native values (ethereum addresses and transactions) - easy to get pending transactions
-- [x] **Event loops** functionality
-- [x] Supports Web3View functionality (WKWebView with **injected "web3" provider**)
-- [x] Possibility to **add or remove "middleware" that intercepts**, modifies and even **cancel transaction** workflow on stages "before assembly", "after assembly"and "before submission"
-- [x] **Literally following the standards** (BIP, EIP, etc):
-
-    - [x] **[BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) (HD Wallets), [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases), [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)**
-- [x] **[EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)** (Standart interface for tokens - ERC-20), **[EIP-67](https://github.com/ethereum/EIPs/issues/67)** (Standard URI scheme), **[EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md)** (Replay attacks protection)
-    - [x] **And many others ** *(For more details about this EIP's look at [Documentation page](https://github.com/matter-labs/web3swift/blob/master/Documentation/))*: EIP-681, EIP-721, EIP-165, EIP-777, EIP-820, EIP-888, EIP-1400, EIP-1410, EIP-1594, EIP-1643, EIP-1644, EIP-1633, EIP-721, EIP-1155, EIP-1376, ST-20
-
-
-- [x] **Batched requests** in concurrent mode
-- [x] **RLP encoding**
-- [x] Base58 encoding scheme
-- [x] Formatting to and from Ethereum Units
-- [x] Comprehensive Unit and Integration Test Coverage
-
 
 ## Projects that are using web3swift
 
@@ -179,6 +178,7 @@ If you are using this library in your project, please [add a link](https://githu
 * [Follow_iOS](https://github.com/FollowInc/Follow_iOS)
 * [Biomedical Data Sharing dApp - Geolocation](https://github.com/HD2i/Geolocation-iOS)
 * [Alice Wallet](https://github.com/alicedapp/AliceX)
+* [web3-react-native](https://github.com/cawfree/web3-react-native)
 * [YOUR APP CAN BE THERE (click me)](https://github.com/matter-labs/web3swift/edit/develop/README.md) :wink:
 
 *Nothing makes developers happier than seeing someone else use our work and go wild with it.*
@@ -213,10 +213,6 @@ We want to continue to do everything we can to move the needle forward.
 ### Future steps 
 
 You are more than welcome to participate! **Your contribution will be paid via  [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift).**
-
-- [ ] [**Objective-C - a proxy bridge** to build your DApp on Objective-C using web3swift](https://github.com/matter-labs/web3swift/issues/10) (help needed)
-
-- [ ] **Support IPFS** via Infura public IPFS gateway
 
 - [ ] **L2 support** (such as [ZkSync](https://zksync.io/))
 
