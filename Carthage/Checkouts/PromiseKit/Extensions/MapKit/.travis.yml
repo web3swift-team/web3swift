@@ -31,9 +31,9 @@ jobs:
     - <<: *pod
       osx_image: xcode9.4
       env: SWIFT=3.3
-    # - <<: *pod
-    #   osx_image: xcode10
-    #   env: SWIFT=3.4
+    - <<: *pod
+      osx_image: xcode10.1
+      env: SWIFT=3.4
     - <<: *pod
       osx_image: xcode9.2
       env: SWIFT=4.0
@@ -41,7 +41,7 @@ jobs:
       osx_image: xcode9.4
       env: SWIFT=4.1
     - <<: *pod
-      osx_image: xcode10
+      osx_image: xcode10.1
       env: SWIFT=4.2
     - <<: *pod
       osx_image: xcode10.2
@@ -52,6 +52,7 @@ jobs:
       osx_image: xcode9.2
       script: |
         carthage bootstrap --cache-builds
+        sed -i '' "s/SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;/SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;/" *.xcodeproj/project.pbxproj
         carthage build --no-skip-current
       cache:
         directories:
@@ -71,10 +72,9 @@ jobs:
       cache:
         directories:
         - Carthage
-      before_install: |
+      before_install:
         carthage bootstrap --cache-builds --no-use-binaries
-        sed -i '' "s/SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;/SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;/" *.xcodeproj/project.pbxproj
     - <<: *test
       xcode_destination: 'platform=iOS Simulator,OS=12.2,name=iPhone SE'
     - <<: *test
-      xcode_destination: 'platform=Apple TV Simulator,OS=12.2,name=Apple TV'
+      xcode_destination: 'platform=tvOS Simulator,OS=12.2,name=Apple TV'

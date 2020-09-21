@@ -62,8 +62,7 @@ jobs:
         carthage bootstrap --cache-builds
         sed -i '' "s/SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;/SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;/" *.xcodeproj/project.pbxproj
         carthage build --no-skip-current
-      cache:
-        directories:
+      cache.directories:
         - Carthage
     - <<: *carthage
       osx_image: xcode9.4
@@ -74,19 +73,13 @@ jobs:
 
     - &swiftpm
       stage: swiftpm
-      name: Xcode 8.3 / SwiftPM
-      os: osx
       osx_image: xcode8.3
-      language: objective-c
       script: swift build
     - <<: *swiftpm
-      name: Xcode 9.4 / SwiftPM
       osx_image: xcode9.4
     - <<: *swiftpm
-      name: Xcode 10.1 / SwiftPM
-      osx_image: xcode10
+      osx_image: xcode10.1
     - <<: *swiftpm
-      name: Xcode 10.2 / SwiftPM
       osx_image: xcode10.2
 
     - &test
@@ -94,12 +87,11 @@ jobs:
       xcode_scheme: PMKAlamofire
       xcode_project: PMKAlamofire.xcodeproj
       xcode_destination: 'platform=macOS'
-      cache:
-        directories:
+      cache.directories:
         - Carthage
       before_install:
         carthage bootstrap --cache-builds --no-use-binaries
     - <<: *test
-      xcode_destination: 'platform=iOS Simualtor,OS=12.2,name=iPhone SE'
+      xcode_destination: 'platform=iOS Simulator,OS=12.2,name=iPhone SE'
     - <<: *test
       xcode_destination: 'platform=tvOS Simulator,OS=12.2,name=Apple TV'

@@ -88,10 +88,14 @@ extension CLLocationManager {
             return auth().then(std)
         case .denied, .restricted:
             return Promise(error: PMKError.notAuthorized)
+      #if swift(>=5)
+        @unknown default:
+            fatalError()
+      #endif
         }
     }
 
-    @available(*, deprecated: 5.0, renamed: "requestLocation")
+    @available(*, deprecated, renamed: "requestLocation")
     public class func promise(_ requestAuthorizationType: RequestAuthorizationType = .automatic, satisfying block: ((CLLocation) -> Bool)? = nil) -> Promise<[CLLocation]> {
         return requestLocation(authorizationType: requestAuthorizationType, satisfying: block)
     }

@@ -249,7 +249,6 @@
 		13C338F721B6C62400F33F5E /* scratch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scratch.h; sourceTree = "<group>"; };
 		13CE02B021FC846800CE7148 /* RELEASE_GUIDE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = RELEASE_GUIDE.md; sourceTree = "<group>"; };
 		13CE02B121FC846900CE7148 /* BUILD_GUIDE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = BUILD_GUIDE.md; sourceTree = "<group>"; };
-		13CE02B421FC849400CE7148 /* Web3swift.pod.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Web3swift.pod.podspec; sourceTree = "<group>"; };
 		3A7EA35D2280EA9A005120C2 /* Encodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extensions.swift"; sourceTree = "<group>"; };
 		3A7EA35F2280EB27005120C2 /* Decodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decodable+Extensions.swift"; sourceTree = "<group>"; };
 		3AA815172276E42F00F5DB52 /* EventFiltering.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFiltering.swift; sourceTree = "<group>"; };
@@ -463,7 +462,6 @@
 				3AA816412276E5A900F5DB52 /* README.md */,
 				3AA8163E2276E5A800F5DB52 /* web3swift-logo.png */,
 				1317BE27218C8A9F00D6D095 /* web3swift.podspec */,
-				13CE02B421FC849400CE7148 /* Web3swift.pod.podspec */,
 				1317BCFD218C526300D6D095 /* Sources */,
 				1317BDD2218C526C00D6D095 /* Tests */,
 				1317BCE4218C50D100D6D095 /* Products */,
@@ -1164,7 +1162,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nfor path in $FRAMEWORK_SEARCH_PATHS\ndo\nif [ -d \"${path}/Dip.framework\" ] && [[ $path == *\"Carthage\"* ]]; then\nexport SCRIPT_INPUT_FILE_COUNT=1\nexport SCRIPT_INPUT_FILE_0=\"${path}/Dip.framework\"\n/usr/local/bin/carthage copy-frameworks\nbreak\nfi\ndone\n";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 		139751F0219AFA500044D2B0 /* Carthage */ = {
 			isa = PBXShellScriptBuildPhase;

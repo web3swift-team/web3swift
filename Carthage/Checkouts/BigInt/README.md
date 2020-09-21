@@ -12,7 +12,7 @@
 	* [RSA Cryptography](#rsa)
 	* [Calculating the Digits of π](#pi)
 
-[![Swift 3](https://img.shields.io/badge/Swift-4-blue.svg)](https://developer.apple.com/swift/)
+[![Swift 3](https://img.shields.io/badge/Swift-5-blue.svg)](https://developer.apple.com/swift/)
 [![License](https://img.shields.io/badge/licence-MIT-blue.svg)](http://cocoapods.org/pods/BigInt)
 [![Platform](https://img.shields.io/cocoapods/p/BigInt.svg)](http://cocoapods.org/pods/BigInt)
 
@@ -97,7 +97,7 @@ BigInt can be used, distributed and modified under [the MIT license][license].
 
 ## <a name="integration">Requirements and Integration</a>
 
-BigInt 3.0.0 requires Swift 4. (The last version with support for Swift 3.x was BigInt 2.1.0.
+BigInt 4.0.0 requires Swift 4.2 (The last version with support for Swift 3.x was BigInt 2.1.0.
 The last version with support for Swift 2 was BigInt 1.3.0.)
 
 | Swift Version | last BigInt Version|
@@ -105,12 +105,13 @@ The last version with support for Swift 2 was BigInt 1.3.0.)
 | 3.x           | 2.1.0              |
 | 4.0           | 3.1.0              |
 | 4.2           | 4.0.0              |
+| 5.0           | 5.0.0              |
 
 BigInt deploys to macOS 10.10, iOS 9, watchOS 2 and tvOS 9.
 It has been tested on the latest OS releases only---however, as the module uses very few platform-provided APIs,
 there should be very few issues with earlier versions.
 
-BigInt uses no APIs specific to Apple platforms except for `arc4random_buf` in `BigUInt Random.swift`, so
+BigInt uses no APIs specific to Apple platforms, so
 it should be easy to port it to other operating systems.
 
 Setup instructions:
@@ -120,19 +121,19 @@ Setup instructions:
   Add this to the dependency section of your `Package.swift` manifest:
 
     ```Swift
-    .package(url: "https://github.com/attaswift/BigInt.git", from: "4.0.0")
+    .package(url: "https://github.com/attaswift/BigInt.git", from: "5.0.0")
     ```
 
 - **CocoaPods:** Put this in your `Podfile`:
 
     ```Ruby
-    pod 'BigInt', '~> 4.0'
+    pod 'BigInt', '~> 5.0'
     ```
 
 - **Carthage:** Put this in your `Cartfile`:
 
     ```
-    github "attaswift/BigInt" ~> 4.0
+    github "attaswift/BigInt" ~> 5.0
     ```
 
 ## <a name="notes">Implementation notes</a>
@@ -144,17 +145,6 @@ automatically extends the array on out-of-bound `set`s. This makes memory manage
 
 [`BigInt`][BigInt] is just a tiny wrapper around a `BigUInt` [absolute value][abs] and a
 [sign bit][negative], both of which are accessible as public read-write properties.
-
-### <a name="fullwidth">Full-width multiplication and division primitives</a>
-
-I haven't found (64,64)->128 multiplication or (128,64)->64 division operations
-in Swift, so [the module has generic implementations for them][fullmuldiv] in terms of the standard
-single-width `*` and `/` operators. I suspect there are LLVM intrinsics for full-width
-arithmetics that are probably accessible somehow, though. ([Let me know][twitter] if you know how!)
-
-This sounds slow, but 64-bit digits are
-still considerably faster than 32-bit, even though the latter can use direct 64-bit arithmetic to
-implement these primitives.
 
 ### <a name="generics">Why is there no generic `BigInt<Digit>` type?</a>
 

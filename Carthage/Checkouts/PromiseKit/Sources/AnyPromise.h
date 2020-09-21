@@ -71,7 +71,7 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 
 
 /**
- The provided block is executed when its receiver is resolved.
+ The provided block is executed when its receiver is fulfilled.
 
  If you provide a block that takes a parameter, the value of the receiver will be passed as that parameter.
 
@@ -181,6 +181,13 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
  @see ensure
  */
 - (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, dispatch_block_t __nonnull))ensureOn NS_REFINED_FOR_SWIFT;
+
+/**
+ Wait until the promise is resolved.
+
+ @return Value if fulfilled or error if rejected.
+ */
+- (id __nullable)wait NS_REFINED_FOR_SWIFT;
 
 /**
  Create a new promise with an associated resolver.

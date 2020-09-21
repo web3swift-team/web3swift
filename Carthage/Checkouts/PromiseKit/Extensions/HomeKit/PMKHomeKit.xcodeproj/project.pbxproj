@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		63C7FFF71D5C020D003BAE60 /* PMKHomeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63C7FFA71D5BEE09003BAE60 /* PMKHomeKit.framework */; };
+		7D619865235E333E001E0F2E /* HMActionSet+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D619864235E333E001E0F2E /* HMActionSet+Promise.swift */; };
+		7D619867235E33AC001E0F2E /* HMTrigger+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D619866235E33AC001E0F2E /* HMTrigger+Promise.swift */; };
+		7D619869235E3401001E0F2E /* HMEventTrigger+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D619868235E3401001E0F2E /* HMEventTrigger+Promise.swift */; };
 		8312EA1521096DF000A47DDF /* HMAccessoryBrowserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8312EA1421096DF000A47DDF /* HMAccessoryBrowserTests.swift */; };
 		8312EA19210974F600A47DDF /* UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8312EA18210974F600A47DDF /* UtilsTests.swift */; };
 		838C29D32103FB9700CE5309 /* HMAcessoryBrowser+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838C29CE2103FB9600CE5309 /* HMAcessoryBrowser+Promise.swift */; };
@@ -33,6 +36,9 @@
 		63C7FFF21D5C020D003BAE60 /* PMKHKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKHKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		63CCF8121D5C0C4E00503216 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		63CCF8171D5C11B500503216 /* Carthage.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Carthage.xcconfig; sourceTree = "<group>"; };
+		7D619864235E333E001E0F2E /* HMActionSet+Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HMActionSet+Promise.swift"; sourceTree = "<group>"; };
+		7D619866235E33AC001E0F2E /* HMTrigger+Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HMTrigger+Promise.swift"; sourceTree = "<group>"; };
+		7D619868235E3401001E0F2E /* HMEventTrigger+Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HMEventTrigger+Promise.swift"; sourceTree = "<group>"; };
 		8312EA1421096DF000A47DDF /* HMAccessoryBrowserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMAccessoryBrowserTests.swift; sourceTree = "<group>"; };
 		8312EA18210974F600A47DDF /* UtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilsTests.swift; sourceTree = "<group>"; };
 		838C29CE2103FB9600CE5309 /* HMAcessoryBrowser+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HMAcessoryBrowser+Promise.swift"; sourceTree = "<group>"; };
@@ -87,8 +93,11 @@
 			children = (
 				838C29D02103FB9700CE5309 /* HMCharacteristic+Promise.swift */,
 				838C29CE2103FB9600CE5309 /* HMAcessoryBrowser+Promise.swift */,
+				7D619864235E333E001E0F2E /* HMActionSet+Promise.swift */,
+				7D619868235E3401001E0F2E /* HMEventTrigger+Promise.swift */,
 				838C29CF2103FB9700CE5309 /* HMHome+Promise.swift */,
 				838C29D12103FB9700CE5309 /* HMHomeManager+Promise.swift */,
+				7D619866235E33AC001E0F2E /* HMTrigger+Promise.swift */,
 				838C29D22103FB9700CE5309 /* Utils.swift */,
 			);
 			path = Sources;
@@ -158,27 +167,28 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Max Howell";
 				TargetAttributes = {
 					63C7FFA61D5BEE09003BAE60 = {
 						CreatedOnToolsVersion = 8.0;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					63C7FFF11D5C020D003BAE60 = {
 						CreatedOnToolsVersion = 8.0;
-						LastSwiftMigration = 0940;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = 63C7FFA11D5BEE09003BAE60 /* Build configuration list for PBXProject "PMKHomeKit" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 63C7FF9D1D5BEE09003BAE60;
 			productRefGroup = 63C7FFA81D5BEE09003BAE60 /* Products */;
@@ -215,8 +225,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				838C29D62103FB9700CE5309 /* HMHomeManager+Promise.swift in Sources */,
+				7D619865235E333E001E0F2E /* HMActionSet+Promise.swift in Sources */,
 				838C29D52103FB9700CE5309 /* HMCharacteristic+Promise.swift in Sources */,
 				838C29D42103FB9700CE5309 /* HMHome+Promise.swift in Sources */,
+				7D619869235E3401001E0F2E /* HMEventTrigger+Promise.swift in Sources */,
+				7D619867235E33AC001E0F2E /* HMTrigger+Promise.swift in Sources */,
 				838C29D32103FB9700CE5309 /* HMAcessoryBrowser+Promise.swift in Sources */,
 				838C29D72103FB9700CE5309 /* Utils.swift in Sources */,
 			);
@@ -247,6 +260,7 @@
 			baseConfigurationReference = 63CCF8171D5C11B500503216 /* Carthage.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -300,7 +314,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos watchsimulator watchos appletvsimulator appletvos";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -314,6 +328,7 @@
 			baseConfigurationReference = 63CCF8171D5C11B500503216 /* Carthage.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -359,7 +374,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit.CoreLocation;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos watchsimulator watchos appletvsimulator appletvos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALIDATE_PRODUCT = YES;
@@ -383,6 +398,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
 			};
 			name = Debug;
 		};
@@ -399,6 +415,7 @@
 				PRODUCT_MODULE_NAME = "${TARGET_NAME}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
 			};
 			name = Release;
 		};
@@ -412,7 +429,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SUPPRESS_WARNINGS = YES;
-				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -425,7 +441,6 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SUPPRESS_WARNINGS = YES;
-				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
