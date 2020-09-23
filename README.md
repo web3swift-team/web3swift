@@ -284,7 +284,7 @@ We want to continue to do everything we can to move the needle forward.
 - **Support us** via [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift)
 - Ether wallet address: `0x6A3738c6299f45c31697aceA647D49EdCC9C28A4`
 
-![Donate](https://raw.githubusercontent.com/matter-labs/web3swift/develop/img/Ether-donations.jpeg)
+<img src="https://raw.githubusercontent.com/matter-labs/web3swift/develop/img/Ether-donations.jpeg" width="300" />
 
 ### Future steps 
 
