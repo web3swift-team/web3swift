@@ -23,8 +23,8 @@
       - [Send Ether](#send-ether)
       - [Send ERC-20 Token](#send-erc-20-token)
       - [Write Transaction and call smart contract method](#write-transaction-and-call-smart-contract-method)
-    - [Web3View example:](#web3view-example)
-  - [Build from source:](#build-from-source)
+  - [Web3View example](#web3view-example)
+  - [Build from source](#build-from-source)
   - [Requirements](#requirements)
   - [Migration Guides](#migration-guides)
 - [Documentation](#documentation)
@@ -194,7 +194,7 @@ let tx = contract.write(
     transactionOptions: options)!
 ```
 
-#### Web3View example:
+### Web3View example
 
 You can see how to our demo project: **WKWebView with injected "web3" provider**:
 
