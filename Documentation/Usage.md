@@ -319,7 +319,7 @@ let tx = contract.write(
     transactionOptions: options)!
 ```
 
-##### Read Transaction to call smart contract method
+##### Read Transaction from call smart contract method
 
 ```swift
 let walletAddress = EthereumAddress(wallet.address)! // Your wallet address

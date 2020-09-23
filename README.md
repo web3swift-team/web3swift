@@ -20,6 +20,11 @@
 - [Core features](#core-features)
 - [Installation](#installation)
   - [Example usage](#example-usage)
+      - [Send Ether](#send-ether)
+      - [Send ERC-20 Token](#send-erc-20-token)
+      - [Write Transaction and call smart contract method](#write-transaction-and-call-smart-contract-method)
+    - [Web3View example:](#web3view-example)
+  - [Build from source:](#build-from-source)
   - [Requirements](#requirements)
   - [Migration Guides](#migration-guides)
 - [Documentation](#documentation)
@@ -51,7 +56,7 @@
 
     - [x] **[BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) (HD Wallets), [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases), [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)**
 - [x] **[EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)** (Standart interface for tokens - ERC-20), **[EIP-67](https://github.com/ethereum/EIPs/issues/67)** (Standard URI scheme), **[EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md)** (Replay attacks protection)
-    - [x] **And many others ** *(For more details about this EIP's look at [Documentation page](https://github.com/matter-labs/web3swift/blob/master/Documentation/))*: EIP-681, EIP-721, EIP-165, EIP-777, EIP-820, EIP-888, EIP-1400, EIP-1410, EIP-1594, EIP-1643, EIP-1644, EIP-1633, EIP-721, EIP-1155, EIP-1376, ST-20
+    - [x] **And many others** *(For details about this EIP's look at [Documentation page](https://github.com/matter-labs/web3swift/blob/master/Documentation/))*: EIP-681, EIP-721, EIP-165, EIP-777, EIP-820, EIP-888, EIP-1400, EIP-1410, EIP-1594, EIP-1643, EIP-1644, EIP-1633, EIP-721, EIP-1155, EIP-1376, ST-20
 
 - [x] 🗜 **Batched requests** in concurrent mode
 - [x] **RLP encoding**
@@ -116,9 +121,80 @@ github "matter-labs/web3swift" "master"
 
 Run `carthage update` to build the framework. By default, Carthage performs checkouts and creates a new directory 'Carthage' in the same location as your Cartfile. Open this directory, go to 'Build' directory, choose iOS or macOS directory, and use the selected directory framework in your Xcode project.
 
+- Swift Package
+Open xcode setting and add this repo as a source
+
 ### Example usage
 
-**Web3View example:**
+
+##### Send Ether
+
+```swift
+let value: String = "1.0" // In Ether
+let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
+let toAddress = EthereumAddress(toAddressString)!
+let contract = web3.contract(Web3.Utils.coldWalletABI, at: toAddress, abiVersion: 2)!
+let amount = Web3.Utils.parseToBigUInt(value, units: .eth)
+var options = TransactionOptions.defaultOptions
+options.value = amount
+options.from = walletAddress
+options.gasPrice = .automatic
+options.gasLimit = .automatic
+let tx = contract.write(
+    "fallback",
+    parameters: [AnyObject](),
+    extraData: Data(),
+    transactionOptions: options)!
+```
+
+##### Send ERC-20 Token
+
+```swift
+let value: String = "1.0" // In Tokens
+let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
+let toAddress = EthereumAddress(toAddressString)!
+let erc20ContractAddress = EthereumAddress(token.address)!
+let contract = web3.contract(Web3.Utils.erc20ABI, at: erc20ContractAddress, abiVersion: 2)!
+let amount = Web3.Utils.parseToBigUInt(value, units: .eth)
+var options = TransactionOptions.defaultOptions
+options.value = amount
+options.from = walletAddress
+options.gasPrice = .automatic
+options.gasLimit = .automatic
+let method = "transfer"
+let tx = contract.write(
+    method,
+    parameters: [toAddress, amount] as [AnyObject],
+    extraData: Data(),
+    transactionOptions: options)!
+```
+
+##### Write Transaction and call smart contract method
+
+```swift
+let value: String = "0.0" // Any amount of Ether you need to send
+let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
+let contractMethod = "SOMECONTRACTMETHOD" // Contract method you want to write
+let contractABI = "..." // Contract ABI
+let contractAddress = EthereumAddress(contractAddressString)!
+let abiVersion = 2 // Contract ABI version
+let parameters: [AnyObject] = [...]() // Parameters for contract method
+let extraData: Data = Data() // Extra data for contract method
+let contract = web3.contract(contractABI, at: contractAddress, abiVersion: abiVersion)!
+let amount = Web3.Utils.parseToBigUInt(value, units: .eth)
+var options = TransactionOptions.defaultOptions
+options.value = amount
+options.from = walletAddress
+options.gasPrice = .automatic
+options.gasLimit = .automatic
+let tx = contract.write(
+    contractMethod,
+    parameters: parameters,
+    extraData: extraData,
+    transactionOptions: options)!
+```
+
+#### Web3View example:
 
 You can see how to our demo project: **WKWebView with injected "web3" provider**:
 
@@ -132,7 +208,7 @@ open ./web3swiftBrowser.xcworkspace
 ### Build from source:
 
 - Clone repo
-- Instal dependencies via  `./carthage-build.sh --platform iOS` (temo workaround, foe of Carthage bug.For  more details please look at https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323)
+- Instal dependencies via  `./carthage-build.sh --platform iOS` (temp workaround, foe of Carthage bug. [For details please look at](https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323)
 
 ### Requirements
 
