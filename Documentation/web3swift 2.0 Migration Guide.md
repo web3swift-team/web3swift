@@ -44,10 +44,6 @@ This guide is provided in order to ease the transition of existing applications 
 
 ---
 
-## Follow naming convention
-
-Now you have to do "import Web3swift" (capitalization!) instead of "import web3swift" to follow naming convention.
-
 ## New pods
 
 Now EthereumAddress and Ethereum ABI are separate projects. Use "//import EthereumAddress" and "import Ethereum ABI" everywhere you use them.
@@ -256,7 +252,7 @@ let balanceString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .eth, dec
 
 // web3swift 2.0
 let address = EthereumAddress("<Address>")!
-let web3Main = Web3.InfuraMainnetWeb3()
+let web3 = Web3.InfuraMainnetWeb3()
 let balance = try web3.eth.getBalance(address: address)
 let balanceString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .eth, decimals: 3)
 ```

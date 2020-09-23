@@ -150,6 +150,7 @@ let tx = contract.write(
 ##### Send ERC-20 Token
 
 ```swift
+let web3 = Web3.InfuraMainnetWeb3() 
 let value: String = "1.0" // In Tokens
 let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
 let toAddress = EthereumAddress(toAddressString)!
@@ -169,9 +170,19 @@ let tx = contract.write(
     transactionOptions: options)!
 ```
 
+
+##### Get account balance
+```swift
+let web3 = Web3.InfuraMainnetWeb3() 
+let address = EthereumAddress("<Address>")!
+let balance = try web3.eth.getBalance(address: address)
+let balanceString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .eth, decimals: 3)
+```
+
 ##### Write Transaction and call smart contract method
 
 ```swift
+let web3 = Web3.InfuraMainnetWeb3() 
 let value: String = "0.0" // Any amount of Ether you need to send
 let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
 let contractMethod = "SOMECONTRACTMETHOD" // Contract method you want to write
