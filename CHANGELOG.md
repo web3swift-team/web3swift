@@ -2,7 +2,42 @@
 
 ## [Unreleased](https://github.com/matter-labs/web3swift/tree/HEAD)
 
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/2.2.1...HEAD)
+[Full Changelog](https://github.com/matter-labs/web3swift/compare/2.3.0...HEAD)
+
+**Implemented enhancements:**
+
+- Credentials: send "Authorization" header [\#267](https://github.com/matter-labs/web3swift/issues/267)
+
+**Closed issues:**
+
+- Xcode 10.3 archive failed [\#266](https://github.com/matter-labs/web3swift/issues/266)
+- Xcode 11 regenerating password [\#228](https://github.com/matter-labs/web3swift/issues/228)
+- support Xocde 11 SPM for iOS [\#221](https://github.com/matter-labs/web3swift/issues/221)
+
+## [2.3.0](https://github.com/matter-labs/web3swift/tree/2.3.0) (2020-09-21)
+
+[Full Changelog](https://github.com/matter-labs/web3swift/compare/2.2.2...2.3.0)
+
+**Fixed bugs:**
+
+- How to add web3swift in my framework ? [\#167](https://github.com/matter-labs/web3swift/issues/167)
+- Documentation link 404 in README.md [\#164](https://github.com/matter-labs/web3swift/issues/164)
+
+**Closed issues:**
+
+- web3swift.Web3Error.processingError\("Failed to fetch nonce"\) [\#272](https://github.com/matter-labs/web3swift/issues/272)
+- WebView: Dapp & Connect Wallet [\#264](https://github.com/matter-labs/web3swift/issues/264)
+- Create new contract method. [\#261](https://github.com/matter-labs/web3swift/issues/261)
+- Not able to Deploy smart contract [\#214](https://github.com/matter-labs/web3swift/issues/214)
+- unable to create archive file for testflight [\#161](https://github.com/matter-labs/web3swift/issues/161)
+
+**Merged pull requests:**
+
+- Added web3-react-native to libraries that use web3swift [\#263](https://github.com/matter-labs/web3swift/pull/263) ([cawfree](https://github.com/cawfree))
+
+## [2.2.2](https://github.com/matter-labs/web3swift/tree/2.2.2) (2020-04-04)
+
+[Full Changelog](https://github.com/matter-labs/web3swift/compare/2.2.1...2.2.2)
 
 **Implemented enhancements:**
 
@@ -12,7 +47,6 @@
 **Fixed bugs:**
 
 - Fix build dependencies [\#244](https://github.com/matter-labs/web3swift/issues/244)
-- Return nil on tx.call\(\) \(was not there few days ago\)  [\#239](https://github.com/matter-labs/web3swift/issues/239)
 - Carthage build fails [\#226](https://github.com/matter-labs/web3swift/issues/226)
 
 **Closed issues:**
@@ -25,6 +59,7 @@
 **Merged pull requests:**
 
 - value as optional parameter [\#256](https://github.com/matter-labs/web3swift/pull/256) ([skywinder](https://github.com/skywinder))
+- 2.2.2 [\#253](https://github.com/matter-labs/web3swift/pull/253) ([BaldyAsh](https://github.com/BaldyAsh))
 - \#248 [\#250](https://github.com/matter-labs/web3swift/pull/250) ([hakumai-iida](https://github.com/hakumai-iida))
 - Baldyash/webview [\#249](https://github.com/matter-labs/web3swift/pull/249) ([BaldyAsh](https://github.com/BaldyAsh))
 - policy [\#247](https://github.com/matter-labs/web3swift/pull/247) ([BaldyAsh](https://github.com/BaldyAsh))
@@ -36,7 +71,6 @@
 - correct gasLimit [\#222](https://github.com/matter-labs/web3swift/pull/222) ([luqz](https://github.com/luqz))
 - Change BIP39 word list extension from array of strings to one string … [\#217](https://github.com/matter-labs/web3swift/pull/217) ([husamettinor](https://github.com/husamettinor))
 - Expose BIP39 words and separator [\#212](https://github.com/matter-labs/web3swift/pull/212) ([dawiddr](https://github.com/dawiddr))
-- infura v3 complete update [\#209](https://github.com/matter-labs/web3swift/pull/209) ([BaldyAsh](https://github.com/BaldyAsh))
 
 ## [2.2.1](https://github.com/matter-labs/web3swift/tree/2.2.1) (2019-06-24)
 
@@ -67,6 +101,7 @@
 **Merged pull requests:**
 
 - 2.2.1 [\#210](https://github.com/matter-labs/web3swift/pull/210) ([BaldyAsh](https://github.com/BaldyAsh))
+- infura v3 complete update [\#209](https://github.com/matter-labs/web3swift/pull/209) ([BaldyAsh](https://github.com/BaldyAsh))
 - merge Master -\> develop [\#205](https://github.com/matter-labs/web3swift/pull/205) ([skywinder](https://github.com/skywinder))
 - update documentation, prettify doc style [\#204](https://github.com/matter-labs/web3swift/pull/204) ([skywinder](https://github.com/skywinder))
 - V handle fix [\#201](https://github.com/matter-labs/web3swift/pull/201) ([BaldyAsh](https://github.com/BaldyAsh))
@@ -103,6 +138,10 @@
 
 [Full Changelog](https://github.com/matter-labs/web3swift/compare/2.1.4...2.1.5)
 
+**Merged pull requests:**
+
+- Documentation update [\#153](https://github.com/matter-labs/web3swift/pull/153) ([BaldyAsh](https://github.com/BaldyAsh))
+
 ## [2.1.4](https://github.com/matter-labs/web3swift/tree/2.1.4) (2019-04-24)
 
 [Full Changelog](https://github.com/matter-labs/web3swift/compare/2.1.3...2.1.4)
@@ -128,8 +167,6 @@
 - Added reverse registrar [\#165](https://github.com/matter-labs/web3swift/pull/165) ([BaldyAsh](https://github.com/BaldyAsh))
 - WIP: ENS BaseRegistrar and RegistrarController support [\#162](https://github.com/matter-labs/web3swift/pull/162) ([BaldyAsh](https://github.com/BaldyAsh))
 - Updated example to 2.1.3 [\#158](https://github.com/matter-labs/web3swift/pull/158) ([BaldyAsh](https://github.com/BaldyAsh))
-- Documentation update [\#153](https://github.com/matter-labs/web3swift/pull/153) ([BaldyAsh](https://github.com/BaldyAsh))
-- 2.1.3 fix No2 [\#152](https://github.com/matter-labs/web3swift/pull/152) ([BaldyAsh](https://github.com/BaldyAsh))
 
 ## [2.1.3](https://github.com/matter-labs/web3swift/tree/2.1.3) (2019-04-06)
 
@@ -148,6 +185,7 @@
 
 **Merged pull requests:**
 
+- 2.1.3 fix No2 [\#152](https://github.com/matter-labs/web3swift/pull/152) ([BaldyAsh](https://github.com/BaldyAsh))
 - 2.1.3 fix [\#151](https://github.com/matter-labs/web3swift/pull/151) ([BaldyAsh](https://github.com/BaldyAsh))
 - 2.1.3 [\#150](https://github.com/matter-labs/web3swift/pull/150) ([BaldyAsh](https://github.com/BaldyAsh))
 
@@ -177,10 +215,9 @@
 
 **Merged pull requests:**
 
-- Swift 5 update [\#142](https://github.com/matter-labs/web3swift/pull/142) ([BaldyAsh](https://github.com/BaldyAsh))
+- Fix/podspec [\#135](https://github.com/matter-labs/web3swift/pull/135) ([BaldyAsh](https://github.com/BaldyAsh))
 - let some functions public for customization [\#132](https://github.com/matter-labs/web3swift/pull/132) ([scottphc](https://github.com/scottphc))
 - WIP: ST-20 and Security Token support [\#130](https://github.com/matter-labs/web3swift/pull/130) ([BaldyAsh](https://github.com/BaldyAsh))
-- Recent updates [\#125](https://github.com/matter-labs/web3swift/pull/125) ([BaldyAsh](https://github.com/BaldyAsh))
 - Fix/remove deprecated [\#120](https://github.com/matter-labs/web3swift/pull/120) ([BaldyAsh](https://github.com/BaldyAsh))
 
 ## [2.1.0](https://github.com/matter-labs/web3swift/tree/2.1.0) (2019-03-06)
@@ -235,7 +272,6 @@
 - Master to develop for 2.0.2 [\#94](https://github.com/matter-labs/web3swift/pull/94) ([shamatar](https://github.com/shamatar))
 - Feature/readme improvement [\#85](https://github.com/matter-labs/web3swift/pull/85) ([BaldyAsh](https://github.com/BaldyAsh))
 - Get recent develop changes [\#80](https://github.com/matter-labs/web3swift/pull/80) ([BaldyAsh](https://github.com/BaldyAsh))
-- Carthage [\#75](https://github.com/matter-labs/web3swift/pull/75) ([BaldyAsh](https://github.com/BaldyAsh))
 
 ## [2.0.4](https://github.com/matter-labs/web3swift/tree/2.0.4) (2018-11-20)
 
@@ -266,6 +302,10 @@
 
 - ENS Functionality [\#56](https://github.com/matter-labs/web3swift/issues/56)
 
+**Merged pull requests:**
+
+- ENS fix [\#83](https://github.com/matter-labs/web3swift/pull/83) ([BaldyAsh](https://github.com/BaldyAsh))
+
 ## [2.0.0](https://github.com/matter-labs/web3swift/tree/2.0.0) (2018-10-30)
 
 [Full Changelog](https://github.com/matter-labs/web3swift/compare/1.5.1...2.0.0)
@@ -289,6 +329,7 @@
 
 **Merged pull requests:**
 
+- Carthage [\#75](https://github.com/matter-labs/web3swift/pull/75) ([BaldyAsh](https://github.com/BaldyAsh))
 - Carthage fixes [\#74](https://github.com/matter-labs/web3swift/pull/74) ([BaldyAsh](https://github.com/BaldyAsh))
 
 ## [1.5.1](https://github.com/matter-labs/web3swift/tree/1.5.1) (2018-10-22)
@@ -382,190 +423,6 @@
 
 - Quick fix for scrypt performance [\#17](https://github.com/matter-labs/web3swift/pull/17) ([shamatar](https://github.com/shamatar))
 - adding description string to Web3Error [\#1](https://github.com/matter-labs/web3swift/pull/1) ([GabCas](https://github.com/GabCas))
-
-## [1.1.5](https://github.com/matter-labs/web3swift/tree/1.1.5) (2018-08-10)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/1.1.1...1.1.5)
-
-## [1.1.1](https://github.com/matter-labs/web3swift/tree/1.1.1) (2018-07-30)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/1.1.0...1.1.1)
-
-## [1.1.0](https://github.com/matter-labs/web3swift/tree/1.1.0) (2018-07-27)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/1.0.1...1.1.0)
-
-## [1.0.1](https://github.com/matter-labs/web3swift/tree/1.0.1) (2018-07-12)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/1.0.0...1.0.1)
-
-## [1.0.0](https://github.com/matter-labs/web3swift/tree/1.0.0) (2018-07-04)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.9.0...1.0.0)
-
-## [0.9.0](https://github.com/matter-labs/web3swift/tree/0.9.0) (2018-06-18)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.8.1...0.9.0)
-
-## [0.8.1](https://github.com/matter-labs/web3swift/tree/0.8.1) (2018-06-10)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.8.0...0.8.1)
-
-## [0.8.0](https://github.com/matter-labs/web3swift/tree/0.8.0) (2018-05-31)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.7.9...0.8.0)
-
-## [0.7.9](https://github.com/matter-labs/web3swift/tree/0.7.9) (2018-05-31)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.7.0...0.7.9)
-
-## [0.7.0](https://github.com/matter-labs/web3swift/tree/0.7.0) (2018-05-11)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.6.0...0.7.0)
-
-## [0.6.0](https://github.com/matter-labs/web3swift/tree/0.6.0) (2018-04-24)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.5.6...0.6.0)
-
-## [0.5.6](https://github.com/matter-labs/web3swift/tree/0.5.6) (2018-04-20)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.5.5...0.5.6)
-
-## [0.5.5](https://github.com/matter-labs/web3swift/tree/0.5.5) (2018-04-18)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.5.4...0.5.5)
-
-## [0.5.4](https://github.com/matter-labs/web3swift/tree/0.5.4) (2018-04-16)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.5.3...0.5.4)
-
-## [0.5.3](https://github.com/matter-labs/web3swift/tree/0.5.3) (2018-04-16)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.5.2...0.5.3)
-
-## [0.5.2](https://github.com/matter-labs/web3swift/tree/0.5.2) (2018-04-16)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.5.1...0.5.2)
-
-## [0.5.1](https://github.com/matter-labs/web3swift/tree/0.5.1) (2018-04-11)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.5.0...0.5.1)
-
-## [0.5.0](https://github.com/matter-labs/web3swift/tree/0.5.0) (2018-04-10)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.4.1...0.5.0)
-
-## [0.4.1](https://github.com/matter-labs/web3swift/tree/0.4.1) (2018-04-07)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.4.0...0.4.1)
-
-## [0.4.0](https://github.com/matter-labs/web3swift/tree/0.4.0) (2018-04-04)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.3.6...0.4.0)
-
-## [0.3.6](https://github.com/matter-labs/web3swift/tree/0.3.6) (2018-04-02)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.3.5...0.3.6)
-
-## [0.3.5](https://github.com/matter-labs/web3swift/tree/0.3.5) (2018-03-20)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.3.4...0.3.5)
-
-## [0.3.4](https://github.com/matter-labs/web3swift/tree/0.3.4) (2018-03-18)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.3.3...0.3.4)
-
-## [0.3.3](https://github.com/matter-labs/web3swift/tree/0.3.3) (2018-03-05)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.3.2...0.3.3)
-
-## [0.3.2](https://github.com/matter-labs/web3swift/tree/0.3.2) (2018-03-03)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.3.1...0.3.2)
-
-## [0.3.1](https://github.com/matter-labs/web3swift/tree/0.3.1) (2018-03-01)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.3.0...0.3.1)
-
-## [0.3.0](https://github.com/matter-labs/web3swift/tree/0.3.0) (2018-02-27)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.2.99...0.3.0)
-
-## [0.2.99](https://github.com/matter-labs/web3swift/tree/0.2.99) (2018-02-27)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.2.98...0.2.99)
-
-## [0.2.98](https://github.com/matter-labs/web3swift/tree/0.2.98) (2018-02-27)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.2.12...0.2.98)
-
-## [0.2.12](https://github.com/matter-labs/web3swift/tree/0.2.12) (2018-02-01)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.2.11...0.2.12)
-
-## [0.2.11](https://github.com/matter-labs/web3swift/tree/0.2.11) (2018-02-01)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.2.10...0.2.11)
-
-## [0.2.10](https://github.com/matter-labs/web3swift/tree/0.2.10) (2018-01-31)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.2.9...0.2.10)
-
-## [0.2.9](https://github.com/matter-labs/web3swift/tree/0.2.9) (2018-01-29)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.2.8...0.2.9)
-
-## [0.2.8](https://github.com/matter-labs/web3swift/tree/0.2.8) (2018-01-18)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.2.7...0.2.8)
-
-## [0.2.7](https://github.com/matter-labs/web3swift/tree/0.2.7) (2018-01-15)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.2.5...0.2.7)
-
-## [0.2.5](https://github.com/matter-labs/web3swift/tree/0.2.5) (2018-01-12)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.2.0...0.2.5)
-
-## [0.2.0](https://github.com/matter-labs/web3swift/tree/0.2.0) (2017-12-30)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.1.2...0.2.0)
-
-## [0.1.2](https://github.com/matter-labs/web3swift/tree/0.1.2) (2017-12-27)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.1.1...0.1.2)
-
-## [0.1.1](https://github.com/matter-labs/web3swift/tree/0.1.1) (2017-12-26)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.1.0...0.1.1)
-
-## [0.1.0](https://github.com/matter-labs/web3swift/tree/0.1.0) (2017-12-26)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.0.6...0.1.0)
-
-## [0.0.6](https://github.com/matter-labs/web3swift/tree/0.0.6) (2017-12-26)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.0.5...0.0.6)
-
-## [0.0.5](https://github.com/matter-labs/web3swift/tree/0.0.5) (2017-12-21)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.0.4...0.0.5)
-
-## [0.0.4](https://github.com/matter-labs/web3swift/tree/0.0.4) (2017-12-21)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.0.3...0.0.4)
-
-## [0.0.3](https://github.com/matter-labs/web3swift/tree/0.0.3) (2017-12-20)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.0.2...0.0.3)
-
-## [0.0.2](https://github.com/matter-labs/web3swift/tree/0.0.2) (2017-12-20)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/0.0.1...0.0.2)
-
-## [0.0.1](https://github.com/matter-labs/web3swift/tree/0.0.1) (2017-12-19)
-
-[Full Changelog](https://github.com/matter-labs/web3swift/compare/3b32224461f8510e743fa23bccbb437269f98525...0.0.1)
 
 
 
