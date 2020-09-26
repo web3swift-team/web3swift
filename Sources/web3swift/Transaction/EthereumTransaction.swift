@@ -17,6 +17,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     // The destination address of the message, left undefined for a contract-creation transaction.
     public var to: EthereumAddress
     // (optional) The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
+    // TODO - split EthereumTransaction to two classes: with optional and required value property, depends on type of transaction
     public var value: BigUInt?
     public var data: Data
     public var v: BigUInt = BigUInt(1)
