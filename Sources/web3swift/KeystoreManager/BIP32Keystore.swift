@@ -40,6 +40,8 @@ public class BIP32Keystore: AbstractKeystore {
     
     // --------------
     
+    private static let KeystoreParamsBIP32Version = 4
+    
     public var keystoreParams: KeystoreParamsBIP32?
     public var rootPrefix: String
     
@@ -53,7 +55,7 @@ public class BIP32Keystore: AbstractKeystore {
     
     public init?(_ jsonData: Data) {
         guard var keystorePars = try? JSONDecoder().decode(KeystoreParamsBIP32.self, from: jsonData) else {return nil}
-        if (keystorePars.version != 3) {return nil}
+        if (keystorePars.version != Self.KeystoreParamsBIP32Version) {return nil}
         if (keystorePars.crypto.version != nil && keystorePars.crypto.version != "1") {return nil}
         if (!keystorePars.isHDWallet) {return nil}
         addressStorage = PathAddressStorage(pathAddressPairs: keystorePars.pathAddressPairs)
@@ -181,7 +183,7 @@ public class BIP32Keystore: AbstractKeystore {
         let kdfparams = KdfParamsV3(salt: saltData.toHexString(), dklen: dkLen, n: N, p: P, r: R, c: nil, prf: nil)
         let cipherparams = CipherParamsV3(iv: IV.toHexString())
         let crypto = CryptoParamsV3(ciphertext: encryptedKeyData.toHexString(), cipher: aesMode, cipherparams: cipherparams, kdf: "scrypt", kdfparams: kdfparams, mac: mac.toHexString(), version: nil)
-        var keystorePars = KeystoreParamsBIP32(crypto: crypto, id: UUID().uuidString.lowercased(), version: 3)
+        var keystorePars = KeystoreParamsBIP32(crypto: crypto, id: UUID().uuidString.lowercased(), version: Self.KeystoreParamsBIP32Version)
         keystorePars.pathAddressPairs = addressStorage.toPathAddressPairs()
         keystorePars.rootPath = self.rootPrefix
         keystoreParams = keystorePars
