@@ -17,6 +17,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     // The destination address of the message, left undefined for a contract-creation transaction.
     public var to: EthereumAddress
     // (optional) The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
+    // TODO - split EthereumTransaction to two classes: with optional and required value property, depends on type of transaction
     public var value: BigUInt?
     public var data: Data
     public var v: BigUInt = BigUInt(1)
@@ -165,18 +166,18 @@ public struct EthereumTransaction: CustomStringConvertible {
     public func encode(forSignature:Bool = false, chainID: BigUInt? = nil) -> Data? {
         if (forSignature) {
             if chainID != nil  {
-                let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, chainID!, BigUInt(0), BigUInt(0)] as [AnyObject]
+                let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value!, self.data, chainID!, BigUInt(0), BigUInt(0)] as [AnyObject]
                 return RLP.encode(fields)
             }
             else if self.chainID != nil  {
-                let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, self.chainID!, BigUInt(0), BigUInt(0)] as [AnyObject]
+                let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value!, self.data, self.chainID!, BigUInt(0), BigUInt(0)] as [AnyObject]
                 return RLP.encode(fields)
             } else {
-                let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data] as [AnyObject]
+                let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value!, self.data] as [AnyObject]
                 return RLP.encode(fields)
             }
         } else {
-            let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, self.v, self.r, self.s] as [AnyObject]
+            let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value!, self.data, self.v, self.r, self.s] as [AnyObject]
             return RLP.encode(fields)
         }
     }

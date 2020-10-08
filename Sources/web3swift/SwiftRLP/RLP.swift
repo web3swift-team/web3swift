@@ -193,7 +193,7 @@ public struct RLP {
                 return false
             case .data(_):
                 return true
-            case .list(_):
+            case .list(_, _, _):
                 return false
             }
         }
@@ -204,7 +204,7 @@ public struct RLP {
                 return false
             case .data(_):
                 return false
-            case .list(_):
+            case .list(_,_,_):
                 return true
             }
         }
