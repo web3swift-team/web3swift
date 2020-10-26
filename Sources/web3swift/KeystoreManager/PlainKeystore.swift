@@ -10,6 +10,13 @@ import Foundation
 //import EthereumAddress
 
 public class PlainKeystore: AbstractKeystore {
+    public var keystoreParams: KeystoreParamsV3?
+
+    public func giveKeystoreParams() -> AbstractKeystoreParams {
+        keystoreParams
+    }
+
+
     private var privateKey: Data
     
     public var addresses: [EthereumAddress]?

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4E682284C32FB121612729BC /* Pods_web3swiftBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70293EAB078119DCD5CCB3AD /* Pods_web3swiftBrowser.framework */; };
 		4E8234902546F4BF0059F71E /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E82348F2546F4BF0059F71E /* MainTableViewController.swift */; };
+		4E8234982546FA4E0059F71E /* PrefferedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8234972546FA4E0059F71E /* PrefferedModels.swift */; };
 		81E09B202002623A005DF51D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E09B1F2002623A005DF51D /* AppDelegate.swift */; };
 		81E09B222002623A005DF51D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E09B212002623A005DF51D /* ViewController.swift */; };
 		81E09B252002623A005DF51D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81E09B232002623A005DF51D /* Main.storyboard */; };
@@ -24,6 +25,7 @@
 		4E65513525469DA3000BB8A3 /* web3swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = web3swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E65513E25469E14000BB8A3 /* web3swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = web3swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E82348F2546F4BF0059F71E /* MainTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
+		4E8234972546FA4E0059F71E /* PrefferedModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PrefferedModels.swift; path = web3swiftBrowser/PrefferedModels.swift; sourceTree = "<group>"; };
 		6E58291D3C20D10F47593B54 /* Pods-web3swiftBrowser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftBrowser.release.xcconfig"; path = "Target Support Files/Pods-web3swiftBrowser/Pods-web3swiftBrowser.release.xcconfig"; sourceTree = "<group>"; };
 		70293EAB078119DCD5CCB3AD /* Pods_web3swiftBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E09B1C2002623A005DF51D /* web3swiftBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = web3swiftBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,6 +69,7 @@
 		81E09B132002623A005DF51D = {
 			isa = PBXGroup;
 			children = (
+				4E8234972546FA4E0059F71E /* PrefferedModels.swift */,
 				81E09B1E2002623A005DF51D /* web3swiftBrowser */,
 				81E09B362002623B005DF51D /* web3swiftBrowserTests */,
 				81E09B412002623B005DF51D /* web3swiftBrowserUITests */,
@@ -258,6 +261,7 @@
 			files = (
 				4E8234902546F4BF0059F71E /* MainTableViewController.swift in Sources */,
 				81E09B222002623A005DF51D /* ViewController.swift in Sources */,
+				4E8234982546FA4E0059F71E /* PrefferedModels.swift in Sources */,
 				81E09B282002623A005DF51D /* web3swiftBrowser.xcdatamodeld in Sources */,
 				81E09B202002623A005DF51D /* AppDelegate.swift in Sources */,
 			);

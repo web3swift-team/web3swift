@@ -7,17 +7,18 @@
 import Foundation
 import CryptoSwift
 import Foundation
-//import secp256k1_swift
-//import EthereumAddress
 
 public class EthereumKeystoreV3: AbstractKeystore {
-    // Class
-    
-    public func getAddress() -> EthereumAddress? {
-        return self.address
+    public var keystoreParams: KeystoreParamsV3?
+
+    public func giveKeystoreParams() -> AbstractKeystoreParams {
+        keystoreParams
     }
-        
+
+
     // Protocol
+    private var address: EthereumAddress?
+    public var isHDKeystore: Bool = false
     
     public var addresses: [EthereumAddress]? {
         get {
@@ -27,7 +28,6 @@ public class EthereumKeystoreV3: AbstractKeystore {
             return nil
         }
     }
-    public var isHDKeystore: Bool = false
     
     public func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data {
         if self.addresses?.count == 1 && account == self.addresses?.last {
@@ -37,10 +37,13 @@ public class EthereumKeystoreV3: AbstractKeystore {
         throw AbstractKeystoreError.invalidAccountError
     }
     
-
+    // Class
+    
+    public func getAddress() -> EthereumAddress? {
+        return self.address
+    }
+    
     // --------------
-    private var address: EthereumAddress?
-    public var keystoreParams: KeystoreParamsV3?
     
     public convenience init?(_ jsonString: String) {
         let lowercaseJSON = jsonString.lowercased()
