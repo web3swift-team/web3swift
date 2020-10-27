@@ -12,9 +12,9 @@ import Foundation
 
 public class BIP32Keystore: AbstractKeystore {
 
-    typealias Params = KeystoreParamsBIP32
+    public typealias Params = KeystoreParamsBIP32
     public func giveKeystoreParams() -> Params {
-        self.keystoreParams
+        self.keystoreParams!
     }
 
     // Protocol

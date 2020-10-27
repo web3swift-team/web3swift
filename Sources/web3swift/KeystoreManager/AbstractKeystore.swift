@@ -9,7 +9,7 @@ import Foundation
 //import EthereumAddress
 
 public protocol AbstractKeystore {
-    public associatedtype Params: AbstractKeystoreParams
+    associatedtype Params: AbstractKeystoreParams
     func giveKeystoreParams() -> Params
     var addresses: [EthereumAddress]? { get }
     var isHDKeystore: Bool { get }

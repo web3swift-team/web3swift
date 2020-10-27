@@ -9,11 +9,11 @@ import CryptoSwift
 import Foundation
 
 public class EthereumKeystoreV3: AbstractKeystore {
-    typealias Params = KeystoreParamsV3
-    public var keystoreParams: KeystoreParamsV3?
+    public typealias Params = KeystoreParamsV3
+    public var keystoreParams: Params?
 
     public func giveKeystoreParams() -> Params {
-        keystoreParams
+        keystoreParams!
     }
 
 

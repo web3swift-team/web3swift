@@ -10,12 +10,12 @@ import Foundation
 //import EthereumAddress
 
 public class PlainKeystore: AbstractKeystore {
-    typealias Params = KeystoreParamsV3
+    public typealias Params = KeystoreParamsV3
 
     public var keystoreParams: KeystoreParamsV3?
 
-    public func giveKeystoreParams() -> T {
-        keystoreParams
+    public func giveKeystoreParams() -> Params {
+        keystoreParams!
     }
 
 

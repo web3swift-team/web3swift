@@ -9,10 +9,9 @@ import Foundation
 //import EthereumAddress
 
 public class KeystoreManager: AbstractKeystore {
-    associatedtype Params = KeystoreParamsV3
+    public typealias Params = KeystoreParamsV3
     public func giveKeystoreParams() -> Params {
         fatalError("giveKeystoreParams() is not available for manager implemented")
-        return nil
     }
     
     public var isHDKeystore: Bool = false
@@ -109,13 +108,13 @@ public class KeystoreManager: AbstractKeystore {
 
     public var path: String
 
-    public func walletForAddress(_ address: EthereumAddress) -> AbstractKeystore? {
+    public func walletForAddress(_ address: EthereumAddress) -> <T: AbstractKeystore> T  {
         for keystore in _keystores {
             guard let key = keystore.addresses?.first else {
                 continue
             }
             if key == address && key.isValid {
-                return keystore
+                return keystore as? T
             }
         }
         for keystore in _bip32keystores {
@@ -124,7 +123,7 @@ public class KeystoreManager: AbstractKeystore {
             }
             for addr in allAddresses {
                 if addr == address && addr.isValid {
-                    return keystore
+                    return keystore as? T
                 }
             }
         }
@@ -133,7 +132,7 @@ public class KeystoreManager: AbstractKeystore {
                 continue
             }
             if key == address && key.isValid {
-                return keystore
+                return keystore as? T
             }
         }
         return nil
