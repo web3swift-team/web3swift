@@ -108,7 +108,7 @@ public class KeystoreManager: AbstractKeystore {
 
     public var path: String
 
-    public func walletForAddress(_ address: EthereumAddress) -> <T: AbstractKeystore> T  {
+    public func walletForAddress(_ address: EthereumAddress) -> some AbstractKeystore? {
         for keystore in _keystores {
             guard let key = keystore.addresses?.first else {
                 continue
