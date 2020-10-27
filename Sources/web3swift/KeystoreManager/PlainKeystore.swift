@@ -10,12 +10,13 @@ import Foundation
 //import EthereumAddress
 
 public class PlainKeystore: AbstractKeystore {
-    private var privateKey: Data
-    
-    public var addresses: [EthereumAddress]?
-    
+
     public var isHDKeystore: Bool = false
-    
+
+    private var privateKey: Data
+
+    public var addresses: [EthereumAddress]?
+
     public func UNSAFE_getPrivateKeyData(password: String = "", account: EthereumAddress) throws -> Data {
         return self.privateKey
     }

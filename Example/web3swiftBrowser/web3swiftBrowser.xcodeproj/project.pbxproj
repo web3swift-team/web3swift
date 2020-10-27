@@ -7,38 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E682284C32FB121612729BC /* Pods_web3swiftBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70293EAB078119DCD5CCB3AD /* Pods_web3swiftBrowser.framework */; };
+		4E8234902546F4BF0059F71E /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E82348F2546F4BF0059F71E /* MainTableViewController.swift */; };
+		4E8234982546FA4E0059F71E /* PrefferedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8234972546FA4E0059F71E /* PrefferedModels.swift */; };
 		81E09B202002623A005DF51D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E09B1F2002623A005DF51D /* AppDelegate.swift */; };
 		81E09B222002623A005DF51D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E09B212002623A005DF51D /* ViewController.swift */; };
 		81E09B252002623A005DF51D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81E09B232002623A005DF51D /* Main.storyboard */; };
 		81E09B282002623A005DF51D /* web3swiftBrowser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81E09B262002623A005DF51D /* web3swiftBrowser.xcdatamodeld */; };
 		81E09B2A2002623A005DF51D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E09B292002623A005DF51D /* Assets.xcassets */; };
 		81E09B2D2002623A005DF51D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81E09B2B2002623A005DF51D /* LaunchScreen.storyboard */; };
-		81E09B382002623B005DF51D /* web3swiftBrowserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E09B372002623B005DF51D /* web3swiftBrowserTests.swift */; };
-		81E09B432002623B005DF51D /* web3swiftBrowserUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E09B422002623B005DF51D /* web3swiftBrowserUITests.swift */; };
-		C2C40799AB45A254C5B8B694 /* Pods_web3swiftBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2B1946592C2F6161DF2A16 /* Pods_web3swiftBrowser.framework */; };
 		E2EDC5F0241EECFD00410EA6 /* browser.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E2EDC5EF241EECFD00410EA6 /* browser.min.js */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		81E09B342002623B005DF51D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 81E09B142002623A005DF51D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 81E09B1B2002623A005DF51D;
-			remoteInfo = web3swiftBrowser;
-		};
-		81E09B3F2002623B005DF51D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 81E09B142002623A005DF51D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 81E09B1B2002623A005DF51D;
-			remoteInfo = web3swiftBrowser;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		2F89255F9B9DFBDF61D676C1 /* Pods-web3swiftBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftBrowser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-web3swiftBrowser/Pods-web3swiftBrowser.debug.xcconfig"; sourceTree = "<group>"; };
-		3D2B1946592C2F6161DF2A16 /* Pods_web3swiftBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B99DA0894372BDF278D880D /* Pods-web3swiftBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftBrowser.debug.xcconfig"; path = "Target Support Files/Pods-web3swiftBrowser/Pods-web3swiftBrowser.debug.xcconfig"; sourceTree = "<group>"; };
+		4E65512F25469D8E000BB8A3 /* web3swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = web3swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E65513525469DA3000BB8A3 /* web3swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = web3swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E65513E25469E14000BB8A3 /* web3swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = web3swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E82348F2546F4BF0059F71E /* MainTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
+		4E8234972546FA4E0059F71E /* PrefferedModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PrefferedModels.swift; path = web3swiftBrowser/PrefferedModels.swift; sourceTree = "<group>"; };
+		6E58291D3C20D10F47593B54 /* Pods-web3swiftBrowser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftBrowser.release.xcconfig"; path = "Target Support Files/Pods-web3swiftBrowser/Pods-web3swiftBrowser.release.xcconfig"; sourceTree = "<group>"; };
+		70293EAB078119DCD5CCB3AD /* Pods_web3swiftBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_web3swiftBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E09B1C2002623A005DF51D /* web3swiftBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = web3swiftBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E09B1F2002623A005DF51D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		81E09B212002623A005DF51D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,14 +36,11 @@
 		81E09B292002623A005DF51D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		81E09B2C2002623A005DF51D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		81E09B2E2002623A005DF51D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		81E09B332002623B005DF51D /* web3swiftBrowserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = web3swiftBrowserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E09B372002623B005DF51D /* web3swiftBrowserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftBrowserTests.swift; sourceTree = "<group>"; };
 		81E09B392002623B005DF51D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		81E09B3E2002623B005DF51D /* web3swiftBrowserUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = web3swiftBrowserUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E09B422002623B005DF51D /* web3swiftBrowserUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftBrowserUITests.swift; sourceTree = "<group>"; };
 		81E09B442002623B005DF51D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E2EDC5EF241EECFD00410EA6 /* browser.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.min.js; sourceTree = "<group>"; };
-		FE32BFE26D945D8D376882BB /* Pods-web3swiftBrowser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-web3swiftBrowser.release.xcconfig"; path = "Pods/Target Support Files/Pods-web3swiftBrowser/Pods-web3swiftBrowser.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,21 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C2C40799AB45A254C5B8B694 /* Pods_web3swiftBrowser.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		81E09B302002623B005DF51D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		81E09B3B2002623B005DF51D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				4E682284C32FB121612729BC /* Pods_web3swiftBrowser.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,7 +58,10 @@
 		781266D867FD7907798A4689 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3D2B1946592C2F6161DF2A16 /* Pods_web3swiftBrowser.framework */,
+				4E65513E25469E14000BB8A3 /* web3swift.framework */,
+				4E65513525469DA3000BB8A3 /* web3swift.framework */,
+				4E65512F25469D8E000BB8A3 /* web3swift.framework */,
+				70293EAB078119DCD5CCB3AD /* Pods_web3swiftBrowser.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -94,12 +69,13 @@
 		81E09B132002623A005DF51D = {
 			isa = PBXGroup;
 			children = (
+				4E8234972546FA4E0059F71E /* PrefferedModels.swift */,
 				81E09B1E2002623A005DF51D /* web3swiftBrowser */,
 				81E09B362002623B005DF51D /* web3swiftBrowserTests */,
 				81E09B412002623B005DF51D /* web3swiftBrowserUITests */,
 				81E09B1D2002623A005DF51D /* Products */,
-				F77DEFCDCCAAB6607113C871 /* Pods */,
 				781266D867FD7907798A4689 /* Frameworks */,
+				E1B9D09B139343735E1061E9 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,8 +83,6 @@
 			isa = PBXGroup;
 			children = (
 				81E09B1C2002623A005DF51D /* web3swiftBrowser.app */,
-				81E09B332002623B005DF51D /* web3swiftBrowserTests.xctest */,
-				81E09B3E2002623B005DF51D /* web3swiftBrowserUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -124,6 +98,7 @@
 				81E09B2B2002623A005DF51D /* LaunchScreen.storyboard */,
 				81E09B2E2002623A005DF51D /* Info.plist */,
 				81E09B262002623A005DF51D /* web3swiftBrowser.xcdatamodeld */,
+				4E82348F2546F4BF0059F71E /* MainTableViewController.swift */,
 			);
 			path = web3swiftBrowser;
 			sourceTree = "<group>";
@@ -146,13 +121,13 @@
 			path = web3swiftBrowserUITests;
 			sourceTree = "<group>";
 		};
-		F77DEFCDCCAAB6607113C871 /* Pods */ = {
+		E1B9D09B139343735E1061E9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				2F89255F9B9DFBDF61D676C1 /* Pods-web3swiftBrowser.debug.xcconfig */,
-				FE32BFE26D945D8D376882BB /* Pods-web3swiftBrowser.release.xcconfig */,
+				4B99DA0894372BDF278D880D /* Pods-web3swiftBrowser.debug.xcconfig */,
+				6E58291D3C20D10F47593B54 /* Pods-web3swiftBrowser.release.xcconfig */,
 			);
-			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,11 +137,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 81E09B472002623B005DF51D /* Build configuration list for PBXNativeTarget "web3swiftBrowser" */;
 			buildPhases = (
-				9A11C03ACBB5B5900D5122FB /* [CP] Check Pods Manifest.lock */,
+				DAD6A0E8776F675D05ED5ADB /* [CP] Check Pods Manifest.lock */,
 				81E09B182002623A005DF51D /* Sources */,
 				81E09B192002623A005DF51D /* Frameworks */,
 				81E09B1A2002623A005DF51D /* Resources */,
-				062413EA48CB3776C65CDAF2 /* [CP] Embed Pods Frameworks */,
+				382FFA217D585C1591C9725D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -177,42 +152,6 @@
 			productReference = 81E09B1C2002623A005DF51D /* web3swiftBrowser.app */;
 			productType = "com.apple.product-type.application";
 		};
-		81E09B322002623B005DF51D /* web3swiftBrowserTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 81E09B4A2002623B005DF51D /* Build configuration list for PBXNativeTarget "web3swiftBrowserTests" */;
-			buildPhases = (
-				81E09B2F2002623B005DF51D /* Sources */,
-				81E09B302002623B005DF51D /* Frameworks */,
-				81E09B312002623B005DF51D /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				81E09B352002623B005DF51D /* PBXTargetDependency */,
-			);
-			name = web3swiftBrowserTests;
-			productName = web3swiftBrowserTests;
-			productReference = 81E09B332002623B005DF51D /* web3swiftBrowserTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		81E09B3D2002623B005DF51D /* web3swiftBrowserUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 81E09B4D2002623B005DF51D /* Build configuration list for PBXNativeTarget "web3swiftBrowserUITests" */;
-			buildPhases = (
-				81E09B3A2002623B005DF51D /* Sources */,
-				81E09B3B2002623B005DF51D /* Frameworks */,
-				81E09B3C2002623B005DF51D /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				81E09B402002623B005DF51D /* PBXTargetDependency */,
-			);
-			name = web3swiftBrowserUITests;
-			productName = web3swiftBrowserUITests;
-			productReference = 81E09B3E2002623B005DF51D /* web3swiftBrowserUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -220,25 +159,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 1210;
 				ORGANIZATIONNAME = "Matter Labs";
 				TargetAttributes = {
 					81E09B1B2002623A005DF51D = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1200;
 						ProvisioningStyle = Automatic;
-					};
-					81E09B322002623B005DF51D = {
-						CreatedOnToolsVersion = 9.2;
-						LastSwiftMigration = 1200;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 81E09B1B2002623A005DF51D;
-					};
-					81E09B3D2002623B005DF51D = {
-						CreatedOnToolsVersion = 9.2;
-						LastSwiftMigration = 1200;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 81E09B1B2002623A005DF51D;
 					};
 				};
 			};
@@ -256,8 +183,6 @@
 			projectRoot = "";
 			targets = (
 				81E09B1B2002623A005DF51D /* web3swiftBrowser */,
-				81E09B322002623B005DF51D /* web3swiftBrowserTests */,
-				81E09B3D2002623B005DF51D /* web3swiftBrowserUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -274,24 +199,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		81E09B312002623B005DF51D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		81E09B3C2002623B005DF51D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		062413EA48CB3776C65CDAF2 /* [CP] Embed Pods Frameworks */ = {
+		382FFA217D585C1591C9725D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -319,16 +230,20 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-web3swiftBrowser/Pods-web3swiftBrowser-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9A11C03ACBB5B5900D5122FB /* [CP] Check Pods Manifest.lock */ = {
+		DAD6A0E8776F675D05ED5ADB /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			inputFileListPaths = (
 			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-web3swiftBrowser-checkManifestLockResult.txt",
 			);
@@ -344,42 +259,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E8234902546F4BF0059F71E /* MainTableViewController.swift in Sources */,
 				81E09B222002623A005DF51D /* ViewController.swift in Sources */,
+				4E8234982546FA4E0059F71E /* PrefferedModels.swift in Sources */,
 				81E09B282002623A005DF51D /* web3swiftBrowser.xcdatamodeld in Sources */,
 				81E09B202002623A005DF51D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		81E09B2F2002623B005DF51D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				81E09B382002623B005DF51D /* web3swiftBrowserTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		81E09B3A2002623B005DF51D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				81E09B432002623B005DF51D /* web3swiftBrowserUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		81E09B352002623B005DF51D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 81E09B1B2002623A005DF51D /* web3swiftBrowser */;
-			targetProxy = 81E09B342002623B005DF51D /* PBXContainerItemProxy */;
-		};
-		81E09B402002623B005DF51D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 81E09B1B2002623A005DF51D /* web3swiftBrowser */;
-			targetProxy = 81E09B3F2002623B005DF51D /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		81E09B232002623A005DF51D /* Main.storyboard */ = {
@@ -415,6 +303,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -422,8 +311,10 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -449,7 +340,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -472,6 +363,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -479,8 +371,10 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -500,7 +394,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -510,12 +404,13 @@
 		};
 		81E09B482002623B005DF51D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2F89255F9B9DFBDF61D676C1 /* Pods-web3swiftBrowser.debug.xcconfig */;
+			baseConfigurationReference = 4B99DA0894372BDF278D880D /* Pods-web3swiftBrowser.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 62V9CKQN89;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = web3swiftBrowser/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.thematter.web3swiftBrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -526,83 +421,18 @@
 		};
 		81E09B492002623B005DF51D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FE32BFE26D945D8D376882BB /* Pods-web3swiftBrowser.release.xcconfig */;
+			baseConfigurationReference = 6E58291D3C20D10F47593B54 /* Pods-web3swiftBrowser.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 62V9CKQN89;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = web3swiftBrowser/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.thematter.web3swiftBrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		81E09B4B2002623B005DF51D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 62V9CKQN89;
-				INFOPLIST_FILE = web3swiftBrowserTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = io.thematter.web3swiftBrowserTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/web3swiftBrowser.app/web3swiftBrowser";
-			};
-			name = Debug;
-		};
-		81E09B4C2002623B005DF51D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 62V9CKQN89;
-				INFOPLIST_FILE = web3swiftBrowserTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = io.thematter.web3swiftBrowserTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/web3swiftBrowser.app/web3swiftBrowser";
-			};
-			name = Release;
-		};
-		81E09B4E2002623B005DF51D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 62V9CKQN89;
-				INFOPLIST_FILE = web3swiftBrowserUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = io.thematter.web3swiftBrowserUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = web3swiftBrowser;
-			};
-			name = Debug;
-		};
-		81E09B4F2002623B005DF51D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 62V9CKQN89;
-				INFOPLIST_FILE = web3swiftBrowserUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = io.thematter.web3swiftBrowserUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = web3swiftBrowser;
 			};
 			name = Release;
 		};
@@ -623,24 +453,6 @@
 			buildConfigurations = (
 				81E09B482002623B005DF51D /* Debug */,
 				81E09B492002623B005DF51D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		81E09B4A2002623B005DF51D /* Build configuration list for PBXNativeTarget "web3swiftBrowserTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				81E09B4B2002623B005DF51D /* Debug */,
-				81E09B4C2002623B005DF51D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		81E09B4D2002623B005DF51D /* Build configuration list for PBXNativeTarget "web3swiftBrowserUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				81E09B4E2002623B005DF51D /* Debug */,
-				81E09B4F2002623B005DF51D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

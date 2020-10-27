@@ -1,6 +1,6 @@
 {
   "name": "web3swift",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "platforms": {
     "ios": "9.0",
     "osx": "10.11"
@@ -18,12 +18,15 @@
   },
   "source": {
     "git": "https://github.com/matter-labs/web3swift.git",
-    "tag": "2.2.2"
+    "tag": "2.3.0"
   },
   "source_files": [
-    "Sources/web3swift/{Contract,Convenience,EthereumABI,EthereumAddress,HookedFunctions,KeystoreManager,Promises,SwiftRLP,Transaction,Web3,Browser}/*.swift",
+    "Sources/web3swift/{Contract,Convenience,EthereumABI,EthereumAddress,HookedFunctions,KeystoreManager,Promises,SwiftRLP,Transaction,Web3}/*.swift",
     "Sources/web3swift/{Tokens,Utils}/**/*.swift"
   ],
+  "ios": {
+    "source_files": "Sources/web3swift/Browser/*.swift"
+  },
   "resource_bundles": {
     "Browser": "Sources/web3swift/Browser/*.js"
   },
