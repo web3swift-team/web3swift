@@ -1,12 +1,44 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+Documentation
 
-- [Design Decisions](#design-decisions)
-- [Core features:](#core-features)
-- [FAQ](#faq)
+*If you need to find or understand basic Usage, check [Usage.md](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md).*
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+Here are quick references for essential features:
+
+- [Preffered models](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preffered-models)
+- [Account Management (create, import, private keys managments, etc.)](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#account-management)
+- [Ethereum Endpoints interaction (web3, balance, tx's operations, chain state)](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ethereum-endpoints-interaction)
+- [Websockets](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#websockets)
+- [ENS](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ens)
+
+
+
+
+
+- [Account Management](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#account-management)
+
+  - [Create Account](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#create-account)
+  - [Import Account](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#import-account)
+  - [Get Keystore Manager from wallet data](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-keystore-manager-from-wallet-data)
+  - [Get private key](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-private-key)
+
+- [Ethereum Endpoints interaction](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ethereum-endpoints-interaction)
+
+  - [web3 instance](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#web3-instance)
+  - [Ethereum Address](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ethereum-address)
+  - [Get Balance](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-balance)
+  - [Transactions Operations](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#transactions-operations)
+      - [Send Ether](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#send-ether)
+      - [Send ERC-20 Token](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#send-erc-20-token)
+      - [Write Transaction and call smart contract method](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#write-transaction-and-call-smart-contract-method)
+      - [Read Transaction to call smart contract method](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#read-transaction-to-call-smart-contract-method)
+    - [Send Transaction](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#send-transaction)
+    - [Get Block number](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#get-block-number)
+
+- [Websockets](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#websockets)
+
+- [ENS](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ens)
+
+  
 
 ## Design Decisions
 
@@ -31,27 +63,56 @@
 - [x] Possibility to **add or remove "middleware" that intercepts**, modifies and even **cancel transaction** workflow on stages "before assembly", "after assembly"and "before submission"
 - [x] **Literally following the standards:**
     - [x] [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) HD Wallets: Deterministic Wallet
+    
     - [x] [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases)
+    
     - [x] [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)
+    
     - [x] [EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md) (A standard interface for tokens - ERC-20)
+    
     - [x] [EIP-67](https://github.com/ethereum/EIPs/issues/67) (Standard URI scheme)
+    
     - [x] [EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md) (Replay attacks protection) *enforced!*
+    
     - [x] [EIP-681](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-681.md) (A standard way of representing various transactions, especially payment requests in Ethers and ERC-20 tokens as URLs)
+    
     - [x] [EIP-721](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md) (A standard interface for non-fungible tokens, also known as deeds - ERC-721)
+    
     - [x] [EIP-165](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-165.md) (Standard Interface Detection, also known as ERC-165)
+    
     - [x] [EIP-777](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-777.md) (New Advanced Token Standard, also known as ERC-777)
+    
     - [x] [EIP-820](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-820.md) (Pseudo-introspection Registry Contract, also known as ERC-820)
+    
     - [x] [EIP-888](https://github.com/ethereum/EIPs/issues/888) (MultiDimensional Token Standard, also known as ERC-888)
+    
     - [x] [EIP-1400](https://github.com/ethereum/EIPs/issues/1411) (Security Token Standard, also known as ERC-1400)
+    
     - [x] [EIP-1410](https://github.com/ethereum/EIPs/issues/1410) (Partially Fungible Token Standard, also known as ERC-1410)
+    
     - [x] [EIP-1594](https://github.com/ethereum/EIPs/issues/1594) (Core Security Token Standard, also known as ERC-1594)
+    
     - [x] [EIP-1643](https://github.com/ethereum/EIPs/issues/1643) (Document Management Standard, also known as ERC-1643)
+    
     - [x] [EIP-1644](https://github.com/ethereum/EIPs/issues/1644) (Controller Token Operation Standard, also known as ERC-1644)
+    
     - [x] [EIP-1633](https://github.com/ethereum/EIPs/issues/1634) (Re-Fungible Token, also known as ERC-1633)
+    
     - [x] [EIP-721x](https://github.com/loomnetwork/erc721x) (An extension of ERC721 that adds support for multi-fungible tokens and batch transfers, while being fully backward-compatible, also known as ERC-721x)
+    
     - [x] [EIP-1155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1155.md) (Multi Token Standard, also known as ERC-1155)
+    
     - [x] [EIP-1376](https://github.com/ethereum/EIPs/issues/1376) (Service-Friendly Token, also known as ERC-1376)
+    
     - [x] [ST-20](https://github.com/PolymathNetwork/polymath-core) - ST-20 token is an Ethereum-based token implemented on top of the ERC-20 protocol that adds the ability for tokens to control transfers based on specific rules
+    
+      
+
+### Migration Guides
+
+- [web3swift 2.0 Migration Guide](https://github.com/matterinc/web3swift/blob/master/Documentation/web3swift%202.0%20Migration%20Guide.md)
+
+## 
 
 ## FAQ
 
