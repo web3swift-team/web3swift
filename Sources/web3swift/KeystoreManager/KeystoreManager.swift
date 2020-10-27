@@ -9,8 +9,10 @@ import Foundation
 //import EthereumAddress
 
 public class KeystoreManager: AbstractKeystore {
-    public func giveKeystoreParams() -> AbstractKeystoreParams {
+    associatedtype Params = KeystoreParamsV3
+    public func giveKeystoreParams() -> Params {
         fatalError("giveKeystoreParams() is not available for manager implemented")
+        return nil
     }
     
     public var isHDKeystore: Bool = false

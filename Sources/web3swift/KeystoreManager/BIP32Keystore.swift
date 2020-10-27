@@ -11,8 +11,10 @@ import Foundation
 //import EthereumAddress
 
 public class BIP32Keystore: AbstractKeystore {
-    public func giveKeystoreParams() -> AbstractKeystoreParams {
-        keystoreParams
+
+    typealias Params = KeystoreParamsBIP32
+    public func giveKeystoreParams() -> Params {
+        self.keystoreParams
     }
 
     // Protocol
