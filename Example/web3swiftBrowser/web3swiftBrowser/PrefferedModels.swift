@@ -10,9 +10,9 @@ import Foundation
 import web3swift
 
 struct Wallet {
-    enum walletType: Int {
+    enum walletType {
         case EthereumKeystoreV3
-        case BIP39
+        case BIP39(mnemonic: String)
     }
 
     var name: String = "Wallet"
@@ -22,6 +22,19 @@ struct Wallet {
     var address: String
 
     var data: Data
+    var mnemonics: String {
+        get{self.mnemonics}
+        set {
+            let keystore = try! BIP32Keystore(
+                mnemonics: newValue,
+                    password: password,
+                    mnemonicsPassword: "",
+                    language: .english)!
+            self.data = try! JSONEncoder().encode(keystore.keystoreParams)
+            self.isHD = true
+            self.address = keystore.addresses!.first!.address
+        }
+    }
     var isHD: Bool
 
     init(type: walletType) {
@@ -32,21 +45,20 @@ struct Wallet {
             self.data = try! JSONEncoder().encode(keystore.keystoreParams)
             self.isHD = false
             self.address = keystore.addresses!.first!.address
-
-        case .BIP39:
-            let mnemonics = try! BIP39.generateMnemonics(bitsOfEntropy: bitsOfEntropy)!
-            let keystore = try! BIP32Keystore(
-                    mnemonics: mnemonics,
-                    password: password,
-                    mnemonicsPassword: "",
-                    language: .english)!
-            self.name = "HD Wallet"
-            self.data = try! JSONEncoder().encode(keystore.keystoreParams)
-            self.isHD = true
-            self.address = keystore.addresses!.first!.address
+           
+        case .BIP39(mnemonic: let mnemonic):
+                       let keystore = try! BIP32Keystore(
+                               mnemonics: mnemonic,
+                               password: password,
+                               mnemonicsPassword: "",
+                               language: .english)!
+                       self.name = "HD Wallet"
+                       self.data = try! JSONEncoder().encode(keystore.keystoreParams)
+                       self.isHD = true
+                       self.address = keystore.addresses!.first!.address
         }
 
-        
+
     }
 }
 

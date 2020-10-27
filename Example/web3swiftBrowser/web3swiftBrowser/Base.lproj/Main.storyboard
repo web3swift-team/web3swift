@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gLe-1b-Uz4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gLe-1b-Uz4">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -15,10 +14,10 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="web3Browser" image="infinity" catalog="system" id="9jl-vW-z4Z"/>
+                    <tabBarItem key="tabBarItem" title="web3Browser" id="9jl-vW-z4Z"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -31,7 +30,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="frv-h2-1e3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <sections>
                             <tableViewSection headerTitle="Account Management" id="AKB-Tc-2Lm">
                                 <cells>
@@ -42,7 +41,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wpa-kh-BpQ">
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wpa-kh-BpQ">
                                                     <rect key="frame" x="134" y="6" width="107" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="Create Account"/>
@@ -77,31 +76,50 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="nwr-0W-mx7">
-                                        <rect key="frame" x="0.0" y="115" width="375" height="43.5"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="nwr-0W-mx7" id="bYo-tP-e8R">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="GVE-eA-dRm">
-                                        <rect key="frame" x="0.0" y="158.5" width="375" height="43.5"/>
+                                        <rect key="frame" x="0.0" y="115" width="375" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="GVE-eA-dRm" id="xds-JW-hOG">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y1x-fD-oOZ">
-                                                    <rect key="frame" x="130" y="6" width="116" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="BIP32 Mnemonic"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y1x-fD-oOZ">
+                                                    <rect key="frame" x="65" y="7" width="245" height="30"/>
+                                                    <state key="normal" title="Generate BIP32 Mnemonic"/>
                                                     <connections>
-                                                        <action selector="createAccount:" destination="ExQ-Th-f3A" eventType="touchUpInside" id="dJH-QG-dtS"/>
                                                         <action selector="generateBipMnemonic:" destination="ExQ-Th-f3A" eventType="touchUpInside" id="FLx-nD-IOX"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="y1x-fD-oOZ" firstAttribute="centerX" secondItem="xds-JW-hOG" secondAttribute="centerX" id="1Ki-9u-9rB"/>
+                                                <constraint firstItem="y1x-fD-oOZ" firstAttribute="centerY" secondItem="xds-JW-hOG" secondAttribute="centerY" id="6aW-DI-tzz"/>
+                                                <constraint firstItem="y1x-fD-oOZ" firstAttribute="height" secondItem="xds-JW-hOG" secondAttribute="height" multiplier="0.689655" id="FQO-gK-fJL"/>
+                                                <constraint firstItem="y1x-fD-oOZ" firstAttribute="width" secondItem="xds-JW-hOG" secondAttribute="width" multiplier="0.653333" id="taA-fe-d61"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="1cX-fV-3w1">
+                                        <rect key="frame" x="0.0" y="158.5" width="375" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1cX-fV-3w1" id="Bsv-1l-8Vd">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lt9-fx-T7i">
+                                                    <rect key="frame" x="65" y="7" width="245" height="30"/>
+                                                    <state key="normal" title="Generate BIP32 Wallet"/>
+                                                    <connections>
+                                                        <action selector="genBip32Account:" destination="ExQ-Th-f3A" eventType="touchUpInside" id="iGe-bI-zgm"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Lt9-fx-T7i" firstAttribute="height" secondItem="Bsv-1l-8Vd" secondAttribute="height" multiplier="0.689655" id="2G8-f2-Ugy"/>
+                                                <constraint firstItem="Lt9-fx-T7i" firstAttribute="centerY" secondItem="Bsv-1l-8Vd" secondAttribute="centerY" id="Cl6-wX-Jwc"/>
+                                                <constraint firstItem="Lt9-fx-T7i" firstAttribute="width" secondItem="Bsv-1l-8Vd" secondAttribute="width" multiplier="0.653333" id="VfX-Bu-C5h"/>
+                                                <constraint firstItem="Lt9-fx-T7i" firstAttribute="centerX" secondItem="Bsv-1l-8Vd" secondAttribute="centerX" id="nu9-tN-K4m"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" textLabel="R4W-9G-vnO" detailTextLabel="i9j-7H-1gC" style="IBUITableViewCellStyleSubtitle" id="pRM-qd-tOr">
@@ -111,7 +129,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Mnemonic" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="R4W-9G-vnO">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Mnemonic" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.25" adjustsLetterSpacingToFitWidth="YES" id="R4W-9G-vnO">
                                                     <rect key="frame" x="16" y="5" width="80" height="20.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -139,12 +157,12 @@
                             <outlet property="delegate" destination="ExQ-Th-f3A" id="E8y-63-xkE"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="MainFunctions" image="tablecells" catalog="system" id="bzu-Ue-X9c"/>
+                    <tabBarItem key="tabBarItem" title="MainFunctions" id="bzu-Ue-X9c"/>
                     <connections>
                         <outlet property="accountName" destination="eag-jz-PDn" id="Xtc-PX-BPE"/>
                         <outlet property="bipKey" destination="i9j-7H-1gC" id="g0X-mk-QSq"/>
                         <outlet property="bipMnemonic" destination="R4W-9G-vnO" id="B4l-FU-9kr"/>
-                        <outlet property="mnemonic" destination="ghD-Lo-5Fe" id="qe2-lc-JQo"/>
+                        <outlet property="mnemonic" destination="ghD-Lo-5Fe" id="JXs-IW-Lyh"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Vw-wG-i46" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -157,6 +175,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="gLe-1b-Uz4" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="wcn-HH-Smk">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
@@ -170,11 +189,4 @@
             <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="infinity" catalog="system" width="128" height="62"/>
-        <image name="tablecells" catalog="system" width="128" height="93"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>
