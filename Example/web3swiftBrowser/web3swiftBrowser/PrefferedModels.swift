@@ -20,31 +20,33 @@ struct Wallet {
     var password = "web3swift" // We recommend here and everywhere to use the password set by the user.
 
     var address: String
-    var keystore: AbstractKeystore
+
     var data: Data
     var isHD: Bool
 
     init(type: walletType) {
         switch type {
         case .EthereumKeystoreV3:
-            keystore = try! EthereumKeystoreV3(password: password)!
+            let keystore = try! EthereumKeystoreV3(password: password)!
             self.address = keystore.addresses!.first!.address
-            self.data = try! JSONEncoder().encode(keystore.giveKeystoreParams())
+            self.data = try! JSONEncoder().encode(keystore.keystoreParams)
             self.isHD = false
+            self.address = keystore.addresses!.first!.address
 
         case .BIP39:
             let mnemonics = try! BIP39.generateMnemonics(bitsOfEntropy: bitsOfEntropy)!
-            keystore = try! BIP32Keystore(
+            let keystore = try! BIP32Keystore(
                     mnemonics: mnemonics,
                     password: password,
                     mnemonicsPassword: "",
                     language: .english)!
             self.name = "HD Wallet"
-            self.data = try! JSONEncoder().encode(keystore.giveKeystoreParams())
+            self.data = try! JSONEncoder().encode(keystore.keystoreParams)
             self.isHD = true
+            self.address = keystore.addresses!.first!.address
         }
 
-        self.address = keystore.addresses!.first!.address
+        
     }
 }
 

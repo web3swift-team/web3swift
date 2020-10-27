@@ -12,12 +12,14 @@ import Foundation
 
 public class BIP32Keystore: AbstractKeystore {
 
-    public typealias Params = KeystoreParamsBIP32
-    public func giveKeystoreParams() -> Params {
-        self.keystoreParams!
-    }
 
     // Protocol
+    public var isHDKeystore: Bool = true
+
+    public var keystoreParams: KeystoreParamsBIP32?
+    public var paths: [String: EthereumAddress] = [String: EthereumAddress]()
+
+    public var rootPrefix: String
 
     public var addresses: [EthereumAddress]? {
         get {
@@ -31,8 +33,6 @@ public class BIP32Keystore: AbstractKeystore {
             return allAccounts
         }
     }
-
-    public var isHDKeystore: Bool = true
 
     public func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data {
         if let key = self.paths.keyForValue(value: account) {
@@ -62,9 +62,6 @@ public class BIP32Keystore: AbstractKeystore {
 
     // --------------
 
-    public var keystoreParams: KeystoreParamsBIP32?
-    public var paths: [String: EthereumAddress] = [String: EthereumAddress]()
-    public var rootPrefix: String
 
     public convenience init?(_ jsonString: String) {
         let lowercaseJSON = jsonString.lowercased()

@@ -196,7 +196,7 @@ extension web3.BrowserFunctions {
                 transaction.chainID = self.web3.provider.network?.chainID
             }
             
-            guard let keystore: AbstractKeystore = keystoreManager.walletForAddress(from)  else {return nil}
+            guard let keystore = keystoreManager.walletForAddress(from) else {return nil}
             try Web3Signer.signTX(transaction: &transaction, keystore: keystore, account: from, password: password)
             print(transaction)
             let signedData = transaction.encode(forSignature: false, chainID: nil)?.toHexString().addHexPrefix()
