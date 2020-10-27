@@ -22,11 +22,10 @@ struct Wallet {
     var address: String
 
     var data: Data
-    var mnemonics: String {
-        get{self.mnemonics}
-        set {
+    var mnemonics: String? {
+        didSet {
             let keystore = try! BIP32Keystore(
-                mnemonics: newValue,
+                mnemonics: self.mnemonics!,
                     password: password,
                     mnemonicsPassword: "",
                     language: .english)!
