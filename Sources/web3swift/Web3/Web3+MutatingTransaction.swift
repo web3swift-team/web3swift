@@ -98,24 +98,32 @@ public class WriteTransaction: ReadTransaction {
                 guard case .fulfilled(let nonce) = results[0] else {
                     throw Web3Error.processingError(desc: "Failed to fetch nonce")
                 }
-                guard case .fulfilled(let gasEstimate) = results[1] else {
-                    throw Web3Error.processingError(desc: "Failed to fetch gas estimate")
+
+                if case .manual = mergedOptions.gasLimit {
+                    print("skiping fetch gas estimate")
+                    assembledTransaction.gasLimit = mergedOptions.resolveGasLimit(0) ?? 0
                 }
+                else {
+                    guard case .fulfilled(let gasEstimate) = results[1] else {
+                        throw Web3Error.processingError(desc: "Failed to fetch gas estimate")
+                    }
+                    guard let estimate = mergedOptions.resolveGasLimit(gasEstimate) else {
+                        throw Web3Error.processingError(desc: "Failed to calculate gas estimate that satisfied options")
+                    }
+                    assembledTransaction.gasLimit = estimate
+                }
+                
+                
                 guard case .fulfilled(let gasPrice) = results[2] else {
                     throw Web3Error.processingError(desc: "Failed to fetch gas price")
                 }
                 
-                guard let estimate = mergedOptions.resolveGasLimit(gasEstimate) else {
-                    throw Web3Error.processingError(desc: "Failed to calculate gas estimate that satisfied options")
-                }
                 
                 guard let finalGasPrice = mergedOptions.resolveGasPrice(gasPrice) else {
                     throw Web3Error.processingError(desc: "Missing parameter of gas price for transaction")
                 }
                 
-    
                 assembledTransaction.nonce = nonce
-                assembledTransaction.gasLimit = estimate
                 assembledTransaction.gasPrice = finalGasPrice
                 
                 forAssemblyPipeline = (assembledTransaction, self.contract, mergedOptions)
