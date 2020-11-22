@@ -10,15 +10,16 @@ let package = Package(
     .library(name: "web3swift", targets: ["web3swift"]),
     ],
   dependencies: [
-    .package(url: "https://github.com/attaswift/BigInt.git", from: "5.0.0"),
+    .package(url: "https://github.com/attaswift/BigInt.git", .exact("4.0.0")),
     .package(url: "https://github.com/mxcl/PromiseKit.git", from: "6.8.4"),
     .package(url: "https://github.com/daltoniam/Starscream.git", from: "3.1.0"),
-    .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.0.0"),
+    .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .exact("1.0.0")),
+    .package(url: "https://github.com/Boilertalk/secp256k1.swift.git", .exact("0.1.4")),
     ],
   targets: [
     // Targets are the basic building blocks of a package. A target can define a module or a test suite.
     // Targets can depend on other targets in this package, and on products in packages which this package depends on.
-    .target(name: "secp256k1"),
+//    .target(name: "secp256k1"),
     .target(
       name: "web3swift",
       dependencies: ["BigInt", "secp256k1", "PromiseKit", "Starscream", "CryptoSwift"],

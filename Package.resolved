@@ -6,17 +6,8 @@
         "repositoryURL": "https://github.com/attaswift/BigInt.git",
         "state": {
           "branch": null,
-          "revision": "018a5925f60f9e0523edd261de394a0898fe95b7",
-          "version": "3.1.0"
-        }
-      },
-      {
-        "package": "Cryptor",
-        "repositoryURL": "https://github.com/v57/BlueCryptor.git",
-        "state": {
-          "branch": null,
-          "revision": "62470ce23835f8920ce58e39d59548406af85dea",
-          "version": "1.0.23"
+          "revision": "108801d539eb014469c758bc0d7f734690791fb4",
+          "version": "4.0.0"
         }
       },
       {
@@ -24,8 +15,8 @@
         "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift.git",
         "state": {
           "branch": null,
-          "revision": "874280173e082cdd7ac6602be235914efe3f4dbc",
-          "version": "0.13.0"
+          "revision": "3a2acbb32ab68215ee1596ee6004da8e90c3721b",
+          "version": "1.0.0"
         }
       },
       {
@@ -33,17 +24,35 @@
         "repositoryURL": "https://github.com/mxcl/PromiseKit.git",
         "state": {
           "branch": null,
-          "revision": "66bcc386163121f14ee543aa20b682973cc98dd7",
-          "version": "6.5.2"
+          "revision": "aea48ea1855f5d82e2dffa6027afce3aab8f3dd7",
+          "version": "6.13.3"
         }
       },
       {
-        "package": "SipHash",
-        "repositoryURL": "https://github.com/attaswift/SipHash",
+        "package": "secp256k1",
+        "repositoryURL": "https://github.com/Boilertalk/secp256k1.swift.git",
         "state": {
           "branch": null,
-          "revision": "e325083424688055363bbfcb7f1a440d7d7a1bae",
-          "version": "1.2.2"
+          "revision": "823281fe9def21b384099b72a9a53ca988317b20",
+          "version": "0.1.4"
+        }
+      },
+      {
+        "package": "Starscream",
+        "repositoryURL": "https://github.com/daltoniam/Starscream.git",
+        "state": {
+          "branch": null,
+          "revision": "e6b65c6d9077ea48b4a7bdda8994a1d3c6969c8d",
+          "version": "3.1.1"
+        }
+      },
+      {
+        "package": "swift-nio-zlib-support",
+        "repositoryURL": "https://github.com/apple/swift-nio-zlib-support.git",
+        "state": {
+          "branch": null,
+          "revision": "37760e9a52030bb9011972c5213c3350fa9d41fd",
+          "version": "1.0.0"
         }
       }
     ]
