@@ -164,10 +164,10 @@ options.gasPrice = .automatic
 options.gasLimit = .automatic
 let method = "transfer"
 let tx = contract.write(
-method,
-parameters: [toAddress, amount] as [AnyObject],
-extraData: Data(),
-transactionOptions: options)!
+  method,
+  parameters: [toAddress, amount] as [AnyObject],
+  extraData: Data(),
+  transactionOptions: options)!
 ```
 
 
@@ -199,10 +199,10 @@ options.from = walletAddress
 options.gasPrice = .automatic
 options.gasLimit = .automatic
 let tx = contract.write(
-contractMethod,
-parameters: parameters,
-extraData: extraData,
-transactionOptions: options)!
+  contractMethod,
+  parameters: parameters,
+  extraData: extraData,
+  transactionOptions: options)!
 ```
 
 
