@@ -230,36 +230,26 @@ transactionOptions: options)!
             self.receiverAddressString = self.walletAddressTF.text //get receiver address string
             print("Receiver address is : ", self.receiverAddressString ?? " ")
             self.etheriumAccountAddress = self.wethioKeystoreManager?.addresses.first?.address  //get sender address in string
-            
-            
-            //convert address string into etherium addresss
+            /*
+            convert address string into etherium addresss
+            */
             let senderEthAddress = EthereumAddress(self.etheriumAccountAddress ?? "")
+            //Run on backgrounnd tread
             DispatchQueue.global(qos: .background).async {
                 do {
                     //Convert receiver address in to etherium address
                     let toaddress = EthereumAddress(self.receiverAddressString ?? "")
-                    
-                    //Create web3 options
-                    var options = Web3Options.defaultOptions()
-                    
-                    //Convert amount into BIGINT
-                    let amountDouble = BigInt((Double(yourCoin) ?? 0.1)*pow(10, 18))
-                    
-                    //Here i am using 0.1 as an default value please use validation for amount (coin or token)
+                    var options = Web3Options.defaultOptions() //Create web3 options
+                    let amountDouble = BigInt((Double(yourCoin) ?? 0.1)*pow(10, 18)) //Convert amount into BIGINT
                     print("Total amount in double value : ", amountDouble)
+                    var amount = BigUInt.init(amountDouble) //Convert amount in BIG UI Int
+                    let estimateGasPrice = try wInstance.eth.getGasPrice() //estimate gas price
                     
-                    //Convert amount in BIG UI iNt
-                    var amount = BigUInt.init(amountDouble)
-                    
-                    //get gas price
-                    let estimateGasPrice = try wInstance.eth.getGasPrice()
                     guard let eGasReult = self.estimatedGasResult else {
                         print("Unable to find gas price")
                         return
                     }
-                    
-                    //Get nonce
-                    let nonce = try wInstance.eth.getTransactionCount(address: senderEthAddress)
+                    let nonce = try wInstance.eth.getTransactionCount(address: senderEthAddress) //Get nonce or transaction count
                     print("Is the Transaction count", nonce)
                     let fee = estimateGasPrice * eGasReult
                     /*
@@ -273,23 +263,16 @@ transactionOptions: options)!
                     sendTransactionIntermediateOptions.from = senderEthAddress
                     sendTransactionIntermediateOptions.gasLimit = eGasReult
                     sendTransactionIntermediateOptions.gasPrice = estimateGasPrice
-                    
-                    var tokenTransactionIntermediate: TransactionIntermediate!
+                    var tokenTransactionIntermediate: TransactionIntermediate! //Create transaction intermediate
                     tokenTransactionIntermediate = try wInstance.contract("Your custom contract ABI string", at: contractAddress).method("transfer", args: toaddress, amount, options: sendTransactionIntermediateOptions)
-                    
                     let mainTransaction = try tokenTransactionIntermediate.send(options: sendTransactionIntermediateOptions, onBlock: "latest")
-                    
-                    print(mainTransaction.hash, "is the hash")
+                    print(mainTransaction.hash, "is the hash of your transaction")
                 }
             }
         }
     }
 
 ```
-
-
-
-
 
 ### Web3View example
 
