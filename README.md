@@ -209,77 +209,82 @@ transactionOptions: options)!
 ####  Write Transaction with your custom contract ABI
 #### Requirement : Your custom contract ABI string
 ```Code
-let yourCoin = self.yourbalance.text ?? "0.0" //Get token for sending
-let userDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] //get user directory for keystore
-if (FileManager.default.fileExists(atPath: userDir + "/keystore/key.json")) {
-//Create Keystore
-guard let manager = FilestoreWrapper.getKeystoreManager() else {
-print("Manager not found ")
-return
-}
-wethioKeystoreManager = manager 
-guard let urlStr = URL(string: "Your rpc url here") else { return }
-guard let kManager = yourKeystoreManager else { return }
+    func contractTransactionMethod(){
+        let yourCoin = self.yourbalance.text ?? "0.0" //Get token for sending
+        let userDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] //get user directory for keystore
+        if (FileManager.default.fileExists(atPath: userDir + "/keystore/key.json")) {
+            //Create Keystore
+            guard let manager = FilestoreWrapper.getKeystoreManager() else {
+                print("Manager not found ")
+                return
+            }
+            wethioKeystoreManager = manager
+            guard let urlStr = URL(string: "Your rpc url here") else { return }
+            guard let kManager = yourKeystoreManager else { return }
+            
+            //Create Web3Provider Instance with key manager
+            web3ProvideInstance = Web3HttpProvider(urlStr, keystoreManager: kManager)
+            guard let wProvier = self.web3ProvideInstance else {return}
+            self.web3Instance = Web3(provider: wProvier) //Set provide instance with web3
+            guard let wInstance = self.web3Instance else {return}
+            self.receiverAddressString = self.walletAddressTF.text //get receiver address string
+            print("Receiver address is : ", self.receiverAddressString ?? " ")
+            self.etheriumAccountAddress = self.wethioKeystoreManager?.addresses.first?.address  //get sender address in string
+            
+            
+            //convert address string into etherium addresss
+            let senderEthAddress = EthereumAddress(self.etheriumAccountAddress ?? "")
+            DispatchQueue.global(qos: .background).async {
+                do {
+                    //Convert receiver address in to etherium address
+                    let toaddress = EthereumAddress(self.receiverAddressString ?? "")
+                    
+                    //Create web3 options
+                    var options = Web3Options.defaultOptions()
+                    
+                    //Convert amount into BIGINT
+                    let amountDouble = BigInt((Double(yourCoin) ?? 0.1)*pow(10, 18))
+                    
+                    //Here i am using 0.1 as an default value please use validation for amount (coin or token)
+                    print("Total amount in double value : ", amountDouble)
+                    
+                    //Convert amount in BIG UI iNt
+                    var amount = BigUInt.init(amountDouble)
+                    
+                    //get gas price
+                    let estimateGasPrice = try wInstance.eth.getGasPrice()
+                    guard let eGasReult = self.estimatedGasResult else {
+                        print("Unable to find gas price")
+                        return
+                    }
+                    
+                    //Get nonce
+                    let nonce = try wInstance.eth.getTransactionCount(address: senderEthAddress)
+                    print("Is the Transaction count", nonce)
+                    let fee = estimateGasPrice * eGasReult
+                    /*
+                     adding
+                     - sender address
+                     - Gas Result
+                     - Gas price
+                     - amount
+                     */
+                    var sendTransactionIntermediateOptions = Web3Options.defaultOptions()
+                    sendTransactionIntermediateOptions.from = senderEthAddress
+                    sendTransactionIntermediateOptions.gasLimit = eGasReult
+                    sendTransactionIntermediateOptions.gasPrice = estimateGasPrice
+                    
+                    var tokenTransactionIntermediate: TransactionIntermediate!
+                    tokenTransactionIntermediate = try wInstance.contract("Your custom contract ABI string", at: contractAddress).method("transfer", args: toaddress, amount, options: sendTransactionIntermediateOptions)
+                    
+                    let mainTransaction = try tokenTransactionIntermediate.send(options: sendTransactionIntermediateOptions, onBlock: "latest")
+                    
+                    print(mainTransaction.hash, "is the hash")
+                }
+            }
+        }
+    }
 
-//Create Web3Provider Instance with key manager
-web3ProvideInstance = Web3HttpProvider(urlStr, keystoreManager: kManager)
-guard let wProvier = self.web3ProvideInstance else {return}
-self.web3Instance = Web3(provider: wProvier) //Set provide instance with web3
-guard let wInstance = self.web3Instance else {return}
-self.receiverAddressString = self.walletAddressTF.text //get receiver address string
-print("Receiver address is : ", self.receiverAddressString ?? " ")
-self.etheriumAccountAddress = self.wethioKeystoreManager?.addresses.first?.address  //get sender address in string
-
-
-//convert address string into etherium addresss
-let senderEthAddress = EthereumAddress(self.etheriumAccountAddress ?? "")
-DispatchQueue.global(qos: .background).async {
-do {
-//Convert receiver address in to etherium address
-let toaddress = EthereumAddress(self.receiverAddressString ?? "")
-
-//Create web3 options
-var options = Web3Options.defaultOptions()
-
-//Convert amount into BIGINT
-let amountDouble = BigInt((Double(yourCoin) ?? 0.1)*pow(10, 18))
-
-//Here i am using 0.1 as an default value please use validation for amount (coin or token)  
-print("Total amount in double value : ", amountDouble)
-
-//Convert amount in BIG UI iNt
-var amount = BigUInt.init(amountDouble)
-
-//get gas price
-let estimateGasPrice = try wInstance.eth.getGasPrice()
-guard let eGasReult = self.estimatedGasResult else {
-print("Unable to find gas price")
-return
-}
-
-//Get nonce
-let nonce = try wInstance.eth.getTransactionCount(address: senderEthAddress)
-print("Is the Transaction count", nonce)
-let fee = estimateGasPrice * eGasReult
-/*
-adding
-- sender address
-- Gas Result
-- Gas price
-- amount
-*/
-var sendTransactionIntermediateOptions = Web3Options.defaultOptions()
-sendTransactionIntermediateOptions.from = senderEthAddress
-sendTransactionIntermediateOptions.gasLimit = eGasReult
-sendTransactionIntermediateOptions.gasPrice = estimateGasPrice
-
-var tokenTransactionIntermediate: TransactionIntermediate!
-tokenTransactionIntermediate = try wInstance.contract("Your custom contract ABI string", at: contractAddress).method("transfer", args: toaddress, amount, options: sendTransactionIntermediateOptions)
-
-let mainTransaction = try tokenTransactionIntermediate.send(options: sendTransactionIntermediateOptions, onBlock: "latest")
-
-print(mainTransaction.hash, "is the hash")
-}
 ```
 
 
