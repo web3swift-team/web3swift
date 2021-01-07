@@ -32,6 +32,43 @@ class web3swift_Keystores_tests: XCTestCase {
         let recoveredSeed = BIP39.mnemonicsToEntropy(mnemonics!, language: .english)
         XCTAssert(seed == recoveredSeed)
     }
+
+    // https://github.com/trezor/python-mnemonic/blob/master/vectors.json
+    func testBIP39MnemonicIsMultipleOfThree() {
+        // https://github.com/trezor/python-mnemonic/blob/master/vectors.json#L95
+        let mnemonic_12 = "scheme spot photo card baby mountain device kick cradle pact join borrow"
+        let entropy_12 = BIP39.mnemonicsToEntropy(mnemonic_12, language: .english)
+        XCTAssertEqual(entropy_12!.toHexString(), "c0ba5a8e914111210f2bd131f3d5e08d")
+
+        let mnemonic_15 = "foster muscle start pluck when army tool surprise essay monitor impulse hello segment garage twenty"
+        let entropy_15 = BIP39.mnemonicsToEntropy(mnemonic_15, language: .english)
+        XCTAssertEqual(entropy_15!.toHexString(), "5c123352d35fa218392ed34d31e1c8b56c32befa")
+
+        // https://github.com/trezor/python-mnemonic/blob/master/vectors.json#L101
+        let mnemonic_18 = "horn tenant knee talent sponsor spell gate clip pulse soap slush warm silver nephew swap uncle crack brave"
+        let entropy_18 = BIP39.mnemonicsToEntropy(mnemonic_18, language: .english)
+        XCTAssertEqual(entropy_18!.toHexString(), "6d9be1ee6ebd27a258115aad99b7317b9c8d28b6d76431c3")
+
+        let mnemonic_21 = "weird change toe upper damp panel unaware long noise resource grant prevent file live travel price cry danger fix manage base"
+        let entropy_21 = BIP39.mnemonicsToEntropy(mnemonic_21, language: .english)
+        XCTAssertEqual(entropy_21!.toHexString(), "f924c78e7783733f3b1c1e95d6f196d525630579e5533526ed604371")
+
+        // https://github.com/trezor/python-mnemonic/blob/master/vectors.json#L107
+        let mnemonic_24 = "panda eyebrow bullet gorilla call smoke muffin taste mesh discover soft ostrich alcohol speed nation flash devote level hobby quick inner drive ghost inside"
+        let entropy_24 = BIP39.mnemonicsToEntropy(mnemonic_24, language: .english)
+        XCTAssertEqual(entropy_24!.toHexString(), "9f6a2878b2520799a44ef18bc7df394e7061a224d2c33cd015b157d746869863")
+
+        // Invalid mnemonics
+
+        let mnemonic_9 = "initial repeat scout eye october lucky rabbit enact unfair"
+        XCTAssertNil(BIP39.mnemonicsToEntropy(mnemonic_9, language: .english))
+
+        let mnemonic_16 = "success drip spoon lunar effort unfold clinic seminar custom protect orchard correct pledge cousin slab visa"
+        XCTAssertNil(BIP39.mnemonicsToEntropy(mnemonic_16, language: .english))
+
+        let mnemonic_27 = "clock venue style demise net float differ click object poet afraid october hurry organ faint inject cart trade test immense gentle speak almost rude success drip spoon"
+        XCTAssertNil(BIP39.mnemonicsToEntropy(mnemonic_27, language: .english))
+    }
     
     func testHMAC() {
         let seed = Data.fromHex("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b")!

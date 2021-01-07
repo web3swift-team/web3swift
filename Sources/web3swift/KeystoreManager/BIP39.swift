@@ -114,7 +114,7 @@ public class BIP39 {
     
     static public func mnemonicsToEntropy(_ mnemonics: String, language: BIP39Language = BIP39Language.english) -> Data? {
         let wordList = mnemonics.components(separatedBy: " ")
-        guard wordList.count >= 12 && wordList.count.isMultiple(of: 4) else {return nil}
+        guard wordList.count >= 12 && wordList.count.isMultiple(of: 3) && wordList.count <= 24 else {return nil}
         var bitString = ""
         for word in wordList {
 //            let idx = language.words.index(of: word)
