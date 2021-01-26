@@ -267,6 +267,7 @@ If you are using this library in your project, please [add a link](https://githu
 * [Alice Wallet](https://github.com/alicedapp/AliceX)
 * [web3-react-native](https://github.com/cawfree/web3-react-native)
 * [YOUR APP CAN BE THERE (click me)](https://github.com/matter-labs/web3swift/edit/develop/README.md) :wink:
+* [ProLabArt](https://prolabart.com)
 
 *Nothing makes developers happier than seeing someone else use our work and go wild with it.*
 
