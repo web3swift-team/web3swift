@@ -117,11 +117,11 @@ public extension ENS {
             return result
         }
         
-        func getContentHash(forNode node: String) throws -> String {
+        func getContentHash(forNode node: String) throws -> Data {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.read("contenthash", parameters: [nameHash] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             guard let result = try? transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
-            guard let content = result["0"] as? String else {throw Web3Error.processingError(desc: "Can't get content")}
+            guard let content = result["0"] as? Data else {throw Web3Error.processingError(desc: "Can't get content")}
             return content
         }
         
