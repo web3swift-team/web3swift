@@ -92,6 +92,11 @@ public protocol Web3SocketDelegate {
 
 /// The default websocket provider.
 public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDelegate {
+    
+    public func didReceive(event: WebSocketEvent, client: WebSocket) {
+        
+    }
+    
     public func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse> {
         return Promise(error: Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'"))
     }
@@ -153,7 +158,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         url = URL(string: endpointString)!
         delegate = wsdelegate
         attachedKeystoreManager = manager
-        socket = WebSocket(url: url)
+        socket = WebSocket(request: .init(url: url))
         socket.delegate = self
     }
     
@@ -194,7 +199,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         url = URL(string: finalEndpoint)!
         delegate = wsdelegate
         attachedKeystoreManager = manager
-        socket = WebSocket(url: url)
+        socket = WebSocket(request: .init(url: url))
         socket.delegate = self
     }
     
