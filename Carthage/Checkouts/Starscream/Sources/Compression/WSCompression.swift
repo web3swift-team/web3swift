@@ -1,9 +1,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//  Compression.swift
+//  WSCompression.swift
 //
 //  Created by Joseph Ross on 7/16/14.
-//  Copyright © 2017 Joseph Ross.
+//  Copyright © 2017 Joseph Ross & Vluxe. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -29,13 +29,81 @@
 import Foundation
 import zlib
 
+public class WSCompression: CompressionHandler {
+    let headerWSExtensionName = "Sec-WebSocket-Extensions"
+    var decompressor: Decompressor?
+    var compressor: Compressor?
+    var decompressorTakeOver = false
+    var compressorTakeOver = false
+    
+    public init() {
+        
+    }
+    
+    public func load(headers: [String: String]) {
+        guard let extensionHeader = headers[headerWSExtensionName] else { return }
+        decompressorTakeOver = false
+        compressorTakeOver = false
+        
+        let parts = extensionHeader.components(separatedBy: ";")
+        for p in parts {
+            let part = p.trimmingCharacters(in: .whitespaces)
+            if part.hasPrefix("server_max_window_bits=") {
+                let valString = part.components(separatedBy: "=")[1]
+                if let val = Int(valString.trimmingCharacters(in: .whitespaces)) {
+                    decompressor = Decompressor(windowBits: val)
+                }
+            } else if part.hasPrefix("client_max_window_bits=") {
+                let valString = part.components(separatedBy: "=")[1]
+                if let val = Int(valString.trimmingCharacters(in: .whitespaces)) {
+                    compressor = Compressor(windowBits: val)
+                }
+            } else if part == "client_no_context_takeover" {
+                compressorTakeOver = true
+            } else if part == "server_no_context_takeover" {
+                decompressorTakeOver = true
+            }
+        }
+    }
+    
+    public func decompress(data: Data, isFinal: Bool) -> Data? {
+        guard let decompressor = decompressor else { return nil }
+        do {
+            let decompressedData = try decompressor.decompress(data, finish: isFinal)
+            if decompressorTakeOver {
+                try decompressor.reset()
+            }
+            return decompressedData
+        } catch {
+            //do nothing with the error for now
+        }
+        return nil
+    }
+    
+    public func compress(data: Data) -> Data? {
+        guard let compressor = compressor else { return nil }
+        do {
+            let compressedData = try compressor.compress(data)
+            if compressorTakeOver {
+                try compressor.reset()
+            }
+            return compressedData
+        } catch {
+            //do nothing with the error for now
+        }
+        return nil
+    }
+    
+
+}
+
 class Decompressor {
     private var strm = z_stream()
     private var buffer = [UInt8](repeating: 0, count: 0x2000)
     private var inflateInitialized = false
-    private let windowBits:Int
+    private let windowBits: Int
 
-    init?(windowBits:Int) {
+    init?(windowBits: Int) {
         self.windowBits = windowBits
         guard initInflate() else { return nil }
     }
@@ -56,7 +124,7 @@ class Decompressor {
     }
 
     func decompress(_ data: Data, finish: Bool) throws -> Data {
-        return try data.withUnsafeBytes { (bytes:UnsafePointer<UInt8>) -> Data in
+        return try data.withUnsafeBytes { (bytes: UnsafePointer<UInt8>) -> Data in
             return try decompress(bytes: bytes, count: data.count, finish: finish)
         }
     }
@@ -71,19 +139,20 @@ class Decompressor {
         }
 
         return decompressed
-
     }
 
-    private func decompress(bytes: UnsafePointer<UInt8>, count: Int, out:inout Data) throws {
-        var res:CInt = 0
+    private func decompress(bytes: UnsafePointer<UInt8>, count: Int, out: inout Data) throws {
+        var res: CInt = 0
         strm.next_in = UnsafeMutablePointer<UInt8>(mutating: bytes)
         strm.avail_in = CUnsignedInt(count)
 
         repeat {
-            strm.next_out = UnsafeMutablePointer<UInt8>(&buffer)
-            strm.avail_out = CUnsignedInt(buffer.count)
+            buffer.withUnsafeMutableBytes { (bufferPtr) in
+                strm.next_out = bufferPtr.bindMemory(to: UInt8.self).baseAddress
+                strm.avail_out = CUnsignedInt(bufferPtr.count)
 
-            res = inflate(&strm, 0)
+                res = inflate(&strm, 0)
+            }
 
             let byteCount = buffer.count - Int(strm.avail_out)
             out.append(buffer, count: byteCount)
@@ -111,7 +180,7 @@ class Compressor {
     private var strm = z_stream()
     private var buffer = [UInt8](repeating: 0, count: 0x2000)
     private var deflateInitialized = false
-    private let windowBits:Int
+    private let windowBits: Int
 
     init?(windowBits: Int) {
         self.windowBits = windowBits
@@ -136,16 +205,18 @@ class Compressor {
 
     func compress(_ data: Data) throws -> Data {
         var compressed = Data()
-        var res:CInt = 0
+        var res: CInt = 0
         data.withUnsafeBytes { (ptr:UnsafePointer<UInt8>) -> Void in
             strm.next_in = UnsafeMutablePointer<UInt8>(mutating: ptr)
             strm.avail_in = CUnsignedInt(data.count)
 
             repeat {
-                strm.next_out = UnsafeMutablePointer<UInt8>(&buffer)
-                strm.avail_out = CUnsignedInt(buffer.count)
+                buffer.withUnsafeMutableBytes { (bufferPtr) in
+                    strm.next_out = bufferPtr.bindMemory(to: UInt8.self).baseAddress
+                    strm.avail_out = CUnsignedInt(bufferPtr.count)
 
-                res = deflate(&strm, Z_SYNC_FLUSH)
+                    res = deflate(&strm, Z_SYNC_FLUSH)
+                }
 
                 let byteCount = buffer.count - Int(strm.avail_out)
                 compressed.append(buffer, count: byteCount)
@@ -174,4 +245,3 @@ class Compressor {
         teardownDeflate()
     }
 }
-
