@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -192,6 +192,16 @@
 		E2EDC5EA241EDE3600410EA6 /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */; };
 		E2EDC5EC241EE18700410EA6 /* wk.bridge.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E2EDC5EB241EE18700410EA6 /* wk.bridge.min.js */; };
 		E2EDC5EE241EE1E600410EA6 /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5ED241EE1E600410EA6 /* Bridge.swift */; };
+		F587AF3526776E1000C73E7E /* Starscream.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F587AF3026776E0F00C73E7E /* Starscream.xcframework */; };
+		F587AF3626776E1000C73E7E /* Starscream.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F587AF3026776E0F00C73E7E /* Starscream.xcframework */; };
+		F587AF3726776E1000C73E7E /* BigInt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F587AF3126776E0F00C73E7E /* BigInt.xcframework */; };
+		F587AF3826776E1000C73E7E /* BigInt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F587AF3126776E0F00C73E7E /* BigInt.xcframework */; };
+		F587AF3926776E1000C73E7E /* CryptoSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F587AF3226776E0F00C73E7E /* CryptoSwift.xcframework */; };
+		F587AF3A26776E1000C73E7E /* CryptoSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F587AF3226776E0F00C73E7E /* CryptoSwift.xcframework */; };
+		F587AF3B26776E1000C73E7E /* PromiseKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F587AF3326776E0F00C73E7E /* PromiseKit.xcframework */; };
+		F587AF3C26776E1000C73E7E /* PromiseKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F587AF3326776E0F00C73E7E /* PromiseKit.xcframework */; };
+		F587AF3D26776E1000C73E7E /* SipHash.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F587AF3426776E1000C73E7E /* SipHash.xcframework */; };
+		F587AF3E26776E1000C73E7E /* SipHash.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F587AF3426776E1000C73E7E /* SipHash.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -396,6 +406,11 @@
 		E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		E2EDC5EB241EE18700410EA6 /* wk.bridge.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = wk.bridge.min.js; sourceTree = "<group>"; };
 		E2EDC5ED241EE1E600410EA6 /* Bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bridge.swift; sourceTree = "<group>"; };
+		F587AF3026776E0F00C73E7E /* Starscream.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Starscream.xcframework; path = Carthage/Build/Starscream.xcframework; sourceTree = "<group>"; };
+		F587AF3126776E0F00C73E7E /* BigInt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = BigInt.xcframework; path = Carthage/Build/BigInt.xcframework; sourceTree = "<group>"; };
+		F587AF3226776E0F00C73E7E /* CryptoSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CryptoSwift.xcframework; path = Carthage/Build/CryptoSwift.xcframework; sourceTree = "<group>"; };
+		F587AF3326776E0F00C73E7E /* PromiseKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = PromiseKit.xcframework; path = Carthage/Build/PromiseKit.xcframework; sourceTree = "<group>"; };
+		F587AF3426776E1000C73E7E /* SipHash.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SipHash.xcframework; path = Carthage/Build/SipHash.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -403,6 +418,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F587AF3926776E1000C73E7E /* CryptoSwift.xcframework in Frameworks */,
+				F587AF3726776E1000C73E7E /* BigInt.xcframework in Frameworks */,
+				F587AF3B26776E1000C73E7E /* PromiseKit.xcframework in Frameworks */,
+				F587AF3526776E1000C73E7E /* Starscream.xcframework in Frameworks */,
+				F587AF3D26776E1000C73E7E /* SipHash.xcframework in Frameworks */,
 				13C3392821B6C68900F33F5E /* secp256k1.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -419,6 +439,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F587AF3C26776E1000C73E7E /* PromiseKit.xcframework in Frameworks */,
+				F587AF3E26776E1000C73E7E /* SipHash.xcframework in Frameworks */,
+				F587AF3826776E1000C73E7E /* BigInt.xcframework in Frameworks */,
+				F587AF3626776E1000C73E7E /* Starscream.xcframework in Frameworks */,
+				F587AF3A26776E1000C73E7E /* CryptoSwift.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -561,6 +586,11 @@
 		13C3392721B6C68900F33F5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F587AF3126776E0F00C73E7E /* BigInt.xcframework */,
+				F587AF3226776E0F00C73E7E /* CryptoSwift.xcframework */,
+				F587AF3326776E0F00C73E7E /* PromiseKit.xcframework */,
+				F587AF3426776E1000C73E7E /* SipHash.xcframework */,
+				F587AF3026776E0F00C73E7E /* Starscream.xcframework */,
 				13A8D5BD21B9296B00469740 /* CoreImage.framework */,
 			);
 			name = Frameworks;
