@@ -192,6 +192,8 @@
 		E2EDC5EA241EDE3600410EA6 /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */; };
 		E2EDC5EC241EE18700410EA6 /* wk.bridge.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E2EDC5EB241EE18700410EA6 /* wk.bridge.min.js */; };
 		E2EDC5EE241EE1E600410EA6 /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5ED241EE1E600410EA6 /* Bridge.swift */; };
+		E97551C02683706A002794AF /* Scrypt+Calculate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97551BE2683706A002794AF /* Scrypt+Calculate.swift */; };
+		E97551C12683706A002794AF /* PBKDF2+Calculate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97551BF2683706A002794AF /* PBKDF2+Calculate.swift */; };
 		F5213FF42673849600EBDC50 /* CryptoSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FEF2673849600EBDC50 /* CryptoSwift.xcframework */; };
 		F5213FF52673849600EBDC50 /* CryptoSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FEF2673849600EBDC50 /* CryptoSwift.xcframework */; };
 		F5213FF62673849600EBDC50 /* BigInt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FF02673849600EBDC50 /* BigInt.xcframework */; };
@@ -406,6 +408,8 @@
 		E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		E2EDC5EB241EE18700410EA6 /* wk.bridge.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = wk.bridge.min.js; sourceTree = "<group>"; };
 		E2EDC5ED241EE1E600410EA6 /* Bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bridge.swift; sourceTree = "<group>"; };
+		E97551BE2683706A002794AF /* Scrypt+Calculate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Scrypt+Calculate.swift"; sourceTree = "<group>"; };
+		E97551BF2683706A002794AF /* PBKDF2+Calculate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PBKDF2+Calculate.swift"; sourceTree = "<group>"; };
 		F5213FEF2673849600EBDC50 /* CryptoSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CryptoSwift.xcframework; path = Carthage/Build/CryptoSwift.xcframework; sourceTree = "<group>"; };
 		F5213FF02673849600EBDC50 /* BigInt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = BigInt.xcframework; path = Carthage/Build/BigInt.xcframework; sourceTree = "<group>"; };
 		F5213FF12673849600EBDC50 /* PromiseKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = PromiseKit.xcframework; path = Carthage/Build/PromiseKit.xcframework; sourceTree = "<group>"; };
@@ -631,6 +635,7 @@
 		3AA815212276E44100F5DB52 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				E97551BD2683706A002794AF /* Calculations */,
 				3AA815222276E44100F5DB52 /* ENS */,
 				3AA8152B2276E44100F5DB52 /* Hooks */,
 				3AA8152D2276E44100F5DB52 /* EIP */,
@@ -990,6 +995,15 @@
 			path = Browser;
 			sourceTree = "<group>";
 		};
+		E97551BD2683706A002794AF /* Calculations */ = {
+			isa = PBXGroup;
+			children = (
+				E97551BE2683706A002794AF /* Scrypt+Calculate.swift */,
+				E97551BF2683706A002794AF /* PBKDF2+Calculate.swift */,
+			);
+			path = Calculations;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1229,6 +1243,7 @@
 				3AA815E42276E44100F5DB52 /* Data+Extension.swift in Sources */,
 				3AA815C62276E44100F5DB52 /* ABI.swift in Sources */,
 				3AA815D02276E44100F5DB52 /* Web3+Utils.swift in Sources */,
+				E97551C02683706A002794AF /* Scrypt+Calculate.swift in Sources */,
 				3AA815B82276E44100F5DB52 /* EthereumKeystoreV3.swift in Sources */,
 				3AA815EB2276E44100F5DB52 /* Promise+Web3+Personal+Sign.swift in Sources */,
 				3AA815E32276E44100F5DB52 /* Dictionary+Extension.swift in Sources */,
@@ -1332,6 +1347,7 @@
 				3AA815E02276E44100F5DB52 /* CryptoExtensions.swift in Sources */,
 				3AA815D52276E44100F5DB52 /* Web3+EventParser.swift in Sources */,
 				3AA815C02276E44100F5DB52 /* Web3+Wallet.swift in Sources */,
+				E97551C12683706A002794AF /* PBKDF2+Calculate.swift in Sources */,
 				3AA815F12276E44100F5DB52 /* Promise+Web3+Eth+GetBalance.swift in Sources */,
 				3AA815D62276E44100F5DB52 /* Web3+ReadingTransaction.swift in Sources */,
 				3AA815AC2276E44100F5DB52 /* NameHash.swift in Sources */,

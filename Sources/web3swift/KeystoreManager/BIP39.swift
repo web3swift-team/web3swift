@@ -150,7 +150,7 @@ public class BIP39 {
         guard let mnemData = mnemonics.decomposedStringWithCompatibilityMapping.data(using: .utf8) else {return nil}
         let salt = "mnemonic" + password
         guard let saltData = salt.decomposedStringWithCompatibilityMapping.data(using: .utf8) else {return nil}
-        guard let seedArray = try? PKCS5.PBKDF2(password: mnemData.bytes, salt: saltData.bytes, iterations: 2048, keyLength: 64, variant: HMAC.Variant.sha512).calculate() else {return nil}
+        guard let seedArray = try? PBKDF2.calculate(password: mnemData.bytes, salt: saltData.bytes, iterations: 2048, keyLength: 64, variant: .sha512) else {return nil}
 //        let seed = Data(bytes:seedArray)
         let seed = Data(seedArray)
         return seed

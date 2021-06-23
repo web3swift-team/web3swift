@@ -179,14 +179,14 @@ public class EthereumKeystoreV3: AbstractKeystore {
             guard let algo = keystoreParams.crypto.kdfparams.prf else {
                 return nil
             }
-            var hashVariant: HMAC.Variant?;
+            var hashVariant: PBKDF2.Variant?;
             switch algo {
             case "hmac-sha256":
-                hashVariant = HMAC.Variant.sha256
+                hashVariant = .sha256
             case "hmac-sha384":
-                hashVariant = HMAC.Variant.sha384
+                hashVariant = .sha384
             case "hmac-sha512":
-                hashVariant = HMAC.Variant.sha512
+                hashVariant = .sha512
             default:
                 hashVariant = nil
             }
@@ -199,7 +199,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
             guard let passData = password.data(using: .utf8) else {
                 return nil
             }
-            guard let derivedArray = try? PKCS5.PBKDF2(password: passData.bytes, salt: saltData.bytes, iterations: c, keyLength: derivedLen, variant: hashVariant!).calculate() else {
+            guard let derivedArray = try? PBKDF2.calculate(password: passData.bytes, salt: saltData.bytes, iterations: c, keyLength: derivedLen, variant: hashVariant!) else {
                 return nil
             }
 //            passwordDerivedKey = Data(bytes:derivedArray)
