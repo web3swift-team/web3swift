@@ -194,6 +194,28 @@
 		E2EDC5EE241EE1E600410EA6 /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5ED241EE1E600410EA6 /* Bridge.swift */; };
 		E97551C02683706A002794AF /* Scrypt+Calculate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97551BE2683706A002794AF /* Scrypt+Calculate.swift */; };
 		E97551C12683706A002794AF /* PBKDF2+Calculate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97551BF2683706A002794AF /* PBKDF2+Calculate.swift */; };
+		E9A21DC92683FC860062462C /* crypto_scrypt-hash.c in Sources */ = {isa = PBXBuildFile; fileRef = E9A21DB42683FC860062462C /* crypto_scrypt-hash.c */; };
+		E9A21DCA2683FC860062462C /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = E9A21DB52683FC860062462C /* LICENSE */; };
+		E9A21DCB2683FC860062462C /* slowequals.c in Sources */ = {isa = PBXBuildFile; fileRef = E9A21DB62683FC860062462C /* slowequals.c */; };
+		E9A21DCC2683FC860062462C /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = E9A21DB72683FC860062462C /* Makefile */; };
+		E9A21DCD2683FC860062462C /* libscrypt.version in Resources */ = {isa = PBXBuildFile; fileRef = E9A21DB82683FC860062462C /* libscrypt.version */; };
+		E9A21DCE2683FC860062462C /* b64.h in Headers */ = {isa = PBXBuildFile; fileRef = E9A21DB92683FC860062462C /* b64.h */; };
+		E9A21DCF2683FC860062462C /* sha256.h in Headers */ = {isa = PBXBuildFile; fileRef = E9A21DBA2683FC860062462C /* sha256.h */; };
+		E9A21DD02683FC860062462C /* crypto-scrypt-saltgen.c in Sources */ = {isa = PBXBuildFile; fileRef = E9A21DBB2683FC860062462C /* crypto-scrypt-saltgen.c */; };
+		E9A21DD12683FC860062462C /* crypto_scrypt-hexconvert.c in Sources */ = {isa = PBXBuildFile; fileRef = E9A21DBC2683FC860062462C /* crypto_scrypt-hexconvert.c */; };
+		E9A21DD22683FC860062462C /* crypto-mcf.c in Sources */ = {isa = PBXBuildFile; fileRef = E9A21DBD2683FC860062462C /* crypto-mcf.c */; };
+		E9A21DD32683FC860062462C /* sysendian.h in Headers */ = {isa = PBXBuildFile; fileRef = E9A21DBE2683FC860062462C /* sysendian.h */; };
+		E9A21DD42683FC860062462C /* libscrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = E9A21DBF2683FC860062462C /* libscrypt.h */; };
+		E9A21DD52683FC860062462C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = E9A21DC02683FC860062462C /* README.md */; };
+		E9A21DD62683FC860062462C /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = E9A21DC12683FC860062462C /* main.c */; };
+		E9A21DD72683FC860062462C /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = E9A21DC22683FC860062462C /* .gitignore */; };
+		E9A21DD82683FC860062462C /* crypto_scrypt-check.c in Sources */ = {isa = PBXBuildFile; fileRef = E9A21DC32683FC860062462C /* crypto_scrypt-check.c */; };
+		E9A21DD92683FC860062462C /* slowequals.h in Headers */ = {isa = PBXBuildFile; fileRef = E9A21DC42683FC860062462C /* slowequals.h */; };
+		E9A21DDA2683FC860062462C /* b64.c in Sources */ = {isa = PBXBuildFile; fileRef = E9A21DC52683FC860062462C /* b64.c */; };
+		E9A21DDB2683FC860062462C /* sha256.c in Sources */ = {isa = PBXBuildFile; fileRef = E9A21DC62683FC860062462C /* sha256.c */; };
+		E9A21DDC2683FC860062462C /* crypto_scrypt-nosse.c in Sources */ = {isa = PBXBuildFile; fileRef = E9A21DC72683FC860062462C /* crypto_scrypt-nosse.c */; };
+		E9A21DDD2683FC860062462C /* crypto_scrypt-hexconvert.h in Headers */ = {isa = PBXBuildFile; fileRef = E9A21DC82683FC860062462C /* crypto_scrypt-hexconvert.h */; };
+		E9A21DDF2683FC9F0062462C /* libscrypt.h in Headers */ = {isa = PBXBuildFile; fileRef = E9A21DDE2683FC9F0062462C /* libscrypt.h */; };
 		F5213FF42673849600EBDC50 /* CryptoSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FEF2673849600EBDC50 /* CryptoSwift.xcframework */; };
 		F5213FF52673849600EBDC50 /* CryptoSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FEF2673849600EBDC50 /* CryptoSwift.xcframework */; };
 		F5213FF62673849600EBDC50 /* BigInt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FF02673849600EBDC50 /* BigInt.xcframework */; };
@@ -410,6 +432,29 @@
 		E2EDC5ED241EE1E600410EA6 /* Bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bridge.swift; sourceTree = "<group>"; };
 		E97551BE2683706A002794AF /* Scrypt+Calculate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Scrypt+Calculate.swift"; sourceTree = "<group>"; };
 		E97551BF2683706A002794AF /* PBKDF2+Calculate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PBKDF2+Calculate.swift"; sourceTree = "<group>"; };
+		E9A21DB42683FC860062462C /* crypto_scrypt-hash.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "crypto_scrypt-hash.c"; sourceTree = "<group>"; };
+		E9A21DB52683FC860062462C /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		E9A21DB62683FC860062462C /* slowequals.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = slowequals.c; sourceTree = "<group>"; };
+		E9A21DB72683FC860062462C /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		E9A21DB82683FC860062462C /* libscrypt.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libscrypt.version; sourceTree = "<group>"; };
+		E9A21DB92683FC860062462C /* b64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = b64.h; sourceTree = "<group>"; };
+		E9A21DBA2683FC860062462C /* sha256.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha256.h; sourceTree = "<group>"; };
+		E9A21DBB2683FC860062462C /* crypto-scrypt-saltgen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "crypto-scrypt-saltgen.c"; sourceTree = "<group>"; };
+		E9A21DBC2683FC860062462C /* crypto_scrypt-hexconvert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "crypto_scrypt-hexconvert.c"; sourceTree = "<group>"; };
+		E9A21DBD2683FC860062462C /* crypto-mcf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "crypto-mcf.c"; sourceTree = "<group>"; };
+		E9A21DBE2683FC860062462C /* sysendian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sysendian.h; sourceTree = "<group>"; };
+		E9A21DBF2683FC860062462C /* libscrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libscrypt.h; sourceTree = "<group>"; };
+		E9A21DC02683FC860062462C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E9A21DC12683FC860062462C /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		E9A21DC22683FC860062462C /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		E9A21DC32683FC860062462C /* crypto_scrypt-check.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "crypto_scrypt-check.c"; sourceTree = "<group>"; };
+		E9A21DC42683FC860062462C /* slowequals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slowequals.h; sourceTree = "<group>"; };
+		E9A21DC52683FC860062462C /* b64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = b64.c; sourceTree = "<group>"; };
+		E9A21DC62683FC860062462C /* sha256.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sha256.c; sourceTree = "<group>"; };
+		E9A21DC72683FC860062462C /* crypto_scrypt-nosse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "crypto_scrypt-nosse.c"; sourceTree = "<group>"; };
+		E9A21DC82683FC860062462C /* crypto_scrypt-hexconvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "crypto_scrypt-hexconvert.h"; sourceTree = "<group>"; };
+		E9A21DDE2683FC9F0062462C /* libscrypt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libscrypt.h; sourceTree = "<group>"; };
+		E9A21DE02683FCF40062462C /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		F5213FEF2673849600EBDC50 /* CryptoSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CryptoSwift.xcframework; path = Carthage/Build/CryptoSwift.xcframework; sourceTree = "<group>"; };
 		F5213FF02673849600EBDC50 /* BigInt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = BigInt.xcframework; path = Carthage/Build/BigInt.xcframework; sourceTree = "<group>"; };
 		F5213FF12673849600EBDC50 /* PromiseKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = PromiseKit.xcframework; path = Carthage/Build/PromiseKit.xcframework; sourceTree = "<group>"; };
@@ -513,6 +558,7 @@
 		1317BCFD218C526300D6D095 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E9A21DB12683FC860062462C /* libscrypt */,
 				3AA815152276E3FF00F5DB52 /* web3swift */,
 				13C3385821B6C26900F33F5E /* secp256k1 */,
 			);
@@ -1004,6 +1050,52 @@
 			path = Calculations;
 			sourceTree = "<group>";
 		};
+		E9A21DB12683FC860062462C /* libscrypt */ = {
+			isa = PBXGroup;
+			children = (
+				E9A21DB22683FC860062462C /* include */,
+				E9A21DB32683FC860062462C /* libscrypt */,
+			);
+			path = libscrypt;
+			sourceTree = "<group>";
+		};
+		E9A21DB22683FC860062462C /* include */ = {
+			isa = PBXGroup;
+			children = (
+				E9A21DDE2683FC9F0062462C /* libscrypt.h */,
+				E9A21DE02683FCF40062462C /* module.modulemap */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		E9A21DB32683FC860062462C /* libscrypt */ = {
+			isa = PBXGroup;
+			children = (
+				E9A21DB42683FC860062462C /* crypto_scrypt-hash.c */,
+				E9A21DB52683FC860062462C /* LICENSE */,
+				E9A21DB62683FC860062462C /* slowequals.c */,
+				E9A21DB72683FC860062462C /* Makefile */,
+				E9A21DB82683FC860062462C /* libscrypt.version */,
+				E9A21DB92683FC860062462C /* b64.h */,
+				E9A21DBA2683FC860062462C /* sha256.h */,
+				E9A21DBB2683FC860062462C /* crypto-scrypt-saltgen.c */,
+				E9A21DBC2683FC860062462C /* crypto_scrypt-hexconvert.c */,
+				E9A21DBD2683FC860062462C /* crypto-mcf.c */,
+				E9A21DBE2683FC860062462C /* sysendian.h */,
+				E9A21DBF2683FC860062462C /* libscrypt.h */,
+				E9A21DC02683FC860062462C /* README.md */,
+				E9A21DC12683FC860062462C /* main.c */,
+				E9A21DC22683FC860062462C /* .gitignore */,
+				E9A21DC32683FC860062462C /* crypto_scrypt-check.c */,
+				E9A21DC42683FC860062462C /* slowequals.h */,
+				E9A21DC52683FC860062462C /* b64.c */,
+				E9A21DC62683FC860062462C /* sha256.c */,
+				E9A21DC72683FC860062462C /* crypto_scrypt-nosse.c */,
+				E9A21DC82683FC860062462C /* crypto_scrypt-hexconvert.h */,
+			);
+			path = libscrypt;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1011,6 +1103,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9A21DCE2683FC860062462C /* b64.h in Headers */,
+				E9A21DD92683FC860062462C /* slowequals.h in Headers */,
+				E9A21DD42683FC860062462C /* libscrypt.h in Headers */,
+				E9A21DD32683FC860062462C /* sysendian.h in Headers */,
+				E9A21DDD2683FC860062462C /* crypto_scrypt-hexconvert.h in Headers */,
+				E9A21DDF2683FC9F0062462C /* libscrypt.h in Headers */,
+				E9A21DCF2683FC860062462C /* sha256.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1170,9 +1269,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9A21DD52683FC860062462C /* README.md in Resources */,
+				E9A21DD72683FC860062462C /* .gitignore in Resources */,
 				E2B76710241ED479007EBFE3 /* browser.js in Resources */,
 				E2EDC5EC241EE18700410EA6 /* wk.bridge.min.js in Resources */,
+				E9A21DCA2683FC860062462C /* LICENSE in Resources */,
 				E22A911F241ED71A00EC1021 /* browser.min.js in Resources */,
+				E9A21DCD2683FC860062462C /* libscrypt.version in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1240,6 +1343,7 @@
 				3A7EA35E2280EA9A005120C2 /* Encodable+Extensions.swift in Sources */,
 				3AA815D22276E44100F5DB52 /* Web3+JSONRPC.swift in Sources */,
 				3AA815F82276E44100F5DB52 /* Promise+Web3+Contract+GetIndexedEvents.swift in Sources */,
+				E9A21DC92683FC860062462C /* crypto_scrypt-hash.c in Sources */,
 				3AA815E42276E44100F5DB52 /* Data+Extension.swift in Sources */,
 				3AA815C62276E44100F5DB52 /* ABI.swift in Sources */,
 				3AA815D02276E44100F5DB52 /* Web3+Utils.swift in Sources */,
@@ -1281,19 +1385,27 @@
 				3AA815BD2276E44100F5DB52 /* BloomFilter.swift in Sources */,
 				3AA815F62276E44100F5DB52 /* Promise+Web3+Eth+SendRawTransaction.swift in Sources */,
 				3AA815FF2276E44100F5DB52 /* Web3+ERC721x.swift in Sources */,
+				E9A21DD02683FC860062462C /* crypto-scrypt-saltgen.c in Sources */,
 				3AA815E52276E44100F5DB52 /* NativeTypesEncoding+Extensions.swift in Sources */,
 				3AA815D12276E44100F5DB52 /* Web3+MutatingTransaction.swift in Sources */,
 				3AA815CA2276E44100F5DB52 /* Web3+HttpProvider.swift in Sources */,
 				3AA815D42276E44100F5DB52 /* Web3+Contract.swift in Sources */,
 				3AA815CE2276E44100F5DB52 /* Web3+Eventloop.swift in Sources */,
+				E9A21DDB2683FC860062462C /* sha256.c in Sources */,
 				3AA815B42276E44100F5DB52 /* BIP39.swift in Sources */,
 				3AA815E22276E44100F5DB52 /* NSRegularExpressionExtension.swift in Sources */,
+				E9A21DD82683FC860062462C /* crypto_scrypt-check.c in Sources */,
+				E9A21DD12683FC860062462C /* crypto_scrypt-hexconvert.c in Sources */,
 				3AA815C12276E44100F5DB52 /* Web3+BrowserFunctions.swift in Sources */,
 				3AA815E82276E44100F5DB52 /* Extensions.swift in Sources */,
+				E9A21DD22683FC860062462C /* crypto-mcf.c in Sources */,
 				3AA815FE2276E44100F5DB52 /* Web3+ERC820.swift in Sources */,
 				3AA815DB2276E44100F5DB52 /* Web3+TxPool.swift in Sources */,
 				3AA8160A2276E44100F5DB52 /* Web3+ERC1594.swift in Sources */,
+				E9A21DDA2683FC860062462C /* b64.c in Sources */,
 				3AA815FB2276E44100F5DB52 /* Promise+Web3+Personal+UnlockAccount.swift in Sources */,
+				E9A21DD62683FC860062462C /* main.c in Sources */,
+				E9A21DCB2683FC860062462C /* slowequals.c in Sources */,
 				3AA815AD2276E44100F5DB52 /* ENSRegistry.swift in Sources */,
 				3AA815CD2276E44100F5DB52 /* Web3+Personal.swift in Sources */,
 				3AA8151E2276E42F00F5DB52 /* EthereumFilterEncodingExtensions.swift in Sources */,
@@ -1310,6 +1422,7 @@
 				3AA815B62276E44100F5DB52 /* BIP39+WordLists.swift in Sources */,
 				3AA816032276E44100F5DB52 /* Web3+ERC20.swift in Sources */,
 				E2EDC5EA241EDE3600410EA6 /* BrowserViewController.swift in Sources */,
+				E9A21DDC2683FC860062462C /* crypto_scrypt-nosse.c in Sources */,
 				3AA8160C2276E44100F5DB52 /* Web3+ERC1410.swift in Sources */,
 				3AA816042276E44100F5DB52 /* Web3+ERC1400.swift in Sources */,
 				3AA815ED2276E44100F5DB52 /* Promise+Web3+Eth+GetBlockByHash.swift in Sources */,
@@ -1337,6 +1450,7 @@
 				3AA815C42276E44100F5DB52 /* ABITypeParser.swift in Sources */,
 				3AA815BA2276E44100F5DB52 /* PlainKeystore.swift in Sources */,
 				3AA815C92276E44100F5DB52 /* RLP.swift in Sources */,
+				E9A21DCC2683FC860062462C /* Makefile in Sources */,
 				3AA816012276E44100F5DB52 /* Web3+ERC1376.swift in Sources */,
 				3AA815A72276E44100F5DB52 /* ENS.swift in Sources */,
 				3AA815F32276E44100F5DB52 /* Promise+Web3+Eth+GetTransactionReceipt.swift in Sources */,
