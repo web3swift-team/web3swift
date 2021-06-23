@@ -92,6 +92,7 @@ public protocol Web3SocketDelegate {
 
 /// The default websocket provider.
 public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDelegate {
+    
     public func didReceive(event: WebSocketEvent, client: WebSocket) {
         
     }
