@@ -1,11 +1,10 @@
-// swift-tools-version:5.2
-
+//////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//  Package.Swift
+//  Compression.swift
 //  Starscream
 //
-//  Created by Dalton Cherry on 5/16/15.
-//  Copyright (c) 2014-2016 Dalton Cherry.
+//  Created by Dalton Cherry on 2/4/19.
+//  Copyright © 2019 Vluxe. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -19,21 +18,12 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 //
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
-import PackageDescription
+import Foundation
 
-let package = Package(
-        name: "Starscream",
-        products: [
-            .library(name: "Starscream", targets: ["Starscream"])
-        ],
-        dependencies: [],
-        targets: [
-            .target(name: "Starscream",
-                    path: "Sources")
-        ]
-)
-
-#if os(Linux)
-    package.dependencies.append(.package(url: "https://github.com/apple/swift-nio-zlib-support.git", from: "1.0.0"))
-#endif
+public protocol CompressionHandler {
+    func load(headers: [String: String])
+    func decompress(data: Data, isFinal: Bool) -> Data?
+    func compress(data: Data) -> Data?
+}
