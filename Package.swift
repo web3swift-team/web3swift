@@ -29,7 +29,7 @@ let package = Package(
             ]),
         .target(
             name: "web3swift",
-            dependencies: ["BigInt", "secp256k1", "PromiseKit", "Starscream", "CryptoSwift", "libscrypt"],
+            dependencies: ["BigInt", "secp256k1", "PromiseKit", "Starscream", "CryptoSwift"],
             exclude: [
             ]),
         .testTarget(
