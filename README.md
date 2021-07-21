@@ -3,7 +3,7 @@
 
 ## [Join our discord](https://discord.gg/8tXjHK3pus) if you need a support or want to contribute to web3swift development!
 
-![matter-github-swift](https://github.com/matter-labs/web3swift/blob/develop/web3swift-logo.png)
+![matter-github-swift](https://github.com/skywinder/web3swift/blob/develop/web3swift-logo.png)
 [![Build Status](https://travis-ci.com/skywinder/web3swift.svg?branch=develop)](https://travis-ci.com/skywinder/web3swift)
 [![Swift](https://img.shields.io/badge/Swift-5.4-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
@@ -58,7 +58,7 @@
 
     - [x] **[BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) (HD Wallets), [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases), [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)**
 - [x] **[EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)** (Standart interface for tokens - ERC-20), **[EIP-67](https://github.com/ethereum/EIPs/issues/67)** (Standard URI scheme), **[EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md)** (Replay attacks protection)
-    - [x] **And many others** *(For details about this EIP's look at [Documentation page](https://github.com/matter-labs/web3swift/blob/master/Documentation/))*: EIP-681, EIP-721, EIP-165, EIP-777, EIP-820, EIP-888, EIP-1400, EIP-1410, EIP-1594, EIP-1643, EIP-1644, EIP-1633, EIP-721, EIP-1155, EIP-1376, ST-20
+    - [x] **And many others** *(For details about this EIP's look at [Documentation page](https://github.com/skywinder/web3swift/blob/master/Documentation/))*: EIP-681, EIP-721, EIP-165, EIP-777, EIP-820, EIP-888, EIP-1400, EIP-1410, EIP-1594, EIP-1643, EIP-1644, EIP-1633, EIP-721, EIP-1155, EIP-1376, ST-20
 
 - [x] 🗜 **Batched requests** in concurrent mode
 - [x] **RLP encoding**
@@ -118,7 +118,7 @@ $ open -a Xcode Cartfile
 Add the following line to the Cartfile and save it:
 
 ```ogdl
-github "matter-labs/web3swift" "master"
+github "skywinder/web3swift" "master"
 ```
 
 Run `carthage update` to build the framework. By default, Carthage performs checkouts and creates a new directory 'Carthage' in the same location as your Cartfile. Open this directory, go to 'Build' directory, choose iOS or macOS directory, and use the selected directory framework in your Xcode project.
@@ -218,7 +218,7 @@ let tx = contract.write(
 You can see how to our demo project: **WKWebView with injected "web3" provider**:
 
 ``` bash
-git clone https://github.com/matter-labs/web3swift.git
+git clone https://github.com/skywinder/web3swift.git
 cd web3swift/Example/web3swiftBrowser
 pod install
 open ./web3swiftBrowser.xcworkspace
@@ -227,7 +227,7 @@ open ./web3swiftBrowser.xcworkspace
 ### Build from source
 
 - Clone repo
-- Instal dependencies via  `./carthage-build.sh --platform iOS` (temp workaround, foe of Carthage bug. [For details please look at](https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323)
+- Install dependencies via  `./carthage-build.sh --platform iOS` (temp workaround, foe of Carthage bug. [For details please look at](https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323)
 
 ### Requirements
 
@@ -241,23 +241,23 @@ open ./web3swiftBrowser.xcworkspace
 
 ## Documentation
 
-For full documentation details and FAQ, please look at [Documentation](https://github.com/matter-labs/web3swift/blob/master/Documentation/)
+For full documentation details and FAQ, please look at [Documentation](https://github.com/skywinder/web3swift/blob/master/Documentation/)
 
-*If you need to find or understand an API, check [Usage.md](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md).*
+*If you need to find or understand an API, check [Usage.md](https://github.com/skywinder/web3swift/blob/master/Documentation/Usage.md).*
 
- **FAQ moved [Documentation Page](https://github.com/matter-labs/web3swift/blob/master/Documentation/)**
+ **FAQ moved [Documentation Page](https://github.com/skywinder/web3swift/blob/master/Documentation/)**
 
 Here are quick references for essential features:
 
-- [Preffered models](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#preffered-models)
-- [Account Management (create, import, private keys managments, etc.)](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#account-management)
-- [Ethereum Endpoints interaction (web3, balance, tx's operations, chain state)](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ethereum-endpoints-interaction)
-- [Websockets](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#websockets)
-- [ENS](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#ens)
+- [Preffered models](https://github.com/skywinder/web3swift/blob/master/Documentation/Usage.md#preffered-models)
+- [Account Management (create, import, private keys managments, etc.)](https://github.com/skywinder/web3swift/blob/master/Documentation/Usage.md#account-management)
+- [Ethereum Endpoints interaction (web3, balance, tx's operations, chain state)](https://github.com/skywinder/web3swift/blob/master/Documentation/Usage.md#ethereum-endpoints-interaction)
+- [Websockets](https://github.com/skywinder/web3swift/blob/master/Documentation/Usage.md#websockets)
+- [ENS](https://github.com/skywinder/web3swift/blob/master/Documentation/Usage.md#ens)
 
 ## Projects that are using web3swift
 
-If you are using this library in your project, please [add a link](https://github.com/matter-labs/web3swift/edit/develop/README.md) to this repo.
+If you are using this library in your project, please [add a link](https://github.com/skywinder/web3swift/edit/develop/README.md) to this repo.
 
 * [MyEtherWallet/MEWconnect-iOS](https://github.com/MyEtherWallet/MEWconnect-iOS)
 * [Peepeth iOS client](https://github.com/matterinc/PeepethClient)
@@ -274,7 +274,7 @@ If you are using this library in your project, please [add a link](https://githu
 * [Biomedical Data Sharing dApp - Geolocation](https://github.com/HD2i/Geolocation-iOS)
 * [Alice Wallet](https://github.com/alicedapp/AliceX)
 * [web3-react-native](https://github.com/cawfree/web3-react-native)
-* [YOUR APP CAN BE THERE (click me)](https://github.com/matter-labs/web3swift/edit/develop/README.md) :wink:
+* [YOUR APP CAN BE THERE (click me)](https://github.com/skywinder/web3swift/edit/develop/README.md) :wink:
 
 *Nothing makes developers happier than seeing someone else use our work and go wild with it.*
 
@@ -282,9 +282,9 @@ If you are using this library in your project, please [add a link](https://githu
 
 **[Join our discord](https://discord.gg/DZKFJFn3) if you need a support or want to contribute to web3swift development!**
 
-- If you **need help**, [open an issue](https://github.com/matter-labs/web3swift/issues).
-- If you'd like to **see web3swift best practices**, check [Projects that using web3swift](https://github.com/matter-labs/web3swift#projects-that-using-web3swift).
-- If you **found a bug**, [open an issue](https://github.com/matter-labs/web3swift/issues).
+- If you **need help**, [open an issue](https://github.com/skywinder/web3swift/issues).
+- If you'd like to **see web3swift best practices**, check [Projects that using web3swift](https://github.com/skywinder/web3swift#projects-that-using-web3swift).
+- If you **found a bug**, [open an issue](https://github.com/skywinder/web3swift/issues).
 
 
 ## Contribute
@@ -293,31 +293,30 @@ Want to improve? It's awesome:
 
 Then good news for you: **We are ready to pay for your contribution via [@gitcoin bot](https://gitcoin.co/grants/358/web3swift)!**
 
-- If you **have a feature request**, [open an issue](https://github.com/matter-labs/web3swift/issues).
+- If you **have a feature request**, [open an issue](https://github.com/skywinder/web3swift/issues).
 
-- If you **want to contribute**, read [contribution policy](https://github.com/matter-labs/web3swift/blob/master/Documentation/CONTRIBUTION_POLICY.md) & [submit a pull request](https://github.com/matter-labs/web3swift/pulls).
+- If you **want to contribute**, read [contribution policy](https://github.com/skywinder/web3swift/blob/master/Documentation/CONTRIBUTION_POLICY.md) & [submit a pull request](https://github.com/skywinder/web3swift/pulls).
 
 If you use any of our libraries for work, see if your employers would be interested in donating. Any amount you can donate today to help us reach our goal would be much appreciated.
 
-[Matter Labs](https://github.com/orgs/matter-labs/people) are charged with open-sourсe and do not require money for using their web3swift lib.
+[Matter Labs](https://github.com/orgs/skywinder/people) are charged with open-sourсe and do not require money for using their web3swift lib.
 We want to continue to do everything we can to move the needle forward.
 
 - **Support us** via [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift)
 - Ether wallet address: `0x6A3738c6299f45c31697aceA647D49EdCC9C28A4`
 
-<img src="https://raw.githubusercontent.com/matter-labs/web3swift/develop/img/Ether-donations.jpeg" width="300" />
+<img src="https://raw.githubusercontent.com/skywinder/web3swift/develop/img/Ether-donations.jpeg" width="300" />
 
 ### Future steps 
 
 You are more than welcome to participate! **Your contribution will be paid via  [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift).**
 
+- [x] Performance Improvements thanks to @**[xdozorx](https://github.com/xdozorx)** for [Update perfomance of import account](https://github.com/skywinder/web3swift/pull/336)
+
 - [ ] **L2 support** (such as [ZkSync](https://zksync.io/))
 
 - [ ] **Modularity** with the basic Web3 subspec/SPM (the most basic functions like transaction signing and interacting with an http rpc server) and other modules with additional functionality
-
-- [ ] Complete Documentation (https://web3swift.github.io/web3swift)
-
-- [ ] Performance Improvements
+- [ ] [Complete Documentation](https://web3swift.github.io/web3swift)
 
 - [ ] Convenient methods for namespaces
 
@@ -325,15 +324,16 @@ You are more than welcome to participate! **Your contribution will be paid via  
 
 ## Credits
 
-- Alex Vlasov, [@shamatar](https://github.com/shamatar)
-- Petr Korolev, [@skywinder](https://github.com/skywinder)
-- Anton Grigorev, [@baldyash](https://github.com/BaldyAsh)
+- Alex Vlasov, [@shamatar](https://github.com/shamatar) - for the initial implementation
+- Petr Korolev, [@skywinder](https://github.com/skywinder) - botstrap and continous support
+- Anton Grigorev, [@baldyash](https://github.com/BaldyAsh) - core contributor, who use it and making a lot of ipmprovments
+- Yhanks to [web3swift's growing list of contributors](https://github.com/skywinder/web3swift/graphs/contributors).
 
 ## Security Disclosure
 
-If you believe you have identified a security vulnerability with web3swift, you should report it as soon as possible via email to [hello@matter-labs.io](mailto:hello@matter-labs.io). Please do not post it to a public issue tracker.
+If you believe you have identified a security vulnerability with web3swift, you should report it as soon as possible via email to [web3swift@oxor.io](mailto:web3swift@oxor.io). Please do not post it to a public issue tracker.
 
 
 ## License
 
-web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/matter-labs/web3swift/blob/master/LICENSE) for details.
+web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/skywinder/web3swift/blob/master/LICENSE) for details.
