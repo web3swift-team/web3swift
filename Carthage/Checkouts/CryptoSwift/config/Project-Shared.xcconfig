@@ -1,4 +1,4 @@
-MARKETING_VERSION = 1.4.0
+MARKETING_VERSION = 1.4.1
 
 SUPPORTED_PLATFORMS = iphonesimulator iphoneos macosx appletvos watchos appletvsimulator watchsimulator
 
@@ -7,8 +7,8 @@ SWIFT_VERSION = 5.0
 
 TARGETED_DEVICE_FAMILY = 1,2,3,4
 
-TVOS_DEPLOYMENT_TARGET = 12.0
-IPHONEOS_DEPLOYMENT_TARGET = 12.0
+TVOS_DEPLOYMENT_TARGET = 9.0
+IPHONEOS_DEPLOYMENT_TARGET = 9.0
 MACOSX_DEPLOYMENT_TARGET = 10.12
 WATCHOS_DEPLOYMENT_TARGET = 2.0
 
@@ -78,6 +78,7 @@ VERSIONING_SYSTEM = apple-generic
 CURRENT_PROJECT_VERSION = 1
 
 // XCFramework
+// Swift have (at least) 2 language dialects: With and without Library Evolution behave differently regarding enums.
 BUILD_LIBRARY_FOR_DISTRIBUTION = YES
 
 // Catalyst
