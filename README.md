@@ -68,7 +68,7 @@
 
 ## Installation
 
-- CocoaPods
+### CocoaPods
 
 [CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
 
@@ -96,7 +96,7 @@ Then, run the following command:
 $ pod install
 ```
 
-- Carthage
+### Carthage
 
 [Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.
 
@@ -128,10 +128,16 @@ Open xcode setting and add this repo as a source
 
 ### Example usage
 
+In the imports section:
+
+```swift
+import web3swift
+```
 
 ##### Send Ether
 
-```swift
+```
+
 let value: String = "1.0" // In Ether
 let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
 let toAddress = EthereumAddress(toAddressString)!

@@ -1117,7 +1117,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1200;
-				ORGANIZATIONNAME = "Matter Labs";
+				ORGANIZATIONNAME = web3swift;
 				TargetAttributes = {
 					1317BCE2218C50D100D6D095 = {
 						CreatedOnToolsVersion = 10.1;
