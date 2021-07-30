@@ -7,10 +7,10 @@
 import XCTest
 import CryptoSwift
 import BigInt
-//import EthereumAddress
 
 @testable import web3swift
 
+// MARK: Works only with network connection
 class web3swift_remoteParsing_Tests: XCTestCase {
     
     func testEventParsing1usingABIv2() throws {

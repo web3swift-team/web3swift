@@ -13,7 +13,7 @@ class web3swift_Keystores_tests: XCTestCase {
     
     let mnemonic = "fruit wave dwarf banana earth journey tattoo true farm silk olive fence"
     
-    func testBIP39 () {
+    func testBIP39 () throws {
         var entropy = Data.fromHex("00000000000000000000000000000000")!
         var phrase = BIP39.generateMnemonicsFromEntropy(entropy: entropy)
         XCTAssert( phrase == "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about")
@@ -26,21 +26,21 @@ class web3swift_Keystores_tests: XCTestCase {
         XCTAssert(seed?.toHexString() == "64c87cde7e12ecf6704ab95bb1408bef047c22db4cc7491c4271d170a1b213d20b385bc1588d9c7b38f1b39d415665b8a9030c9ec653d75e65f847d8fc1fc440")
     }
     
-    func testBIP39SeedAndMnemConversions() {
+    func testBIP39SeedAndMnemConversions() throws {
         let seed = Data.randomBytes(length: 32)!
         let mnemonics = BIP39.generateMnemonicsFromEntropy(entropy: seed)
         let recoveredSeed = BIP39.mnemonicsToEntropy(mnemonics!, language: .english)
         XCTAssert(seed == recoveredSeed)
     }
     
-    func testHMAC() {
+    func testHMAC() throws {
         let seed = Data.fromHex("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b")!
         let data = Data.fromHex("4869205468657265")!
         let hmac = try! HMAC.init(key: seed.bytes, variant: HMAC.Variant.sha512).authenticate(data.bytes)
         XCTAssert(Data(hmac).toHexString() == "87aa7cdea5ef619d4ff0b4241a1d6cb02379f4e2ce4ec2787ad0b30545e17cdedaa833b7d6b8a702038b274eaea3f4e4be9d914eeb61f1702e696c203a126854")
     }
     
-    func testV3keystoreExportPrivateKey() {
+    func testV3keystoreExportPrivateKey() throws {
         let keystore = try! EthereumKeystoreV3(password: "");
         XCTAssertNotNil(keystore)
         let account = keystore!.addresses![0]
@@ -51,7 +51,7 @@ class web3swift_Keystores_tests: XCTestCase {
         XCTAssertNotNil(key)
     }
     
-    func testV3keystoreSerialization() {
+    func testV3keystoreSerialization() throws {
         let keystore = try! EthereumKeystoreV3(password: "");
         XCTAssertNotNil(keystore)
         let account = keystore!.addresses![0]
@@ -67,20 +67,20 @@ class web3swift_Keystores_tests: XCTestCase {
         XCTAssertEqual(key, restoredKey)
     }
     
-    func testNewBIP32keystore() {
+    func testNewBIP32keystore() throws {
         let mnemonic = try! BIP39.generateMnemonics(bitsOfEntropy: 256)!
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
         XCTAssert(keystore != nil)
     }
     
-    func testSameAddressesFromTheSameMnemonics() {
+    func testSameAddressesFromTheSameMnemonics() throws {
         let mnemonic = try! BIP39.generateMnemonics(bitsOfEntropy: 256)!
         let keystore1 = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
         let keystore2 = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
         XCTAssert(keystore1?.addresses?.first == keystore2?.addresses?.first)
     }
     
-    func testBIP32keystoreExportPrivateKey() {
+    func testBIP32keystoreExportPrivateKey() throws {
         let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
         XCTAssertNotNil(keystore)
@@ -89,7 +89,7 @@ class web3swift_Keystores_tests: XCTestCase {
         XCTAssertNotNil(key)
     }
     
-    func testBIP32keystoreMatching() {
+    func testBIP32keystoreMatching() throws {
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana")
         XCTAssertNotNil(keystore)
         let account = keystore!.addresses![0]
@@ -98,14 +98,14 @@ class web3swift_Keystores_tests: XCTestCase {
         XCTAssert(pubKey?.toHexString() == "027160bd3a4d938cac609ff3a11fe9233de7b76c22a80d2b575e202cbf26631659")
     }
     
-    func testBIP32keystoreMatchingRootNode() {
+    func testBIP32keystoreMatchingRootNode() throws {
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana")
         XCTAssertNotNil(keystore)
         let rootNode = try! keystore!.serializeRootNodeToString(password: "")
         XCTAssert(rootNode == "xprvA2KM71v838kPwE8Lfr12m9DL939TZmPStMnhoFcZkr1nBwDXSG7c3pjYbMM9SaqcofK154zNSCp7W7b4boEVstZu1J3pniLQJJq7uvodfCV")
     }
     
-    func testBIP32keystoreCustomPathMatching() {
+    func testBIP32keystoreCustomPathMatching() throws {
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana", prefixPath:"m/44'/60'/0'/0")
         XCTAssertNotNil(keystore)
         let account = keystore!.addresses![0]
@@ -114,7 +114,7 @@ class web3swift_Keystores_tests: XCTestCase {
         XCTAssert(pubKey?.toHexString() == "027160bd3a4d938cac609ff3a11fe9233de7b76c22a80d2b575e202cbf26631659")
     }
     
-    func testByBIP32keystoreCreateChildAccount() {
+    func testByBIP32keystoreCreateChildAccount() throws {
         let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
         XCTAssertNotNil(keystore)
@@ -126,7 +126,7 @@ class web3swift_Keystores_tests: XCTestCase {
         XCTAssertNotNil(key)
     }
     
-    func testByBIP32keystoreCreateCustomChildAccount() {
+    func testByBIP32keystoreCreateCustomChildAccount() throws {
         let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
         XCTAssertNotNil(keystore)
@@ -139,7 +139,7 @@ class web3swift_Keystores_tests: XCTestCase {
         print(keystore!.paths)
     }
     
-    func testByBIP32keystoreSaveAndDeriva() {
+    func testByBIP32keystoreSaveAndDeriva() throws {
         let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "", prefixPath: "m/44'/60'/0'")
         XCTAssertNotNil(keystore)
@@ -154,25 +154,25 @@ class web3swift_Keystores_tests: XCTestCase {
         print(keystore!.addresses![1].address)
         print(recreatedStore!.addresses![0].address)
         print(recreatedStore!.addresses![1].address)
-        // This will fail. It wont fail if use scrypt from pod 'scrypt', '2.0', not from CryptoSwift
-        XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![1])
-        XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![0])
+        // It fails if run tests in batch and succeeds if run it separately
+        XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![0])
+        XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![1])
     }
     
-    //    func testPBKDF2() {
-    //        let pass = "passDATAb00AB7YxDTTl".data(using: .utf8)!
-    //        let salt = "saltKEYbcTcXHCBxtjD2".data(using: .utf8)!
-    //        let dataArray = try? PKCS5.PBKDF2(password: pass.bytes, salt: salt.bytes, iterations: 100000, keyLength: 65, variant: HMAC.Variant.sha512).calculate()
-    //        XCTAssert(Data(dataArray!).toHexString().addHexPrefix().lowercased() == "0x594256B0BD4D6C9F21A87F7BA5772A791A10E6110694F44365CD94670E57F1AECD797EF1D1001938719044C7F018026697845EB9AD97D97DE36AB8786AAB5096E7".lowercased())
-    //    }
+    func testPBKDF2() throws {
+        let pass = "passDATAb00AB7YxDTTl".data(using: .utf8)!
+        let salt = "saltKEYbcTcXHCBxtjD2".data(using: .utf8)!
+        let dataArray = try? PKCS5.PBKDF2(password: pass.bytes, salt: salt.bytes, iterations: 100000, keyLength: 65, variant: HMAC.Variant.sha512).calculate()
+        XCTAssert(Data(dataArray!).toHexString().addHexPrefix().lowercased() == "0x594256B0BD4D6C9F21A87F7BA5772A791A10E6110694F44365CD94670E57F1AECD797EF1D1001938719044C7F018026697845EB9AD97D97DE36AB8786AAB5096E7".lowercased())
+    }
     
-    func testRIPEMD() {
+    func testRIPEMD() throws {
         let data = "message digest".data(using: .ascii)
         let hash = try! RIPEMD160.hash(message: data!)
         XCTAssert(hash.toHexString() == "5d0689ef49d2fae572b881b123a85ffa21595f36")
     }
     
-    func testHD32() {
+    func testHD32() throws {
         let seed = Data.fromHex("000102030405060708090a0b0c0d0e0f")!
         let node = HDNode(seed: seed)!
         XCTAssert(node.chaincode == Data.fromHex("873dff81c02f525623fd1fe5167eac3a55a049de3d314bb42ee227ffed37d508"))
@@ -216,7 +216,7 @@ class web3swift_Keystores_tests: XCTestCase {
         XCTAssert(treeNode?.serializeToString(serializePublic: false) == "xprv9zZhZKG7taxeit8w1HiTDdUko2Fm1RxkrjxANbEaG7kFvJp5UEh6MiQ5b5XvwWg8xdHMhueagettVG2AbfqSRDyNpxRDBLyMSbNq1KhZ8ai")
     }
     
-    func testBIP32derivation2() {
+    func testBIP32derivation2() throws {
         let seed = Data.fromHex("fffcf9f6f3f0edeae7e4e1dedbd8d5d2cfccc9c6c3c0bdbab7b4b1aeaba8a5a29f9c999693908d8a8784817e7b7875726f6c696663605d5a5754514e4b484542")!
         let node = HDNode(seed: seed)!
         let path = "m/0/2147483647'/1/2147483646'/2"
@@ -227,7 +227,7 @@ class web3swift_Keystores_tests: XCTestCase {
         XCTAssert(treeNode?.serializeToString(serializePublic: false) == "xprvA2nrNbFZABcdryreWet9Ea4LvTJcGsqrMzxHx98MMrotbir7yrKCEXw7nadnHM8Dq38EGfSh6dqA9QWTyefMLEcBYJUuekgW4BYPJcr9E7j")
     }
     
-    func testKeystoreDerivationTime() {
+    func testKeystoreDerivationTime() throws {
         let privateKey = Data.randomBytes(length: 32)!
         measure {
             let ks = try! EthereumKeystoreV3(privateKey: privateKey, password: "TEST")!
@@ -236,7 +236,7 @@ class web3swift_Keystores_tests: XCTestCase {
         }
     }
     
-    func testSingleScryptDerivation() {
+    func testSingleScryptDerivation() throws {
         let privateKey = Data.randomBytes(length: 32)!
         let _ = try! EthereumKeystoreV3(privateKey: privateKey, password: "TEST")!
     }

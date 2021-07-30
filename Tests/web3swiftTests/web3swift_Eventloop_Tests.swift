@@ -5,13 +5,12 @@
 //
 
 import XCTest
-//import EthereumAddress
 
 @testable import web3swift
 
 class web3swift_Eventloop_Tests: XCTestCase {
 
-    func testBasicEventLoop() {
+    func testBasicEventLoop() throws {
         var ticksToWait = 5
         let expectation = self.expectation(description: "Waiting")
         func getBlockNumber(_ web3: web3) {
@@ -26,7 +25,8 @@ class web3swift_Eventloop_Tests: XCTestCase {
                 print(error)
             }
         }
-        let web3main = Web3.InfuraMainnetWeb3()
+        
+        let web3main = try Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
         let functionToCall: web3.Eventloop.EventLoopCall = getBlockNumber
         let monitoredProperty = web3.Eventloop.MonitoredProperty.init(name: "onNewBlock", queue: web3main.requestDispatcher.queue, calledFunction: functionToCall)
         web3main.eventLoop.monitoredProperties.append(monitoredProperty)
@@ -35,8 +35,8 @@ class web3swift_Eventloop_Tests: XCTestCase {
         waitForExpectations(timeout: 60, handler: nil)
     }
     
-//    func testNonceMiddleware() {
-//        let web3 = Web3.InfuraRinkebyWeb3()
+//    func testNonceMiddleware() throws {
+//        let web3 = try Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
 //        let middleware = Web3.Utils.NonceMiddleware()
 //        middleware.attach(web3)
 //
@@ -62,12 +62,12 @@ class web3swift_Eventloop_Tests: XCTestCase {
 //        let hookNewNonce2 = middleware.nonceLookups[tempKeystore!.addresses!.first!]!
 //        XCTAssert(newNonce2 == hookNewNonce2)
 //    }
-    
-    func getKeystoreData() -> Data? {
-        let bundle = Bundle(for: type(of: self))
-        guard let path = bundle.path(forResource: "key", ofType: "json") else {return nil}
-        guard let data = NSData(contentsOfFile: path) else {return nil}
-        return data as Data
-    }
+//    
+//    func getKeystoreData() -> Data? {
+//        let bundle = Bundle(for: type(of: self))
+//        guard let path = bundle.path(forResource: "key", ofType: "json") else {return nil}
+//        guard let data = NSData(contentsOfFile: path) else {return nil}
+//        return data as Data
+//    }
     
 }
