@@ -296,8 +296,28 @@ open ./web3swiftBrowser.xcworkspace
 
 ### Build from source
 
-- Clone repo
-- Install dependencies via  `./carthage-build.sh --platform iOS` (temp workaround, foe of Carthage bug. [For details please look at](https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323)
+### Default web3swift build
+
+1. Install carthage:
+```
+brew install carthage
+```
+2. Run carthage update:
+```
+# Available platforms: `iOS, macOS` 
+carthage update --platform iOS --use-xcframeworks
+```
+3.  Build project in XCode:
+`Command + B`
+
+### Build web3swift into .framework:
+```
+carthage build --no-skip-current --platform iOS
+```
+
+### In case of build errors, please check this solition
+
+- Install dependencies via  `./carthage-build.sh --platform iOS` (temp workaround, for of Carthage bug. [For details please look at](https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323)
 
 ### Requirements
 
