@@ -136,8 +136,7 @@ import web3swift
 
 ##### Send Ether
 
-```
-
+```swift
 let value: String = "1.0" // In Ether
 let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
 let toAddress = EthereumAddress(toAddressString)!
@@ -274,6 +273,9 @@ If you are using this library in your project, please [add a link](https://githu
 * [Biomedical Data Sharing dApp - Geolocation](https://github.com/HD2i/Geolocation-iOS)
 * [Alice Wallet](https://github.com/alicedapp/AliceX)
 * [web3-react-native](https://github.com/cawfree/web3-react-native)
+* [ProLabArt](https://prolabart.com)
+<!-- Add your project below -->
+<!-- * [Project Name](link to projext) -->
 * [YOUR APP CAN BE THERE (click me)](https://github.com/skywinder/web3swift/edit/develop/README.md) :wink:
 
 *Nothing makes developers happier than seeing someone else use our work and go wild with it.*
