@@ -8,7 +8,8 @@
 
 //MARK: Full-width multiplication and division
 
-extension FixedWidthInteger where Magnitude == Self {
+// TODO: Return to `where Magnitude == Self` when SR-13491 is resolved
+extension FixedWidthInteger {
     private var halfShift: Self {
         return Self(Self.bitWidth / 2)
 
@@ -91,13 +92,13 @@ extension FixedWidthInteger where Magnitude == Self {
         let w = Self(Self.bitWidth) - z
         let vn = self << z
 
-        let un32 = (z == 0 ? dividend.high : (dividend.high &<< z) | (dividend.low &>> w)) // No bits are lost
+        let un32 = (z == 0 ? dividend.high : (dividend.high &<< z) | ((dividend.low as! Self) &>> w)) // No bits are lost
         let un10 = dividend.low &<< z
         let (un1, un0) = un10.split
 
         // Divide `(un32,un10)` by `vn`, splitting the full 4/2 division into two 3/2 ones.
-        let (q1, un21) = quotientAndRemainder(dividing: (un32, un1), by: vn)
-        let (q0, rn) = quotientAndRemainder(dividing: (un21, un0), by: vn)
+        let (q1, un21) = quotientAndRemainder(dividing: (un32, (un1 as! Self)), by: vn)
+        let (q0, rn) = quotientAndRemainder(dividing: (un21, (un0 as! Self)), by: vn)
 
         // Undo normalization of the remainder and combine the two halves of the quotient.
         let mod = rn >> z
@@ -120,7 +121,7 @@ extension FixedWidthInteger where Magnitude == Self {
             r = s
         }
         else {
-            (q, r) = y.0.fastDividingFullWidth((x.0, x.1))
+            (q, r) = y.0.fastDividingFullWidth((x.0, (x.1 as! Magnitude)))
         }
         // Now refine q by considering x.2 and y.1.
         // Note that since y is normalized, q * y - x is between 0 and 2.
@@ -130,7 +131,7 @@ extension FixedWidthInteger where Magnitude == Self {
         let (r1, ro) = r.addingReportingOverflow(y.0)
         if ro { return q - 1 }
 
-        let (pl1, so) = pl.subtractingReportingOverflow(y.1)
+        let (pl1, so) = pl.subtractingReportingOverflow((y.1 as! Magnitude))
         let ph1 = (so ? ph - 1 : ph)
 
         if ph1 < r1 || (ph1 == r1 && pl1 <= x.2) { return q - 1 }
