@@ -121,9 +121,11 @@ Add the following line to the Cartfile and save it:
 github "skywinder/web3swift" "master"
 ```
 
-Run `carthage update` to build the framework. By default, Carthage performs checkouts and creates a new directory 'Carthage' in the same location as your Cartfile. Open this directory, go to 'Build' directory, choose iOS or macOS directory, and use the selected directory framework in your Xcode project.
+Run `carthage update --no-use-binaries --platform iOS` to build the framework. By default, Carthage performs checkouts and creates a new directory 'Carthage' in the same location as your Cartfile. Open this directory, go to 'Build' directory, choose iOS or macOS directory, and use the selected directory framework in your Xcode project.
 
-- Swift Package
+
+
+### Swift Package
 Open xcode setting and add this repo as a source
 
 ### Example usage
