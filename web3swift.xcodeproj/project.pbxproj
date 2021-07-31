@@ -455,25 +455,8 @@
 		1317404621BE96D300208B8F /* web3swiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				E252E68126B542D000717C16 /* local_tests */,
 				E252E68026B40C1600717C16 /* infura_tests */,
-				3AA816122276E48300F5DB52 /* web3swift_AdvancedABIv2_Tests.swift */,
-				3AA8160F2276E48300F5DB52 /* web3swift_EIP67_Tests.swift */,
-				3AA8161A2276E48300F5DB52 /* web3swift_EIP681_Tests.swift */,
-				3AA816172276E48300F5DB52 /* web3swift_ERC20_Class_Tests.swift */,
-				3AA816132276E48300F5DB52 /* web3swift_ERC20_Tests.swift */,
-				3AA816222276E48400F5DB52 /* web3swift_Eventloop_Tests.swift */,
-				3AA8161B2276E48300F5DB52 /* web3swift_keystores_Tests.swift */,
-				3AA816102276E48300F5DB52 /* web3swift_basic_local_node_Tests.swift */,
-				3AA816182276E48300F5DB52 /* web3swift_numberFormattingUtil_Tests.swift */,
-				3AA816192276E48300F5DB52 /* web3swift_ObjC_Tests.swift */,
-				3AA8161C2276E48300F5DB52 /* web3swift_promises_Tests.swift */,
-				3AA8161D2276E48300F5DB52 /* web3swift_remoteParsing_Tests.swift */,
-				3AA816212276E48400F5DB52 /* web3swift_personalSignature_Tests.swift */,
-				3AA816112276E48300F5DB52 /* web3swift_RLP_Tests.swift */,
-				3AA816152276E48300F5DB52 /* web3swift_Tests.swift */,
-				3AA816202276E48400F5DB52 /* web3swift_transactions_Tests.swift */,
-				3AA816162276E48300F5DB52 /* web3swift_User_cases.swift */,
-				E252E67E26B403F500717C16 /* web3swift_helpers.swift */,
 			);
 			path = web3swiftTests;
 			sourceTree = "<group>";
@@ -987,6 +970,31 @@
 				3AA8161F2276E48400F5DB52 /* web3swift_infura_Tests.swift */,
 			);
 			path = infura_tests;
+			sourceTree = "<group>";
+		};
+		E252E68126B542D000717C16 /* local_tests */ = {
+			isa = PBXGroup;
+			children = (
+				3AA816122276E48300F5DB52 /* web3swift_AdvancedABIv2_Tests.swift */,
+				3AA8160F2276E48300F5DB52 /* web3swift_EIP67_Tests.swift */,
+				3AA8161A2276E48300F5DB52 /* web3swift_EIP681_Tests.swift */,
+				3AA816172276E48300F5DB52 /* web3swift_ERC20_Class_Tests.swift */,
+				3AA816132276E48300F5DB52 /* web3swift_ERC20_Tests.swift */,
+				3AA816222276E48400F5DB52 /* web3swift_Eventloop_Tests.swift */,
+				3AA8161B2276E48300F5DB52 /* web3swift_keystores_Tests.swift */,
+				3AA816102276E48300F5DB52 /* web3swift_basic_local_node_Tests.swift */,
+				3AA816182276E48300F5DB52 /* web3swift_numberFormattingUtil_Tests.swift */,
+				3AA816192276E48300F5DB52 /* web3swift_ObjC_Tests.swift */,
+				3AA8161C2276E48300F5DB52 /* web3swift_promises_Tests.swift */,
+				3AA8161D2276E48300F5DB52 /* web3swift_remoteParsing_Tests.swift */,
+				3AA816212276E48400F5DB52 /* web3swift_personalSignature_Tests.swift */,
+				3AA816112276E48300F5DB52 /* web3swift_RLP_Tests.swift */,
+				3AA816152276E48300F5DB52 /* web3swift_Tests.swift */,
+				3AA816202276E48400F5DB52 /* web3swift_transactions_Tests.swift */,
+				3AA816162276E48300F5DB52 /* web3swift_User_cases.swift */,
+				E252E67E26B403F500717C16 /* web3swift_helpers.swift */,
+			);
+			path = local_tests;
 			sourceTree = "<group>";
 		};
 		E2B7670E241ED424007EBFE3 /* Browser */ = {
