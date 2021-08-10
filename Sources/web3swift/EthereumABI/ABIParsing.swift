@@ -134,6 +134,17 @@ extension ABI.Input {
             let nativeInput = ABI.Element.InOut(name: name, type: type)
             return nativeInput
         }
+        else if case .array(type: .tuple(types: _), length: _) = parameterType {
+            let components = try self.components?.compactMap({ (inp: ABI.Input) throws -> ABI.Element.ParameterType in
+                let input = try inp.parse()
+                return input.type
+            })
+            let tupleType = ABI.Element.ParameterType.tuple(types: components!)
+            
+            let newType: ABI.Element.ParameterType = .array(type: tupleType, length: 0)
+            let nativeInput = ABI.Element.InOut(name: name, type: newType)
+            return nativeInput
+        }
         else {
             let nativeInput = ABI.Element.InOut(name: name, type: parameterType)
             return nativeInput
