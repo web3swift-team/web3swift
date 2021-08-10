@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 import web3swift
 import WebKit
 
@@ -26,15 +25,15 @@ open class BrowserViewController: UIViewController {
         let date = NSDate(timeIntervalSince1970: 0)
         
         WKWebsiteDataStore.default().removeData(ofTypes: websiteDataTypes as! Set<String>, modifiedSince: date as Date, completionHandler:{ })
-        let webView = WKWebView(
+        let webKitView = WKWebView(
             frame: .zero,
             configuration: self.config
         )
-        webView.allowsBackForwardNavigationGestures = true
-        webView.scrollView.isScrollEnabled = true
-        webView.navigationDelegate = self
-        webView.configuration.preferences.setValue(true, forKey: "developerExtrasEnabled")
-        return webView
+        webKitView.allowsBackForwardNavigationGestures = true
+        webKitView.scrollView.isScrollEnabled = true
+        webKitView.navigationDelegate = self
+        webKitView.configuration.preferences.setValue(true, forKey: "developerExtrasEnabled")
+        return webKitView
     }()
     
     lazy var config: WKWebViewConfiguration = {
@@ -119,7 +118,7 @@ open class BrowserViewController: UIViewController {
 
 extension BrowserViewController: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        
+        print("Navigation is completed")
     }
 }
 
