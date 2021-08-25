@@ -7,14 +7,14 @@
 //
 import XCTest
 import BigInt
-//import EthereumAddress
 
 @testable import web3swift
 
+// MARK: Works only with network connection
 class web3swift_ST20AndSecurityToken_Tests: XCTestCase {
     
-    func testERC20TokenCreation() {
-        let web3 = try! Web3.new(URL(string: "https://kovan.infura.io")!)
+    func testERC20TokenCreation() throws {
+        let web3 = Web3.InfuraKovanWeb3()
         let w3sTokenAddress = EthereumAddress("0x2dD33957C90880bE4Ee9fd5F703110BDA2E579EC")!
         let st20token = ST20.init(web3: web3, provider: web3.provider, address: w3sTokenAddress)
         st20token.readProperties()
@@ -24,7 +24,7 @@ class web3swift_ST20AndSecurityToken_Tests: XCTestCase {
     }
     
     func testST20tokenBalanceAndAllowance() throws {
-        let web3 = try! Web3.new(URL(string: "https://kovan.infura.io")!)
+        let web3 = Web3.InfuraKovanWeb3()
         let w3sTokenAddress = EthereumAddress("0x2dD33957C90880bE4Ee9fd5F703110BDA2E579EC")!
         let st20token = ST20.init(web3: web3, provider: web3.provider, address: w3sTokenAddress)
         let userAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
@@ -35,7 +35,7 @@ class web3swift_ST20AndSecurityToken_Tests: XCTestCase {
     }
     
     func testSecurityTokenInvestors() throws {
-        let web3 = try! Web3.new(URL(string: "https://kovan.infura.io")!)
+        let web3 = Web3.InfuraKovanWeb3()
         let w3sTokenAddress = EthereumAddress("0x2dD33957C90880bE4Ee9fd5F703110BDA2E579EC")!
         let stoken = SecurityToken.init(web3: web3, provider: web3.provider, address: w3sTokenAddress)
         let investorsCount = try stoken.investorCount()
@@ -44,7 +44,7 @@ class web3swift_ST20AndSecurityToken_Tests: XCTestCase {
     }
     
     func testSecurityTokenGranularity() throws {
-        let web3 = try! Web3.new(URL(string: "https://kovan.infura.io")!)
+        let web3 = Web3.InfuraKovanWeb3()
         let w3sTokenAddress = EthereumAddress("0x2dD33957C90880bE4Ee9fd5F703110BDA2E579EC")!
         let stoken = SecurityToken.init(web3: web3, provider: web3.provider, address: w3sTokenAddress)
         let granularity = try stoken.getGranularity()

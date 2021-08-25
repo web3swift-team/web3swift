@@ -48,27 +48,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "web3swift_Eventloop_Tests">
-               </Test>
-               <Test
-                  Identifier = "web3swift_ST20AndSecurityToken_Tests">
-               </Test>
-               <Test
-                  Identifier = "web3swift_User_cases">
-               </Test>
-               <Test
-                  Identifier = "web3swift_infura_Tests">
-               </Test>
-               <Test
-                  Identifier = "web3swift_promises_Tests">
-               </Test>
-               <Test
-                  Identifier = "web3swift_remoteParsing_Tests">
-               </Test>
-               <Test
-                  Identifier = "web3swift_transactions_Tests">
-               </Test>
-               <Test
                   Identifier = "web3swift_websocket_Tests">
                </Test>
             </SkippedTests>

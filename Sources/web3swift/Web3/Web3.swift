@@ -76,4 +76,10 @@ public struct Web3 {
         return web3(provider: infura)
     }
     
+    /// Initialized Web3 instance bound to Infura's kovan provider.
+    public static func InfuraKovanWeb3(accessToken: String? = nil) -> web3 {
+        let infura = InfuraProvider(Networks.Kovan, accessToken: accessToken)!
+        return web3(provider: infura)
+    }
+    
 }

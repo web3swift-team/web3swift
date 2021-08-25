@@ -40,6 +40,7 @@ class SpyDelegate: Web3SocketDelegate {
     }
 }
 
+// MARK: Works only with network connection
 class web3swift_websocket_Tests: XCTestCase {
     
     let spyDelegate = SpyDelegate()
@@ -75,7 +76,7 @@ class web3swift_websocket_Tests: XCTestCase {
         }
         self.socketProvider = socketProvider
         spyDelegate.asyncExpectation = expectation(description: "Delegate called")
-        try! self.socketProvider!.subscribeOnLogs(addresses: [EthereumAddress("0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359")!], topics: nil)
+        try! self.socketProvider!.subscribeOnLogs(addresses: [EthereumAddress("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48")!], topics: nil)
         //        DispatchQueue.main.asyncAfter(deadline: .now()+5) { [unowned self] in
         //            try! self.socketProvider!.subscribeOnNewPendingTransactions()
         //        }
@@ -123,7 +124,7 @@ class web3swift_websocket_Tests: XCTestCase {
         }
         self.socketProvider = socketProvider
         spyDelegate.asyncExpectation = expectation(description: "Delegate called")
-        try! self.socketProvider?.setFilterAndGetLogs(method: .newFilter, address: EthereumAddress("0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359")!, fromBlock: .earliest, toBlock: .latest, topics: nil)
+        try! self.socketProvider?.setFilterAndGetLogs(method: .newFilter, address: EthereumAddress("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48")!, fromBlock: .earliest, toBlock: .latest, topics: nil)
         //        DispatchQueue.main.asyncAfter(deadline: .now()+5) { [unowned self] in
         //            try! self.socketProvider!.subscribeOnNewPendingTransactions()
         //        }
