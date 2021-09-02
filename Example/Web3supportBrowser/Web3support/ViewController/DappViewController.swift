@@ -14,8 +14,12 @@ class DappViewController: BrowserViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         var urlToOpen = "https://1inch.exchange/"
-        urlToOpen = "https://app.compound.finance"
-//        urlToOpen = "https://app.uniswap.org"
+//        urlToOpen = "https://app.compound.finance"
+        urlToOpen = "https://app.uniswap.org"
+        
+        //Connect with formatic connect
+//        email:ravi@yopmail.com
+//        pasword: Gauransh7
 //        urlToOpen = "https://exchange.pancakeswap.finance/#/swap"
 
         
@@ -30,10 +34,6 @@ class DappViewController: BrowserViewController {
         
         // Do any additional setup after loading the view.
     }
-    
-    
-    
-    
 }
 class FilestoreWrapper: NSObject {
     /// Get KeyStore manager Instance
