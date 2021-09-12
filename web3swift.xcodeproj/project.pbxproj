@@ -1214,7 +1214,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/opt/homebrew/bin/carthage copy-frameworks\n";
+			shellScript = "# /opt/homebrew/bin/carthage copy-frameworks\n/usr/local/bin/carthage copy-frameworks\n";
 		};
 		139751F0219AFA500044D2B0 /* Carthage */ = {
 			isa = PBXShellScriptBuildPhase;

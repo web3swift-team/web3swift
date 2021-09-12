@@ -21,6 +21,21 @@ class SpyDelegate: Web3SocketDelegate {
     var asyncExpectation: XCTestExpectation?
     var fulfilled = false
     
+    func socketConnected(_ headers: [String:String]) {
+        somethingWithDelegateResult = headers
+        guard let expectation = asyncExpectation else {
+            XCTFail("SpyDelegate was not setup correctly. Missing XCTExpectation reference")
+            return
+        }
+        print("socket connected, headers: \(headers)")
+
+        if !fulfilled {
+            print("fullfilled")
+            fulfilled = true
+            expectation.fulfill()
+        }
+    }
+    
     func received(message: Any) {
         somethingWithDelegateResult = message
         guard let expectation = asyncExpectation else {
@@ -45,6 +60,28 @@ class web3swift_websocket_Tests: XCTestCase {
     
     let spyDelegate = SpyDelegate()
     var socketProvider: InfuraWebsocketProvider?
+    
+    func testSocketConnection(){
+        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
+            return XCTFail()
+        }
+        self.socketProvider = socketProvider
+        
+        spyDelegate.asyncExpectation = expectation(description: "Delegate called")
+        
+        waitForExpectations(timeout: 1000) { error in
+            if let error = error {
+                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+            }
+            
+            guard self.spyDelegate.somethingWithDelegateResult != nil else {
+                XCTFail("Expected delegate to be called")
+                return
+            }
+            
+            XCTAssert(true)
+        }
+    }
     
     func testSubscribeOnPendingTXs() {
         guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {

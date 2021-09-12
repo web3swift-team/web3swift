@@ -44,6 +44,9 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     private var subscriptionIDforUnsubscribing: String? = nil
     private var filterTimer: Timer?
     
+    /// if set debugMode True then show websocket events logs in the console
+    public var debugMode: Bool = false
+    
     public init?(_ network: Networks,
                  delegate: Web3SocketDelegate,
                  projectId: String? = nil,
@@ -242,7 +245,48 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         try writeMessage(method: method, params: params)
     }
     
-    override public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
+    /// override WebsocketDelegate
+    override public func didReceive(event: WebSocketEvent, client: WebSocket) {
+        switch event {
+        case .connected(let headers):
+            debugMode ? print("websocket is connected, headers:\n \(headers)") : nil
+            websocketConnected = true
+            delegate.socketConnected(headers)
+        case .disconnected(let reason, let code):
+            debugMode ? print("websocket is disconnected: \(reason) with code: \(code)") : nil
+            websocketConnected = false
+            delegate.gotError(error: Web3Error.connectionError)
+        case .text(let string):
+            debugMode ? print("received text: \(string)") : nil
+            websocketDidReceiveMessage(text: string)
+            break
+        case .binary(let data):
+            debugMode ? print("received text: \(String(data: data, encoding: .utf8) ?? "empty")") : nil
+            delegate.received(message: data)
+        case .ping(_):
+            debugMode ? print("ping") : nil
+            break
+        case .pong(_):
+            debugMode ? print("pong") : nil
+            break
+        case .viabilityChanged(_):
+            debugMode ? print("viabilityChanged") : nil
+            break
+        case .reconnectSuggested(_):
+            debugMode ? print("reconnectSuggested") : nil
+            break
+        case .cancelled:
+            debugMode ? print("cancelled") : nil
+            websocketConnected = false
+            delegate.gotError(error: Web3Error.nodeError(desc: "socket cancelled"))
+        case .error(let error):
+            debugMode ? print("error: \(String(describing: error))") : nil
+            websocketConnected = false
+            delegate.gotError(error: error!)
+        }
+    }
+    
+    private func websocketDidReceiveMessage(text: String) {
         if let data = text.data(using: String.Encoding.utf8),
             let dictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
             if filterID == nil,
@@ -273,3 +317,6 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         }
     }
 }
+
+
+
