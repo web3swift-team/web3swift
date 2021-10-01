@@ -14,9 +14,11 @@
 //
 
 #if canImport(Darwin)
-  import Darwin
-#else
-  import Glibc
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(ucrt)
+import ucrt
 #endif
 
 protocol _UInt32Type {}
@@ -30,6 +32,7 @@ extension UInt32 {
   }
 
   @_specialize(where T == ArraySlice<UInt8>)
+  @inlinable
   init<T: Collection>(bytes: T, fromIndex index: T.Index) where T.Element == UInt8, T.Index == Int {
     if bytes.isEmpty {
       self = 0
