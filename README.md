@@ -1,7 +1,7 @@
 # web3swift
 **web3swift** is an iOS toolbelt for interaction with the Ethereum network.
 
-## [Join our discord](https://discord.gg/8tXjHK3pus) if you need a support or want to contribute to web3swift development!
+## [Join our discord](https://discord.gg/npZ6SuSS) if you need a support or want to contribute to web3swift development!
 
 ![matter-github-swift](https://github.com/skywinder/web3swift/blob/develop/web3swift-logo.png)
 [![Build Status](https://travis-ci.com/skywinder/web3swift.svg?branch=develop)](https://travis-ci.com/skywinder/web3swift)
@@ -121,9 +121,11 @@ Add the following line to the Cartfile and save it:
 github "skywinder/web3swift" "master"
 ```
 
-Run `carthage update` to build the framework. By default, Carthage performs checkouts and creates a new directory 'Carthage' in the same location as your Cartfile. Open this directory, go to 'Build' directory, choose iOS or macOS directory, and use the selected directory framework in your Xcode project.
+Run `carthage update --no-use-binaries --platform iOS` to build the framework. By default, Carthage performs checkouts and creates a new directory 'Carthage' in the same location as your Cartfile. Open this directory, go to 'Build' directory, choose iOS or macOS directory, and use the selected directory framework in your Xcode project.
 
-- Swift Package
+
+
+### Swift Package
 Open xcode setting and add this repo as a source
 
 ### Example usage
@@ -294,8 +296,28 @@ open ./web3swiftBrowser.xcworkspace
 
 ### Build from source
 
-- Clone repo
-- Install dependencies via  `./carthage-build.sh --platform iOS` (temp workaround, foe of Carthage bug. [For details please look at](https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323)
+### Default web3swift build
+
+1. Install carthage:
+```
+brew install carthage
+```
+2. Run carthage update:
+```
+# Available platforms: `iOS, macOS` 
+carthage update --platform iOS --use-xcframeworks
+```
+3.  Build project in XCode:
+`Command + B`
+
+### Build web3swift into .framework:
+```
+carthage build --no-skip-current --platform iOS
+```
+
+### In case of build errors, please check this solition
+
+- Install dependencies via  `./carthage-build.sh --platform iOS` (temp workaround, for of Carthage bug. [For details please look at](https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323)
 
 ### Requirements
 
@@ -366,11 +388,16 @@ Then good news for you: **We are ready to pay for your contribution via [@gitcoi
 
 - If you **have a feature request**, [open an issue](https://github.com/skywinder/web3swift/issues).
 
-- If you **want to contribute**, read [contribution policy](https://github.com/skywinder/web3swift/blob/master/Documentation/CONTRIBUTION_POLICY.md) & [submit a pull request](https://github.com/skywinder/web3swift/pulls).
+If you **want to contribute**, [submit a pull request](https://github.com/skywinder/web3swift/pulls).
 
-If you use any of our libraries for work, see if your employers would be interested in donating. Any amount you can donate today to help us reach our goal would be much appreciated.
+#### Contribution
+0. You are more than welcome to participate and get bounty by contributing! **Your contribution will be paid via  [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift).**
+1. Find or create an [issue](https://github.com/skywinder/web3swift/issues)
+2. You can find open bounties in [Gitcoin Bounties](https://gitcoin.co/explorer?applicants=ALL&keywords=web3swift&order_by=-web3_created) list
+2. Commita fix or a new feature in branch, push your changes
+3. [Submit a pull request to **develop** branch](https://github.com/skywinder/web3swift/pulls)
 
-[Matter Labs](https://github.com/orgs/skywinder/people) are charged with open-sourсe and do not require money for using their web3swift lib.
+[@skywinder](https://github.com/skywinder) are charged with open-sourсe and do not require money for using web3swift library.
 We want to continue to do everything we can to move the needle forward.
 
 - **Support us** via [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift)
@@ -378,32 +405,21 @@ We want to continue to do everything we can to move the needle forward.
 
 <img src="https://raw.githubusercontent.com/skywinder/web3swift/develop/img/Ether-donations.jpeg" width="300" />
 
-### Future steps 
-
-You are more than welcome to participate! **Your contribution will be paid via  [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift).**
-
 - [x] Performance Improvements thanks to @**[xdozorx](https://github.com/xdozorx)** for [Update perfomance of import account](https://github.com/skywinder/web3swift/pull/336)
-
-- [ ] **L2 support** (such as [ZkSync](https://zksync.io/))
-
 - [ ] **Modularity** with the basic Web3 subspec/SPM (the most basic functions like transaction signing and interacting with an http rpc server) and other modules with additional functionality
 - [ ] [Complete Documentation](https://web3swift.github.io/web3swift)
-
 - [ ] Convenient methods for namespaces
-
-
 
 ## Credits
 
 - Alex Vlasov, [@shamatar](https://github.com/shamatar) - for the initial implementation
 - Petr Korolev, [@skywinder](https://github.com/skywinder) - botstrap and continous support
 - Anton Grigorev, [@baldyash](https://github.com/BaldyAsh) - core contributor, who use it and making a lot of ipmprovments
-- Yhanks to [web3swift's growing list of contributors](https://github.com/skywinder/web3swift/graphs/contributors).
+- Thanks to [web3swift's growing list of contributors](https://github.com/skywinder/web3swift/graphs/contributors).
 
 ## Security Disclosure
 
 If you believe you have identified a security vulnerability with web3swift, you should report it as soon as possible via email to [web3swift@oxor.io](mailto:web3swift@oxor.io). Please do not post it to a public issue tracker.
-
 
 ## License
 
