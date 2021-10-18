@@ -23,7 +23,7 @@
 /// primality test for signed integers. When you need to call one of these, just extract the absolute value:
 ///
 /// ```Swift
-/// BigInt(255).abs.isPrime()   // Returns false
+/// BigInt(255).magnitude.isPrime()   // Returns false
 /// ```
 ///
 public struct BigInt: SignedInteger {

@@ -21,9 +21,9 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          BigInt Docs
+          BigInt v5.2.1 Docs
         </a>
-         (92% documented)
+         (85% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -40,7 +40,7 @@
         </p>
     
         <p class="header-col header-col--secondary">
-          <a class="header-link" href="dash-feed://https%3A%2F%2Fattaswift%2Egithub%2Eio%2FBigInt%2Freference%2Fdocsets%2FBigInt%2Exml">
+          <a class="header-link" href="dash-feed://https%3A%2F%2Fattaswift.github.io%2FBigInt%2Freference%2Fdocsets%2FBigInt.xml">
             <img class="header-icon" src="../img/dash.png"/>
             Install in Dash
           </a>
@@ -92,11 +92,12 @@
       <article class="main-content">
 
         <section class="section">
-          <div class="section-content">
+          <div class="section-content top-matter">
             <h1>BinaryFloatingPoint</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">protocol</span> <span class="kt">BinaryFloatingPoint</span> <span class="p">:</span> <span class="kt">FloatingPoint</span><span class="p">,</span> <span class="kt">ExpressibleByFloatLiteral</span></code></pre>
+                  
+                  <pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BinaryFloatingPoint</span> <span class="k">where</span> <span class="kt">RawExponent</span><span class="p">:</span> <span class="kt">FixedWidthInteger</span><span class="p">,</span> <span class="kt">RawSignificand</span><span class="p">:</span> <span class="kt">FixedWidthInteger</span></code></pre>
 
                 </div>
               </div>
@@ -107,13 +108,22 @@
         <section class="section">
           <div class="section-content">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Available%20where%20%60RawExponent%60%3A%20%60FixedWidthInteger%60%2C%20%60RawSignificand%60%3A%20%60FixedWidthInteger%60"></a>
+                <a name="//apple_ref/swift/Section/Available where `RawExponent`: `FixedWidthInteger`, `RawSignificand`: `FixedWidthInteger`" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Available%20where%20%60RawExponent%60%3A%20%60FixedWidthInteger%60%2C%20%60RawSignificand%60%3A%20%60FixedWidthInteger%60"></a>
+                  <h3 class="section-name"><p>Available where <code>RawExponent</code>: <code>FixedWidthInteger</code>, <code>RawSignificand</code>: <code>FixedWidthInteger</code></p>
+</h3>
+                </div>
+              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:s19BinaryFloatingPointP6BigIntsAARzs17FixedWidthInteger11RawExponentRpzsAD0I11SignificandRpzlExA2CVcfc"></a>
+                    <a name="/s:SB6BigInts17FixedWidthInteger11RawExponentRpzsAB0F11SignificandRpzrlEyxA2AVcfc"></a>
                     <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:s19BinaryFloatingPointP6BigIntsAARzs17FixedWidthInteger11RawExponentRpzsAD0I11SignificandRpzlExA2CVcfc">init(_:)</a>
+                    <a class="token" href="#/s:SB6BigInts17FixedWidthInteger11RawExponentRpzsAB0F11SignificandRpzrlEyxA2AVcfc">init(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -128,12 +138,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">protocol</span> <span class="kt">BinaryFloatingPoint</span> <span class="p">:</span> <span class="kt">FloatingPoint</span><span class="p">,</span> <span class="kt">ExpressibleByFloatLiteral</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt"><a href="../Structs/BigInt.html">BigInt</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/attaswift/BigInt/tree/50208597616c8ab08729bbc33edf295bd06da27c/sources/Floating Point Conversion.swift#L45-L68">Show on GitHub</a>
+                        <a href="https://github.com/attaswift/tree/v5.2.1/Sources/Floating Point Conversion.swift#L45-L68">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -141,9 +151,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:s19BinaryFloatingPointP6BigIntsAARzs17FixedWidthInteger11RawExponentRpzsAD0I11SignificandRpzlExAC0D4UIntVcfc"></a>
+                    <a name="/s:SB6BigInts17FixedWidthInteger11RawExponentRpzsAB0F11SignificandRpzrlEyxAA0A4UIntVcfc"></a>
                     <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:s19BinaryFloatingPointP6BigIntsAARzs17FixedWidthInteger11RawExponentRpzsAD0I11SignificandRpzlExAC0D4UIntVcfc">init(_:)</a>
+                    <a class="token" href="#/s:SB6BigInts17FixedWidthInteger11RawExponentRpzsAB0F11SignificandRpzrlEyxAA0A4UIntVcfc">init(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -158,12 +168,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">protocol</span> <span class="kt">BinaryFloatingPoint</span> <span class="p">:</span> <span class="kt">FloatingPoint</span><span class="p">,</span> <span class="kt">ExpressibleByFloatLiteral</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt"><a href="../Structs/BigUInt.html">BigUInt</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/attaswift/BigInt/tree/50208597616c8ab08729bbc33edf295bd06da27c/sources/Floating Point Conversion.swift#L70-L72">Show on GitHub</a>
+                        <a href="https://github.com/attaswift/tree/v5.2.1/Sources/Floating Point Conversion.swift#L70-L72">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -176,8 +186,8 @@
       </article>
     </div>
     <section class="footer">
-      <p>© 2016 <a class="link" href="https://twitter.com/lorentey" target="_blank" rel="external">Károly Lőrentey</a>. (Last updated: 2017-10-10)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>© 2020 <a class="link" href="https://twitter.com/lorentey" target="_blank" rel="external">Károly Lőrentey</a>. (Last updated: 2020-12-15)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

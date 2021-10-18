@@ -269,34 +269,34 @@ class BigUIntTests: XCTestCase {
         XCTAssertEqual(BigUInt(words: 1 ..< 10).extract(2 ..< 5).capacity, 0)
         var words: [Word] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
         words.reserveCapacity(100)
-        XCTAssertEqual(BigUInt(words: words).capacity, 100)
+        XCTAssertGreaterThanOrEqual(BigUInt(words: words).capacity, 100)
     }
 
     func testReserveCapacity() {
         var a = BigUInt()
         a.reserveCapacity(100)
         check(a, .array, [])
-        XCTAssertEqual(a.capacity, 100)
+        XCTAssertGreaterThanOrEqual(a.capacity, 100)
 
         a = BigUInt(word: 1)
         a.reserveCapacity(100)
         check(a, .array, [1])
-        XCTAssertEqual(a.capacity, 100)
+        XCTAssertGreaterThanOrEqual(a.capacity, 100)
 
         a = BigUInt(low: 1, high: 2)
         a.reserveCapacity(100)
         check(a, .array, [1, 2])
-        XCTAssertEqual(a.capacity, 100)
+        XCTAssertGreaterThanOrEqual(a.capacity, 100)
 
         a = BigUInt(words: [1, 2, 3, 4])
         a.reserveCapacity(100)
         check(a, .array, [1, 2, 3, 4])
-        XCTAssertEqual(a.capacity, 100)
+        XCTAssertGreaterThanOrEqual(a.capacity, 100)
 
         a = BigUInt(words: [1, 2, 3, 4, 5, 6], from: 1, to: 5)
         a.reserveCapacity(100)
         check(a, .array, [2, 3, 4, 5])
-        XCTAssertEqual(a.capacity, 100)
+        XCTAssertGreaterThanOrEqual(a.capacity, 100)
     }
 
     func testLoad() {
@@ -305,15 +305,15 @@ class BigUIntTests: XCTestCase {
 
         a.load(BigUInt(low: 1, high: 2))
         check(a, .array, [1, 2])
-        XCTAssertEqual(a.capacity, 100)
+        XCTAssertGreaterThanOrEqual(a.capacity, 100)
 
         a.load(BigUInt(words: [1, 2, 3, 4, 5, 6]))
         check(a, .array, [1, 2, 3, 4, 5, 6])
-        XCTAssertEqual(a.capacity, 100)
+        XCTAssertGreaterThanOrEqual(a.capacity, 100)
 
         a.clear()
         check(a, .array, [])
-        XCTAssertEqual(a.capacity, 100)
+        XCTAssertGreaterThanOrEqual(a.capacity, 100)
     }
 
     func testInitFromLiterals() {
@@ -1477,60 +1477,5 @@ class BigUIntTests: XCTestCase {
         let limit = BigUInt(UInt64.max) * BigUInt(UInt64.max) * BigUInt(UInt64.max)
         check { BigUInt.randomInteger(lessThan: limit, using: &$0) }
     }
-
-    //
-    // you have to manually register linux tests here :-(
-    //
-    static var allTests = [
-        ("testInit_WordBased", testInit_WordBased),
-        ("testInit_BinaryInteger", testInit_BinaryInteger),
-        ("testInit_FloatingPoint", testInit_FloatingPoint),
-        ("testInit_Buffer", testInit_Buffer),
-        ("testConversionToFloatingPoint", testConversionToFloatingPoint),
-        ("testInit_Misc", testInit_Misc),
-        ("testEnsureArray", testEnsureArray),
-        // ("testCapacity", testCapacity),
-        // ("testReserveCapacity", testReserveCapacity),
-        // ("testLoad", testLoad),
-        ("testInitFromLiterals", testInitFromLiterals),
-        ("testSubscriptingGetter", testSubscriptingGetter),
-        ("testSubscriptingSetter", testSubscriptingSetter),
-        ("testSlice", testSlice),
-        ("testSigns", testSigns),
-        ("testBits", testBits),
-        ("testStrideableRequirements", testStrideableRequirements),
-        ("testRightShift_ByWord", testRightShift_ByWord),
-        ("testLeftShift_ByWord", testLeftShift_ByWord),
-        ("testSplit", testSplit),
-        ("testLowHigh", testLowHigh),
-        ("testComparison", testComparison),
-        ("testHashing", testHashing),
-        ("testConversionFromBytes", testConversionFromBytes),
-        ("testConversionToData", testConversionToData),
-        ("testCodable", testCodable),
-        ("testAddition", testAddition),
-        ("testShiftedAddition", testShiftedAddition),
-        ("testSubtraction", testSubtraction),
-        ("testMultiplyByWord", testMultiplyByWord),
-        ("testMultiplication", testMultiplication),
-        ("testDivision", testDivision),
-        ("testFactorial", testFactorial),
-        ("testExponentiation", testExponentiation),
-        ("testModularExponentiation", testModularExponentiation),
-        ("testBitWidth", testBitWidth),
-        ("testBitwise", testBitwise),
-        ("testLeftShifts", testLeftShifts),
-        ("testRightShifts", testRightShifts),
-        ("testSquareRoot", testSquareRoot),
-        ("testGCD", testGCD),
-        ("testInverse", testInverse),
-        ("testStrongProbablePrimeTest", testStrongProbablePrimeTest),
-        ("testIsPrime", testIsPrime),
-        ("testConversionToString", testConversionToString),
-        ("testConversionFromString", testConversionFromString),
-        ("testRandomIntegerWithMaximumWidth", testRandomIntegerWithMaximumWidth),
-        ("testRandomIntegerWithExactWidth", testRandomIntegerWithExactWidth),
-        ("testRandomIntegerLessThan", testRandomIntegerLessThan),
-        ("testRandomFunctionsUseProvidedGenerator", testRandomFunctionsUseProvidedGenerator),
-    ]
+    
 }
