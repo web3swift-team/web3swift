@@ -1,4 +1,4 @@
-# web3swift
+## web3swift
 **web3swift** is an iOS toolbelt for interaction with the Ethereum network.
 
 ## [Join our discord](https://discord.gg/npZ6SuSS) if you need a support or want to contribute to web3swift development!
