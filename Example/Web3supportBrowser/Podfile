@@ -1,6 +1,7 @@
 # Uncomment the next line to define a global platform for your project
-fixes all problems with CocoaPods on M1 macs: source 'https://github.com/CocoaPods/Specs.git'
 # platform :ios, '9.0'
+
+source 'https://github.com/CocoaPods/Specs.git'
 
 target 'Web3support' do
   # Comment the next line if you don't want to use dynamic frameworks
