@@ -26,7 +26,7 @@ extension Web3.Utils {
     
     /// Calculate address of deployed contract deterministically based on the address of the deploying Ethereum address
     /// and the nonce of this address
-    public static func calcualteContractAddress(from: EthereumAddress, nonce: BigUInt) -> EthereumAddress? {
+    public static func calculateContractAddress(from: EthereumAddress, nonce: BigUInt) -> EthereumAddress? {
         guard let normalizedAddress = from.addressData.setLengthLeft(32) else {return nil}
         guard let data = RLP.encode([normalizedAddress, nonce] as [AnyObject]) else {return nil}
         guard let contractAddressData = Web3.Utils.sha3(data)?[12..<32] else {return nil}
