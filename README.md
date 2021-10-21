@@ -310,6 +310,7 @@ carthage update --platform iOS --use-xcframeworks
 3.  Build project in XCode:
 `Command + B`
 
+
 ### Build web3swift into .framework:
 ```
 carthage build --no-skip-current --platform iOS
@@ -317,7 +318,7 @@ carthage build --no-skip-current --platform iOS
 
 ### In case of build errors, please check this solition
 
-- Install dependencies via  `./carthage-build.sh --platform iOS` (temp workaround, for of Carthage bug. [For details please look at](https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323)
+--Install dependencies via  `./carthage-build.sh --platform iOS` (temp workaround, for of Carthage bug. [For details please look at](https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323)
 
 ### Requirements
 
