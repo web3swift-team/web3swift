@@ -401,7 +401,7 @@ If you **want to contribute**, [submit a pull request](https://github.com/skywin
 We want to continue to do everything we can to move the needle forward.
 
 - **Support us** via [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift)
-- Ether wallet address: `0x6A3738c6299f45c31697aceA647D49EdCC9C28A4`
+- Ether wallet address: "0x8c39f43BDB1a7315aA15b861641d093Bd4F43dD1"
 
 <img src="https://raw.githubusercontent.com/skywinder/web3swift/develop/img/Ether-donations.jpeg" width="300" />
 
