@@ -1,0 +1,815 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		08D762AA7F8C96F1FEC2BDDA /* Pods_myWeb3Wallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6EB035B54D0DDFE25556549 /* Pods_myWeb3Wallet.framework */; };
+		1A3D2B3177B96101E5BA3A86 /* Pods_myWeb3WalletTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4590F35DEE4A4CA41141602 /* Pods_myWeb3WalletTests.framework */; };
+		ADDA7950DDF6B6F2FFB1F198 /* Pods_myWeb3Wallet_myWeb3WalletUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DEF494BADF9FD39D553B87D /* Pods_myWeb3Wallet_myWeb3WalletUITests.framework */; };
+		FA5308212721D59B002C1F06 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308202721D59B002C1F06 /* AppDelegate.swift */; };
+		FA5308232721D59B002C1F06 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308222721D59B002C1F06 /* SceneDelegate.swift */; };
+		FA5308252721D59B002C1F06 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308242721D59B002C1F06 /* ViewController.swift */; };
+		FA5308282721D59B002C1F06 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA5308262721D59B002C1F06 /* Main.storyboard */; };
+		FA53082A2721D59D002C1F06 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA5308292721D59D002C1F06 /* Assets.xcassets */; };
+		FA53082D2721D59D002C1F06 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA53082B2721D59D002C1F06 /* LaunchScreen.storyboard */; };
+		FA5308382721D59D002C1F06 /* myWeb3WalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308372721D59D002C1F06 /* myWeb3WalletTests.swift */; };
+		FA5308422721D59D002C1F06 /* myWeb3WalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308412721D59D002C1F06 /* myWeb3WalletUITests.swift */; };
+		FA5308442721D59D002C1F06 /* myWeb3WalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308432721D59D002C1F06 /* myWeb3WalletUITestsLaunchTests.swift */; };
+		FA5308512721F5BC002C1F06 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308502721F5BC002C1F06 /* SplashViewController.swift */; };
+		FA5308562721F647002C1F06 /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308552721F647002C1F06 /* WalletViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FA5308342721D59D002C1F06 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FA5308152721D59B002C1F06 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FA53081C2721D59B002C1F06;
+			remoteInfo = myWeb3Wallet;
+		};
+		FA53083E2721D59D002C1F06 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FA5308152721D59B002C1F06 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FA53081C2721D59B002C1F06;
+			remoteInfo = myWeb3Wallet;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2DEF494BADF9FD39D553B87D /* Pods_myWeb3Wallet_myWeb3WalletUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_myWeb3Wallet_myWeb3WalletUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B0E97C0C8FE51D0241E7D19 /* Pods-myWeb3Wallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myWeb3Wallet.release.xcconfig"; path = "Target Support Files/Pods-myWeb3Wallet/Pods-myWeb3Wallet.release.xcconfig"; sourceTree = "<group>"; };
+		600772647D45BC0D702D4137 /* Pods-myWeb3Wallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myWeb3Wallet.debug.xcconfig"; path = "Target Support Files/Pods-myWeb3Wallet/Pods-myWeb3Wallet.debug.xcconfig"; sourceTree = "<group>"; };
+		7574A738941D92CC94F93A9E /* Pods-myWeb3Wallet-myWeb3WalletUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myWeb3Wallet-myWeb3WalletUITests.release.xcconfig"; path = "Target Support Files/Pods-myWeb3Wallet-myWeb3WalletUITests/Pods-myWeb3Wallet-myWeb3WalletUITests.release.xcconfig"; sourceTree = "<group>"; };
+		A87A2F63C4B3084139E790F5 /* Pods-myWeb3WalletTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myWeb3WalletTests.debug.xcconfig"; path = "Target Support Files/Pods-myWeb3WalletTests/Pods-myWeb3WalletTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D4590F35DEE4A4CA41141602 /* Pods_myWeb3WalletTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_myWeb3WalletTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6018FABA256C0117F85A829 /* Pods-myWeb3Wallet-myWeb3WalletUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myWeb3Wallet-myWeb3WalletUITests.debug.xcconfig"; path = "Target Support Files/Pods-myWeb3Wallet-myWeb3WalletUITests/Pods-myWeb3Wallet-myWeb3WalletUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		D6EB035B54D0DDFE25556549 /* Pods_myWeb3Wallet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_myWeb3Wallet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E41A5A8BF0A312348D3C52FD /* Pods-myWeb3WalletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myWeb3WalletTests.release.xcconfig"; path = "Target Support Files/Pods-myWeb3WalletTests/Pods-myWeb3WalletTests.release.xcconfig"; sourceTree = "<group>"; };
+		FA53081D2721D59B002C1F06 /* myWeb3Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = myWeb3Wallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA5308202721D59B002C1F06 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FA5308222721D59B002C1F06 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		FA5308242721D59B002C1F06 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		FA5308272721D59B002C1F06 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		FA5308292721D59D002C1F06 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FA53082C2721D59D002C1F06 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		FA53082E2721D59D002C1F06 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA5308332721D59D002C1F06 /* myWeb3WalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = myWeb3WalletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA5308372721D59D002C1F06 /* myWeb3WalletTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myWeb3WalletTests.swift; sourceTree = "<group>"; };
+		FA53083D2721D59D002C1F06 /* myWeb3WalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = myWeb3WalletUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA5308412721D59D002C1F06 /* myWeb3WalletUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myWeb3WalletUITests.swift; sourceTree = "<group>"; };
+		FA5308432721D59D002C1F06 /* myWeb3WalletUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myWeb3WalletUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		FA5308502721F5BC002C1F06 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		FA5308552721F647002C1F06 /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FA53081A2721D59B002C1F06 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08D762AA7F8C96F1FEC2BDDA /* Pods_myWeb3Wallet.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA5308302721D59D002C1F06 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A3D2B3177B96101E5BA3A86 /* Pods_myWeb3WalletTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA53083A2721D59D002C1F06 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ADDA7950DDF6B6F2FFB1F198 /* Pods_myWeb3Wallet_myWeb3WalletUITests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		40AC3854191B335F2FCA6C71 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				600772647D45BC0D702D4137 /* Pods-myWeb3Wallet.debug.xcconfig */,
+				5B0E97C0C8FE51D0241E7D19 /* Pods-myWeb3Wallet.release.xcconfig */,
+				D6018FABA256C0117F85A829 /* Pods-myWeb3Wallet-myWeb3WalletUITests.debug.xcconfig */,
+				7574A738941D92CC94F93A9E /* Pods-myWeb3Wallet-myWeb3WalletUITests.release.xcconfig */,
+				A87A2F63C4B3084139E790F5 /* Pods-myWeb3WalletTests.debug.xcconfig */,
+				E41A5A8BF0A312348D3C52FD /* Pods-myWeb3WalletTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		B67819FA7D92C1562AFD65A8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D6EB035B54D0DDFE25556549 /* Pods_myWeb3Wallet.framework */,
+				2DEF494BADF9FD39D553B87D /* Pods_myWeb3Wallet_myWeb3WalletUITests.framework */,
+				D4590F35DEE4A4CA41141602 /* Pods_myWeb3WalletTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FA5308142721D59B002C1F06 = {
+			isa = PBXGroup;
+			children = (
+				FA53081F2721D59B002C1F06 /* myWeb3Wallet */,
+				FA5308362721D59D002C1F06 /* myWeb3WalletTests */,
+				FA5308402721D59D002C1F06 /* myWeb3WalletUITests */,
+				FA53081E2721D59B002C1F06 /* Products */,
+				40AC3854191B335F2FCA6C71 /* Pods */,
+				B67819FA7D92C1562AFD65A8 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		FA53081E2721D59B002C1F06 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FA53081D2721D59B002C1F06 /* myWeb3Wallet.app */,
+				FA5308332721D59D002C1F06 /* myWeb3WalletTests.xctest */,
+				FA53083D2721D59D002C1F06 /* myWeb3WalletUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FA53081F2721D59B002C1F06 /* myWeb3Wallet */ = {
+			isa = PBXGroup;
+			children = (
+				FA5308532721F615002C1F06 /* ViewController */,
+				FA5308522721F5C8002C1F06 /* Appdelegate */,
+				FA5308242721D59B002C1F06 /* ViewController.swift */,
+				FA5308262721D59B002C1F06 /* Main.storyboard */,
+				FA5308292721D59D002C1F06 /* Assets.xcassets */,
+				FA53082B2721D59D002C1F06 /* LaunchScreen.storyboard */,
+				FA53082E2721D59D002C1F06 /* Info.plist */,
+				FA5308502721F5BC002C1F06 /* SplashViewController.swift */,
+			);
+			path = myWeb3Wallet;
+			sourceTree = "<group>";
+		};
+		FA5308362721D59D002C1F06 /* myWeb3WalletTests */ = {
+			isa = PBXGroup;
+			children = (
+				FA5308372721D59D002C1F06 /* myWeb3WalletTests.swift */,
+			);
+			path = myWeb3WalletTests;
+			sourceTree = "<group>";
+		};
+		FA5308402721D59D002C1F06 /* myWeb3WalletUITests */ = {
+			isa = PBXGroup;
+			children = (
+				FA5308412721D59D002C1F06 /* myWeb3WalletUITests.swift */,
+				FA5308432721D59D002C1F06 /* myWeb3WalletUITestsLaunchTests.swift */,
+			);
+			path = myWeb3WalletUITests;
+			sourceTree = "<group>";
+		};
+		FA5308522721F5C8002C1F06 /* Appdelegate */ = {
+			isa = PBXGroup;
+			children = (
+				FA5308222721D59B002C1F06 /* SceneDelegate.swift */,
+				FA5308202721D59B002C1F06 /* AppDelegate.swift */,
+			);
+			path = Appdelegate;
+			sourceTree = "<group>";
+		};
+		FA5308532721F615002C1F06 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				FA5308542721F62E002C1F06 /* WalletController */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		FA5308542721F62E002C1F06 /* WalletController */ = {
+			isa = PBXGroup;
+			children = (
+				FA5308552721F647002C1F06 /* WalletViewController.swift */,
+			);
+			path = WalletController;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FA53081C2721D59B002C1F06 /* myWeb3Wallet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FA5308472721D59D002C1F06 /* Build configuration list for PBXNativeTarget "myWeb3Wallet" */;
+			buildPhases = (
+				2C189F9EA9914E3A42777867 /* [CP] Check Pods Manifest.lock */,
+				FA5308192721D59B002C1F06 /* Sources */,
+				FA53081A2721D59B002C1F06 /* Frameworks */,
+				FA53081B2721D59B002C1F06 /* Resources */,
+				5E0CBD27780EAD115251C9AC /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = myWeb3Wallet;
+			productName = myWeb3Wallet;
+			productReference = FA53081D2721D59B002C1F06 /* myWeb3Wallet.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FA5308322721D59D002C1F06 /* myWeb3WalletTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FA53084A2721D59D002C1F06 /* Build configuration list for PBXNativeTarget "myWeb3WalletTests" */;
+			buildPhases = (
+				342829194E3F4C74B29C947B /* [CP] Check Pods Manifest.lock */,
+				FA53082F2721D59D002C1F06 /* Sources */,
+				FA5308302721D59D002C1F06 /* Frameworks */,
+				FA5308312721D59D002C1F06 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FA5308352721D59D002C1F06 /* PBXTargetDependency */,
+			);
+			name = myWeb3WalletTests;
+			productName = myWeb3WalletTests;
+			productReference = FA5308332721D59D002C1F06 /* myWeb3WalletTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FA53083C2721D59D002C1F06 /* myWeb3WalletUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FA53084D2721D59D002C1F06 /* Build configuration list for PBXNativeTarget "myWeb3WalletUITests" */;
+			buildPhases = (
+				5F33F7D7F77389C37C4F1656 /* [CP] Check Pods Manifest.lock */,
+				FA5308392721D59D002C1F06 /* Sources */,
+				FA53083A2721D59D002C1F06 /* Frameworks */,
+				FA53083B2721D59D002C1F06 /* Resources */,
+				AAF75ECFD98859A6D0818BB6 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FA53083F2721D59D002C1F06 /* PBXTargetDependency */,
+			);
+			name = myWeb3WalletUITests;
+			productName = myWeb3WalletUITests;
+			productReference = FA53083D2721D59D002C1F06 /* myWeb3WalletUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FA5308152721D59B002C1F06 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1300;
+				LastUpgradeCheck = 1300;
+				TargetAttributes = {
+					FA53081C2721D59B002C1F06 = {
+						CreatedOnToolsVersion = 13.0;
+					};
+					FA5308322721D59D002C1F06 = {
+						CreatedOnToolsVersion = 13.0;
+						TestTargetID = FA53081C2721D59B002C1F06;
+					};
+					FA53083C2721D59D002C1F06 = {
+						CreatedOnToolsVersion = 13.0;
+						TestTargetID = FA53081C2721D59B002C1F06;
+					};
+				};
+			};
+			buildConfigurationList = FA5308182721D59B002C1F06 /* Build configuration list for PBXProject "myWeb3Wallet" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FA5308142721D59B002C1F06;
+			productRefGroup = FA53081E2721D59B002C1F06 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FA53081C2721D59B002C1F06 /* myWeb3Wallet */,
+				FA5308322721D59D002C1F06 /* myWeb3WalletTests */,
+				FA53083C2721D59D002C1F06 /* myWeb3WalletUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FA53081B2721D59B002C1F06 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA53082D2721D59D002C1F06 /* LaunchScreen.storyboard in Resources */,
+				FA53082A2721D59D002C1F06 /* Assets.xcassets in Resources */,
+				FA5308282721D59B002C1F06 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA5308312721D59D002C1F06 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA53083B2721D59D002C1F06 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2C189F9EA9914E3A42777867 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-myWeb3Wallet-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		342829194E3F4C74B29C947B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-myWeb3WalletTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5E0CBD27780EAD115251C9AC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-myWeb3Wallet/Pods-myWeb3Wallet-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-myWeb3Wallet/Pods-myWeb3Wallet-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-myWeb3Wallet/Pods-myWeb3Wallet-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5F33F7D7F77389C37C4F1656 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-myWeb3Wallet-myWeb3WalletUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AAF75ECFD98859A6D0818BB6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-myWeb3Wallet-myWeb3WalletUITests/Pods-myWeb3Wallet-myWeb3WalletUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-myWeb3Wallet-myWeb3WalletUITests/Pods-myWeb3Wallet-myWeb3WalletUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-myWeb3Wallet-myWeb3WalletUITests/Pods-myWeb3Wallet-myWeb3WalletUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FA5308192721D59B002C1F06 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA5308252721D59B002C1F06 /* ViewController.swift in Sources */,
+				FA5308212721D59B002C1F06 /* AppDelegate.swift in Sources */,
+				FA5308232721D59B002C1F06 /* SceneDelegate.swift in Sources */,
+				FA5308512721F5BC002C1F06 /* SplashViewController.swift in Sources */,
+				FA5308562721F647002C1F06 /* WalletViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA53082F2721D59D002C1F06 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA5308382721D59D002C1F06 /* myWeb3WalletTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA5308392721D59D002C1F06 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA5308442721D59D002C1F06 /* myWeb3WalletUITestsLaunchTests.swift in Sources */,
+				FA5308422721D59D002C1F06 /* myWeb3WalletUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FA5308352721D59D002C1F06 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FA53081C2721D59B002C1F06 /* myWeb3Wallet */;
+			targetProxy = FA5308342721D59D002C1F06 /* PBXContainerItemProxy */;
+		};
+		FA53083F2721D59D002C1F06 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FA53081C2721D59B002C1F06 /* myWeb3Wallet */;
+			targetProxy = FA53083E2721D59D002C1F06 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		FA5308262721D59B002C1F06 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FA5308272721D59B002C1F06 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		FA53082B2721D59D002C1F06 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FA53082C2721D59D002C1F06 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FA5308452721D59D002C1F06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		FA5308462721D59D002C1F06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FA5308482721D59D002C1F06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 600772647D45BC0D702D4137 /* Pods-myWeb3Wallet.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VPS9LBWQ55;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = myWeb3Wallet/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = greenboxip.myWeb3Wallet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FA5308492721D59D002C1F06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5B0E97C0C8FE51D0241E7D19 /* Pods-myWeb3Wallet.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VPS9LBWQ55;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = myWeb3Wallet/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = greenboxip.myWeb3Wallet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		FA53084B2721D59D002C1F06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A87A2F63C4B3084139E790F5 /* Pods-myWeb3WalletTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VPS9LBWQ55;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = greenboxip.myWeb3WalletTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/myWeb3Wallet.app/myWeb3Wallet";
+			};
+			name = Debug;
+		};
+		FA53084C2721D59D002C1F06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E41A5A8BF0A312348D3C52FD /* Pods-myWeb3WalletTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VPS9LBWQ55;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = greenboxip.myWeb3WalletTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/myWeb3Wallet.app/myWeb3Wallet";
+			};
+			name = Release;
+		};
+		FA53084E2721D59D002C1F06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D6018FABA256C0117F85A829 /* Pods-myWeb3Wallet-myWeb3WalletUITests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VPS9LBWQ55;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = greenboxip.myWeb3WalletUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = myWeb3Wallet;
+			};
+			name = Debug;
+		};
+		FA53084F2721D59D002C1F06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7574A738941D92CC94F93A9E /* Pods-myWeb3Wallet-myWeb3WalletUITests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VPS9LBWQ55;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = greenboxip.myWeb3WalletUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = myWeb3Wallet;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FA5308182721D59B002C1F06 /* Build configuration list for PBXProject "myWeb3Wallet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FA5308452721D59D002C1F06 /* Debug */,
+				FA5308462721D59D002C1F06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FA5308472721D59D002C1F06 /* Build configuration list for PBXNativeTarget "myWeb3Wallet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FA5308482721D59D002C1F06 /* Debug */,
+				FA5308492721D59D002C1F06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FA53084A2721D59D002C1F06 /* Build configuration list for PBXNativeTarget "myWeb3WalletTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FA53084B2721D59D002C1F06 /* Debug */,
+				FA53084C2721D59D002C1F06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FA53084D2721D59D002C1F06 /* Build configuration list for PBXNativeTarget "myWeb3WalletUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FA53084E2721D59D002C1F06 /* Debug */,
+				FA53084F2721D59D002C1F06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FA5308152721D59B002C1F06 /* Project object */;
+}
