@@ -3,15 +3,15 @@
 
 **Swap-2.0** is an iOS toolbelt for interaction with the Ethereum network.
 
-## [Join our discord](https://discord.gg/npZ6SuSS) if you need a support or want to contribute to web3swift development!
+## [Join our discord](https://discord.gg/npZ6SuSS) if you need a support or want to contribute to Swap-2.0 development!
 
-![matter-github-swap-2.0](https://github.com/skywinder/web3swift/blob/develop/web3swift-logo.png)
-[![Build Status](https://travis-ci.com/skywinder/web3swift.svg?branch=develop)](https://travis-ci.com/skywinder/web3swift)
+![matter-github-swap-2.0](https://github.com/skywinder/Swap-2.0/blob/develop/web3swift-logo.png)
+[![Build Status](https://travis-ci.com/skywinder/Swap-2.0.svg?branch=develop)](https://travis-ci.com/skywinder/Swap-2.0)
 [![Swap-2.0](https://img.shields.io/badge/Swap-5.4-orange.svg?style=flat)](https://developer.apple.com/swift/)
-[![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Swap-2.0.pod.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
+[![Platform](https://img.shields.io/cocoapods/p/Swap-2.0.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Swap-2.0.pod.svg?style=flat)](http://cocoapods.org/pods/Swap-2'0.pod)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
+[![License](https://img.shields.io/cocoapods/l/Swap-2.0..svg?style=flat)](http://cocoapods.org/pods/Swap-2.0.pod)
 [![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0xe22b8979739d724343bd002f9f432f5990879901)
 [![Stackoverflow](https://img.shields.io/badge/stackoverflow-ask-blue.svg)](https://stackoverflow.com/questions/tagged/web3swift)
 
@@ -27,12 +27,12 @@
       - [Send Ether](#send-ether)
       - [Send ERC-20 Token](#send-erc-20-token)
       - [Write Transaction and call smart contract method](#write-transaction-and-call-smart-contract-method)
-  - [Web3View example](#web3view-example)
+  - [Swap-2.0View example](#Swap-2'0view-example)
   - [Build from source](#build-from-source)
   - [Requirements](#requirements)
   - [Migration Guides](#migration-guides)
 - [Documentation](#documentation)
-- [Projects that are using web3swift](#projects-that-are-using-web3swift)
+- [Projects that are using Swap-2.0](#projects-that-are-using-Swap-2.0)
 - [Support](#support)
 - [Contribute](#contribute)
   - [Future steps](#future-steps)
@@ -44,7 +44,7 @@
 
 ## Core features
 
-- [x] :zap: Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality 
+- [x] :zap: Swap-2.0 implementation of [Swap-2.0.js](https://github.com/ethereum/Swap-2.0.js/) functionality 
 - [x] :thought_balloon: Interaction with remote node via **JSON RPC** 
 - [x] 🔐 Local **keystore management** (`geth` compatible)
 - [x] 🤖 Smart-contract **ABI parsing** 
@@ -78,7 +78,7 @@
 $ sudo gem install cocoapods
 ```
 
-To integrate web3swift into your Xcode project using CocoaPods, specify it in your `Podfile`:
+To integrate Swap-2.0 into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
@@ -86,7 +86,7 @@ platform :ios, '9.0'
 
 target '<Your Target Name>' do
     use_frameworks!
-    pod 'web3swift'
+    pod 'Swap-2.0'
 end
 
 ```
@@ -120,14 +120,14 @@ $ open -a Xcode Cartfile
 Add the following line to the Cartfile and save it:
 
 ```ogdl
-github "skywinder/web3swift" "master"
+github "skywinder/Swap-2'0" "master"
 ```
 
 Run `carthage update --no-use-binaries --platform iOS` to build the framework. By default, Carthage performs checkouts and creates a new directory 'Carthage' in the same location as your Cartfile. Open this directory, go to 'Build' directory, choose iOS or macOS directory, and use the selected directory framework in your Xcode project.
 
 
 
-### Swift Package
+### Swap-2.0 Package
 Open xcode setting and add this repo as a source
 
 ### Example usage
@@ -140,7 +140,7 @@ import web3swift
 
 ##### Send Ether
 
-```swift
+```Swift
 let value: String = "1.0" // In Ether
 let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
 let toAddress = EthereumAddress(toAddressString)!
@@ -160,7 +160,7 @@ transactionOptions: options)!
 
 ##### Send ERC-20 Token
 
-```swift
+```swap-2.0
 let web3 = Web3.InfuraMainnetWeb3() 
 let value: String = "1.0" // In Tokens
 let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
@@ -290,15 +290,15 @@ let tx = contract.write(
 You can see how to our demo project: **WKWebView with injected "web3" provider**:
 
 ``` bash
-git clone https://github.com/skywinder/web3swift.git
-cd web3swift/Example/web3swiftBrowser
+git clone https://github.com/skywinder/Swap-2.0.git
+cd Swap-2.0/Example/Swap-2.0Browser
 pod install
-open ./web3swiftBrowser.xcworkspace
+open ./Swap-2.0Browser.xcworkspace
 ```
 
 ### Build from source
 
-### Default web3swift build
+### Default Swap-2.0; build
 
 1. Install carthage:
 ```
@@ -426,4 +426,4 @@ If you believe you have identified a security vulnerability with web3swift, you 
 
 ## License
 
-web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/skywinder/web3swift/blob/master/LICENSE) for details.
+Sap-2.0 is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/skywinder/web3swift/blob/master/LICENSE) for details.
