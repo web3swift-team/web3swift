@@ -22,6 +22,10 @@
 		FA5308512721F5BC002C1F06 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308502721F5BC002C1F06 /* SplashViewController.swift */; };
 		FA5308562721F647002C1F06 /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308552721F647002C1F06 /* WalletViewController.swift */; };
 		FAF01E912722D848002CEE01 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF01E902722D848002CEE01 /* DashboardViewController.swift */; };
+		FAF01E942722E6F1002CEE01 /* simulator_screenshot_9B13C8F6-BE7A-4919-966A-9E69A2953F31.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF01E932722E6F1002CEE01 /* simulator_screenshot_9B13C8F6-BE7A-4919-966A-9E69A2953F31.png */; };
+		FAF01E962722E713002CEE01 /* simulator_screenshot_38EB4733-C3DB-4280-BAF2-9ED97440A8AD.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF01E952722E713002CEE01 /* simulator_screenshot_38EB4733-C3DB-4280-BAF2-9ED97440A8AD.png */; };
+		FAF01E982722E72C002CEE01 /* simulator_screenshot_C6881651-9D22-410A-BDC2-4CC3FFEF4FD8.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF01E972722E72C002CEE01 /* simulator_screenshot_C6881651-9D22-410A-BDC2-4CC3FFEF4FD8.png */; };
+		FAF01E9A2722E73D002CEE01 /* simulator_screenshot_10F04849-E85A-41AB-8A17-D3FC394285AE.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF01E992722E73D002CEE01 /* simulator_screenshot_10F04849-E85A-41AB-8A17-D3FC394285AE.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +71,10 @@
 		FA5308502721F5BC002C1F06 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		FA5308552721F647002C1F06 /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
 		FAF01E902722D848002CEE01 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
+		FAF01E932722E6F1002CEE01 /* simulator_screenshot_9B13C8F6-BE7A-4919-966A-9E69A2953F31.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "simulator_screenshot_9B13C8F6-BE7A-4919-966A-9E69A2953F31.png"; sourceTree = "<group>"; };
+		FAF01E952722E713002CEE01 /* simulator_screenshot_38EB4733-C3DB-4280-BAF2-9ED97440A8AD.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "simulator_screenshot_38EB4733-C3DB-4280-BAF2-9ED97440A8AD.png"; sourceTree = "<group>"; };
+		FAF01E972722E72C002CEE01 /* simulator_screenshot_C6881651-9D22-410A-BDC2-4CC3FFEF4FD8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "simulator_screenshot_C6881651-9D22-410A-BDC2-4CC3FFEF4FD8.png"; sourceTree = "<group>"; };
+		FAF01E992722E73D002CEE01 /* simulator_screenshot_10F04849-E85A-41AB-8A17-D3FC394285AE.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "simulator_screenshot_10F04849-E85A-41AB-8A17-D3FC394285AE.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,7 +153,8 @@
 		FA53081F2721D59B002C1F06 /* myWeb3Wallet */ = {
 			isa = PBXGroup;
 			children = (
-				FA5308532721F615002C1F06 /* ViewController */,
+				FAF01E922722E673002CEE01 /* ScreenShot */,
+				FA5308532721F615002C1F06 /* ViewControllers */,
 				FA5308522721F5C8002C1F06 /* Appdelegate */,
 				FA5308242721D59B002C1F06 /* ViewController.swift */,
 				FA5308262721D59B002C1F06 /* Main.storyboard */,
@@ -182,12 +191,12 @@
 			path = Appdelegate;
 			sourceTree = "<group>";
 		};
-		FA5308532721F615002C1F06 /* ViewController */ = {
+		FA5308532721F615002C1F06 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				FA5308542721F62E002C1F06 /* WalletController */,
 			);
-			path = ViewController;
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		FA5308542721F62E002C1F06 /* WalletController */ = {
@@ -198,6 +207,17 @@
 				FAF01E902722D848002CEE01 /* DashboardViewController.swift */,
 			);
 			path = WalletController;
+			sourceTree = "<group>";
+		};
+		FAF01E922722E673002CEE01 /* ScreenShot */ = {
+			isa = PBXGroup;
+			children = (
+				FAF01E952722E713002CEE01 /* simulator_screenshot_38EB4733-C3DB-4280-BAF2-9ED97440A8AD.png */,
+				FAF01E932722E6F1002CEE01 /* simulator_screenshot_9B13C8F6-BE7A-4919-966A-9E69A2953F31.png */,
+				FAF01E972722E72C002CEE01 /* simulator_screenshot_C6881651-9D22-410A-BDC2-4CC3FFEF4FD8.png */,
+				FAF01E992722E73D002CEE01 /* simulator_screenshot_10F04849-E85A-41AB-8A17-D3FC394285AE.png */,
+			);
+			path = ScreenShot;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -310,7 +330,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA53082D2721D59D002C1F06 /* LaunchScreen.storyboard in Resources */,
+				FAF01E962722E713002CEE01 /* simulator_screenshot_38EB4733-C3DB-4280-BAF2-9ED97440A8AD.png in Resources */,
+				FAF01E942722E6F1002CEE01 /* simulator_screenshot_9B13C8F6-BE7A-4919-966A-9E69A2953F31.png in Resources */,
+				FAF01E9A2722E73D002CEE01 /* simulator_screenshot_10F04849-E85A-41AB-8A17-D3FC394285AE.png in Resources */,
 				FA53082A2721D59D002C1F06 /* Assets.xcassets in Resources */,
+				FAF01E982722E72C002CEE01 /* simulator_screenshot_C6881651-9D22-410A-BDC2-4CC3FFEF4FD8.png in Resources */,
 				FA5308282721D59B002C1F06 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
