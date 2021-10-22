@@ -9,9 +9,16 @@ import UIKit
 
 class SplashViewController: UIViewController {
 
+    @IBOutlet weak var logoView: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        Timer.scheduledTimer(timeInterval: 0.6, target: self, selector: #selector(self.moveToWalletView), userInfo: nil, repeats: false)
+        UIView.animate(withDuration: 0.9) {
+            self.logoView.center.y = self.view.center.y
+            Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.moveToWalletView), userInfo: nil, repeats: false)
+
+        }
+       
 
         // Do any additional setup after loading the view.
     }

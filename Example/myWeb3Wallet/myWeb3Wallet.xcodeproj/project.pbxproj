@@ -21,6 +21,7 @@
 		FA5308442721D59D002C1F06 /* myWeb3WalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308432721D59D002C1F06 /* myWeb3WalletUITestsLaunchTests.swift */; };
 		FA5308512721F5BC002C1F06 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308502721F5BC002C1F06 /* SplashViewController.swift */; };
 		FA5308562721F647002C1F06 /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308552721F647002C1F06 /* WalletViewController.swift */; };
+		FAF01E912722D848002CEE01 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF01E902722D848002CEE01 /* DashboardViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		FA5308432721D59D002C1F06 /* myWeb3WalletUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myWeb3WalletUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		FA5308502721F5BC002C1F06 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		FA5308552721F647002C1F06 /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
+		FAF01E902722D848002CEE01 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,7 +152,6 @@
 				FA5308292721D59D002C1F06 /* Assets.xcassets */,
 				FA53082B2721D59D002C1F06 /* LaunchScreen.storyboard */,
 				FA53082E2721D59D002C1F06 /* Info.plist */,
-				FA5308502721F5BC002C1F06 /* SplashViewController.swift */,
 			);
 			path = myWeb3Wallet;
 			sourceTree = "<group>";
@@ -192,7 +193,9 @@
 		FA5308542721F62E002C1F06 /* WalletController */ = {
 			isa = PBXGroup;
 			children = (
+				FA5308502721F5BC002C1F06 /* SplashViewController.swift */,
 				FA5308552721F647002C1F06 /* WalletViewController.swift */,
+				FAF01E902722D848002CEE01 /* DashboardViewController.swift */,
 			);
 			path = WalletController;
 			sourceTree = "<group>";
@@ -437,6 +440,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA5308252721D59B002C1F06 /* ViewController.swift in Sources */,
+				FAF01E912722D848002CEE01 /* DashboardViewController.swift in Sources */,
 				FA5308212721D59B002C1F06 /* AppDelegate.swift in Sources */,
 				FA5308232721D59B002C1F06 /* SceneDelegate.swift in Sources */,
 				FA5308512721F5BC002C1F06 /* SplashViewController.swift in Sources */,
