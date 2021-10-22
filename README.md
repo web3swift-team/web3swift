@@ -1,15 +1,15 @@
 
-## web3swift
+## Swap-2.0
 
-**web3swift** is an iOS toolbelt for interaction with the Ethereum network.
+**Swap-2.0** is an iOS toolbelt for interaction with the Ethereum network.
 
 ## [Join our discord](https://discord.gg/npZ6SuSS) if you need a support or want to contribute to web3swift development!
 
-![matter-github-swift](https://github.com/skywinder/web3swift/blob/develop/web3swift-logo.png)
+![matter-github-swap-2.0](https://github.com/skywinder/web3swift/blob/develop/web3swift-logo.png)
 [![Build Status](https://travis-ci.com/skywinder/web3swift.svg?branch=develop)](https://travis-ci.com/skywinder/web3swift)
-[![Swift](https://img.shields.io/badge/Swift-5.4-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Swap-2.0](https://img.shields.io/badge/Swap-5.4-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/web3.swift.pod.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Swap-2.0.pod.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
 [![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0xe22b8979739d724343bd002f9f432f5990879901)
