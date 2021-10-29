@@ -1,7 +1,6 @@
-
-language: swift
+language: swif 
 osx_image: xcode11
-script:
+- script:
 - swift build
 - swift test
 - xcrun xcodebuild -workspace BigInt.xcworkspace -scheme BigInt-macOS test
