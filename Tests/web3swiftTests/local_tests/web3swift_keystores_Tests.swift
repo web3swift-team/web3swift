@@ -136,7 +136,7 @@ class web3swift_Keystores_tests: XCTestCase {
         let account = keystore!.addresses![1]
         let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
         XCTAssertNotNil(key)
-        print(keystore!.paths)
+        print(keystore!.addressStorage.paths)
     }
     
     func testByBIP32keystoreSaveAndDeriva() throws {
@@ -154,9 +154,8 @@ class web3swift_Keystores_tests: XCTestCase {
         print(keystore!.addresses![1].address)
         print(recreatedStore!.addresses![0].address)
         print(recreatedStore!.addresses![1].address)
-        // It fails if run tests in batch and succeeds if run it separately
-        XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![0])
-        XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![1])
+        XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![0])
+        XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![1])
     }
     
     func testPBKDF2() throws {

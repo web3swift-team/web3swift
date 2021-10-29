@@ -38,6 +38,10 @@ public protocol AbstractKeystoreParams: Codable {
 
 }
 
+public struct PathAddressPair: Codable {
+    let path: String
+    let address: String
+}
 
 public struct KeystoreParamsBIP32: AbstractKeystoreParams {
     public var crypto: CryptoParamsV3
@@ -46,6 +50,7 @@ public struct KeystoreParamsBIP32: AbstractKeystoreParams {
     public var isHDWallet: Bool
 
     var pathToAddress: [String: String]
+    var pathAddressPairs: [PathAddressPair]
     var rootPath: String?
 
     public init(crypto cr: CryptoParamsV3, id i: String, version ver: Int = 32, rootPath: String? = nil) {
@@ -53,6 +58,7 @@ public struct KeystoreParamsBIP32: AbstractKeystoreParams {
         self.id = i
         self.version = ver
         pathToAddress = [String: String]()
+        pathAddressPairs = [PathAddressPair]()
         self.rootPath = rootPath
         self.isHDWallet = true
     }
