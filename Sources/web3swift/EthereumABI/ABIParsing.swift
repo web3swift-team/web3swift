@@ -30,6 +30,7 @@ extension ABI {
         case constructor
         case fallback
         case event
+        case receive
     }
     
 }
@@ -58,6 +59,9 @@ fileprivate func parseToElement(from abiRecord: ABI.Record, type: ABI.ElementTyp
     case .event:
         let event = try parseEvent(abiRecord: abiRecord)
         return ABI.Element.event(event)
+    case .receive:
+        let receive = try parseReceive(abiRecord: abiRecord)
+        return ABI.Element.receive(receive)
     }
     
 }
@@ -118,6 +122,23 @@ fileprivate func parseEvent(abiRecord:ABI.Record) throws -> ABI.Element.Event {
     let name = abiRecord.name != nil ? abiRecord.name! : ""
     let anonymous = abiRecord.anonymous != nil ? abiRecord.anonymous! : false
     let functionElement = ABI.Element.Event(name: name, inputs: abiInputs, anonymous: anonymous)
+    return functionElement
+}
+
+fileprivate func parseReceive(abiRecord:ABI.Record) throws -> ABI.Element.Receive {
+    let inputs = try abiRecord.inputs?.map({ (input:ABI.Input) throws -> ABI.Element.InOut in
+        let nativeInput = try input.parse()
+        return nativeInput
+    })
+    let abiInputs = inputs != nil ? inputs! : [ABI.Element.InOut]()
+    var payable = false
+    if (abiRecord.payable != nil) {
+        payable = abiRecord.payable!
+    }
+    if (abiRecord.stateMutability == "payable") {
+        payable = true
+    }
+    let functionElement = ABI.Element.Receive(inputs: abiInputs, payable: payable)
     return functionElement
 }
 
