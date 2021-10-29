@@ -137,7 +137,12 @@ extension ABIDecoder {
                         let (v, c) = decodeSignleType(type: subType, data: dataSlice, pointer: subpointer)
                         guard let valueUnwrapped = v, let consumedUnwrapped = c else {break}
                         toReturn.append(valueUnwrapped)
-                        subpointer = subpointer + consumedUnwrapped
+                        if (subType.isStatic) {
+                            subpointer = subpointer + consumedUnwrapped
+                        }
+                        else {
+                            subpointer = consumedUnwrapped // need to go by nextElementPointer
+                        }
                     }
                     return (toReturn as AnyObject, nextElementPointer)
                 }
