@@ -19,7 +19,18 @@ public class BIP32Keystore: AbstractKeystore {
     public var keystoreParams: KeystoreParamsBIP32?
 
     @available(*, deprecated, message: "Please use addressStorage instead")
-    public var paths: [String: EthereumAddress] = [String: EthereumAddress]()
+    public var paths: [String: EthereumAddress] {
+        get {
+            return self.addressStorage.toPathAddressPairs().reduce(into: [String: EthereumAddress]()) {
+                $0[$1.path] = EthereumAddress($1.address)!
+            }
+        }
+        set {
+            for pair in newValue {
+                self.addressStorage.add(address: pair.value, for: pair.key)
+            }
+        }
+    }
 
     public var rootPrefix: String
 
@@ -73,9 +84,6 @@ public class BIP32Keystore: AbstractKeystore {
         if (keystorePars.crypto.version != nil && keystorePars.crypto.version != "1") {return nil}
         if (!keystorePars.isHDWallet) {return nil}
 
-        for (p, ad) in keystorePars.pathToAddress {
-            paths[p] = EthereumAddress(ad)
-        }
         addressStorage = PathAddressStorage(pathAddressPairs: keystorePars.pathAddressPairs)
         
         if keystorePars.rootPath == nil {
@@ -195,7 +203,6 @@ public class BIP32Keystore: AbstractKeystore {
         } else {
             newPath = prefixPath + "/" + pathAppendix!
         }
-        paths[newPath] = newAddress
         addressStorage.add(address: newAddress, for: newPath)
         guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {throw AbstractKeystoreError.keyDerivationError}
         try encryptDataToStorage(password, data: serializedRootNode, aesMode: self.keystoreParams!.crypto.cipher)
@@ -244,10 +251,7 @@ public class BIP32Keystore: AbstractKeystore {
         let kdfparams = KdfParamsV3(salt: saltData.toHexString(), dklen: dkLen, n: N, p: P, r: R, c: nil, prf: nil)
         let cipherparams = CipherParamsV3(iv: IV.toHexString())
         let crypto = CryptoParamsV3(ciphertext: encryptedKeyData.toHexString(), cipher: aesMode, cipherparams: cipherparams, kdf: "scrypt", kdfparams: kdfparams, mac: mac.toHexString(), version: nil)
-        var pathToAddress = [String: String]()
-        for (path, address) in paths {
-            pathToAddress[path] = address.address
-        }
+        
         var keystorePars = KeystoreParamsBIP32(crypto: crypto, id: UUID().uuidString.lowercased(), version: Self.KeystoreParamsBIP32Version)
         keystorePars.pathAddressPairs = addressStorage.toPathAddressPairs()
         keystorePars.rootPath = self.rootPrefix
