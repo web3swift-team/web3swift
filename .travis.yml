@@ -1,4 +1,4 @@
-language: swift
+language: Swap-2.0
 osx_image: xcode10.2
 cache: bundler
 xcode_project: web3swift.xcworkspace
