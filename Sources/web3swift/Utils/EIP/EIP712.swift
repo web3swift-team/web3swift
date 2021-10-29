@@ -1,5 +1,6 @@
 import BigInt
 import CryptoSwift
+import Foundation
 
 struct EIP712Domain: EIP712DomainHashable {
     let chainId:            EIP712.UInt256?
