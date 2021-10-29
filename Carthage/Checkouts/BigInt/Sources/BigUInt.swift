@@ -68,7 +68,7 @@ extension BigUInt {
     /// Return true iff this integer is zero.
     ///
     /// - Complexity: O(1)
-    var isZero: Bool {
+    public var isZero: Bool {
         switch kind {
         case .inline(0, 0): return true
         case .array: return storage.isEmpty

@@ -49,7 +49,9 @@ public struct KeystoreParamsBIP32: AbstractKeystoreParams {
     public var version: Int
     public var isHDWallet: Bool
 
+    @available(*, deprecated, message: "Please use pathAddressPairs instead")
     var pathToAddress: [String: String]
+    
     var pathAddressPairs: [PathAddressPair]
     var rootPath: String?
 

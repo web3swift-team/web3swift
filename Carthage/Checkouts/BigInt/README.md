@@ -12,12 +12,13 @@
 	* [RSA Cryptography](#rsa)
 	* [Calculating the Digits of π](#pi)
 
-[![Swift 3](https://img.shields.io/badge/Swift-5-blue.svg)](https://developer.apple.com/swift/)
+[![Swift 5](https://img.shields.io/badge/Swift-5-blue.svg)](https://developer.apple.com/swift/)
 [![License](https://img.shields.io/badge/licence-MIT-blue.svg)](http://cocoapods.org/pods/BigInt)
 [![Platform](https://img.shields.io/cocoapods/p/BigInt.svg)](http://cocoapods.org/pods/BigInt)
 
-[![Build Status](https://travis-ci.org/attaswift/BigInt.svg?branch=master)](https://travis-ci.org/attaswift/BigInt)
+![Build Status](https://github.com/attaswift/BigInt/workflows/Swift/badge.svg?branch=master)
 [![Code Coverage](https://codecov.io/github/attaswift/BigInt/coverage.svg?branch=master)](https://codecov.io/github/attaswift/BigInt?branch=master)
+[![jazzy](https://raw.githubusercontent.com/attaswift/BigInt/master/docs/badge.svg)](https://attaswift.github.io/BigInt/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg)](https://github.com/Carthage/Carthage)
 [![Version](https://img.shields.io/cocoapods/v/BigInt.svg)](http://cocoapods.org/pods/BigInt)
 
@@ -89,7 +90,7 @@ in it.
 
 ## <a name="api">API Documentation</a>
 
-Generated API docs are available at http://attaswift.github.io/BigInt/.
+Generated API docs are available at https://attaswift.github.io/BigInt/.
 
 ## <a name="license">License</a>
 
@@ -105,7 +106,7 @@ The last version with support for Swift 2 was BigInt 1.3.0.)
 | 3.x           | 2.1.0              |
 | 4.0           | 3.1.0              |
 | 4.2           | 4.0.0              |
-| 5.x           | 5.2.1              |
+| 5.x           | 5.3.0              |
 
 BigInt deploys to macOS 10.10, iOS 9, watchOS 2 and tvOS 9.
 It has been tested on the latest OS releases only---however, as the module uses very few platform-provided APIs,
@@ -121,19 +122,19 @@ Setup instructions:
   Add this to the dependency section of your `Package.swift` manifest:
 
     ```Swift
-    .package(url: "https://github.com/attaswift/BigInt.git", from: "5.2.1")
+    .package(url: "https://github.com/attaswift/BigInt.git", from: "5.3.0")
     ```
 
 - **CocoaPods:** Put this in your `Podfile`:
 
     ```Ruby
-    pod 'BigInt', '~> 5.2'
+    pod 'BigInt', '~> 5.3'
     ```
 
 - **Carthage:** Put this in your `Cartfile`:
 
     ```
-    github "attaswift/BigInt" ~> 5.2
+    github "attaswift/BigInt" ~> 5.3
     ```
 
 ## <a name="notes">Implementation notes</a>
@@ -143,7 +144,7 @@ digit at index 0. As a convenience, [`BigUInt`][BigUInt] allows you to subscript
 or above its `count`. [The subscript operator][subscript] returns 0 for out-of-bound `get`s and
 automatically extends the array on out-of-bound `set`s. This makes memory management simpler.
 
-[`BigInt`][BigInt] is just a tiny wrapper around a `BigUInt` [absolute value][abs] and a
+[`BigInt`][BigInt] is just a tiny wrapper around a `BigUInt` [absolute value][magnitude] and a
 [sign bit][negative], both of which are accessible as public read-write properties.
 
 ### <a name="generics">Why is there no generic `BigInt<Digit>` type?</a>

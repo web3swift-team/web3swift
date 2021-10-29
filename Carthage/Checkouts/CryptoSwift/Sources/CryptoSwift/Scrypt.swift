@@ -1,7 +1,7 @@
 //
 //  CryptoSwift
 //
-//  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+//  Copyright (C) 2014-2021 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
 //  This software is provided 'as-is', without any express or implied warranty.
 //
 //  In no event will the authors be held liable for any damages arising from the use of this software.
@@ -83,7 +83,7 @@ public final class Scrypt {
 
     /* 1: (B_0 ... B_{p-1}) <-- PBKDF2(P, S, 1, p * MFLen) */
     // Expand the initial key
-    let barray = try PKCS5.PBKDF2(password: Array(self.password), salt: Array(self.salt), iterations: 1, keyLength: self.p * 128 * self.r, variant: .sha256).calculate()
+    let barray = try PKCS5.PBKDF2(password: Array(self.password), salt: Array(self.salt), iterations: 1, keyLength: self.p * 128 * self.r, variant: .sha2(.sha256)).calculate()
     barray.withUnsafeBytes { p in
       B.copyMemory(from: p.baseAddress!, byteCount: barray.count)
     }
@@ -99,7 +99,7 @@ public final class Scrypt {
     let pointer = B.assumingMemoryBound(to: UInt8.self)
     let bufferPointer = UnsafeBufferPointer(start: pointer, count: p * 128 * self.r)
     let block = [UInt8](bufferPointer)
-    return try PKCS5.PBKDF2(password: Array(self.password), salt: block, iterations: 1, keyLength: self.dkLen, variant: .sha256).calculate()
+    return try PKCS5.PBKDF2(password: Array(self.password), salt: block, iterations: 1, keyLength: self.dkLen, variant: .sha2(.sha256)).calculate()
   }
 }
 

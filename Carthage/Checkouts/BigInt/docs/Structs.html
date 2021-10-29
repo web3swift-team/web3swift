@@ -14,15 +14,16 @@
   </head>
   <body>
 
+    <a name="//apple_ref/swift/Section/Structures" class="dashAnchor"></a>
 
     <a title="Structures  Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          BigInt Docs
+          BigInt v5.2.1 Docs
         </a>
-         (92% documented)
+         (85% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -39,7 +40,7 @@
         </p>
     
         <p class="header-col header-col--secondary">
-          <a class="header-link" href="dash-feed://https%3A%2F%2Fattaswift%2Egithub%2Eio%2FBigInt%2Freference%2Fdocsets%2FBigInt%2Exml">
+          <a class="header-link" href="dash-feed://https%3A%2F%2Fattaswift.github.io%2FBigInt%2Freference%2Fdocsets%2FBigInt.xml">
             <img class="header-icon" src="img/dash.png"/>
             Install in Dash
           </a>
@@ -91,7 +92,7 @@
       <article class="main-content">
 
         <section class="section">
-          <div class="section-content">
+          <div class="section-content top-matter">
             <h1>Structures</h1>
             <p>The following structures are available globally.</p>
 
@@ -115,7 +116,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>An arbitary precision unsigned integer type, also known as a <q>big integer</q>.</p>
+                        <p>An arbitary precision unsigned integer type, also known as a &ldquo;big integer&rdquo;.</p>
 
 <p>Operations on big integers never overflow, but they may take a long time to execute.
 The amount of memory (and address space) available is the only constraint to the magnitude of these numbers.</p>
@@ -129,12 +130,20 @@ around <code>Array&lt;UInt64&gt;</code>. (In fact, <code>BigUInt</code> only use
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">BigUInt</span><span class="p">:</span> <span class="kt">UnsignedInteger</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">BigUInt</span> <span class="p">:</span> <span class="kt">UnsignedInteger</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigUInt</span><span class="p">:</span> <span class="kt">Codable</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigUInt</span><span class="p">:</span> <span class="kt">Comparable</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigUInt</span><span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigUInt</span><span class="p">:</span> <span class="kt">ExpressibleByIntegerLiteral</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigUInt</span><span class="p">:</span> <span class="kt">Strideable</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigUInt</span><span class="p">:</span> <span class="kt">ExpressibleByStringLiteral</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigUInt</span><span class="p">:</span> <span class="kt">CustomStringConvertible</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigUInt</span><span class="p">:</span> <span class="kt">CustomPlaygroundDisplayConvertible</span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/attaswift/BigInt/tree/50208597616c8ab08729bbc33edf295bd06da27c/sources/BigUInt.swift#L16-L61">Show on GitHub</a>
+                        <a href="https://github.com/attaswift/tree/v5.2.1/Sources/BigUInt.swift#L16-L61">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -145,9 +154,11 @@ around <code>Array&lt;UInt64&gt;</code>. (In fact, <code>BigUInt</code> only use
               <div class="task-name-container">
                 <a name="/BigInt"></a>
                 <a name="//apple_ref/swift/Section/BigInt" class="dashAnchor"></a>
-                <a href="#/BigInt">
-                  <h3 class="section-name">BigInt</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/BigInt"></a>
+                  <h3 class="section-name"><p>BigInt</p>
+</h3>
+                </div>
               </div>
               <ul class="item-container">
                 <li class="item">
@@ -163,7 +174,7 @@ around <code>Array&lt;UInt64&gt;</code>. (In fact, <code>BigUInt</code> only use
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>An arbitary precision signed integer type, also known as a <q>big integer</q>.</p>
+                        <p>An arbitary precision signed integer type, also known as a &ldquo;big integer&rdquo;.</p>
 
 <p>Operations on big integers never overflow, but they might take a long time to execute.
 The amount of memory (and address space) available is the only constraint to the magnitude of these numbers.</p>
@@ -185,12 +196,19 @@ primality test for signed integers. When you need to call one of these, just ext
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">BigInt</span><span class="p">:</span> <span class="kt">SignedInteger</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">BigInt</span> <span class="p">:</span> <span class="kt">SignedInteger</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigInt</span><span class="p">:</span> <span class="kt">Codable</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigInt</span><span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigInt</span><span class="p">:</span> <span class="kt">ExpressibleByIntegerLiteral</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigInt</span><span class="p">:</span> <span class="kt">Strideable</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigInt</span><span class="p">:</span> <span class="kt">ExpressibleByStringLiteral</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigInt</span><span class="p">:</span> <span class="kt">CustomStringConvertible</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">BigInt</span><span class="p">:</span> <span class="kt">CustomPlaygroundDisplayConvertible</span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/attaswift/BigInt/tree/50208597616c8ab08729bbc33edf295bd06da27c/sources/BigInt.swift#L31-L76">Show on GitHub</a>
+                        <a href="https://github.com/attaswift/tree/v5.2.1/Sources/BigInt.swift#L29-L74">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -203,8 +221,8 @@ primality test for signed integers. When you need to call one of these, just ext
       </article>
     </div>
     <section class="footer">
-      <p>© 2016 <a class="link" href="https://twitter.com/lorentey" target="_blank" rel="external">Károly Lőrentey</a>. (Last updated: 2017-10-10)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>© 2020 <a class="link" href="https://twitter.com/lorentey" target="_blank" rel="external">Károly Lőrentey</a>. (Last updated: 2020-12-15)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>
