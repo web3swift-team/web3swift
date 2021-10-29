@@ -53,6 +53,7 @@
 		13C3392521B6C62400F33F5E /* secp256k1_ec_mult_static_context.h in Headers */ = {isa = PBXBuildFile; fileRef = 13C338F621B6C62400F33F5E /* secp256k1_ec_mult_static_context.h */; };
 		13C3392621B6C62400F33F5E /* scratch.h in Headers */ = {isa = PBXBuildFile; fileRef = 13C338F721B6C62400F33F5E /* scratch.h */; };
 		13C3392821B6C68900F33F5E /* secp256k1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13C3388E21B6C2DD00F33F5E /* secp256k1.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		2AC22E362525C2000072F037 /* PathAddressStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC22E352525C2000072F037 /* PathAddressStorage.swift */; };
 		3A7EA35E2280EA9A005120C2 /* Encodable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7EA35D2280EA9A005120C2 /* Encodable+Extensions.swift */; };
 		3A7EA3602280EB27005120C2 /* Decodable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7EA35F2280EB27005120C2 /* Decodable+Extensions.swift */; };
 		3AA8151C2276E42F00F5DB52 /* EventFiltering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA815172276E42F00F5DB52 /* EventFiltering.swift */; };
@@ -260,6 +261,7 @@
 		13C338F721B6C62400F33F5E /* scratch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scratch.h; sourceTree = "<group>"; };
 		13CE02B021FC846800CE7148 /* RELEASE_GUIDE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = RELEASE_GUIDE.md; sourceTree = "<group>"; };
 		13CE02B121FC846900CE7148 /* BUILD_GUIDE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = BUILD_GUIDE.md; sourceTree = "<group>"; };
+		2AC22E352525C2000072F037 /* PathAddressStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathAddressStorage.swift; sourceTree = "<group>"; };
 		3A7EA35D2280EA9A005120C2 /* Encodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extensions.swift"; sourceTree = "<group>"; };
 		3A7EA35F2280EB27005120C2 /* Decodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decodable+Extensions.swift"; sourceTree = "<group>"; };
 		3AA815172276E42F00F5DB52 /* EventFiltering.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventFiltering.swift; sourceTree = "<group>"; };
@@ -285,7 +287,6 @@
 		3AA815352276E44100F5DB52 /* BIP39+WordLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BIP39+WordLists.swift"; sourceTree = "<group>"; };
 		3AA815362276E44100F5DB52 /* BIP32Keystore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BIP32Keystore.swift; sourceTree = "<group>"; };
 		3AA815372276E44100F5DB52 /* EthereumKeystoreV3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EthereumKeystoreV3.swift; sourceTree = "<group>"; };
-		3AA815382276E44100F5DB52 /* BIP32KeystoreJSONStructure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BIP32KeystoreJSONStructure.swift; sourceTree = "<group>"; };
 		3AA815392276E44100F5DB52 /* PlainKeystore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlainKeystore.swift; sourceTree = "<group>"; };
 		3AA8153A2276E44100F5DB52 /* AbstractKeystore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractKeystore.swift; sourceTree = "<group>"; };
 		3AA8153B2276E44100F5DB52 /* KeystoreV3JSONStructure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeystoreV3JSONStructure.swift; sourceTree = "<group>"; };
@@ -657,6 +658,7 @@
 			isa = PBXGroup;
 			children = (
 				4E2DFEF325485B53001AF561 /* KeystoreParams.swift */,
+				2AC22E352525C2000072F037 /* PathAddressStorage.swift */,
 				3AA815312276E44100F5DB52 /* KeystoreManager.swift */,
 				3AA815322276E44100F5DB52 /* IBAN.swift */,
 				3AA815332276E44100F5DB52 /* BIP39.swift */,
@@ -664,7 +666,6 @@
 				3AA815352276E44100F5DB52 /* BIP39+WordLists.swift */,
 				3AA815362276E44100F5DB52 /* BIP32Keystore.swift */,
 				3AA815372276E44100F5DB52 /* EthereumKeystoreV3.swift */,
-				3AA815382276E44100F5DB52 /* BIP32KeystoreJSONStructure.swift */,
 				3AA815392276E44100F5DB52 /* PlainKeystore.swift */,
 				3AA8153A2276E44100F5DB52 /* AbstractKeystore.swift */,
 				3AA8153B2276E44100F5DB52 /* KeystoreV3JSONStructure.swift */,
@@ -1355,6 +1356,7 @@
 				3AA815D62276E44100F5DB52 /* Web3+ReadingTransaction.swift in Sources */,
 				3AA815AC2276E44100F5DB52 /* NameHash.swift in Sources */,
 				3AA8151C2276E42F00F5DB52 /* EventFiltering.swift in Sources */,
+				2AC22E362525C2000072F037 /* PathAddressStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

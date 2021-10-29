@@ -39,7 +39,7 @@ extension BigUInt: Comparable {
     }
 }
 
-extension BigInt {
+extension BigInt: Comparable {
     /// Return true iff `a` is equal to `b`.
     public static func ==(a: BigInt, b: BigInt) -> Bool {
         return a.sign == b.sign && a.magnitude == b.magnitude
