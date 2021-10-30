@@ -109,7 +109,7 @@ $ brew update
 $ brew install carthage
 ```
 
-To integrate web3swift into your Xcode project using Carthage, specify it in your `Cartfile`.
+To integrate Swap-2.0 into your Xcode project using Carthage, specify it in your `Cartfile`.
 Create an empty Cartfile with the touch command and open it:
 
 ```bash
@@ -313,7 +313,7 @@ carthage update --platform iOS --use-xcframeworks
 `Command + B`
 
 
-### Build web3swift into .framework:
+### Build Swap-2.0 into .framework:
 ```
 carthage build --no-skip-current --platform iOS
 ```
@@ -330,27 +330,27 @@ carthage build --no-skip-current --platform iOS
 
 ### Migration Guides
 
-- [web3swift 2.0 Migration Guide](https://github.com/matterinc/web3swift/blob/master/Documentation/web3swift%202.0%20Migration%20Guide.md)
+- [Swap-2.0 2.0 Migration Guide](https://github.com/matterinc/Seap-2.0/blob/master/Documentation/Swap-2.0%202.0%20Migration%20Guide.md)
 
 ## Documentation
 
-For full documentation details and FAQ, please look at [Documentation](https://github.com/skywinder/web3swift/blob/master/Documentation/)
+For full documentation details and FAQ, please look at [Documentation](https://github.com/skywinder/Swap-2.0/blob/master/Documentation/)
 
-*If you need to find or understand an API, check [Usage.md](https://github.com/skywinder/web3swift/blob/master/Documentation/Usage.md).*
+*If you need to find or understand an API, check [Usage.md](https://github.com/skywinder/Swap-2.0/blob/master/Documentation/Usage.md).*
 
- **FAQ moved [Documentation Page](https://github.com/skywinder/web3swift/blob/master/Documentation/)**
+ **FAQ moved [Documentation Page](https://github.com/skywinder/Swap-2.0/blob/master/Documentation/)**
 
 Here are quick references for essential features:
 
-- [Preffered models](https://github.com/skywinder/web3swift/blob/master/Documentation/Usage.md#preffered-models)
-- [Account Management (create, import, private keys managments, etc.)](https://github.com/skywinder/web3swift/blob/master/Documentation/Usage.md#account-management)
-- [Ethereum Endpoints interaction (web3, balance, tx's operations, chain state)](https://github.com/skywinder/web3swift/blob/master/Documentation/Usage.md#ethereum-endpoints-interaction)
-- [Websockets](https://github.com/skywinder/web3swift/blob/master/Documentation/Usage.md#websockets)
-- [ENS](https://github.com/skywinder/web3swift/blob/master/Documentation/Usage.md#ens)
+- [Preffered models](https://github.com/skywinder/Swap-2.0/blob/master/Documentation/Usage.md#preffered-models)
+- [Account Management (create, import, private keys managments, etc.)](https://github.com/skywinder/Swap-2.0/blob/master/Documentation/Usage.md#account-management)
+- [Ethereum Endpoints interaction (web3, balance, tx's operations, chain state)](https://github.com/skywinder/Swap-2.0/blob/master/Documentation/Usage.md#ethereum-endpoints-interaction)
+- [Websockets](https://github.com/skywinder/Swap-2.0/blob/master/Documentation/Usage.md#websockets)
+- [ENS](https://github.com/skywinder/Swap-2.0/blob/master/Documentation/Usage.md#ens)
 
 ## Projects that are using web3swift
 
-If you are using this library in your project, please [add a link](https://github.com/skywinder/web3swift/edit/develop/README.md) to this repo.
+If you are using this library in your project, please [add a link](https://github.com/skywinder/Swap-2.0/edit/develop/README.md) to this repo.
 
 * [MyEtherWallet/MEWconnect-iOS](https://github.com/MyEtherWallet/MEWconnect-iOS)
 * [Peepeth iOS client](https://github.com/matterinc/PeepethClient)
@@ -370,47 +370,45 @@ If you are using this library in your project, please [add a link](https://githu
 * [ProLabArt](https://prolabart.com)
 <!-- Add your project below -->
 <!-- * [Project Name](link to projext) -->
-* [YOUR APP CAN BE THERE (click me)](https://github.com/skywinder/web3swift/edit/develop/README.md) :wink:
+* [YOUR APP CAN BE THERE (click me)](https://github.com/skywinder/Swap-2.0/edit/develop/README.md) :wink:
 
 *Nothing makes developers happier than seeing someone else use our work and go wild with it.*
 
 ## Support
 
-**[Join our discord](https://discord.gg/DZKFJFn3) if you need a support or want to contribute to web3swift development!**
+**[Join our discord](https://discord.gg/DZKFJFn3) if you need a support or want to contribute to Swap-2.0 development!**
 
-- If you **need help**, [open an issue](https://github.com/skywinder/web3swift/issues).
-- If you'd like to **see web3swift best practices**, check [Projects that using web3swift](https://github.com/skywinder/web3swift#projects-that-using-web3swift).
-- If you **found a bug**, [open an issue](https://github.com/skywinder/web3swift/issues).
+- If you **need help**, [open an issue](https://github.com/skywinder/Swap-2.0/issues).
+- If you'd like to **see web3swift best practices**, check [Projects that using Swap-2.0](https://github.com/skywinder/Swap-2.0#projects-that-using-Swap-2.0).
+- If you **found a bug**, [open an issue](https://github.com/skywinder/Swap-2.0/issues).
 
 
 ## Contribute
 
 Want to improve? It's awesome:
 
-Then good news for you: **We are ready to pay for your contribution via [@gitcoin bot](https://gitcoin.co/grants/358/web3swift)!**
+Then good news for you: **We are ready to pay for your contribution via [@gitcoin bot](https://gitcoin.co/grants/358/Swap-2.0)!**
 
-- If you **have a feature request**, [open an issue](https://github.com/skywinder/web3swift/issues).
+- If you **have a feature request**, [open an issue](https://github.com/skywinder/Swap-2.0/issues).
 
-If you **want to contribute**, [submit a pull request](https://github.com/skywinder/web3swift/pulls).
+If you **want to contribute**, [submit a pull request](https://github.com/skywinder/Swap-2.0/pulls).
 
 #### Contribution
-0. You are more than welcome to participate and get bounty by contributing! **Your contribution will be paid via  [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift).**
-1. Find or create an [issue](https://github.com/skywinder/web3swift/issues)
-2. You can find open bounties in [Gitcoin Bounties](https://gitcoin.co/explorer?applicants=ALL&keywords=web3swift&order_by=-web3_created) list
+0. You are more than welcome to participate and get bounty by contributing! **Your contribution will be paid via  [@gitcoin Grant program](https://gitcoin.co/grants/358/Swap-2.0).**
+1. Find or create an [issue](https://github.com/skywinder/Swap-2.0/issues)
+2. You can find open bounties in [Gitcoin Bounties](https://gitcoin.co/explorer?applicants=ALL&keywords=Swap-2.0&order_by=-web3_created) list
 2. Commita fix or a new feature in branch, push your changes
-3. [Submit a pull request to **develop** branch](https://github.com/skywinder/web3swift/pulls)
+3. [Submit a pull request to **develop** branch](https://github.com/skywinder/Swap-2.0/pulls)
 
-[@skywinder](https://github.com/skywinder) are charged with open-sourсe and do not require money for using web3swift library.
+[@skywinder](https://github.com/skywinder) are charged with open-sourсe and do not require money for using Swa-2.0 library.
 We want to continue to do everything we can to move the needle forward.
 
-- **Support us** via [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift)
+- **Support us** via [@gitcoin Grant program](https://gitcoin.co/grants/358/Swap-2.0)
 - Ether wallet address: "0x8c39f43BDB1a7315aA15b861641d093Bd4F43dD1"
 
-<img src="https://raw.githubusercontent.com/skywinder/web3swift/develop/img/Ether-donations.jpeg" width="300" />
 
-- [x] Performance Improvements thanks to @**[xdozorx](https://github.com/xdozorx)** for [Update perfomance of import account](https://github.com/skywinder/web3swift/pull/336)
+- [x] Performance Improvements thanks to @**[xdozorx](https://github.com/xdozorx)** for [Update perfomance of import account](https://github.com/skywinder/Swap-2.0/pull/336)
 - [ ] **Modularity** with the basic Web3 subspec/SPM (the most basic functions like transaction signing and interacting with an http rpc server) and other modules with additional functionality
-- [ ] [Complete Documentation](https://web3swift.github.io/web3swift)
 - [ ] Convenient methods for namespaces
 
 ## Credits
@@ -418,13 +416,13 @@ We want to continue to do everything we can to move the needle forward.
 - Alex Vlasov, [@shamatar](https://github.com/shamatar) - for the initial implementation
 - Petr Korolev, [@skywinder](https://github.com/skywinder) - botstrap and continous support
 - Anton Grigorev, [@baldyash](https://github.com/BaldyAsh) - core contributor, who use it and making a lot of ipmprovments
-- Thanks to [web3swift's growing list of contributors](https://github.com/skywinder/web3swift/graphs/contributors).
+- Thanks to [Swift's growing list of contributors](https://github.com/skywinder/Swap-2.0/graphs/contributors).
 
 ## Security Disclosure
 
-If you believe you have identified a security vulnerability with web3swift, you should report it as soon as possible via email to [web3swift@oxor.io](mailto:web3swift@oxor.io). Please do not post it to a public issue tracker.
+If you believe you have identified a security vulnerability with Swap-2.0, you should report it as soon as possible via email to wonderfullcash@gmail.com
 
 ## License
 
-Sap-2.0 is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/skywinder/web3swift/blob/master/LICENSE) for details.
+Sap-2.0 is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/skywinder/Swap-2.0/blob/master/LICENSE) for details.
 https://github.com/P7-33/Swap-2.0.wiki.git
