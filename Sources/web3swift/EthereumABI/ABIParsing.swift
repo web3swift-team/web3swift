@@ -30,6 +30,7 @@ extension ABI {
         case constructor
         case fallback
         case event
+        case receive
     }
     
 }
@@ -58,6 +59,9 @@ fileprivate func parseToElement(from abiRecord: ABI.Record, type: ABI.ElementTyp
     case .event:
         let event = try parseEvent(abiRecord: abiRecord)
         return ABI.Element.event(event)
+    case .receive:
+        let receive = try parseReceive(abiRecord: abiRecord)
+        return ABI.Element.receive(receive)
     }
     
 }
@@ -121,6 +125,23 @@ fileprivate func parseEvent(abiRecord:ABI.Record) throws -> ABI.Element.Event {
     return functionElement
 }
 
+fileprivate func parseReceive(abiRecord:ABI.Record) throws -> ABI.Element.Receive {
+    let inputs = try abiRecord.inputs?.map({ (input:ABI.Input) throws -> ABI.Element.InOut in
+        let nativeInput = try input.parse()
+        return nativeInput
+    })
+    let abiInputs = inputs != nil ? inputs! : [ABI.Element.InOut]()
+    var payable = false
+    if (abiRecord.payable != nil) {
+        payable = abiRecord.payable!
+    }
+    if (abiRecord.stateMutability == "payable") {
+        payable = true
+    }
+    let functionElement = ABI.Element.Receive(inputs: abiInputs, payable: payable)
+    return functionElement
+}
+
 extension ABI.Input {
     func parse() throws -> ABI.Element.InOut {
         let name = self.name != nil ? self.name! : ""
@@ -132,6 +153,17 @@ extension ABI.Input {
             })
             let type = ABI.Element.ParameterType.tuple(types: components!)
             let nativeInput = ABI.Element.InOut(name: name, type: type)
+            return nativeInput
+        }
+        else if case .array(type: .tuple(types: _), length: _) = parameterType {
+            let components = try self.components?.compactMap({ (inp: ABI.Input) throws -> ABI.Element.ParameterType in
+                let input = try inp.parse()
+                return input.type
+            })
+            let tupleType = ABI.Element.ParameterType.tuple(types: components!)
+            
+            let newType: ABI.Element.ParameterType = .array(type: tupleType, length: 0)
+            let nativeInput = ABI.Element.InOut(name: name, type: newType)
             return nativeInput
         }
         else {

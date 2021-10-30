@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Bcj-Kg-hgt">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Splash View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController storyboardIdentifier="SplashViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="SplashViewController" customModule="myWeb3Wallet" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="swift" translatesAutoresizingMaskIntoConstraints="NO" id="oGp-VV-rqh">
+                                <rect key="frame" x="137" y="692" width="140" height="140"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="140" id="HRe-Fh-bbd"/>
+                                    <constraint firstAttribute="width" constant="140" id="KWf-Vu-L7t"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                        <constraints>
+                            <constraint firstItem="oGp-VV-rqh" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Zmh-Ju-Nv2"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="oGp-VV-rqh" secondAttribute="bottom" constant="30" id="qAw-HX-2BJ"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="rKv-UP-7kn"/>
+                    <connections>
+                        <outlet property="logoView" destination="oGp-VV-rqh" id="ztP-Uz-7fi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="794" y="67"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="oco-fZ-QsX">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="Bcj-Kg-hgt" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="a3T-hG-1yu">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="DuF-Xu-gQe"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qWL-Nk-Ott" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="18.840579710144929" y="66.964285714285708"/>
+        </scene>
+        <!--Wallet View Controller-->
+        <scene sceneID="0m1-99-x4x">
+            <objects>
+                <viewController storyboardIdentifier="WalletViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="oox-Y6-Jww" customClass="WalletViewController" customModule="myWeb3Wallet" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Wu8-YM-FMv">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ECR-y6-Fn2">
+                                <rect key="frame" x="10" y="802" width="394" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="cVc-OO-PKu"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="systemPinkColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Import Wallet">
+                                    <fontDescription key="titleFontDescription" name="Menlo-Bold" family="Menlo" pointSize="17"/>
+                                    <color key="baseForegroundColor" systemColor="systemOrangeColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="onClickImportWalletButton:" destination="oox-Y6-Jww" eventType="touchUpInside" id="pOr-L2-1mk"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="83O-KE-O2m">
+                                <rect key="frame" x="10" y="742" width="394" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="w0J-8t-VgQ"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="tertiarySystemBackgroundColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Create Wallet">
+                                    <fontDescription key="titleFontDescription" name="Menlo-Bold" family="Menlo" pointSize="19"/>
+                                    <color key="baseForegroundColor" systemColor="systemOrangeColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="onClickCreateWallet:" destination="oox-Y6-Jww" eventType="touchUpInside" id="SSs-4T-aA8"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0x" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o1c-6W-qpt">
+                                <rect key="frame" x="10" y="428" width="394" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="jmb-od-PZg"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Kefa-Regular" family="Kefa" pointSize="16"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NYc-GP-SKi">
+                                <rect key="frame" x="294" y="54" width="100" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="Yd3-3G-fTf"/>
+                                    <constraint firstAttribute="width" constant="100" id="oCh-hj-GbR"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Continue">
+                                    <fontDescription key="titleFontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="20"/>
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="onClickContinueButton:" destination="oox-Y6-Jww" eventType="touchUpInside" id="9V7-Ni-tWy"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="67E-R9-nCw"/>
+                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                        <constraints>
+                            <constraint firstItem="67E-R9-nCw" firstAttribute="trailing" secondItem="NYc-GP-SKi" secondAttribute="trailing" constant="20" id="2T2-mF-CuW"/>
+                            <constraint firstItem="67E-R9-nCw" firstAttribute="trailing" secondItem="ECR-y6-Fn2" secondAttribute="trailing" constant="10" id="8Yr-Bs-0ha"/>
+                            <constraint firstItem="67E-R9-nCw" firstAttribute="bottom" secondItem="ECR-y6-Fn2" secondAttribute="bottom" constant="10" id="NcI-VJ-AGv"/>
+                            <constraint firstItem="67E-R9-nCw" firstAttribute="trailing" secondItem="o1c-6W-qpt" secondAttribute="trailing" constant="10" id="Op7-CZ-evY"/>
+                            <constraint firstItem="67E-R9-nCw" firstAttribute="trailing" secondItem="83O-KE-O2m" secondAttribute="trailing" constant="10" id="UW1-u4-Nd2"/>
+                            <constraint firstItem="NYc-GP-SKi" firstAttribute="top" secondItem="67E-R9-nCw" secondAttribute="top" constant="10" id="V5j-Mu-5Jp"/>
+                            <constraint firstItem="83O-KE-O2m" firstAttribute="leading" secondItem="67E-R9-nCw" secondAttribute="leading" constant="10" id="Y1F-bB-iUH"/>
+                            <constraint firstItem="ECR-y6-Fn2" firstAttribute="leading" secondItem="67E-R9-nCw" secondAttribute="leading" constant="10" id="f8V-BX-HMO"/>
+                            <constraint firstItem="o1c-6W-qpt" firstAttribute="centerY" secondItem="Wu8-YM-FMv" secondAttribute="centerY" id="gz9-Px-dKg"/>
+                            <constraint firstItem="ECR-y6-Fn2" firstAttribute="top" secondItem="83O-KE-O2m" secondAttribute="bottom" constant="10" id="umq-hw-uqs"/>
+                            <constraint firstItem="o1c-6W-qpt" firstAttribute="leading" secondItem="67E-R9-nCw" secondAttribute="leading" constant="10" id="yzP-OP-YOJ"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="RKW-Ok-jbO"/>
+                    <connections>
+                        <outlet property="continueButton" destination="NYc-GP-SKi" id="mPw-jo-qeg"/>
+                        <outlet property="createWalletButton" destination="83O-KE-O2m" id="9oY-hc-pPL"/>
+                        <outlet property="importWalletButton" destination="ECR-y6-Fn2" id="XrJ-86-gmP"/>
+                        <outlet property="walletAddressLabel" destination="o1c-6W-qpt" id="w2C-pk-tDc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eYA-OT-Z6J" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1479.7101449275362" y="66.964285714285708"/>
+        </scene>
+        <!--Dashboard View Controller-->
+        <scene sceneID="4ac-mv-moF">
+            <objects>
+                <viewController storyboardIdentifier="DashboardViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="sQO-2K-OgC" customClass="DashboardViewController" customModule="myWeb3Wallet" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cxD-3g-TiC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="swift" translatesAutoresizingMaskIntoConstraints="NO" id="07L-Jn-RLf">
+                                <rect key="frame" x="137" y="692" width="140" height="140"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="BMv-Df-ogQ"/>
+                                    <constraint firstAttribute="height" constant="140" id="DzK-jH-bkV"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="IBh-wH-SOd"/>
+                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                        <constraints>
+                            <constraint firstItem="IBh-wH-SOd" firstAttribute="bottom" secondItem="07L-Jn-RLf" secondAttribute="bottom" constant="30" id="5nI-3C-Icc"/>
+                            <constraint firstItem="07L-Jn-RLf" firstAttribute="centerX" secondItem="cxD-3g-TiC" secondAttribute="centerX" id="6xl-M4-4Pq"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="o1a-fR-hOg"/>
+                    <connections>
+                        <outlet property="logoImageView" destination="07L-Jn-RLf" id="Hb4-ml-CaT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fzf-RD-WtE" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2207" y="67"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="swift" width="128" height="128"/>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="tertiarySystemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
