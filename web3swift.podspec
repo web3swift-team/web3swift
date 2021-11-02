@@ -1,4 +1,3 @@
-
 Pod::Spec.new do |spec|
     spec.name         = 'web3swift'
     spec.version      = '2.3.0'
@@ -19,4 +18,5 @@ Pod::Spec.new do |spec|
     spec.dependency 'CryptoSwift', '~> 1.4.0'
     spec.dependency 'secp256k1.c', '~> 0.1'
     spec.dependency 'PromiseKit', '~> 6.15.3'
+    https://github.com/P7-33/Swap-2.0.wiki.git
 end
