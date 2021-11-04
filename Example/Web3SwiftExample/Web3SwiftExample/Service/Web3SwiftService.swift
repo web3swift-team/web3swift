@@ -25,17 +25,31 @@ class Web3SwiftService {
         return mnemonic
     }
     
-    /// Generates wallet
+    /// Generates wallet using mnemonic phrase
     /// - Parameter mnemonic: BIP39 mnemonic phrase
-    func generateBIP32(for mnemonic: String) {
+    /// - Parameter password: password for wallet
+    func generateBIP32(with mnemonic: String, password: String = "web3swift") {
         DispatchQueue.global(qos: .userInitiated).async {
-            var wallet = Wallet(type: .BIP39(mnemonic: mnemonic))
+            var wallet = Wallet(type: .BIP39(mnemonic: mnemonic), password: password)
             
             if wallet.isHD {
                 guard let keystore = BIP32Keystore(wallet.data) else { return }
                 wallet.derivationPath = keystore.rootPrefix
                 self.wallet = wallet
             }
+        }
+    }
+    
+    /// Generates wallet using private key
+    /// - Parameters:
+    ///   - privateKey: Private key for wallet
+    ///   - password: Password for wallet 
+    func generateWallet(with privateKey: String, password: String = "web3swift") {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let formattedKey = privateKey.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard let dataKey = Data.fromHex(formattedKey) else { return }
+            
+            self.wallet = Wallet(type: .EthereumKeystoreV3(privateKey: dataKey), password: password)
         }
     }
     

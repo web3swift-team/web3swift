@@ -30,9 +30,6 @@ class DappViewController: BrowserViewController {
         web3.addKeystoreManager(FilestoreWrapper.getKeystoreManager())
         
         self.registerBridges(for: web3)
-        
-        
-        // Do any additional setup after loading the view.
     }
 }
 class FilestoreWrapper: NSObject {

@@ -3,7 +3,8 @@ CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO
 FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/BigInt" "${PODS_CONFIGURATION_BUILD_DIR}/CryptoSwift" "${PODS_CONFIGURATION_BUILD_DIR}/PromiseKit" "${PODS_CONFIGURATION_BUILD_DIR}/Starscream" "${PODS_CONFIGURATION_BUILD_DIR}/secp256k1.c" "${PODS_CONFIGURATION_BUILD_DIR}/web3swift"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/BigInt/BigInt.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/CryptoSwift/CryptoSwift.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/PromiseKit/PromiseKit.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/Starscream/Starscream.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/secp256k1.c/secp256k1.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/web3swift/web3swift.framework/Headers"
-LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
+LD_RUNPATH_SEARCH_PATHS = $(inherited) /usr/lib/swift '@executable_path/Frameworks' '@loader_path/Frameworks'
+LIBRARY_SEARCH_PATHS = $(inherited) "${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}" /usr/lib/swift
 OTHER_LDFLAGS = $(inherited) -framework "BigInt" -framework "CoreImage" -framework "CryptoSwift" -framework "Foundation" -framework "PromiseKit" -framework "Starscream" -framework "UIKit" -framework "secp256k1" -framework "web3swift"
 OTHER_SWIFT_FLAGS = $(inherited) -D COCOAPODS
 PODS_BUILD_DIR = ${BUILD_DIR}

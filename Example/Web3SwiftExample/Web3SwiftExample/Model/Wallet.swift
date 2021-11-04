@@ -10,7 +10,7 @@ import web3swift
 
 struct Wallet {
     enum walletType {
-        case EthereumKeystoreV3
+        case EthereumKeystoreV3(privateKey: Data)
         case BIP39(mnemonic: String)
     }
     
@@ -18,8 +18,6 @@ struct Wallet {
     var name: String = "Wallet"
     /// Entropy is a measure of password strength. Usually used 128 or 256 bits.
     var bitsOfEntropy: Int = 128
-    /// We recommend here and everywhere to use the password set by the user.
-    var password = "web3swift"
     var derivationPath: String = ""
 
     /// Public key
@@ -30,24 +28,13 @@ struct Wallet {
 
     
     /// BIP-39 mnemonic phrase
-    var mnemonic: String? {
-        didSet {
-            let keystore = try! BIP32Keystore(
-                mnemonics: self.mnemonic!,
-                    password: password,
-                    mnemonicsPassword: "",
-                    language: .english)!
-            self.data = try! JSONEncoder().encode(keystore.keystoreParams)
-            self.isHD = true
-            self.address = keystore.addresses!.first!.address
-        }
-    }
+    var mnemonic: String?
     
     /// Is it HD wallet
     var isHD: Bool
 
     // MARK:- Inits
-    init(type: walletType) {
+    init(type: walletType, password: String = "web3swift") {
         switch type {
         case .EthereumKeystoreV3:
             let keystore = try! EthereumKeystoreV3(password: password)!
@@ -55,7 +42,7 @@ struct Wallet {
             self.data = try! JSONEncoder().encode(keystore.keystoreParams)
             self.isHD = false
             self.address = keystore.addresses!.first!.address
-            self.privateKey = try! keystore.UNSAFE_getPrivateKeyData(password: self.password, account: EthereumAddress(self.address)!).toHexString()
+            self.privateKey = try! keystore.UNSAFE_getPrivateKeyData(password: password, account: EthereumAddress(self.address)!).toHexString()
         case .BIP39(mnemonic: let mnemonic):
             let keystore = try! BIP32Keystore(
                                mnemonics: mnemonic,
@@ -66,7 +53,7 @@ struct Wallet {
             self.data = try! JSONEncoder().encode(keystore.keystoreParams)
             self.isHD = true
             self.address = keystore.addresses!.first!.address
-            self.privateKey = try! keystore.UNSAFE_getPrivateKeyData(password: self.password, account: EthereumAddress(self.address)!).toHexString()
+            self.privateKey = try! keystore.UNSAFE_getPrivateKeyData(password: password, account: EthereumAddress(self.address)!).toHexString()
         }
     }
 }

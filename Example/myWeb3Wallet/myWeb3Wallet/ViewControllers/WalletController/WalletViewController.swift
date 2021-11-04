@@ -63,6 +63,7 @@ class WalletViewController: UIViewController {
             print("Clicked on Mnemonics Option")
             guard let mnemonics = alert.textFields?[0].text else { return }
             print(mnemonics)
+            self.importWalletWith(mnemonics: mnemonics)
         }
         let privateKeyAction = UIAlertAction(title: "Private Key", style: .default) { _ in
             print("Clicked on Private Key Wallet Option")
@@ -117,11 +118,9 @@ class WalletViewController: UIViewController {
         let walletAddress = try? BIP32Keystore(mnemonics: mnemonics , prefixPath: "m/44'/77777'/0'/0")
         print(walletAddress?.addresses as Any)
         self.walletAddressLabel.text = "\(walletAddress?.addresses?.first?.address ?? "0x")"
-        
     }
-    
-    
 }
+
 extension WalletViewController {
     
     fileprivate func createMnemonics(){

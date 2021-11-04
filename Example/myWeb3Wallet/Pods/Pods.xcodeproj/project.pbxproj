@@ -212,7 +212,7 @@
 		86954D3235BD19D7B94330AC9CA0D5AB /* Web3+ReadingTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61329F3723A6B1ABEF3BBCD12675C0C1 /* Web3+ReadingTransaction.swift */; };
 		86AC32BC3900B807699D31D22C06A16C /* Web3+Personal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7BC9EE36F90A14659788AD767DB322 /* Web3+Personal.swift */; };
 		8919A8100FF0A5D62AB5D254FC884684 /* afterlife.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB23B3EF1286E7A0B48DF6ED3428E86B /* afterlife.swift */; };
-		89516187419F3D7FC4037DC8931E2A2A /* Browser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 12DC6A0FDF284A2C935F5EA9F6111B0B /* Browser.bundle */; };
+		89516187419F3D7FC4037DC8931E2A2A /* web3swift-Browser in Resources */ = {isa = PBXBuildFile; fileRef = 12DC6A0FDF284A2C935F5EA9F6111B0B /* web3swift-Browser */; };
 		899599790D1F3E0DE49CA1985E123C35 /* UIView+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C843E59BC22FDE9FDA54491D8F3ECCC /* UIView+AnyPromise.m */; };
 		89F43849392A22634685D2CC339648EA /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889E3ECE5439BC9C800DFD88ED2F04BD /* AES.swift */; };
 		8A6DA5FBD77B428568A3F4C38F6B0DE1 /* scalar.h in Headers */ = {isa = PBXBuildFile; fileRef = C798B4F4D8097C83111B844CBB1C3CE6 /* scalar.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -503,7 +503,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		002B1E88BA14EBF633CD66EBFBA107E9 /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		002B1E88BA14EBF633CD66EBFBA107E9 /* PromiseKit */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = PromiseKit; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0050F742D824A11AEB8424E0DD2C63DE /* AbstractKeystore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AbstractKeystore.swift; path = Sources/web3swift/KeystoreManager/AbstractKeystore.swift; sourceTree = "<group>"; };
 		00C245DA669E6E0BBAFA3115D6823007 /* BIP39.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BIP39.swift; path = Sources/web3swift/KeystoreManager/BIP39.swift; sourceTree = "<group>"; };
 		01316651403CC05C86D98D47F9CF04B3 /* Starscream-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Starscream-prefix.pch"; sourceTree = "<group>"; };
@@ -530,7 +530,7 @@
 		11657185FCE37F7674E70752DFF319F7 /* Cryptors.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Cryptors.swift; path = Sources/CryptoSwift/Cryptors.swift; sourceTree = "<group>"; };
 		127BE2CFB3F3A1C174D216B55D11EBAD /* Web3+Eth+Websocket.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Web3+Eth+Websocket.swift"; path = "Sources/web3swift/Web3/Web3+Eth+Websocket.swift"; sourceTree = "<group>"; };
 		12CFBD6C81A2CE71BA2C4F590B5D5927 /* util.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = util.h; path = secp256k1/util.h; sourceTree = "<group>"; };
-		12DC6A0FDF284A2C935F5EA9F6111B0B /* Browser.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Browser.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		12DC6A0FDF284A2C935F5EA9F6111B0B /* web3swift-Browser */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "web3swift-Browser"; path = Browser.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		138407359512A2D920EEDD6C7AEDDF81 /* ecmult.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ecmult.h; path = secp256k1/ecmult.h; sourceTree = "<group>"; };
 		14105AEFAD47B97BBFD0A972AA98DF35 /* Pods-myWeb3Wallet-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-myWeb3Wallet-umbrella.h"; sourceTree = "<group>"; };
 		141B6AEB28CFF06BE48234968D5F6490 /* GCM.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GCM.swift; path = Sources/CryptoSwift/BlockMode/GCM.swift; sourceTree = "<group>"; };
@@ -567,13 +567,13 @@
 		2AEB64E397C62A9D958096179BE64189 /* Division.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Division.swift; path = Sources/Division.swift; sourceTree = "<group>"; };
 		2B5918B5A16C03780E709CF2CDD1104C /* ABIParameterTypes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ABIParameterTypes.swift; path = Sources/web3swift/EthereumABI/ABIParameterTypes.swift; sourceTree = "<group>"; };
 		2CA6A6221D6CA8057D71BA60A8DAF0EF /* eckey_impl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = eckey_impl.h; path = secp256k1/eckey_impl.h; sourceTree = "<group>"; };
-		2D1CFEA76FE44A2E6511787F74D0794C /* wk.bridge.min.js */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.javascript; name = wk.bridge.min.js; path = Sources/web3swift/Browser/wk.bridge.min.js; sourceTree = "<group>"; };
+		2D1CFEA76FE44A2E6511787F74D0794C /* wk.bridge.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = wk.bridge.min.js; path = Sources/web3swift/Browser/wk.bridge.min.js; sourceTree = "<group>"; };
 		2DDB8CD09F1100772FC894971E35ECF6 /* BlockCipher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BlockCipher.swift; path = Sources/CryptoSwift/BlockCipher.swift; sourceTree = "<group>"; };
 		2E5F6F994922528B6B9B3A5BB5E2DA3A /* Square Root.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Square Root.swift"; path = "Sources/Square Root.swift"; sourceTree = "<group>"; };
 		307663AAE1B15058CDCC30A8C3B476C6 /* PromiseKit-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "PromiseKit-Info.plist"; sourceTree = "<group>"; };
 		30F6DD109D1E925101993EF13CC1B6DD /* Encodable+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Encodable+Extensions.swift"; path = "Sources/web3swift/Convenience/Encodable+Extensions.swift"; sourceTree = "<group>"; };
 		3241E63D9616921B2EB997B33DA65015 /* Bitwise Ops.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Bitwise Ops.swift"; path = "Sources/Bitwise Ops.swift"; sourceTree = "<group>"; };
-		332A47430CFF99501D563788C7AAF1D2 /* secp256k1.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = secp256k1.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		332A47430CFF99501D563788C7AAF1D2 /* secp256k1.c */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = secp256k1.c; path = secp256k1.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3339301FC43964D4764CDC289EBDD39E /* ABIEncoding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ABIEncoding.swift; path = Sources/web3swift/EthereumABI/ABIEncoding.swift; sourceTree = "<group>"; };
 		33D9C3E44151CA8DAEC4B95DEEE84E07 /* Array+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Array+Extension.swift"; path = "Sources/CryptoSwift/Array+Extension.swift"; sourceTree = "<group>"; };
 		3402BA34F808F411E48E41CD59F05FCE /* Web3+ERC1643.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Web3+ERC1643.swift"; path = "Sources/web3swift/Tokens/ERC1643/Web3+ERC1643.swift"; sourceTree = "<group>"; };
@@ -711,23 +711,23 @@
 		8456FEA753DE9A90D304EA54DFD5DAD3 /* NSURLSession+AnyPromise.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSURLSession+AnyPromise.m"; path = "Extensions/Foundation/Sources/NSURLSession+AnyPromise.m"; sourceTree = "<group>"; };
 		8552720D720D203E2444F5263C6A4021 /* PBKDF1.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PBKDF1.swift; path = Sources/CryptoSwift/PKCS/PBKDF1.swift; sourceTree = "<group>"; };
 		856EEADEDD158D4873F666AE218DE570 /* PMKUIKit.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PMKUIKit.h; path = Extensions/UIKit/Sources/PMKUIKit.h; sourceTree = "<group>"; };
-		85D99C55C6D2A7368634E17D0FC07D22 /* secp256k1.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = secp256k1.c; path = secp256k1/secp256k1.c; sourceTree = "<group>"; };
+		85D99C55C6D2A7368634E17D0FC07D22 /* secp256k1.c */ = {isa = PBXFileReference; includeInIndex = 1; name = secp256k1.c; path = secp256k1/secp256k1.c; sourceTree = "<group>"; };
 		861A826AE843EA63A9502FDE98A45BB7 /* num_gmp_impl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = num_gmp_impl.h; path = secp256k1/num_gmp_impl.h; sourceTree = "<group>"; };
 		871B8E61AECB22BF7E4F511683743783 /* Pods-myWeb3Wallet-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-myWeb3Wallet-Info.plist"; sourceTree = "<group>"; };
 		878D77F928A64BCC11C2A541B02CA9F2 /* Pods-myWeb3Wallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-myWeb3Wallet.release.xcconfig"; sourceTree = "<group>"; };
 		889E3ECE5439BC9C800DFD88ED2F04BD /* AES.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AES.swift; path = Sources/CryptoSwift/AES.swift; sourceTree = "<group>"; };
 		8907A4B63AEF5B00260E490E38ACCE3E /* BigUInt.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BigUInt.swift; path = Sources/BigUInt.swift; sourceTree = "<group>"; };
-		891B2270823847ED23F2ECFC28F935EC /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		891B2270823847ED23F2ECFC28F935EC /* Starscream */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Starscream; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		89216AD64050A687049C2812AE6F2D3D /* secp256k1.c.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = secp256k1.c.modulemap; sourceTree = "<group>"; };
 		89E3E5798A0F9C8B82F89E4AA1C9B933 /* firstly.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = firstly.swift; path = Sources/firstly.swift; sourceTree = "<group>"; };
-		8A2449DF78D58AD33A7C7504BB3F38A0 /* web3swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = web3swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A2449DF78D58AD33A7C7504BB3F38A0 /* web3swift */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = web3swift; path = web3swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AA0DDDD58D43515BE066493834EE7F7 /* HTTPHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HTTPHandler.swift; path = Sources/Framer/HTTPHandler.swift; sourceTree = "<group>"; };
 		8AFCDD28CDD4C6AB23094990AABE6DE9 /* AES.Cryptors.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AES.Cryptors.swift; path = Sources/CryptoSwift/AES.Cryptors.swift; sourceTree = "<group>"; };
 		8C020773045EBAC1BB6CC4DCF9CF70E8 /* Pods-myWeb3WalletTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-myWeb3WalletTests-dummy.m"; sourceTree = "<group>"; };
 		8D144717D9392F89398A95CE943E7FCD /* ecmult_impl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ecmult_impl.h; path = secp256k1/ecmult_impl.h; sourceTree = "<group>"; };
 		8DB09F270FE9B4BDA5AFBD4357E646CE /* Pods-myWeb3Wallet-myWeb3WalletUITests */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-myWeb3Wallet-myWeb3WalletUITests"; path = Pods_myWeb3Wallet_myWeb3WalletUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DC49762D0D20DA70D0F705EC08E302F /* after.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = after.m; path = Sources/after.m; sourceTree = "<group>"; };
-		91BB24BA472AF523E913108C9AA301F2 /* BigInt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BigInt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		91BB24BA472AF523E913108C9AA301F2 /* BigInt */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = BigInt; path = BigInt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		91E170E8B0E46F448434AEDA45BE7201 /* Comparable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Comparable.swift; path = Sources/Comparable.swift; sourceTree = "<group>"; };
 		9217736E16B090E354FA8D7B1F16A693 /* BigInt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BigInt.debug.xcconfig; sourceTree = "<group>"; };
 		9272051904F9CDACCBD8DE527C05C8A0 /* PMKFoundation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PMKFoundation.h; path = Extensions/Foundation/Sources/PMKFoundation.h; sourceTree = "<group>"; };
@@ -751,7 +751,7 @@
 		9B72CCFE3D10F1F6A2457EC5730BA509 /* Promise+Web3+Eth+GetAccounts.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Promise+Web3+Eth+GetAccounts.swift"; path = "Sources/web3swift/Promises/Promise+Web3+Eth+GetAccounts.swift"; sourceTree = "<group>"; };
 		9C1F8F8C962B269D1B535A7E69211345 /* Codable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Codable.swift; path = Sources/Codable.swift; sourceTree = "<group>"; };
 		9CDA08FC40E440445F5B1C2087699FA4 /* Data+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Data+Extension.swift"; path = "Sources/web3swift/Convenience/Data+Extension.swift"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9DA7F20BAF89DD9B24B85E9A1A2B4FD2 /* ENSReverseRegistrar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ENSReverseRegistrar.swift; path = Sources/web3swift/Utils/ENS/ENSReverseRegistrar.swift; sourceTree = "<group>"; };
 		9DBB832EE6B1A46B6B06C03F1FB46839 /* Promise+Web3+Eth+GetGasPrice.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Promise+Web3+Eth+GetGasPrice.swift"; path = "Sources/web3swift/Promises/Promise+Web3+Eth+GetGasPrice.swift"; sourceTree = "<group>"; };
 		9DFDD8684C07E988EE7BEF8AB894F1C3 /* Web3+ERC888.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Web3+ERC888.swift"; path = "Sources/web3swift/Tokens/ERC888/Web3+ERC888.swift"; sourceTree = "<group>"; };
@@ -785,7 +785,7 @@
 		B283E7DB525627BCDF8B64F25F729738 /* Promise+HttpProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Promise+HttpProvider.swift"; path = "Sources/web3swift/Promises/Promise+HttpProvider.swift"; sourceTree = "<group>"; };
 		B2D684B79FC7FFF779E5AF645F1E8129 /* RIPEMD160+StackOveflow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "RIPEMD160+StackOveflow.swift"; path = "Sources/web3swift/Convenience/RIPEMD160+StackOveflow.swift"; sourceTree = "<group>"; };
 		B373FED6638B961B7A97AABD5280E615 /* Promise+Web3+Eth+Call.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Promise+Web3+Eth+Call.swift"; path = "Sources/web3swift/Promises/Promise+Web3+Eth+Call.swift"; sourceTree = "<group>"; };
-		B3B83F5426FCB99B70C9BA58611231F2 /* browser.min.js */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.javascript; name = browser.min.js; path = Sources/web3swift/Browser/browser.min.js; sourceTree = "<group>"; };
+		B3B83F5426FCB99B70C9BA58611231F2 /* browser.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = browser.min.js; path = Sources/web3swift/Browser/browser.min.js; sourceTree = "<group>"; };
 		B3CA76593B24771BFE57E65E82FABF4D /* hash.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = hash.h; path = secp256k1/hash.h; sourceTree = "<group>"; };
 		B4C26BFD4C4F0041CB43065B7C15190C /* Blowfish.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Blowfish.swift; path = Sources/CryptoSwift/Blowfish.swift; sourceTree = "<group>"; };
 		B4FC29C6A531D0517444640A0FDF354E /* Pods-myWeb3Wallet-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-myWeb3Wallet-acknowledgements.plist"; sourceTree = "<group>"; };
@@ -869,7 +869,7 @@
 		E4A02AC333F90D23C1B6F38D7E3EAFD0 /* Pods-myWeb3WalletTests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-myWeb3WalletTests-Info.plist"; sourceTree = "<group>"; };
 		E55E8B81407082884426231F92E19AED /* Cipher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Cipher.swift; path = Sources/CryptoSwift/Cipher.swift; sourceTree = "<group>"; };
 		E6C3B21AB95E51A2D26F2C42C0A2C164 /* basic-config.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "basic-config.h"; path = "secp256k1/basic-config.h"; sourceTree = "<group>"; };
-		E71A523B7024293D61E1102B9CC22823 /* browser.js */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.javascript; name = browser.js; path = Sources/web3swift/Browser/browser.js; sourceTree = "<group>"; };
+		E71A523B7024293D61E1102B9CC22823 /* browser.js */ = {isa = PBXFileReference; includeInIndex = 1; name = browser.js; path = Sources/web3swift/Browser/browser.js; sourceTree = "<group>"; };
 		E725C147A5A1C727AA89210D74D57CBF /* Utils+Foundation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Utils+Foundation.swift"; path = "Sources/CryptoSwift/Foundation/Utils+Foundation.swift"; sourceTree = "<group>"; };
 		E76D73543A413D250E98C170B65439FE /* StringHTTPHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StringHTTPHandler.swift; path = Sources/Framer/StringHTTPHandler.swift; sourceTree = "<group>"; };
 		E77EA545335C3D935F993E0EC64F9B1D /* NSURLSession+Promise.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "NSURLSession+Promise.swift"; path = "Extensions/Foundation/Sources/NSURLSession+Promise.swift"; sourceTree = "<group>"; };
@@ -897,7 +897,7 @@
 		F7902A028BC075F44A5B91EA5C782640 /* Configuration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Configuration.swift; path = Sources/Configuration.swift; sourceTree = "<group>"; };
 		F7C0A6F898A3FC267475D1DAA9F64305 /* ecmult_const_impl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ecmult_const_impl.h; path = secp256k1/ecmult_const_impl.h; sourceTree = "<group>"; };
 		F7C21A8D4CE9BE9389B1B027A7F1684A /* Floating Point Conversion.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Floating Point Conversion.swift"; path = "Sources/Floating Point Conversion.swift"; sourceTree = "<group>"; };
-		F81274EDB681F11E7CB05F7DCA2BB33C /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F81274EDB681F11E7CB05F7DCA2BB33C /* CryptoSwift */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CryptoSwift; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8A625D05EC1B896D29CA0FCFF4B4395 /* CMAC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CMAC.swift; path = Sources/CryptoSwift/CMAC.swift; sourceTree = "<group>"; };
 		F8C128F18673E79A6E143D83ECDB3AEB /* Framer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Framer.swift; path = Sources/Framer/Framer.swift; sourceTree = "<group>"; };
 		F91048DD1C7E59A1DD091512416C06A4 /* Web3+Wallet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Web3+Wallet.swift"; path = "Sources/web3swift/HookedFunctions/Web3+Wallet.swift"; sourceTree = "<group>"; };
@@ -1064,16 +1064,16 @@
 		0DF01B081E3CE50BBDCBDC81675BF37D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				91BB24BA472AF523E913108C9AA301F2 /* BigInt.framework */,
-				F81274EDB681F11E7CB05F7DCA2BB33C /* CryptoSwift.framework */,
+				91BB24BA472AF523E913108C9AA301F2 /* BigInt */,
+				F81274EDB681F11E7CB05F7DCA2BB33C /* CryptoSwift */,
 				08A8472B9823BC68472175977392F4B9 /* Pods-myWeb3Wallet */,
 				8DB09F270FE9B4BDA5AFBD4357E646CE /* Pods-myWeb3Wallet-myWeb3WalletUITests */,
 				11103C5C5CFDD9B3B2EA4E84B98049A8 /* Pods-myWeb3WalletTests */,
-				002B1E88BA14EBF633CD66EBFBA107E9 /* PromiseKit.framework */,
-				332A47430CFF99501D563788C7AAF1D2 /* secp256k1.framework */,
-				891B2270823847ED23F2ECFC28F935EC /* Starscream.framework */,
-				8A2449DF78D58AD33A7C7504BB3F38A0 /* web3swift.framework */,
-				12DC6A0FDF284A2C935F5EA9F6111B0B /* Browser.bundle */,
+				002B1E88BA14EBF633CD66EBFBA107E9 /* PromiseKit */,
+				332A47430CFF99501D563788C7AAF1D2 /* secp256k1.c */,
+				891B2270823847ED23F2ECFC28F935EC /* Starscream */,
+				8A2449DF78D58AD33A7C7504BB3F38A0 /* web3swift */,
+				12DC6A0FDF284A2C935F5EA9F6111B0B /* web3swift-Browser */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1182,6 +1182,7 @@
 				C3548788EB8345E15691BB5699B8300D /* Support Files */,
 				E4252E85FC6716FF11013746B8F44E37 /* UIKit */,
 			);
+			name = PromiseKit;
 			path = PromiseKit;
 			sourceTree = "<group>";
 		};
@@ -1292,6 +1293,7 @@
 				5CC9E23320B8991F34BC31A01FB21A1C /* ZeroPadding.swift */,
 				B1F341B2BE61C900DD9EA2A9B56A8FB9 /* Support Files */,
 			);
+			name = CryptoSwift;
 			path = CryptoSwift;
 			sourceTree = "<group>";
 		};
@@ -1432,6 +1434,7 @@
 				37EB84EB9EE271BE501D87C519F8420A /* Resources */,
 				572EDFECC902962660EEB1CB04EA2F19 /* Support Files */,
 			);
+			name = web3swift;
 			path = web3swift;
 			sourceTree = "<group>";
 		};
@@ -1485,6 +1488,7 @@
 				12CFBD6C81A2CE71BA2C4F590B5D5927 /* util.h */,
 				4FA755BC662B391E20D9C601F408FC81 /* Support Files */,
 			);
+			name = secp256k1.c;
 			path = secp256k1.c;
 			sourceTree = "<group>";
 		};
@@ -1586,6 +1590,7 @@
 				5C8F369ECC895BB94124AC2173EB80ED /* Words and Bits.swift */,
 				80B7A94A648E0A02BA2B76640AFA293F /* Support Files */,
 			);
+			name = BigInt;
 			path = BigInt;
 			sourceTree = "<group>";
 		};
@@ -1614,6 +1619,7 @@
 				3B81B518FB1855580F5B38EBB277693E /* WSEngine.swift */,
 				38FF7B99E4C0BC8A75F62E500F3A8994 /* Support Files */,
 			);
+			name = Starscream;
 			path = Starscream;
 			sourceTree = "<group>";
 		};
@@ -1783,7 +1789,7 @@
 			);
 			name = BigInt;
 			productName = BigInt;
-			productReference = 91BB24BA472AF523E913108C9AA301F2 /* BigInt.framework */;
+			productReference = 91BB24BA472AF523E913108C9AA301F2 /* BigInt */;
 			productType = "com.apple.product-type.framework";
 		};
 		161C26511FC920CB146236AB7295D5E0 /* secp256k1.c */ = {
@@ -1801,7 +1807,7 @@
 			);
 			name = secp256k1.c;
 			productName = secp256k1;
-			productReference = 332A47430CFF99501D563788C7AAF1D2 /* secp256k1.framework */;
+			productReference = 332A47430CFF99501D563788C7AAF1D2 /* secp256k1.c */;
 			productType = "com.apple.product-type.framework";
 		};
 		7C579CE66A1E7A9AA33CA5F97F9C22C5 /* PromiseKit */ = {
@@ -1819,7 +1825,7 @@
 			);
 			name = PromiseKit;
 			productName = PromiseKit;
-			productReference = 002B1E88BA14EBF633CD66EBFBA107E9 /* PromiseKit.framework */;
+			productReference = 002B1E88BA14EBF633CD66EBFBA107E9 /* PromiseKit */;
 			productType = "com.apple.product-type.framework";
 		};
 		8CDD759A6130CA265C6D157F4407C39B /* web3swift-Browser */ = {
@@ -1836,7 +1842,7 @@
 			);
 			name = "web3swift-Browser";
 			productName = Browser;
-			productReference = 12DC6A0FDF284A2C935F5EA9F6111B0B /* Browser.bundle */;
+			productReference = 12DC6A0FDF284A2C935F5EA9F6111B0B /* web3swift-Browser */;
 			productType = "com.apple.product-type.bundle";
 		};
 		99313990C1D76A6D1D017868B6975CC8 /* CryptoSwift */ = {
@@ -1854,7 +1860,7 @@
 			);
 			name = CryptoSwift;
 			productName = CryptoSwift;
-			productReference = F81274EDB681F11E7CB05F7DCA2BB33C /* CryptoSwift.framework */;
+			productReference = F81274EDB681F11E7CB05F7DCA2BB33C /* CryptoSwift */;
 			productType = "com.apple.product-type.framework";
 		};
 		99364D9FB07EF3FA5DFE1237001805EC /* web3swift */ = {
@@ -1878,7 +1884,7 @@
 			);
 			name = web3swift;
 			productName = web3swift;
-			productReference = 8A2449DF78D58AD33A7C7504BB3F38A0 /* web3swift.framework */;
+			productReference = 8A2449DF78D58AD33A7C7504BB3F38A0 /* web3swift */;
 			productType = "com.apple.product-type.framework";
 		};
 		9B78EE4AF6AE03E79D88886319853FF7 /* Starscream */ = {
@@ -1896,7 +1902,7 @@
 			);
 			name = Starscream;
 			productName = Starscream;
-			productReference = 891B2270823847ED23F2ECFC28F935EC /* Starscream.framework */;
+			productReference = 891B2270823847ED23F2ECFC28F935EC /* Starscream */;
 			productType = "com.apple.product-type.framework";
 		};
 		A3E8E30CED7400C4962623E6F83EC78E /* Pods-myWeb3Wallet-myWeb3WalletUITests */ = {
@@ -1954,7 +1960,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1240;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 13.0";
@@ -2023,7 +2029,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89516187419F3D7FC4037DC8931E2A2A /* Browser.bundle in Resources */,
+				89516187419F3D7FC4037DC8931E2A2A /* web3swift-Browser in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2583,7 +2589,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/BigInt/BigInt-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/BigInt/BigInt-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2655,7 +2661,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CryptoSwift/CryptoSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CryptoSwift/CryptoSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2689,7 +2695,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/secp256k1.c/secp256k1.c-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/secp256k1.c/secp256k1.c-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2724,7 +2730,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/web3swift/web3swift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/web3swift/web3swift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2797,7 +2803,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/web3swift/web3swift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/web3swift/web3swift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2869,7 +2875,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/BigInt/BigInt-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/BigInt/BigInt-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2895,7 +2901,7 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/web3swift";
 				IBSC_MODULE = web3swift;
 				INFOPLIST_FILE = "Target Support Files/web3swift/ResourceBundle-Browser-web3swift-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = Browser;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2919,7 +2925,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/PromiseKit/PromiseKit-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/PromiseKit/PromiseKit-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2954,7 +2960,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/PromiseKit/PromiseKit-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/PromiseKit/PromiseKit-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2988,7 +2994,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Starscream/Starscream-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Starscream/Starscream-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3150,7 +3156,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/secp256k1.c/secp256k1.c-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/secp256k1.c/secp256k1.c-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3176,7 +3182,7 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/web3swift";
 				IBSC_MODULE = web3swift;
 				INFOPLIST_FILE = "Target Support Files/web3swift/ResourceBundle-Browser-web3swift-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				PRODUCT_NAME = Browser;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -3200,7 +3206,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Starscream/Starscream-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Starscream/Starscream-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3309,7 +3315,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/CryptoSwift/CryptoSwift-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/CryptoSwift/CryptoSwift-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
