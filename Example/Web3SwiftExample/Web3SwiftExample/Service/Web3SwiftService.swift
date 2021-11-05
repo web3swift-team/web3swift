@@ -10,25 +10,28 @@ import web3swift
 
 class Web3SwiftService {
     // MARK:- Properties
-    var mnemonic: String?
+    var mnemonic: String = "" 
     var wallet: Wallet?
     var keystoreManager: KeystoreManager?
     var password: String = "web3swift"
     
     // MARK:- Functions
     /// Generates mnemonic phrase
-    func generateBIP39() -> String? {
+    func generateBIP39(completion: @escaping (String?) -> ()) {
         DispatchQueue.global(qos: .userInitiated).async {
-            self.mnemonic = try? BIP39.generateMnemonics(bitsOfEntropy: 128)
+            if let mnemonic = try? BIP39.generateMnemonics(bitsOfEntropy: 128) {
+                self.mnemonic = mnemonic
+            }
+            DispatchQueue.main.async {
+                completion(self.mnemonic)
+            }
         }
-        
-        return mnemonic
     }
     
     /// Generates wallet using mnemonic phrase
     /// - Parameter mnemonic: BIP39 mnemonic phrase
     /// - Parameter password: password for wallet
-    func generateBIP32(with mnemonic: String, password: String = "web3swift") {
+    func generateBIP32(with mnemonic: String, password: String = "web3swift", completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .userInitiated).async {
             var wallet = Wallet(type: .BIP39(mnemonic: mnemonic), password: password)
             
@@ -36,6 +39,9 @@ class Web3SwiftService {
                 guard let keystore = BIP32Keystore(wallet.data) else { return }
                 wallet.derivationPath = keystore.rootPrefix
                 self.wallet = wallet
+                DispatchQueue.main.async {
+                    completion()
+                }
             }
         }
     }
@@ -43,13 +49,16 @@ class Web3SwiftService {
     /// Generates wallet using private key
     /// - Parameters:
     ///   - privateKey: Private key for wallet
-    ///   - password: Password for wallet 
-    func generateWallet(with privateKey: String, password: String = "web3swift") {
+    ///   - password: Password for wallet
+    func generateWallet(with privateKey: String, password: String = "web3swift", completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .userInitiated).async {
             let formattedKey = privateKey.trimmingCharacters(in: .whitespacesAndNewlines)
             guard let dataKey = Data.fromHex(formattedKey) else { return }
             
             self.wallet = Wallet(type: .EthereumKeystoreV3(privateKey: dataKey), password: password)
+            DispatchQueue.main.async {
+                completion()
+            }
         }
     }
     
@@ -68,17 +77,5 @@ class Web3SwiftService {
         }
         
         return keystoreManager
-    }
-    
-    private func generatePrivateKey() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            guard let wallet = self.wallet,
-                  let ethereumAddress = EthereumAddress(wallet.address),
-                  let keystoreManager = self.getKeystoreManager()
-            else { return }
-            
-            let privateKey = try! keystoreManager.UNSAFE_getPrivateKeyData(password: self.password, account: ethereumAddress).toHexString()
-            self.wallet?.privateKey = privateKey
-        }
     }
 }

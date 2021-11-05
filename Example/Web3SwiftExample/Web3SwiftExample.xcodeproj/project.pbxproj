@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		88483B77273423E7009BF5AD /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88483B76273423E7009BF5AD /* MainTabBarViewController.swift */; };
+		88483B7A273424D7009BF5AD /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88483B79273424D7009BF5AD /* WalletViewController.swift */; };
+		88483B7E27342C7F009BF5AD /* WalletView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 88483B7D27342C7F009BF5AD /* WalletView.xib */; };
 		88CE90CF2732CD1500246051 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE90CE2732CD1500246051 /* AppDelegate.swift */; };
 		88CE90D12732CD1500246051 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE90D02732CD1500246051 /* SceneDelegate.swift */; };
-		88CE90D32732CD1500246051 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE90D22732CD1500246051 /* ViewController.swift */; };
-		88CE90D62732CD1500246051 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88CE90D42732CD1500246051 /* Main.storyboard */; };
 		88CE90D82732CD1500246051 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88CE90D72732CD1500246051 /* Assets.xcassets */; };
 		88CE90DB2732CD1500246051 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88CE90D92732CD1500246051 /* LaunchScreen.storyboard */; };
 		88CE90E42732D03B00246051 /* Web3SwiftService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE90E32732D03B00246051 /* Web3SwiftService.swift */; };
@@ -22,11 +23,12 @@
 		2307EFD0D0507F85D35F7CB3 /* Pods-Web3SwiftExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Web3SwiftExample.debug.xcconfig"; path = "Target Support Files/Pods-Web3SwiftExample/Pods-Web3SwiftExample.debug.xcconfig"; sourceTree = "<group>"; };
 		5432A953527953CF663E9CE7 /* Pods-Web3SwiftExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Web3SwiftExample.release.xcconfig"; path = "Target Support Files/Pods-Web3SwiftExample/Pods-Web3SwiftExample.release.xcconfig"; sourceTree = "<group>"; };
 		75010C5BFD447810EC8EDA06 /* Pods_Web3SwiftExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Web3SwiftExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		88483B76273423E7009BF5AD /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
+		88483B79273424D7009BF5AD /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
+		88483B7D27342C7F009BF5AD /* WalletView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WalletView.xib; sourceTree = "<group>"; };
 		88CE90CB2732CD1500246051 /* Web3SwiftExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Web3SwiftExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88CE90CE2732CD1500246051 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		88CE90D02732CD1500246051 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		88CE90D22732CD1500246051 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		88CE90D52732CD1500246051 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		88CE90D72732CD1500246051 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		88CE90DA2732CD1500246051 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		88CE90DC2732CD1500246051 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -54,6 +56,43 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		88483B73273423C8009BF5AD /* SupportFiles */ = {
+			isa = PBXGroup;
+			children = (
+				88CE90CE2732CD1500246051 /* AppDelegate.swift */,
+				88CE90D02732CD1500246051 /* SceneDelegate.swift */,
+				88CE90D72732CD1500246051 /* Assets.xcassets */,
+				88CE90D92732CD1500246051 /* LaunchScreen.storyboard */,
+			);
+			path = SupportFiles;
+			sourceTree = "<group>";
+		};
+		88483B74273423D6009BF5AD /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				88483B78273424AE009BF5AD /* WalletModule */,
+				88483B75273423DC009BF5AD /* MainModule */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		88483B75273423DC009BF5AD /* MainModule */ = {
+			isa = PBXGroup;
+			children = (
+				88483B76273423E7009BF5AD /* MainTabBarViewController.swift */,
+			);
+			path = MainModule;
+			sourceTree = "<group>";
+		};
+		88483B78273424AE009BF5AD /* WalletModule */ = {
+			isa = PBXGroup;
+			children = (
+				88483B79273424D7009BF5AD /* WalletViewController.swift */,
+				88483B7D27342C7F009BF5AD /* WalletView.xib */,
+			);
+			path = WalletModule;
+			sourceTree = "<group>";
+		};
 		88CE90C22732CD1500246051 = {
 			isa = PBXGroup;
 			children = (
@@ -75,14 +114,10 @@
 		88CE90CD2732CD1500246051 /* Web3SwiftExample */ = {
 			isa = PBXGroup;
 			children = (
+				88483B74273423D6009BF5AD /* Modules */,
 				88CE90E52732D20800246051 /* Model */,
 				88CE90E22732D02A00246051 /* Service */,
-				88CE90CE2732CD1500246051 /* AppDelegate.swift */,
-				88CE90D02732CD1500246051 /* SceneDelegate.swift */,
-				88CE90D22732CD1500246051 /* ViewController.swift */,
-				88CE90D42732CD1500246051 /* Main.storyboard */,
-				88CE90D72732CD1500246051 /* Assets.xcassets */,
-				88CE90D92732CD1500246051 /* LaunchScreen.storyboard */,
+				88483B73273423C8009BF5AD /* SupportFiles */,
 				88CE90DC2732CD1500246051 /* Info.plist */,
 			);
 			path = Web3SwiftExample;
@@ -173,9 +208,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88483B7E27342C7F009BF5AD /* WalletView.xib in Resources */,
 				88CE90DB2732CD1500246051 /* LaunchScreen.storyboard in Resources */,
 				88CE90D82732CD1500246051 /* Assets.xcassets in Resources */,
-				88CE90D62732CD1500246051 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,25 +263,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88483B77273423E7009BF5AD /* MainTabBarViewController.swift in Sources */,
 				88CE90E72732D20F00246051 /* Wallet.swift in Sources */,
 				88CE90E42732D03B00246051 /* Web3SwiftService.swift in Sources */,
-				88CE90D32732CD1500246051 /* ViewController.swift in Sources */,
 				88CE90CF2732CD1500246051 /* AppDelegate.swift in Sources */,
 				88CE90D12732CD1500246051 /* SceneDelegate.swift in Sources */,
+				88483B7A273424D7009BF5AD /* WalletViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		88CE90D42732CD1500246051 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				88CE90D52732CD1500246051 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		88CE90D92732CD1500246051 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
