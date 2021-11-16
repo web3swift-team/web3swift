@@ -264,7 +264,6 @@
 		13C338F621B6C62400F33F5E /* secp256k1_ec_mult_static_context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = secp256k1_ec_mult_static_context.h; sourceTree = "<group>"; };
 		13C338F721B6C62400F33F5E /* scratch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scratch.h; sourceTree = "<group>"; };
 		13CE02B021FC846800CE7148 /* RELEASE_GUIDE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = RELEASE_GUIDE.md; sourceTree = "<group>"; };
-		13CE02B121FC846900CE7148 /* BUILD_GUIDE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = BUILD_GUIDE.md; sourceTree = "<group>"; };
 		2AC22E352525C2000072F037 /* PathAddressStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathAddressStorage.swift; sourceTree = "<group>"; };
 		3A7EA35D2280EA9A005120C2 /* Encodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extensions.swift"; sourceTree = "<group>"; };
 		3A7EA35F2280EB27005120C2 /* Decodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decodable+Extensions.swift"; sourceTree = "<group>"; };
@@ -412,7 +411,6 @@
 		E22A911E241ED71A00EC1021 /* browser.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.min.js; sourceTree = "<group>"; };
 		E252E67E26B403F500717C16 /* web3swift_helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_helpers.swift; sourceTree = "<group>"; };
 		E2B7670F241ED479007EBFE3 /* browser.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.js; sourceTree = "<group>"; };
-		E2D081C72402F6900082EA93 /* CONTRIBUTION_POLICY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTION_POLICY.md; sourceTree = "<group>"; };
 		E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		E2EDC5EB241EE18700410EA6 /* wk.bridge.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = wk.bridge.min.js; sourceTree = "<group>"; };
 		E2EDC5ED241EE1E600410EA6 /* Bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bridge.swift; sourceTree = "<group>"; };
@@ -964,9 +962,7 @@
 			children = (
 				3AA8163D2276E56D00F5DB52 /* Usage.md */,
 				3AA8163C2276E56D00F5DB52 /* web3swift 2.0 Migration Guide.md */,
-				E2D081C72402F6900082EA93 /* CONTRIBUTION_POLICY.md */,
 				13CE02B021FC846800CE7148 /* RELEASE_GUIDE.md */,
-				13CE02B121FC846900CE7148 /* BUILD_GUIDE.md */,
 			);
 			path = Documentation;
 			sourceTree = "<group>";
