@@ -191,7 +191,6 @@
 		5C03EADF274406410052C66D /* web3swift_AdvancedABIv2_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C03EACD274406400052C66D /* web3swift_AdvancedABIv2_Tests.swift */; };
 		5C03EAE0274406410052C66D /* web3swift_transactions_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C03EACE274406410052C66D /* web3swift_transactions_Tests.swift */; };
 		CB50A52827060BD600D7E39B /* web3swift_EIP712_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50A52727060BD600D7E39B /* web3swift_EIP712_Tests.swift */; };
-		CB50A52A27060C5300D7E39B /* EIP712.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50A52927060C5300D7E39B /* EIP712.swift */; };
 		E22A911F241ED71A00EC1021 /* browser.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E22A911E241ED71A00EC1021 /* browser.min.js */; };
 		E252E67F26B403F500717C16 /* web3swift_helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E252E67E26B403F500717C16 /* web3swift_helpers.swift */; };
 		E2B76710241ED479007EBFE3 /* browser.js in Resources */ = {isa = PBXBuildFile; fileRef = E2B7670F241ED479007EBFE3 /* browser.js */; };
@@ -1373,7 +1372,6 @@
 			files = (
 				5C03EAD7274406410052C66D /* web3swift_EIP67_Tests.swift in Sources */,
 				5C03EAD2274406410052C66D /* web3swift_ObjC_Tests.swift in Sources */,
-				CB50A52A27060C5300D7E39B /* EIP712.swift in Sources */,
 				5C03EADE274406410052C66D /* web3swift_User_cases.swift in Sources */,
 				5C03EAD6274406410052C66D /* web3swift_EIP681_Tests.swift in Sources */,
 				5C03EAB9274406340052C66D /* web3swift_ENS_Tests.swift in Sources */,

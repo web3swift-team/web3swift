@@ -38,7 +38,9 @@
       </MacroExpansion>
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES"
+            testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "139751B6219AF76D0044D2B0"
@@ -46,11 +48,6 @@
                BlueprintName = "Tests"
                ReferencedContainer = "container:web3swift.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "web3swift_websocket_Tests">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>
