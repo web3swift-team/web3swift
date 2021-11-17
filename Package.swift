@@ -7,9 +7,6 @@ import PackageDescription
 #if os(macOS)
 let excludeFiles = [
     "./Browser/BrowserViewController.swift", // Because of inheriting iOS only class failed to build on macOS.
-    "./Browser/browser.js",
-    "./Browser/browser.min.js",
-    "./Browser/wk.bridge.min.js"
 ]
 #elseif os(iOS)
 let excludeFiles: String = []
@@ -32,11 +29,15 @@ let package = Package(
     ],
     targets: [
         .target(name: "secp256k1"),
-
         .target(
             name: "web3swift",
             dependencies: ["BigInt", "secp256k1", "PromiseKit", "Starscream", "CryptoSwift"],
-            exclude: excludeFiles
+            exclude: excludeFiles,
+            resources: [
+                .copy("./Browser/browser.js"),
+                .copy("./Browser/browser.min.js"),
+                .copy("./Browser/wk.bridge.min.js")
+            ]
         ),
         .testTarget(
             name: "web3swiftTests",
