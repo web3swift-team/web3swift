@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -19,17 +19,32 @@ let package = Package(
         .package(url: "https://github.com/daltoniam/Starscream.git", from: "4.0.4"),
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.4.2"),
     ],
-    targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages which this package depends on.
-        .target(name: "secp256k1"),
-        .target(
-            name: "web3swift",
-            dependencies: ["BigInt", "secp256k1", "PromiseKit", "Starscream", "CryptoSwift"],
-            exclude: [
-            ]),
-        .testTarget(
-            name: "web3swiftTests",
-            dependencies: ["web3swift"]),
-    ]
+	targets: {
+		var targets: [Target] = [
+			.target(name: "secp256k1"),
+			.testTarget(
+				name: "web3swiftTests",
+				dependencies: ["web3swift"])
+		]
+		
+#if os(iOS)
+		// iOS build platform
+		targets.append(contentsOf: [
+			.target(
+				name: "web3swift",
+				dependencies: ["BigInt", "secp256k1", "PromiseKit", "Starscream", "CryptoSwift"]
+			)
+		])
+#else
+		// not iOS build platform, e.g. macOS, linux
+		targets.append(contentsOf: [
+			.target(
+				name: "web3swift",
+				dependencies: ["BigInt", "secp256k1", "PromiseKit", "Starscream", "CryptoSwift"],
+				exclude: ["Browser"]
+			)
+		])
+#endif
+		return targets
+	}()
 )
