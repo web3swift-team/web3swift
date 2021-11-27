@@ -35,8 +35,6 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="65" id="HVG-2p-Mc4"/>
                     </constraints>
-                    <string key="text">derive crime pioneer fault impose tragic stamp wreck gentle toss output wife
-</string>
                     <color key="textColor" systemColor="labelColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -53,7 +51,8 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="65" id="xxw-E6-35k"/>
                     </constraints>
-                    <string key="text">0x1113Ee76928c13e58652363B26381CEFF0F6C544
+                    <string key="text" base64-UTF8="YES">
+Cg
 </string>
                     <color key="textColor" systemColor="labelColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -72,27 +71,28 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DXJ-gc-avx">
-                    <rect key="frame" x="20" y="439" width="374" height="61"/>
-                    <string key="text">d829206df60878a0ebd515ebc0fe1fd7fa7d70f0fb797f97335afa310c0c057a
+                    <rect key="frame" x="20" y="439" width="374" height="41"/>
+                    <string key="text" base64-UTF8="YES">
+Cg
 </string>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Derrivation path" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UP5-y9-9xe">
-                    <rect key="frame" x="20" y="520" width="132" height="21"/>
+                    <rect key="frame" x="20" y="500" width="132" height="21"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="m/44'/60'/0'/0/0" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sMk-yX-nZp">
-                    <rect key="frame" x="20" y="556" width="374" height="20.5"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sMk-yX-nZp">
+                    <rect key="frame" x="20" y="536" width="374" height="0.0"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Muo-GL-bcO">
-                    <rect key="frame" x="20" y="616.5" width="374" height="40"/>
+                    <rect key="frame" x="20" y="576" width="374" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="ziH-FQ-aXB"/>
                     </constraints>
