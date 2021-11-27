@@ -110,6 +110,13 @@
                         <action selector="generateBIP39Touched:" destination="-1" eventType="touchUpInside" id="eNM-DE-pKp"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ftd-fp-XBd">
+                    <rect key="frame" x="349.5" y="64" width="44.5" height="31"/>
+                    <buttonConfiguration key="configuration" style="plain" image="gearshape.fill" catalog="system"/>
+                    <connections>
+                        <action selector="settingButtonTouched:" destination="-1" eventType="touchUpInside" id="QVJ-Ik-iuf"/>
+                    </connections>
+                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -127,6 +134,7 @@
                 <constraint firstItem="aa8-yr-lJN" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="GLh-I4-Dx7"/>
                 <constraint firstItem="sMp-OF-paN" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="HZK-7Y-T2E"/>
                 <constraint firstItem="sMk-yX-nZp" firstAttribute="top" secondItem="UP5-y9-9xe" secondAttribute="bottom" constant="15" id="IZv-GG-QPg"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="ftd-fp-XBd" secondAttribute="trailing" constant="20" id="LcF-uv-nq3"/>
                 <constraint firstItem="aa8-yr-lJN" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="20" id="MTY-dp-e6l"/>
                 <constraint firstItem="UP5-y9-9xe" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="Q15-6V-tDe"/>
                 <constraint firstItem="Muo-GL-bcO" firstAttribute="top" secondItem="sMk-yX-nZp" secondAttribute="bottom" constant="40" id="T7E-qL-hy1"/>
@@ -142,11 +150,13 @@
                 <constraint firstItem="NyZ-Pp-dyW" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="uwJ-xd-AG5"/>
                 <constraint firstItem="aHY-mH-5i3" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="v7F-2n-NRP"/>
                 <constraint firstItem="sMk-yX-nZp" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="yf8-2q-VTp"/>
+                <constraint firstItem="ftd-fp-XBd" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="20" id="zvl-cw-os8"/>
             </constraints>
             <point key="canvasLocation" x="137.68115942028987" y="99.776785714285708"/>
         </view>
     </objects>
     <resources>
+        <image name="gearshape.fill" catalog="system" width="128" height="121"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

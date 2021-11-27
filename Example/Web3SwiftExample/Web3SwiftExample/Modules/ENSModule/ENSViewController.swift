@@ -8,22 +8,29 @@
 import UIKit
 
 class ENSViewController: UIViewController {
-
+    // MARK: - Dependencies
+    var web3service = Web3SwiftService()
+    
+    // MARK: - Views 
+    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var nodeTextField: UITextField!
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        nodeTextField.delegate = self
     }
+
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func configureLabels() {
+        guard let node = nodeTextField.text else { return }
+        addressLabel.text = try! web3service.ens.getAddress(forNode: node).address
     }
-    */
+}
 
+extension ENSViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        configureLabels()
+        return true
+    }
 }

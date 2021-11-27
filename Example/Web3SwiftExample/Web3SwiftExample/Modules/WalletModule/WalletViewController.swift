@@ -43,5 +43,9 @@ class WalletViewController: UIViewController {
             self?.mnemonicTextView.text = mnemonic
         }
     }
+    
+    @IBAction func settingButtonTouched(_ sender: UIButton) {
+        let networkViewController = NetworkViewController()
+        present(networkViewController, animated: true)
+    }
 }
-

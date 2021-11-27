@@ -14,6 +14,9 @@ class Web3SwiftService {
     var wallet: Wallet?
     var keystoreManager: KeystoreManager?
     var password: String = "web3swift"
+    /// Current network in which you will work
+    var network: Networks = .Mainnet
+    lazy var ens = ENS(web3: web3(provider: InfuraProvider(network)!))!
     
     // MARK:- Functions
     /// Generates mnemonic phrase
@@ -77,5 +80,10 @@ class Web3SwiftService {
         }
         
         return keystoreManager
+    }
+    
+    func getBalance(for walletAddress: EthereumAddress) -> String {
+        let balanceResult = try! web3(provider: InfuraProvider(.Mainnet)!).eth.getBalance(address: walletAddress)
+        return Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3)!
     }
 }
