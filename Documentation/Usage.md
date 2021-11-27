@@ -496,7 +496,7 @@ You use convenient resolver methods from ENS instance:
 let address = try! ens.getAddress(forNode: node)
 let name = try! ens.getName(forNode: node)
 let content = try! ens.getContent(forNode: node)
-let abi = try! ens.getABI(forNode: node)
+let abi = try! ens.getABI(forNode: node, contentType: .URI)
 let pubkey = try! ens.getPublicKey(forNode: node)
 let text = try! ens.getText(forNode: node, key: key)
 
