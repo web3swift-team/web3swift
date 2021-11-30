@@ -40,13 +40,25 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "web3swiftTests",
+            name: "localTests",
             dependencies: ["web3swift"],
+            path: "Tests/web3swiftTests/local_tests",
             resources: [
-                .copy("../../TestToken/Helpers/SafeMath/SafeMath.sol"),
-                .copy("../../TestToken/Helpers/TokenBasics/ERC20.sol"),
-                .copy("../../TestToken/Helpers/TokenBasics/IERC20.sol"),
-                .copy("../../TestToken/Token/Web3SwiftToken.sol")
+                .copy("../../../TestToken/Helpers/SafeMath/SafeMath.sol"),
+                .copy("../../../TestToken/Helpers/TokenBasics/ERC20.sol"),
+                .copy("../../../TestToken/Helpers/TokenBasics/IERC20.sol"),
+                .copy("../../../TestToken/Token/Web3SwiftToken.sol")
+            ]
+        ),
+        .testTarget(
+            name: "remoteTests",
+            dependencies: ["web3swift"],
+            path: "Tests/web3swiftTests/infura_tests",
+            resources: [
+                .copy("../../../TestToken/Helpers/SafeMath/SafeMath.sol"),
+                .copy("../../../TestToken/Helpers/TokenBasics/ERC20.sol"),
+                .copy("../../../TestToken/Helpers/TokenBasics/IERC20.sol"),
+                .copy("../../../TestToken/Token/Web3SwiftToken.sol")
             ]
         ),
     ]

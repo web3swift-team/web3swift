@@ -37,4 +37,4 @@ jobs:
       - name: Resolve dependencies
         run: swift package resolve
       - name: Test
-        run: swift test # --skip-build
+        run: swift test --filter localTests
