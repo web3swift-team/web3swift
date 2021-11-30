@@ -1,0 +1,41 @@
+name: "Web3swift CI"
+
+on: 
+  push:
+    branches: 
+      - master
+      - develop
+      - hotfix
+      - github-actions
+    paths:
+      - Sources/**
+      - 'Tests/**'
+      - 'web3swift*/**'
+      - '.github/workflows/**'
+
+concurrency: 
+  group: ci
+  cancel-in-progress: true
+jobs:
+  macOS_5_4:
+    name: Test macOS 11 (5.4)
+    runs-on: macOS-11
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        destination: ['OS=14.5,name=iPhone 12']
+    steps:
+      - uses: actions/checkout@v2
+      # - name: Fetch dependencies
+      #   run: |
+      #     carthage bootstrap --no-use-binaries --platform iOS --cache-builds
+      #     bundle exec pod install
+      #     swift package update
+      - name: Resolve dependencies
+        run: swift package resolve
+      - name: Build
+        run: swift build --build-tests -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk iphonesimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios13.0-simulator"
+      - name: Test
+        run: swift test --skip-build --parallel --list-tests
