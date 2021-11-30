@@ -9,7 +9,7 @@ import UIKit
 
 class ENSViewController: UIViewController {
     // MARK: - Dependencies
-    var web3service = Web3SwiftService()
+    var web3Service: Web3SwiftService! 
     
     // MARK: - Views 
     @IBOutlet weak var addressLabel: UILabel!
@@ -19,12 +19,19 @@ class ENSViewController: UIViewController {
         super.viewDidLoad()
         
         nodeTextField.delegate = self
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(addressLabelSelected))
+        addressLabel.addGestureRecognizer(gestureRecognizer)
     }
 
-    
+    // MARK: - Setup
     private func configureLabels() {
         guard let node = nodeTextField.text else { return }
-        addressLabel.text = try! web3service.ens.getAddress(forNode: node).address
+        addressLabel.text = try! web3Service.ens.getAddress(forNode: node).address
+    }
+    
+    // MARK: - Selectors
+    @objc private func addressLabelSelected() {
+        UIPasteboard.general.string = addressLabel.text
     }
 }
 

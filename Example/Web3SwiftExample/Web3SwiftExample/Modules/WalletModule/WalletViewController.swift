@@ -9,7 +9,7 @@ import UIKit
 
 class WalletViewController: UIViewController {
     // MARK: - Dependencies
-    var web3Service = Web3SwiftService()
+    var web3Service: Web3SwiftService!
     
     // MARK: - Private properties
     

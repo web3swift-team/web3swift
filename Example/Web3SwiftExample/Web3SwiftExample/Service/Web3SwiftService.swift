@@ -86,4 +86,8 @@ class Web3SwiftService {
         let balanceResult = try! web3(provider: InfuraProvider(.Mainnet)!).eth.getBalance(address: walletAddress)
         return Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3)!
     }
+    
+    func changeCurrentNetwork(chainId: Int) {
+        network = Networks.fromInt(chainId) ?? .Mainnet
+    }
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import web3swift
 
 class MainViewController: UIViewController {
     // MARK: - View
@@ -19,13 +20,16 @@ class MainViewController: UIViewController {
     }()
     
     // MARK: - Properties
-    private let examples = ["ENS", "Wallet", "Network", "Balance"]
+    private let examples = ["ENS", "Wallet", "Balance"]
     private let cellId = "MainViewControllerCellId"
+    
+    private let web3service = Web3SwiftService()
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupLayout()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(settingsSelected))
     }
     
     // MARK: - Setup
@@ -38,6 +42,15 @@ class MainViewController: UIViewController {
             exampleTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
+    
+    // MARK: - Selectors
+    @objc private func settingsSelected() {
+        let networkViewController = NetworkViewController()
+        networkViewController.delegate = self
+        networkViewController.title = "Network"
+        networkViewController.web3Service = web3service
+        navigationController?.pushViewController(networkViewController, animated: true)
+    }
 }
 
 extension MainViewController: UITableViewDelegate {
@@ -45,18 +58,17 @@ extension MainViewController: UITableViewDelegate {
         switch indexPath.row {
         case 0:
             let ensViewController = ENSViewController()
+            ensViewController.web3Service = web3service
             ensViewController.title = "ENS"
             navigationController?.pushViewController(ensViewController, animated: true)
         case 1:
             let walletViewController = WalletViewController()
+            walletViewController.web3Service = web3service
             walletViewController.title = "Wallet"
             navigationController?.pushViewController(walletViewController, animated: true)
         case 2:
-            let networkViewController = NetworkViewController()
-            networkViewController.title = "Network"
-            navigationController?.pushViewController(networkViewController, animated: true)
-        case 3:
             let balanceViewController = BalanceViewController()
+            balanceViewController.web3Service = web3service
             balanceViewController.title = "Balance"
             navigationController?.pushViewController(balanceViewController, animated: true)
         default:
@@ -72,7 +84,14 @@ extension MainViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        cell.accessoryType = .disclosureIndicator
         cell.textLabel?.text = examples[indexPath.row]
         return cell
+    }
+}
+
+extension MainViewController: NetworkViewControllerDelegate {
+    func networkSelected(networkId: Int) {
+        web3service.changeCurrentNetwork(chainId: networkId)
     }
 }

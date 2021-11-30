@@ -9,7 +9,7 @@ import UIKit
 import web3swift
 
 class BalanceViewController: UIViewController {
-    let web3service = Web3SwiftService()
+    var web3Service: Web3SwiftService!
     
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var addressTextField: UITextField!
@@ -22,13 +22,13 @@ class BalanceViewController: UIViewController {
     
     private func showBalance() {
         guard let addressText = addressTextField.text else { return }
-        if let address = try? web3service.ens.getAddress(forNode: addressText) {
-            balanceLabel.text = web3service.getBalance(for: address)
+        if let address = try? web3Service.ens.getAddress(forNode: addressText) {
+            balanceLabel.text = web3Service.getBalance(for: address)
             return
         }
         
         let address = EthereumAddress(addressText)!
-        balanceLabel.text = web3service.getBalance(for: address)
+        balanceLabel.text = web3Service.getBalance(for: address)
     }
 }
 
