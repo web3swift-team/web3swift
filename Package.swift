@@ -43,10 +43,10 @@ let package = Package(
             name: "web3swiftTests",
             dependencies: ["web3swift"],
             resources: [
-                .copy("../TestToken/Helpers/SafeMath/SafeMath.sol"),
-                .copy("../TestToken/Helpers/TokenBasics/ERC20.sol"),
-                .copy("../TestToken/Helpers/TokenBasics/IERC20.sol"),
-                .copy("../TestToken/Token/Web3SwiftToken.sol")
+                .copy("../../TestToken/Helpers/SafeMath/SafeMath.sol"),
+                .copy("../../TestToken/Helpers/TokenBasics/ERC20.sol"),
+                .copy("../../TestToken/Helpers/TokenBasics/IERC20.sol"),
+                .copy("../../TestToken/Token/Web3SwiftToken.sol")
             ]
         ),
     ]

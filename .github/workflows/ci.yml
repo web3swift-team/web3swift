@@ -17,13 +17,14 @@ concurrency:
   group: ci
   cancel-in-progress: true
 jobs:
-  macOS_5_4:
+  SPM:
     name: Test macOS 11 (5.4)
     runs-on: macOS-11
     env:
       DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
-    timeout-minutes: 10
     strategy:
+      fail-fast: false
+      max-parallel: 2
       matrix:
         destination: ['OS=14.5,name=iPhone 12']
     steps:
@@ -35,7 +36,5 @@ jobs:
       #     swift package update
       - name: Resolve dependencies
         run: swift package resolve
-      - name: Build
-        run: swift build --build-tests -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk iphonesimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios13.0-simulator"
       - name: Test
-        run: swift test --skip-build --parallel --list-tests
+        run: swift test # --skip-build
