@@ -1,6 +1,6 @@
 name: "Web3swift CI"
 
-on: 
+on:
   push:
     branches:
       - master
@@ -12,6 +12,10 @@ on:
       - 'Tests/**'
       - 'web3swift*/**'
       - '.github/workflows/**'
+  pull_request:
+    branches:
+      - master
+      - develop
 
 concurrency: 
   group: ci
