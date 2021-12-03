@@ -5,7 +5,7 @@
 ## Build generated
 build/
 DerivedData/
-.build
+
 ## Various settings
 *.pbxuser
 !default.pbxuser
@@ -38,6 +38,8 @@ playground.xcworkspace
 Packages/
 Package.pins
 .build/
+.swiftpm/**
+*/.swiftpm/**
 
 # CocoaPods
 #
