@@ -17,13 +17,11 @@ on:
       - master
       - develop
 
-concurrency: 
-  group: ci
-  cancel-in-progress: true
 jobs:
   spm:
     name: Swift Package Manager 5.4
     runs-on: macOS-11
+    concurrency: spm
     env:
       DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
     steps:
@@ -32,11 +30,12 @@ jobs:
         run: swift package resolve
       - name: Build
         run: swift build --build-tests
-      - name: Run local tests
-        run: swift test --skip-build -c debug --filter localTests
+      # - name: Run local tests
+      #   run: swift test --skip-build -c debug --filter localTests
   carthage:
     name: Carthage
     runs-on: macOS-11
+    concurrency: carthage
     env:
       DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
     strategy:
@@ -46,28 +45,9 @@ jobs:
         destination: ['OS=14.5,name=iPhone 12']
     steps:
       - uses: actions/checkout@v2
-      - name: Resolve dependencies
+      - name: Resolving dependencies
         run: carthage checkout
-      - name: Build
-        run: carthage update --platform iOS --use-xcframeworks
-      # - name: Run local tests
-      #   run: 
-  # pods:
-  #   name: CocoaPods
-  #   runs-on: macOS-11
-  #   env:
-  #     DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
-  #   strategy:
-  #     fail-fast: false
-  #     max-parallel: 2
-  #     matrix:
-  #       destination: ['OS=14.5,name=iPhone 12']
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Resolve dependencies
-  #       run: swift package resolve
-  #     - name: Build
-  #       run: swift build --build-tests
-  #     - name: Run local tests
-  #       run: swift test --skip-build -c debug --filter localTests
-  #     
+      - name: Building dependencies
+        run: carthage build --no-use-binaries --platform iOS Simulator --use-xcframeworks
+      - name: Running local tests
+        run: xcodebuild test -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests | xcpretty
