@@ -21,8 +21,21 @@ concurrency:
   group: ci
   cancel-in-progress: true
 jobs:
-  SPM:
+  spm:
     name: Swift Package Manager 5.4
+    runs-on: macOS-11
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v2
+      - name: Resolve dependencies
+        run: swift package resolve
+      - name: Build
+        run: swift build --build-tests
+      - name: Run local tests
+        run: swift test --skip-build -c debug --filter localTests
+  carthage:
+    name: Carthage
     runs-on: macOS-11
     env:
       DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
@@ -34,6 +47,27 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Resolve dependencies
-        run: swift package resolve
-      - name: Run local test
-        run: swift test --filter localTests
+        run: carthage checkout
+      - name: Build
+        run: carthage update --platform iOS --use-xcframeworks
+      # - name: Run local tests
+      #   run: 
+  # pods:
+  #   name: CocoaPods
+  #   runs-on: macOS-11
+  #   env:
+  #     DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
+  #   strategy:
+  #     fail-fast: false
+  #     max-parallel: 2
+  #     matrix:
+  #       destination: ['OS=14.5,name=iPhone 12']
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Resolve dependencies
+  #       run: swift package resolve
+  #     - name: Build
+  #       run: swift build --build-tests
+  #     - name: Run local tests
+  #       run: swift test --skip-build -c debug --filter localTests
+  #     
