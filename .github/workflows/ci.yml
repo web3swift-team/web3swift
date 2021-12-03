@@ -2,7 +2,7 @@ name: "Web3swift CI"
 
 on: 
   push:
-    branches: 
+    branches:
       - master
       - develop
       - hotfix
@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   SPM:
-    name: Test macOS 11 (5.4)
+    name: Swift Package Manager 5.4
     runs-on: macOS-11
     env:
       DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
@@ -29,12 +29,7 @@ jobs:
         destination: ['OS=14.5,name=iPhone 12']
     steps:
       - uses: actions/checkout@v2
-      # - name: Fetch dependencies
-      #   run: |
-      #     carthage bootstrap --no-use-binaries --platform iOS --cache-builds
-      #     bundle exec pod install
-      #     swift package update
       - name: Resolve dependencies
         run: swift package resolve
-      - name: Test
+      - name: Run local test
         run: swift test --filter localTests
