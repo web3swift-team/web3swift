@@ -10,7 +10,7 @@ import web3swift
 
 class Web3SwiftService {
     // MARK:- Properties
-    var mnemonic: String = "" 
+    var mnemonic: String = ""
     var wallet: Wallet?
     var keystoreManager: KeystoreManager?
     var password: String = "web3swift"
@@ -20,30 +20,33 @@ class Web3SwiftService {
     
     // MARK:- Functions
     /// Generates mnemonic phrase
-    func generateBIP39(completion: @escaping (String?) -> ()) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            if let mnemonic = try? BIP39.generateMnemonics(bitsOfEntropy: 128) {
-                self.mnemonic = mnemonic
-            }
-            DispatchQueue.main.async {
-                completion(self.mnemonic)
-            }
+    func generateBIP39(completion: ((String?) -> ())? = nil) {
+        if let mnemonic = try? BIP39.generateMnemonics(bitsOfEntropy: 128) {
+            self.mnemonic = mnemonic
+        }
+        if let completion = completion {
+            completion(self.mnemonic)
         }
     }
+    
     
     /// Generates wallet using mnemonic phrase
     /// - Parameter mnemonic: BIP39 mnemonic phrase
     /// - Parameter password: password for wallet
     func generateBIP32(with mnemonic: String, password: String = "web3swift", completion: @escaping () -> ()) {
         DispatchQueue.global(qos: .userInitiated).async {
-            var wallet = Wallet(type: .BIP39(mnemonic: mnemonic), password: password)
-            
-            if wallet.isHD {
-                guard let keystore = BIP32Keystore(wallet.data) else { return }
-                wallet.derivationPath = keystore.rootPrefix
-                self.wallet = wallet
-                DispatchQueue.main.async {
-                    completion()
+            self.generateBIP39 { mnemonic in
+                guard let mnemonic = mnemonic else { return }
+                var wallet = Wallet(type: .BIP39(mnemonic: mnemonic), password: password)
+                
+                if wallet.isHD {
+//                    guard let keystore = BIP32Keystore(wallet.data) else { return }
+                    guard let keystore = wallet.keystore as? BIP32Keystore else { return }
+                    wallet.derivationPath = keystore.rootPrefix
+                    self.wallet = wallet
+                    DispatchQueue.main.async {
+                        completion()
+                    }
                 }
             }
         }
@@ -68,21 +71,23 @@ class Web3SwiftService {
     // MARK:- Private methods
     private func getKeystoreManager() -> KeystoreManager?  {
         guard let wallet = wallet else { return nil }
-        let data = wallet.data
+//        let data = wallet.data
         
         var keystoreManager: KeystoreManager
         if wallet.isHD {
-            let keystore = BIP32Keystore(data)!
+            guard let keystore = wallet.keystore as? BIP32Keystore else { return nil }
             keystoreManager = KeystoreManager([keystore])
         } else {
-            let keystore = EthereumKeystoreV3(data)!
+            guard let keystore = wallet.keystore as? EthereumKeystoreV3 else { return nil }
             keystoreManager = KeystoreManager([keystore])
         }
         
         return keystoreManager
     }
     
-    func getBalance(for walletAddress: EthereumAddress) -> String {
+    func getBalance(for walletAddress: EthereumAddress?) -> String? {
+        guard let walletAddress = walletAddress else { return nil }
+
         let balanceResult = try! web3(provider: InfuraProvider(.Mainnet)!).eth.getBalance(address: walletAddress)
         return Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3)!
     }
