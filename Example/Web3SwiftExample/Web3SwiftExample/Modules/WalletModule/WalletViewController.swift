@@ -19,6 +19,7 @@ class WalletViewController: UIViewController {
     @IBOutlet weak var privateKeyLabel: UILabel!
     @IBOutlet weak var derrivationPathLabel: UILabel!
     @IBOutlet weak var generateAccountButton: UIButton!
+    @IBOutlet weak var balanceLabel: UILabel!
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -32,15 +33,11 @@ class WalletViewController: UIViewController {
     // MARK: - Actions
     @IBAction func generateButtonTouched(_ sender: UIButton) {
         web3Service.generateBIP32(with: web3Service.mnemonic) { [weak self] in
+            self?.mnemonicTextView.text = self?.web3Service.mnemonic
             self?.publicKeyTextView.text = self?.web3Service.wallet?.address
             self?.derrivationPathLabel.text = self?.web3Service.wallet?.derivationPath
             self?.privateKeyLabel.text = self?.web3Service.wallet?.privateKey
-        }
-    }
-    
-    @IBAction func generateBIP39Touched(_ sender: UIButton) {
-        web3Service.generateBIP39 { [weak self] mnemonic in
-            self?.mnemonicTextView.text = mnemonic
+            self?.balanceLabel.text = strongSelf.web3Service.getBalance(for: self?.web3Service.wallet!.keystore.addresses?.first!)
         }
     }
     
