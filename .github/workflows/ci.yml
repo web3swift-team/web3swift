@@ -51,5 +51,5 @@ jobs:
         run: carthage build --no-use-binaries --platform iOS Simulator --use-xcframeworks
       - name: Building framework
         run: xcodebuild build-for-testing -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
-      - name: Running local tests
-        run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
+      # - name: Running local tests
+      #   run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
