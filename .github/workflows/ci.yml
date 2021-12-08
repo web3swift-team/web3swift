@@ -1,0 +1,55 @@
+name: "Web3swift CI"
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - hotfix
+      - github-actions
+    paths:
+      - Sources/**
+      - 'Tests/**'
+      - 'web3swift*/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches:
+      - master
+      - develop
+
+jobs:
+  spm:
+    name: Swift Package Manager 5.4
+    runs-on: macOS-11
+    concurrency: spm
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v2
+      - name: Resolve dependencies
+        run: swift package resolve
+      - name: Build
+        run: swift build --build-tests
+      # - name: Run local tests
+      #   run: swift test --skip-build -c debug --filter localTests
+  carthage:
+    name: Carthage
+    runs-on: macOS-11
+    concurrency: carthage
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        destination: ['OS=14.5,name=iPhone 12']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Resolving dependencies
+        run: carthage checkout
+      - name: Building dependencies
+        run: carthage build --no-use-binaries --platform iOS Simulator --use-xcframeworks
+      - name: Building framework
+        run: xcodebuild build-for-testing -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
+      # - name: Running local tests
+      #   run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
