@@ -6,7 +6,6 @@ on:
       - master
       - develop
       - hotfix
-      - github-actions
     paths:
       - Sources/**
       - 'Tests/**'
