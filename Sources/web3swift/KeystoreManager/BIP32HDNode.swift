@@ -231,7 +231,7 @@ extension HDNode {
             let newNode = HDNode()
             newNode.chaincode = cc
             newNode.depth = self.depth + 1
-            newNode.publicKey = pubKeyCandidate
+            newNode.publicKey = newPublicKey
             newNode.childNumber = index
             guard let fprint = try? RIPEMD160.hash(message: self.publicKey.sha256())[0..<4] else {
                 return nil
