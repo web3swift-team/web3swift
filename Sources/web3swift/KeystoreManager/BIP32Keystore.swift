@@ -68,7 +68,7 @@ public class BIP32Keystore: AbstractKeystore {
     
     private static let KeystoreParamsBIP32Version = 4
     
-    private (set) var addressStorage: PathAddressStorage
+    private (set) public var addressStorage: PathAddressStorage
     
     public convenience init?(_ jsonString: String) {
         let lowercaseJSON = jsonString.lowercased()

@@ -44,7 +44,7 @@ extension PathAddressStorage {
         self.paths = paths
     }
     
-    func toPathAddressPairs() -> [PathAddressPair] {
+    public func toPathAddressPairs() -> [PathAddressPair] {
         var pathAddressPairs = [PathAddressPair]()
         for (index, path) in paths.enumerated() {
             let address = addresses[index]

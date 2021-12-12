@@ -39,8 +39,8 @@ public protocol AbstractKeystoreParams: Codable {
 }
 
 public struct PathAddressPair: Codable {
-    let path: String
-    let address: String
+    public let path: String
+    public let address: String
 }
 
 public struct KeystoreParamsBIP32: AbstractKeystoreParams {
