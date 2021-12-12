@@ -94,6 +94,7 @@ class web3swift_basic_local_node_Tests: XCTestCase {
         XCTAssert(balanceBeforeFrom - (balanceAfterFrom + receipt.gasUsed * details.transaction.gasPrice) == valueToSend)
     }
 
+    // FIXME: Crashes on CI/CD
     func testSignPersonal() throws {
         let web3 = try Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
         let allAddresses = try web3.eth.getAccounts()

@@ -1,0 +1,30 @@
+{
+  "configurations" : [
+    {
+      "id" : "4E912C93-FF4B-4607-99AB-A9647DCD2235",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:web3swift.xcodeproj",
+      "identifier" : "1317BCE2218C50D100D6D095",
+      "name" : "web3swift"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:web3swift.xcodeproj",
+        "identifier" : "139751B6219AF76D0044D2B0",
+        "name" : "Tests"
+      }
+    }
+  ],
+  "version" : 1
+}

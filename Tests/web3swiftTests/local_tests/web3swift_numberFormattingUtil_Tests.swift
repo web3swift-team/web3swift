@@ -14,6 +14,7 @@ class web3swift_numberFormattingUtil_Tests: XCTestCase {
     
     func testNumberFormattingUtil() throws {
         let balance = BigInt("-1000000000000000000")
+        print("this is print")
         let formatted = Web3.Utils.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 4, decimalSeparator: ",")
         XCTAssert(formatted == "-1")
     }
