@@ -27,6 +27,7 @@ class web3swiftENSTests: XCTestCase {
         let ens = ENS(web3: web)
         let domain = "somename.eth"
         let address = try ens?.registry.getResolver(forDomain: domain).resolverContractAddress
+        print(address)
         XCTAssertEqual(address?.address.lowercased(), "0x5ffc014343cd971b7eb70732021e26c35b744cc4")
     }
     

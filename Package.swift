@@ -53,7 +53,7 @@ let package = Package(
         .testTarget(
             name: "remoteTests",
             dependencies: ["web3swift"],
-            path: "Tests/web3swiftTests/infuraTests",
+            path: "Tests/web3swiftTests/remoteTests",
             resources: [
                 .copy("../../../TestToken/Helpers/SafeMath/SafeMath.sol"),
                 .copy("../../../TestToken/Helpers/TokenBasics/ERC20.sol"),

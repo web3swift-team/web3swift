@@ -6,7 +6,7 @@ on:
       - master
       - develop
       - hotfix
-      - ganche-tests
+      - ganache-tests
     paths:
       - Sources/**
       - 'Tests/**'
@@ -30,8 +30,8 @@ jobs:
         run: swift package resolve
       - name: Build
         run: swift build --build-tests
-      # - name: Run local tests
-      #   run: swift test --skip-build -c debug --filter localTests
+      - name: Run local tests
+        run: swift test --skip-build -c debug --filter remoteTests
   carthage:
     name: Carthage
     runs-on: macOS-11
