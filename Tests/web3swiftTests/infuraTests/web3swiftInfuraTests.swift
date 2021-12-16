@@ -9,7 +9,7 @@ import XCTest
 @testable import web3swift
 
 // MARK: Works only with network connection
-class web3swift_infura_Tests: XCTestCase {
+class web3swiftInfuraTests: XCTestCase {
     
     func testGetBalance() throws {
         do {

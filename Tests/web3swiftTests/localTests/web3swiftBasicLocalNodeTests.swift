@@ -11,7 +11,7 @@ import BigInt
 
 @testable import web3swift
 
-class web3swift_basic_local_node_Tests: XCTestCase {
+class web3swiftBasicLocalNodeTests: XCTestCase {
 
     func testDeployWithRemoteSigning() throws {
         let web3 = try Web3.new(URL.init(string: "http://127.0.0.1:8545")!)

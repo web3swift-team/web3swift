@@ -11,7 +11,7 @@ import BigInt
 @testable import web3swift
 
 // MARK: Works only with network connection
-class web3swift_remoteParsing_Tests: XCTestCase {
+class web3swiftPemoteParsingTests: XCTestCase {
     
    func testEventParsing1usingABIv2() throws {
        print(1)

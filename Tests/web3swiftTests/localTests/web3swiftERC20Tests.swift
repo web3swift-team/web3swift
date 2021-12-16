@@ -9,10 +9,10 @@ import BigInt
 
 @testable import web3swift
 
-class web3swift_ERC20_Tests: XCTestCase {
+class web3swiftERC20Tests: XCTestCase {
     
     func testERC20name() throws {
-        let (web3, _, receipt, _) = try web3swift_helpers.localDeployERC20()
+        let (web3, _, receipt, _) = try web3swiftHelpers.localDeployERC20()
         
         let parameters = [] as [AnyObject]
         let contract = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress!)!
@@ -24,7 +24,7 @@ class web3swift_ERC20_Tests: XCTestCase {
     }
     
     func testERC20tokenBalance() throws {
-        let (web3, _, receipt, _) = try web3swift_helpers.localDeployERC20()
+        let (web3, _, receipt, _) = try web3swiftHelpers.localDeployERC20()
         
         let addressOfUser = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let contract = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress!, abiVersion: 2)!
