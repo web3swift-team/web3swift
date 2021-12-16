@@ -24,7 +24,7 @@ extension Web3 {
 }
 
 // MARK: Works only with network connection
-class web3swiftInfuraTests: XCTestCase {
+class web3swiftGanacheTests: XCTestCase {
     
     func testGetBalance() throws {
         do {

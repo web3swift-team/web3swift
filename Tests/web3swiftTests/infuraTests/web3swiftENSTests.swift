@@ -23,7 +23,7 @@ class web3swiftENSTests: XCTestCase {
     }
     
     func testResolverAddress() throws {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+        let web = web3(provider: GanacheProvider()!)
         let ens = ENS(web3: web)
         let domain = "somename.eth"
         let address = try ens?.registry.getResolver(forDomain: domain).resolverContractAddress
@@ -31,7 +31,7 @@ class web3swiftENSTests: XCTestCase {
     }
     
     func testResolver() throws {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+        let web = web3(provider: GanacheProvider()!)
         let ens = ENS(web3: web)
         let domain = "somename.eth"
         let address = try ens?.getAddress(forNode: domain)
@@ -39,7 +39,7 @@ class web3swiftENSTests: XCTestCase {
     }
     
     func testSupportsInterface() throws {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+        let web = web3(provider: GanacheProvider()!)
         let ens = ENS(web3: web)
         let domain = "somename.eth"
         let resolver = try ens?.registry.getResolver(forDomain: domain)
@@ -54,7 +54,7 @@ class web3swiftENSTests: XCTestCase {
     }
     
     func testABI() throws {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+        let web = web3(provider: GanacheProvider()!)
         let ens = ENS(web3: web)
         let domain = "somename.eth"
         let resolver = try ens?.registry.getResolver(forDomain: domain)
@@ -69,7 +69,7 @@ class web3swiftENSTests: XCTestCase {
     }
     
     func testOwner() throws {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+        let web = web3(provider: GanacheProvider()!)
         let ens = ENS(web3: web)
         let domain = "somename.eth"
         let owner = try ens?.registry.getOwner(node: domain)
@@ -77,7 +77,7 @@ class web3swiftENSTests: XCTestCase {
     }
     
     func testTTL() throws {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+        let web = web3(provider: GanacheProvider()!)
         let ens = ENS(web3: web)
         let domain = "somename.eth"
         let ttl = try ens?.registry.getTTL(node: domain)
@@ -85,7 +85,7 @@ class web3swiftENSTests: XCTestCase {
     }
     
     func testGetAddress() throws {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+        let web = web3(provider: GanacheProvider()!)
         let ens = ENS(web3: web)
         let domain = "somename.eth"
         let resolver = try ens?.registry.getResolver(forDomain: domain)
@@ -94,7 +94,7 @@ class web3swiftENSTests: XCTestCase {
     }
     
     func testGetPubkey() throws {
-        let web = web3(provider: InfuraProvider(Networks.Mainnet)!)
+        let web = web3(provider: GanacheProvider()!)
         let ens = ENS(web3: web)
         let domain = "somename.eth"
         let resolver = try ens?.registry.getResolver(forDomain: domain)
