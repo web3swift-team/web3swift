@@ -5,7 +5,6 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-- [About source and GitHub repositories](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#about-source-and-github-repositories)
 
 - [Introduction](#introduction)
   - [Preffered models](#preffered-models)
@@ -50,8 +49,8 @@
     - [Get new pending transactions](#get-new-pending-transactions)
     - [Create a new subscription over particular events](#create-a-new-subscription-over-particular-events)
     - [Subscribe on new pending transactions](#subscribe-on-new-pending-transactions)
-		- [Subscribe on logs](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#subscribe-on-logs)
-		- [Subscribe on new heads](https://github.com/matter-labs/web3swift/blob/master/Documentation/Usage.md#subscribe-on-new-heads)
+		- [Subscribe on logs](https://github.com/matter-labs/web3swift/blob/develop/Documentation/Usage.md#subscribe-on-logs)
+		- [Subscribe on new heads](https://github.com/matter-labs/web3swift/blob/develop/Documentation/Usage.md#subscribe-on-new-heads)
 - [ENS](#ens)
   - [Registry](#registry)
   - [Resolver](#resolver)
@@ -497,7 +496,7 @@ You use convenient resolver methods from ENS instance:
 let address = try! ens.getAddress(forNode: node)
 let name = try! ens.getName(forNode: node)
 let content = try! ens.getContent(forNode: node)
-let abi = try! ens.getABI(forNode: node)
+let abi = try! ens.getABI(forNode: node, contentType: .URI)
 let pubkey = try! ens.getPublicKey(forNode: node)
 let text = try! ens.getText(forNode: node, key: key)
 

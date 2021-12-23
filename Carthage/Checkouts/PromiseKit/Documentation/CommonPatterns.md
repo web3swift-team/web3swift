@@ -283,8 +283,9 @@ want to enable that behavior. In cases where you do want cancellation, the exact
 that it should work will vary depending on how the underlying task supports cancellation.
 PromiseKit provides cancellation primitives but no concrete API.
 
-Cancelled chains do not call `catch` handlers by default. However you can
-intercept cancellation if you like:
+**Important**: Errors which conform to the `CancellableError` protocol do *not* normally trigger the `.catch` block. 
+Cancelation is neither success nor failure, so cancelled chains do not call `catch` handlers by default. 
+However you can intercept cancellation if you like:
 
 ```swift
 foo.then {
@@ -310,7 +311,7 @@ func attempt<T>(maximumRetryCount: Int = 3, delayBeforeRetry: DispatchTimeInterv
         attempts += 1
         return body().recover { error -> Promise<T> in
             guard attempts < maximumRetryCount else { throw error }
-            return after(delayBeforeRetry).then(on: nil, attempt)
+            return after(delayBeforeRetry).then(attempt)
         }
     }
     return attempt()

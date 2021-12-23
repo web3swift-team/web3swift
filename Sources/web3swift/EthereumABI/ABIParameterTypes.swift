@@ -220,7 +220,7 @@ extension ABI.Element.ParameterType: ABIEncoding {
         case .tuple(types: let types):
             let typesRepresentation = types.map({return $0.abiRepresentation})
             let typesJoined = typesRepresentation.joined(separator: ",")
-            return "tuple(\(typesJoined))"
+            return "(\(typesJoined))"
         case .string:
             return "string"
         }

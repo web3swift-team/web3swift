@@ -1,0 +1,7 @@
+${PODS_ROOT}/Target Support Files/Pods-Web3support/Pods-Web3support-frameworks.sh
+${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework
+${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework
+${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework
+${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework
+${BUILT_PRODUCTS_DIR}/secp256k1.c/secp256k1.framework
+${BUILT_PRODUCTS_DIR}/web3swift/web3swift.framework

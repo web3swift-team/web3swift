@@ -634,50 +634,5 @@ class BigIntTests: XCTestCase {
         test((BigInt(0x01) << 64 + BigInt(0x0203040506070809)) * BigInt(-1), [0x01, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 09])
 
     }
-    
-    //
-    // you have to manually register linux tests here :-(
-    //
-    static var allTests = [
-        ("testSigns", testSigns),
-        ("testInit", testInit),
-        ("testInit_FloatingPoint", testInit_FloatingPoint),
-        ("testInit_Buffer", testInit_Buffer),
-        ("testConversionToFloatingPoint", testConversionToFloatingPoint),
-        ("testTwosComplement", testTwosComplement),
-        ("testSign", testSign),
-        ("testBitWidth", testBitWidth),
-        ("testTrailingZeroBitCount", testTrailingZeroBitCount),
-        ("testWords", testWords),
-        ("testComplement", testComplement),
-        ("testBinaryAnd", testBinaryAnd),
-        ("testBinaryOr", testBinaryOr),
-        ("testBinaryXor", testBinaryXor),
-        ("testConversionToString", testConversionToString),
-        ("testComparable", testComparable),
-        ("testHashable", testHashable),
-        ("testStrideable", testStrideable),
-        ("testAddition", testAddition),
-        ("testNegation", testNegation),
-        ("testSubtraction", testSubtraction),
-        ("testMultiplication", testMultiplication),
-        ("testQuotientAndRemainder", testQuotientAndRemainder),
-        ("testDivision", testDivision),
-        ("testRemainder", testRemainder),
-        ("testModulo", testModulo),
-        ("testStrideableRequirements", testStrideableRequirements),
-        ("testAbsoluteValuableRequirements", testAbsoluteValuableRequirements),
-        ("testIntegerArithmeticRequirements", testIntegerArithmeticRequirements),
-        ("testAssignmentOperators", testAssignmentOperators),
-        ("testExponentiation", testExponentiation),
-        ("testModularExponentiation", testModularExponentiation),
-        ("testSquareRoot", testSquareRoot),
-        ("testGCD", testGCD),
-        ("testInverse", testInverse),
-        ("testPrimes", testPrimes),
-        ("testShifts", testShifts),
-        ("testShiftAssignments", testShiftAssignments),
-        ("testCodable", testCodable),
-        ("testConversionToData", testConversionToData)
-    ]
+
 }

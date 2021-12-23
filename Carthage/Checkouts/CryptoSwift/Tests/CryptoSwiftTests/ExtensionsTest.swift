@@ -1,7 +1,7 @@
 //
 //  CryptoSwift
 //
-//  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+//  Copyright (C) 2014-2021 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
 //  This software is provided 'as-is', without any express or implied warranty.
 //
 //  In no event will the authors be held liable for any damages arising from the use of this software.
@@ -84,7 +84,7 @@ final class ExtensionsTest: XCTestCase {
     do {
       let cipher = try AES(key: "secret0key000000".bytes.md5(), blockMode: ECB())
       let encrypted = try "".encryptToBase64(cipher: cipher)
-      let decrypted = try encrypted?.decryptBase64ToString(cipher: cipher)
+      let decrypted = try encrypted.decryptBase64ToString(cipher: cipher)
       XCTAssertEqual("", decrypted)
 
       XCTAssertThrowsError(try "".decryptBase64(cipher: cipher))

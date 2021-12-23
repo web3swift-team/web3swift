@@ -21,9 +21,9 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          BigInt Docs
+          BigInt v5.2.1 Docs
         </a>
-         (92% documented)
+         (85% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -40,7 +40,7 @@
         </p>
     
         <p class="header-col header-col--secondary">
-          <a class="header-link" href="dash-feed://https%3A%2F%2Fattaswift%2Egithub%2Eio%2FBigInt%2Freference%2Fdocsets%2FBigInt%2Exml">
+          <a class="header-link" href="dash-feed://https%3A%2F%2Fattaswift.github.io%2FBigInt%2Freference%2Fdocsets%2FBigInt.xml">
             <img class="header-icon" src="../img/dash.png"/>
             Install in Dash
           </a>
@@ -92,11 +92,12 @@
       <article class="main-content">
 
         <section class="section">
-          <div class="section-content">
+          <div class="section-content top-matter">
             <h1>String</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">struct</span> <span class="kt">String</span></code></pre>
+                  
+                  <pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">String</span></code></pre>
 
                 </div>
               </div>
@@ -111,9 +112,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:SS6BigIntESSAA0A4UIntVcfc"></a>
+                    <a name="/s:SS6BigIntEySSAA0A4UIntVcfc"></a>
                     <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:SS6BigIntESSAA0A4UIntVcfc">init(_:)</a>
+                    <a class="token" href="#/s:SS6BigIntEySSAA0A4UIntVcfc">init(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -133,12 +134,12 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">v</span><span class="p">:</span> <span class="kt"><a href="../Structs/BigUInt.html">BigUInt</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">v</span><span class="p">:</span> <span class="kt"><a href="../Structs/BigUInt.html">BigUInt</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/attaswift/BigInt/tree/50208597616c8ab08729bbc33edf295bd06da27c/sources/String Conversion.swift#L114">Show on GitHub</a>
+                        <a href="https://github.com/attaswift/tree/v5.2.1/Sources/String Conversion.swift#L108">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -146,9 +147,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:SS6BigIntESSAA0A4UIntV_Si5radixSb9uppercasetcfc"></a>
+                    <a name="/s:SS6BigIntE_5radix9uppercaseSSAA0A4UIntV_SiSbtcfc"></a>
                     <a name="//apple_ref/swift/Method/init(_:radix:uppercase:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:SS6BigIntESSAA0A4UIntV_Si5radixSb9uppercasetcfc">init(_:radix:uppercase:)</a>
+                    <a class="token" href="#/s:SS6BigIntE_5radix9uppercaseSSAA0A4UIntV_SiSbtcfc">init(_:<wbr>radix:<wbr>uppercase:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -164,8 +165,7 @@ starting with <code>a</code> if <code>uppercase</code> is false or <code>A</code
     <p class="aside-title">Requires</p>
     radix &gt; 1 &amp;&amp; radix &lt;= 36
 
-</div>
-<div class="aside aside-complexity">
+</div><div class="aside aside-complexity">
     <p class="aside-title">Complexity</p>
     O(count) when radix is a power of two; otherwise O(count^2).
 
@@ -176,12 +176,12 @@ starting with <code>a</code> if <code>uppercase</code> is false or <code>A</code
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">v</span><span class="p">:</span> <span class="kt"><a href="../Structs/BigUInt.html">BigUInt</a></span><span class="p">,</span> <span class="nv">radix</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">uppercase</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">v</span><span class="p">:</span> <span class="kt"><a href="../Structs/BigUInt.html">BigUInt</a></span><span class="p">,</span> <span class="nv">radix</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">uppercase</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/attaswift/BigInt/tree/50208597616c8ab08729bbc33edf295bd06da27c/sources/String Conversion.swift#L123-L155">Show on GitHub</a>
+                        <a href="https://github.com/attaswift/tree/v5.2.1/Sources/String Conversion.swift#L117-L149">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -189,9 +189,9 @@ starting with <code>a</code> if <code>uppercase</code> is false or <code>A</code
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:SS6BigIntESSA2AV_Si5radixSb9uppercasetcfc"></a>
+                    <a name="/s:SS6BigIntE_5radix9uppercaseSSA2AV_SiSbtcfc"></a>
                     <a name="//apple_ref/swift/Method/init(_:radix:uppercase:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:SS6BigIntESSA2AV_Si5radixSb9uppercasetcfc">init(_:radix:uppercase:)</a>
+                    <a class="token" href="#/s:SS6BigIntE_5radix9uppercaseSSA2AV_SiSbtcfc">init(_:<wbr>radix:<wbr>uppercase:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -207,8 +207,7 @@ starting with <code>a</code> if <code>uppercase</code> is false or <code>A</code
     <p class="aside-title">Requires</p>
     radix &gt; 1 &amp;&amp; radix &lt;= 36
 
-</div>
-<div class="aside aside-complexity">
+</div><div class="aside aside-complexity">
     <p class="aside-title">Complexity</p>
     O(count) when radix is a power of two; otherwise O(count^2).
 
@@ -219,12 +218,12 @@ starting with <code>a</code> if <code>uppercase</code> is false or <code>A</code
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt"><a href="../Structs/BigInt.html">BigInt</a></span><span class="p">,</span> <span class="nv">radix</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="nv">uppercase</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt"><a href="../Structs/BigInt.html">BigInt</a></span><span class="p">,</span> <span class="nv">radix</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="nv">uppercase</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/attaswift/BigInt/tree/50208597616c8ab08729bbc33edf295bd06da27c/sources/String Conversion.swift#L164-L169">Show on GitHub</a>
+                        <a href="https://github.com/attaswift/tree/v5.2.1/Sources/String Conversion.swift#L158-L163">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -237,8 +236,8 @@ starting with <code>a</code> if <code>uppercase</code> is false or <code>A</code
       </article>
     </div>
     <section class="footer">
-      <p>© 2016 <a class="link" href="https://twitter.com/lorentey" target="_blank" rel="external">Károly Lőrentey</a>. (Last updated: 2017-10-10)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>© 2020 <a class="link" href="https://twitter.com/lorentey" target="_blank" rel="external">Károly Lőrentey</a>. (Last updated: 2020-12-15)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

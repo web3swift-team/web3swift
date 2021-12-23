@@ -1,3 +1,17 @@
+# 5.3.0 (2021-09-06)
+
+This release contains the following changes:
+
+- Make access level for isZero the same for signed and unsigned types (#93)
+
+- NFC: Add protocol conformance to Comparable for BigInt for consistency (#88)
+
+# 5.2.1 (2020-11-15)
+
+This release contains the following changes:
+
+- Added a temporary fix for [SR-13491](https://bugs.swift.org/browse/SR-13491)
+
 # 5.2.0 (2020-08-24)
 
 This release contains the following changes:

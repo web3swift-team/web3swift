@@ -43,6 +43,7 @@ public extension ABI {
         case constructor(Constructor)
         case fallback(Fallback)
         case event(Event)
+        case receive(Receive)
         
         public enum StateMutability {
             case payable
@@ -142,6 +143,15 @@ public extension ABI {
                 }
             }
         }
+        public struct Receive {
+            public let payable: Bool
+            public let inputs: [InOut]
+            
+            public init(inputs: [InOut], payable: Bool) {
+                self.inputs = inputs
+                self.payable = payable
+            }
+        }
     }
 }
 
@@ -161,6 +171,8 @@ extension ABI.Element {
             let signature = function.methodEncoding
             guard let data = ABIEncoder.encode(types: function.inputs, values: parameters) else {return nil}
             return signature + data
+        case .receive(_):
+            return nil
         }
     }
 }
@@ -235,6 +247,8 @@ extension ABI.Element {
             // set a flag to detect the request succeeded
             returnArray["_success"] = true
             return returnArray
+        case .receive(_):
+            return nil
         }
     }
     
@@ -308,6 +322,8 @@ extension ABI.Element {
                 i = i + 1
             }
             return returnArray
+        case .receive(_):
+            return nil
         }
     }
 }

@@ -1,0 +1,6 @@
+framework module Pods_myWeb3Wallet_myWeb3WalletUITests {
+  umbrella header "Pods-myWeb3Wallet-myWeb3WalletUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
