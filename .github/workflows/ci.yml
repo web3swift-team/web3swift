@@ -8,6 +8,9 @@ on:
       - hotfix
       - ganache-tests
     paths:
+      - Packag*.swift
+      - web3swift.podspec
+      - Cartfile
       - Sources/**
       - 'Tests/**'
       - 'web3swift*/**'
