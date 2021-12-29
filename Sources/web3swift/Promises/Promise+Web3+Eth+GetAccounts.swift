@@ -12,7 +12,7 @@ import PromiseKit
 extension web3.Eth {
     public func getAccountsPromise() -> Promise<[EthereumAddress]> {
         let queue = web3.requestDispatcher.queue
-        if (self.web3.attachedKeystoreManager != nil) {
+        if (self.web3.keystoreManager != nil) {
             let promise = Promise<[EthereumAddress]>.pending()
             queue.async {
                 do {
