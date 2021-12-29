@@ -11,6 +11,7 @@ import PromiseKit
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
     public var provider : Web3Provider
+    public var attachedKeystoreManager: KeystoreManager?
     public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
     public var defaultBlock = "latest"
     public var requestDispatcher: JSONRPCrequestDispatcher
@@ -33,7 +34,7 @@ public class web3 {
     /// Keystore manager can be bound to Web3 instance. If some manager is bound all further account related functions, such
     /// as account listing, transaction signing, etc. are done locally using private keys and accounts found in a manager.
     public func addKeystoreManager(_ manager: KeystoreManager?) {
-        self.provider.attachedKeystoreManager = manager
+        self.attachedKeystoreManager = manager
     }
     
     var ethInstance: web3.Eth?

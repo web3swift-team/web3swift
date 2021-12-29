@@ -13,7 +13,6 @@ public protocol Web3Provider {
     func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse>
     func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue) -> Promise<JSONRPCresponseBatch>
     var network: Networks? {get set}
-    var attachedKeystoreManager: KeystoreManager? {get set}
     var url: URL {get}
     var session: URLSession {get}
 }
@@ -23,13 +22,12 @@ public protocol Web3Provider {
 public class Web3HttpProvider: Web3Provider {
     public var url: URL
     public var network: Networks?
-    public var attachedKeystoreManager: KeystoreManager? = nil
     public var session: URLSession = {() -> URLSession in
         let config = URLSessionConfiguration.default
         let urlSession = URLSession(configuration: config)
         return urlSession
     }()
-    public init?(_ httpProviderURL: URL, network net: Networks? = nil, keystoreManager manager: KeystoreManager? = nil) {
+    public init?(_ httpProviderURL: URL, network net: Networks? = nil) {
         do {
             guard httpProviderURL.scheme == "http" || httpProviderURL.scheme == "https" else {return nil}
             url = httpProviderURL
@@ -51,7 +49,6 @@ public class Web3HttpProvider: Web3Provider {
         } catch {
             return nil
         }
-        attachedKeystoreManager = manager
     }
 }
 

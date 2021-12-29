@@ -109,7 +109,6 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         let urlSession = URLSession(configuration: config)
         return urlSession
     }()
-    public var attachedKeystoreManager: KeystoreManager? = nil
     
     public var socket: WebSocket
     public var delegate: Web3SocketDelegate
@@ -123,7 +122,6 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     public init?(_ endpoint: URL,
                  delegate wsdelegate: Web3SocketDelegate,
                  projectId: String? = nil,
-                 keystoreManager manager: KeystoreManager? = nil,
                  network net: Networks? = nil) {
         websocketConnected = false
         var endpointString = endpoint.absoluteString
@@ -155,7 +153,6 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         }
         url = URL(string: endpointString)!
         delegate = wsdelegate
-        attachedKeystoreManager = manager
         let request = URLRequest(url: url)
         socket = WebSocket(request: request)
         socket.delegate = self
@@ -164,7 +161,6 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     public init?(_ endpoint: String,
                  delegate wsdelegate: Web3SocketDelegate,
                  projectId: String? = nil,
-                 keystoreManager manager: KeystoreManager? = nil,
                  network net: Networks? = nil) {
         guard URL(string: endpoint) != nil else {return nil}
         var finalEndpoint = endpoint
@@ -197,7 +193,6 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         }
         url = URL(string: finalEndpoint)!
         delegate = wsdelegate
-        attachedKeystoreManager = manager
         let request = URLRequest(url: url)
         socket = WebSocket(request: request)
         socket.delegate = self
@@ -224,12 +219,10 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     public class func connectToSocket(_ endpoint: String,
                                       delegate: Web3SocketDelegate,
                                       projectId: String? = nil,
-                                      keystoreManager manager: KeystoreManager? = nil,
                                       network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = WebsocketProvider(endpoint,
                                                      delegate: delegate,
                                                      projectId: projectId,
-                                                     keystoreManager: manager,
                                                      network: net) else {
                                                 return nil
         }
@@ -240,12 +233,10 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     public class func connectToSocket(_ endpoint: URL,
                                       delegate: Web3SocketDelegate,
                                       projectId: String? = nil,
-                                      keystoreManager manager: KeystoreManager? = nil,
                                       network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = WebsocketProvider(endpoint,
                                                      delegate: delegate,
                                                      projectId: projectId,
-                                                     keystoreManager: manager,
                                                      network: net) else {
                                                         return nil
         }

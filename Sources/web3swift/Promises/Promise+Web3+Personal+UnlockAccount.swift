@@ -19,7 +19,7 @@ extension web3.Personal {
     public func unlockAccountPromise(account: String, password:String = "web3swift", seconds: UInt64 = 300) -> Promise<Bool> {
         let queue = web3.requestDispatcher.queue
         do {
-            if self.web3.provider.attachedKeystoreManager == nil {
+            if self.web3.attachedKeystoreManager == nil {
                 let request = JSONRPCRequestFabric.prepareRequest(.unlockAccount, parameters: [account.lowercased(), password, seconds])
                 return self.web3.dispatch(request).map(on: queue) {response in
                     guard let value: Bool = response.getValue() else {

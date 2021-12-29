@@ -13,7 +13,7 @@ extension web3.Personal {
     public func createAccountPromise(password:String = "web3swift") -> Promise<EthereumAddress> {
         let queue = web3.requestDispatcher.queue
         do {
-            if self.web3.provider.attachedKeystoreManager == nil {
+            if self.web3.attachedKeystoreManager == nil {
                 let request = JSONRPCRequestFabric.prepareRequest(.createAccount, parameters: [password])
                 return self.web3.dispatch(request).map(on: queue) {response in
                     guard let value: EthereumAddress = response.getValue() else {

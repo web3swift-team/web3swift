@@ -19,7 +19,7 @@ extension web3.Eth {
             guard let infuraNetwork = provider.network else {
                 throw Web3Error.processingError(desc: "Wrong network")
             }
-            guard let infuraProvider = InfuraWebsocketProvider(infuraNetwork, delegate: delegate, keystoreManager: provider.attachedKeystoreManager) else {
+            guard let infuraProvider = InfuraWebsocketProvider(infuraNetwork, delegate: delegate) else {
                 throw Web3Error.processingError(desc: "Wrong network")
             }
             infuraWSProvider = infuraProvider

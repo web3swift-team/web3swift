@@ -11,7 +11,7 @@ import BigInt
 extension web3.Web3Wallet {
     
     public func getAccounts() throws -> [EthereumAddress] {
-        guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {
+        guard let keystoreManager = self.web3.attachedKeystoreManager else {
             throw Web3Error.walletError
         }
         guard let ethAddresses = keystoreManager.addresses else {
@@ -30,7 +30,7 @@ extension web3.Web3Wallet {
     
     public func signTX(transaction:inout EthereumTransaction, account: EthereumAddress, password: String = "web3swift") throws -> Bool {
         do {
-            guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {
+            guard let keystoreManager = self.web3.attachedKeystoreManager else {
                 throw Web3Error.walletError
             }
             try Web3Signer.signTX(transaction: &transaction, keystore: keystoreManager, account: account, password: password)
@@ -53,7 +53,7 @@ extension web3.Web3Wallet {
     
     public func signPersonalMessage(_ personalMessage: Data, account: EthereumAddress, password: String = "web3swift") throws -> Data {
         do {
-            guard let keystoreManager = self.web3.provider.attachedKeystoreManager else
+            guard let keystoreManager = self.web3.attachedKeystoreManager else
             {
                 throw Web3Error.walletError
             }

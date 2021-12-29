@@ -14,7 +14,7 @@ extension web3.Personal {
     public func signPersonalMessagePromise(message: Data, from: EthereumAddress, password:String = "web3swift") -> Promise<Data> {
         let queue = web3.requestDispatcher.queue
         do {
-            if self.web3.provider.attachedKeystoreManager == nil {
+            if self.web3.attachedKeystoreManager == nil {
                 let hexData = message.toHexString().addHexPrefix()
                 let request = JSONRPCRequestFabric.prepareRequest(.personalSign, parameters: [from.address.lowercased(), hexData])
                 return self.web3.dispatch(request).map(on: queue) {response in
@@ -27,7 +27,7 @@ extension web3.Personal {
                     return value
                 }
             }
-            guard let signature = try Web3Signer.signPersonalMessage(message, keystore: self.web3.provider.attachedKeystoreManager!, account: from, password: password) else { throw Web3Error.inputError(desc: "Failed to locally sign a message") }
+            guard let signature = try Web3Signer.signPersonalMessage(message, keystore: self.web3.attachedKeystoreManager!, account: from, password: password) else { throw Web3Error.inputError(desc: "Failed to locally sign a message") }
             let returnPromise = Promise<Data>.pending()
             queue.async {
                 returnPromise.resolver.fulfill(signature)

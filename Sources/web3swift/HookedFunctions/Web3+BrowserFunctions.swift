@@ -37,7 +37,7 @@ extension web3.BrowserFunctions {
     
     public func sign(_ personalMessage: Data, account: String, password: String = "web3swift") -> String? {
         do {
-            guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {return nil}
+            guard let keystoreManager = self.web3.attachedKeystoreManager else {return nil}
             guard let from = EthereumAddress(account, ignoreChecksum: true) else {return nil}
             guard let signature = try Web3Signer.signPersonalMessage(personalMessage, keystore: keystoreManager, account: from, password: password) else {return nil}
             return signature.toHexString().addHexPrefix()
@@ -164,7 +164,7 @@ extension web3.BrowserFunctions {
         do {
             var transaction = trans
             guard let from = transactionOptions.from else {return nil}
-            guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {return nil}
+            guard let keystoreManager = self.web3.attachedKeystoreManager else {return nil}
             guard let gasPricePolicy = transactionOptions.gasPrice else {return nil}
             guard let gasLimitPolicy = transactionOptions.gasLimit else {return nil}
             guard let noncePolicy = transactionOptions.nonce else {return nil}

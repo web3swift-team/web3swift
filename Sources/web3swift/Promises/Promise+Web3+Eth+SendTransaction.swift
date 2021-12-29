@@ -38,7 +38,7 @@ extension web3.Eth {
             assembledTransaction = forAssemblyPipeline.0
             mergedOptions = forAssemblyPipeline.1
             
-            if self.web3.provider.attachedKeystoreManager == nil {
+            if self.web3.attachedKeystoreManager == nil {
                 guard let request = EthereumTransaction.createRequest(method: .sendTransaction, transaction: assembledTransaction, transactionOptions: mergedOptions) else
                 {
                     throw Web3Error.processingError(desc: "Failed to create a request to send transaction")
@@ -63,7 +63,7 @@ extension web3.Eth {
                 throw Web3Error.inputError(desc: "No 'from' field provided")
             }
             do {
-                try Web3Signer.signTX(transaction: &assembledTransaction, keystore: self.web3.provider.attachedKeystoreManager!, account: from, password: password)
+                try Web3Signer.signTX(transaction: &assembledTransaction, keystore: self.web3.attachedKeystoreManager!, account: from, password: password)
             } catch {
                 throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
             }
