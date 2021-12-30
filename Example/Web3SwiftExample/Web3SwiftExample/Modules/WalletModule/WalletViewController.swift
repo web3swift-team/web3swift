@@ -36,7 +36,7 @@ class WalletViewController: UIViewController {
     // MARK: - Actions
     @IBAction func generateButtonTouched(_ sender: UIButton) {
         activityIndicatorView.startAnimating()
-        activityIndicatorView.isHidden = false 
+        activityIndicatorView.isHidden = false
         web3Service.generateBIP32 { [weak self] in
             self?.activityIndicatorView.stopAnimating()
             self?.activityIndicatorView.isHidden = true
@@ -51,12 +51,20 @@ class WalletViewController: UIViewController {
 extension WalletViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let path = textField.text else { return true }
-        let pathPairs = web3Service.createChildAccount(path: path)
         
-        walletsTextView.text = ""
-        pathPairs.forEach { pathPair in
-            walletsTextView.text.append("\(pathPair.path) : \(pathPair.address) \n")
+        activityIndicatorView.startAnimating()
+        activityIndicatorView.isHidden = false
+        
+        web3Service.createChildAccount(path: path) { [weak self] pathPairs in
+            self?.walletsTextView.text = ""
+            pathPairs.forEach { pathPair in
+                self?.walletsTextView.text.append("\(pathPair.path) : \(pathPair.address) \n")
+                
+                self?.activityIndicatorView.stopAnimating()
+                self?.activityIndicatorView.isHidden = true
+            }
         }
+        
         return true
     }
 }

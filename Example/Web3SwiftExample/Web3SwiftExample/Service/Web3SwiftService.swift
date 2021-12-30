@@ -39,7 +39,7 @@ class Web3SwiftService {
                 var wallet = Wallet(type: .BIP39(mnemonic: self.mnemonic), password: password)
                 
                 if wallet.isHD {
-                    guard let keystore = wallet.keystore as? BIP32Keystore else { return }
+                    guard let keystore = wallet.bip32Keystore else { return }
                     wallet.derivationPath = keystore.rootPrefix
                     self.wallet = wallet
                     DispatchQueue.main.async {
@@ -69,10 +69,10 @@ class Web3SwiftService {
         
         var keystoreManager: KeystoreManager
         if wallet.isHD {
-            guard let keystore = wallet.keystore as? BIP32Keystore else { return nil }
+            guard let keystore = wallet.bip32Keystore else { return nil }
             keystoreManager = KeystoreManager([keystore])
         } else {
-            guard let keystore = wallet.keystore as? EthereumKeystoreV3 else { return nil }
+            guard let keystore = wallet.ethKeysoreV3 else { return nil }
             keystoreManager = KeystoreManager([keystore])
         }
         
@@ -94,17 +94,21 @@ class Web3SwiftService {
         network = Networks.fromInt(chainId) ?? .Mainnet
     }
     
-    func createChildAccount(path: String) -> [PathAddressPair] {
-        do {
-            try wallet?.bip32Keystore.createNewCustomChildAccount(path: path)
-        } catch let error {
-            print(error.localizedDescription)
+    func createChildAccount(path: String, complete: @escaping ([PathAddressPair]) -> ()) {
+        DispatchQueue.global().async {
+            do {
+                try self.wallet?.bip32Keystore.createNewCustomChildAccount(path: path)
+            } catch let error {
+                print(error.localizedDescription)
+            }
+            
+            DispatchQueue.main.async {
+                if let wallet = self.wallet {
+                    complete(wallet.bip32Keystore.addressStorage.toPathAddressPairs())
+                } else {
+                    complete([])
+                }
+            }
         }
-        
-        guard let wallet = wallet else {
-            return []
-        }
-        
-        return wallet.bip32Keystore.addressStorage.toPathAddressPairs()
     }
 }

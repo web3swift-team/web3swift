@@ -19,7 +19,7 @@ struct Wallet {
     /// Entropy is a measure of password strength. Usually used 128 or 256 bits.
     var bitsOfEntropy: Int = 128
     var derivationPath: String = ""
-    var keystore: AbstractKeystore!
+//    var keystore: AbstractKeystore!
     
     /// Public key
     var address: String
@@ -47,7 +47,7 @@ struct Wallet {
             self.isHD = false
             self.privateKey = try! ethKeysoreV3.UNSAFE_getPrivateKeyData(password: password, account: EthereumAddress(self.address)!).toHexString()
         case .BIP39(mnemonic: let mnemonic):
-            keystore = try! BIP32Keystore(
+            bip32Keystore = try! BIP32Keystore(
                 mnemonics: mnemonic,
                 password: password,
                 mnemonicsPassword: "",
@@ -55,8 +55,8 @@ struct Wallet {
             self.name = "HD Wallet"
             //            self.data = try! JSONEncoder().encode(keystore.keystoreParams)
             self.isHD = true
-            self.address = keystore.addresses!.first!.address
-            self.privateKey = try! keystore.UNSAFE_getPrivateKeyData(password: password, account: EthereumAddress(self.address)!).toHexString()
+            self.address = bip32Keystore.addresses!.first!.address
+            self.privateKey = try! bip32Keystore.UNSAFE_getPrivateKeyData(password: password, account: EthereumAddress(self.address)!).toHexString()
         }
     }
 }
