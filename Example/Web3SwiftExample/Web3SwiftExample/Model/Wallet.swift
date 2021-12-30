@@ -20,22 +20,22 @@ struct Wallet {
     var bitsOfEntropy: Int = 128
     var derivationPath: String = ""
     var keystore: AbstractKeystore!
-
+    
     /// Public key
     var address: String
     var privateKey: String
     
-//    var data: Data
-
+    //    var data: Data
+    
     
     /// BIP-39 mnemonic phrase
     var mnemonic: String?
     
     /// Is it HD wallet
     var isHD: Bool
-
+    
     var ethKeysoreV3: EthereumKeystoreV3! = nil
-    var bip32Keystore: BIP32Keystore! = nil 
+    var bip32Keystore: BIP32Keystore! = nil
     
     // MARK:- Inits
     init(type: walletType, password: String = "web3swift") {
@@ -43,20 +43,20 @@ struct Wallet {
         case .EthereumKeystoreV3:
             ethKeysoreV3 = try! EthereumKeystoreV3(password: password)!
             self.address = ethKeysoreV3?.addresses!.first!.address ?? ""
-            self.data = try! JSONEncoder().encode(ethKeysoreV3.keystoreParams)
+            //            self.data = try! JSONEncoder().encode(ethKeysoreV3.keystoreParams)
             self.isHD = false
-            self.privateKey = try! ethKeysoreV3.UNSAFE_getPrivateKeyData(password: password, account: EthereumAddress(self.address)!).toHexString() as! String
+            self.privateKey = try! ethKeysoreV3.UNSAFE_getPrivateKeyData(password: password, account: EthereumAddress(self.address)!).toHexString()
         case .BIP39(mnemonic: let mnemonic):
-            bip32Keystore = try! BIP32Keystore(
-                               mnemonics: mnemonic,
-                               password: password,
-                               mnemonicsPassword: "",
-                               language: .english)!
+            keystore = try! BIP32Keystore(
+                mnemonics: mnemonic,
+                password: password,
+                mnemonicsPassword: "",
+                language: .english)!
             self.name = "HD Wallet"
-            self.data = try! JSONEncoder().encode(bip32Keystore?.keystoreParams)
+            //            self.data = try! JSONEncoder().encode(keystore.keystoreParams)
             self.isHD = true
-            self.address = bip32Keystore?.addresses!.first!.address ?? ""
-            self.privateKey = try! bip32Keystore?.UNSAFE_getPrivateKeyData(password: password, account: EthereumAddress(self.address)!).toHexString() as! String
+            self.address = keystore.addresses!.first!.address
+            self.privateKey = try! keystore.UNSAFE_getPrivateKeyData(password: password, account: EthereumAddress(self.address)!).toHexString()
         }
     }
 }

@@ -10,6 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WalletViewController" customModule="Web3SwiftExample" customModuleProvider="target">
             <connections>
+                <outlet property="activityIndicatorView" destination="tS4-HT-YcL" id="cDc-hv-RxV"/>
                 <outlet property="generateAccountButton" destination="Muo-GL-bcO" id="KTF-Ue-bEE"/>
                 <outlet property="mnemonicTextView" destination="8Qj-RB-GVL" id="a5h-03-2Xx"/>
                 <outlet property="pathTextField" destination="8Wv-8r-4Kg" id="B5p-TE-TdM"/>
@@ -154,10 +155,19 @@ Cg
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="tS4-HT-YcL">
+                    <rect key="frame" x="181" y="67" width="20" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="20" id="FX8-NJ-W5J"/>
+                        <constraint firstAttribute="height" constant="20" id="XtM-HG-fVD"/>
+                    </constraints>
+                </activityIndicatorView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
+                <constraint firstItem="tS4-HT-YcL" firstAttribute="leading" secondItem="aa8-yr-lJN" secondAttribute="trailing" constant="10" id="3bi-C2-5nG"/>
+                <constraint firstItem="6Za-VP-697" firstAttribute="top" secondItem="tS4-HT-YcL" secondAttribute="bottom" constant="13" id="88p-QB-BbB"/>
                 <constraint firstItem="aa8-yr-lJN" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="GLh-I4-Dx7"/>
                 <constraint firstItem="6Za-VP-697" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="KRo-NR-otB"/>
                 <constraint firstItem="aa8-yr-lJN" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="20" id="MTY-dp-e6l"/>

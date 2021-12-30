@@ -23,12 +23,16 @@ class BalanceViewController: UIViewController {
     private func showBalance() {
         guard let addressText = addressTextField.text else { return }
         if let address = try? web3Service.ens.getAddress(forNode: addressText) {
-            balanceLabel.text = web3Service.getBalance(for: address)
+            web3Service.getBalance(for: address) { [weak self] balance in
+                self?.balanceLabel.text = balance
+            }
             return
         }
         
         let address = EthereumAddress(addressText)!
-        balanceLabel.text = web3Service.getBalance(for: address)
+        web3Service.getBalance(for: address) { [weak self] balance in
+            self?.balanceLabel.text = balance
+        }
     }
 }
 

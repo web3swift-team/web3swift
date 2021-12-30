@@ -20,6 +20,7 @@ class WalletViewController: UIViewController {
     @IBOutlet weak var generateAccountButton: UIButton!
     @IBOutlet weak var pathTextField: UITextField!
     @IBOutlet weak var walletsTextView: UITextView!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -27,13 +28,19 @@ class WalletViewController: UIViewController {
         
         Bundle.main.loadNibNamed("WalletView", owner: self, options: nil)
         pathTextField.delegate = self
+        activityIndicatorView.isHidden = true
     }
     
     // MARK: - Setups
     
     // MARK: - Actions
     @IBAction func generateButtonTouched(_ sender: UIButton) {
+        activityIndicatorView.startAnimating()
+        activityIndicatorView.isHidden = false 
         web3Service.generateBIP32 { [weak self] in
+            self?.activityIndicatorView.stopAnimating()
+            self?.activityIndicatorView.isHidden = true
+            
             self?.mnemonicTextView.text = self?.web3Service.mnemonic
             self?.publicKeyTextView.text = self?.web3Service.wallet?.address
             self?.privateKeyLabel.text = self?.web3Service.wallet?.privateKey
