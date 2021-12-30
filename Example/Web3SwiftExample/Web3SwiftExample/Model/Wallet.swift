@@ -19,12 +19,13 @@ struct Wallet {
     /// Entropy is a measure of password strength. Usually used 128 or 256 bits.
     var bitsOfEntropy: Int = 128
     var derivationPath: String = ""
+    var keystore: AbstractKeystore!
 
     /// Public key
     var address: String
     var privateKey: String
     
-    var data: Data
+//    var data: Data
 
     
     /// BIP-39 mnemonic phrase

@@ -27,6 +27,7 @@ class Web3SwiftService {
         completion(self.mnemonic)
     }
     
+    
     /// Generates wallet using mnemonic phrase
     /// - Parameter mnemonic: BIP39 mnemonic phrase
     /// - Parameter password: password for wallet
@@ -64,21 +65,23 @@ class Web3SwiftService {
     // MARK:- Private methods
     private func getKeystoreManager() -> KeystoreManager?  {
         guard let wallet = wallet else { return nil }
-        let data = wallet.data
+//        let data = wallet.data
         
         var keystoreManager: KeystoreManager
         if wallet.isHD {
-            let keystore = BIP32Keystore(data)!
+            guard let keystore = wallet.keystore as? BIP32Keystore else { return nil }
             keystoreManager = KeystoreManager([keystore])
         } else {
-            let keystore = EthereumKeystoreV3(data)!
+            guard let keystore = wallet.keystore as? EthereumKeystoreV3 else { return nil }
             keystoreManager = KeystoreManager([keystore])
         }
         
         return keystoreManager
     }
     
-    func getBalance(for walletAddress: EthereumAddress) -> String {
+    func getBalance(for walletAddress: EthereumAddress?) -> String? {
+        guard let walletAddress = walletAddress else { return nil }
+
         let balanceResult = try! web3(provider: InfuraProvider(.Mainnet)!).eth.getBalance(address: walletAddress)
         return Web3.Utils.formatToEthereumUnits(balanceResult, toUnits: .eth, decimals: 3)!
     }
