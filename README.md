@@ -373,7 +373,7 @@ If you are using this library in your project, please [add a link](https://githu
 
 ## Support
 
-**[Join our discord](https://discord.gg/DZKFJFn3) if you need a support or want to contribute to web3swift development!**
+**[Join our discord](https://discord.gg/8bHCNmhS7x) if you need a support or want to contribute to web3swift development!**
 
 - If you **need help**, [open an issue](https://github.com/skywinder/web3swift/issues).
 - If you'd like to **see web3swift best practices**, check [Projects that using web3swift](https://github.com/skywinder/web3swift#projects-that-using-web3swift).
