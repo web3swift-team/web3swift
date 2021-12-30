@@ -147,15 +147,9 @@ Cg
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ftd-fp-XBd">
-                    <rect key="frame" x="348.5" y="64" width="45.5" height="31"/>
-                    <buttonConfiguration key="configuration" style="plain" image="gearshape.fill" catalog="system"/>
-                    <connections>
-                        <action selector="settingButtonTouched:" destination="-1" eventType="touchUpInside" id="QVJ-Ik-iuf"/>
-                    </connections>
-                </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hIn-NC-EzE">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hIn-NC-EzE">
                     <rect key="frame" x="20" y="624" width="374" height="25.5"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="21"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -166,18 +160,15 @@ Cg
             <constraints>
                 <constraint firstItem="aa8-yr-lJN" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="GLh-I4-Dx7"/>
                 <constraint firstItem="6Za-VP-697" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="KRo-NR-otB"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="ftd-fp-XBd" secondAttribute="trailing" constant="20" id="LcF-uv-nq3"/>
                 <constraint firstItem="aa8-yr-lJN" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="20" id="MTY-dp-e6l"/>
                 <constraint firstItem="6Za-VP-697" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="STC-aV-Zhe"/>
                 <constraint firstItem="6Za-VP-697" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="VbH-hD-FNS"/>
-                <constraint firstItem="6Za-VP-697" firstAttribute="top" secondItem="ftd-fp-XBd" secondAttribute="bottom" constant="5" id="zMK-KA-tXz"/>
-                <constraint firstItem="ftd-fp-XBd" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="20" id="zvl-cw-os8"/>
+                <constraint firstItem="6Za-VP-697" firstAttribute="top" secondItem="aa8-yr-lJN" secondAttribute="bottom" constant="10" id="W4l-E4-iSf"/>
             </constraints>
             <point key="canvasLocation" x="137.68115942028987" y="99.776785714285708"/>
         </view>
     </objects>
     <resources>
-        <image name="gearshape.fill" catalog="system" width="128" height="121"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

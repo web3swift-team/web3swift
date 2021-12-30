@@ -39,12 +39,6 @@ class WalletViewController: UIViewController {
             self?.privateKeyLabel.text = self?.web3Service.wallet?.privateKey
         }
     }
-    
-    
-    @IBAction func settingButtonTouched(_ sender: UIButton) {
-        let networkViewController = NetworkViewController()
-        present(networkViewController, animated: true)
-    }
 }
 
 extension WalletViewController: UITextFieldDelegate {
