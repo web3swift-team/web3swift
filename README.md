@@ -283,15 +283,15 @@ let tx = contract.write(
 
 ```
 
-### Web3View example
+### web3swift example project
 
-You can see how to our demo project: **WKWebView with injected "web3" provider**:
+You can see how to our demo project:
 
 ``` bash
 git clone https://github.com/skywinder/web3swift.git
-cd web3swift/Example/web3swiftBrowser
+cd web3swift/Example/Web3SwiftExample/
 pod install
-open ./web3swiftBrowser.xcworkspace
+open Web3SwiftExample.xcworkspace
 ```
 
 ### Build from source
