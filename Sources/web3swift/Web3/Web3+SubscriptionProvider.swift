@@ -15,12 +15,12 @@ public enum SubscribeEventFilter {
 }
 
 public protocol Subscription {
-    func unsubscribe() throws
+    func unsubscribe()
 }
 
 public typealias Web3SubscriptionListener<R: Decodable> = (Result<R, Error>) -> Void
 
 public protocol Web3SubscriptionProvider: Web3Provider {
     func subscribe<R>(filter: SubscribeEventFilter,
-                      listener: @escaping Web3SubscriptionListener<R>) throws -> Subscription
+                      listener: @escaping Web3SubscriptionListener<R>) -> Subscription
 }

@@ -99,7 +99,7 @@ public struct WebsocketSubscription: Subscription {
         self.unsubscribeCallback = unsubscribeCallback
     }
     
-    public func unsubscribe() throws {
+    public func unsubscribe() {
         unsubscribeCallback(self)
     }
 }
@@ -223,7 +223,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     }
     
     public func subscribe<R>(filter: SubscribeEventFilter,
-                             listener: @escaping Web3SubscriptionListener<R>) throws -> Subscription {
+                             listener: @escaping Web3SubscriptionListener<R>) -> Subscription {
         fatalError("Not implemented")
     }
     

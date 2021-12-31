@@ -199,7 +199,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     }
     
     override public func subscribe<R>(filter: SubscribeEventFilter,
-                                      listener: @escaping Web3SubscriptionListener<R>) throws -> Subscription {
+                                      listener: @escaping Web3SubscriptionListener<R>) -> Subscription {
         let params: [Encodable]
         switch filter {
         case .newHeads:
@@ -212,8 +212,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
             params = ["syncing"]
         }
         let method = InfuraWebsocketMethod.subscribe
-        try writeMessage(method: method, params: params)
-        let subscription = WebsocketSubscription(unsubscribeCallback: { subscription in
+        var subscription = WebsocketSubscription(unsubscribeCallback: { subscription in
             let method = InfuraWebsocketMethod.unsubscribe
             self.send(id: self.newID(), method: method, params: [subscription.id]) { result in
                 switch result {
@@ -237,12 +236,13 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
             switch result {
             case .success(let data):
                 let subscriptionID = data as! String
+                subscription.id = subscriptionID
                 self.subscriptions[subscriptionID] = (subscription, handler)
             case .failure(let error):
                 handler(.failure(error))
             }
         }
-        fatalError()
+        return subscription
     }
     
     public func subscribeOnNewHeads() throws {
