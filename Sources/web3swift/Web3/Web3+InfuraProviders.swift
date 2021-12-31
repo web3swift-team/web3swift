@@ -40,8 +40,8 @@ public final class InfuraProvider: Web3HttpProvider {
 /// Custom Websocket provider of Infura nodes.
 public final class InfuraWebsocketProvider: WebsocketProvider {
     public var filterID: String?
-    public var subscriptionIDs = Set<String>()
-    private var subscriptionIDforUnsubscribing: String? = nil
+    public var subscriptions = [String: (sub: WebsocketSubscription, cb: (Result<Decodable, Error>) -> Void)]()
+    private var requests = [UInt32: (Result<Decodable, Error>) -> Void]()
     private var filterTimer: Timer?
     
     /// if set debugMode True then show websocket events logs in the console
@@ -120,6 +120,16 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         writeMessage(requestData)
     }
     
+    private func send(id: UInt32, method: InfuraWebsocketMethod, params: [Encodable], cb: @escaping (Result<Decodable, Error>) -> Void) {
+        do {
+            try writeMessage(method: method, params: params)
+        } catch {
+            cb(.failure(error))
+            return
+        }
+        requests[id] = cb
+    }
+    
     public func setFilterAndGetChanges(method: InfuraWebsocketMethod, params: [Encodable]? = nil) throws {
         filterTimer?.invalidate()
         filterID = nil
@@ -188,15 +198,51 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         }
     }
     
-    public func subscribe(params: [Encodable]) throws {
+    override public func subscribe<R>(filter: SubscribeEventFilter,
+                                      listener: @escaping Web3SubscriptionListener<R>) throws -> Subscription {
+        let params: [Encodable]
+        switch filter {
+        case .newHeads:
+            params = ["newHeads"]
+        case .logs(let p):
+            params = ["logs", p]
+        case .newPendingTransactions:
+            params = ["newPendingTransactions"]
+        case .syncing:
+            params = ["syncing"]
+        }
         let method = InfuraWebsocketMethod.subscribe
         try writeMessage(method: method, params: params)
-    }
-    
-    public func unsubscribe(subscriptionID: String) throws {
-        let method = InfuraWebsocketMethod.unsubscribe
-        subscriptionIDforUnsubscribing = subscriptionID
-        try writeMessage(method: method, params: [subscriptionID])
+        let subscription = WebsocketSubscription(unsubscribeCallback: { subscription in
+            let method = InfuraWebsocketMethod.unsubscribe
+            self.send(id: self.newID(), method: method, params: [subscription.id]) { result in
+                switch result {
+                case .success(let data):
+                    let unsubscribed = data as! Bool
+                    if unsubscribed {
+                        self.subscriptions.removeValue(forKey: subscription.id)
+                    } else {
+                        self.delegate.gotError(error: Web3Error.processingError(desc: "Can\'t unsubscribe \(subscription.id)"))
+                    }
+                case .failure(let error):
+                    // TODO: handle error
+                    fatalError("Not implemented")
+                }
+            }
+        })
+        let handler = { (result: Result<Decodable, Error>) in
+            listener(result.map { $0 as! R })
+        }
+        send(id: newID(), method: method, params: params) { result in
+            switch result {
+            case .success(let data):
+                let subscriptionID = data as! String
+                self.subscriptions[subscriptionID] = (subscription, handler)
+            case .failure(let error):
+                handler(.failure(error))
+            }
+        }
+        fatalError()
     }
     
     public func subscribeOnNewHeads() throws {
@@ -281,21 +327,17 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
                 let result = dictionary["result"] as? String {
                 // setting filter id
                 filterID = result
-            } else if let params = dictionary["params"] as? [String: Any],
-                let subscription = params["subscription"] as? String,
-                let result = params["result"] {
-                // subscription result
-                subscriptionIDs.insert(subscription)
-                delegate.received(message: result)
-            } else if let unsubscribed = dictionary["result"] as? Bool {
-                // unsubsribe result
-                if unsubscribed == true, let id = subscriptionIDforUnsubscribing {
-                    subscriptionIDs.remove(id)
-                } else if let id = subscriptionIDforUnsubscribing {
-                    delegate.gotError(error: Web3Error.processingError(desc: "Can\'t unsubscribe \(id)"))
-                } else {
-                    delegate.received(message: unsubscribed)
+            } else if let id = dictionary["id"] as? UInt32 {
+                if let request = requests.removeValue(forKey: id) {
+                    request(.success(dictionary["result"] as! Decodable))
                 }
+            } else if let params = dictionary["params"] as? [String: Any],
+                let subscriptionID = params["subscription"] as? String,
+                let result = params["result"] {
+                if let subscription = subscriptions[subscriptionID] {
+                    subscription.cb(.success(result as! Decodable))
+                }
+                delegate.received(message: result)
             } else if let message = dictionary["result"] {
                 // filter result
                 delegate.received(message: message)

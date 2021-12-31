@@ -39,4 +39,6 @@ extension web3.Eth {
         let provider = try getWebsocketProvider(forDelegate: delegate)
         try provider.subscribeOnNewPendingTransactions()
     }
+    
+    // TODO: make 4 subscribe methods
 }

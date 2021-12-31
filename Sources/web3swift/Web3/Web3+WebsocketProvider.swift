@@ -91,8 +91,21 @@ public protocol Web3SocketDelegate {
     func gotError(error: Error)
 }
 
+public struct WebsocketSubscription: Subscription {
+    public var id = ""
+    private let unsubscribeCallback: (Self) -> Void
+    
+    public init(unsubscribeCallback: @escaping (Self) -> Void) {
+        self.unsubscribeCallback = unsubscribeCallback
+    }
+    
+    public func unsubscribe() throws {
+        unsubscribeCallback(self)
+    }
+}
+
 /// The default websocket provider.
-public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDelegate {
+public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, WebSocketDelegate {
 
     public func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse> {
         return Promise(error: Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'"))
@@ -118,6 +131,8 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     private var writeTimer: Timer? = nil
     private var messagesStringToWrite: [String] = []
     private var messagesDataToWrite: [Data] = []
+    
+    private var currentID: UInt32 = 0
     
     public init?(_ endpoint: URL,
                  delegate wsdelegate: Web3SocketDelegate,
@@ -200,6 +215,16 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     
     deinit {
         writeTimer?.invalidate()
+    }
+    
+    public func newID() -> UInt32 {
+        currentID = currentID == UInt32.max ? 1 : currentID + 1
+        return currentID
+    }
+    
+    public func subscribe<R>(filter: SubscribeEventFilter,
+                             listener: @escaping Web3SubscriptionListener<R>) throws -> Subscription {
+        fatalError("Not implemented")
     }
     
     public func connectSocket() {
