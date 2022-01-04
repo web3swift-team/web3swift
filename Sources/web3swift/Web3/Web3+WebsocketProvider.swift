@@ -281,6 +281,10 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     private func send(method: JSONRPCmethod,
                       params: [Encodable],
                       cb: @escaping (Swift.Result<Decodable, Error>) -> Void) {
+        guard [.subscribe, .unsubscribe].contains(method) else {
+            cb(.failure(Web3Error.inputError(desc: "Unsupported method \(method)")))
+            return
+        }
         let request: JSONRPCrequest
         do {
             request = try writeMessage(method: method, params: params)

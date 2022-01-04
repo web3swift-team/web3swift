@@ -98,11 +98,21 @@ extension Web3HttpProvider {
         if request.method == nil {
             return Promise(error: Web3Error.nodeError(desc: "RPC method is nill"))
         }
-        
+        guard ![.subscribe, .unsubscribe].contains(request.method!) else {
+            return Promise(error: Web3Error.inputError(desc: "Unsupported method \(request.method!)"))
+        }
         return Web3HttpProvider.post(request, providerURL: self.url, queue: queue, session: self.session)
     }
     
     public func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue = .main) -> Promise<JSONRPCresponseBatch> {
+        guard requests.requests.allSatisfy({
+            guard let method = $0.method else {
+                return true
+            }
+            return ![.subscribe, .unsubscribe].contains(method)
+        }) else {
+            return Promise(error: Web3Error.inputError(desc: "Unsupported method in requests"))
+        }
         return Web3HttpProvider.post(requests, providerURL: self.url, queue: queue, session: self.session)
     }
 }
