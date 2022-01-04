@@ -48,7 +48,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     public var debugMode: Bool = false
     
     public init?(_ network: Networks,
-                 delegate: Web3SocketDelegate,
+                 delegate: Web3SocketDelegate? = nil,
                  projectId: String? = nil) {
         guard network == Networks.Kovan
             || network == Networks.Rinkeby
@@ -64,7 +64,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     }
     
     public init?(_ endpoint: String,
-                 delegate: Web3SocketDelegate,
+                 delegate: Web3SocketDelegate? = nil,
                  projectId: String? = nil) {
         guard URL(string: endpoint) != nil else {return nil}
         super.init(endpoint,
@@ -73,7 +73,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     }
     
     public init?(_ endpoint: URL,
-                 delegate: Web3SocketDelegate,
+                 delegate: Web3SocketDelegate? = nil,
                  projectId: String? = nil) {
         super.init(endpoint,
                    delegate: delegate,
@@ -81,7 +81,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     }
     
     override public class func connectToSocket(_ endpoint: String,
-                                               delegate: Web3SocketDelegate,
+                                               delegate: Web3SocketDelegate? = nil,
                                                projectId: String? = nil,
                                                network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(endpoint,
@@ -92,7 +92,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     }
     
     override public class func connectToSocket(_ endpoint: URL,
-                                               delegate: Web3SocketDelegate,
+                                               delegate: Web3SocketDelegate? = nil,
                                                projectId: String? = nil,
                                                network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(endpoint,
@@ -224,8 +224,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
                         self.delegate.gotError(error: Web3Error.processingError(desc: "Can\'t unsubscribe \(subscription.id)"))
                     }
                 case .failure(let error):
-                    // TODO: handle error
-                    fatalError("Not implemented")
+                    self.delegate.gotError(error: error)
                 }
             }
         })
@@ -327,17 +326,21 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
                 let result = dictionary["result"] as? String {
                 // setting filter id
                 filterID = result
-            } else if let id = dictionary["id"] as? UInt32 {
-                if let request = requests.removeValue(forKey: id) {
-                    request(.success(dictionary["result"] as! Decodable))
+            } else if let id = dictionary["id"] as? UInt32,
+                      let result = dictionary["result"] as? Decodable {
+                guard let request = requests.removeValue(forKey: id) else {
+                    delegate.received(message: dictionary)
+                    return
                 }
+                request(.success(result))
             } else if let params = dictionary["params"] as? [String: Any],
                 let subscriptionID = params["subscription"] as? String,
-                let result = params["result"] {
-                if let subscription = subscriptions[subscriptionID] {
-                    subscription.cb(.success(result as! Decodable))
+                let result = params["result"] as? Decodable {
+                guard let subscription = subscriptions[subscriptionID] else {
+                    delegate.received(message: dictionary)
+                    return
                 }
-                delegate.received(message: result)
+                subscription.cb(.success(result))
             } else if let message = dictionary["result"] {
                 // filter result
                 delegate.received(message: message)

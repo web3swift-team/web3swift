@@ -91,6 +91,20 @@ public protocol Web3SocketDelegate {
     func gotError(error: Error)
 }
 
+public struct DefaultWeb3SocketDelegate: Web3SocketDelegate {
+    public func socketConnected(_ headers: [String : String]) {
+        print("DefaultWeb3SocketDelegate.socketConnected: \(headers)")
+    }
+    
+    public func received(message: Any) {
+        print("DefaultWeb3SocketDelegate.received: \(message)")
+    }
+    
+    public func gotError(error: Error) {
+        print("DefaultWeb3SocketDelegate.gotError: \(error)")
+    }
+}
+
 public struct WebsocketSubscription: Subscription {
     public var id = ""
     private let unsubscribeCallback: (Self) -> Void
@@ -135,7 +149,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     private var currentID: UInt32 = 0
     
     public init?(_ endpoint: URL,
-                 delegate wsdelegate: Web3SocketDelegate,
+                 delegate wsdelegate: Web3SocketDelegate? = nil,
                  projectId: String? = nil,
                  network net: Networks? = nil) {
         websocketConnected = false
@@ -167,14 +181,14 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
             }
         }
         url = URL(string: endpointString)!
-        delegate = wsdelegate
+        delegate = wsdelegate ?? DefaultWeb3SocketDelegate()
         let request = URLRequest(url: url)
         socket = WebSocket(request: request)
         socket.delegate = self
     }
     
     public init?(_ endpoint: String,
-                 delegate wsdelegate: Web3SocketDelegate,
+                 delegate wsdelegate: Web3SocketDelegate? = nil,
                  projectId: String? = nil,
                  network net: Networks? = nil) {
         guard URL(string: endpoint) != nil else {return nil}
@@ -207,7 +221,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
             }
         }
         url = URL(string: finalEndpoint)!
-        delegate = wsdelegate
+        delegate = wsdelegate ?? DefaultWeb3SocketDelegate()
         let request = URLRequest(url: url)
         socket = WebSocket(request: request)
         socket.delegate = self
@@ -242,7 +256,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     }
     
     public class func connectToSocket(_ endpoint: String,
-                                      delegate: Web3SocketDelegate,
+                                      delegate: Web3SocketDelegate? = nil,
                                       projectId: String? = nil,
                                       network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = WebsocketProvider(endpoint,
@@ -256,7 +270,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     }
     
     public class func connectToSocket(_ endpoint: URL,
-                                      delegate: Web3SocketDelegate,
+                                      delegate: Web3SocketDelegate? = nil,
                                       projectId: String? = nil,
                                       network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = WebsocketProvider(endpoint,
