@@ -107,7 +107,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         return socketProvider
     }
     
-    public func setFilterAndGetChanges(method: WebsocketMethod, params: [Encodable]? = nil) throws {
+    public func setFilterAndGetChanges(method: JSONRPCmethod, params: [Encodable]? = nil) throws {
         filterTimer?.invalidate()
         filterID = nil
         let params = params ?? []
@@ -119,12 +119,12 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         filterTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(getFilterChanges), userInfo: nil, repeats: true)
     }
     
-    public func setFilterAndGetChanges(method: WebsocketMethod, address: EthereumAddress? = nil, fromBlock: BlockNumber? = nil, toBlock: BlockNumber? = nil, topics: [String]? = nil) throws {
+    public func setFilterAndGetChanges(method: JSONRPCmethod, address: EthereumAddress? = nil, fromBlock: BlockNumber? = nil, toBlock: BlockNumber? = nil, topics: [String]? = nil) throws {
         let filterParams = EventFilterParameters(fromBlock: fromBlock?.stringValue, toBlock: toBlock?.stringValue, topics: [topics], address: [address?.address])
         try setFilterAndGetChanges(method: method, params: [filterParams])
     }
     
-    public func setFilterAndGetLogs(method: WebsocketMethod, params: [Encodable]? = nil) throws {
+    public func setFilterAndGetLogs(method: JSONRPCmethod, params: [Encodable]? = nil) throws {
         filterTimer?.invalidate()
         filterID = nil
         let params = params ?? []
@@ -136,7 +136,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         filterTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(getFilterLogs), userInfo: nil, repeats: true)
     }
     
-    public func setFilterAndGetLogs(method: WebsocketMethod, address: EthereumAddress? = nil, fromBlock: BlockNumber? = nil, toBlock: BlockNumber? = nil, topics: [String]? = nil) throws {
+    public func setFilterAndGetLogs(method: JSONRPCmethod, address: EthereumAddress? = nil, fromBlock: BlockNumber? = nil, toBlock: BlockNumber? = nil, topics: [String]? = nil) throws {
         let filterParams = EventFilterParameters(fromBlock: fromBlock?.stringValue, toBlock: toBlock?.stringValue, topics: [topics], address: [address?.address])
         try setFilterAndGetLogs(method: method, params: [filterParams])
     }
@@ -144,7 +144,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     @objc public func getFilterChanges() throws {
         if let id = filterID {
             filterTimer?.invalidate()
-            let method = WebsocketMethod.getFilterChanges
+            let method = JSONRPCmethod.getFilterChanges
             try writeMessage(method: method, params: [id])
         }
     }
@@ -152,7 +152,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     @objc public func getFilterLogs() throws {
         if let id = filterID {
             filterTimer?.invalidate()
-            let method = WebsocketMethod.getFilterLogs
+            let method = JSONRPCmethod.getFilterLogs
             try writeMessage(method: method, params: [id])
         }
     }
@@ -160,7 +160,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     public func getFilterLogs(address: EthereumAddress? = nil, fromBlock: BlockNumber? = nil, toBlock: BlockNumber? = nil, topics: [String]? = nil) throws {
         if let id = filterID {
             let filterParams = EventFilterParameters(fromBlock: fromBlock?.stringValue, toBlock: toBlock?.stringValue, topics: [topics], address: [address?.address])
-            let method = WebsocketMethod.getFilterLogs
+            let method = JSONRPCmethod.getFilterLogs
             try writeMessage(method: method, params: [id, filterParams])
         }
     }
@@ -168,7 +168,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     public func unistallFilter() throws {
         if let id = filterID {
             filterID = nil
-            let method = WebsocketMethod.uninstallFilter
+            let method = JSONRPCmethod.uninstallFilter
             try writeMessage(method: method, params: [id])
         } else {
             throw Web3Error.nodeError(desc: "No filter set")
@@ -176,13 +176,13 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     }
     
     public func subscribeOnNewHeads() throws {
-        let method = WebsocketMethod.subscribe
+        let method = JSONRPCmethod.subscribe
         let params = ["newHeads"]
         try writeMessage(method: method, params: params)
     }
     
     public func subscribeOnLogs(addresses: [EthereumAddress]? = nil, topics: [String]? = nil) throws {
-        let method = WebsocketMethod.subscribe
+        let method = JSONRPCmethod.subscribe
         var stringAddresses = [String]()
         if let addrs = addresses {
             for addr in addrs {
@@ -195,7 +195,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     }
     
     public func subscribeOnNewPendingTransactions() throws {
-        let method = WebsocketMethod.subscribe
+        let method = JSONRPCmethod.subscribe
         let params = ["newPendingTransactions"]
         try writeMessage(method: method, params: params)
     }
@@ -204,7 +204,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         guard network != Networks.Kovan else {
             throw Web3Error.inputError(desc: "Can't sync on Kovan")
         }
-        let method = WebsocketMethod.subscribe
+        let method = JSONRPCmethod.subscribe
         let params = ["syncing"]
         try writeMessage(method: method, params: params)
     }

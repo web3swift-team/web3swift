@@ -31,9 +31,16 @@ public enum JSONRPCmethod: String, Encodable {
     case getTxPoolInspect = "txpool_inspect"
     case getTxPoolStatus = "txpool_status"
     case getTxPoolContent = "txpool_content"
-
+    case newPendingTransactionFilter = "eth_newPendingTransactionFilter"
+    case getFilterChanges = "eth_getFilterChanges"
+    case newFilter = "eth_newFilter"
+    case newBlockFilter = "eth_newBlockFilter"
+    case getFilterLogs = "eth_getFilterLogs"
+    case uninstallFilter = "eth_uninstallFilter"
+    case subscribe = "eth_subscribe"
+    case unsubscribe = "eth_unsubscribe"
     
-    public var requiredNumOfParameters: Int {
+    public var requiredNumOfParameters: Int? {
         get {
             switch self {
             case .call:
@@ -64,6 +71,22 @@ public enum JSONRPCmethod: String, Encodable {
                 return 0
             case .getTxPoolInspect:
                 return 0
+            case .newPendingTransactionFilter:
+                return 0
+            case .getFilterChanges:
+                return 1
+            case .newFilter:
+                return nil
+            case .newBlockFilter:
+                return 0
+            case .getFilterLogs:
+                return nil
+            case .uninstallFilter:
+                return 1
+            case .subscribe:
+                return nil
+            case .unsubscribe:
+                return 1
             default:
                 return 1
             }
@@ -74,14 +97,6 @@ public enum JSONRPCmethod: String, Encodable {
 public struct JSONRPCRequestFabric {
     public static func prepareRequest(_ method: JSONRPCmethod, parameters: [Encodable]) -> JSONRPCrequest {
         var request = JSONRPCrequest()
-        request.method = method
-        let pars = JSONRPCparams(params: parameters)
-        request.params = pars
-        return request
-    }
-    
-    public static func prepareRequest(_ method: WebsocketMethod, parameters: [Encodable]) -> WebsocketRequest {
-        var request = WebsocketRequest()
         request.method = method
         let pars = JSONRPCparams(params: parameters)
         request.params = pars

@@ -18,73 +18,6 @@ public protocol IWebsocketProvider {
     func writeMessage<T>(_ message: T)
 }
 
-public enum WebsocketMethod: String, Encodable {
-    
-    case newPendingTransactionFilter = "eth_newPendingTransactionFilter"
-    case getFilterChanges = "eth_getFilterChanges"
-    case newFilter = "eth_newFilter"
-    case newBlockFilter = "eth_newBlockFilter"
-    case getFilterLogs = "eth_getFilterLogs"
-    case uninstallFilter = "eth_uninstallFilter"
-    case subscribe = "eth_subscribe"
-    case unsubscribe = "eth_unsubscribe"
-    
-    public var requiredNumOfParameters: Int? {
-        get {
-            switch self {
-            case .newPendingTransactionFilter:
-                return 0
-            case .getFilterChanges:
-                return 1
-            case .newFilter:
-                return nil
-            case .newBlockFilter:
-                return 0
-            case .getFilterLogs:
-                return nil
-            case .uninstallFilter:
-                return 1
-            case .subscribe:
-                return nil
-            case .unsubscribe:
-                return 1
-            }
-        }
-    }
-}
-
-public struct WebsocketRequest: Encodable {
-    public var jsonrpc: String = "2.0"
-    public var method: WebsocketMethod?
-    public var params: JSONRPCparams?
-    public var id: UInt64 = Counter.increment()
-    
-    enum CodingKeys: String, CodingKey {
-        case jsonrpc
-        case method
-        case params
-        case id
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(jsonrpc, forKey: .jsonrpc)
-        try container.encode(method?.rawValue, forKey: .method)
-        try container.encode(params, forKey: .params)
-        try container.encode(id, forKey: .id)
-    }
-    
-    public var isValid: Bool {
-        get {
-            if self.method == nil {
-                return false
-            }
-            guard let method = self.method else {return false}
-            return method.requiredNumOfParameters == self.params?.params.count
-        }
-    }
-}
-
 public protocol Web3SocketDelegate {
     func socketConnected(_ headers: [String:String])
     func gotError(error: Error)
@@ -145,9 +78,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     public var debugMode: Bool = false
     
     private var subscriptions = [String: (sub: WebsocketSubscription, cb: (Swift.Result<Decodable, Error>) -> Void)]()
-    private var requests = [UInt32: (Swift.Result<Decodable, Error>) -> Void]()
-    
-    private var currentID: UInt32 = 0
+    private var requests = [UInt64: (Swift.Result<Decodable, Error>) -> Void]()
     
     public init?(_ endpoint: URL,
                  delegate wsdelegate: Web3SocketDelegate? = nil,
@@ -232,11 +163,6 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
         writeTimer?.invalidate()
     }
     
-    private func newID() -> UInt32 {
-        currentID = currentID == UInt32.max ? 1 : currentID + 1
-        return currentID
-    }
-    
     public func subscribe<R>(filter: SubscribeEventFilter,
                              listener: @escaping Web3SubscriptionListener<R>) -> Subscription {
         let params: [Encodable]
@@ -250,10 +176,10 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
         case .syncing:
             params = ["syncing"]
         }
-        let method = WebsocketMethod.subscribe
+        let method = JSONRPCmethod.subscribe
         var subscription = WebsocketSubscription(unsubscribeCallback: { subscription in
-            let method = WebsocketMethod.unsubscribe
-            self.send(id: self.newID(), method: method, params: [subscription.id]) { result in
+            let method = JSONRPCmethod.unsubscribe
+            self.send(method: method, params: [subscription.id]) { result in
                 switch result {
                 case .success(let data):
                     let unsubscribed = data as! Bool
@@ -270,7 +196,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
         let handler = { (result: Swift.Result<Decodable, Error>) in
             listener(result.map { $0 as! R })
         }
-        send(id: newID(), method: method, params: params) { result in
+        send(method: method, params: params) { result in
             switch result {
             case .success(let data):
                 let subscriptionID = data as! String
@@ -343,25 +269,26 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
         writeTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(performWriteOperations), userInfo: nil, repeats: true)
     }
     
-    public func writeMessage(method: WebsocketMethod, params: [Encodable]) throws {
+    public func writeMessage(method: JSONRPCmethod, params: [Encodable]) throws -> JSONRPCrequest {
         let request = JSONRPCRequestFabric.prepareRequest(method, parameters: params)
         let encoder = JSONEncoder()
         let requestData = try encoder.encode(request)
         print(String(decoding: requestData, as: UTF8.self))
         writeMessage(requestData)
+        return request
     }
     
-    private func send(id: UInt32,
-                      method: WebsocketMethod,
+    private func send(method: JSONRPCmethod,
                       params: [Encodable],
                       cb: @escaping (Swift.Result<Decodable, Error>) -> Void) {
+        let request: JSONRPCrequest
         do {
-            try writeMessage(method: method, params: params)
+            request = try writeMessage(method: method, params: params)
         } catch {
             cb(.failure(error))
             return
         }
-        requests[id] = cb
+        requests[request.id] = cb
     }
     
     @objc private func performWriteOperations() {
@@ -425,7 +352,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
 //                // setting filter id
 //                filterID = result
 //            } else
-            if let id = dictionary["id"] as? UInt32,
+            if let id = dictionary["id"] as? UInt64,
                       let result = dictionary["result"] as? Decodable {
                 guard let request = requests.removeValue(forKey: id) else {
                     return
