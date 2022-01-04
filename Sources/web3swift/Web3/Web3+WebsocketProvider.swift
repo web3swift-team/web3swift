@@ -18,7 +18,7 @@ public protocol IWebsocketProvider {
     func writeMessage<T>(_ message: T)
 }
 
-public enum InfuraWebsocketMethod: String, Encodable {
+public enum WebsocketMethod: String, Encodable {
     
     case newPendingTransactionFilter = "eth_newPendingTransactionFilter"
     case getFilterChanges = "eth_getFilterChanges"
@@ -53,9 +53,9 @@ public enum InfuraWebsocketMethod: String, Encodable {
     }
 }
 
-public struct InfuraWebsocketRequest: Encodable {
+public struct WebsocketRequest: Encodable {
     public var jsonrpc: String = "2.0"
-    public var method: InfuraWebsocketMethod?
+    public var method: WebsocketMethod?
     public var params: JSONRPCparams?
     public var id: UInt64 = Counter.increment()
     
@@ -87,17 +87,12 @@ public struct InfuraWebsocketRequest: Encodable {
 
 public protocol Web3SocketDelegate {
     func socketConnected(_ headers: [String:String])
-    func received(message: Any)
     func gotError(error: Error)
 }
 
 public struct DefaultWeb3SocketDelegate: Web3SocketDelegate {
     public func socketConnected(_ headers: [String : String]) {
         print("DefaultWeb3SocketDelegate.socketConnected: \(headers)")
-    }
-    
-    public func received(message: Any) {
-        print("DefaultWeb3SocketDelegate.received: \(message)")
     }
     
     public func gotError(error: Error) {
@@ -145,6 +140,12 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     private var writeTimer: Timer? = nil
     private var messagesStringToWrite: [String] = []
     private var messagesDataToWrite: [Data] = []
+    
+    /// if set debugMode True then show websocket events logs in the console
+    public var debugMode: Bool = false
+    
+    private var subscriptions = [String: (sub: WebsocketSubscription, cb: (Swift.Result<Decodable, Error>) -> Void)]()
+    private var requests = [UInt32: (Swift.Result<Decodable, Error>) -> Void]()
     
     private var currentID: UInt32 = 0
     
@@ -231,14 +232,55 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
         writeTimer?.invalidate()
     }
     
-    public func newID() -> UInt32 {
+    private func newID() -> UInt32 {
         currentID = currentID == UInt32.max ? 1 : currentID + 1
         return currentID
     }
     
     public func subscribe<R>(filter: SubscribeEventFilter,
                              listener: @escaping Web3SubscriptionListener<R>) -> Subscription {
-        fatalError("Not implemented")
+        let params: [Encodable]
+        switch filter {
+        case .newHeads:
+            params = ["newHeads"]
+        case .logs(let p):
+            params = ["logs", p]
+        case .newPendingTransactions:
+            params = ["newPendingTransactions"]
+        case .syncing:
+            params = ["syncing"]
+        }
+        let method = WebsocketMethod.subscribe
+        var subscription = WebsocketSubscription(unsubscribeCallback: { subscription in
+            let method = WebsocketMethod.unsubscribe
+            self.send(id: self.newID(), method: method, params: [subscription.id]) { result in
+                switch result {
+                case .success(let data):
+                    let unsubscribed = data as! Bool
+                    if unsubscribed {
+                        self.subscriptions.removeValue(forKey: subscription.id)
+                    } else {
+                        self.delegate.gotError(error: Web3Error.processingError(desc: "Can\'t unsubscribe \(subscription.id)"))
+                    }
+                case .failure(let error):
+                    self.delegate.gotError(error: error)
+                }
+            }
+        })
+        let handler = { (result: Swift.Result<Decodable, Error>) in
+            listener(result.map { $0 as! R })
+        }
+        send(id: newID(), method: method, params: params) { result in
+            switch result {
+            case .success(let data):
+                let subscriptionID = data as! String
+                subscription.id = subscriptionID
+                self.subscriptions[subscriptionID] = (subscription, handler)
+            case .failure(let error):
+                handler(.failure(error))
+            }
+        }
+        return subscription
     }
     
     public func connectSocket() {
@@ -301,6 +343,27 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
         writeTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(performWriteOperations), userInfo: nil, repeats: true)
     }
     
+    public func writeMessage(method: WebsocketMethod, params: [Encodable]) throws {
+        let request = JSONRPCRequestFabric.prepareRequest(method, parameters: params)
+        let encoder = JSONEncoder()
+        let requestData = try encoder.encode(request)
+        print(String(decoding: requestData, as: UTF8.self))
+        writeMessage(requestData)
+    }
+    
+    private func send(id: UInt32,
+                      method: WebsocketMethod,
+                      params: [Encodable],
+                      cb: @escaping (Swift.Result<Decodable, Error>) -> Void) {
+        do {
+            try writeMessage(method: method, params: params)
+        } catch {
+            cb(.failure(error))
+            return
+        }
+        requests[id] = cb
+    }
+    
     @objc private func performWriteOperations() {
         if websocketConnected {
             writeTimer?.invalidate()
@@ -316,31 +379,71 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     public func didReceive(event: WebSocketEvent, client: WebSocket) {
         switch event {
         case .connected(let headers):
+            debugMode ? print("websocket is connected, headers:\n \(headers)") : nil
             websocketConnected = true
             delegate.socketConnected(headers)
         case .disconnected(let reason, let code):
-            print("socket disconnected: \(reason) , code: \(code)")
+            debugMode ? print("websocket is disconnected: \(reason) with code: \(code)") : nil
             websocketConnected = false
             delegate.gotError(error: Web3Error.connectionError)
         case .text(let string):
-            delegate.received(message: string)
+            debugMode ? print("received text: \(string)") : nil
+            websocketDidReceiveMessage(text: string)
             break
         case .binary(let data):
-            delegate.received(message: data)
+            debugMode ? print("received text: \(String(data: data, encoding: .utf8) ?? "empty")") : nil
+            delegate.gotError(error: Web3Error.processingError(desc: "Unsupported data type"))
         case .ping(_):
+            debugMode ? print("ping") : nil
             break
         case .pong(_):
+            debugMode ? print("pong") : nil
             break
         case .viabilityChanged(_):
+            debugMode ? print("viabilityChanged") : nil
             break
         case .reconnectSuggested(_):
+            debugMode ? print("reconnectSuggested") : nil
             break
         case .cancelled:
+            debugMode ? print("cancelled") : nil
             websocketConnected = false
             delegate.gotError(error: Web3Error.nodeError(desc: "socket cancelled"))
         case .error(let error):
+            debugMode ? print("error: \(String(describing: error))") : nil
             websocketConnected = false
             delegate.gotError(error: error!)
+        }
+    }
+    
+    private func websocketDidReceiveMessage(text: String) {
+        if let data = text.data(using: String.Encoding.utf8),
+            let dictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            // TODO: filterID
+//            if filterID == nil,
+//                let result = dictionary["result"] as? String {
+//                // setting filter id
+//                filterID = result
+//            } else
+            if let id = dictionary["id"] as? UInt32,
+                      let result = dictionary["result"] as? Decodable {
+                guard let request = requests.removeValue(forKey: id) else {
+                    return
+                }
+                request(.success(result))
+            } else if let params = dictionary["params"] as? [String: Any],
+                let subscriptionID = params["subscription"] as? String,
+                let result = params["result"] as? Decodable {
+                guard let subscription = subscriptions[subscriptionID] else {
+                    return
+                }
+                subscription.cb(.success(result))
+            } else if let message = dictionary["result"] {
+                // filter result
+                // TODO: process filter result
+            } else {
+                delegate.gotError(error: Web3Error.processingError(desc: "Can\'t get known result. Message is: \(text)"))
+            }
         }
     }
 }

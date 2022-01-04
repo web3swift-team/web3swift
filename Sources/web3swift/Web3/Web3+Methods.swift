@@ -80,8 +80,8 @@ public struct JSONRPCRequestFabric {
         return request
     }
     
-    public static func prepareRequest(_ method: InfuraWebsocketMethod, parameters: [Encodable]) -> InfuraWebsocketRequest {
-        var request = InfuraWebsocketRequest()
+    public static func prepareRequest(_ method: WebsocketMethod, parameters: [Encodable]) -> WebsocketRequest {
+        var request = WebsocketRequest()
         request.method = method
         let pars = JSONRPCparams(params: parameters)
         request.params = pars
