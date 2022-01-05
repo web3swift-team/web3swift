@@ -50,7 +50,23 @@ public struct WebsocketSubscription: Subscription {
 public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, WebSocketDelegate {
 
     public func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse> {
-        return Promise(error: Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'"))
+        guard let method = request.method else {
+            return Promise(error: Web3Error.inputError(desc: "No method in request: \(request)"))
+        }
+        guard [.subscribe, .unsubscribe].contains(method) else {
+            return Promise(error: Web3Error.inputError(desc: "Unsupported method: \(method)"))
+        }
+        return Promise { resolver in
+            let requestData = try JSONEncoder().encode(request)
+            print(String(decoding: requestData, as: UTF8.self))
+            writeMessage(requestData)
+            requests[request.id] = { result in
+                switch result {
+                case .success(let response): resolver.fulfill(response)
+                case .failure(let error): resolver.reject(error)
+                }
+            }
+        }
     }
     
     public func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue) -> Promise<JSONRPCresponseBatch> {
@@ -67,6 +83,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     
     public var socket: WebSocket
     public var delegate: Web3SocketDelegate
+    private var queue: DispatchQueue? = nil
     /// A flag that is true if socket connected or false if socket doesn't connected.
     public var websocketConnected: Bool = false
     
@@ -78,7 +95,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     public var debugMode: Bool = false
     
     private var subscriptions = [String: (sub: WebsocketSubscription, cb: (Swift.Result<Decodable, Error>) -> Void)]()
-    private var requests = [UInt64: (Swift.Result<Decodable, Error>) -> Void]()
+    private var requests = [UInt64: (Swift.Result<JSONRPCresponse, Error>) -> Void]()
     
     public init?(_ endpoint: URL,
                  delegate wsdelegate: Web3SocketDelegate? = nil,
@@ -163,6 +180,10 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
         writeTimer?.invalidate()
     }
     
+    public func setQueue(queue: DispatchQueue) {
+        self.queue = queue
+    }
+    
     public func subscribe<R>(filter: SubscribeEventFilter,
                              listener: @escaping Web3SubscriptionListener<R>) -> Subscription {
         let params: [Encodable]
@@ -176,34 +197,39 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
         case .syncing:
             params = ["syncing"]
         }
-        let method = JSONRPCmethod.subscribe
         var subscription = WebsocketSubscription(unsubscribeCallback: { subscription in
-            let method = JSONRPCmethod.unsubscribe
-            self.send(method: method, params: [subscription.id]) { result in
+            let request = JSONRPCRequestFabric.prepareRequest(JSONRPCmethod.unsubscribe, parameters: [subscription.id])
+            self.sendAsync(request, queue: self.queue!).pipe { result in
                 switch result {
-                case .success(let data):
-                    let unsubscribed = data as! Bool
+                case .fulfilled(let response):
+                    guard let unsubscribed = response.result as? Bool else {
+                        self.delegate.gotError(error: Web3Error.processingError(desc: "Wrong result in response: \(response)"))
+                        return
+                    }
                     if unsubscribed {
                         self.subscriptions.removeValue(forKey: subscription.id)
                     } else {
                         self.delegate.gotError(error: Web3Error.processingError(desc: "Can\'t unsubscribe \(subscription.id)"))
                     }
-                case .failure(let error):
+                case .rejected(let error):
                     self.delegate.gotError(error: error)
                 }
             }
         })
-        let handler = { (result: Swift.Result<Decodable, Error>) in
-            listener(result.map { $0 as! R })
-        }
-        send(method: method, params: params) { result in
+        let request = JSONRPCRequestFabric.prepareRequest(JSONRPCmethod.subscribe, parameters: params)
+        sendAsync(request, queue: queue!).pipe { result in
             switch result {
-            case .success(let data):
-                let subscriptionID = data as! String
+            case .fulfilled(let response):
+                guard let subscriptionID = response.result as? String else {
+                    self.delegate.gotError(error: Web3Error.processingError(desc: "Wrong result in response: \(response)"))
+                    return
+                }
                 subscription.id = subscriptionID
-                self.subscriptions[subscriptionID] = (subscription, handler)
-            case .failure(let error):
-                handler(.failure(error))
+                self.subscriptions[subscriptionID] = (subscription, { result in
+                    listener(result.map { $0 as! R })
+                })
+            case .rejected(let error):
+                listener(.failure(error))
             }
         }
         return subscription
@@ -269,30 +295,12 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
         writeTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(performWriteOperations), userInfo: nil, repeats: true)
     }
     
-    public func writeMessage(method: JSONRPCmethod, params: [Encodable]) throws -> JSONRPCrequest {
+    public func writeMessage(method: JSONRPCmethod, params: [Encodable]) throws {
         let request = JSONRPCRequestFabric.prepareRequest(method, parameters: params)
         let encoder = JSONEncoder()
         let requestData = try encoder.encode(request)
         print(String(decoding: requestData, as: UTF8.self))
         writeMessage(requestData)
-        return request
-    }
-    
-    private func send(method: JSONRPCmethod,
-                      params: [Encodable],
-                      cb: @escaping (Swift.Result<Decodable, Error>) -> Void) {
-        guard [.subscribe, .unsubscribe].contains(method) else {
-            cb(.failure(Web3Error.inputError(desc: "Unsupported method \(method)")))
-            return
-        }
-        let request: JSONRPCrequest
-        do {
-            request = try writeMessage(method: method, params: params)
-        } catch {
-            cb(.failure(error))
-            return
-        }
-        requests[request.id] = cb
     }
     
     @objc private func performWriteOperations() {
@@ -356,12 +364,23 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
 //                // setting filter id
 //                filterID = result
 //            } else
-            if let id = dictionary["id"] as? UInt64,
-                      let result = dictionary["result"] as? Decodable {
-                guard let request = requests.removeValue(forKey: id) else {
+            if let _ = dictionary["id"] as? UInt64 {
+                let response: JSONRPCresponse
+                do {
+                    response = try JSONDecoder().decode(JSONRPCresponse.self, from: data)
+                } catch {
+                    delegate.gotError(error: error)
                     return
                 }
-                request(.success(result))
+                if let request = requests.removeValue(forKey: UInt64(response.id)) {
+                    if let error = response.error {
+                        request(.failure(Web3Error.nodeError(desc: "Received an error message\n" + String(describing: error))))
+                    } else {
+                        request(.success(response))
+                    }
+                } else {
+                    delegate.gotError(error: Web3Error.processingError(desc: "Unknown response id. Message is: \(text)"))
+                }
             } else if let params = dictionary["params"] as? [String: Any],
                 let subscriptionID = params["subscription"] as? String,
                 let result = params["result"] as? Decodable {
