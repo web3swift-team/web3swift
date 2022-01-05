@@ -227,6 +227,10 @@ public struct JSONRPCresponse: Decodable{
 public struct JSONRPCresponseBatch: Decodable {
     var responses: [JSONRPCresponse]
     
+    public init(responses: [JSONRPCresponse]) {
+        self.responses = responses
+    }
+    
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let responses = try container.decode([JSONRPCresponse].self)

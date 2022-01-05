@@ -70,7 +70,9 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     }
     
     public func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue) -> Promise<JSONRPCresponseBatch> {
-        return Promise(error: Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'"))
+        when(fulfilled: requests.requests.map { sendAsync($0, queue: queue) }).map { responses in
+            JSONRPCresponseBatch(responses: responses)
+        }
     }
     
     public var network: Networks?
