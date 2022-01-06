@@ -689,3 +689,17 @@ public struct TxPoolContentForNonce {
     public var nonce: BigUInt
     public var details: [TransactionDetails]
 }
+
+public enum FilterChanges: Decodable {
+    case hashes([String])
+    case logs([EventLog])
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let hashes = try? container.decode([String].self) {
+            self = .hashes(hashes)
+        } else {
+            self = .logs(try container.decode([EventLog].self))
+        }
+    }
+}

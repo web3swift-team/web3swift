@@ -160,6 +160,8 @@ public struct JSONRPCresponse: Decodable{
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent([String:[String:[String:[String:String?]]]].self, forKey: .result) {
             result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent(FilterChanges.self, forKey: .result) {
+            result = rawValue
         }
         self.init(id: id, jsonrpc: jsonrpc, result: result, error: nil)
     }

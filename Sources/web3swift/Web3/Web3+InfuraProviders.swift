@@ -4,28 +4,7 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 import Foundation
-import BigInt
 import Starscream
-
-public enum BlockNumber {
-    case pending
-    case latest
-    case earliest
-    case exact(BigUInt)
-    
-    public var stringValue: String {
-        switch self {
-        case .pending:
-            return "pending"
-        case .latest:
-            return "latest"
-        case .earliest:
-            return "earliest"
-        case .exact(let number):
-            return String(number, radix: 16).addHexPrefix()
-        }
-    }
-}
 
 /// Custom Web3 HTTP provider of Infura nodes.
 public final class InfuraProvider: Web3HttpProvider {
@@ -39,9 +18,6 @@ public final class InfuraProvider: Web3HttpProvider {
 
 /// Custom Websocket provider of Infura nodes.
 public final class InfuraWebsocketProvider: WebsocketProvider {
-    public var filterID: String?
-    private var filterTimer: Timer?
-    
     public init?(_ network: Networks,
                  delegate: Web3SocketDelegate? = nil,
                  projectId: String? = nil) {
@@ -105,74 +81,6 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
                                                            projectId: projectId) else {return nil}
         socketProvider.connectSocket()
         return socketProvider
-    }
-    
-    public func setFilterAndGetChanges(method: JSONRPCmethod, params: [Encodable]? = nil) throws {
-        filterTimer?.invalidate()
-        filterID = nil
-        let params = params ?? []
-        let paramsCount = params.count
-        guard method.requiredNumOfParameters == paramsCount || method.requiredNumOfParameters == nil else {
-            throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters!), got - \(paramsCount)")
-        }
-        try writeMessage(method: method, params: params)
-        filterTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(getFilterChanges), userInfo: nil, repeats: true)
-    }
-    
-    public func setFilterAndGetChanges(method: JSONRPCmethod, address: EthereumAddress? = nil, fromBlock: BlockNumber? = nil, toBlock: BlockNumber? = nil, topics: [String]? = nil) throws {
-        let filterParams = EventFilterParameters(fromBlock: fromBlock?.stringValue, toBlock: toBlock?.stringValue, topics: [topics], address: [address?.address])
-        try setFilterAndGetChanges(method: method, params: [filterParams])
-    }
-    
-    public func setFilterAndGetLogs(method: JSONRPCmethod, params: [Encodable]? = nil) throws {
-        filterTimer?.invalidate()
-        filterID = nil
-        let params = params ?? []
-        let paramsCount = params.count
-        guard method.requiredNumOfParameters == paramsCount || method.requiredNumOfParameters == nil else {
-            throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters!), got - \(paramsCount)")
-        }
-        try writeMessage(method: method, params: params)
-        filterTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(getFilterLogs), userInfo: nil, repeats: true)
-    }
-    
-    public func setFilterAndGetLogs(method: JSONRPCmethod, address: EthereumAddress? = nil, fromBlock: BlockNumber? = nil, toBlock: BlockNumber? = nil, topics: [String]? = nil) throws {
-        let filterParams = EventFilterParameters(fromBlock: fromBlock?.stringValue, toBlock: toBlock?.stringValue, topics: [topics], address: [address?.address])
-        try setFilterAndGetLogs(method: method, params: [filterParams])
-    }
-    
-    @objc public func getFilterChanges() throws {
-        if let id = filterID {
-            filterTimer?.invalidate()
-            let method = JSONRPCmethod.getFilterChanges
-            try writeMessage(method: method, params: [id])
-        }
-    }
-    
-    @objc public func getFilterLogs() throws {
-        if let id = filterID {
-            filterTimer?.invalidate()
-            let method = JSONRPCmethod.getFilterLogs
-            try writeMessage(method: method, params: [id])
-        }
-    }
-    
-    public func getFilterLogs(address: EthereumAddress? = nil, fromBlock: BlockNumber? = nil, toBlock: BlockNumber? = nil, topics: [String]? = nil) throws {
-        if let id = filterID {
-            let filterParams = EventFilterParameters(fromBlock: fromBlock?.stringValue, toBlock: toBlock?.stringValue, topics: [topics], address: [address?.address])
-            let method = JSONRPCmethod.getFilterLogs
-            try writeMessage(method: method, params: [id, filterParams])
-        }
-    }
-    
-    public func unistallFilter() throws {
-        if let id = filterID {
-            filterID = nil
-            let method = JSONRPCmethod.uninstallFilter
-            try writeMessage(method: method, params: [id])
-        } else {
-            throw Web3Error.nodeError(desc: "No filter set")
-        }
     }
     
     public func subscribeOnNewHeads() throws {

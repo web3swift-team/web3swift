@@ -359,13 +359,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     
     private func websocketDidReceiveMessage(text: String) {
         if let data = text.data(using: String.Encoding.utf8),
-            let dictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-            // TODO: filterID
-//            if filterID == nil,
-//                let result = dictionary["result"] as? String {
-//                // setting filter id
-//                filterID = result
-//            } else
+           let dictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
             if let _ = dictionary["id"] as? UInt64 {
                 let response: JSONRPCresponse
                 do {
@@ -390,9 +384,6 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
                     return
                 }
                 subscription.cb(.success(result))
-            } else if let message = dictionary["result"] {
-                // filter result
-                // TODO: process filter result
             } else {
                 delegate.gotError(error: Web3Error.processingError(desc: "Can\'t get known result. Message is: \(text)"))
             }

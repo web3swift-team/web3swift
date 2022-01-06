@@ -30,11 +30,6 @@ extension web3.Eth {
         return infuraWSProvider
     }
     
-    public func getLatestPendingTransactions(forDelegate delegate: Web3SocketDelegate) throws {
-        let provider = try getWebsocketProvider(forDelegate: delegate)
-        try provider.setFilterAndGetChanges(method: .newPendingTransactionFilter)
-    }
-    
     public func subscribeOnPendingTransactions(forDelegate delegate: Web3SocketDelegate) throws {
         let provider = try getWebsocketProvider(forDelegate: delegate)
         try provider.subscribeOnNewPendingTransactions()
