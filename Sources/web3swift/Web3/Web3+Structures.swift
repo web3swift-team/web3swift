@@ -703,3 +703,44 @@ public enum FilterChanges: Decodable {
         }
     }
 }
+
+public struct BlockHeader: Decodable {
+    public let difficulty: String
+    public let extraData: String
+    public let gasLimit: String
+    public let gasUsed: String
+    public let logsBloom: String
+    public let miner: String
+    public let nonce: String
+    public let number: String
+    public let parentHash: String
+    public let receiptRoot: String
+    public let sha3Uncles: String
+    public let stateRoot: String
+    public let timestamp: String
+    public let transactionsRoot: String
+}
+
+public struct LogItem: Decodable {
+    public let address: String
+    public let blockHash: String
+    public let blockNumber: String
+    public let data: String
+    public let logIndex: String
+    public let topics: [String]
+    public let transactionHash: String
+    public let transactionIndex: String
+}
+
+public struct SyncingInfo: Decodable {
+    public struct Status: Decodable {
+        public let startingBlock: Int
+        public let currentBlock: Int
+        public let highestBlock: Int
+        public let pulledStates: Int
+        public let knownStates: Int
+    }
+    
+    public let syncing: Bool
+    public let status: Status?
+}

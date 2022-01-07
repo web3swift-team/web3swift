@@ -10,30 +10,39 @@ import BigInt
 import PromiseKit
 import Starscream
 
+public struct SubscribeOnLogsParams: Encodable {
+    public let address: [String]?
+    public let topics: [String]?
+}
 
 extension web3.Eth {
-    
-    public func getWebsocketProvider(forDelegate delegate: Web3SocketDelegate) throws -> InfuraWebsocketProvider {
-        var infuraWSProvider: InfuraWebsocketProvider
-        if !(provider is InfuraWebsocketProvider) {
-            guard let infuraNetwork = provider.network else {
-                throw Web3Error.processingError(desc: "Wrong network")
-            }
-            guard let infuraProvider = InfuraWebsocketProvider(infuraNetwork, delegate: delegate) else {
-                throw Web3Error.processingError(desc: "Wrong network")
-            }
-            infuraWSProvider = infuraProvider
-        } else {
-            infuraWSProvider = provider as! InfuraWebsocketProvider
+    private func _subscribe<R>(filter: SubscribeEventFilter,
+                              listener: @escaping Web3SubscriptionListener<R>) throws -> Subscription {
+        guard let provider = provider as? Web3SubscriptionProvider else {
+            throw Web3Error.processingError(desc: "Provider is not subscribable")
         }
-        infuraWSProvider.connectSocket()
-        return infuraWSProvider
+        return provider.subscribe(filter: filter, listener: listener)
     }
     
-    public func subscribeOnPendingTransactions(forDelegate delegate: Web3SocketDelegate) throws {
-        let provider = try getWebsocketProvider(forDelegate: delegate)
-        try provider.subscribeOnNewPendingTransactions()
+    public func subscribeOnNewHeads(listener: @escaping Web3SubscriptionListener<BlockHeader>) throws -> Subscription {
+        try _subscribe(filter: .newHeads, listener: listener)
     }
     
-    // TODO: make 4 subscribe methods
+    public func subscribeOnLogs(addresses: [EthereumAddress]? = nil,
+                                topics: [String]? = nil,
+                                listener: @escaping Web3SubscriptionListener<LogItem>) throws -> Subscription {
+        let params = SubscribeOnLogsParams(address: addresses?.map { $0.address }, topics: topics)
+        return try _subscribe(filter: .logs(params: params), listener: listener)
+    }
+    
+    public func subscribeOnNewPendingTransactions(listener: @escaping Web3SubscriptionListener<String>) throws -> Subscription {
+        try _subscribe(filter: .newPendingTransactions, listener: listener)
+    }
+    
+    public func subscribeOnSyncing(listener: @escaping Web3SubscriptionListener<SyncingInfo>) throws -> Subscription {
+        guard provider.network != Networks.Kovan else {
+            throw Web3Error.inputError(desc: "Can't sync on Kovan")
+        }
+        return try _subscribe(filter: .syncing, listener: listener)
+    }
 }

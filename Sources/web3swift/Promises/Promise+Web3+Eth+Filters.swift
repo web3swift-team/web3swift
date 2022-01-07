@@ -30,7 +30,7 @@ public enum BlockNumber {
 }
 
 extension web3.Eth {
-    private func dispatchRequest<T>(_ request: JSONRPCrequest) -> Promise<T> {
+    private func _dispatchRequest<T>(_ request: JSONRPCrequest) -> Promise<T> {
         web3.dispatch(request).map(on: web3.requestDispatcher.queue) { response in
             guard let value: T = response.getValue() else {
                 if response.error != nil {
@@ -47,26 +47,26 @@ extension web3.Eth {
                                  toBlock: BlockNumber? = .latest,
                                  topics: [String]) -> Promise<String> {
         let addresses = addresses.map { $0.address.lowercased() }
-        return dispatchRequest(JSONRPCRequestFabric.prepareRequest(.newFilter, parameters: [addresses, fromBlock?.stringValue, toBlock?.stringValue, topics]))
+        return _dispatchRequest(JSONRPCRequestFabric.prepareRequest(.newFilter, parameters: [addresses, fromBlock?.stringValue, toBlock?.stringValue, topics]))
     }
     
     public func newBlockFilterPromise() -> Promise<String> {
-        return dispatchRequest(JSONRPCRequestFabric.prepareRequest(.newBlockFilter, parameters: []))
+        return _dispatchRequest(JSONRPCRequestFabric.prepareRequest(.newBlockFilter, parameters: []))
     }
     
     public func newPendingTransactionFilterPromise() -> Promise<String> {
-        return dispatchRequest(JSONRPCRequestFabric.prepareRequest(.newPendingTransactionFilter, parameters: []))
+        return _dispatchRequest(JSONRPCRequestFabric.prepareRequest(.newPendingTransactionFilter, parameters: []))
     }
     
     public func uninstallFilterPromise(filterID: String) -> Promise<Bool> {
-        return dispatchRequest(JSONRPCRequestFabric.prepareRequest(.uninstallFilter, parameters: [filterID]))
+        return _dispatchRequest(JSONRPCRequestFabric.prepareRequest(.uninstallFilter, parameters: [filterID]))
     }
     
     public func getFilterChangesPromise(filterID: String) -> Promise<FilterChanges> {
-        return dispatchRequest(JSONRPCRequestFabric.prepareRequest(.getFilterChanges, parameters: [filterID]))
+        return _dispatchRequest(JSONRPCRequestFabric.prepareRequest(.getFilterChanges, parameters: [filterID]))
     }
     
     public func getFilterLogsPromise(filterID: String) -> Promise<FilterChanges> {
-        return dispatchRequest(JSONRPCRequestFabric.prepareRequest(.getFilterLogs, parameters: [filterID]))
+        return _dispatchRequest(JSONRPCRequestFabric.prepareRequest(.getFilterLogs, parameters: [filterID]))
     }
 }

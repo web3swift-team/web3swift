@@ -46,6 +46,17 @@ public struct WebsocketSubscription: Subscription {
     }
 }
 
+public struct JSONRPCSubscriptionEvent<R: Decodable>: Decodable {
+    public struct Params: Decodable {
+        public let result: R
+        public let subscription: String
+    }
+    
+    public let jsonrpc: String
+    public let method: String
+    public let params: Params
+}
+
 /// The default websocket provider.
 public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, WebSocketDelegate {
 
@@ -57,13 +68,21 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
             return Promise(error: Web3Error.inputError(desc: "Unsupported method: \(method)"))
         }
         return Promise { resolver in
-            let requestData = try JSONEncoder().encode(request)
-            print(String(decoding: requestData, as: UTF8.self))
-            writeMessage(requestData)
-            requests[request.id] = { result in
-                switch result {
-                case .success(let response): resolver.fulfill(response)
-                case .failure(let error): resolver.reject(error)
+            queue.async {
+                let requestData: Data
+                do {
+                    requestData = try JSONEncoder().encode(request)
+                } catch {
+                    resolver.reject(error)
+                    return
+                }
+                print(String(decoding: requestData, as: UTF8.self))
+                self.writeMessage(requestData)
+                self.requests[request.id] = { result in
+                    switch result {
+                    case .success(let response): resolver.fulfill(response)
+                    case .failure(let error): resolver.reject(error)
+                    }
                 }
             }
         }
@@ -85,7 +104,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     
     public var socket: WebSocket
     public var delegate: Web3SocketDelegate
-    private var queue: DispatchQueue? = nil
+    private var queue: DispatchQueue!
     /// A flag that is true if socket connected or false if socket doesn't connected.
     public var websocketConnected: Bool = false
     
@@ -96,7 +115,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     /// if set debugMode True then show websocket events logs in the console
     public var debugMode: Bool = false
     
-    private var subscriptions = [String: (sub: WebsocketSubscription, cb: (Swift.Result<Decodable, Error>) -> Void)]()
+    private var subscriptions = [String: (sub: WebsocketSubscription, cb: (Swift.Result<Data, Error>) -> Void)]()
     private var requests = [UInt64: (Swift.Result<JSONRPCresponse, Error>) -> Void]()
     
     public init?(_ endpoint: URL,
@@ -201,7 +220,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
         }
         var subscription = WebsocketSubscription(unsubscribeCallback: { subscription in
             let request = JSONRPCRequestFabric.prepareRequest(JSONRPCmethod.unsubscribe, parameters: [subscription.id])
-            self.sendAsync(request, queue: self.queue!).pipe { result in
+            self.sendAsync(request, queue: self.queue).pipe { result in
                 switch result {
                 case .fulfilled(let response):
                     guard let unsubscribed = response.result as? Bool else {
@@ -219,7 +238,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
             }
         })
         let request = JSONRPCRequestFabric.prepareRequest(JSONRPCmethod.subscribe, parameters: params)
-        sendAsync(request, queue: queue!).pipe { result in
+        sendAsync(request, queue: queue).pipe { result in
             switch result {
             case .fulfilled(let response):
                 guard let subscriptionID = response.result as? String else {
@@ -228,7 +247,11 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
                 }
                 subscription.id = subscriptionID
                 self.subscriptions[subscriptionID] = (subscription, { result in
-                    listener(result.map { $0 as! R })
+                    listener(result.flatMap { eventData in
+                        Swift.Result {
+                            try JSONDecoder().decode(JSONRPCSubscriptionEvent<R>.self, from: eventData)
+                        }
+                    }.map { $0.params.result })
                 })
             case .rejected(let error):
                 listener(.failure(error))
@@ -365,7 +388,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
                 do {
                     response = try JSONDecoder().decode(JSONRPCresponse.self, from: data)
                 } catch {
-                    delegate.gotError(error: error)
+                    delegate.gotError(error: Web3Error.processingError(desc: "Cannot parse JSON-RPC response. Error: \(String(describing: error)). Response: \(text)"))
                     return
                 }
                 if let request = requests.removeValue(forKey: UInt64(response.id)) {
@@ -378,12 +401,12 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
                     delegate.gotError(error: Web3Error.processingError(desc: "Unknown response id. Message is: \(text)"))
                 }
             } else if let params = dictionary["params"] as? [String: Any],
-                let subscriptionID = params["subscription"] as? String,
-                let result = params["result"] as? Decodable {
+                      let subscriptionID = params["subscription"] as? String {
                 guard let subscription = subscriptions[subscriptionID] else {
+                    delegate.gotError(error: Web3Error.processingError(desc: "Unknown subscription id: \(subscriptionID)"))
                     return
                 }
-                subscription.cb(.success(result))
+                subscription.cb(.success(data))
             } else {
                 delegate.gotError(error: Web3Error.processingError(desc: "Can\'t get known result. Message is: \(text)"))
             }

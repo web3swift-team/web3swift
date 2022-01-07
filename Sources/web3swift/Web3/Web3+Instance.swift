@@ -29,6 +29,9 @@ public class web3 {
         } else {
             self.requestDispatcher = requestDispatcher!
         }
+        if let provider = provider as? WebsocketProvider {
+            provider.setQueue(queue: self.requestDispatcher.queue)
+        }
     }
     
     /// Keystore manager can be bound to Web3 instance. If some manager is bound all further account related functions, such

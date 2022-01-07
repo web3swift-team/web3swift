@@ -83,75 +83,76 @@ class web3swift_websocket_Tests: XCTestCase {
         }
     }
     
-    func testSubscribeOnPendingTXs() {
-        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
-            return XCTFail()
-        }
-        self.socketProvider = socketProvider
-        spyDelegate.asyncExpectation = expectation(description: "Delegate called")
-        try! self.socketProvider!.subscribeOnNewPendingTransactions()
-//        DispatchQueue.main.asyncAfter(deadline: .now()+5) { [unowned self] in
-//            try! self.socketProvider!.subscribeOnNewPendingTransactions()
+    // TODO: subscription tests
+//    func testSubscribeOnPendingTXs() {
+//        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
+//            return XCTFail()
 //        }
-        waitForExpectations(timeout: 1000) { error in
-            if let error = error {
-                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
-            }
-            
-            guard self.spyDelegate.somethingWithDelegateResult != nil else {
-                XCTFail("Expected delegate to be called")
-                return
-            }
-            
-            XCTAssert(true)
-        }
-    }
+//        self.socketProvider = socketProvider
+//        spyDelegate.asyncExpectation = expectation(description: "Delegate called")
+//        try! self.socketProvider!.subscribeOnNewPendingTransactions()
+////        DispatchQueue.main.asyncAfter(deadline: .now()+5) { [unowned self] in
+////            try! self.socketProvider!.subscribeOnNewPendingTransactions()
+////        }
+//        waitForExpectations(timeout: 1000) { error in
+//            if let error = error {
+//                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+//            }
+//
+//            guard self.spyDelegate.somethingWithDelegateResult != nil else {
+//                XCTFail("Expected delegate to be called")
+//                return
+//            }
+//
+//            XCTAssert(true)
+//        }
+//    }
     
-    func testSubscribeOnLogs() {
-        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
-            return XCTFail()
-        }
-        self.socketProvider = socketProvider
-        spyDelegate.asyncExpectation = expectation(description: "Delegate called")
-        try! self.socketProvider!.subscribeOnLogs(addresses: [EthereumAddress("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48")!], topics: nil)
-        //        DispatchQueue.main.asyncAfter(deadline: .now()+5) { [unowned self] in
-        //            try! self.socketProvider!.subscribeOnNewPendingTransactions()
-        //        }
-        waitForExpectations(timeout: 1000) { error in
-            if let error = error {
-                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
-            }
-            
-            guard self.spyDelegate.somethingWithDelegateResult != nil else {
-                XCTFail("Expected delegate to be called")
-                return
-            }
-            
-            XCTAssert(true)
-        }
-    }
+//    func testSubscribeOnLogs() {
+//        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
+//            return XCTFail()
+//        }
+//        self.socketProvider = socketProvider
+//        spyDelegate.asyncExpectation = expectation(description: "Delegate called")
+//        try! self.socketProvider!.subscribeOnLogs(addresses: [EthereumAddress("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48")!], topics: nil)
+//        //        DispatchQueue.main.asyncAfter(deadline: .now()+5) { [unowned self] in
+//        //            try! self.socketProvider!.subscribeOnNewPendingTransactions()
+//        //        }
+//        waitForExpectations(timeout: 1000) { error in
+//            if let error = error {
+//                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+//            }
+//
+//            guard self.spyDelegate.somethingWithDelegateResult != nil else {
+//                XCTFail("Expected delegate to be called")
+//                return
+//            }
+//
+//            XCTAssert(true)
+//        }
+//    }
     
-    func testSubscribeOnNewHeads() {
-        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
-            return XCTFail()
-        }
-        self.socketProvider = socketProvider
-        spyDelegate.asyncExpectation = expectation(description: "Delegate called")
-        try! self.socketProvider!.subscribeOnNewHeads()
-        //        DispatchQueue.main.asyncAfter(deadline: .now()+5) { [unowned self] in
-        //            try! self.socketProvider!.subscribeOnNewPendingTransactions()
-        //        }
-        waitForExpectations(timeout: 1000) { error in
-            if let error = error {
-                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
-            }
-            
-            guard self.spyDelegate.somethingWithDelegateResult != nil else {
-                XCTFail("Expected delegate to be called")
-                return
-            }
-            
-            XCTAssert(true)
-        }
-    }
+//    func testSubscribeOnNewHeads() {
+//        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
+//            return XCTFail()
+//        }
+//        self.socketProvider = socketProvider
+//        spyDelegate.asyncExpectation = expectation(description: "Delegate called")
+//        try! self.socketProvider!.subscribeOnNewHeads()
+//        //        DispatchQueue.main.asyncAfter(deadline: .now()+5) { [unowned self] in
+//        //            try! self.socketProvider!.subscribeOnNewPendingTransactions()
+//        //        }
+//        waitForExpectations(timeout: 1000) { error in
+//            if let error = error {
+//                XCTFail("waitForExpectationsWithTimeout errored: \(error)")
+//            }
+//
+//            guard self.spyDelegate.somethingWithDelegateResult != nil else {
+//                XCTFail("Expected delegate to be called")
+//                return
+//            }
+//
+//            XCTAssert(true)
+//        }
+//    }
 }

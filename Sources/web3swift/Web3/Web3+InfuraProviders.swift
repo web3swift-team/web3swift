@@ -82,38 +82,4 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         socketProvider.connectSocket()
         return socketProvider
     }
-    
-    public func subscribeOnNewHeads() throws {
-        let method = JSONRPCmethod.subscribe
-        let params = ["newHeads"]
-        try writeMessage(method: method, params: params)
-    }
-    
-    public func subscribeOnLogs(addresses: [EthereumAddress]? = nil, topics: [String]? = nil) throws {
-        let method = JSONRPCmethod.subscribe
-        var stringAddresses = [String]()
-        if let addrs = addresses {
-            for addr in addrs {
-                stringAddresses.append(addr.address)
-            }
-        }
-//        let ts = topics == nil ? nil : [topics!]
-        let filterParams = EventFilterParameters(fromBlock: nil, toBlock: nil, topics: [topics], address: stringAddresses)
-        try writeMessage(method: method, params: ["logs", filterParams])
-    }
-    
-    public func subscribeOnNewPendingTransactions() throws {
-        let method = JSONRPCmethod.subscribe
-        let params = ["newPendingTransactions"]
-        try writeMessage(method: method, params: params)
-    }
-    
-    public func subscribeOnSyncing() throws {
-        guard network != Networks.Kovan else {
-            throw Web3Error.inputError(desc: "Can't sync on Kovan")
-        }
-        let method = JSONRPCmethod.subscribe
-        let params = ["syncing"]
-        try writeMessage(method: method, params: params)
-    }
 }
