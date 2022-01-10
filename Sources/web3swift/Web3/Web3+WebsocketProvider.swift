@@ -10,14 +10,6 @@ import PromiseKit
 import BigInt
 import Foundation
 
-public protocol IWebsocketProvider {
-    var socket: WebSocket {get}
-    var delegate: Web3SocketDelegate {get set}
-    func connectSocket() throws
-    func disconnectSocket() throws
-    func writeMessage<T>(_ message: T)
-}
-
 public protocol Web3SocketDelegate {
     func socketConnected(_ headers: [String:String])
     func gotError(error: Error)
@@ -58,7 +50,7 @@ public struct JSONRPCSubscriptionEvent<R: Decodable>: Decodable {
 }
 
 /// The default websocket provider.
-public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, WebSocketDelegate {
+public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
 
     public func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse> {
         guard let method = request.method else {
