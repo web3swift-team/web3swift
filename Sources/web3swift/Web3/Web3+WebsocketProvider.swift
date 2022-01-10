@@ -207,17 +207,6 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
                              queue: DispatchQueue,
                              listener: @escaping Web3SubscriptionListener<R>) -> Subscription {
         internalQueue.sync {
-            let params: [Encodable]
-            switch filter {
-            case .newHeads:
-                params = ["newHeads"]
-            case .logs(let logsParam):
-                params = ["logs", logsParam]
-            case .newPendingTransactions:
-                params = ["newPendingTransactions"]
-            case .syncing:
-                params = ["syncing"]
-            }
             var subscription = WebsocketSubscription(unsubscribeCallback: { subscription in
                 guard let id = subscription.id else {
                     return
@@ -240,7 +229,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
                     }
                 }
             })
-            let request = JSONRPCRequestFabric.prepareRequest(JSONRPCmethod.subscribe, parameters: params)
+            let request = JSONRPCRequestFabric.prepareRequest(JSONRPCmethod.subscribe, parameters: filter.params)
             sendAsync(request, queue: queue).pipe { result in
                 switch result {
                 case .fulfilled(let response):

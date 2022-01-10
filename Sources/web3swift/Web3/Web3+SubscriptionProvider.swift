@@ -14,6 +14,17 @@ public enum SubscribeEventFilter {
     case syncing
 }
 
+extension SubscribeEventFilter {
+    public var params: [Encodable] {
+        switch self {
+        case .newHeads: return ["newHeads"]
+        case .logs(let logsParam): return ["logs", logsParam]
+        case .newPendingTransactions: return ["newPendingTransactions"]
+        case .syncing: return ["syncing"]
+        }
+    }
+}
+
 public protocol Subscription {
     func unsubscribe()
 }
