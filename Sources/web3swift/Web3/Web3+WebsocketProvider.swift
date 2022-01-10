@@ -34,7 +34,7 @@ public struct DefaultWeb3SocketDelegate: Web3SocketDelegate {
 }
 
 public struct WebsocketSubscription: Subscription {
-    public var id = ""
+    public var id: String? = nil
     private let unsubscribeCallback: (Self) -> Void
     
     public init(unsubscribeCallback: @escaping (Self) -> Void) {
@@ -78,10 +78,12 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
                 }
                 print(String(decoding: requestData, as: UTF8.self))
                 self.writeMessage(requestData)
-                self.requests[request.id] = { result in
-                    switch result {
-                    case .success(let response): resolver.fulfill(response)
-                    case .failure(let error): resolver.reject(error)
+                self.internalQueue.sync {
+                    self.requests[request.id] = { result in
+                        switch result {
+                        case .success(let response): resolver.fulfill(response)
+                        case .failure(let error): resolver.reject(error)
+                        }
                     }
                 }
             }
@@ -117,6 +119,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     
     private var subscriptions = [String: (sub: WebsocketSubscription, cb: (Swift.Result<Data, Error>) -> Void)]()
     private var requests = [UInt64: (Swift.Result<JSONRPCresponse, Error>) -> Void]()
+    private var internalQueue: DispatchQueue
     
     public init?(_ endpoint: URL,
                  delegate wsdelegate: Web3SocketDelegate? = nil,
@@ -153,6 +156,10 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
         url = URL(string: endpointString)!
         delegate = wsdelegate ?? DefaultWeb3SocketDelegate()
         let request = URLRequest(url: url)
+        internalQueue = DispatchQueue(
+            label: "web3swift.websocketProvider.internalQueue",
+            target: .global()
+        )
         socket = WebSocket(request: request)
         socket.delegate = self
     }
@@ -193,6 +200,10 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
         url = URL(string: finalEndpoint)!
         delegate = wsdelegate ?? DefaultWeb3SocketDelegate()
         let request = URLRequest(url: url)
+        internalQueue = DispatchQueue(
+            label: "web3swift.websocketProvider.internalQueue",
+            target: .global()
+        )
         socket = WebSocket(request: request)
         socket.delegate = self
     }
@@ -207,57 +218,62 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
     
     public func subscribe<R>(filter: SubscribeEventFilter,
                              listener: @escaping Web3SubscriptionListener<R>) -> Subscription {
-        let params: [Encodable]
-        switch filter {
-        case .newHeads:
-            params = ["newHeads"]
-        case .logs(let p):
-            params = ["logs", p]
-        case .newPendingTransactions:
-            params = ["newPendingTransactions"]
-        case .syncing:
-            params = ["syncing"]
-        }
-        var subscription = WebsocketSubscription(unsubscribeCallback: { subscription in
-            let request = JSONRPCRequestFabric.prepareRequest(JSONRPCmethod.unsubscribe, parameters: [subscription.id])
-            self.sendAsync(request, queue: self.queue).pipe { result in
+        internalQueue.sync {
+            let params: [Encodable]
+            switch filter {
+            case .newHeads:
+                params = ["newHeads"]
+            case .logs(let logsParam):
+                params = ["logs", logsParam]
+            case .newPendingTransactions:
+                params = ["newPendingTransactions"]
+            case .syncing:
+                params = ["syncing"]
+            }
+            var subscription = WebsocketSubscription(unsubscribeCallback: { subscription in
+                guard let id = subscription.id else {
+                    return
+                }
+                let request = JSONRPCRequestFabric.prepareRequest(JSONRPCmethod.unsubscribe, parameters: [id])
+                self.sendAsync(request, queue: self.queue).pipe { result in
+                    switch result {
+                    case .fulfilled(let response):
+                        guard let unsubscribed = response.result as? Bool else {
+                            self.delegate.gotError(error: Web3Error.processingError(desc: "Wrong result in response: \(response)"))
+                            return
+                        }
+                        if unsubscribed {
+                            self.subscriptions.removeValue(forKey: id)
+                        } else {
+                            self.delegate.gotError(error: Web3Error.processingError(desc: "Can\'t unsubscribe \(id)"))
+                        }
+                    case .rejected(let error):
+                        self.delegate.gotError(error: error)
+                    }
+                }
+            })
+            let request = JSONRPCRequestFabric.prepareRequest(JSONRPCmethod.subscribe, parameters: params)
+            sendAsync(request, queue: queue).pipe { result in
                 switch result {
                 case .fulfilled(let response):
-                    guard let unsubscribed = response.result as? Bool else {
+                    guard let subscriptionID = response.result as? String else {
                         self.delegate.gotError(error: Web3Error.processingError(desc: "Wrong result in response: \(response)"))
                         return
                     }
-                    if unsubscribed {
-                        self.subscriptions.removeValue(forKey: subscription.id)
-                    } else {
-                        self.delegate.gotError(error: Web3Error.processingError(desc: "Can\'t unsubscribe \(subscription.id)"))
-                    }
+                    subscription.id = subscriptionID
+                    self.subscriptions[subscriptionID] = (subscription, { result in
+                        listener(result.flatMap { eventData in
+                            Swift.Result {
+                                try JSONDecoder().decode(JSONRPCSubscriptionEvent<R>.self, from: eventData)
+                            }
+                        }.map { $0.params.result })
+                    })
                 case .rejected(let error):
-                    self.delegate.gotError(error: error)
+                    listener(.failure(error))
                 }
             }
-        })
-        let request = JSONRPCRequestFabric.prepareRequest(JSONRPCmethod.subscribe, parameters: params)
-        sendAsync(request, queue: queue).pipe { result in
-            switch result {
-            case .fulfilled(let response):
-                guard let subscriptionID = response.result as? String else {
-                    self.delegate.gotError(error: Web3Error.processingError(desc: "Wrong result in response: \(response)"))
-                    return
-                }
-                subscription.id = subscriptionID
-                self.subscriptions[subscriptionID] = (subscription, { result in
-                    listener(result.flatMap { eventData in
-                        Swift.Result {
-                            try JSONDecoder().decode(JSONRPCSubscriptionEvent<R>.self, from: eventData)
-                        }
-                    }.map { $0.params.result })
-                })
-            case .rejected(let error):
-                listener(.failure(error))
-            }
+            return subscription
         }
-        return subscription
     }
     
     public func connectSocket() {
@@ -391,14 +407,16 @@ public class WebsocketProvider: Web3SubscriptionProvider, IWebsocketProvider, We
                     delegate.gotError(error: Web3Error.processingError(desc: "Cannot parse JSON-RPC response. Error: \(String(describing: error)). Response: \(text)"))
                     return
                 }
-                if let request = requests.removeValue(forKey: UInt64(response.id)) {
-                    if let error = response.error {
-                        request(.failure(Web3Error.nodeError(desc: "Received an error message\n" + String(describing: error))))
+                internalQueue.sync {
+                    if let request = requests.removeValue(forKey: UInt64(response.id)) {
+                        if let error = response.error {
+                            request(.failure(Web3Error.nodeError(desc: "Received an error message\n" + String(describing: error))))
+                        } else {
+                            request(.success(response))
+                        }
                     } else {
-                        request(.success(response))
+                        delegate.gotError(error: Web3Error.processingError(desc: "Unknown response id. Message is: \(text)"))
                     }
-                } else {
-                    delegate.gotError(error: Web3Error.processingError(desc: "Unknown response id. Message is: \(text)"))
                 }
             } else if let params = dictionary["params"] as? [String: Any],
                       let subscriptionID = params["subscription"] as? String {
