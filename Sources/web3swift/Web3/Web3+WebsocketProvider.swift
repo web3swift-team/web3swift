@@ -69,13 +69,18 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
                     return
                 }
                 print(String(decoding: requestData, as: UTF8.self))
-                self.writeMessage(requestData)
                 self.internalQueue.sync {
                     self.requests[request.id] = { result in
                         switch result {
                         case .success(let response): resolver.fulfill(response)
                         case .failure(let error): resolver.reject(error)
                         }
+                    }
+                    let writeRequest = { self.socket.write(data: requestData) }
+                    if self.websocketConnected {
+                        writeRequest()
+                    } else {
+                        self.pendingRequests.append(writeRequest)
                     }
                 }
             }
@@ -101,15 +106,12 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
     /// A flag that is true if socket connected or false if socket doesn't connected.
     public var websocketConnected: Bool = false
     
-    private var writeTimer: Timer? = nil
-    private var messagesStringToWrite: [String] = []
-    private var messagesDataToWrite: [Data] = []
-    
     /// if set debugMode True then show websocket events logs in the console
     public var debugMode: Bool = false
     
     private var subscriptions = [String: (sub: WebsocketSubscription, cb: (Swift.Result<Data, Error>) -> Void)]()
     private var requests = [UInt64: (Swift.Result<JSONRPCresponse, Error>) -> Void]()
+    private var pendingRequests = [() -> Void]()
     private var internalQueue: DispatchQueue
     
     public init?(_ endpoint: URL,
@@ -199,10 +201,6 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
         socket.delegate = self
     }
     
-    deinit {
-        writeTimer?.invalidate()
-    }
-    
     public func subscribe<R>(filter: SubscribeEventFilter,
                              queue: DispatchQueue,
                              listener: @escaping Web3SubscriptionListener<R>) -> Subscription {
@@ -254,12 +252,10 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
     }
     
     public func connectSocket() {
-        writeTimer?.invalidate()
         socket.connect()
     }
     
     public func disconnectSocket() {
-        writeTimer?.invalidate()
         socket.disconnect()
     }
     
@@ -295,49 +291,12 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
         return socketProvider
     }
     
-    public func writeMessage<T>(_ message: T) {
-        var sMessage: String? = nil
-        var dMessage: Data? = nil
-        if !(message.self is String) && !(message.self is Data) {
-            sMessage = "\(message)"
-        } else if message.self is String {
-            sMessage = message as? String
-        } else if message.self is Data {
-            dMessage = message as? Data
-        }
-        if sMessage != nil {
-            self.messagesStringToWrite.append(sMessage!)
-        } else if dMessage != nil {
-            self.messagesDataToWrite.append(dMessage!)
-        }
-        writeTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(performWriteOperations), userInfo: nil, repeats: true)
-    }
-    
-    public func writeMessage(method: JSONRPCmethod, params: [Encodable]) throws {
-        let request = JSONRPCRequestFabric.prepareRequest(method, parameters: params)
-        let encoder = JSONEncoder()
-        let requestData = try encoder.encode(request)
-        print(String(decoding: requestData, as: UTF8.self))
-        writeMessage(requestData)
-    }
-    
-    @objc private func performWriteOperations() {
-        if websocketConnected {
-            writeTimer?.invalidate()
-            for s in messagesStringToWrite {
-                socket.write(string: s)
-            }
-            for d in messagesDataToWrite {
-                socket.write(data: d)
-            }
-        }
-    }
-    
     public func didReceive(event: WebSocketEvent, client: WebSocket) {
         switch event {
         case .connected(let headers):
             debugMode ? print("websocket is connected, headers:\n \(headers)") : nil
             websocketConnected = true
+            connected()
             delegate.socketConnected(headers)
         case .disconnected(let reason, let code):
             debugMode ? print("websocket is disconnected: \(reason) with code: \(code)") : nil
@@ -370,6 +329,13 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
             debugMode ? print("error: \(String(describing: error))") : nil
             websocketConnected = false
             delegate.gotError(error: error!)
+        }
+    }
+    
+    private func connected() {
+        internalQueue.sync {
+            pendingRequests.forEach { $0() }
+            pendingRequests.removeAll()
         }
     }
     
