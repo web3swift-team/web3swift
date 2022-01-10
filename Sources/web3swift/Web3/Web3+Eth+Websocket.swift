@@ -21,6 +21,9 @@ extension web3.Eth {
         guard let provider = provider as? Web3SubscriptionProvider else {
             throw Web3Error.processingError(desc: "Provider is not subscribable")
         }
+        if let provider = provider as? WebsocketProvider {
+            provider.setQueue(queue: web3.requestDispatcher.queue)
+        }
         return provider.subscribe(filter: filter, listener: listener)
     }
     
