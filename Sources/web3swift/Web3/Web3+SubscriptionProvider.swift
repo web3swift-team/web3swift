@@ -22,5 +22,6 @@ public typealias Web3SubscriptionListener<R: Decodable> = (Result<R, Error>) -> 
 
 public protocol Web3SubscriptionProvider: Web3Provider {
     func subscribe<R>(filter: SubscribeEventFilter,
+                      queue: DispatchQueue,
                       listener: @escaping Web3SubscriptionListener<R>) -> Subscription
 }

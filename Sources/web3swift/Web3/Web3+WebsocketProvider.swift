@@ -98,7 +98,6 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
     
     public var socket: WebSocket
     public var delegate: Web3SocketDelegate
-    private var queue: DispatchQueue!
     /// A flag that is true if socket connected or false if socket doesn't connected.
     public var websocketConnected: Bool = false
     
@@ -204,11 +203,8 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
         writeTimer?.invalidate()
     }
     
-    public func setQueue(queue: DispatchQueue) {
-        self.queue = queue
-    }
-    
     public func subscribe<R>(filter: SubscribeEventFilter,
+                             queue: DispatchQueue,
                              listener: @escaping Web3SubscriptionListener<R>) -> Subscription {
         internalQueue.sync {
             let params: [Encodable]
@@ -227,7 +223,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
                     return
                 }
                 let request = JSONRPCRequestFabric.prepareRequest(JSONRPCmethod.unsubscribe, parameters: [id])
-                self.sendAsync(request, queue: self.queue).pipe { result in
+                self.sendAsync(request, queue: queue).pipe { result in
                     switch result {
                     case .fulfilled(let response):
                         guard let unsubscribed = response.result as? Bool else {
