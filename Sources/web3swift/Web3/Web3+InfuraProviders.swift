@@ -26,32 +26,51 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
             || network == Networks.Ropsten
             || network == Networks.Mainnet else {return nil}
         let networkName = network.name
-        let urlString = "wss://" + networkName + Constants.infuraWsScheme
-        guard URL(string: urlString) != nil else {return nil}
-        super.init(urlString,
-                   delegate: delegate,
-                   projectId: projectId,
-                   network: network)
+        var urlString = "wss://" + networkName + Constants.infuraWsScheme
+        urlString += projectId ?? Constants.infuraToken
+        guard let url = URL(string: urlString) else {return nil}
+        super.init(url, delegate: delegate, network: network)
     }
     
     public init?(_ endpoint: String,
                  delegate: Web3SocketDelegate? = nil,
                  projectId: String? = nil) {
-        guard URL(string: endpoint) != nil else {return nil}
-        super.init(endpoint,
-                   delegate: delegate,
-                   projectId: projectId)
+        var endpoint = endpoint
+        if !(endpoint.hasPrefix("wss://") || endpoint.hasPrefix("ws://")) {
+            return nil
+        }
+        var network: Networks? = nil
+        if endpoint.hasPrefix("wss://") && endpoint.hasSuffix(Constants.infuraWsScheme) {
+            let networkString = endpoint.replacingOccurrences(of: "wss://", with: "")
+                .replacingOccurrences(of: Constants.infuraWsScheme, with: "")
+            switch networkString {
+            case "mainnet":
+                network = Networks.Mainnet
+            case "rinkeby":
+                network = Networks.Rinkeby
+            case "ropsten":
+                network = Networks.Ropsten
+            case "kovan":
+                network = Networks.Kovan
+            default:
+                break
+            }
+        }
+        guard let network = network else {
+            return nil
+        }
+        endpoint += projectId ?? Constants.infuraToken
+        guard let url = URL(string: endpoint) else {return nil}
+        super.init(url, delegate: delegate, network: network)
     }
     
-    public init?(_ endpoint: URL,
+    public convenience init?(_ endpoint: URL,
                  delegate: Web3SocketDelegate? = nil,
                  projectId: String? = nil) {
-        super.init(endpoint,
-                   delegate: delegate,
-                   projectId: projectId)
+        self.init(endpoint.absoluteString, delegate: delegate, projectId: projectId)
     }
     
-    override public class func connectToSocket(_ endpoint: String,
+    public class func connectToSocket(_ endpoint: String,
                                                delegate: Web3SocketDelegate? = nil,
                                                projectId: String? = nil,
                                                network net: Networks? = nil) -> WebsocketProvider? {
@@ -62,7 +81,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         return socketProvider
     }
     
-    override public class func connectToSocket(_ endpoint: URL,
+    public class func connectToSocket(_ endpoint: URL,
                                                delegate: Web3SocketDelegate? = nil,
                                                projectId: String? = nil,
                                                network net: Networks? = nil) -> WebsocketProvider? {

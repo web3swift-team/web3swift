@@ -116,37 +116,9 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
     
     public init?(_ endpoint: URL,
                  delegate wsdelegate: Web3SocketDelegate? = nil,
-                 projectId: String? = nil,
-                 network net: Networks? = nil) {
-        websocketConnected = false
-        var endpointString = endpoint.absoluteString
-        if !(endpointString.hasPrefix("wss://") || endpointString.hasPrefix("ws://")) {
-            return nil
-        }
-        if endpointString.hasPrefix("wss://") && endpointString.hasSuffix(Constants.infuraWsScheme) {
-            if net == nil {
-                let networkString = endpointString.replacingOccurrences(of: "wss://", with: "")
-                    .replacingOccurrences(of: Constants.infuraWsScheme, with: "")
-                switch networkString {
-                case "mainnet":
-                    network = Networks.Mainnet
-                case "rinkeby":
-                    network = Networks.Rinkeby
-                case "ropsten":
-                    network = Networks.Ropsten
-                case "kovan":
-                    network = Networks.Kovan
-                default:
-                    break
-                }
-            } else {
-                network = net
-            }
-            if network != nil {
-                endpointString += projectId ?? Constants.infuraToken
-            }
-        }
-        url = URL(string: endpointString)!
+                 network: Networks) {
+        url = endpoint
+        self.network = network
         delegate = wsdelegate ?? DefaultWeb3SocketDelegate()
         let request = URLRequest(url: url)
         internalQueue = DispatchQueue(
@@ -157,48 +129,11 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
         socket.delegate = self
     }
     
-    public init?(_ endpoint: String,
+    public convenience init?(_ endpoint: String,
                  delegate wsdelegate: Web3SocketDelegate? = nil,
-                 projectId: String? = nil,
-                 network net: Networks? = nil) {
-        guard URL(string: endpoint) != nil else {return nil}
-        var finalEndpoint = endpoint
-        websocketConnected = false
-        if !(endpoint.hasPrefix("wss://") || endpoint.hasPrefix("ws://")) {
-            return nil
-        }
-        if endpoint.hasPrefix("wss://") && endpoint.hasSuffix(Constants.infuraWsScheme) {
-            if net == nil {
-                let networkString = endpoint.replacingOccurrences(of: "wss://", with: "")
-                    .replacingOccurrences(of: Constants.infuraWsScheme, with: "")
-                switch networkString {
-                case "mainnet":
-                    network = Networks.Mainnet
-                case "rinkeby":
-                    network = Networks.Rinkeby
-                case "ropsten":
-                    network = Networks.Ropsten
-                case "kovan":
-                    network = Networks.Kovan
-                default:
-                    break
-                }
-            } else {
-                network = net
-            }
-            if network != nil {
-                finalEndpoint += projectId ?? Constants.infuraToken
-            }
-        }
-        url = URL(string: finalEndpoint)!
-        delegate = wsdelegate ?? DefaultWeb3SocketDelegate()
-        let request = URLRequest(url: url)
-        internalQueue = DispatchQueue(
-            label: "web3swift.websocketProvider.internalQueue",
-            target: .global()
-        )
-        socket = WebSocket(request: request)
-        socket.delegate = self
+                 network: Networks) {
+        guard let url = URL(string: endpoint) else {return nil}
+        self.init(url, delegate: wsdelegate, network: network)
     }
     
     public func subscribe<R>(filter: SubscribeEventFilter,
@@ -265,11 +200,9 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
     
     public class func connectToSocket(_ endpoint: String,
                                       delegate: Web3SocketDelegate? = nil,
-                                      projectId: String? = nil,
-                                      network net: Networks? = nil) -> WebsocketProvider? {
+                                      network net: Networks) -> WebsocketProvider? {
         guard let socketProvider = WebsocketProvider(endpoint,
                                                      delegate: delegate,
-                                                     projectId: projectId,
                                                      network: net) else {
                                                 return nil
         }
@@ -279,11 +212,9 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
     
     public class func connectToSocket(_ endpoint: URL,
                                       delegate: Web3SocketDelegate? = nil,
-                                      projectId: String? = nil,
-                                      network net: Networks? = nil) -> WebsocketProvider? {
+                                      network net: Networks) -> WebsocketProvider? {
         guard let socketProvider = WebsocketProvider(endpoint,
                                                      delegate: delegate,
-                                                     projectId: projectId,
                                                      network: net) else {
                                                         return nil
         }
