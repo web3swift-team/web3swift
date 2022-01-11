@@ -95,11 +95,6 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
     
     public var network: Networks?
     public var url: URL
-    public var session: URLSession = {() -> URLSession in
-        let config = URLSessionConfiguration.default
-        let urlSession = URLSession(configuration: config)
-        return urlSession
-    }()
     
     public var socket: WebSocket
     public var delegate: Web3SocketDelegate
