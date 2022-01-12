@@ -7,7 +7,16 @@
 
 import Foundation
 
+public typealias SignatureProviderCallback<R> = (Result<R, Error>) -> Void
+
 public protocol SignatureProvider {
-    func sign(transaction: EthereumTransaction, with account: EthereumAddress) throws
-    func sign(message: Data, with account: EthereumAddress) throws
+    func accounts(_ cb: @escaping SignatureProviderCallback<[EthereumAddress]>)
+    func sign(transaction: EthereumTransaction,
+              with account: EthereumAddress,
+              using password: String,
+              _ cb: @escaping SignatureProviderCallback<EthereumTransaction>)
+    func sign(message: Data,
+              with account: EthereumAddress,
+              using password: String,
+              _ cb: @escaping SignatureProviderCallback<Data>)
 }
