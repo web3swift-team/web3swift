@@ -25,11 +25,11 @@ public struct DefaultWeb3SocketDelegate: Web3SocketDelegate {
     }
 }
 
-public struct WebsocketSubscription: Subscription {
+public class WebsocketSubscription: Subscription {
     public var id: String? = nil
-    private let unsubscribeCallback: (Self) -> Void
+    private let unsubscribeCallback: (WebsocketSubscription) -> Void
     
-    public init(unsubscribeCallback: @escaping (Self) -> Void) {
+    public init(unsubscribeCallback: @escaping (WebsocketSubscription) -> Void) {
         self.unsubscribeCallback = unsubscribeCallback
     }
     
@@ -44,7 +44,6 @@ public struct JSONRPCSubscriptionEvent<R: Decodable>: Decodable {
         public let subscription: String
     }
     
-    public let jsonrpc: String
     public let method: String
     public let params: Params
 }
@@ -135,7 +134,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
                              queue: DispatchQueue,
                              listener: @escaping Web3SubscriptionListener<R>) -> Subscription {
         internalQueue.sync {
-            var subscription = WebsocketSubscription(unsubscribeCallback: { subscription in
+            let subscription = WebsocketSubscription(unsubscribeCallback: { subscription in
                 guard let id = subscription.id else {
                     return
                 }

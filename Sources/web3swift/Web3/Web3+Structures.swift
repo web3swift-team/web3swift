@@ -714,7 +714,7 @@ public struct BlockHeader: Decodable {
     public let nonce: String
     public let number: String
     public let parentHash: String
-    public let receiptRoot: String
+    public let receiptsRoot: String
     public let sha3Uncles: String
     public let stateRoot: String
     public let timestamp: String

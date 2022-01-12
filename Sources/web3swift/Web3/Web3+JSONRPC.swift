@@ -278,6 +278,8 @@ public struct JSONRPCparams: Encodable{
                 try container.encode(p)
             } else if let p = par as? EventFilterParameters {
                 try container.encode(p)
+            } else if let p = par as? SubscribeOnLogsParams {
+                try container.encode(p)
             }
         }
     }
