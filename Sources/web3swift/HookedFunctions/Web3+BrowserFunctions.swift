@@ -11,50 +11,42 @@ import PromiseKit
 //import EthereumAddress
 
 extension web3.BrowserFunctions {
-    
-    public func getAccounts() -> [String]? {
-        do {
-            let accounts = try self.web3.eth.getAccounts()
-            return accounts.compactMap({$0.address})
-        } catch {
-            return [String]()
+    public func getAccounts() -> Promise<[String]> {
+        self.web3.eth.getAccountsPromise().map { accounts in
+            accounts.map { $0.address }
         }
     }
     
-    public func getCoinbase() -> String? {
-        guard let addresses = self.getAccounts() else {return nil}
-        guard addresses.count > 0 else {return nil}
-        return addresses[0]
+    public func getCoinbase() -> Promise<String?> {
+        self.getAccounts().map { $0.first }
     }
     
-    public func personalSign(_ personalMessage: String, account: String, password: String = "web3swift") -> String? {
+    public func personalSign(_ personalMessage: String, account: String, password: String = "web3swift") -> Promise<String?> {
         self.sign(personalMessage, account: account, password: password)
     }
     
-    public func sign(_ personalMessage: String, account: String, password: String = "web3swift") -> String? {
+    public func sign(_ personalMessage: String, account: String, password: String = "web3swift") -> Promise<String?> {
         guard let data = Data.fromHex(personalMessage) else {
-            return nil
+            return Promise.value(nil)
         }
         return self.sign(data, account: account, password: password)
     }
     
-    public func sign(_ personalMessage: Data, account: String, password: String = "web3swift") -> String? {
+    public func sign(_ personalMessage: Data, account: String, password: String = "web3swift") -> Promise<String?> {
         guard let signer = self.web3.signer,
               let from = EthereumAddress(account, ignoreChecksum: true) else {
-            return nil
+            return Promise.value(nil)
         }
-        do {
-            return try Promise { resolver in
-                signer.sign(message: personalMessage, with: from, using: password) { result in
-                    switch result {
-                    case .success(let data): resolver.fulfill(data.toHexString().addHexPrefix())
-                    case .failure(let error): resolver.reject(error)
-                    }
+        return Promise { resolver in
+            signer.sign(message: personalMessage, with: from, using: password) { result in
+                switch result {
+                case .success(let data):
+                    resolver.fulfill(data.toHexString().addHexPrefix())
+                case .failure(let error):
+                    print(error)
+                    resolver.fulfill(nil)
                 }
-            }.wait()
-        } catch {
-            print(error)
-            return nil
+            }
         }
     }
     
@@ -153,10 +145,10 @@ extension web3.BrowserFunctions {
         }
     }
     
-    public func signTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") -> String? {
+    public func signTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") -> Promise<String?> {
         guard let transaction = EthereumTransaction.fromJSON(transactionJSON),
               let options = TransactionOptions.fromJSON(transactionJSON) else {
-            return nil
+            return Promise.value(nil)
         }
         var transactionOptions = TransactionOptions()
         transactionOptions.from = options.from
@@ -172,21 +164,21 @@ extension web3.BrowserFunctions {
         return self.signTransaction(transaction, transactionOptions: transactionOptions, password: password)
     }
     
-    public func signTransaction(_ trans: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") -> String? {
+    public func signTransaction(_ trans: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") -> Promise<String?> {
         var transaction = trans
         guard let from = transactionOptions.from,
               let signer = self.web3.signer,
               let gasPricePolicy = transactionOptions.gasPrice,
               let gasLimitPolicy = transactionOptions.gasLimit,
               let noncePolicy = transactionOptions.nonce else {
-            return nil
+            return Promise.value(nil)
         }
         switch gasPricePolicy {
         case .manual(let gasPrice):
             transaction.gasPrice = gasPrice
         default:
             guard let gasPrice = try? self.web3.eth.getGasPrice() else {
-                return nil
+                return Promise.value(nil)
             }
             transaction.gasPrice = gasPrice
         }
@@ -196,7 +188,7 @@ extension web3.BrowserFunctions {
             transaction.gasLimit = gasLimit
         default:
             guard let gasLimit = try? self.web3.eth.estimateGas(transaction, transactionOptions: transactionOptions) else {
-                return nil
+                return Promise.value(nil)
             }
             transaction.gasLimit = gasLimit
         }
@@ -206,7 +198,7 @@ extension web3.BrowserFunctions {
             transaction.nonce = nonce
         default:
             guard let nonce = try? self.web3.eth.getTransactionCount(address: from, onBlock: "pending") else {
-                return nil
+                return Promise.value(nil)
             }
             transaction.nonce = nonce
         }
@@ -215,21 +207,17 @@ extension web3.BrowserFunctions {
             transaction.chainID = self.web3.provider.network?.chainID
         }
         
-        do {
-            return try Promise { resolver in
-                signer.sign(transaction: transaction, with: from, using: password) { result in
-                    switch result {
-                    case .success(let transaction):
-                        print(transaction)
-                        let signedData = transaction.encode(forSignature: false, chainID: nil)?.toHexString().addHexPrefix()
-                        resolver.fulfill(signedData)
-                    case .failure(let error):
-                        resolver.reject(error)
-                    }
+        return Promise { resolver in
+            signer.sign(transaction: transaction, with: from, using: password) { result in
+                switch result {
+                case .success(let transaction):
+                    print(transaction)
+                    let signedData = transaction.encode(forSignature: false, chainID: nil)?.toHexString().addHexPrefix()
+                    resolver.fulfill(signedData)
+                case .failure:
+                    resolver.fulfill(nil)
                 }
-            }.wait()
-        } catch {
-            return nil
+            }
         }
     }
 }

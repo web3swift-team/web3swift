@@ -63,13 +63,15 @@ open class BrowserViewController: UIViewController {
         }, for: "getRPCurl")
         
         self.webView.bridge.register({ (parameters, completion) in
-            let allAccounts = web3.browserFunctions.getAccounts()
-            completion(.success(["accounts": allAccounts as Any]))
+            web3.browserFunctions.getAccounts().done(on: DispatchQueue.main) { allAccounts in
+                completion(.success(["accounts": allAccounts as Any]))
+            }
         }, for: "eth_getAccounts")
         
         self.webView.bridge.register({ (parameters, completion) in
-            let coinbase = web3.browserFunctions.getCoinbase()
-            completion(.success(["coinbase": coinbase as Any]))
+            web3.browserFunctions.getCoinbase().done(on: DispatchQueue.main) { coinbase in
+                completion(.success(["coinbase": coinbase as Any]))
+            }
         }, for: "eth_coinbase")
         
         self.webView.bridge.register({ (parameters, completion) in
@@ -88,12 +90,13 @@ open class BrowserViewController: UIViewController {
                 completion(.failure(Bridge.JSError(code: 0, description: "Not enough parameters provided")))
                 return
             }
-            let result = web3.browserFunctions.personalSign(personalMessage!, account: account!)
-            if result == nil {
-                completion(.failure(Bridge.JSError(code: 0, description: "Account or data is invalid")))
-                return
+            web3.browserFunctions.personalSign(personalMessage!, account: account!).done(on: DispatchQueue.main) { result in
+                if result == nil {
+                    completion(.failure(Bridge.JSError(code: 0, description: "Account or data is invalid")))
+                    return
+                }
+                completion(.success(["signedMessage": result as Any]))
             }
-            completion(.success(["signedMessage": result as Any]))
         }, for: "eth_sign")
         
         self.webView.bridge.register({ (parameters, completion) in
@@ -106,12 +109,13 @@ open class BrowserViewController: UIViewController {
                 completion(.failure(Bridge.JSError(code: 0, description: "Not enough parameters provided")))
                 return
             }
-            let result = web3.browserFunctions.signTransaction(transaction!)
-            if result == nil {
-                completion(.failure(Bridge.JSError(code: 0, description: "Data is invalid")))
-                return
+            web3.browserFunctions.signTransaction(transaction!).done(on: DispatchQueue.main) { result in
+                if result == nil {
+                    completion(.failure(Bridge.JSError(code: 0, description: "Data is invalid")))
+                    return
+                }
+                completion(.success(["signedTransaction": result as Any]))
             }
-            completion(.success(["signedTransaction": result as Any]))
         }, for: "eth_signTransaction")
     }
 }
