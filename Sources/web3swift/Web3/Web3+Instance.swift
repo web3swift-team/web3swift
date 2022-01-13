@@ -22,8 +22,12 @@ public class web3 {
     }
 
     /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
-    public init(provider prov: Web3Provider, queue: OperationQueue? = nil, requestDispatcher: JSONRPCrequestDispatcher? = nil) {
-        provider = prov        
+    public init(provider prov: Web3Provider,
+                signer: SignatureProvider? = nil,
+                queue: OperationQueue? = nil,
+                requestDispatcher: JSONRPCrequestDispatcher? = nil) {
+        provider = prov
+        self.signer = signer
         if requestDispatcher == nil {
             self.requestDispatcher = JSONRPCrequestDispatcher(provider: provider, queue: DispatchQueue.global(qos: .userInteractive), policy: .Batch(32))
         } else {
