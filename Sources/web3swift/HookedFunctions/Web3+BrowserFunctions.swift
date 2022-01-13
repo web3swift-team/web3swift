@@ -26,25 +26,32 @@ extension web3.BrowserFunctions {
         return addresses[0]
     }
     
-    public func personalSign(_ personalMessage: String, account: String, password: String = "web3swift") -> String? {
-        return self.sign(personalMessage, account: account, password: password)
+    public func personalSign(_ personalMessage: String, account: String, password: String = "web3swift", _ cb: @escaping (String?) -> Void) {
+        self.sign(personalMessage, account: account, password: password, cb)
     }
     
-    public func sign(_ personalMessage: String, account: String, password: String = "web3swift") -> String? {
-        guard let data = Data.fromHex(personalMessage) else {return nil}
-        return self.sign(data, account: account, password: password)
-    }
-    
-    public func sign(_ personalMessage: Data, account: String, password: String = "web3swift") -> String? {
-        do {
-            guard let keystoreManager = self.web3.keystoreManager else {return nil}
-            guard let from = EthereumAddress(account, ignoreChecksum: true) else {return nil}
-            guard let signature = try Web3Signer.signPersonalMessage(personalMessage, keystore: keystoreManager, account: from, password: password) else {return nil}
-            return signature.toHexString().addHexPrefix()
+    public func sign(_ personalMessage: String, account: String, password: String = "web3swift", _ cb: @escaping (String?) -> Void) {
+        guard let data = Data.fromHex(personalMessage) else {
+            cb(nil)
+            return
         }
-        catch{
-            print(error)
-            return nil
+        self.sign(data, account: account, password: password, cb)
+    }
+    
+    public func sign(_ personalMessage: Data, account: String, password: String = "web3swift", _ cb: @escaping (String?) -> Void) {
+        guard let signer = self.web3.signer,
+              let from = EthereumAddress(account, ignoreChecksum: true) else {
+            cb(nil)
+            return
+        }
+        signer.sign(message: personalMessage, with: from, using: password) { result in
+            switch result {
+            case .success(let data):
+                cb(data.toHexString().addHexPrefix())
+            case .failure(let error):
+                print(error)
+                cb(nil)
+            }
         }
     }
     
@@ -143,9 +150,12 @@ extension web3.BrowserFunctions {
         }
     }
     
-    public func signTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") -> String? {
-        guard let transaction = EthereumTransaction.fromJSON(transactionJSON) else {return nil}
-        guard let options = TransactionOptions.fromJSON(transactionJSON) else {return nil}
+    public func signTransaction(_ transactionJSON: [String: Any], password: String = "web3swift", _ cb: @escaping (String?) -> Void) {
+        guard let transaction = EthereumTransaction.fromJSON(transactionJSON),
+              let options = TransactionOptions.fromJSON(transactionJSON) else {
+            cb(nil)
+            return
+        }
         var transactionOptions = TransactionOptions()
         transactionOptions.from = options.from
         transactionOptions.to = options.to
@@ -157,53 +167,65 @@ extension web3.BrowserFunctions {
         } else {
             transactionOptions.nonce = .pending
         }
-        return self.signTransaction(transaction, transactionOptions: transactionOptions, password: password)
+        self.signTransaction(transaction, transactionOptions: transactionOptions, password: password, cb)
     }
     
-    public func signTransaction(_ trans: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") -> String? {
-        do {
-            var transaction = trans
-            guard let from = transactionOptions.from else {return nil}
-            guard let keystoreManager = self.web3.keystoreManager else {return nil}
-            guard let gasPricePolicy = transactionOptions.gasPrice else {return nil}
-            guard let gasLimitPolicy = transactionOptions.gasLimit else {return nil}
-            guard let noncePolicy = transactionOptions.nonce else {return nil}
-            switch gasPricePolicy {
-            case .manual(let gasPrice):
-                transaction.gasPrice = gasPrice
-            default:
-                let gasPrice = try self.web3.eth.getGasPrice()
-                transaction.gasPrice = gasPrice
-            }
-            
-            switch gasLimitPolicy {
-            case .manual(let gasLimit):
-                transaction.gasLimit = gasLimit
-            default:
-                let gasLimit = try self.web3.eth.estimateGas(transaction, transactionOptions: transactionOptions)
-                transaction.gasLimit = gasLimit
-            }
-
-            switch noncePolicy {
-            case .manual(let nonce):
-                transaction.nonce = nonce
-            default:
-                let nonce = try self.web3.eth.getTransactionCount(address: from, onBlock: "pending")
-                transaction.nonce = nonce
-            }
-            
-            if (self.web3.provider.network != nil) {
-                transaction.chainID = self.web3.provider.network?.chainID
-            }
-            
-            guard let keystore = keystoreManager.walletForAddress(from) else {return nil}
-            try Web3Signer.signTX(transaction: &transaction, keystore: keystore, account: from, password: password)
-            print(transaction)
-            let signedData = transaction.encode(forSignature: false, chainID: nil)?.toHexString().addHexPrefix()
-            return signedData
+    public func signTransaction(_ trans: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift", _ cb: @escaping (String?) -> Void) {
+        var transaction = trans
+        guard let from = transactionOptions.from,
+              let signer = self.web3.signer,
+              let gasPricePolicy = transactionOptions.gasPrice,
+              let gasLimitPolicy = transactionOptions.gasLimit,
+              let noncePolicy = transactionOptions.nonce else {
+            cb(nil)
+            return
         }
-        catch {
-            return nil
+        switch gasPricePolicy {
+        case .manual(let gasPrice):
+            transaction.gasPrice = gasPrice
+        default:
+            guard let gasPrice = try? self.web3.eth.getGasPrice() else {
+                cb(nil)
+                return
+            }
+            transaction.gasPrice = gasPrice
+        }
+        
+        switch gasLimitPolicy {
+        case .manual(let gasLimit):
+            transaction.gasLimit = gasLimit
+        default:
+            guard let gasLimit = try? self.web3.eth.estimateGas(transaction, transactionOptions: transactionOptions) else {
+                cb(nil)
+                return
+            }
+            transaction.gasLimit = gasLimit
+        }
+
+        switch noncePolicy {
+        case .manual(let nonce):
+            transaction.nonce = nonce
+        default:
+            guard let nonce = try? self.web3.eth.getTransactionCount(address: from, onBlock: "pending") else {
+                cb(nil)
+                return
+            }
+            transaction.nonce = nonce
+        }
+        
+        if (self.web3.provider.network != nil) {
+            transaction.chainID = self.web3.provider.network?.chainID
+        }
+        
+        signer.sign(transaction: transaction, with: from, using: password) { result in
+            switch result {
+            case .success(let data):
+                print(transaction)
+                let signedData = transaction.encode(forSignature: false, chainID: nil)?.toHexString().addHexPrefix()
+                cb(signedData)
+            case .failure:
+                cb(nil)
+            }
         }
     }
 }

@@ -12,17 +12,17 @@ import PromiseKit
 extension web3.Eth {
     public func getAccountsPromise() -> Promise<[EthereumAddress]> {
         let queue = web3.requestDispatcher.queue
-        if (self.web3.keystoreManager != nil) {
-            let promise = Promise<[EthereumAddress]>.pending()
-            queue.async {
-                do {
-                    let allAccounts = try self.web3.wallet.getAccounts()
-                    promise.resolver.fulfill(allAccounts)
-                } catch {
-                    promise.resolver.reject(error)
+        if (self.web3.signer != nil) {
+            return Promise { resolver in
+                queue.async {
+                    self.web3.wallet.getAccounts { result in
+                        switch result {
+                        case .success(let accounts): resolver.fulfill(accounts)
+                        case .failure(let error): resolver.reject(error)
+                        }
+                    }
                 }
             }
-            return promise.promise
         }
         let request = JSONRPCRequestFabric.prepareRequest(.getAccounts, parameters: [])
         let rp = web3.dispatch(request)

@@ -10,63 +10,72 @@ import BigInt
 
 extension web3.Web3Wallet {
     
-    public func getAccounts() throws -> [EthereumAddress] {
-        guard let keystoreManager = self.web3.keystoreManager else {
-            throw Web3Error.walletError
+    public func getAccounts(_ cb: @escaping (Result<[EthereumAddress], Error>) -> Void) {
+        guard let signer = self.web3.signer else {
+            cb(.failure(Web3Error.walletError))
+            return
         }
-        guard let ethAddresses = keystoreManager.addresses else {
-            throw Web3Error.walletError
-        }
-        return ethAddresses
+        signer.accounts(cb)
     }
     
-    public func getCoinbase() throws -> EthereumAddress {
-        let addresses = try self.getAccounts()
-        guard addresses.count > 0 else {
-            throw Web3Error.walletError
-        }
-        return addresses[0]
-    }
-    
-    public func signTX(transaction:inout EthereumTransaction, account: EthereumAddress, password: String = "web3swift") throws -> Bool {
-        do {
-            guard let keystoreManager = self.web3.keystoreManager else {
-                throw Web3Error.walletError
+    public func getCoinbase(_ cb: @escaping (Result<EthereumAddress, Error>) -> Void) {
+        self.getAccounts { result in
+            switch result {
+            case .success(let accounts):
+                guard accounts.count > 0 else {
+                    cb(.failure(Web3Error.walletError))
+                    return
+                }
+                cb(.success(accounts[0]))
+            case .failure(let error):
+                cb(.failure(error))
             }
-            try Web3Signer.signTX(transaction: &transaction, keystore: keystoreManager, account: account, password: password)
-            return true
-        } catch {
-            if error is AbstractKeystoreError {
-                throw Web3Error.keystoreError(err: error as! AbstractKeystoreError)
-            }
-            throw Web3Error.generalError(err: error)
         }
     }
     
-    public func signPersonalMessage(_ personalMessage: String, account: EthereumAddress, password: String = "web3swift") throws -> Data {
-        guard let data = Data.fromHex(personalMessage) else
-        {
-            throw Web3Error.dataError
+    public func signTX(transaction: EthereumTransaction, account: EthereumAddress, password: String = "web3swift", _ cb: @escaping (Result<EthereumTransaction, Error>) -> Void) {
+        guard let signer = self.web3.signer else {
+            cb(.failure(Web3Error.walletError))
+            return
         }
-        return try self.signPersonalMessage(data, account: account, password: password)
+        signer.sign(transaction: transaction, with: account, using: password) { result in
+            switch result {
+            case .success(let transaction):
+                cb(.success(transaction))
+            case .failure(let error):
+                if error is AbstractKeystoreError {
+                    cb(.failure(Web3Error.keystoreError(err: error as! AbstractKeystoreError)))
+                } else {
+                    cb(.failure(Web3Error.generalError(err: error)))
+                }
+            }
+        }
     }
     
-    public func signPersonalMessage(_ personalMessage: Data, account: EthereumAddress, password: String = "web3swift") throws -> Data {
-        do {
-            guard let keystoreManager = self.web3.keystoreManager else
-            {
-                throw Web3Error.walletError
-            }
-            guard let data = try Web3Signer.signPersonalMessage(personalMessage, keystore: keystoreManager, account: account, password: password) else {
-                throw Web3Error.walletError
-            }
-            return data
+    public func signPersonalMessage(_ personalMessage: String, account: EthereumAddress, password: String = "web3swift", _ cb: @escaping (Result<Data, Error>) -> Void) {
+        guard let data = Data.fromHex(personalMessage) else {
+            cb(.failure(Web3Error.dataError))
+            return
         }
-        catch{
-            if error is AbstractKeystoreError {
-                throw Web3Error.keystoreError(err: error as! AbstractKeystoreError)
+        self.signPersonalMessage(data, account: account, password: password, cb)
+    }
+    
+    public func signPersonalMessage(_ personalMessage: Data, account: EthereumAddress, password: String = "web3swift", _ cb: @escaping (Result<Data, Error>) -> Void) {
+        guard let signer = self.web3.signer else {
+            cb(.failure(Web3Error.walletError))
+            return
+        }
+        signer.sign(message: personalMessage, with: account, using: password) { result in
+            switch result {
+            case .success(let data):
+                cb(.success(data))
+            case .failure(let error):
+                if error is AbstractKeystoreError {
+                    cb(.failure(Web3Error.keystoreError(err: error as! AbstractKeystoreError)))
+                } else {
+                    cb(.failure(Web3Error.generalError(err: error)))
+                }
             }
-            throw Web3Error.generalError(err: error)
         }
     }
 

@@ -38,7 +38,7 @@ extension web3.Eth {
             assembledTransaction = forAssemblyPipeline.0
             mergedOptions = forAssemblyPipeline.1
             
-            if self.web3.keystoreManager == nil {
+            if self.web3.signer == nil {
                 guard let request = EthereumTransaction.createRequest(method: .sendTransaction, transaction: assembledTransaction, transactionOptions: mergedOptions) else
                 {
                     throw Web3Error.processingError(desc: "Failed to create a request to send transaction")
@@ -62,12 +62,18 @@ extension web3.Eth {
             guard let from = mergedOptions.from else {
                 throw Web3Error.inputError(desc: "No 'from' field provided")
             }
-            do {
-                try Web3Signer.signTX(transaction: &assembledTransaction, keystore: self.web3.keystoreManager!, account: from, password: password)
-            } catch {
-                throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
+            return Promise { resolver in
+                queue.async {
+                    self.web3.signer!.sign(transaction: assembledTransaction, with: from, using: password) { result in
+                        switch result {
+                        case .success(let transaction): resolver.fulfill(transaction)
+                        case .failure(let error): resolver.reject(error)
+                        }
+                    }
+                }
+            }.then(on: queue) { (transaction: EthereumTransaction) in
+                self.web3.eth.sendRawTransactionPromise(transaction)
             }
-            return self.web3.eth.sendRawTransactionPromise(assembledTransaction)
         } catch {
             let returnPromise = Promise<TransactionSendingResult>.pending()
             queue.async {

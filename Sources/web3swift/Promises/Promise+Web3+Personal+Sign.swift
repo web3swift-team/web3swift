@@ -13,32 +13,28 @@ extension web3.Personal {
     
     public func signPersonalMessagePromise(message: Data, from: EthereumAddress, password:String = "web3swift") -> Promise<Data> {
         let queue = web3.requestDispatcher.queue
-        do {
-            if self.web3.keystoreManager == nil {
-                let hexData = message.toHexString().addHexPrefix()
-                let request = JSONRPCRequestFabric.prepareRequest(.personalSign, parameters: [from.address.lowercased(), hexData])
-                return self.web3.dispatch(request).map(on: queue) {response in
-                    guard let value: Data = response.getValue() else {
-                        if response.error != nil {
-                            throw Web3Error.nodeError(desc: response.error!.message)
-                        }
-                        throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
+        if self.web3.signer == nil {
+            let hexData = message.toHexString().addHexPrefix()
+            let request = JSONRPCRequestFabric.prepareRequest(.personalSign, parameters: [from.address.lowercased(), hexData])
+            return self.web3.dispatch(request).map(on: queue) {response in
+                guard let value: Data = response.getValue() else {
+                    if response.error != nil {
+                        throw Web3Error.nodeError(desc: response.error!.message)
                     }
-                    return value
+                    throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
+                }
+                return value
+            }
+        }
+        return Promise { resolver in
+            queue.async {
+                self.web3.signer!.sign(message: message, with: from, using: password) { result in
+                    switch result {
+                    case .success(let signature): resolver.fulfill(signature)
+                    case .failure(let error): resolver.reject(error)
+                    }
                 }
             }
-            guard let signature = try Web3Signer.signPersonalMessage(message, keystore: self.web3.keystoreManager!, account: from, password: password) else { throw Web3Error.inputError(desc: "Failed to locally sign a message") }
-            let returnPromise = Promise<Data>.pending()
-            queue.async {
-                returnPromise.resolver.fulfill(signature)
-            }
-            return returnPromise.promise
-        } catch {
-            let returnPromise = Promise<Data>.pending()
-            queue.async {
-                returnPromise.resolver.reject(error)
-            }
-            return returnPromise.promise
         }
     }
 }
