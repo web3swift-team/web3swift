@@ -15,7 +15,7 @@ extension web3.Eth {
         if (self.web3.signer != nil) {
             return Promise { resolver in
                 queue.async {
-                    self.web3.wallet.getAccounts { result in
+                    self.web3.signer!.accounts { result in
                         switch result {
                         case .success(let accounts): resolver.fulfill(accounts)
                         case .failure(let error): resolver.reject(error)

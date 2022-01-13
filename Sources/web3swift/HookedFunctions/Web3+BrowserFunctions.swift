@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import PromiseKit
 //import secp256k1_swift
 //import EthereumAddress
 
@@ -26,32 +27,34 @@ extension web3.BrowserFunctions {
         return addresses[0]
     }
     
-    public func personalSign(_ personalMessage: String, account: String, password: String = "web3swift", _ cb: @escaping (String?) -> Void) {
-        self.sign(personalMessage, account: account, password: password, cb)
+    public func personalSign(_ personalMessage: String, account: String, password: String = "web3swift") -> String? {
+        self.sign(personalMessage, account: account, password: password)
     }
     
-    public func sign(_ personalMessage: String, account: String, password: String = "web3swift", _ cb: @escaping (String?) -> Void) {
+    public func sign(_ personalMessage: String, account: String, password: String = "web3swift") -> String? {
         guard let data = Data.fromHex(personalMessage) else {
-            cb(nil)
-            return
+            return nil
         }
-        self.sign(data, account: account, password: password, cb)
+        return self.sign(data, account: account, password: password)
     }
     
-    public func sign(_ personalMessage: Data, account: String, password: String = "web3swift", _ cb: @escaping (String?) -> Void) {
+    public func sign(_ personalMessage: Data, account: String, password: String = "web3swift") -> String? {
         guard let signer = self.web3.signer,
               let from = EthereumAddress(account, ignoreChecksum: true) else {
-            cb(nil)
-            return
+            return nil
         }
-        signer.sign(message: personalMessage, with: from, using: password) { result in
-            switch result {
-            case .success(let data):
-                cb(data.toHexString().addHexPrefix())
-            case .failure(let error):
-                print(error)
-                cb(nil)
-            }
+        do {
+            return try Promise { resolver in
+                signer.sign(message: personalMessage, with: from, using: password) { result in
+                    switch result {
+                    case .success(let data): resolver.fulfill(data.toHexString().addHexPrefix())
+                    case .failure(let error): resolver.reject(error)
+                    }
+                }
+            }.wait()
+        } catch {
+            print(error)
+            return nil
         }
     }
     
@@ -150,11 +153,10 @@ extension web3.BrowserFunctions {
         }
     }
     
-    public func signTransaction(_ transactionJSON: [String: Any], password: String = "web3swift", _ cb: @escaping (String?) -> Void) {
+    public func signTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") -> String? {
         guard let transaction = EthereumTransaction.fromJSON(transactionJSON),
               let options = TransactionOptions.fromJSON(transactionJSON) else {
-            cb(nil)
-            return
+            return nil
         }
         var transactionOptions = TransactionOptions()
         transactionOptions.from = options.from
@@ -167,26 +169,24 @@ extension web3.BrowserFunctions {
         } else {
             transactionOptions.nonce = .pending
         }
-        self.signTransaction(transaction, transactionOptions: transactionOptions, password: password, cb)
+        return self.signTransaction(transaction, transactionOptions: transactionOptions, password: password)
     }
     
-    public func signTransaction(_ trans: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift", _ cb: @escaping (String?) -> Void) {
+    public func signTransaction(_ trans: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") -> String? {
         var transaction = trans
         guard let from = transactionOptions.from,
               let signer = self.web3.signer,
               let gasPricePolicy = transactionOptions.gasPrice,
               let gasLimitPolicy = transactionOptions.gasLimit,
               let noncePolicy = transactionOptions.nonce else {
-            cb(nil)
-            return
+            return nil
         }
         switch gasPricePolicy {
         case .manual(let gasPrice):
             transaction.gasPrice = gasPrice
         default:
             guard let gasPrice = try? self.web3.eth.getGasPrice() else {
-                cb(nil)
-                return
+                return nil
             }
             transaction.gasPrice = gasPrice
         }
@@ -196,8 +196,7 @@ extension web3.BrowserFunctions {
             transaction.gasLimit = gasLimit
         default:
             guard let gasLimit = try? self.web3.eth.estimateGas(transaction, transactionOptions: transactionOptions) else {
-                cb(nil)
-                return
+                return nil
             }
             transaction.gasLimit = gasLimit
         }
@@ -207,8 +206,7 @@ extension web3.BrowserFunctions {
             transaction.nonce = nonce
         default:
             guard let nonce = try? self.web3.eth.getTransactionCount(address: from, onBlock: "pending") else {
-                cb(nil)
-                return
+                return nil
             }
             transaction.nonce = nonce
         }
@@ -217,15 +215,21 @@ extension web3.BrowserFunctions {
             transaction.chainID = self.web3.provider.network?.chainID
         }
         
-        signer.sign(transaction: transaction, with: from, using: password) { result in
-            switch result {
-            case .success(let data):
-                print(transaction)
-                let signedData = transaction.encode(forSignature: false, chainID: nil)?.toHexString().addHexPrefix()
-                cb(signedData)
-            case .failure:
-                cb(nil)
-            }
+        do {
+            return try Promise { resolver in
+                signer.sign(transaction: transaction, with: from, using: password) { result in
+                    switch result {
+                    case .success(let transaction):
+                        print(transaction)
+                        let signedData = transaction.encode(forSignature: false, chainID: nil)?.toHexString().addHexPrefix()
+                        resolver.fulfill(signedData)
+                    case .failure(let error):
+                        resolver.reject(error)
+                    }
+                }
+            }.wait()
+        } catch {
+            return nil
         }
     }
 }
