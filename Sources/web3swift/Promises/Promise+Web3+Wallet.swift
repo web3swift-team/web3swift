@@ -1,5 +1,5 @@
 //
-//  Web3+Wallet+Promise.swift
+//  Promise+Web3+Wallet.swift
 //  
 //
 //  Created by Ostap Danylovych on 13.01.2022.
@@ -13,14 +13,7 @@ extension web3.Web3Wallet {
         guard let signer = self.web3.signer else {
             return Promise(error: Web3Error.walletError)
         }
-        return Promise { resolver in
-            signer.accounts { result in
-                switch result {
-                case .success(let accounts): resolver.fulfill(accounts)
-                case .failure(let error): resolver.reject(error)
-                }
-            }
-        }
+        return signer.accounts(on: web3.requestDispatcher.queue)
     }
     
     public func getCoinbasePromise() -> Promise<EthereumAddress> {
@@ -36,19 +29,13 @@ extension web3.Web3Wallet {
         guard let signer = self.web3.signer else {
             return Promise(error: Web3Error.walletError)
         }
-        return Promise { resolver in
-            signer.sign(transaction: transaction, with: account, using: password) { result in
-                switch result {
-                case .success(let transaction):
-                    resolver.fulfill(transaction)
-                case .failure(let error):
-                    if error is AbstractKeystoreError {
-                        resolver.reject(Web3Error.keystoreError(err: error as! AbstractKeystoreError))
-                    } else {
-                        resolver.reject(Web3Error.generalError(err: error))
-                    }
-                }
+        let queue = web3.requestDispatcher.queue
+        let signedPromise = signer.sign(transaction: transaction, with: account, using: password, on: queue)
+        return signedPromise.recover(on: queue) { error -> Promise<EthereumTransaction> in
+            if error is AbstractKeystoreError {
+                throw Web3Error.keystoreError(err: error as! AbstractKeystoreError)
             }
+            throw Web3Error.generalError(err: error)
         }
     }
     
@@ -63,18 +50,13 @@ extension web3.Web3Wallet {
         guard let signer = self.web3.signer else {
             return Promise(error: Web3Error.walletError)
         }
-        return Promise { resolver in
-            signer.sign(message: personalMessage, with: account, using: password) { result in
-                switch result {
-                case .success(let data):
-                    resolver.fulfill(data)
-                case .failure(let error):
-                    if error is AbstractKeystoreError {
-                        resolver.reject(Web3Error.keystoreError(err: error as! AbstractKeystoreError))
-                    }
-                    resolver.reject(Web3Error.generalError(err: error))
-                }
+        let queue = web3.requestDispatcher.queue
+        let signedPromise = signer.sign(message: personalMessage, with: account, using: password, on: queue)
+        return signedPromise.recover(on: queue) { error -> Promise<Data> in
+            if error is AbstractKeystoreError {
+                throw Web3Error.keystoreError(err: error as! AbstractKeystoreError)
             }
+            throw Web3Error.generalError(err: error)
         }
     }
 }

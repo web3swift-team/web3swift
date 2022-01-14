@@ -7,10 +7,8 @@
 import Foundation
 import BigInt
 import PromiseKit
-//import EthereumAddress
 
 extension web3.Personal {
-    
     public func signPersonalMessagePromise(message: Data, from: EthereumAddress, password:String = "web3swift") -> Promise<Data> {
         let queue = web3.requestDispatcher.queue
         if self.web3.signer == nil {
@@ -26,15 +24,6 @@ extension web3.Personal {
                 return value
             }
         }
-        return Promise { resolver in
-            queue.async {
-                self.web3.signer!.sign(message: message, with: from, using: password) { result in
-                    switch result {
-                    case .success(let signature): resolver.fulfill(signature)
-                    case .failure(let error): resolver.reject(error)
-                    }
-                }
-            }
-        }
+        return self.web3.signer!.sign(message: message, with: from, using: password, on: queue)
     }
 }

@@ -37,16 +37,13 @@ extension web3.BrowserFunctions {
               let from = EthereumAddress(account, ignoreChecksum: true) else {
             return Promise.value(nil)
         }
-        return Promise { resolver in
-            signer.sign(message: personalMessage, with: from, using: password) { result in
-                switch result {
-                case .success(let data):
-                    resolver.fulfill(data.toHexString().addHexPrefix())
-                case .failure(let error):
-                    print(error)
-                    resolver.fulfill(nil)
-                }
-            }
+        let queue = web3.requestDispatcher.queue
+        let signedPromise = signer.sign(message: personalMessage, with: from, using: password, on: queue)
+        return signedPromise.map(on: queue) { data in
+            data.toHexString().addHexPrefix()
+        }.recover(on: queue) { error -> Promise<String?> in
+            print(error)
+            return Promise.value(nil)
         }
     }
     
@@ -207,17 +204,12 @@ extension web3.BrowserFunctions {
             transaction.chainID = self.web3.provider.network?.chainID
         }
         
-        return Promise { resolver in
-            signer.sign(transaction: transaction, with: from, using: password) { result in
-                switch result {
-                case .success(let transaction):
-                    print(transaction)
-                    let signedData = transaction.encode(forSignature: false, chainID: nil)?.toHexString().addHexPrefix()
-                    resolver.fulfill(signedData)
-                case .failure:
-                    resolver.fulfill(nil)
-                }
-            }
+        let queue = web3.requestDispatcher.queue
+        return signer.sign(transaction: transaction, with: from, using: password, on: queue).map(on: queue) { transaction in
+            print(transaction)
+            return transaction.encode(forSignature: false, chainID: nil)?.toHexString().addHexPrefix()
+        }.recover(on: queue) { error in
+            Promise.value(nil)
         }
     }
 }

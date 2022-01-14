@@ -62,16 +62,8 @@ extension web3.Eth {
             guard let from = mergedOptions.from else {
                 throw Web3Error.inputError(desc: "No 'from' field provided")
             }
-            return Promise { resolver in
-                queue.async {
-                    self.web3.signer!.sign(transaction: assembledTransaction, with: from, using: password) { result in
-                        switch result {
-                        case .success(let transaction): resolver.fulfill(transaction)
-                        case .failure(let error): resolver.reject(error)
-                        }
-                    }
-                }
-            }.then(on: queue) { (transaction: EthereumTransaction) in
+            let signedPromise = self.web3.signer!.sign(transaction: assembledTransaction, with: from, using: password, on: queue)
+            return signedPromise.then(on: queue) { transaction in
                 self.web3.eth.sendRawTransactionPromise(transaction)
             }
         } catch {
