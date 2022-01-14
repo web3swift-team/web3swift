@@ -4,12 +4,12 @@
 import PackageDescription
 
 
-#if os(macOS)
-let excludeFiles = [
+#if os(iOS)
+let excludeFiles = []
+#else
+let excludeFiles: [String] = [
     "./Browser/BrowserViewController.swift", // Because of inheriting iOS only class failed to build on macOS.
 ]
-#elseif os(iOS)
-let excludeFiles: String = []
 #endif
 
 let package = Package(
@@ -24,7 +24,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/attaswift/BigInt.git", from: "5.3.0"),
         .package(url: "https://github.com/mxcl/PromiseKit.git", from: "6.16.2"),
-        .package(url: "https://github.com/daltoniam/Starscream.git", from: "4.0.4"),
+        .package(path: "../Starscream"),
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.4.2")
     ],
     targets: [
