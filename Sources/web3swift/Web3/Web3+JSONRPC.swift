@@ -57,7 +57,7 @@ public struct JSONRPCrequest: Encodable {
 
 /// JSON RPC batch request structure for serialization and deserialization purposes.
 public struct JSONRPCrequestBatch: Encodable {
-    var requests: [JSONRPCrequest]
+    public var requests: [JSONRPCrequest]
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
@@ -90,6 +90,11 @@ public struct JSONRPCresponse: Decodable{
     public struct ErrorMessage: Decodable {
         public var code: Int
         public var message: String
+        
+        public init(code: Int, message: String) {
+            self.code = code
+            self.message = message
+        }
     }
     
     internal var decodableTypes: [Decodable.Type] = [[EventLog].self,
