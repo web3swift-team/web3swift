@@ -105,7 +105,7 @@ class web3swift_Tests: XCTestCase {
     
     func testGenericRPCresponse() throws {
         let hex = "0x1"
-        let rpcResponse = JSONRPCresponse(id: 1, jsonrpc: "2.0", result: hex, error: nil)
+        let rpcResponse = JSONRPCresponse(id: 1, jsonrpc: "2.0", result: JSONRPCresponse.Result(value: hex), error: nil)
         let value: BigUInt? = rpcResponse.getValue()
         XCTAssert(value == 1)
     }
