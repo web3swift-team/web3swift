@@ -21,7 +21,7 @@ public struct DefaultWeb3SocketDelegate: Web3SocketDelegate {
     }
     
     public func gotError(error: Error) {
-        print("DefaultWeb3SocketDelegate.gotError: \(error)")
+        print("DefaultWeb3SocketDelegate.gotError: \(String(describing: error))")
     }
 }
 
@@ -142,7 +142,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
                 self.sendAsync(request, queue: queue).pipe { result in
                     switch result {
                     case .fulfilled(let response):
-                        guard let unsubscribed = response.result as? Bool else {
+                        guard let unsubscribed: Bool = response.getValue() else {
                             self.delegate.gotError(error: Web3Error.processingError(desc: "Wrong result in response: \(response)"))
                             return
                         }
@@ -160,7 +160,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
             sendAsync(request, queue: queue).pipe { result in
                 switch result {
                 case .fulfilled(let response):
-                    guard let subscriptionID = response.result as? String else {
+                    guard let subscriptionID: String = response.getValue() else {
                         self.delegate.gotError(error: Web3Error.processingError(desc: "Wrong result in response: \(response)"))
                         return
                     }
