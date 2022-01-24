@@ -191,6 +191,7 @@
 		5C03EADF274406410052C66D /* web3swift_AdvancedABIv2_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C03EACD274406400052C66D /* web3swift_AdvancedABIv2_Tests.swift */; };
 		5C03EAE0274406410052C66D /* web3swift_transactions_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C03EACE274406410052C66D /* web3swift_transactions_Tests.swift */; };
 		CB50A52827060BD600D7E39B /* web3swift_EIP712_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50A52727060BD600D7E39B /* web3swift_EIP712_Tests.swift */; };
+		D606A56B279F5D59003643ED /* web3swift_decodeSolidityErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D606A56A279F5D59003643ED /* web3swift_decodeSolidityErrorType.swift */; };
 		E22A911F241ED71A00EC1021 /* browser.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E22A911E241ED71A00EC1021 /* browser.min.js */; };
 		E252E67F26B403F500717C16 /* web3swift_helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E252E67E26B403F500717C16 /* web3swift_helpers.swift */; };
 		E2B76710241ED479007EBFE3 /* browser.js in Resources */ = {isa = PBXBuildFile; fileRef = E2B7670F241ED479007EBFE3 /* browser.js */; };
@@ -405,11 +406,12 @@
 		5C03EACC274406400052C66D /* web3swift_User_cases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = web3swift_User_cases.swift; sourceTree = "<group>"; };
 		5C03EACD274406400052C66D /* web3swift_AdvancedABIv2_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = web3swift_AdvancedABIv2_Tests.swift; sourceTree = "<group>"; };
 		5C03EACE274406410052C66D /* web3swift_transactions_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = web3swift_transactions_Tests.swift; sourceTree = "<group>"; };
-		5CDEF972275A74590004A2F2 /* web3swift.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = file; name = web3swift.xctestplan; path = Tests/web3swiftTests/web3swift.xctestplan; sourceTree = SOURCE_ROOT; };
+		5CDEF972275A74590004A2F2 /* web3swift.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = web3swift.xctestplan; path = Tests/web3swiftTests/web3swift.xctestplan; sourceTree = SOURCE_ROOT; };
 		5CDEF973275A74670004A2F2 /* LocalTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LocalTests.xctestplan; sourceTree = "<group>"; };
 		5CDEF974275A747B0004A2F2 /* RemoteTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RemoteTests.xctestplan; sourceTree = "<group>"; };
 		CB50A52727060BD600D7E39B /* web3swift_EIP712_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = web3swift_EIP712_Tests.swift; sourceTree = "<group>"; };
 		CB50A52927060C5300D7E39B /* EIP712.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP712.swift; sourceTree = "<group>"; };
+		D606A56A279F5D59003643ED /* web3swift_decodeSolidityErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_decodeSolidityErrorType.swift; sourceTree = "<group>"; };
 		E22A911E241ED71A00EC1021 /* browser.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.min.js; sourceTree = "<group>"; };
 		E252E67E26B403F500717C16 /* web3swift_helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swift_helpers.swift; sourceTree = "<group>"; };
 		E2B7670F241ED479007EBFE3 /* browser.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.js; sourceTree = "<group>"; };
@@ -1005,6 +1007,7 @@
 				5C03EACC274406400052C66D /* web3swift_User_cases.swift */,
 				E252E67E26B403F500717C16 /* web3swift_helpers.swift */,
 				5CDEF973275A74670004A2F2 /* LocalTests.xctestplan */,
+				D606A56A279F5D59003643ED /* web3swift_decodeSolidityErrorType.swift */,
 			);
 			path = local_tests;
 			sourceTree = "<group>";
@@ -1384,6 +1387,7 @@
 				5C03EACF274406410052C66D /* web3swift_helpers.swift in Sources */,
 				5C03EAD4274406410052C66D /* web3swift_numberFormattingUtil_Tests.swift in Sources */,
 				CB50A52827060BD600D7E39B /* web3swift_EIP712_Tests.swift in Sources */,
+				D606A56B279F5D59003643ED /* web3swift_decodeSolidityErrorType.swift in Sources */,
 				5C03EAE0274406410052C66D /* web3swift_transactions_Tests.swift in Sources */,
 				5C03EAD9274406410052C66D /* web3swift_keystores_Tests.swift in Sources */,
 				5C03EAD8274406410052C66D /* web3swift_Eventloop_Tests.swift in Sources */,

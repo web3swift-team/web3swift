@@ -31,6 +31,7 @@ extension ABI {
         case fallback
         case event
         case receive
+        case error
     }
     
 }
@@ -62,6 +63,9 @@ fileprivate func parseToElement(from abiRecord: ABI.Record, type: ABI.ElementTyp
     case .receive:
         let receive = try parseReceive(abiRecord: abiRecord)
         return ABI.Element.receive(receive)
+    case .error:
+        let error = try parseError(abiRecord: abiRecord)
+        return ABI.Element.error(error)
     }
     
 }
@@ -142,6 +146,16 @@ fileprivate func parseReceive(abiRecord:ABI.Record) throws -> ABI.Element.Receiv
     return functionElement
 }
 
+fileprivate func parseError(abiRecord:ABI.Record) throws -> ABI.Element.EthError {
+    let inputs = try abiRecord.inputs?.map({ (input:ABI.Input) throws -> ABI.Element.EthError.Input in
+        let nativeInput = try input.parseForError()
+        return nativeInput
+    })
+    let abiInputs = inputs ?? []
+    let name = abiRecord.name != nil ? abiRecord.name! : ""
+    return ABI.Element.EthError(name: name, inputs: abiInputs)
+}
+
 extension ABI.Input {
     func parse() throws -> ABI.Element.InOut {
         let name = self.name != nil ? self.name! : ""
@@ -172,11 +186,17 @@ extension ABI.Input {
         }
     }
     
-    func parseForEvent() throws -> ABI.Element.Event.Input{
+    func parseForEvent() throws -> ABI.Element.Event.Input {
         let name = self.name != nil ? self.name! : ""
         let parameterType = try ABITypeParser.parseTypeString(self.type)
         let indexed = self.indexed == true
         return ABI.Element.Event.Input(name:name, type: parameterType, indexed: indexed)
+    }
+    
+    func parseForError() throws -> ABI.Element.EthError.Input {
+        let name = self.name != nil ? self.name! : ""
+        let parameterType = try ABITypeParser.parseTypeString(self.type)
+        return ABI.Element.EthError.Input(name:name, type: parameterType)
     }
 }
 
