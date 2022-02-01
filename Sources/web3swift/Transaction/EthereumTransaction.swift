@@ -12,8 +12,16 @@ import BigInt
 
 public struct EthereumTransaction: CustomStringConvertible {
     public var nonce: BigUInt
+    
+    /// using for EIP-2930 transactions
     public var gasPrice: BigUInt = BigUInt(0)
+    
     public var gasLimit: BigUInt = BigUInt(0)
+    
+    // using for EIP-1559
+    public var maxPriorityFeePerGas: BigUInt = BigUInt(0)
+    public var maxFeePerGas: BigUInt = BigUInt() 
+    
     // The destination address of the message, left undefined for a contract-creation transaction.
     public var to: EthereumAddress
     // (optional) The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
