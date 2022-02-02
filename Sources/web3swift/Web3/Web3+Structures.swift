@@ -458,6 +458,7 @@ public struct Block:Decodable {
     public var size: BigUInt
     public var gasLimit: BigUInt
     public var gasUsed: BigUInt
+    public var baseFeePerGas: BigUInt
     public var timestamp: Date
     public var transactions: [TransactionInBlock]
     public var uncles: [Data]
@@ -483,6 +484,7 @@ public struct Block:Decodable {
         case timestamp
         case transactions
         case uncles
+        case baseFeePerGas
     }
     
     public init(from decoder: Decoder) throws {
@@ -543,6 +545,9 @@ public struct Block:Decodable {
         
         guard let gasUsed = try decodeHexToBigUInt(container, key: .gasUsed) else {throw Web3Error.dataError}
         self.gasUsed = gasUsed
+        
+        guard let baseFeePerGas = try decodeHexToBigUInt(container, key: .baseFeePerGas) else { throw Web3Error.dataError }
+        self.baseFeePerGas = baseFeePerGas
         
         let timestampString = try container.decode(String.self, forKey: .timestamp).stripHexPrefix()
         guard let timestampInt = UInt64(timestampString, radix: 16) else {throw Web3Error.dataError}

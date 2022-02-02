@@ -14,6 +14,11 @@ public struct EthereumTransaction: CustomStringConvertible {
     public var nonce: BigUInt
     public var gasPrice: BigUInt = BigUInt(0)
     public var gasLimit: BigUInt = BigUInt(0)
+    
+    // EIP-1559
+    public var maxPriorityFeePerGas: BigUInt = BigUInt(0)
+    public var maxFeePerGas: BigUInt = BigUInt(0)
+    
     // The destination address of the message, left undefined for a contract-creation transaction.
     public var to: EthereumAddress
     // (optional) The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
@@ -90,6 +95,8 @@ public struct EthereumTransaction: CustomStringConvertible {
             toReturn = toReturn + "Nonce: " + String(self.nonce) + "\n"
             toReturn = toReturn + "Gas price: " + String(self.gasPrice) + "\n"
             toReturn = toReturn + "Gas limit: " + String(describing: self.gasLimit) + "\n"
+            toReturn = toReturn + "Max priority fee per gas: " + String(describing: self.maxPriorityFeePerGas)
+            toReturn = toReturn + "Max fee per gas: " + String(describing: maxFeePerGas)
             toReturn = toReturn + "To: " + self.to.address + "\n"
             toReturn = toReturn + "Value: " + String(self.value ?? "nil") + "\n"
             toReturn = toReturn + "Data: " + self.data.toHexString().addHexPrefix().lowercased() + "\n"
