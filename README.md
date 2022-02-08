@@ -1,6 +1,6 @@
 
-## Swap-2.0
-
+# Swap-2.0
+https://github.com/P7-33/Swap-2.0.wiki.git
 **Swap-2.0** is an iOS toolbelt for interaction with the Ethereum network.
 
 ## [Join our discord](https://discord.gg/npZ6SuSS) if you need a support or want to contribute to Swap-2.0 development!
