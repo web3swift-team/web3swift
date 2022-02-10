@@ -110,12 +110,20 @@ extension EthereumTransaction:Decodable {
         case r
         case s
         case value
+        case type  // present in EIP-1559 transaction objects
     }
     
     public init(from decoder: Decoder) throws {
         let options = try TransactionOptions(from: decoder)
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
+        // test to see if it is a EIP-1559 wrapper
+        let envelope = try decodeHexToBigUInt(container, key: .type, allowOptional: true)
+        if( (envelope != nil) && (envelope! != BigInt(0)) ) {
+            // if present and non-sero we are a new wrapper we can't decode
+            throw Web3Error.dataError
+        }
+
         var data = try decodeHexToData(container, key: .data, allowOptional: true)
         if data != nil {
             self.data = data!
