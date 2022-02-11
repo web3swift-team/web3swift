@@ -4,12 +4,12 @@
 import PackageDescription
 
 
-#if !os(iOS)
+#if os(iOS)
+let excludeFiles: String = []
+#else
 let excludeFiles = [
     "./Browser/BrowserViewController.swift", // Because of inheriting iOS only class failed to build on macOS.
 ]
-#else
-let excludeFiles: String = []
 #endif
 
 let package = Package(
