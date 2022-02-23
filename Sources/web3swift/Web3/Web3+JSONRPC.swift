@@ -194,8 +194,7 @@ public struct JSONRPCresponse: Decodable{
                 }
                 return values as? T
             }
-            guard let value = self.value as? T  else {return nil}
-            return value
+            return self.value as? T
         }
     }
     
