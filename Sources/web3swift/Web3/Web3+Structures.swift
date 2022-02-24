@@ -721,17 +721,6 @@ public struct BlockHeader: Decodable {
     public let transactionsRoot: String
 }
 
-public struct LogItem: Decodable {
-    public let address: String
-    public let blockHash: String
-    public let blockNumber: String
-    public let data: String
-    public let logIndex: String
-    public let topics: [String]
-    public let transactionHash: String
-    public let transactionIndex: String
-}
-
 public struct SyncingInfo: Decodable {
     public struct Status: Decodable {
         public let startingBlock: Int
