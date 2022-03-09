@@ -12,12 +12,12 @@ import BigInt
 
 public struct EthereumTransaction: CustomStringConvertible {
     public var nonce: BigUInt
-    public var gasPrice: BigUInt = BigUInt(0)
-    public var gasLimit: BigUInt = BigUInt(0)
+    public var gasPrice: BigUInt = 0
+    public var gasLimit: BigUInt = 0
     
     // EIP-1559
-    public var maxPriorityFeePerGas: BigUInt = BigUInt(0)
-    public var maxFeePerGas: BigUInt = BigUInt(0)
+    public var maxPriorityFeePerGas: BigUInt = 0
+    public var maxFeePerGas: BigUInt = 0
     
     // The destination address of the message, left undefined for a contract-creation transaction.
     public var to: EthereumAddress
@@ -25,9 +25,9 @@ public struct EthereumTransaction: CustomStringConvertible {
     // TODO - split EthereumTransaction to two classes: with optional and required value property, depends on type of transaction
     public var value: BigUInt?
     public var data: Data
-    public var v: BigUInt = BigUInt(1)
-    public var r: BigUInt = BigUInt(0)
-    public var s: BigUInt = BigUInt(0)
+    public var v: BigUInt = 1
+    public var r: BigUInt = 0
+    public var s: BigUInt = 0
     var chainID: BigUInt? = nil
     
     public var inferedChainID: BigUInt? {
@@ -42,11 +42,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         }
     }
     
-    public var intrinsicChainID: BigUInt? {
-        get{
-            return self.chainID
-        }
-    }
+    public var intrinsicChainID: BigUInt? { chainID }
     
     public mutating func UNSAFE_setChainID(_ chainID: BigUInt?) {
         self.chainID = chainID
@@ -55,84 +51,60 @@ public struct EthereumTransaction: CustomStringConvertible {
     public var hash: Data? {
         var encoded: Data
         let inferedChainID = self.inferedChainID
-        if inferedChainID != nil {
-            guard let enc = self.self.encode(forSignature: false, chainID: inferedChainID) else {return nil}
+        if let inferedChainID = inferedChainID {
+            guard let enc = self.self.encode(forSignature: false, chainID: inferedChainID) else { return nil }
             encoded = enc
         } else {
-            guard let enc = self.self.encode(forSignature: false, chainID: self.chainID) else {return nil}
+            guard let enc = self.self.encode(forSignature: false, chainID: chainID) else { return nil }
             encoded = enc
         }
         let hash = encoded.sha3(.keccak256)
         return hash
     }
     
-    public init(gasPrice: BigUInt, gasLimit: BigUInt, to: EthereumAddress, value: BigUInt, data: Data) {
-        self.nonce = BigUInt(0)
-        self.gasPrice = gasPrice
-        self.gasLimit = gasLimit
-        self.value = value
-        self.data = data
-        self.to = to
-    }
-    
-    
-    public init (nonce: BigUInt, gasPrice: BigUInt, gasLimit: BigUInt, to: EthereumAddress, value: BigUInt, data: Data, v: BigUInt, r: BigUInt, s: BigUInt) {
-        self.nonce = nonce
-        self.gasPrice = gasPrice
-        self.gasLimit = gasLimit
-        self.to = to
-        self.value = value
-        self.data = data
-        self.v = v
-        self.r = r
-        self.s = s
-    }
-    
     public var description: String {
-        get {
-            var toReturn = ""
-            toReturn = toReturn + "Transaction" + "\n"
-            toReturn = toReturn + "Nonce: " + String(self.nonce) + "\n"
-            toReturn = toReturn + "Gas price: " + String(self.gasPrice) + "\n"
-            toReturn = toReturn + "Gas limit: " + String(describing: self.gasLimit) + "\n"
-            toReturn = toReturn + "Max priority fee per gas: " + String(describing: self.maxPriorityFeePerGas)
-            toReturn = toReturn + "Max fee per gas: " + String(describing: maxFeePerGas)
-            toReturn = toReturn + "To: " + self.to.address + "\n"
-            toReturn = toReturn + "Value: " + String(self.value ?? "nil") + "\n"
-            toReturn = toReturn + "Data: " + self.data.toHexString().addHexPrefix().lowercased() + "\n"
-            toReturn = toReturn + "v: " + String(self.v) + "\n"
-            toReturn = toReturn + "r: " + String(self.r) + "\n"
-            toReturn = toReturn + "s: " + String(self.s) + "\n"
-            toReturn = toReturn + "Intrinsic chainID: " + String(describing:self.chainID) + "\n"
-            toReturn = toReturn + "Infered chainID: " + String(describing:self.inferedChainID) + "\n"
-            toReturn = toReturn + "sender: " + String(describing: self.sender?.address)  + "\n"
-            toReturn = toReturn + "hash: " + String(describing: self.hash?.toHexString().addHexPrefix()) + "\n"
-            return toReturn
-        }
-        
+        var toReturn = ""
+        toReturn = toReturn + "Transaction" + "\n"
+        toReturn = toReturn + "Nonce: " + String(self.nonce) + "\n"
+        toReturn = toReturn + "Gas price: " + String(self.gasPrice) + "\n"
+        toReturn = toReturn + "Gas limit: " + String(describing: self.gasLimit) + "\n"
+        toReturn = toReturn + "Max priority fee per gas: " + String(describing: self.maxPriorityFeePerGas)
+        toReturn = toReturn + "Max fee per gas: " + String(describing: maxFeePerGas)
+        toReturn = toReturn + "To: " + self.to.address + "\n"
+        toReturn = toReturn + "Value: " + String(self.value ?? "nil") + "\n"
+        toReturn = toReturn + "Data: " + self.data.toHexString().addHexPrefix().lowercased() + "\n"
+        toReturn = toReturn + "v: " + String(self.v) + "\n"
+        toReturn = toReturn + "r: " + String(self.r) + "\n"
+        toReturn = toReturn + "s: " + String(self.s) + "\n"
+        toReturn = toReturn + "Intrinsic chainID: " + String(describing:self.chainID) + "\n"
+        toReturn = toReturn + "Infered chainID: " + String(describing:self.inferedChainID) + "\n"
+        toReturn = toReturn + "sender: " + String(describing: self.sender?.address)  + "\n"
+        toReturn = toReturn + "hash: " + String(describing: self.hash?.toHexString().addHexPrefix()) + "\n"
+        return toReturn
     }
+
     public var sender: EthereumAddress? {
-        get {
-            guard let publicKey = self.recoverPublicKey() else {return nil}
-            return Web3.Utils.publicToAddress(publicKey)
-        }
+        guard let publicKey = self.recoverPublicKey() else { return nil }
+        return Web3.Utils.publicToAddress(publicKey)
     }
     
     public func recoverPublicKey() -> Data? {
-        if (self.r == BigUInt(0) && self.s == BigUInt(0)) {
-            return nil
-        }
-        var normalizedV:BigUInt = BigUInt(27)
+        guard r != 0, s != 0 else { return nil }
+        // if (self.r == 0 && self.s == 0) {
+        //     return nil
+        // }
+        var normalizedV: BigUInt = 27
         let inferedChainID = self.inferedChainID
-        var d = BigUInt(0)
+        var d: BigUInt = 0
+
         if self.v >= 35 && self.v <= 38 {
-            d = BigUInt(35)
+            d = 35
         } else if self.v >= 31 && self.v <= 34 {
-            d = BigUInt(31)
+            d = 31
         } else if self.v >= 27 && self.v <= 30 {
-            d = BigUInt(27)
+            d = 27
         }
-        if (self.chainID != nil && self.chainID != BigUInt(0)) {
+        if (chainID != nil && chainID != 0) {
             normalizedV = self.v - d - self.chainID! - self.chainID!
         } else if (inferedChainID != nil) {
             normalizedV = self.v - d - inferedChainID! - inferedChainID!
@@ -156,22 +128,16 @@ public struct EthereumTransaction: CustomStringConvertible {
     }
     
     public var txhash: String? {
-        get{
-            guard self.sender != nil else {return nil}
-            guard let hash = self.hash else {return nil}
-            let txid = hash.toHexString().addHexPrefix().lowercased()
-            return txid
-        }
+        guard sender != nil else { return nil }
+        guard let hash = hash else { return nil }
+        let txid = hash.toHexString().addHexPrefix().lowercased()
+        return txid
     }
     
-    public var txid: String? {
-        get {
-            return self.txhash
-        }
-    }
+    public var txid: String? { txhash }
     
-    public func encode(forSignature:Bool = false, chainID: BigUInt? = nil) -> Data? {
-        if (forSignature) {
+    public func encode(forSignature: Bool = false, chainID: BigUInt? = nil) -> Data? {
+        if forSignature {
             if chainID != nil  {
                 let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value!, self.data, chainID!, BigUInt(0), BigUInt(0)] as [AnyObject]
                 return RLP.encode(fields)
@@ -297,11 +263,11 @@ public struct EthereumTransaction: CustomStringConvertible {
     }
 }
 
-public extension EthereumTransaction {
+extension EthereumTransaction {
     init(to: EthereumAddress, data: Data, options: TransactionOptions) {
         let defaults = TransactionOptions.defaultOptions
         let merged = defaults.merge(options)
-        self.nonce = BigUInt(0)
+        nonce = 0
         
         if let gP = merged.gasPrice {
             switch gP {
@@ -327,6 +293,17 @@ public extension EthereumTransaction {
 
         self.to = to
         self.data = data
+    }
+}
+
+public extension EthereumTransaction {
+    init(gasPrice: BigUInt, gasLimit: BigUInt, to: EthereumAddress, value: BigUInt, data: Data) {
+        self.nonce = BigUInt(0)
+        self.gasPrice = gasPrice
+        self.gasLimit = gasLimit
+        self.value = value
+        self.data = data
+        self.to = to
     }
     
     func mergedWithOptions(_ options: TransactionOptions) -> EthereumTransaction {
@@ -406,5 +383,4 @@ public extension EthereumTransaction {
         }
         return transaction
     }
-    
 }

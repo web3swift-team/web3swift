@@ -38,6 +38,7 @@ public struct TransactionOptions {
         case manual(BigUInt)
         case withMargin(Double)
     }
+
     public var gasPrice: GasPricePolicy?
 
     /// The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
@@ -48,6 +49,7 @@ public struct TransactionOptions {
         case latest
         case manual(BigUInt)
     }
+
     public var nonce: NoncePolicy?
     
     public enum CallingBlockPolicy {
@@ -66,10 +68,8 @@ public struct TransactionOptions {
             }
         }
     }
+
     public var callOnBlock: CallingBlockPolicy?
-    
-    public init() {
-    }
     
     public static var defaultOptions: TransactionOptions {
         var opts = TransactionOptions()
