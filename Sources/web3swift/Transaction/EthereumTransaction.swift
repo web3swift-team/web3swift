@@ -64,22 +64,22 @@ public struct EthereumTransaction: CustomStringConvertible {
     
     public var description: String {
         var toReturn = ""
-        toReturn = toReturn + "Transaction" + "\n"
-        toReturn = toReturn + "Nonce: " + String(self.nonce) + "\n"
-        toReturn = toReturn + "Gas price: " + String(self.gasPrice) + "\n"
-        toReturn = toReturn + "Gas limit: " + String(describing: self.gasLimit) + "\n"
-        toReturn = toReturn + "Max priority fee per gas: " + String(describing: self.maxPriorityFeePerGas)
-        toReturn = toReturn + "Max fee per gas: " + String(describing: maxFeePerGas)
-        toReturn = toReturn + "To: " + self.to.address + "\n"
-        toReturn = toReturn + "Value: " + String(self.value ?? "nil") + "\n"
-        toReturn = toReturn + "Data: " + self.data.toHexString().addHexPrefix().lowercased() + "\n"
-        toReturn = toReturn + "v: " + String(self.v) + "\n"
-        toReturn = toReturn + "r: " + String(self.r) + "\n"
-        toReturn = toReturn + "s: " + String(self.s) + "\n"
-        toReturn = toReturn + "Intrinsic chainID: " + String(describing:self.chainID) + "\n"
-        toReturn = toReturn + "Infered chainID: " + String(describing:self.inferedChainID) + "\n"
-        toReturn = toReturn + "sender: " + String(describing: self.sender?.address)  + "\n"
-        toReturn = toReturn + "hash: " + String(describing: self.hash?.toHexString().addHexPrefix()) + "\n"
+        toReturn += "Transaction" + "\n"
+        toReturn += "Nonce: " + String(self.nonce) + "\n"
+        toReturn += "Gas price: " + String(self.gasPrice) + "\n"
+        toReturn += "Gas limit: " + String(describing: self.gasLimit) + "\n"
+        toReturn += "Max priority fee per gas: " + String(describing: self.maxPriorityFeePerGas)
+        toReturn += "Max fee per gas: " + String(describing: maxFeePerGas)
+        toReturn += "To: " + self.to.address + "\n"
+        toReturn += "Value: " + String(self.value ?? "nil") + "\n"
+        toReturn += "Data: " + self.data.toHexString().addHexPrefix().lowercased() + "\n"
+        toReturn += "v: " + String(self.v) + "\n"
+        toReturn += "r: " + String(self.r) + "\n"
+        toReturn += "s: " + String(self.s) + "\n"
+        toReturn += "Intrinsic chainID: " + String(describing:self.chainID) + "\n"
+        toReturn += "Infered chainID: " + String(describing:self.inferedChainID) + "\n"
+        toReturn += "sender: " + String(describing: self.sender?.address)  + "\n"
+        toReturn += "hash: " + String(describing: self.hash?.toHexString().addHexPrefix()) + "\n"
         return toReturn
     }
 
