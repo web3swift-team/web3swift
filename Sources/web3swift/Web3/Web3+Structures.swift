@@ -344,17 +344,21 @@ public enum TransactionInBlock: Decodable {
     }
 }
 
+/// Ethereum Block
+///
+/// Official specification: [](https://github.com/ethereum/execution-apis/blob/main/src/schemas/block.json)
 public struct Block: Decodable {
-    public var number: BigUInt
-    public var hash: Data
+
+    public var number: BigUInt // MARK: This is optional in web3js, but required in Ethereum JSON-RPC
+    public var hash: Data // MARK: This is optional in web3js, but required in Ethereum JSON-RPC
     public var parentHash: Data
-    public var nonce: Data?
+    public var nonce: Data? // MARK: This is optional in web3js but required in Ethereum JSON-RPC
     public var sha3Uncles: Data
-    public var logsBloom: EthereumBloomFilter? = nil
+    public var logsBloom: EthereumBloomFilter? = nil // MARK: This is optional in web3js but required in Ethereum JSON-RPC
     public var transactionsRoot: Data
     public var stateRoot: Data
     public var receiptsRoot: Data
-    public var miner: EthereumAddress? = nil
+    public var miner: EthereumAddress? = nil // MARK: This is NOT optional in web3js
     public var difficulty: BigUInt
     public var totalDifficulty: BigUInt
     public var extraData: Data
