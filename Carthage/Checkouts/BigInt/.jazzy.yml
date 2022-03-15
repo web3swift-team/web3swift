@@ -1,8 +1,0 @@
-module: BigInt
-author: Károly Lőrentey
-theme: fullwidth
-output: ./docs
-author_url: "https://twitter.com/lorentey"
-github_url: "https://github.com/attaswift/BigInt"
-root_url: "https://attaswift.github.io/BigInt/reference/" 
-xcodebuild_arguments: ["-workspace", "BigInt.xcworkspace", "-scheme", "BigInt-macOS"]

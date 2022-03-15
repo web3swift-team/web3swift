@@ -1,6 +1,0 @@
-framework module BigInt {
-  umbrella header "BigInt-umbrella.h"
-
-  export *
-  module * { export * }
-}
