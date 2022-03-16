@@ -6,7 +6,6 @@ on:
       - master
       - develop
       - hotfix
-      - ganache-tests
     paths:
       - Packag*.swift
       - web3swift.podspec
