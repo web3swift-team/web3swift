@@ -37,7 +37,7 @@ jobs:
       # since it could lost some files in project.
       - name: Install ganache
         run: npm install ganache --global
-      - name: Start ganache
+      - name: Start ganache in background
         run: ganache &
       - name: Wait till ganache starts
         run: sleep 1
