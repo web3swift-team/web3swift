@@ -33,10 +33,14 @@ jobs:
         run: swift package resolve
       - name: Build
         run: swift build --build-tests
-      # - name: Run local tests
-      #   run: swift test --skip-build -c debug --filter localTests
-      # - name: Run remote tests
-      #   run: swift test --skip-build -c debug --filter remoteTests
+      # No need to run tests more than once, but this should be run in Carghage part 
+      # since it could lost some files in project.
+      - name: Install ganache
+        run: npm install ganache --global
+      - name: Start ganache
+        run: ganache
+      - name: Run local tests
+        run: swift test --skip-build -c debug --filter localTests
   carthage:
     name: Carthage
     runs-on: macOS-11
