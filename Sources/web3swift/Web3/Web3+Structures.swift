@@ -118,12 +118,11 @@ extension EthereumTransaction:Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // test to see if it is a EIP-1559 wrapper
-        let envelope = try decodeHexToBigUInt(container, key: .type, allowOptional: true)
-        if( (envelope != nil) && (envelope! != BigInt(0)) ) {
+        if let envelope = try decodeHexToBigUInt(container, key: .type, allowOptional: true) {
             // if present and non-sero we are a new wrapper we can't decode
-            throw Web3Error.dataError
+            if(envelope != BigInt(0)) { throw Web3Error.dataError }
         }
-
+        
         var data = try decodeHexToData(container, key: .data, allowOptional: true)
         if data != nil {
             self.data = data!

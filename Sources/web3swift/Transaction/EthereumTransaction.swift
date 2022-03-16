@@ -125,10 +125,10 @@ public struct EthereumTransaction: CustomStringConvertible {
         } else if self.v >= 27 && self.v <= 30 {
             d = BigUInt(27)
         }
-        if (self.chainID != nil && self.chainID != BigUInt(0) && self.v >= (d + self.chainID! + self.chainID!)) {
-            normalizedV = self.v - d - self.chainID! - self.chainID!
-        } else if (inferedChainID != nil  && self.v >= (d + self.inferedChainID! + self.inferedChainID!)) {
-            normalizedV = self.v - d - inferedChainID! - inferedChainID!
+        if let testID = self.chainID, testID != BigUInt(0) && self.v >= (d + testID + testID) {
+            normalizedV = self.v - d - testID - testID
+        } else if let testID = inferedChainID, self.v >= (d + testID + testID) {
+            normalizedV = self.v - d - testID - testID
         } else {
             if(d > v) { d = 0 }
             normalizedV = self.v - d
