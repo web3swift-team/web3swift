@@ -33,8 +33,6 @@ jobs:
         run: swift package resolve
       - name: Build
         run: swift build --build-tests
-      # No need to run tests more than once, but this should be run in Carghage part 
-      # since it could lost some files in project.
       - name: Install ganache
         run: npm install ganache --global
       - name: Start ganache in background
@@ -62,7 +60,13 @@ jobs:
         run: carthage build --no-use-binaries --platform iOS Simulator --use-xcframeworks
       - name: Building framework
         run: xcodebuild build-for-testing -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
-      # - name: Running local tests
-      #   run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
+      - name: Install ganache
+        run: npm install ganache --global
+      - name: Start ganache in background
+        run: ganache &
+      - name: Wait till ganache starts
+        run: sleep 1
+      - name: Running local tests
+        run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
       # - name: Running remote tests
       #   run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan RemoteTests
