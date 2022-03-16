@@ -29,11 +29,13 @@ public enum BlockNumber {
 
 /// Custom Web3 HTTP provider of Infura nodes.
 public final class InfuraProvider: Web3HttpProvider {
-    public init?(_ net:Networks, accessToken token: String? = nil, keystoreManager manager: KeystoreManager? = nil) {
+    public init(_ net:Networks, accessToken token: String? = nil, keystoreManager manager: KeystoreManager? = nil) throws {
         var requestURLstring = "https://" + net.name + Constants.infuraHttpScheme
-        requestURLstring += token != nil ? token! : Constants.infuraToken
-        let providerURL = URL(string: requestURLstring)
-        super.init(providerURL!, network: net, keystoreManager: manager)
+        requestURLstring += token ?? Constants.infuraToken
+        guard let providerURL = URL(string: requestURLstring) else {
+            throw Web3Error.connectionError
+        }
+        try super.init(providerURL, network: net, keystoreManager: manager)
     }
 }
 
@@ -47,40 +49,40 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     /// if set debugMode True then show websocket events logs in the console
     public var debugMode: Bool = false
     
-    public init?(_ network: Networks,
+    public init(_ network: Networks,
                  delegate: Web3SocketDelegate,
                  projectId: String? = nil,
-                 keystoreManager manager: KeystoreManager? = nil) {
+                 keystoreManager manager: KeystoreManager? = nil) throws {
         guard network == Networks.Kovan
             || network == Networks.Rinkeby
             || network == Networks.Ropsten
-            || network == Networks.Mainnet else {return nil}
+                || network == Networks.Mainnet else {throw Web3Error.connectionError}
         let networkName = network.name
         let urlString = "wss://" + networkName + Constants.infuraWsScheme
-        guard URL(string: urlString) != nil else {return nil}
-        super.init(urlString,
+        guard URL(string: urlString) != nil else {throw Web3Error.connectionError}
+        try super.init(urlString,
                    delegate: delegate,
                    projectId: projectId,
                    keystoreManager: manager,
                    network: network)
     }
     
-    public init?(_ endpoint: String,
+    public init(_ endpoint: String,
                  delegate: Web3SocketDelegate,
                  projectId: String? = nil,
-                 keystoreManager manager: KeystoreManager? = nil) {
-        guard URL(string: endpoint) != nil else {return nil}
-        super.init(endpoint,
+                 keystoreManager manager: KeystoreManager? = nil) throws {
+        guard URL(string: endpoint) != nil else {throw Web3Error.connectionError}
+        try super.init(endpoint,
                    delegate: delegate,
                    projectId: projectId,
                    keystoreManager: manager)
     }
     
-    public init?(_ endpoint: URL,
+    public init(_ endpoint: URL,
                  delegate: Web3SocketDelegate,
                  projectId: String? = nil,
-                 keystoreManager manager: KeystoreManager? = nil) {
-        super.init(endpoint,
+                 keystoreManager manager: KeystoreManager? = nil) throws {
+        try super.init(endpoint,
                    delegate: delegate,
                    projectId: projectId,
                    keystoreManager: manager)
@@ -91,7 +93,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
                                                projectId: String? = nil,
                                                keystoreManager manager: KeystoreManager? = nil,
                                                network net: Networks? = nil) -> WebsocketProvider? {
-        guard let socketProvider = InfuraWebsocketProvider(endpoint,
+        guard let socketProvider = try? InfuraWebsocketProvider(endpoint,
                                                            delegate: delegate,
                                                            projectId: projectId,
                                                            keystoreManager: manager) else {return nil}
@@ -104,7 +106,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
                                                projectId: String? = nil,
                                                keystoreManager manager: KeystoreManager? = nil,
                                                network net: Networks? = nil) -> WebsocketProvider? {
-        guard let socketProvider = InfuraWebsocketProvider(endpoint,
+        guard let socketProvider = try? InfuraWebsocketProvider(endpoint,
                                                            delegate: delegate,
                                                            projectId: projectId,
                                                            keystoreManager: manager) else {return nil}
@@ -116,7 +118,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
                                              delegate: Web3SocketDelegate,
                                              projectId: String? = nil,
                                              keystoreManager manager: KeystoreManager? = nil) -> InfuraWebsocketProvider? {
-        guard let socketProvider = InfuraWebsocketProvider(network,
+        guard let socketProvider = try? InfuraWebsocketProvider(network,
                                                            delegate: delegate,
                                                            projectId: projectId,
                                                            keystoreManager: manager) else {return nil}
@@ -138,7 +140,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         let params = params ?? []
         let paramsCount = params.count
         guard method.requiredNumOfParameters == paramsCount || method.requiredNumOfParameters == nil else {
-            throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters!), got - \(paramsCount)")
+            throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters ?? 0), got - \(paramsCount)")
         }
         try writeMessage(method: method, params: params)
         filterTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(getFilterChanges), userInfo: nil, repeats: true)
@@ -155,7 +157,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         let params = params ?? []
         let paramsCount = params.count
         guard method.requiredNumOfParameters == paramsCount || method.requiredNumOfParameters == nil else {
-            throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters!), got - \(paramsCount)")
+            throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters ?? 0), got - \(paramsCount)")
         }
         try writeMessage(method: method, params: params)
         filterTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(getFilterLogs), userInfo: nil, repeats: true)
@@ -225,7 +227,6 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
                 stringAddresses.append(addr.address)
             }
         }
-//        let ts = topics == nil ? nil : [topics!]
         let filterParams = EventFilterParameters(fromBlock: nil, toBlock: nil, topics: [topics], address: stringAddresses)
         try writeMessage(method: method, params: ["logs", filterParams])
     }
@@ -282,7 +283,9 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         case .error(let error):
             debugMode ? print("error: \(String(describing: error))") : nil
             websocketConnected = false
-            delegate.gotError(error: error!)
+            if let error = error {
+                delegate.gotError(error: error)
+            }
         }
     }
     

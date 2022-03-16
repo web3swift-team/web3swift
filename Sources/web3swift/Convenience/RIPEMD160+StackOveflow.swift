@@ -391,92 +391,6 @@ public struct RIPEMD160 {
         
         return data
     }
-    
-    //    public mutating func update(data: Data) throws {
-    //        try data.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
-    //
-    //            if let bodyAddress = body.baseAddress, body.count > 0 {
-    //                var ptr = bodyAddress.assumingMemoryBound(to: UInt8.self)
-    //                var length = data.count
-    //                var X = [UInt32](repeating: 0, count: 16)
-    //
-    //                // Process remaining bytes from last call:
-    //                if buffer.count > 0 && buffer.count + length >= 64 {
-    //                    let amount = 64 - buffer.count
-    //                    buffer.append(ptr, count: amount)
-    //                    try buffer.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
-    //                        if let bodyAddress = body.baseAddress, body.count > 0 {
-    //                            let pointer = bodyAddress.assumingMemoryBound(to: Void.self)
-    //                            _ = memcpy(&X, pointer, 64)
-    //                        } else {
-    //                            throw Web3Error.dataError
-    //                        }
-    //                    }
-    //                    compress(X)
-    //                    ptr += amount
-    //                    length -= amount
-    //                }
-    //                // Process 64 byte chunks:
-    //                while length >= 64 {
-    //                    memcpy(&X, ptr, 64)
-    //                    compress(X)
-    //                    ptr += 64
-    //                    length -= 64
-    //                }
-    //                // Save remaining unprocessed bytes:
-    //                buffer = Data(bytes: ptr, count: length)
-    //            } else {
-    //                throw Web3Error.dataError
-    //            }
-    //
-    //        }
-    //        count += Int64(data.count)
-    //    }
-    //
-    //    public mutating func finalize() throws -> Data {
-    //        var X = [UInt32](repeating: 0, count: 16)
-    //        /* append the bit m_n == 1 */
-    //        buffer.append(0x80)
-    //        try buffer.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
-    //            if let bodyAddress = body.baseAddress, body.count > 0 {
-    //                let pointer = bodyAddress.assumingMemoryBound(to: Void.self)
-    //                _ = memcpy(&X, pointer, buffer.count)
-    //            } else {
-    //                throw Web3Error.dataError
-    //            }
-    //        }
-    //
-    //        if (count & 63) > 55 {
-    //            /* length goes to next block */
-    //            compress(X)
-    //            X = [UInt32](repeating: 0, count: 16)
-    //        }
-    //
-    //        /* append length in bits */
-    //        let lswlen = UInt32(truncatingIfNeeded: count)
-    //        let mswlen = UInt32(UInt64(count) >> 32)
-    //        X[14] = lswlen << 3
-    //        X[15] = (lswlen >> 29) | (mswlen << 3)
-    //        compress(X)
-    //
-    //        var data = Data(count: 20)
-    //        try data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) in
-    //            if let bodyAddress = body.baseAddress, body.count > 0 {
-    //                let pointer = bodyAddress.assumingMemoryBound(to: UInt32.self)
-    //                pointer[0] = MDbuf.0
-    //                pointer[1] = MDbuf.1
-    //                pointer[2] = MDbuf.2
-    //                pointer[3] = MDbuf.3
-    //                pointer[4] = MDbuf.4
-    //            } else {
-    //                throw Web3Error.dataError
-    //            }
-    //        }
-    //
-    //        buffer = Data()
-    //
-    //        return data
-    //    }
 }
 
 public extension RIPEMD160 {
@@ -485,12 +399,10 @@ public extension RIPEMD160 {
         var md = RIPEMD160()
         try md.update(data: message)
         return try md.finalize()
-        //        return try md.finalize()
     }
     
     static func hash(message: String) throws -> Data {
         return try RIPEMD160.hash(message: message.data(using: .utf8)!)
-        //        return try RIPEMD160.hash(message: message.data(using: .utf8)!)
     }
 }
 
@@ -501,34 +413,25 @@ public extension RIPEMD160 {
         var key = key
         key.count = 64 // Truncate to 64 bytes or fill-up with zeros.
         
-        //        let outerKeyPad = Data(bytes: key.map { $0 ^ 0x5c })
-        //        let innerKeyPad = Data(bytes: key.map { $0 ^ 0x36 })
         let outerKeyPad = Data(key.map { $0 ^ 0x5c })
         let innerKeyPad = Data(key.map { $0 ^ 0x36 })
         
         var innerMd = RIPEMD160()
         try innerMd.update(data: innerKeyPad)
         try innerMd.update(data: message)
-        //        try innerMd.update(data: innerKeyPad)
-        //        try innerMd.update(data: message)
-        
+
         var outerMd = RIPEMD160()
         try outerMd.update(data: outerKeyPad)
         try outerMd.update(data: innerMd.finalize())
-        //        try outerMd.update(data: outerKeyPad)
-        //        try outerMd.update(data: innerMd.finalize())
-        
+
         return try outerMd.finalize()
-        //        return try outerMd.finalize()
     }
     
     static func hmac(key: Data, message: String) throws -> Data {
         return try RIPEMD160.hmac(key: key, message: message.data(using: .utf8)!)
-        //        return try RIPEMD160.hmac(key: key, message: message.data(using: .utf8)!)
     }
     
     static func hmac(key: String, message: String) throws -> Data {
         return try RIPEMD160.hmac(key: key.data(using: .utf8)!, message: message)
-        //        return try RIPEMD160.hmac(key: key.data(using: .utf8)!, message: message)
     }
 }

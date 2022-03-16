@@ -6,7 +6,6 @@
 //  Copyright © 2019 The Matter Inc. All rights reserved.
 //
 import Starscream
-import PromiseKit
 import BigInt
 import Foundation
 
@@ -92,15 +91,7 @@ public protocol Web3SocketDelegate {
 }
 
 /// The default websocket provider.
-public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDelegate {
-
-    public func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse> {
-        return Promise(error: Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'"))
-    }
-    
-    public func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue) -> Promise<JSONRPCresponseBatch> {
-        return Promise(error: Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'"))
-    }
+public class WebsocketProvider: Web3NetworkProvider, IWebsocketProvider, WebSocketDelegate {
     
     public var network: Networks?
     public var url: URL
@@ -120,15 +111,15 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     private var messagesStringToWrite: [String] = []
     private var messagesDataToWrite: [Data] = []
     
-    public init?(_ endpoint: URL,
+    public init(_ endpoint: URL,
                  delegate wsdelegate: Web3SocketDelegate,
                  projectId: String? = nil,
                  keystoreManager manager: KeystoreManager? = nil,
-                 network net: Networks? = nil) {
+                 network net: Networks? = nil) throws {
         websocketConnected = false
         var endpointString = endpoint.absoluteString
         if !(endpointString.hasPrefix("wss://") || endpointString.hasPrefix("ws://")) {
-            return nil
+            throw Web3Error.dataError
         }
         if endpointString.hasPrefix("wss://") && endpointString.hasSuffix(Constants.infuraWsScheme) {
             if net == nil {
@@ -153,7 +144,11 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
                 endpointString += projectId ?? Constants.infuraToken
             }
         }
-        url = URL(string: endpointString)!
+        if let urlValue = URL(string: endpointString) {
+            url = urlValue
+        } else {
+            throw Web3Error.dataError
+        }
         delegate = wsdelegate
         attachedKeystoreManager = manager
         let request = URLRequest(url: url)
@@ -161,16 +156,16 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         socket.delegate = self
     }
     
-    public init?(_ endpoint: String,
+    public init(_ endpoint: String,
                  delegate wsdelegate: Web3SocketDelegate,
                  projectId: String? = nil,
                  keystoreManager manager: KeystoreManager? = nil,
-                 network net: Networks? = nil) {
-        guard URL(string: endpoint) != nil else {return nil}
+                 network net: Networks? = nil) throws {
+        guard URL(string: endpoint) != nil else {throw Web3Error.dataError}
         var finalEndpoint = endpoint
         websocketConnected = false
         if !(endpoint.hasPrefix("wss://") || endpoint.hasPrefix("ws://")) {
-            return nil
+            throw Web3Error.dataError
         }
         if endpoint.hasPrefix("wss://") && endpoint.hasSuffix(Constants.infuraWsScheme) {
             if net == nil {
@@ -195,7 +190,11 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
                 finalEndpoint += projectId ?? Constants.infuraToken
             }
         }
-        url = URL(string: finalEndpoint)!
+        if let urlValue = URL(string: finalEndpoint) {
+            url = urlValue
+        } else {
+            throw Web3Error.dataError
+        }
         delegate = wsdelegate
         attachedKeystoreManager = manager
         let request = URLRequest(url: url)
@@ -226,7 +225,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
                                       projectId: String? = nil,
                                       keystoreManager manager: KeystoreManager? = nil,
                                       network net: Networks? = nil) -> WebsocketProvider? {
-        guard let socketProvider = WebsocketProvider(endpoint,
+        guard let socketProvider = try? WebsocketProvider(endpoint,
                                                      delegate: delegate,
                                                      projectId: projectId,
                                                      keystoreManager: manager,
@@ -242,7 +241,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
                                       projectId: String? = nil,
                                       keystoreManager manager: KeystoreManager? = nil,
                                       network net: Networks? = nil) -> WebsocketProvider? {
-        guard let socketProvider = WebsocketProvider(endpoint,
+        guard let socketProvider = try? WebsocketProvider(endpoint,
                                                      delegate: delegate,
                                                      projectId: projectId,
                                                      keystoreManager: manager,
@@ -263,10 +262,10 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         } else if message.self is Data {
             dMessage = message as? Data
         }
-        if sMessage != nil {
-            self.messagesStringToWrite.append(sMessage!)
-        } else if dMessage != nil {
-            self.messagesDataToWrite.append(dMessage!)
+        if let sMessage = sMessage {
+            self.messagesStringToWrite.append(sMessage)
+        } else if let dMessage = dMessage {
+            self.messagesDataToWrite.append(dMessage)
         }
         writeTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(performWriteOperations), userInfo: nil, repeats: true)
     }
@@ -310,7 +309,9 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
             delegate.gotError(error: Web3Error.nodeError(desc: "socket cancelled"))
         case .error(let error):
             websocketConnected = false
-            delegate.gotError(error: error!)
+            if let error = error {
+                delegate.gotError(error: error)
+            }
         }
     }
 }

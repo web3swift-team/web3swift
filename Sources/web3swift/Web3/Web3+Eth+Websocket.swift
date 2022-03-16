@@ -7,27 +7,21 @@
 //
 import Foundation
 import BigInt
-import PromiseKit
 import Starscream
 
 
 extension web3.Eth {
     
     public func getWebsocketProvider(forDelegate delegate: Web3SocketDelegate) throws -> InfuraWebsocketProvider {
-        var infuraWSProvider: InfuraWebsocketProvider
-        if !(provider is InfuraWebsocketProvider) {
-            guard let infuraNetwork = provider.network else {
-                throw Web3Error.processingError(desc: "Wrong network")
-            }
-            guard let infuraProvider = InfuraWebsocketProvider(infuraNetwork, delegate: delegate, keystoreManager: provider.attachedKeystoreManager) else {
-                throw Web3Error.processingError(desc: "Wrong network")
-            }
-            infuraWSProvider = infuraProvider
-        } else {
-            infuraWSProvider = provider as! InfuraWebsocketProvider
+
+        guard let infuraNetwork = provider.network else {
+            throw Web3Error.processingError(desc: "Wrong network")
         }
-        infuraWSProvider.connectSocket()
-        return infuraWSProvider
+        guard let infuraProvider = try? InfuraWebsocketProvider(infuraNetwork, delegate: delegate, keystoreManager: provider.attachedKeystoreManager) else {
+            throw Web3Error.processingError(desc: "Wrong network")
+        }
+        infuraProvider.connectSocket()
+        return infuraProvider
     }
     
     public func getLatestPendingTransactions(forDelegate delegate: Web3SocketDelegate) throws {

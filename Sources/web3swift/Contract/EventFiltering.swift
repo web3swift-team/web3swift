@@ -5,8 +5,6 @@
 //
 
 import Foundation
-//import EthereumABI
-//import EthereumAddress
 
 internal func filterLogs(decodedLogs: [EventParserResultProtocol], eventFilter: EventFilter) -> [EventParserResultProtocol] {
     let filteredLogs = decodedLogs.filter { (result) -> Bool in

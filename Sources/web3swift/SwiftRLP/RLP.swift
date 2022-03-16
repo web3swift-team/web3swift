@@ -218,16 +218,6 @@ public struct RLP {
                 return list.count
             }
         }
-        //        public var hasNext: Bool {
-        //            switch self.content {
-        //            case .noItem:
-        //                return false
-        //            case .data(_):
-        //                return false
-        //            case .list(let list, let counter, _):
-        //                return list.count > counter
-        //            }
-        //        }
         
         public subscript(index: Int) -> RLPItem? {
             get {

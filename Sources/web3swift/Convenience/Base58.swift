@@ -56,7 +56,6 @@ struct Base58 {
         }
         
         for b in base58 {
-            //str = "\(str)\(base58Alphabet[String.Index(encodedOffset: Int(b))])"
             str = "\(str)\(base58Alphabet[String.Index(utf16Offset: Int(b), in: base58Alphabet)])"
         }
         
@@ -82,8 +81,7 @@ struct Base58 {
         for c in string where c != " " {
             // search for base58 character
             guard let base58Index = base58Alphabet.index(of: c) else { return [] }
-            
-//            var carry = base58Index.encodedOffset
+
             var carry = base58Index.utf16Offset(in: base58Alphabet)
             var i = 0
             for j in 0...base58.count where carry != 0 || i < length {
@@ -159,12 +157,5 @@ extension String {
         
         return bytes
     }
-    
-//    public var littleEndianHexToUInt: UInt {
-//        let data = Data.fromHex(self)!
-//        let revensed =
-//        return UInt(sel)
-//        return UInt(self.dataWithHexString().bytes.reversed().fullHexString,radix: 16)!
-//    }
     
 }
