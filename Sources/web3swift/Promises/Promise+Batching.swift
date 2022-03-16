@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import PromiseKit
 
 public class JSONRPCrequestDispatcher {
     public var MAX_WAIT_TIME: TimeInterval = 0.1
@@ -21,71 +20,57 @@ public class JSONRPCrequestDispatcher {
         self.queue = queue
         self.policy = policy
         self.lockQueue = DispatchQueue.init(label: "batchingQueue") // serial simplest queue
-//        DispatchQueue(label: "batchingQueue", qos: .userInitiated)
-        self.batches.append(Batch(provider: self.provider, capacity: 32, queue: self.queue, lockQueue: self.lockQueue))
+        self.batches.append(Batch(provider: provider, capacity: 32, queue: queue, lockQueue: lockQueue))
     }
     
     internal final class Batch {
         var capacity: Int
-        var promisesDict: [UInt64: (promise: Promise<JSONRPCresponse>, resolver: Resolver<JSONRPCresponse>)] = [UInt64: (promise: Promise<JSONRPCresponse>, resolver: Resolver<JSONRPCresponse>)]()
+        var promisesDict = [UInt64]()
+        var jsonRPCresponseHandlers: [(UInt64, ([JSONRPCresponse])-> Void)] = []
         var requests: [JSONRPCrequest] = [JSONRPCrequest]()
-        var pendingTrigger: Guarantee<Void>?
+        var pendingTrigger: Bool = true
         var provider: Web3Provider
         var queue: DispatchQueue
         var lockQueue : DispatchQueue
         var triggered : Bool = false
-        func add(_ request: JSONRPCrequest, maxWaitTime: TimeInterval) throws -> Promise<JSONRPCresponse> {
-            if self.triggered {
+        func add(_ request: JSONRPCrequest, jsonRPCresponseHandler: @escaping ([JSONRPCresponse])-> Void, maxWaitTime: TimeInterval) async throws {
+            if triggered {
                 throw Web3Error.nodeError(desc: "Batch is already in flight")
             }
             let requestID = request.id
-            let promiseToReturn = Promise<JSONRPCresponse>.pending()
-            self.lockQueue.async {
-                if self.promisesDict[requestID] != nil {
-                    promiseToReturn.resolver.reject(Web3Error.processingError(desc: "Request ID collision"))
-                }
-                self.promisesDict[requestID] = promiseToReturn
-                self.requests.append(request)
-                if self.pendingTrigger == nil {
-                    self.pendingTrigger = after(seconds: maxWaitTime).done(on: self.queue) {
-                        self.trigger()
-                    }
-                }
-                if self.requests.count == self.capacity {
-                    self.trigger()
-                }
+
+            if promisesDict.contains(requestID) {
+                throw Web3Error.processingError(desc: "Request ID collision")
+            } else {
+                promisesDict.append(requestID)
+                jsonRPCresponseHandlers.append((requestID, jsonRPCresponseHandler))
             }
-            return promiseToReturn.promise
+            requests.append(request)
+            if pendingTrigger {
+                pendingTrigger.toggle()
+                try? await Task.sleep(nanoseconds: UInt64(maxWaitTime) * 1_000_000_000)
+                try await trigger()
+            }
+            if requests.count == capacity {
+                try await trigger()
+            }
         }
-        
-        func trigger() {
-            self.lockQueue.async {
-                if self.triggered {
+
+        func trigger() async throws {
+            Task {
+                if triggered {
                     return
                 }
-                self.triggered = true
-                let requestsBatch = JSONRPCrequestBatch(requests: self.requests)
-                _ = self.provider.sendAsync(requestsBatch, queue: self.queue).done(on: self.queue){batch in
-                    for response in batch.responses {
-                        if self.promisesDict[UInt64(response.id)] == nil {
-                            for k in self.promisesDict.keys {
-                                self.promisesDict[k]?.resolver.reject(Web3Error.nodeError(desc: "Unknown request id"))
-                            }
-                            return
-                        }
-                    }
-                    for response in batch.responses {
-                        let promise = self.promisesDict[UInt64(response.id)]!
-                        promise.resolver.fulfill(response)
-                    }
-                }.catch(on:self.queue) {err in
-                    for k in self.promisesDict.keys {
-                        self.promisesDict[k]?.resolver.reject(err)
-                    }
+                triggered = true
+                let requestsBatch = JSONRPCrequestBatch(requests: requests)
+                let batch = try await provider.sendAsync(requestsBatch)
+                jsonRPCresponseHandlers.forEach { (requestID, function) in
+                    function(batch.responses.filter { response in response.id == requestID })
+
                 }
             }
         }
-        
+
         init (provider: Web3Provider, capacity: Int, queue: DispatchQueue, lockQueue: DispatchQueue) {
             self.provider = provider
             self.capacity = capacity
@@ -95,13 +80,12 @@ public class JSONRPCrequestDispatcher {
     }
     
     func getBatch() throws -> Batch {
-        guard case .Batch(let batchLength) = self.policy else {
+        guard case .Batch(let batchLength) = policy, let currentBatch = batches.last else {
             throw Web3Error.inputError(desc: "Trying to batch a request when policy is not to batch")
         }
-        let currentBatch = self.batches.last!
         if currentBatch.requests.count.isMultiple(of: batchLength) || currentBatch.triggered {
-            let newBatch = Batch(provider: self.provider, capacity: Int(batchLength), queue: self.queue, lockQueue: self.lockQueue)
-            self.batches.append(newBatch)
+            let newBatch = Batch(provider: provider, capacity: Int(batchLength), queue: queue, lockQueue: lockQueue)
+            batches.append(newBatch)
             return newBatch
         }
         return currentBatch
@@ -111,29 +95,15 @@ public class JSONRPCrequestDispatcher {
         case Batch(Int)
         case NoBatching
     }
-    
-    func addToQueue(request: JSONRPCrequest) -> Promise<JSONRPCresponse> {
-        switch self.policy {
+    //TODO: we should spilt these out so not confusing which way value is being retruned
+    func addToQueue(request: JSONRPCrequest, jsonRPCresponseHandler: @escaping([JSONRPCresponse])-> Void) async throws -> JSONRPCresponse? {
+        switch policy {
         case .NoBatching:
-            return self.provider.sendAsync(request, queue: self.queue)
+            return try await provider.sendAsync(request)
         case .Batch(_):
-            let promise = Promise<JSONRPCresponse> {
-                seal in
-                self.lockQueue.async {
-                    do {
-                        let batch = try self.getBatch()
-                        let internalPromise = try batch.add(request, maxWaitTime: self.MAX_WAIT_TIME)
-                        internalPromise.done(on: self.queue) {resp in
-                            seal.fulfill(resp)
-                        }.catch(on: self.queue){err in
-                            seal.reject(err)
-                        }
-                    } catch {
-                        seal.reject(error)
-                    }
-                }
-            }
-            return promise
+            let batch = try getBatch()
+            try await batch.add(request, jsonRPCresponseHandler: jsonRPCresponseHandler, maxWaitTime: MAX_WAIT_TIME)
         }
+        return nil
     }
 }
