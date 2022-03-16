@@ -1,5 +1,5 @@
 github "attaswift/BigInt" "v5.3.0"
 github "attaswift/SipHash" "v1.2.2"
 github "daltoniam/Starscream" "4.0.4"
-github "krzyzanowskim/CryptoSwift" "1.4.2"
-github "mxcl/PromiseKit" "6.16.2"
+github "krzyzanowskim/CryptoSwift" "1.4.3"
+github "mxcl/PromiseKit" "6.17.0"

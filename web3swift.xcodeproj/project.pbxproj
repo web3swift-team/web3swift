@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -197,17 +197,35 @@
 		E2EDC5EA241EDE3600410EA6 /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */; };
 		E2EDC5EC241EE18700410EA6 /* wk.bridge.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E2EDC5EB241EE18700410EA6 /* wk.bridge.min.js */; };
 		E2EDC5EE241EE1E600410EA6 /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5ED241EE1E600410EA6 /* Bridge.swift */; };
-		F5213FF42673849600EBDC50 /* CryptoSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FEF2673849600EBDC50 /* CryptoSwift.xcframework */; };
-		F5213FF52673849600EBDC50 /* CryptoSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FEF2673849600EBDC50 /* CryptoSwift.xcframework */; };
-		F5213FF62673849600EBDC50 /* BigInt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FF02673849600EBDC50 /* BigInt.xcframework */; };
-		F5213FF72673849600EBDC50 /* BigInt.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FF02673849600EBDC50 /* BigInt.xcframework */; };
-		F5213FF82673849600EBDC50 /* PromiseKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FF12673849600EBDC50 /* PromiseKit.xcframework */; };
-		F5213FF92673849600EBDC50 /* PromiseKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FF12673849600EBDC50 /* PromiseKit.xcframework */; };
-		F5213FFA2673849600EBDC50 /* SipHash.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FF22673849600EBDC50 /* SipHash.xcframework */; };
-		F5213FFB2673849600EBDC50 /* SipHash.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FF22673849600EBDC50 /* SipHash.xcframework */; };
-		F5213FFC2673849600EBDC50 /* Starscream.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FF32673849600EBDC50 /* Starscream.xcframework */; };
-		F5213FFD2673849600EBDC50 /* Starscream.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FF32673849600EBDC50 /* Starscream.xcframework */; };
+		EBB01C6027DE26D000765612 /* SipHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBB01C5B27DE26D000765612 /* SipHash.framework */; };
+		EBB01C6127DE26D100765612 /* SipHash.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EBB01C5B27DE26D000765612 /* SipHash.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EBB01C6227DE26D100765612 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBB01C5C27DE26D000765612 /* BigInt.framework */; };
+		EBB01C6327DE26D100765612 /* BigInt.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EBB01C5C27DE26D000765612 /* BigInt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EBB01C6427DE26D100765612 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBB01C5D27DE26D000765612 /* PromiseKit.framework */; };
+		EBB01C6527DE26D100765612 /* PromiseKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EBB01C5D27DE26D000765612 /* PromiseKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EBB01C6627DE26D100765612 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBB01C5E27DE26D000765612 /* CryptoSwift.framework */; };
+		EBB01C6727DE26D100765612 /* CryptoSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EBB01C5E27DE26D000765612 /* CryptoSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EBB01C6827DE26D100765612 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBB01C5F27DE26D000765612 /* Starscream.framework */; };
+		EBB01C6927DE26D100765612 /* Starscream.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EBB01C5F27DE26D000765612 /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EBB01C6A27DE26D100765612 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EBB01C6527DE26D100765612 /* PromiseKit.framework in Embed Frameworks */,
+				EBB01C6127DE26D100765612 /* SipHash.framework in Embed Frameworks */,
+				EBB01C6327DE26D100765612 /* BigInt.framework in Embed Frameworks */,
+				EBB01C6927DE26D100765612 /* Starscream.framework in Embed Frameworks */,
+				EBB01C6727DE26D100765612 /* CryptoSwift.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1317BCE3218C50D100D6D095 /* web3swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = web3swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -405,7 +423,7 @@
 		5C03EACC274406400052C66D /* web3swift_User_cases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = web3swift_User_cases.swift; sourceTree = "<group>"; };
 		5C03EACD274406400052C66D /* web3swift_AdvancedABIv2_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = web3swift_AdvancedABIv2_Tests.swift; sourceTree = "<group>"; };
 		5C03EACE274406410052C66D /* web3swift_transactions_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = web3swift_transactions_Tests.swift; sourceTree = "<group>"; };
-		5CDEF972275A74590004A2F2 /* web3swift.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = file; name = web3swift.xctestplan; path = Tests/web3swiftTests/web3swift.xctestplan; sourceTree = SOURCE_ROOT; };
+		5CDEF972275A74590004A2F2 /* web3swift.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = web3swift.xctestplan; path = Tests/web3swiftTests/web3swift.xctestplan; sourceTree = SOURCE_ROOT; };
 		5CDEF973275A74670004A2F2 /* LocalTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LocalTests.xctestplan; sourceTree = "<group>"; };
 		5CDEF974275A747B0004A2F2 /* RemoteTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RemoteTests.xctestplan; sourceTree = "<group>"; };
 		CB50A52727060BD600D7E39B /* web3swift_EIP712_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = web3swift_EIP712_Tests.swift; sourceTree = "<group>"; };
@@ -416,11 +434,11 @@
 		E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		E2EDC5EB241EE18700410EA6 /* wk.bridge.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = wk.bridge.min.js; sourceTree = "<group>"; };
 		E2EDC5ED241EE1E600410EA6 /* Bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bridge.swift; sourceTree = "<group>"; };
-		F5213FEF2673849600EBDC50 /* CryptoSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CryptoSwift.xcframework; path = Carthage/Build/CryptoSwift.xcframework; sourceTree = "<group>"; };
-		F5213FF02673849600EBDC50 /* BigInt.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = BigInt.xcframework; path = Carthage/Build/BigInt.xcframework; sourceTree = "<group>"; };
-		F5213FF12673849600EBDC50 /* PromiseKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = PromiseKit.xcframework; path = Carthage/Build/PromiseKit.xcframework; sourceTree = "<group>"; };
-		F5213FF22673849600EBDC50 /* SipHash.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SipHash.xcframework; path = Carthage/Build/SipHash.xcframework; sourceTree = "<group>"; };
-		F5213FF32673849600EBDC50 /* Starscream.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Starscream.xcframework; path = Carthage/Build/Starscream.xcframework; sourceTree = "<group>"; };
+		EBB01C5B27DE26D000765612 /* SipHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SipHash.framework; path = Carthage/Build/iOS/SipHash.framework; sourceTree = "<group>"; };
+		EBB01C5C27DE26D000765612 /* BigInt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BigInt.framework; path = Carthage/Build/iOS/BigInt.framework; sourceTree = "<group>"; };
+		EBB01C5D27DE26D000765612 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
+		EBB01C5E27DE26D000765612 /* CryptoSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoSwift.framework; path = Carthage/Build/iOS/CryptoSwift.framework; sourceTree = "<group>"; };
+		EBB01C5F27DE26D000765612 /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -428,12 +446,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5213FF82673849600EBDC50 /* PromiseKit.xcframework in Frameworks */,
-				F5213FFA2673849600EBDC50 /* SipHash.xcframework in Frameworks */,
-				F5213FF62673849600EBDC50 /* BigInt.xcframework in Frameworks */,
-				F5213FF42673849600EBDC50 /* CryptoSwift.xcframework in Frameworks */,
-				F5213FFC2673849600EBDC50 /* Starscream.xcframework in Frameworks */,
 				13C3392821B6C68900F33F5E /* secp256k1.framework in Frameworks */,
+				EBB01C6827DE26D100765612 /* Starscream.framework in Frameworks */,
+				EBB01C6227DE26D100765612 /* BigInt.framework in Frameworks */,
+				EBB01C6027DE26D000765612 /* SipHash.framework in Frameworks */,
+				EBB01C6627DE26D100765612 /* CryptoSwift.framework in Frameworks */,
+				EBB01C6427DE26D100765612 /* PromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,11 +467,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5213FF72673849600EBDC50 /* BigInt.xcframework in Frameworks */,
-				F5213FF52673849600EBDC50 /* CryptoSwift.xcframework in Frameworks */,
-				F5213FFB2673849600EBDC50 /* SipHash.xcframework in Frameworks */,
-				F5213FF92673849600EBDC50 /* PromiseKit.xcframework in Frameworks */,
-				F5213FFD2673849600EBDC50 /* Starscream.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -578,11 +591,11 @@
 		13C3392721B6C68900F33F5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F5213FF02673849600EBDC50 /* BigInt.xcframework */,
-				F5213FEF2673849600EBDC50 /* CryptoSwift.xcframework */,
-				F5213FF12673849600EBDC50 /* PromiseKit.xcframework */,
-				F5213FF22673849600EBDC50 /* SipHash.xcframework */,
-				F5213FF32673849600EBDC50 /* Starscream.xcframework */,
+				EBB01C5C27DE26D000765612 /* BigInt.framework */,
+				EBB01C5E27DE26D000765612 /* CryptoSwift.framework */,
+				EBB01C5D27DE26D000765612 /* PromiseKit.framework */,
+				EBB01C5B27DE26D000765612 /* SipHash.framework */,
+				EBB01C5F27DE26D000765612 /* Starscream.framework */,
 				13A8D5BD21B9296B00469740 /* CoreImage.framework */,
 			);
 			name = Frameworks;
@@ -1094,6 +1107,7 @@
 				1317BCE0218C50D100D6D095 /* Frameworks */,
 				1317BCE1218C50D100D6D095 /* Resources */,
 				1317BE04218C5D1B00D6D095 /* Carthage */,
+				EBB01C6A27DE26D100765612 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1468,7 +1482,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = web3swift.xcodeproj/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1532,7 +1546,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = web3swift.xcodeproj/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -1558,6 +1572,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = "$(SRCROOT)/Carthage/Build/iOS";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(SRCROOT)/Carthage/Build/iOS";
 				"FRAMEWORK_SEARCH_PATHS[sdk=macosx*]" = "$(SRCROOT)/Carthage/Build/Mac";
@@ -1589,8 +1607,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.matter-labs.web3swift";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_VERSION = 5.0;
+				VALIDATE_WORKSPACE = NO;
 			};
 			name = Debug;
 		};
@@ -1605,6 +1624,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = "$(SRCROOT)/Carthage/Build/iOS";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(SRCROOT)/Carthage/Build/iOS";
 				"FRAMEWORK_SEARCH_PATHS[sdk=macosx*]" = "$(SRCROOT)/Carthage/Build/Mac";
@@ -1636,8 +1659,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.matter-labs.web3swift";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_VERSION = 5.0;
+				VALIDATE_WORKSPACE = NO;
 			};
 			name = Release;
 		};
