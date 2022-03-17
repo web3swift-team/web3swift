@@ -192,7 +192,7 @@ public struct TransactionDetails: Decodable {
         let blockHash = try decodeHexToData(container, key: .blockHash, allowOptional: true)
         self.blockHash = blockHash
         
-        let transactionIndex = try decodeHexToBigUInt(container, key: .blockNumber, allowOptional: true)
+        let transactionIndex = try decodeHexToBigUInt(container, key: .transactionIndex, allowOptional: true)
         self.transactionIndex = transactionIndex
         
         let transaction = try EthereumTransaction(from: decoder)

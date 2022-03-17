@@ -205,7 +205,7 @@ extension ABIDecoder {
             guard data.count >= pointer + type.memoryUsage else {return (nil, nil)}
             let dataSlice = data[pointer ..< pointer + type.memoryUsage]
             let bn = BigUInt(dataSlice)
-            if bn > UINT64_MAX || bn >= data.count {
+            if bn > UInt64.max || bn >= data.count {
                 // there are ERC20 contracts that use bytes32 intead of string. Let's be optimistic and return some data
                 if case .string = type {
                     let nextElement = pointer + type.memoryUsage
