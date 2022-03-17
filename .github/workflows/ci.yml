@@ -40,6 +40,8 @@ jobs:
         run: sleep 1
       - name: Run local tests
         run: swift test --skip-build -c debug --filter localTests
+      # - name: Run remote tests
+      #   run: swift test --skip-build -c debug --filter remoteTests
   carthage:
     name: Carthage
     runs-on: macOS-11
@@ -65,7 +67,7 @@ jobs:
         run: ganache &
       - name: Wait till ganache starts
         run: sleep 1
-      - name: Running local tests
+      - name: Run local tests
         run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
-      # - name: Running remote tests
+      # - name: Run remote tests
       #   run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan RemoteTests
