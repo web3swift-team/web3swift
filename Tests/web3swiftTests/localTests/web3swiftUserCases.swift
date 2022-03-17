@@ -10,7 +10,7 @@ import BigInt
 
 @testable import web3swift
 
-class web3swift_User_cases: XCTestCase {
+class web3swiftUserCases: XCTestCase {
     
     func getKeystoreData() -> Data? {
         let bundle = Bundle(for: type(of: self))
@@ -20,7 +20,7 @@ class web3swift_User_cases: XCTestCase {
     }
     
     func testUserCase1() throws {
-        let (web3, _, receipt, abiString) = try web3swift_helpers.localDeployERC20()
+        let (web3, _, receipt, abiString) = try web3swiftHelpers.localDeployERC20()
         let account = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let contract = web3.contract(abiString, at: receipt.contractAddress!)!
         let readTransaction = contract.read("balanceOf", parameters:[account] as [AnyObject])!

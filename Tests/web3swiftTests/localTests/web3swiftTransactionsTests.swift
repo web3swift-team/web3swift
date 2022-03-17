@@ -11,7 +11,7 @@ import BigInt
 
 @testable import web3swift
 
-class web3swift_transactions_Tests: XCTestCase {
+class web3swiftTransactionsTests: XCTestCase {
     
     func testTransaction() throws {
         do {
