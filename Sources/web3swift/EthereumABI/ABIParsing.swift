@@ -82,18 +82,15 @@ fileprivate func parseFunction(abiRecord:ABI.Record) throws -> ABI.Element.Funct
     })
     let abiOutputs = outputs ?? [ABI.Element.InOut]()
     let name = abiRecord.name ?? ""
-    let payable = abiRecord.stateMutability == "payable" || abiRecord.payable ?? false
-    let constant = (abiRecord.constant == true || abiRecord.stateMutability == "view" || abiRecord.stateMutability == "pure")
+    let payable = abiRecord.stateMutability == "payable" || abiRecord.payable == true
+    let constant = abiRecord.constant == true || abiRecord.stateMutability == "view" || abiRecord.stateMutability == "pure"
     let functionElement = ABI.Element.Function(name: name, inputs: abiInputs, outputs: abiOutputs, constant: constant, payable: payable)
     return functionElement
 }
 
 fileprivate func parseFallback(abiRecord:ABI.Record) throws -> ABI.Element.Fallback {
     let payable = (abiRecord.stateMutability == "payable" || abiRecord.payable == true)
-    var constant = abiRecord.constant == true
-    if (abiRecord.stateMutability == "view" || abiRecord.stateMutability == "pure") {
-        constant = true
-    }
+    let constant = abiRecord.constant == true || abiRecord.stateMutability == "view" || abiRecord.stateMutability == "pure"
     let functionElement = ABI.Element.Fallback(constant: constant, payable: payable)
     return functionElement
 }
@@ -104,7 +101,7 @@ fileprivate func parseConstructor(abiRecord:ABI.Record) throws -> ABI.Element.Co
         return nativeInput
     })
     let abiInputs = inputs ?? [ABI.Element.InOut]()
-    var payable = abiRecord.stateMutability == "payable" || abiRecord.payable ?? false
+    let payable = abiRecord.stateMutability == "payable" || abiRecord.payable == true
     let functionElement = ABI.Element.Constructor(inputs: abiInputs, constant: false, payable: payable)
     return functionElement
 }
@@ -127,7 +124,7 @@ fileprivate func parseReceive(abiRecord:ABI.Record) throws -> ABI.Element.Receiv
         return nativeInput
     })
     let abiInputs = inputs ?? [ABI.Element.InOut]()
-    var payable = abiRecord.stateMutability == "payable" || abiRecord.payable ?? false
+    let payable = abiRecord.stateMutability == "payable" || abiRecord.payable == true
     let functionElement = ABI.Element.Receive(inputs: abiInputs, payable: payable)
     return functionElement
 }
