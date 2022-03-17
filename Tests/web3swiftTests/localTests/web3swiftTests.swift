@@ -11,7 +11,7 @@ import BigInt
 
 @testable import web3swift
 
-class web3swift_Tests: XCTestCase {
+class web3swiftTests: XCTestCase {
     
     func testBitFunctions () throws {
         let data = Data([0xf0, 0x02, 0x03])
