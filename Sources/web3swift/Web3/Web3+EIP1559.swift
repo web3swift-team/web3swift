@@ -40,7 +40,7 @@ public extension Web3 {
     /// and thors an error if it isn't.
     func verifyEip1559Block(chain version: ChainVersion, parent: Block, current: Block) throws -> Bool {
         var parentGasLimit = parent.gasLimit
-        if case .London = version {
+        if version != .London {
             parentGasLimit = parent.gasLimit * Web3.ElasticityMultiplier
         }
 
