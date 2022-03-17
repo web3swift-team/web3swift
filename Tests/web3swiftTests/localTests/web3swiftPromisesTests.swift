@@ -11,7 +11,7 @@ import BigInt
 
 @testable import web3swift
 
-class web3swift_promises_Tests: XCTestCase {
+class web3swiftPromisesTests: XCTestCase {
     var urlSession : URLSession?
     
     func testGetBalancePromise() throws {
@@ -129,7 +129,7 @@ class web3swift_promises_Tests: XCTestCase {
     }
     
     func testERC20tokenBalancePromise() throws {
-        let (web3, _, receipt, _) = try web3swift_helpers.localDeployERC20()
+        let (web3, _, receipt, _) = try web3swiftHelpers.localDeployERC20()
         
         let token = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress, abiVersion: 2)!
         

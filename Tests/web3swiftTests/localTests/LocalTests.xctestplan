@@ -14,6 +14,11 @@
   "testTargets" : [
     {
       "skippedTests" : [
+        "web3swiftENSTests",
+        "web3swiftGanacheTests",
+        "web3swiftRemoteParsingTests",
+        "web3swiftST20AndSecurityTokenTests",
+        "web3swiftWebsocketTests",
         "web3swift_ENS_Tests",
         "web3swift_ST20AndSecurityToken_Tests",
         "web3swift_infura_Tests",
