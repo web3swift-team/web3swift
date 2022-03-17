@@ -339,21 +339,6 @@ public struct EventLog : Decodable {
     public var transactionHash: Data
     public var transactionIndex: BigUInt
     
-    
-//    address = 0x53066cddbc0099eb6c96785d9b3df2aaeede5da3;
-//    blockHash = 0x779c1f08f2b5252873f08fd6ec62d75bb54f956633bbb59d33bd7c49f1a3d389;
-//    blockNumber = 0x4f58f8;
-//    data = 0x0000000000000000000000000000000000000000000000004563918244f40000;
-//    logIndex = 0x84;
-//    removed = 0;
-//    topics =     (
-//    0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef,
-//    0x000000000000000000000000efdcf2c36f3756ce7247628afdb632fa4ee12ec5,
-//    0x000000000000000000000000d5395c132c791a7f46fa8fc27f0ab6bacd824484
-//    );
-//    transactionHash = 0x9f7bb2633abb3192d35f65e50a96f9f7ca878fa2ee7bf5d3fca489c0c60dc79a;
-//    transactionIndex = 0x99;
-    
     enum CodingKeys: String, CodingKey
     {
         case address
@@ -419,7 +404,6 @@ public enum TransactionInBlock:Decodable {
             guard let d = Data.fromHex(string) else {throw Web3Error.dataError}
             self = .hash(d)
         } else if let dict = try? value.decode([String:String].self) {
-//            guard let t = try? EthereumTransaction(from: decoder) else {throw Web3Error.dataError}
             guard let t = EthereumTransaction.fromJSON(dict) else {throw Web3Error.dataError}
             self = .transaction(t)
         } else {
@@ -428,17 +412,33 @@ public enum TransactionInBlock:Decodable {
     }
     
     
-    public init?(_ data: AnyObject) {
+    public init(_ data: AnyObject) throws {
         if let string = data as? String {
-            guard let d = Data.fromHex(string) else {return nil}
+            guard let d = Data.fromHex(string) else {
+                throw Web3Error.dataError
+            }
             self = .hash(d)
         } else if let dict = data as? [String:AnyObject] {
-            guard let t = EthereumTransaction.fromJSON(dict) else {return nil}
+            guard let t = EthereumTransaction.fromJSON(dict) else {
+                throw Web3Error.dataError
+            }
             self = .transaction(t)
         } else {
+            self = .null
+        }
+    }
+
+    var hash: Data? {
+        switch self {
+        case .hash(let data):
+            return data
+        case .transaction(let ethereumTransaction):
+            return ethereumTransaction.hash
+        case .null:
             return nil
         }
     }
+
 }
 
 public struct Block:Decodable {
@@ -667,23 +667,6 @@ public struct TxPoolContent : Decodable {
         }
     }
 }
-
-//public struct TxPoolContentForAddress : Decodable {
-//    public var address: EthereumAddress
-//    public var content: [TxPoolContentForNonce]
-//
-//    public init(from decoder: Decoder) throws {
-//        let container = try decoder.singleValueContainer()
-//        let addressString = container.codingPath[0].stringValue
-//        guard let address = EthereumAddress(addressString, type: .normal, ignoreChecksum: true) else {
-//            throw Web3Error.dataError
-//        }
-//        self.address = address
-//
-//        let content = try container.decode([TxPoolContentForNonce].self)
-//        self.content = content
-//    }
-//}
 
 public struct TxPoolContentForNonce {
     public var nonce: BigUInt

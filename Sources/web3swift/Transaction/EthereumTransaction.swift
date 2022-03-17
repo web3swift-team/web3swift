@@ -6,9 +6,6 @@
 
 import Foundation
 import BigInt
-//import SwiftRLP
-//import secp256k1_swift
-//import EthereumAddress
 
 public struct EthereumTransaction: CustomStringConvertible {
     public var nonce: BigUInt
@@ -259,7 +256,6 @@ public struct EthereumTransaction: CustomStringConvertible {
     static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> JSONRPCrequest? {
         let onBlock = transactionOptions?.callOnBlock?.stringValue
         var request = JSONRPCrequest()
-//        var tx = transaction
         request.method = method
         let from = transactionOptions?.from
         guard var txParams = transaction.encodeAsDictionary(from: from) else {return nil}
@@ -364,9 +360,6 @@ public extension EthereumTransaction {
             guard let ethAddr = EthereumAddress(toString) else {return nil}
             to = ethAddr
         }
-        //        if (!to.isValid) {
-        //            return nil
-        //        }
         var dataString = json["data"] as? String
         if (dataString == nil) {
             dataString = json["input"] as? String

@@ -5,15 +5,13 @@
 //
 
 import Foundation
-//import EthereumAddress
 import BigInt
-import PromiseKit
 
 extension Web3.Utils {
-    
+
     fileprivate typealias AssemblyHook = web3.AssemblyHook
     fileprivate typealias SubmissionResultHook = web3.SubmissionResultHook
-    
+
     public class NonceMiddleware: EventLoopRunnableProtocol {
         var web3: web3?
         var nonceLookups: [EthereumAddress: BigUInt] = [EthereumAddress: BigUInt]()
@@ -21,38 +19,46 @@ extension Web3.Utils {
         public let queue: DispatchQueue = DispatchQueue(label: "Nonce middleware queue")
         public var synchronizationPeriod: TimeInterval = 300.0 // 5 minutes
         var lastSyncTime: Date = Date()
-        
-        public func functionToRun() {
-            guard let w3 = self.web3 else {return}
-            var allPromises = [Promise<BigUInt>]()
-            allPromises.reserveCapacity(self.nonceLookups.keys.count)
-            let knownKeys = Array(self.nonceLookups.keys)
-            for k in knownKeys {
-                let promise = w3.eth.getTransactionCountPromise(address: k, onBlock: "latest")
-                allPromises.append(promise)
-            }
-            when(resolved: allPromises).done(on: w3.requestDispatcher.queue) {results in
-                self.queue.async {
-                    var i = 0
-                    for res in results {
-                        switch res {
-                        case .fulfilled(let newNonce):
-                            let key = knownKeys[i]
-                            self.nonceLookups[key] = newNonce
-                            i = i + 1
-                        default:
-                            i = i + 1
-                        }
-                    }
+
+
+        func getTransactionCountPromises(names: [EthereumAddress]) async -> [BigUInt?]? {
+            guard let w3 = self.web3 else {return nil}
+            return await withTaskGroup(of: BigUInt?.self, returning: [BigUInt?].self) { group in
+                for name in names {
+                    group.addTask { try? await w3.eth.getTransactionCountPromise(address: name, onBlock: "latest")}
                 }
-                
+
+                var promises = [BigUInt?]()
+
+                for await result in group {
+                    promises.append(result)
+                }
+
+                return promises
             }
         }
-        
-        public init() {
-            
+
+        public func functionToRun() async {
+            let knownKeys = Array(self.nonceLookups.keys)
+            guard let results = await getTransactionCountPromises(names: knownKeys) else {
+                return
+            }
+
+            Task {
+                var i = 0
+                for res in results {
+                    let key = knownKeys[i]
+                    self.nonceLookups[key] = res
+                    i = i + 1
+                }
+            }
+
         }
-        
+
+        public init() {
+
+        }
+
         func preAssemblyFunction(tx: EthereumTransaction, contract: EthereumContract, transactionOptions: TransactionOptions) -> (EthereumTransaction, EthereumContract, TransactionOptions, Bool) {
             guard let from = transactionOptions.from else {
                 // do nothing
@@ -67,21 +73,18 @@ extension Web3.Utils {
             self.queue.async {
                 self.nonceLookups[from] = newNonce
             }
-            //            var modifiedTX = tx
-            //            modifiedTX.nonce = newNonce
             var newOptions = transactionOptions
             newOptions.nonce = .manual(newNonce)
             return (tx, contract, newOptions, true)
         }
-        
+
         func postSubmissionFunction(result: TransactionSendingResult) {
             guard let from = result.transaction.sender else {
-                // do nothing
                 return
             }
-            
+
             let newNonce = result.transaction.nonce
-            
+
             if let knownNonce = self.nonceLookups[from] {
                 if knownNonce != newNonce {
                     self.queue.async {
@@ -95,7 +98,7 @@ extension Web3.Utils {
             }
             return
         }
-        
+
         public func attach(_ web3: web3) {
             self.web3 = web3
             web3.eventLoop.monitoredUserFunctions.append(self)
@@ -104,8 +107,8 @@ extension Web3.Utils {
             let postHook = SubmissionResultHook(queue: web3.requestDispatcher.queue, function: self.postSubmissionFunction)
             web3.postSubmissionHooks.append(postHook)
         }
-        
+
     }
-    
-    
+
+
 }

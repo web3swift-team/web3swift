@@ -169,71 +169,15 @@ public struct TransactionOptions {
             return TransactionOptions.defaultOptions
         }
         var newOptions = TransactionOptions.defaultOptions
-        if (other?.to != nil) {
-            newOptions.to = other?.to
-        } else {
-            newOptions.to = options?.to
-        }
-        if (other?.from != nil) {
-            newOptions.from = other?.from
-        } else {
-            newOptions.from = options?.from
-        }
-        if (other?.gasLimit != nil) {
-            newOptions.gasLimit = other?.gasLimit
-        } else {
-            newOptions.gasLimit = options?.gasLimit
-        }
-        if (other?.gasPrice != nil) {
-            newOptions.gasPrice = other?.gasPrice
-        } else {
-            newOptions.gasPrice = options?.gasPrice
-        }
-        if (other?.value != nil) {
-            newOptions.value = other?.value
-        } else {
-            newOptions.value = options?.value
-        }
+
+        newOptions.to = other?.to ?? options?.to
+        newOptions.from = other?.from ?? options?.from
+        newOptions.gasLimit = other?.gasLimit ?? options?.gasLimit
+        newOptions.gasPrice = other?.gasPrice ?? options?.gasPrice
+        newOptions.value = other?.value ?? options?.value
+
         return newOptions
     }
-//
-//    /// merges two sets of options along with a gas estimate to try to guess the final gas limit value required by user.
-//    ///
-//    /// Please refer to the source code for a logic.
-//    public static func smartMergeGasLimit(originalOptions: Web3Options?, extraOptions: Web3Options?, gasEstimate: BigUInt) -> BigUInt? {
-//        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} //just require any non-nils
-//        if mergedOptions.gasLimit == nil {
-//            return gasEstimate // for user's convenience we just use an estimate
-//            //            return nil // there is no opinion from user, so we can not proceed
-//        } else {
-//            if originalOptions != nil, originalOptions!.gasLimit != nil, originalOptions!.gasLimit! < gasEstimate { // original gas estimate was less than what's required, so we check extra options
-//                if extraOptions != nil, extraOptions!.gasLimit != nil, extraOptions!.gasLimit! >= gasEstimate {
-//                    return extraOptions!.gasLimit!
-//                } else {
-//                    return gasEstimate // for user's convenience we just use an estimate
-//                    //                    return nil // estimate is lower than allowed
-//                }
-//            } else {
-//                if extraOptions != nil, extraOptions!.gasLimit != nil, extraOptions!.gasLimit! >= gasEstimate {
-//                    return extraOptions!.gasLimit!
-//                } else {
-//                    return gasEstimate // for user's convenience we just use an estimate
-//                    //                    return nil // estimate is lower than allowed
-//                }
-//            }
-//        }
-//    }
-//
-//    public static func smartMergeGasPrice(originalOptions: Web3Options?, extraOptions: Web3Options?, priceEstimate: BigUInt) -> BigUInt? {
-//        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} //just require any non-nils
-//        if mergedOptions.gasPrice == nil {
-//            return priceEstimate
-//        } else if mergedOptions.gasPrice == 0 {
-//            return priceEstimate
-//        } else {
-//            return mergedOptions.gasPrice!
-//        }
-//    }
 }
 
 fileprivate func mergeIfNotNil<T>(first: T?, second: T?) -> T? {
