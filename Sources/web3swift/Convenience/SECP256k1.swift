@@ -116,7 +116,7 @@ extension SECP256K1 {
         let result = privateKey.withUnsafeBytes { (pkRawBufferPointer: UnsafeRawBufferPointer) -> Int32? in
             if let pkRawPointer = pkRawBufferPointer.baseAddress, pkRawBufferPointer.count > 0 {
                 let privateKeyPointer = pkRawPointer.assumingMemoryBound(to: UInt8.self)
-                let res = secp256k1_ec_pubkey_create(context!, UnsafeMutablePointer<secp256k1_pubkey>(&publicKey), privateKeyPointer)
+                let res = secp256k1_ec_pubkey_create(context!, &publicKey, privateKeyPointer)
                 return res
             } else {
                 return nil
@@ -163,7 +163,7 @@ extension SECP256K1 {
         let result = serializedKey.withUnsafeBytes { (serializedKeyRawBufferPointer: UnsafeRawBufferPointer) -> Int32? in
             if let serializedKeyRawPointer = serializedKeyRawBufferPointer.baseAddress, serializedKeyRawBufferPointer.count > 0 {
                 let serializedKeyPointer = serializedKeyRawPointer.assumingMemoryBound(to: UInt8.self)
-                let res = secp256k1_ec_pubkey_parse(context!, UnsafeMutablePointer<secp256k1_pubkey>(&publicKey), serializedKeyPointer, keyLen)
+                let res = secp256k1_ec_pubkey_parse(context!, &publicKey, serializedKeyPointer, keyLen)
                 return res
             } else {
                 return nil

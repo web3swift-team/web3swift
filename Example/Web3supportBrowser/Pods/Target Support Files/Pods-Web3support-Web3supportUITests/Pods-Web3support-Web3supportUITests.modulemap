@@ -1,6 +1,0 @@
-framework module Pods_Web3support_Web3supportUITests {
-  umbrella header "Pods-Web3support-Web3supportUITests-umbrella.h"
-
-  export *
-  module * { export * }
-}
