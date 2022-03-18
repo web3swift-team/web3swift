@@ -11,16 +11,16 @@ import Starscream
 @testable import web3swift
 
 class SpyDelegate: Web3SocketDelegate {
-    
+
     // Setting .None is unnecessary, but helps with clarity imho
     var somethingWithDelegateResult: Any? = nil
-    
+
     // Async test code needs to fulfill the XCTestExpecation used for the test
     // when all the async operations have been completed. For this reason we need
     // to store a reference to the expectation
     var asyncExpectation: XCTestExpectation?
     var fulfilled = false
-    
+
     func socketConnected(_ headers: [String:String]) {
         somethingWithDelegateResult = headers
         guard let expectation = asyncExpectation else {
@@ -35,7 +35,7 @@ class SpyDelegate: Web3SocketDelegate {
             expectation.fulfill()
         }
     }
-    
+
     func received(message: Any) {
         somethingWithDelegateResult = message
         guard let expectation = asyncExpectation else {
@@ -49,7 +49,7 @@ class SpyDelegate: Web3SocketDelegate {
             expectation.fulfill()
         }
     }
-    
+
     func gotError(error: Error) {
         XCTFail(error.localizedDescription)
     }
@@ -57,32 +57,32 @@ class SpyDelegate: Web3SocketDelegate {
 
 // MARK: Works only with network connection
 class web3swift_websocket_Tests: XCTestCase {
-    
+
     let spyDelegate = SpyDelegate()
     var socketProvider: InfuraWebsocketProvider?
-    
+
     func testSocketConnection(){
         guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
             return XCTFail()
         }
         self.socketProvider = socketProvider
-        
+
         spyDelegate.asyncExpectation = expectation(description: "Delegate called")
-        
+
         waitForExpectations(timeout: 1000) { error in
             if let error = error {
                 XCTFail("waitForExpectationsWithTimeout errored: \(error)")
             }
-            
+
             guard self.spyDelegate.somethingWithDelegateResult != nil else {
                 XCTFail("Expected delegate to be called")
                 return
             }
-            
+
             XCTAssert(true)
         }
     }
-    
+
     func testSubscribeOnPendingTXs() {
         guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
             return XCTFail()
@@ -97,16 +97,16 @@ class web3swift_websocket_Tests: XCTestCase {
             if let error = error {
                 XCTFail("waitForExpectationsWithTimeout errored: \(error)")
             }
-            
+
             guard self.spyDelegate.somethingWithDelegateResult != nil else {
                 XCTFail("Expected delegate to be called")
                 return
             }
-            
+
             XCTAssert(true)
         }
     }
-    
+
     func testSubscribeOnLogs() {
         guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
             return XCTFail()
@@ -121,16 +121,16 @@ class web3swift_websocket_Tests: XCTestCase {
             if let error = error {
                 XCTFail("waitForExpectationsWithTimeout errored: \(error)")
             }
-            
+
             guard self.spyDelegate.somethingWithDelegateResult != nil else {
                 XCTFail("Expected delegate to be called")
                 return
             }
-            
+
             XCTAssert(true)
         }
     }
-    
+
     func testSubscribeOnNewHeads() {
         guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
             return XCTFail()
@@ -145,16 +145,16 @@ class web3swift_websocket_Tests: XCTestCase {
             if let error = error {
                 XCTFail("waitForExpectationsWithTimeout errored: \(error)")
             }
-            
+
             guard self.spyDelegate.somethingWithDelegateResult != nil else {
                 XCTFail("Expected delegate to be called")
                 return
             }
-            
+
             XCTAssert(true)
         }
     }
-    
+
     func testFilter() {
         guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
             return XCTFail()
@@ -169,12 +169,12 @@ class web3swift_websocket_Tests: XCTestCase {
             if let error = error {
                 XCTFail("waitForExpectationsWithTimeout errored: \(error)")
             }
-            
+
             guard self.spyDelegate.somethingWithDelegateResult != nil else {
                 XCTFail("Expected delegate to be called")
                 return
             }
-            
+
             XCTAssert(true)
         }
     }

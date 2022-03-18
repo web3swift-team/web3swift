@@ -1,13 +1,13 @@
-////  web3swift
-////
-////  Created by Alex Vlasov.
-////  Copyright © 2018 Alex Vlasov. All rights reserved.
-////
+//  web3swift
 //
-//import XCTest
+//  Created by Alex Vlasov.
+//  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
-//@testable import web3swift_iOS
-//
+
+import XCTest
+import web3swift
+
+
 //class web3swift_ObjC_Tests: XCTestCase {
 //    func testBalance() {
 //        let web3 = _ObjCWeb3.InfuraMainnetWeb3()
@@ -17,16 +17,16 @@
 //        XCTAssert(err?.pointee == nil)
 //        XCTAssert(balance != nil)
 //    }
-//    
+//
 //    func testGettingBlockNumber() {
 //        let web3 = _ObjCWeb3.InfuraMainnetWeb3()
 //        let err: NSErrorPointer = NSErrorPointer(nilLiteral: ())
 //        let blockNumber = web3.web3Eth.getBlockNumber(error: err)
 //        XCTAssert(err?.pointee == nil)
 //        XCTAssert(blockNumber != nil)
-//        
+//
 //    }
-//    
+//
 //    func testGasPrice(){
 //        let web3 = _ObjCWeb3.InfuraMainnetWeb3()
 //        let err: NSErrorPointer = NSErrorPointer(nilLiteral: ())

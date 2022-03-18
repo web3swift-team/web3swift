@@ -7,14 +7,13 @@
 //
 
 import Foundation
-//import EthereumAddress
 
 //Pseudo-introspection using a registry contract
 protocol IERC820: IERC165 {
-    func canImplementInterfaceForAddress(interfaceHash: Data, addr: EthereumAddress) throws -> Data
-    func getInterfaceImplementer(addr: EthereumAddress, interfaceHash: Data) throws -> EthereumAddress
-    func setInterfaceImplementer(from: EthereumAddress, addr: EthereumAddress, interfaceHash: Data, implementer: EthereumAddress) throws -> WriteTransaction
-    func setManager(from: EthereumAddress, addr: EthereumAddress, newManager: EthereumAddress) throws -> WriteTransaction
-    func interfaceHash(interfaceName: String) throws -> Data
-    func updateERC165Cache(from: EthereumAddress, contract: EthereumAddress, interfaceId: [UInt8]) throws -> WriteTransaction
+    func canImplementInterfaceForAddress(interfaceHash: Data, addr: EthereumAddress) async throws -> Data
+    func getInterfaceImplementer(addr: EthereumAddress, interfaceHash: Data) async throws -> EthereumAddress
+    func setInterfaceImplementer(from: EthereumAddress, addr: EthereumAddress, interfaceHash: Data, implementer: EthereumAddress) async throws -> WriteTransaction
+    func setManager(from: EthereumAddress, addr: EthereumAddress, newManager: EthereumAddress) async throws -> WriteTransaction
+    func interfaceHash(interfaceName: String) async throws -> Data
+    func updateERC165Cache(from: EthereumAddress, contract: EthereumAddress, interfaceId: [UInt8]) async throws -> WriteTransaction
 }

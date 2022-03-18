@@ -12,7 +12,7 @@ import BigInt
 @testable import web3swift
 
 class web3swift_transactions_Tests: XCTestCase {
-    
+
     func testTransaction() throws {
         do {
             var transaction = EthereumTransaction(nonce: BigUInt(9),
@@ -42,12 +42,12 @@ class web3swift_transactions_Tests: XCTestCase {
             XCTFail()
         }
     }
-    
-    func testEthSendExampleAndGetTransactionReceiptAndDetails() {
+
+    func testEthSendExampleAndGetTransactionReceiptAndDetails() async {
         do {
-            let web3 = try Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
+            let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
             let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-            let allAddresses = try web3.eth.getAccounts()
+            let allAddresses = try await web3.eth.getAccounts()
             let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
             let value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
             let from = allAddresses[0]
@@ -55,26 +55,26 @@ class web3swift_transactions_Tests: XCTestCase {
             writeTX.transactionOptions.from = from
             writeTX.transactionOptions.value = value
             writeTX.transactionOptions.gasLimit = .manual(78423)
-            let result = try writeTX.sendPromise(password: "").wait()
+            let result = try await writeTX.sendPromise(password: "")
             let txHash = result.hash
             print("Transaction with hash " + txHash)
-            
+
             Thread.sleep(forTimeInterval: 1.0)
-            
-            let receipt = try web3.eth.getTransactionReceipt(txHash)
+
+            let receipt = try await web3.eth.getTransactionReceipt(txHash)
             print(receipt)
             XCTAssert(receipt.status == .ok)
-            
+
             switch receipt.status {
             case .notYetProcessed:
                 return
             default:
                 break
             }
-            
-            let details = try web3.eth.getTransactionDetails(txHash)
+
+            let details = try await web3.eth.getTransactionDetails(txHash)
             print(details)
-            
+
             XCTAssert(details.transaction.gasLimit == BigUInt(78423))
         } catch Web3Error.nodeError(let descr) {
             guard descr == "insufficient funds for gas * price + value" else {return XCTFail()}
@@ -83,7 +83,7 @@ class web3swift_transactions_Tests: XCTestCase {
             XCTFail()
         }
     }
-    
+
     func testGenerateDummyKeystore() throws {
         let keystore = try! EthereumKeystoreV3.init(password: "web3swift")
         let dump = try! keystore!.serialize()

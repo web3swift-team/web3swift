@@ -59,17 +59,16 @@ extension Web3 {
 //        static var addressRegex = "^(pay-)?([0-9a-zA-Z]+)(@[0-9]+)?"
         static var addressRegex = "^(pay-)?([0-9a-zA-Z.]+)(@[0-9]+)?\\/?(.*)?$"
         
-        public static func parse(_ data: Data) -> EIP681Code? {
+        public static func parse(_ data: Data) async -> EIP681Code? {
             guard let string = String(data: data, encoding: .utf8) else {return nil}
-            return parse(string)
+            return await parse(string)
         }
         
-        public static func parse(_ string: String) -> EIP681Code? {
+        public static func parse(_ string: String) async -> EIP681Code? {
             guard string.hasPrefix("ethereum:") else {return nil}
             let striped = string.components(separatedBy: "ethereum:")
             guard striped.count == 2 else {return nil}
             guard let encoding = striped[1].removingPercentEncoding else {return nil}
-//            guard let url = URL.init(string: encoding) else {return nil}
             let matcher = try! NSRegularExpression(pattern: addressRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
             let match = matcher.matches(in: encoding, options: NSRegularExpression.MatchingOptions.anchored, range: encoding.fullNSRange)
             guard match.count == 1 else {return nil}
@@ -77,10 +76,6 @@ extension Web3 {
             var addressString: String? = nil
             var chainIDString: String? = nil
             var tail: String? = nil
-//            if let payModifierRange = Range(match[0].range(at: 1), in: encoding) {
-//                let payModifierString = String(encoding[payModifierRange])
-//                print(payModifierString)
-//            }
             if  let addressRange = Range(match[0].range(at: 2), in: encoding) {
                 addressString = String(encoding[addressRange])
             }
@@ -120,14 +115,12 @@ extension Web3 {
                         switch val {
                         case .ethereumAddress(let ethereumAddress):
                             nativeValue = ethereumAddress as AnyObject
-//                        default:
-//                            return nil
                         case .ensAddress(let ens):
                             do {
-                                let web = web3(provider: InfuraProvider(Networks.fromInt(Int(code.chainID ?? 1)) ?? Networks.Mainnet)!)
+                                let web = web3(provider: try InfuraProvider(Networks.fromInt(Int(code.chainID ?? 1)) ?? Networks.Mainnet))
                                 let ensModel = ENS(web3: web)
-                                try ensModel?.setENSResolver(withDomain: ens)
-                                let address = try ensModel?.getAddress(forNode: ens)
+                                try await ensModel?.setENSResolver(withDomain: ens)
+                                let address = try await ensModel?.getAddress(forNode: ens)
                                 nativeValue = address as AnyObject
                             } catch {
                                 return nil
