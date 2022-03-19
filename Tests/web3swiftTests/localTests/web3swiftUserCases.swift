@@ -18,8 +18,8 @@ class web3swiftUserCases: XCTestCase {
         return data as Data
     }
 
-    func testUserCase1() throws {
-        let (web3, _, receipt, abiString) = try web3swiftHelpers.localDeployERC20()
+    func testUserCase1() async throws {
+        let (web3, _, receipt, abiString) = try await web3swiftHelpers.localDeployERC20()
         let account = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let contract = web3.contract(abiString, at: receipt.contractAddress!)!
         let readTransaction = contract.read("balanceOf", parameters:[account] as [AnyObject])!
