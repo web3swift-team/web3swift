@@ -71,23 +71,45 @@ public enum BIP39Language {
 
 public class BIP39 {
     
-    static public func generateMnemonicsFromEntropy(entropy: Data, language: BIP39Language = BIP39Language.english) -> String?  {
-        guard entropy.count >= 16, entropy.count & 4 == 0 else {return nil}
-        let checksum = entropy.sha256()
-        let checksumBits = entropy.count*8/32
-        var fullEntropy = Data()
-        fullEntropy.append(entropy)
-        fullEntropy.append(checksum[0 ..< (checksumBits+7)/8 ])
-        var wordList = [String]()
-        for i in 0 ..< fullEntropy.count*8/11 {
-            guard let bits = fullEntropy.bitsInRange(i*11, 11) else {return nil}
-            let index = Int(bits)
-            guard language.words.count > index else {return nil}
-            let word = language.words[index]
-            wordList.append(word)
-        }
+    static public func generateMnemonicsFromEntropy(entropy: Data, language: BIP39Language = BIP39Language.english) -> String  {
+        let wordList = generateMnemonicsFrom(entropy: entropy)
         let separator = language.separator
         return wordList.joined(separator: separator)
+    }
+
+    static public func generateMnemonicsFrom(entropy: Data, language: BIP39Language = BIP39Language.english) -> [String]  {
+        let entropy_bit_size = entropy.count * 8
+        let checksum_length = entropy_bit_size / 32
+        
+        var entropy_bits = bitarray(from: entropy)
+        print("array: \(entropy_bits)")
+        guard let checksumTest = generateChecksum(entropyBytes: entropy, checksumLength: checksum_length) else {
+            return []
+        }
+        entropy_bits += checksumTest
+        return entropy_bits
+            .split(every: 11)
+            .compactMap { binary in
+            Int(binary, radix: 2)
+        }
+        .map { index in
+            language.words[index]
+        }
+    }
+
+    static func bitarray(from data: Data) -> String {
+        data.map {
+            let binary = String($0, radix: 2)
+            let padding = String(repeating: "0", count: 8 - binary.count)
+            return padding + binary
+        }.joined()
+    }
+    static func generateChecksum(entropyBytes inputData: Data, checksumLength: Int) -> String? {
+        guard let checksumData = inputData.sha256().bitsInRange(0, checksumLength) else {
+            return nil
+        }
+        let checksum = String(checksumData, radix: 2).leftPadding(toLength: checksumLength, withPad: "0")
+        return checksum
     }
     
     /**
@@ -104,12 +126,16 @@ public class BIP39 {
     /// - Parameters:
     ///   - bitsOfEntropy: 128 - 12 words, 192 - 18 words , 256 - 24 words in output.
     ///   - language: words language, default english
-    static public func generateMnemonics(bitsOfEntropy: Int, language: BIP39Language = BIP39Language.english) throws -> String? {
+    static public func generateMnemonics(bitsOfEntropy: Int, language: BIP39Language = BIP39Language.english) -> String? {
         guard bitsOfEntropy >= 128 && bitsOfEntropy <= 256 && bitsOfEntropy.isMultiple(of: 32) else {return nil}
-        guard let entropy = Data.randomBytes(length: bitsOfEntropy/8) else {throw AbstractKeystoreError.noEntropyError}
-        return BIP39.generateMnemonicsFromEntropy(entropy: entropy, language:
-        language)
-        
+        let entropy = Data.randomBytes(length: bitsOfEntropy/8)
+        return generateMnemonicsFromEntropy(entropy: entropy, language: language)
+    }
+
+    static public func generateMnemonics(entropy: Int, language: BIP39Language = BIP39Language.english) -> [String]? {
+        guard entropy >= 128 && entropy <= 256 && entropy.isMultiple(of: 32) else {return nil}
+        let entropy = Data.randomBytes(length: entropy/8)
+        return generateMnemonicsFrom(entropy: entropy, language: language)
     }
     
     static public func mnemonicsToEntropy(_ mnemonics: String, language: BIP39Language = BIP39Language.english) -> Data? {
@@ -157,9 +183,7 @@ public class BIP39 {
     }
     
     static public func seedFromEntropy(_ entropy: Data, password: String = "", language: BIP39Language = BIP39Language.english) -> Data? {
-        guard let mnemonics = BIP39.generateMnemonicsFromEntropy(entropy: entropy, language: language) else {
-            return nil
-        }
+        let mnemonics = generateMnemonicsFromEntropy(entropy: entropy, language: language)
         return BIP39.seedFromMmemonics(mnemonics, password: password, language: language)
     }
 }
