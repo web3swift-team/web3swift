@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import Metal
 
 public extension Data {
     
@@ -52,50 +53,22 @@ public extension Data {
             body.baseAddress?.assumingMemoryBound(to: UInt8.self).initialize(repeating: 0, count: count)
         }
     }
-    
-    //    static func zero(_ data: inout Data) {
-    //        let count = data.count
-    //        data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) in
-    //            body.baseAddress?.assumingMemoryBound(to: UInt8.self).initialize(repeating: 0, count: count)
-    //        }
-    //    }
-    
-    static func randomBytes(length: Int) -> Data? {
-        for _ in 0...1024 {
-            var data = Data(repeating: 0, count: length)
-            let result = data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) -> Int32? in
-                if let bodyAddress = body.baseAddress, body.count > 0 {
-                    let pointer = bodyAddress.assumingMemoryBound(to: UInt8.self)
-                    return SecRandomCopyBytes(kSecRandomDefault, 32, pointer)
-                } else {
-                    return nil
-                }
-            }
-            if let notNilResult = result, notNilResult == errSecSuccess {
-                return data
-            }
+    static func randomBytes(length: Int) -> Data {
+        let entropy_bit_size = length//128
+        var checksum_length = entropy_bit_size / 32
+        //# valid_entropy_bit_sizes = [128, 160, 192, 224, 256], count: [12, 15, 18, 21, 24]
+        var entropy_bytes = [UInt8](repeating: 0, count: entropy_bit_size)// / 8)
+
+        arc4random_buf(&entropy_bytes, entropy_bytes.count)
+        let source1 = MTLCreateSystemDefaultDevice()?.makeBuffer(length: length)?.hash.description.data(using: .utf8)
+
+        let entropyData = entropy_bytes.shuffled().map{ bit in
+            return bit ^ (source1?.randomElement() ?? 0)
         }
-        return nil
+
+        return Data(entropyData)
     }
-    
-    //    static func randomBytes(length: Int) -> Data? {
-    //        for _ in 0...1024 {
-    //            var data = Data(repeating: 0, count: length)
-    //            let result = data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) -> Int32? in
-    //                if let bodyAddress = body.baseAddress, body.count > 0 {
-    //                    let pointer = bodyAddress.assumingMemoryBound(to: UInt8.self)
-    //                    return SecRandomCopyBytes(kSecRandomDefault, 32, pointer)
-    //                } else {
-    //                    return nil
-    //                }
-    //            }
-    //            if let notNilResult = result, notNilResult == errSecSuccess {
-    //                return data
-    //            }
-    //        }
-    //        return nil
-    //    }
-    
+        
     static func fromHex(_ hex: String) -> Data? {
         guard !hex.isEmpty else {
             return Data()

@@ -226,9 +226,7 @@ public class BIP32Keystore: AbstractKeystore {
         }
         let last16bytes = derivedKey[(derivedKey.count - 16)...(derivedKey.count - 1)]
         let encryptionKey = derivedKey[0...15]
-        guard let IV = Data.randomBytes(length: 16) else {
-            throw AbstractKeystoreError.noEntropyError
-        }
+        let IV = Data.randomBytes(length: 16)
         var aesCipher: AES?
         switch aesMode {
         case "aes-128-cbc":
