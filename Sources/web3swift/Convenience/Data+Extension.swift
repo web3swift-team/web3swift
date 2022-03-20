@@ -97,14 +97,13 @@ public extension Data {
     //    }
     
     static func fromHex(_ hex: String) -> Data? {
+        guard !hex.isEmpty else {
+            return Data()
+        }
         let string = hex.lowercased().stripHexPrefix()
         let array = Array<UInt8>(hex: string)
         if (array.count == 0) {
-            if (hex == "0x" || hex == "") {
-                return Data()
-            } else {
-                return nil
-            }
+            return hex == "0x" ? Data() : nil
         }
         return Data(array)
     }

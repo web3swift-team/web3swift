@@ -104,26 +104,20 @@ public class BIP39 {
     /// - Parameters:
     ///   - bitsOfEntropy: 128 - 12 words, 192 - 18 words , 256 - 24 words in output.
     ///   - language: words language, default english
-    static public func generateMnemonics(bitsOfEntropy: Int, language: BIP39Language = BIP39Language.english) throws -> String? {
-        guard bitsOfEntropy >= 128 && bitsOfEntropy <= 256 && bitsOfEntropy.isMultiple(of: 32) else {return nil}
-        guard let entropy = Data.randomBytes(length: bitsOfEntropy/8) else {throw AbstractKeystoreError.noEntropyError}
-        return BIP39.generateMnemonicsFromEntropy(entropy: entropy, language:
-        language)
-        
+    static public func generateMnemonics(entropy: Int, language: BIP39Language = BIP39Language.english) -> [String]? {
+        guard entropy >= 128 && entropy <= 256 && entropy.isMultiple(of: 32) else {return nil}
+        let entropy = Data.randomBytes(length: entropy/8)
+        return generateMnemonicsFrom(entropy: entropy, language: language)
     }
-    
-    static public func mnemonicsToEntropy(_ mnemonics: String, language: BIP39Language = BIP39Language.english) -> Data? {
-        let wordList = mnemonics.components(separatedBy: " ")
-        guard wordList.count >= 12 && wordList.count.isMultiple(of: 3) && wordList.count <= 24 else {return nil}
+
+    static public func mnemonicsToEntropy(_ mnemonics: [String], language: BIP39Language = BIP39Language.english) -> Data? {
+        guard mnemonics.count >= 12 && mnemonics.count.isMultiple(of: 3) && mnemonics.count <= 24 else {return nil}
         var bitString = ""
-        for word in wordList {
-//            let idx = language.words.index(of: word)
-            let idx = language.words.firstIndex(of: word)
-            if (idx == nil) {
+        for word in mnemonics {
+            guard let idx = language.words.firstIndex(of: word) else {
                 return nil
             }
-            let idxAsInt = language.words.startIndex.distance(to: idx!)
-            let stringForm = String(UInt16(idxAsInt), radix: 2).leftPadding(toLength: 11, withPad: "0")
+            let stringForm = String(UInt16(idx), radix: 2).leftPadding(toLength: 11, withPad: "0")
             bitString.append(stringForm)
         }
         let stringCount = bitString.count
@@ -142,24 +136,19 @@ public class BIP39 {
         return entropy
     }
     
-    static public func seedFromMmemonics(_ mnemonics: String, password: String = "", language: BIP39Language = BIP39Language.english) -> Data? {
-        let valid = BIP39.mnemonicsToEntropy(mnemonics, language: language) != nil
-        if (!valid) {
+    static public func seedFromMmemonics(_ mnemonics: [String], password: String = "", language: BIP39Language = BIP39Language.english) -> Data? {
+        if mnemonicsToEntropy(mnemonics, language: language) == nil {
             return nil
         }
-        guard let mnemData = mnemonics.decomposedStringWithCompatibilityMapping.data(using: .utf8) else {return nil}
+        guard let mnemData = mnemonics.joined(separator: language.separator).decomposedStringWithCompatibilityMapping.data(using: .utf8) else {return nil}
         let salt = "mnemonic" + password
         guard let saltData = salt.decomposedStringWithCompatibilityMapping.data(using: .utf8) else {return nil}
         guard let seedArray = try? PKCS5.PBKDF2(password: mnemData.bytes, salt: saltData.bytes, iterations: 2048, keyLength: 64, variant: HMAC.Variant.sha2(.sha512)).calculate() else {return nil}
-//        let seed = Data(bytes:seedArray)
-        let seed = Data(seedArray)
-        return seed
+        return Data(seedArray)
     }
     
     static public func seedFromEntropy(_ entropy: Data, password: String = "", language: BIP39Language = BIP39Language.english) -> Data? {
-        guard let mnemonics = BIP39.generateMnemonicsFromEntropy(entropy: entropy, language: language) else {
-            return nil
-        }
-        return BIP39.seedFromMmemonics(mnemonics, password: password, language: language)
+        let mnemonics = generateMnemonicsFrom(entropy: entropy, language: language)
+        return seedFromMmemonics(mnemonics, password: password, language: language)
     }
 }
