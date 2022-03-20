@@ -35,11 +35,8 @@ class EIP712Tests: XCTestCase {
         let gasPrice = EIP712.UInt256("20000000000")
         
         let gasToken = EthereumAddress("0x0000000000000000000000000000000000000000")!
-        print(1)
         let refundReceiver = EthereumAddress("0x7c07D32e18D6495eFDC487A32F8D20daFBa53A5e")!
-        print(2)
         let nonce: EIP712.UInt256 = .init(6)
-        print(3)
         let safeTX = SafeTx(
             to: to,
             value: value,
@@ -51,19 +48,12 @@ class EIP712Tests: XCTestCase {
             gasToken: gasToken,
             refundReceiver: refundReceiver,
             nonce: nonce)
-        print(4)
         let password = ""
-        print(5)
         let chainId: EIP712.UInt256? = nil
-        print(6)
         let verifyingContract = EthereumAddress("0x40c21f00Faafcf10Cc671a75ea0de62305199DC1")!
-        print(7)
-        let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
-        print(8)
-        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")!
-        print(9)
+        let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer".components(separatedBy: .whitespaces)
+        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
         let account = keystore.addresses?[0]
-        print(10)
         let signature = try Web3Signer.signEIP712(
             safeTx: safeTX,
             keystore: keystore,
@@ -71,7 +61,6 @@ class EIP712Tests: XCTestCase {
             account: account!,
             password: password,
             chainId: chainId)
-        print(11)
         XCTAssertEqual(signature.toHexString(), "bf3182a3f52e65b416f86e76851c8e7d5602aef28af694f31359705b039d8d1931d53f3d5088ac7195944e8a9188d161ba3757877d08105885304f65282228c71c")
     }
 
@@ -125,8 +114,8 @@ class EIP712Tests: XCTestCase {
             refundReceiver: refundReceiver,
             nonce: nonce)
         
-        let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
-        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")!
+        let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer".components(separatedBy: .whitespaces)
+        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
         
         let verifyingContract = EthereumAddress("0x76106814dc6150b0fe510fbda4d2d877ac221270")!
         
