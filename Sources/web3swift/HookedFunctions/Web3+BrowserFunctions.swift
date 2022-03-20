@@ -82,8 +82,8 @@ extension web3.BrowserFunctions {
           transactionOptions.from = options.from
           transactionOptions.to = options.to
           transactionOptions.value = options.value ?? 0
-          transactionOptions.gasLimit = options.gasLimit != nil ? options.gasLimit! : .automatic
-          transactionOptions.gasPrice = options.gasPrice != nil ? options.gasPrice! : .automatic
+          transactionOptions.gasLimit = options.gasLimit ?? .automatic
+          transactionOptions.gasPrice = options.gasPrice ?? .automatic
           return self.sendTransaction(transaction, transactionOptions: transactionOptions, password: password)
         } catch { return nil }
     }
@@ -105,9 +105,9 @@ extension web3.BrowserFunctions {
             var transactionOptions = TransactionOptions()
             transactionOptions.from = options.from
             transactionOptions.to = options.to
-            transactionOptions.value = options.value != nil ? options.value! : BigUInt(0)
+            transactionOptions.value = options.value ?? 0
             transactionOptions.gasLimit = .automatic
-            transactionOptions.gasPrice = options.gasPrice != nil ? options.gasPrice! : .automatic
+            transactionOptions.gasPrice = options.gasPrice ?? .automatic
             return self.estimateGas(transaction, transactionOptions: transactionOptions)
         } catch { return nil }
     }
@@ -158,9 +158,9 @@ extension web3.BrowserFunctions {
             var transactionOptions = TransactionOptions()
             transactionOptions.from = options.from
             transactionOptions.to = options.to
-            transactionOptions.value = options.value != nil ? options.value! : BigUInt(0)
-            transactionOptions.gasLimit = options.gasLimit != nil ? options.gasLimit! : .automatic
-            transactionOptions.gasPrice = options.gasPrice != nil ? options.gasPrice! : .automatic
+            transactionOptions.value = options.value ?? 0
+            transactionOptions.gasLimit = options.gasLimit ?? .automatic
+            transactionOptions.gasPrice = options.gasPrice ?? .automatic
             if let nonceString = transactionJSON["nonce"] as? String, let nonce = BigUInt(nonceString.stripHexPrefix(), radix: 16) {
                 transactionOptions.nonce = .manual(nonce)
             } else {
