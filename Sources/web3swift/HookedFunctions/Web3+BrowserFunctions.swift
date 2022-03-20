@@ -81,7 +81,7 @@ extension web3.BrowserFunctions {
           var transactionOptions = TransactionOptions()
           transactionOptions.from = options.from
           transactionOptions.to = options.to
-          transactionOptions.value = options.value != nil ? options.value! : BigUInt(0)
+          transactionOptions.value = options.value ?? 0
           transactionOptions.gasLimit = options.gasLimit != nil ? options.gasLimit! : .automatic
           transactionOptions.gasPrice = options.gasPrice != nil ? options.gasPrice! : .automatic
           return self.sendTransaction(transaction, transactionOptions: transactionOptions, password: password)
