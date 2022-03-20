@@ -92,7 +92,7 @@ public class BIP32Keystore: AbstractKeystore {
         rootPrefix = keystoreParams!.rootPath!
     }
 
-    public convenience init(mnemonics: [String], password: String, mnemonicsPassword: String = "", language: BIP39Language = .english, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
+    public convenience init(mnemonics: [String], password: String = "web3swift", mnemonicsPassword: String = "", language: BIP39Language = .english, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
         guard var seed = BIP39.seedFromMmemonics(mnemonics, password: mnemonicsPassword, language: language) else {
             throw AbstractKeystoreError.noEntropyError
         }
@@ -102,7 +102,7 @@ public class BIP32Keystore: AbstractKeystore {
         try self.init(seed: seed, password: password, prefixPath: prefixPath, aesMode: aesMode)
     }
     
-    public init(seed: Data, password: String, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
+    public init(seed: Data, password: String = "web3swift", prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
         addressStorage = PathAddressStorage()
         guard let rootNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else {
             throw AbstractKeystoreError.keyDerivationError
