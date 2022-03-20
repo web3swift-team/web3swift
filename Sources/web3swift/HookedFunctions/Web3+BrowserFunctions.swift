@@ -71,20 +71,7 @@ extension web3.BrowserFunctions {
         guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
         return Web3.Utils.publicToAddressString(publicKey)
     }
-    
-    
-    public func sendTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") -> [String:Any]? {
-        guard let transaction = EthereumTransaction.fromJSON(transactionJSON) else {return nil}
-        guard let options = TransactionOptions.fromJSON(transactionJSON) else {return nil}
-        var transactionOptions = TransactionOptions()
-        transactionOptions.from = options.from
-        transactionOptions.to = options.to
-        transactionOptions.value = options.value != nil ? options.value! : BigUInt(0)
-        transactionOptions.gasLimit = options.gasLimit != nil ? options.gasLimit! : .automatic
-        transactionOptions.gasPrice = options.gasPrice != nil ? options.gasPrice! : .automatic
-        return self.sendTransaction(transaction, transactionOptions: transactionOptions, password: password)
-    }
-    
+
     public func sendTransaction(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") -> [String:Any]? {
         do {
             let result = try self.web3.eth.sendTransaction(transaction, transactionOptions: transactionOptions, password: password)
@@ -93,35 +80,13 @@ extension web3.BrowserFunctions {
             return nil
         }
     }
-    
-    public func estimateGas(_ transactionJSON: [String: Any]) -> BigUInt? {
-        guard let transaction = EthereumTransaction.fromJSON(transactionJSON) else {return nil}
-        guard let options = TransactionOptions.fromJSON(transactionJSON) else {return nil}
-        var transactionOptions = TransactionOptions()
-        transactionOptions.from = options.from
-        transactionOptions.to = options.to
-        transactionOptions.value = options.value != nil ? options.value! : BigUInt(0)
-        transactionOptions.gasLimit = .automatic
-        transactionOptions.gasPrice = options.gasPrice != nil ? options.gasPrice! : .automatic
-        return self.estimateGas(transaction, transactionOptions: transactionOptions)
-    }
-    
+
     public func estimateGas(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions) -> BigUInt? {
         do {
             let result = try self.web3.eth.estimateGas(transaction, transactionOptions: transactionOptions)
             return result
         } catch {
             return nil
-        }
-    }
-    
-    public func prepareTxForApproval(_ transactionJSON: [String: Any]) -> (transaction: EthereumTransaction?, options: TransactionOptions?) {
-        guard let transaction = EthereumTransaction.fromJSON(transactionJSON) else {return (nil, nil)}
-        guard let options = TransactionOptions.fromJSON(transactionJSON) else {return (nil, nil)}
-        do {
-            return try self.prepareTxForApproval(transaction, options: options)
-        } catch {
-            return (nil, nil)
         }
     }
 
@@ -142,24 +107,7 @@ extension web3.BrowserFunctions {
             return (nil, nil)
         }
     }
-    
-    public func signTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") -> String? {
-        guard let transaction = EthereumTransaction.fromJSON(transactionJSON) else {return nil}
-        guard let options = TransactionOptions.fromJSON(transactionJSON) else {return nil}
-        var transactionOptions = TransactionOptions()
-        transactionOptions.from = options.from
-        transactionOptions.to = options.to
-        transactionOptions.value = options.value != nil ? options.value! : BigUInt(0)
-        transactionOptions.gasLimit = options.gasLimit != nil ? options.gasLimit! : .automatic
-        transactionOptions.gasPrice = options.gasPrice != nil ? options.gasPrice! : .automatic
-        if let nonceString = transactionJSON["nonce"] as? String, let nonce = BigUInt(nonceString.stripHexPrefix(), radix: 16) {
-            transactionOptions.nonce = .manual(nonce)
-        } else {
-            transactionOptions.nonce = .pending
-        }
-        return self.signTransaction(transaction, transactionOptions: transactionOptions, password: password)
-    }
-    
+
     public func signTransaction(_ trans: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") -> String? {
         do {
             var transaction = trans
