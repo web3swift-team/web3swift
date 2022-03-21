@@ -181,13 +181,13 @@ extension ABIDecoder {
                     if !subType.isStatic {
                         consumed = consumedUnwrapped
                     } else {
-                        fallthrough
+                        consumed = consumed + consumedUnwrapped
                     }
                 case .tuple(types: _):
                     if !subTypes[i].isStatic {
                         consumed = consumedUnwrapped
                     } else {
-                        fallthrough
+                        consumed = consumed + consumedUnwrapped
                     }
                 default:
                     consumed = consumed + consumedUnwrapped
