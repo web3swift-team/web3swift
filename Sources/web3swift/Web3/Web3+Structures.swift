@@ -91,7 +91,7 @@ extension TransactionOptions: Decodable {
             self.nonce = .pending
         }
         
-        if let callOnBlock = try decodeHexToBigUInt(container, key: .nonce) {
+        if let callOnBlock = try decodeHexToBigUInt(container, key: .callOnBlock) {
             self.callOnBlock = .exactBlockNumber(callOnBlock)
         } else {
             self.callOnBlock = .pending
