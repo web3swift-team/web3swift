@@ -173,7 +173,25 @@ extension ABIDecoder {
                 let (v, c) = decodeSignleType(type: subTypes[i], data: elementItself, pointer: consumed)
                 guard let valueUnwrapped = v, let consumedUnwrapped = c else {return (nil, nil)}
                 toReturn.append(valueUnwrapped)
-                consumed = consumed + consumedUnwrapped
+                /*
+                 When decoding a tuple that is not static or an array with a subtype that is not static, the second value in the tuple returned by decodeSignleType is a pointer to the next element, NOT the length of the consumed element. So when decoding such an element, consumed should be set to consumedUnwrapped, NOT incremented by consumedUnwrapped.
+                 */
+                switch subTypes[i] {
+                case .array(type: let subType, length: _):
+                    if !subType.isStatic {
+                        consumed = consumedUnwrapped
+                    } else {
+                        fallthrough
+                    }
+                case .tuple(types: _):
+                    if !subTypes[i].isStatic {
+                        consumed = consumedUnwrapped
+                    } else {
+                        fallthrough
+                    }
+                default:
+                    consumed = consumed + consumedUnwrapped
+                }
             }
             //            print("Tuple element is: \n" + String(describing: toReturn))
             if type.isStatic {
