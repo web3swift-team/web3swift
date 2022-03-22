@@ -5,8 +5,6 @@
 //
 
 import Foundation
-//import EthereumABI
-//import EthereumAddress
 
 internal func filterLogs(decodedLogs: [EventParserResultProtocol], eventFilter: EventFilter) -> [EventParserResultProtocol] {
     let filteredLogs = decodedLogs.filter { (result) -> Bool in
@@ -88,7 +86,7 @@ internal func encodeTopicToGetLogs(contract: EthereumContract, eventName: String
                 if filterValues != nil {
                     var isFound = false
                     var targetIndexedPosition = i
-                    for j in 0 ..< event!.inputs.count{
+                    for j in 0 ..< event!.inputs.count {
                         if event!.inputs[j].indexed {
                             if targetIndexedPosition == 0 {
                                 isFound = true
@@ -97,7 +95,7 @@ internal func encodeTopicToGetLogs(contract: EthereumContract, eventName: String
                             targetIndexedPosition -= 1
                         }
                     }
-                    
+
                     if !isFound {return nil}
                 }
                 if filterValues == nil {
@@ -155,7 +153,7 @@ internal func parseReceiptForLogs(receipt: TransactionReceipt, contract: Contrac
         var result = EventParserResult(eventName: evName, transactionReceipt: receipt, contractAddress: log.address, decodedResult: evData)
         result.eventLog = log
         return result
-    }).filter { (res:EventParserResultProtocol?) -> Bool in
+    }).filter { (res: EventParserResultProtocol?) -> Bool in
         return res != nil && res?.eventName == eventName
     }
     var allResults = [EventParserResultProtocol]()
