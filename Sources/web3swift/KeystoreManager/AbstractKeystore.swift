@@ -6,8 +6,6 @@
 
 import Foundation
 
-//import EthereumAddress
-
 public protocol AbstractKeystore {
     var addresses: [EthereumAddress]? { get }
     var isHDKeystore: Bool { get }
