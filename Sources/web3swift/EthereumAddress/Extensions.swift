@@ -47,7 +47,7 @@ extension Array where Element == UInt8 {
             append(b)
         }
     }
-    
+
     func toHexString() -> String {
         return `lazy`.reduce("") {
             var s = String($1, radix: 16)
