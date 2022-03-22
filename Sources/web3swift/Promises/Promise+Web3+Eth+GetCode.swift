@@ -29,5 +29,3 @@ extension web3.Eth {
         }
     }
 }
-
-

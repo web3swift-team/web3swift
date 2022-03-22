@@ -7,14 +7,13 @@
 import Foundation
 import BigInt
 import PromiseKit
-//import EthereumAddress
 
 extension web3.Eth {
     public func getTransactionCountPromise(address: EthereumAddress, onBlock: String = "latest") -> Promise<BigUInt> {
         let addr = address.address
         return getTransactionCountPromise(address: addr, onBlock: onBlock)
     }
-    
+
     public func getTransactionCountPromise(address: String, onBlock: String = "latest") -> Promise<BigUInt> {
         let request = JSONRPCRequestFabric.prepareRequest(.getTransactionCount, parameters: [address.lowercased(), onBlock])
         let rp = web3.dispatch(request)

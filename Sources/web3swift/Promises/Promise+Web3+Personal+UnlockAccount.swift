@@ -7,16 +7,14 @@
 import Foundation
 import BigInt
 import PromiseKit
-//import EthereumAddress
 
 extension web3.Personal {
-    public func unlockAccountPromise(account: EthereumAddress, password:String = "web3swift", seconds: UInt64 = 300) -> Promise<Bool> {
+    public func unlockAccountPromise(account: EthereumAddress, password: String = "web3swift", seconds: UInt64 = 300) -> Promise<Bool> {
         let addr = account.address
         return unlockAccountPromise(account: addr, password: password, seconds: seconds)
     }
-    
-    
-    public func unlockAccountPromise(account: String, password:String = "web3swift", seconds: UInt64 = 300) -> Promise<Bool> {
+
+    public func unlockAccountPromise(account: String, password: String = "web3swift", seconds: UInt64 = 300) -> Promise<Bool> {
         let queue = web3.requestDispatcher.queue
         do {
             if self.web3.provider.attachedKeystoreManager == nil {

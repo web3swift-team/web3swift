@@ -7,7 +7,6 @@
 import Foundation
 import PromiseKit
 import BigInt
-//import EthereumAddress
 
 extension web3.Eth {
     public func getBalancePromise(address: EthereumAddress, onBlock: String = "latest") -> Promise<BigUInt> {
