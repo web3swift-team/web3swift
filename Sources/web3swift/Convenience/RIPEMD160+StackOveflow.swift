@@ -28,7 +28,7 @@ public struct RIPEMD160 {
         /* ROL(x, n) cyclically rotates x over n bits to the left */
         /* x must be of an unsigned 32 bits type and 0 <= n < 32. */
         func ROL(_ x: UInt32, _ n: UInt32) -> UInt32 {
-            return (x << n) | ( x >> (32 - n))
+            return (x << n) | (x >> (32 - n))
         }
 
         /* the five basic functions F(), G() and H() */
