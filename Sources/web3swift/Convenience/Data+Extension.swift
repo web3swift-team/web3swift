@@ -7,13 +7,13 @@
 import Foundation
 
 public extension Data {
-    
+
     init<T>(fromArray values: [T]) {
         let values = values
         let ptrUB = values.withUnsafeBufferPointer { (ptr: UnsafeBufferPointer) in return ptr }
         self.init(buffer: ptrUB)
     }
-    
+
     func toArray<T>(type: T.Type) throws -> [T] {
         return try self.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
             if let bodyAddress = body.baseAddress, body.count > 0 {
@@ -24,7 +24,7 @@ public extension Data {
             }
         }
     }
-    
+
     //    func toArray<T>(type: T.Type) throws -> [T] {
     //        return try self.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
     //            if let bodyAddress = body.baseAddress, body.count > 0 {
@@ -35,31 +35,31 @@ public extension Data {
     //            }
     //        }
     //    }
-    
-    func constantTimeComparisonTo(_ other:Data?) -> Bool {
+
+    func constantTimeComparisonTo(_ other: Data?) -> Bool {
         guard let rhs = other else {return false}
         guard self.count == rhs.count else {return false}
         var difference = UInt8(0x00)
         for i in 0..<self.count { // compare full length
-            difference |= self[i] ^ rhs[i] //constant time
+            difference |= self[i] ^ rhs[i] // constant time
         }
         return difference == UInt8(0x00)
     }
-    
+
     static func zero(_ data: inout Data) {
         let count = data.count
         data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) in
             body.baseAddress?.assumingMemoryBound(to: UInt8.self).initialize(repeating: 0, count: count)
         }
     }
-    
+
     //    static func zero(_ data: inout Data) {
     //        let count = data.count
     //        data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) in
     //            body.baseAddress?.assumingMemoryBound(to: UInt8.self).initialize(repeating: 0, count: count)
     //        }
     //    }
-    
+
     static func randomBytes(length: Int) -> Data? {
         for _ in 0...1024 {
             var data = Data(repeating: 0, count: length)
@@ -77,7 +77,7 @@ public extension Data {
         }
         return nil
     }
-    
+
     //    static func randomBytes(length: Int) -> Data? {
     //        for _ in 0...1024 {
     //            var data = Data(repeating: 0, count: length)
@@ -95,7 +95,7 @@ public extension Data {
     //        }
     //        return nil
     //    }
-    
+
     static func fromHex(_ hex: String) -> Data? {
         let string = hex.lowercased().stripHexPrefix()
         let array = Array<UInt8>(hex: string)
@@ -108,8 +108,8 @@ public extension Data {
         }
         return Data(array)
     }
-    
-    func bitsInRange(_ startingBit:Int, _ length:Int) -> UInt64? { //return max of 8 bytes for simplicity, non-public
+
+    func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public
         if startingBit + length / 8 > self.count, length > 64, startingBit > 0, length >= 1 {return nil}
         let bytes = self[(startingBit/8) ..< (startingBit+length+7)/8]
         let padding = Data(repeating: 0, count: 8 - bytes.count)
@@ -124,8 +124,8 @@ public extension Data {
         uintRepresentation = uintRepresentation >> UInt64(64 - length)
         return uintRepresentation
     }
-    
-    //    func bitsInRange(_ startingBit:Int, _ length:Int) -> UInt64? { //return max of 8 bytes for simplicity, non-public
+
+    //    func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public
     //        if startingBit + length / 8 > self.count, length > 64, startingBit > 0, length >= 1 {return nil}
     //        let bytes = self[(startingBit/8) ..< (startingBit+length+7)/8]
     //        let padding = Data(repeating: 0, count: 8 - bytes.count)
