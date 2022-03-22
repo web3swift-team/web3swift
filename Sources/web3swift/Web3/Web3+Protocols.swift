@@ -7,18 +7,17 @@
 import Foundation
 import BigInt
 import class PromiseKit.Promise
-//import EthereumAddress
 
-/// Protocol for generic Ethereum event parsing results
+// Protocol for generic Ethereum event parsing results
 public protocol EventParserResultProtocol {
     var eventName: String {get}
-    var decodedResult: [String:Any] {get}
+    var decodedResult: [String: Any] {get}
     var contractAddress: EthereumAddress {get}
     var transactionReceipt: TransactionReceipt? {get}
     var eventLog: EventLog? {get}
 }
 
-/// Protocol for generic Ethereum event parser
+// Protocol for generic Ethereum event parser
 public protocol EventParserProtocol {
     func parseTransaction(_ transaction: EthereumTransaction) throws -> [EventParserResultProtocol]
     func parseTransactionByHash(_ hash: Data) throws -> [EventParserResultProtocol]
@@ -30,14 +29,14 @@ public protocol EventParserProtocol {
     func parseBlockPromise(_ block: Block) -> Promise<[EventParserResultProtocol]>
 }
 
-/// Enum for the most-used Ethereum networks. Network ID is crucial for EIP155 support
+// Enum for the most-used Ethereum networks. Network ID is crucial for EIP155 support
 public enum Networks {
     case Rinkeby
     case Mainnet
     case Ropsten
     case Kovan
     case Custom(networkID: BigUInt)
-    
+
     public var name: String {
         switch self {
         case .Rinkeby: return "rinkeby"
@@ -47,7 +46,7 @@ public enum Networks {
         case .Custom: return ""
         }
     }
-    
+
     public var chainID: BigUInt {
         switch self {
         case .Custom(let networkID): return networkID
@@ -57,10 +56,10 @@ public enum Networks {
         case .Kovan: return BigUInt(42)
         }
     }
-    
+
     static let allValues = [Mainnet, Ropsten, Kovan, Rinkeby]
-    
-    static func fromInt(_ networkID:Int) -> Networks? {
+
+    static func fromInt(_ networkID: Int) -> Networks? {
         switch networkID {
         case 1:
             return Networks.Mainnet
