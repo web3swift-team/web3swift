@@ -9,8 +9,6 @@
 import Foundation
 import BigInt
 
-// protocol ArrayType {}
-// extension Array: ArrayType {}
 public struct RLP {
     enum Error: Swift.Error {
         case encodingError
@@ -218,20 +216,9 @@ public struct RLP {
                 return list.count
             }
         }
-        //        public var hasNext: Bool {
-        //            switch self.content {
-        //            case .noItem:
-        //                return false
-        //            case .data(_):
-        //                return false
-        //            case .list(let list, let counter, _):
-        //                return list.count > counter
-        //            }
-        //        }
 
         public subscript(index: Int) -> RLPItem? {
             get {
-                //                guard self.hasNext else {return nil}
                 guard case .list(let list, _, _) = self.content else {return nil}
                 let item = list[index]
                 return item
