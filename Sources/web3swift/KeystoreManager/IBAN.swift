@@ -64,9 +64,6 @@ public struct IBAN {
     }
 
     internal static func decodeToInts(_ iban: String) -> String {
-        // let codePointForA = "A".asciiValue
-        // let codePointForZ = "Z".asciiValue
-
         let uppercasedIBAN = iban.replacingOccurrences(of: " ", with: "").uppercased()
         let begining = String(uppercasedIBAN[0..<4])
         let end = String(uppercasedIBAN[4...])
