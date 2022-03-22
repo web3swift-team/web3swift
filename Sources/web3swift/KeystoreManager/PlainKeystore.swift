@@ -5,9 +5,6 @@
 //
 
 import Foundation
-//import secp256k1_swift
-
-//import EthereumAddress
 
 public class PlainKeystore: AbstractKeystore {
 
@@ -20,12 +17,12 @@ public class PlainKeystore: AbstractKeystore {
     public func UNSAFE_getPrivateKeyData(password: String = "", account: EthereumAddress) throws -> Data {
         return self.privateKey
     }
-    
+
     public convenience init?(privateKey: String) {
         guard let privateKeyData = Data.fromHex(privateKey) else {return nil}
         self.init(privateKey: privateKeyData)
     }
-    
+
     public init?(privateKey: Data) {
         guard SECP256K1.verifyPrivateKey(privateKey: privateKey) else {return nil}
         guard let publicKey = Web3.Utils.privateToPublic(privateKey, compressed: false) else {return nil}

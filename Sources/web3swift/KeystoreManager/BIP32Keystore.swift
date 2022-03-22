@@ -6,12 +6,8 @@
 
 import Foundation
 import CryptoSwift
-import Foundation
-
-//import EthereumAddress
 
 public class BIP32Keystore: AbstractKeystore {
-
 
     // Protocol
     public var isHDKeystore: Bool = true
@@ -65,11 +61,11 @@ public class BIP32Keystore: AbstractKeystore {
     }
 
     // --------------
-    
+
     private static let KeystoreParamsBIP32Version = 4
-    
+
     private (set) var addressStorage: PathAddressStorage
-    
+
     public convenience init?(_ jsonString: String) {
         let lowercaseJSON = jsonString.lowercased()
         guard let jsonData = lowercaseJSON.data(using: .utf8) else {
@@ -85,7 +81,7 @@ public class BIP32Keystore: AbstractKeystore {
         if (!keystorePars.isHDWallet) {return nil}
 
         addressStorage = PathAddressStorage(pathAddressPairs: keystorePars.pathAddressPairs)
-        
+
         if keystorePars.rootPath == nil {
             keystorePars.rootPath = HDNode.defaultPathPrefix
         }
@@ -102,7 +98,7 @@ public class BIP32Keystore: AbstractKeystore {
         }
         try self.init(seed: seed, password: password, prefixPath: prefixPath, aesMode: aesMode)
     }
-    
+
     public init? (seed: Data, password: String = "web3swift", prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
         addressStorage = PathAddressStorage()
         guard let rootNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else {return nil}
@@ -215,7 +211,7 @@ public class BIP32Keystore: AbstractKeystore {
         if (data!.count != 82) {
             throw AbstractKeystoreError.encryptionError("Invalid expected data length")
         }
-        let saltLen = 32;
+        let saltLen = 32
         guard let saltData = Data.randomBytes(length: saltLen) else {
             throw AbstractKeystoreError.noEntropyError
         }
@@ -242,7 +238,7 @@ public class BIP32Keystore: AbstractKeystore {
         guard let encryptedKey = try aesCipher?.encrypt(data!.bytes) else {
             throw AbstractKeystoreError.aesError
         }
-//        let encryptedKeyData = Data(bytes:encryptedKey) Data(encryptedKey)
+//        let encryptedKeyData = Data(bytes: encryptedKey) Data(encryptedKey)
         let encryptedKeyData = Data(encryptedKey)
         var dataForMAC = Data()
         dataForMAC.append(last16bytes)
@@ -251,7 +247,7 @@ public class BIP32Keystore: AbstractKeystore {
         let kdfparams = KdfParamsV3(salt: saltData.toHexString(), dklen: dkLen, n: N, p: P, r: R, c: nil, prf: nil)
         let cipherparams = CipherParamsV3(iv: IV.toHexString())
         let crypto = CryptoParamsV3(ciphertext: encryptedKeyData.toHexString(), cipher: aesMode, cipherparams: cipherparams, kdf: "scrypt", kdfparams: kdfparams, mac: mac.toHexString(), version: nil)
-        
+
         var keystorePars = KeystoreParamsBIP32(crypto: crypto, id: UUID().uuidString.lowercased(), version: Self.KeystoreParamsBIP32Version)
         keystorePars.pathAddressPairs = addressStorage.toPathAddressPairs()
         keystorePars.rootPath = self.rootPrefix
@@ -294,7 +290,7 @@ public class BIP32Keystore: AbstractKeystore {
             guard let algo = keystorePars.crypto.kdfparams.prf else {
                 return nil
             }
-            var hashVariant: HMAC.Variant?;
+            var hashVariant: HMAC.Variant?
             switch algo {
             case "hmac-sha256":
                 hashVariant = HMAC.Variant.sha2(.sha256)
@@ -317,7 +313,7 @@ public class BIP32Keystore: AbstractKeystore {
             guard let derivedArray = try? PKCS5.PBKDF2(password: passData.bytes, salt: saltData.bytes, iterations: c, keyLength: derivedLen, variant: hashVariant!).calculate() else {
                 return nil
             }
-//            passwordDerivedKey = Data(bytes:derivedArray)
+//            passwordDerivedKey = Data(bytes: derivedArray)
             passwordDerivedKey = Data(derivedArray)
         default:
             return nil
@@ -365,7 +361,7 @@ public class BIP32Keystore: AbstractKeystore {
         guard decryptedPK?.count == 82 else {
             return nil
         }
-//        return Data(bytes:decryptedPK!)
+//        return Data(bytes: decryptedPK!)
         return Data(decryptedPK!)
     }
 
