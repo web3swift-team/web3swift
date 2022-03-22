@@ -25,7 +25,7 @@ extension web3.Eth {
         }
         let request = JSONRPCRequestFabric.prepareRequest(.getAccounts, parameters: [])
         let rp = web3.dispatch(request)
-        return rp.map(on: queue ) { response in
+        return rp.map(on: queue) { response in
             guard let value: [EthereumAddress] = response.getValue() else {
                 if response.error != nil {
                     throw Web3Error.nodeError(desc: response.error!.message)

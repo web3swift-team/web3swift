@@ -13,7 +13,7 @@ extension web3.TxPool {
         let request = JSONRPCRequestFabric.prepareRequest(.getTxPoolInspect, parameters: [])
         let rp = web3.dispatch(request)
         let queue = web3.requestDispatcher.queue
-        return rp.map(on: queue ) { response in
+        return rp.map(on: queue) { response in
             guard let value: [String: [String: [String: String]]] = response.getValue() else {
                 if response.error != nil {
                     throw Web3Error.nodeError(desc: response.error!.message)
@@ -28,7 +28,7 @@ extension web3.TxPool {
         let request = JSONRPCRequestFabric.prepareRequest(.getTxPoolStatus, parameters: [])
         let rp = web3.dispatch(request)
         let queue = web3.requestDispatcher.queue
-        return rp.map(on: queue ) { response in
+        return rp.map(on: queue) { response in
             guard let value: TxPoolStatus = response.result as? TxPoolStatus else {
                 if response.error != nil {
                     throw Web3Error.nodeError(desc: response.error!.message)
@@ -43,7 +43,7 @@ extension web3.TxPool {
         let request = JSONRPCRequestFabric.prepareRequest(.getTxPoolContent, parameters: [])
         let rp = web3.dispatch(request)
         let queue = web3.requestDispatcher.queue
-        return rp.map(on: queue ) { response in
+        return rp.map(on: queue) { response in
             guard let value: TxPoolContent = response.getValue() else {
                 if response.error != nil {
                     throw Web3Error.nodeError(desc: response.error!.message)
