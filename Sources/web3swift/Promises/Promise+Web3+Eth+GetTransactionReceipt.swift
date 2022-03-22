@@ -13,7 +13,7 @@ extension web3.Eth {
         let hashString = txhash.toHexString().addHexPrefix()
         return self.getTransactionReceiptPromise(hashString)
     }
-    
+
     public func getTransactionReceiptPromise(_ txhash: String) -> Promise<TransactionReceipt> {
         let request = JSONRPCRequestFabric.prepareRequest(.getTransactionReceipt, parameters: [txhash])
         let rp = web3.dispatch(request)

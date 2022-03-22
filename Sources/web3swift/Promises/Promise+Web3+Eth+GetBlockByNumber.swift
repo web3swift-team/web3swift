@@ -13,12 +13,12 @@ extension web3.Eth {
         let block = String(number, radix: 16).addHexPrefix()
         return getBlockByNumberPromise(block, fullTransactions: fullTransactions)
     }
-    
+
     public func getBlockByNumberPromise(_ number: BigUInt, fullTransactions: Bool = false) -> Promise<Block> {
         let block = String(number, radix: 16).addHexPrefix()
         return getBlockByNumberPromise(block, fullTransactions: fullTransactions)
     }
-    
+
     public func getBlockByNumberPromise(_ number: String, fullTransactions: Bool = false) -> Promise<Block> {
         let request = JSONRPCRequestFabric.prepareRequest(.getBlockByNumber, parameters: [number, fullTransactions])
         let rp = web3.dispatch(request)

@@ -8,7 +8,7 @@ import Foundation
 import PromiseKit
 
 extension web3.Eth {
-    
+
     public func callPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> Promise<Data>{
         let queue = web3.requestDispatcher.queue
         do {

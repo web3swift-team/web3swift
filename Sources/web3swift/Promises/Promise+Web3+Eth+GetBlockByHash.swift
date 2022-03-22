@@ -13,7 +13,7 @@ extension web3.Eth {
         let hashString = hash.toHexString().addHexPrefix()
         return getBlockByHashPromise(hashString, fullTransactions: fullTransactions)
     }
-    
+
     public func getBlockByHashPromise(_ hash: String, fullTransactions: Bool = false) -> Promise<Block> {
         let request = JSONRPCRequestFabric.prepareRequest(.getBlockByHash, parameters: [hash, fullTransactions])
         let rp = web3.dispatch(request)
