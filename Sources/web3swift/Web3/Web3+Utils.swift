@@ -11,7 +11,7 @@ import CryptoSwift
 public typealias Web3Utils = Web3.Utils
 
 extension Web3 {
-    // Namespaced Utils functions. Are not bound to particular web3 instance, so capitalization matters.
+    /// Namespaced Utils functions. Are not bound to particular web3 instance, so capitalization matters.
     public struct Utils {
         typealias Iban = IBAN
     }
@@ -19,8 +19,8 @@ extension Web3 {
 
 extension Web3.Utils {
 
-    // Calculate address of deployed contract deterministically based on the address of the deploying Ethereum address
-    // and the nonce of this address
+    /// Calculate address of deployed contract deterministically based on the address of the deploying Ethereum address
+    /// and the nonce of this address
     public static func calculateContractAddress(from: EthereumAddress, nonce: BigUInt) -> EthereumAddress? {
         guard let normalizedAddress = from.addressData.setLengthLeft(32) else {return nil}
         guard let data = RLP.encode([normalizedAddress, nonce] as [AnyObject]) else {return nil}
@@ -29,7 +29,7 @@ extension Web3.Utils {
         return contractAddress
     }
 
-    // Various units used in Ethereum ecosystem
+    /// Various units used in Ethereum ecosystem
     public enum Units {
         case eth
         case wei
@@ -5892,16 +5892,16 @@ extension Web3.Utils {
 
 extension Web3.Utils {
 
-    // Convert the private key (32 bytes of Data) to compressed (33 bytes) or non-compressed (65 bytes) public key.
+    /// Convert the private key (32 bytes of Data) to compressed (33 bytes) or non-compressed (65 bytes) public key.
     public static func privateToPublic(_ privateKey: Data, compressed: Bool = false) -> Data? {
         guard let publicKey = SECP256K1.privateToPublic(privateKey:  privateKey, compressed: compressed) else {return nil}
         return publicKey
     }
 
-    // Convert a public key to the corresponding EthereumAddress. Accepts public keys in compressed (33 bytes), non-compressed (65 bytes)
-    // or raw concat(X, Y) (64 bytes) format.
-    //
-    // Returns 20 bytes of address data.
+    /// Convert a public key to the corresponding EthereumAddress. Accepts public keys in compressed (33 bytes), non-compressed (65 bytes)
+    /// or raw concat(X, Y) (64 bytes) format.
+    ///
+    /// Returns 20 bytes of address data.
     public static func publicToAddressData(_ publicKey: Data) -> Data? {
         if publicKey.count == 33 {
             guard let decompressedKey = SECP256K1.combineSerializedPublicKeys(keys: [publicKey], outputCompressed: false) else {return nil}
@@ -5922,35 +5922,35 @@ extension Web3.Utils {
         return addressData
     }
 
-    // Convert a public key to the corresponding EthereumAddress. Accepts public keys in compressed (33 bytes), non-compressed (65 bytes)
-    // or raw concat(X, Y) (64 bytes) format.
-    //
-    // Returns the EthereumAddress object.
+    /// Convert a public key to the corresponding EthereumAddress. Accepts public keys in compressed (33 bytes), non-compressed (65 bytes)
+    /// or raw concat(X, Y) (64 bytes) format.
+    ///
+    /// Returns the EthereumAddress object.
     public static func publicToAddress(_ publicKey: Data) -> EthereumAddress? {
         guard let addressData = Web3.Utils.publicToAddressData(publicKey) else {return nil}
         let address = addressData.toHexString().addHexPrefix().lowercased()
         return EthereumAddress(address)
     }
 
-    // Convert a public key to the corresponding EthereumAddress. Accepts public keys in compressed (33 bytes), non-compressed (65 bytes)
-    // or raw concat(X, Y) (64 bytes) format.
-    //
-    // Returns a 0x prefixed hex string.
+    /// Convert a public key to the corresponding EthereumAddress. Accepts public keys in compressed (33 bytes), non-compressed (65 bytes)
+    /// or raw concat(X, Y) (64 bytes) format.
+    ///
+    /// Returns a 0x prefixed hex string.
     public static func publicToAddressString(_ publicKey: Data) -> String? {
         guard let addressData = Web3.Utils.publicToAddressData(publicKey) else {return nil}
         let address = addressData.toHexString().addHexPrefix().lowercased()
         return address
     }
 
-    // Converts address data (20 bytes) to the 0x prefixed hex string. Does not perform checksumming.
+    /// Converts address data (20 bytes) to the 0x prefixed hex string. Does not perform checksumming.
     public static func addressDataToString(_ addressData: Data) -> String? {
         guard addressData.count == 20 else {return nil}
         return addressData.toHexString().addHexPrefix().lowercased()
     }
 
-    // Hashes a personal message by first padding it with the "\u{19}Ethereum Signed Message:\n" string and message length string.
-    // Should be used if some arbitrary information should be hashed and signed to prevent signing an Ethereum transaction
-    // by accident.
+    /// Hashes a personal message by first padding it with the "\u{19}Ethereum Signed Message:\n" string and message length string.
+    /// Should be used if some arbitrary information should be hashed and signed to prevent signing an Ethereum transaction
+    /// by accident.
     public static func hashPersonalMessage(_ personalMessage: Data) -> Data? {
         var prefix = "\u{19}Ethereum Signed Message:\n"
         prefix += String(personalMessage.count)
@@ -5966,17 +5966,17 @@ extension Web3.Utils {
         return hash
     }
 
-    // Parse a user-supplied string using the number of decimals for particular Ethereum unit.
-    // If input is non-numeric or precision is not sufficient - returns nil.
-    // Allowed decimal separators are ".", ",".
+    /// Parse a user-supplied string using the number of decimals for particular Ethereum unit.
+    /// If input is non-numeric or precision is not sufficient - returns nil.
+    /// Allowed decimal separators are ".", ",".
     public static func parseToBigUInt(_ amount: String, units: Web3.Utils.Units = .eth) -> BigUInt? {
         let unitDecimals = units.decimals
         return parseToBigUInt(amount, decimals: unitDecimals)
     }
 
-    // Parse a user-supplied string using the number of decimals.
-    // If input is non-numeric or precision is not sufficient - returns nil.
-    // Allowed decimal separators are ".", ",".
+    /// Parse a user-supplied string using the number of decimals.
+    /// If input is non-numeric or precision is not sufficient - returns nil.
+    /// Allowed decimal separators are ".", ",".
     public static func parseToBigUInt(_ amount: String, decimals: Int = 18) -> BigUInt? {
         let separators = CharacterSet(charactersIn: ".,")
         let components = amount.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: separators)
@@ -5994,10 +5994,10 @@ extension Web3.Utils {
         return mainPart
     }
 
-    // Formats a BigInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
-    // then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
-    //
-    // Returns nil of formatting is not possible to satisfy.
+    /// Formats a BigInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
+    /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
+    ///
+    /// Returns nil of formatting is not possible to satisfy.
     public static func formatToEthereumUnits(_ bigNumber: BigInt, toUnits: Web3.Utils.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".") -> String? {
         let magnitude = bigNumber.magnitude
         guard let formatted = formatToEthereumUnits(magnitude, toUnits: toUnits, decimals: decimals, decimalSeparator: decimalSeparator) else {return nil}
@@ -6009,11 +6009,11 @@ extension Web3.Utils {
         }
     }
 
-    // Formats a BigInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
-    // then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
-    // Fallbacks to scientific format if higher precision is required.
-    //
-    // Returns nil of formatting is not possible to satisfy.
+    /// Formats a BigInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
+    /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
+    /// Fallbacks to scientific format if higher precision is required.
+    ///
+    /// Returns nil of formatting is not possible to satisfy.
     public static func formatToPrecision(_ bigNumber: BigInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
         let magnitude = bigNumber.magnitude
         guard let formatted = formatToPrecision(magnitude, numberDecimals: numberDecimals, formattingDecimals: formattingDecimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific) else {return nil}
@@ -6025,19 +6025,19 @@ extension Web3.Utils {
         }
     }
 
-    // Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
-    // then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
-    //
-    // Returns nil of formatting is not possible to satisfy.
+    /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
+    /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
+    ///
+    /// Returns nil of formatting is not possible to satisfy.
     public static func formatToEthereumUnits(_ bigNumber: BigUInt, toUnits: Web3.Utils.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
         return formatToPrecision(bigNumber, numberDecimals: toUnits.decimals, formattingDecimals: decimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific)
     }
 
-    // Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "numberDecimals",
-    // then limits the decimal part to "formattingDecimals" symbols and uses a "decimalSeparator" as a separator.
-    // Fallbacks to scientific format if higher precision is required.
-    //
-    // Returns nil of formatting is not possible to satisfy.
+    /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "numberDecimals",
+    /// then limits the decimal part to "formattingDecimals" symbols and uses a "decimalSeparator" as a separator.
+    /// Fallbacks to scientific format if higher precision is required.
+    ///
+    /// Returns nil of formatting is not possible to satisfy.
     public static func formatToPrecision(_ bigNumber: BigUInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
         if bigNumber == 0 {
             return "0"
@@ -6090,20 +6090,20 @@ extension Web3.Utils {
         return String(quotient) + decimalSeparator + remainderPadded
     }
 
-    // Recover the Ethereum address from recoverable secp256k1 signature. Message is first hashed using the "personal hash" protocol.
-    // BE WARNED - changing a message will result in different Ethereum address, but not in error.
-    //
-    // Input parameters should be hex Strings.
+    /// Recover the Ethereum address from recoverable secp256k1 signature. Message is first hashed using the "personal hash" protocol.
+    /// BE WARNED - changing a message will result in different Ethereum address, but not in error.
+    ///
+    /// Input parameters should be hex Strings.
     static public func personalECRecover(_ personalMessage: String, signature: String) -> EthereumAddress? {
         guard let data = Data.fromHex(personalMessage) else {return nil}
         guard let sig = Data.fromHex(signature) else {return nil}
         return Web3.Utils.personalECRecover(data, signature: sig)
     }
 
-    // Recover the Ethereum address from recoverable secp256k1 signature. Message is first hashed using the "personal hash" protocol.
-    // BE WARNED - changing a message will result in different Ethereum address, but not in error.
-    //
-    // Input parameters should be Data objects.
+    /// Recover the Ethereum address from recoverable secp256k1 signature. Message is first hashed using the "personal hash" protocol.
+    /// BE WARNED - changing a message will result in different Ethereum address, but not in error.
+    ///
+    /// Input parameters should be Data objects.
     static public func personalECRecover(_ personalMessage: Data, signature: Data) -> EthereumAddress? {
         if signature.count != 65 { return nil}
         let rData = signature[0..<32].bytes
@@ -6124,10 +6124,10 @@ extension Web3.Utils {
     }
 
 
-    // Recover the Ethereum address from recoverable secp256k1 signature.
-    // Takes a hash of some message. What message is hashed should be checked by user separately.
-    //
-    // Input parameters should be Data objects.
+    /// Recover the Ethereum address from recoverable secp256k1 signature.
+    /// Takes a hash of some message. What message is hashed should be checked by user separately.
+    ///
+    /// Input parameters should be Data objects.
     static public func hashECRecover(hash: Data, signature: Data) -> EthereumAddress? {
         if signature.count != 65 { return nil}
         let rData = signature[0..<32].bytes
@@ -6145,25 +6145,25 @@ extension Web3.Utils {
         return Web3.Utils.publicToAddress(publicKey)
     }
 
-    // returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
+    /// returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
     static public func keccak256(_ data: Data) -> Data? {
         if data.count == 0 {return nil}
         return data.sha3(.keccak256)
     }
 
-    // returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
+    /// returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
     static public func sha3(_ data: Data) -> Data? {
         if data.count == 0 {return nil}
         return data.sha3(.keccak256)
     }
 
-    // returns sha256 of data. Returns nil is data is empty
+    /// returns sha256 of data. Returns nil is data is empty
     static public func sha256(_ data: Data) -> Data? {
         if data.count == 0 {return nil}
         return data.sha256()
     }
 
-    // Unmarshals a 65 byte recoverable EC signature into internal structure.
+    /// Unmarshals a 65 byte recoverable EC signature into internal structure.
     static func unmarshalSignature(signatureData: Data) -> SECP256K1.UnmarshaledSignature? {
         if (signatureData.count != 65) {return nil}
         let bytes = signatureData.bytes
@@ -6172,7 +6172,7 @@ extension Web3.Utils {
         return SECP256K1.UnmarshaledSignature(v: bytes[64], r: Data(r), s: Data(s))
     }
 
-    // Marshals the V, R and S signature parameters into a 65 byte recoverable EC signature.
+    /// Marshals the V, R and S signature parameters into a 65 byte recoverable EC signature.
     static func marshalSignature(v: UInt8, r: [UInt8], s: [UInt8]) -> Data? {
         guard r.count == 32, s.count == 32 else {return nil}
         var completeSignature = Data(r)
@@ -6184,7 +6184,7 @@ extension Web3.Utils {
         return completeSignature
     }
 
-    // Marshals internal signature structure into a 65 byte recoverable EC signature.
+    /// Marshals internal signature structure into a 65 byte recoverable EC signature.
     static func marshalSignature(unmarshalledSignature: SECP256K1.UnmarshaledSignature) -> Data {
         var completeSignature = Data(unmarshalledSignature.r)
         completeSignature.append(Data(unmarshalledSignature.s))

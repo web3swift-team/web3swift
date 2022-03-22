@@ -22,7 +22,7 @@ public struct SafeTx: EIP712Hashable {
     let nonce:          EIP712.UInt256
 }
 
-// Protocol defines EIP712 struct encoding
+/// Protocol defines EIP712 struct encoding
 protocol EIP712Hashable {
     var typehash: Data { get }
     func hash() throws -> Data

@@ -22,72 +22,72 @@ struct AnyCodingKey: CodingKey {
 }
 
 extension KeyedDecodingContainer {
-    // Decodes a value of the given type for the given key.
-    //
-    // - parameter type: The type of value to decode.
-    // - parameter key: The key that the decoded value is associated with.
-    // - returns: A value of the requested type, if present for the given key
-    //   and convertible to the requested type.
-    // - throws: `DecodingError.typeMismatch` if the encountered encoded value
-    //   is not convertible to the requested type.
-    // - throws: `DecodingError.keyNotFound` if `self` does not have an entry
-    //   for the given key.
-    // - throws: `DecodingError.valueNotFound` if `self` has a null entry for
-    //   the given key.
+    /// Decodes a value of the given type for the given key.
+    ///
+    /// - parameter type: The type of value to decode.
+    /// - parameter key: The key that the decoded value is associated with.
+    /// - returns: A value of the requested type, if present for the given key
+    ///   and convertible to the requested type.
+    /// - throws: `DecodingError.typeMismatch` if the encountered encoded value
+    ///   is not convertible to the requested type.
+    /// - throws: `DecodingError.keyNotFound` if `self` does not have an entry
+    ///   for the given key.
+    /// - throws: `DecodingError.valueNotFound` if `self` has a null entry for
+    ///   the given key.
     public func decode(_ type: [Any].Type, forKey key: KeyedDecodingContainer<K>.Key) throws -> [Any] {
         var values = try nestedUnkeyedContainer(forKey: key)
         return try values.decode(type)
     }
 
-    // Decodes a value of the given type for the given key.
-    //
-    // - parameter type: The type of value to decode.
-    // - parameter key: The key that the decoded value is associated with.
-    // - returns: A value of the requested type, if present for the given key
-    //   and convertible to the requested type.
-    // - throws: `DecodingError.typeMismatch` if the encountered encoded value
-    //   is not convertible to the requested type.
-    // - throws: `DecodingError.keyNotFound` if `self` does not have an entry
-    //   for the given key.
-    // - throws: `DecodingError.valueNotFound` if `self` has a null entry for
-    //   the given key.
+    /// Decodes a value of the given type for the given key.
+    ///
+    /// - parameter type: The type of value to decode.
+    /// - parameter key: The key that the decoded value is associated with.
+    /// - returns: A value of the requested type, if present for the given key
+    ///   and convertible to the requested type.
+    /// - throws: `DecodingError.typeMismatch` if the encountered encoded value
+    ///   is not convertible to the requested type.
+    /// - throws: `DecodingError.keyNotFound` if `self` does not have an entry
+    ///   for the given key.
+    /// - throws: `DecodingError.valueNotFound` if `self` has a null entry for
+    ///   the given key.
     public func decode(_ type: [String: Any].Type, forKey key: KeyedDecodingContainer<K>.Key) throws -> [String: Any] {
         let values = try nestedContainer(keyedBy: AnyCodingKey.self, forKey: key)
         return try values.decode(type)
     }
 
-    // Decodes a value of the given type for the given key, if present.
-    //
-    // This method returns `nil` if the container does not have a value
-    // associated with `key`, or if the value is null. The difference between
-    // these states can be distinguished with a `contains(_: )` call.
-    //
-    // - parameter type: The type of value to decode.
-    // - parameter key: The key that the decoded value is associated with.
-    // - returns: A decoded value of the requested type, or `nil` if the
-    //   `Decoder` does not have an entry associated with the given key, or if
-    //   the value is a null value.
-    // - throws: `DecodingError.typeMismatch` if the encountered encoded value
-    //   is not convertible to the requested type.
+    /// Decodes a value of the given type for the given key, if present.
+    ///
+    /// This method returns `nil` if the container does not have a value
+    /// associated with `key`, or if the value is null. The difference between
+    /// these states can be distinguished with a `contains(_: )` call.
+    ///
+    /// - parameter type: The type of value to decode.
+    /// - parameter key: The key that the decoded value is associated with.
+    /// - returns: A decoded value of the requested type, or `nil` if the
+    ///   `Decoder` does not have an entry associated with the given key, or if
+    ///   the value is a null value.
+    /// - throws: `DecodingError.typeMismatch` if the encountered encoded value
+    ///   is not convertible to the requested type.
     public func decodeIfPresent(_ type: [Any].Type, forKey key: KeyedDecodingContainer<K>.Key) throws -> [Any]? {
         guard contains(key),
             try decodeNil(forKey: key) == false else { return nil }
         return try decode(type, forKey: key)
     }
 
-    // Decodes a value of the given type for the given key, if present.
-    //
-    // This method returns `nil` if the container does not have a value
-    // associated with `key`, or if the value is null. The difference between
-    // these states can be distinguished with a `contains(_: )` call.
-    //
-    // - parameter type: The type of value to decode.
-    // - parameter key: The key that the decoded value is associated with.
-    // - returns: A decoded value of the requested type, or `nil` if the
-    //   `Decoder` does not have an entry associated with the given key, or if
-    //   the value is a null value.
-    // - throws: `DecodingError.typeMismatch` if the encountered encoded value
-    //   is not convertible to the requested type.
+    /// Decodes a value of the given type for the given key, if present.
+    ///
+    /// This method returns `nil` if the container does not have a value
+    /// associated with `key`, or if the value is null. The difference between
+    /// these states can be distinguished with a `contains(_: )` call.
+    ///
+    /// - parameter type: The type of value to decode.
+    /// - parameter key: The key that the decoded value is associated with.
+    /// - returns: A decoded value of the requested type, or `nil` if the
+    ///   `Decoder` does not have an entry associated with the given key, or if
+    ///   the value is a null value.
+    /// - throws: `DecodingError.typeMismatch` if the encountered encoded value
+    ///   is not convertible to the requested type.
     public func decodeIfPresent(_ type: [String: Any].Type, forKey key: KeyedDecodingContainer<K>.Key) throws -> [String: Any]? {
         guard contains(key),
             try decodeNil(forKey: key) == false else { return nil }

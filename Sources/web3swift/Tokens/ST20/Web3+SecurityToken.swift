@@ -10,55 +10,55 @@ import Foundation
 import BigInt
 import PromiseKit
 
-// The Ownable contract has an owner address, and provides basic authorization control functions, this simplifies the implementation of "user permissions".
+/// The Ownable contract has an owner address, and provides basic authorization control functions, this simplifies the implementation of "user permissions".
 protocol IOwnable {
-    // Allows the current owner to relinquish control of the contract.
+    /// Allows the current owner to relinquish control of the contract.
     func renounceOwnership(from: EthereumAddress) throws -> WriteTransaction
 
-    // Allows the current owner to transfer control of the contract to a newOwner.
+    /// Allows the current owner to transfer control of the contract to a newOwner.
     func transferOwnership(from: EthereumAddress, newOwner: EthereumAddress) throws -> WriteTransaction
 }
 
-// Security token interface
+/// Security token interface
 protocol ISecurityToken: IST20, IOwnable {
-    // Value of current checkpoint
+    /// Value of current checkpoint
     func currentCheckpointId() throws -> BigUInt
 
     func getGranularity() throws -> BigUInt
 
-    // Total number of non-zero token holders
+    /// Total number of non-zero token holders
     func investorCount() throws -> BigUInt
 
-    // List of token holders
+    /// List of token holders
     func investors() throws -> [EthereumAddress]
 
-    // Permissions this to a Permission module, which has a key of 1
-    // If no Permission return false - note that IModule withPerm will allow ST owner all permissions anyway
-    // this allows individual modules to override this logic if needed (to not allow ST owner all permissions)
+    /// Permissions this to a Permission module, which has a key of 1
+    /// If no Permission return false - note that IModule withPerm will allow ST owner all permissions anyway
+    /// this allows individual modules to override this logic if needed (to not allow ST owner all permissions)
     func checkPermission(delegate: EthereumAddress, module: EthereumAddress, perm: [UInt32]) throws -> Bool
 
-    // returns module list for a module type
-    // params:
-    // - moduleType is which type of module we are trying to remove
-    // - moduleIndex is the index of the module within the chosen type
+    /// returns module list for a module type
+    /// params:
+    /// - moduleType is which type of module we are trying to remove
+    /// - moduleIndex is the index of the module within the chosen type
     func getModule(moduleType: UInt8, moduleIndex: UInt8) throws -> ([UInt32], EthereumAddress)
 
-    // returns module list for a module name - will return first match
-    // params:
-    // - moduleType is which type of module we are trying to remove
-    // - name is the name of the module within the chosen type
+    /// returns module list for a module name - will return first match
+    /// params:
+    /// - moduleType is which type of module we are trying to remove
+    /// - name is the name of the module within the chosen type
     func getModuleByName(moduleType: UInt8, name: [UInt32]) throws -> ([UInt32], EthereumAddress)
 
-    // Queries totalSupply as of a defined checkpoint
+    /// Queries totalSupply as of a defined checkpoint
     func totalSupplyAt(checkpointId: BigUInt) throws -> BigUInt
 
-    // Queries balances as of a defined checkpoint
+    /// Queries balances as of a defined checkpoint
     func balanceOfAt(investor: EthereumAddress, checkpointId: BigUInt) throws -> BigUInt
 
-    // Creates a checkpoint that can be used to query historical balances / totalSuppy
+    /// Creates a checkpoint that can be used to query historical balances / totalSuppy
     func createCheckpoint(from: EthereumAddress) throws -> WriteTransaction
 
-    // gets length of investors array
+    /// gets length of investors array
     func getInvestorsLength() throws -> BigUInt
 }
 
