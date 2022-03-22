@@ -11,17 +11,17 @@ public protocol TransactionOptionsInheritable {
     var transactionOptions: TransactionOptions {get}
 }
 
-// Options for sending or calling a particular Ethereum transaction
+/// Options for sending or calling a particular Ethereum transaction
 public struct TransactionOptions {
-    // Sets the transaction destination. It can either be a contract address or a private key controlled wallet address.
-    //
-    // Usually should never be nil, left undefined for a contract-creation transaction.
+    /// Sets the transaction destination. It can either be a contract address or a private key controlled wallet address.
+    ///
+    /// Usually should never be nil, left undefined for a contract-creation transaction.
     public var to: EthereumAddress? = nil
-    // Sets from what account a transaction should be sent. Used only internally as the sender of Ethereum transaction
-    // is determined purely from the transaction signature. Indicates to the Ethereum node or to the local keystore what private key
-    // should be used to sign a transaction.
-    //
-    // Can be nil if one reads the information from the blockchain.
+    /// Sets from what account a transaction should be sent. Used only internally as the sender of Ethereum transaction
+    /// is determined purely from the transaction signature. Indicates to the Ethereum node or to the local keystore what private key
+    /// should be used to sign a transaction.
+    ///
+    /// Can be nil if one reads the information from the blockchain.
     public var from: EthereumAddress? = nil
 
     public enum GasLimitPolicy {
@@ -39,7 +39,7 @@ public struct TransactionOptions {
     }
     public var gasPrice: GasPricePolicy?
 
-    // The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
+    /// The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
     public var value: BigUInt? = nil
 
     public enum NoncePolicy {
@@ -159,10 +159,10 @@ public struct TransactionOptions {
         return options
     }
 
-    // Merges two sets of topions by overriding the parameters from the first set by parameters from the second
-    // set if those are not nil.
-    //
-    // Returns default options if both parameters are nil.
+    /// Merges two sets of topions by overriding the parameters from the first set by parameters from the second
+    /// set if those are not nil.
+    ///
+    /// Returns default options if both parameters are nil.
     public static func merge(_ options: TransactionOptions?, with other: TransactionOptions?) -> TransactionOptions? {
         if (other == nil && options == nil) {
             return TransactionOptions.defaultOptions

@@ -8,7 +8,7 @@ import BigInt
 
 extension ABI.Element {
 
-    // Specifies the type that parameters in a contract have.
+    /// Specifies the type that parameters in a contract have.
     public enum ParameterType: ABIElementPropertiesProtocol {
         case uint(bits: UInt64)
         case int(bits: UInt64)

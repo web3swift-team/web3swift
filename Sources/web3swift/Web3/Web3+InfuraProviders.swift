@@ -27,7 +27,7 @@ public enum BlockNumber {
     }
 }
 
-// Custom Web3 HTTP provider of Infura nodes.
+/// Custom Web3 HTTP provider of Infura nodes.
 public final class InfuraProvider: Web3HttpProvider {
     public init?(_ net: Networks, accessToken token: String? = nil, keystoreManager manager: KeystoreManager? = nil) {
         var requestURLstring = "https://" + net.name + Constants.infuraHttpScheme
@@ -37,14 +37,14 @@ public final class InfuraProvider: Web3HttpProvider {
     }
 }
 
-// Custom Websocket provider of Infura nodes.
+/// Custom Websocket provider of Infura nodes.
 public final class InfuraWebsocketProvider: WebsocketProvider {
     public var filterID: String?
     public var subscriptionIDs = Set<String>()
     private var subscriptionIDforUnsubscribing: String? = nil
     private var filterTimer: Timer?
 
-    // if set debugMode True then show websocket events logs in the console
+    /// if set debugMode True then show websocket events logs in the console
     public var debugMode: Bool = false
 
     public init?(_ network: Networks,
@@ -245,7 +245,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         try writeMessage(method: method, params: params)
     }
 
-    // override WebsocketDelegate
+    /// override WebsocketDelegate
     override public func didReceive(event: WebSocketEvent, client: WebSocket) {
         switch event {
         case .connected(let headers):

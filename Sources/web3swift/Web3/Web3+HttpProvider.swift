@@ -8,7 +8,7 @@ import Foundation
 import BigInt
 import PromiseKit
 
-// Providers abstraction for custom providers (websockets, other custom private key managers). At the moment should not be used.
+/// Providers abstraction for custom providers (websockets, other custom private key managers). At the moment should not be used.
 public protocol Web3Provider {
     func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse>
     func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue) -> Promise<JSONRPCresponseBatch>
@@ -18,7 +18,7 @@ public protocol Web3Provider {
     var session: URLSession {get}
 }
 
-// The default http provider.
+/// The default http provider.
 public class Web3HttpProvider: Web3Provider {
     public var url: URL
     public var network: Networks?

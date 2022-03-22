@@ -10,7 +10,7 @@ import PromiseKit
 fileprivate typealias PromiseResult = PromiseKit.Result
 
 extension web3.web3contract {
-    // An event parser to fetch events produced by smart-contract related transactions. Should not be constructed manually, but rather by calling the corresponding function on the web3contract object.
+    /// An event parser to fetch events produced by smart-contract related transactions. Should not be constructed manually, but rather by calling the corresponding function on the web3contract object.
     public struct EventParser: EventParserProtocol {
 
         public var contract: ContractProtocol

@@ -91,7 +91,7 @@ public protocol Web3SocketDelegate {
     func gotError(error: Error)
 }
 
-// The default websocket provider.
+/// The default websocket provider.
 public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDelegate {
 
     public func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse> {
@@ -113,7 +113,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
 
     public var socket: WebSocket
     public var delegate: Web3SocketDelegate
-    // A flag that is true if socket connected or false if socket doesn't connected.
+    /// A flag that is true if socket connected or false if socket doesn't connected.
     public var websocketConnected: Bool = false
 
     private var writeTimer: Timer? = nil

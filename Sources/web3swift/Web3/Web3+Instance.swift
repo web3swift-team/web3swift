@@ -8,19 +8,19 @@ import Foundation
 import BigInt
 import PromiseKit
 
-// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
+/// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
     public var provider: Web3Provider
     public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
     public var defaultBlock = "latest"
     public var requestDispatcher: JSONRPCrequestDispatcher
 
-    // Add a provider request to the dispatch queue.
+    /// Add a provider request to the dispatch queue.
     public func dispatch(_ request: JSONRPCrequest) -> Promise<JSONRPCresponse> {
         return self.requestDispatcher.addToQueue(request: request)
     }
 
-    // Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
+    /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
     public init(provider prov: Web3Provider, queue: OperationQueue? = nil, requestDispatcher: JSONRPCrequestDispatcher? = nil) {
         provider = prov
         if requestDispatcher == nil {
@@ -30,15 +30,15 @@ public class web3 {
         }
     }
 
-    // Keystore manager can be bound to Web3 instance. If some manager is bound all further account related functions, such
-    // as account listing, transaction signing, etc. are done locally using private keys and accounts found in a manager.
+    /// Keystore manager can be bound to Web3 instance. If some manager is bound all further account related functions, such
+    /// as account listing, transaction signing, etc. are done locally using private keys and accounts found in a manager.
     public func addKeystoreManager(_ manager: KeystoreManager?) {
         self.provider.attachedKeystoreManager = manager
     }
 
     var ethInstance: web3.Eth?
 
-    // Public web3.eth.* namespace.
+    /// Public web3.eth.* namespace.
     public var eth: web3.Eth {
         if (self.ethInstance != nil) {
             return self.ethInstance!
@@ -62,7 +62,7 @@ public class web3 {
 
     var personalInstance: web3.Personal?
 
-    // Public web3.personal.* namespace.
+    /// Public web3.personal.* namespace.
     public var personal: web3.Personal {
         if (self.personalInstance != nil) {
             return self.personalInstance!
@@ -86,7 +86,7 @@ public class web3 {
 
     var txPoolInstance: web3.TxPool?
 
-    // Public web3.personal.* namespace.
+    /// Public web3.personal.* namespace.
     public var txPool: web3.TxPool {
         if (self.txPoolInstance != nil) {
             return self.txPoolInstance!
@@ -110,7 +110,7 @@ public class web3 {
 
     var walletInstance: web3.Web3Wallet?
 
-    // Public web3.wallet.* namespace.
+    /// Public web3.wallet.* namespace.
     public var wallet: web3.Web3Wallet {
         if (self.walletInstance != nil) {
             return self.walletInstance!
@@ -131,7 +131,7 @@ public class web3 {
 
     var browserFunctionsInstance: web3.BrowserFunctions?
 
-    // Public web3.browserFunctions.* namespace.
+    /// Public web3.browserFunctions.* namespace.
     public var browserFunctions: web3.BrowserFunctions {
         if (self.browserFunctionsInstance != nil) {
             return self.browserFunctionsInstance!
@@ -155,7 +155,7 @@ public class web3 {
 
     var eventLoopInstance: web3.Eventloop?
 
-    // Public web3.browserFunctions.* namespace.
+    /// Public web3.browserFunctions.* namespace.
     public var eventLoop: web3.Eventloop {
         if (self.eventLoopInstance != nil) {
             return self.eventLoopInstance!
