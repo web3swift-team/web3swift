@@ -21,7 +21,6 @@ public class JSONRPCrequestDispatcher {
         self.queue = queue
         self.policy = policy
         self.lockQueue = DispatchQueue.init(label: "batchingQueue") // serial simplest queue
-        // DispatchQueue(label: "batchingQueue", qos: .userInitiated)
         self.batches.append(Batch(provider: self.provider, capacity: 32, queue: self.queue, lockQueue: self.lockQueue))
     }
 
