@@ -13,12 +13,12 @@ public struct NameHash {
         let normalized = domain.lowercased()
         return normalized
     }
-    
+
     public static func nameHash(_ domain: String) -> Data? {
         guard let normalized = NameHash.normalizeDomainName(domain) else {return nil}
         return namehash(normalized)
     }
-    
+
     static func namehash(_ name: String) -> Data? {
         if name == "" {
             return Data(repeating: 0, count: 32)
