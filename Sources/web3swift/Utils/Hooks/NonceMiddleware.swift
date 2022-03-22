@@ -5,15 +5,14 @@
 //
 
 import Foundation
-//import EthereumAddress
 import BigInt
 import PromiseKit
 
 extension Web3.Utils {
-    
+
     fileprivate typealias AssemblyHook = web3.AssemblyHook
     fileprivate typealias SubmissionResultHook = web3.SubmissionResultHook
-    
+
     public class NonceMiddleware: EventLoopRunnableProtocol {
         var web3: web3?
         var nonceLookups: [EthereumAddress: BigUInt] = [EthereumAddress: BigUInt]()
@@ -21,7 +20,7 @@ extension Web3.Utils {
         public let queue: DispatchQueue = DispatchQueue(label: "Nonce middleware queue")
         public var synchronizationPeriod: TimeInterval = 300.0 // 5 minutes
         var lastSyncTime: Date = Date()
-        
+
         public func functionToRun() {
             guard let w3 = self.web3 else {return}
             var allPromises = [Promise<BigUInt>]()
@@ -45,14 +44,14 @@ extension Web3.Utils {
                         }
                     }
                 }
-                
+
             }
         }
-        
+
         public init() {
-            
+
         }
-        
+
         func preAssemblyFunction(tx: EthereumTransaction, contract: EthereumContract, transactionOptions: TransactionOptions) -> (EthereumTransaction, EthereumContract, TransactionOptions, Bool) {
             guard let from = transactionOptions.from else {
                 // do nothing
@@ -73,15 +72,15 @@ extension Web3.Utils {
             newOptions.nonce = .manual(newNonce)
             return (tx, contract, newOptions, true)
         }
-        
+
         func postSubmissionFunction(result: TransactionSendingResult) {
             guard let from = result.transaction.sender else {
                 // do nothing
                 return
             }
-            
+
             let newNonce = result.transaction.nonce
-            
+
             if let knownNonce = self.nonceLookups[from] {
                 if knownNonce != newNonce {
                     self.queue.async {
@@ -95,7 +94,7 @@ extension Web3.Utils {
             }
             return
         }
-        
+
         public func attach(_ web3: web3) {
             self.web3 = web3
             web3.eventLoop.monitoredUserFunctions.append(self)
@@ -104,8 +103,6 @@ extension Web3.Utils {
             let postHook = SubmissionResultHook(queue: web3.requestDispatcher.queue, function: self.postSubmissionFunction)
             web3.postSubmissionHooks.append(postHook)
         }
-        
+
     }
-    
-    
 }
