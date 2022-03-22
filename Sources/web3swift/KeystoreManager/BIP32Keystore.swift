@@ -238,7 +238,6 @@ public class BIP32Keystore: AbstractKeystore {
         guard let encryptedKey = try aesCipher?.encrypt(data!.bytes) else {
             throw AbstractKeystoreError.aesError
         }
-//        let encryptedKeyData = Data(bytes: encryptedKey) Data(encryptedKey)
         let encryptedKeyData = Data(encryptedKey)
         var dataForMAC = Data()
         dataForMAC.append(last16bytes)
@@ -313,7 +312,6 @@ public class BIP32Keystore: AbstractKeystore {
             guard let derivedArray = try? PKCS5.PBKDF2(password: passData.bytes, salt: saltData.bytes, iterations: c, keyLength: derivedLen, variant: hashVariant!).calculate() else {
                 return nil
             }
-//            passwordDerivedKey = Data(bytes: derivedArray)
             passwordDerivedKey = Data(derivedArray)
         default:
             return nil
@@ -361,7 +359,6 @@ public class BIP32Keystore: AbstractKeystore {
         guard decryptedPK?.count == 82 else {
             return nil
         }
-//        return Data(bytes: decryptedPK!)
         return Data(decryptedPK!)
     }
 
