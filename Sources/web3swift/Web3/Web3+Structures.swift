@@ -52,13 +52,13 @@ extension TransactionOptions: Decodable {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        if let gasLimit = try decodeHexToBigUInt(container, key: .gas) {
+        if let gasLimit = try decodeHexToBigUInt(container, key: .gas, allowOptional:true) {
             self.gasLimit = .manual(gasLimit)
         } else {
             self.gasLimit = .automatic
         }
         
-        if let gasPrice = try decodeHexToBigUInt(container, key: .gasPrice) {
+        if let gasPrice = try decodeHexToBigUInt(container, key: .gasPrice, allowOptional:true) {
             self.gasPrice = .manual(gasPrice)
         } else {
             self.gasPrice = .automatic
@@ -85,13 +85,13 @@ extension TransactionOptions: Decodable {
         let value = try decodeHexToBigUInt(container, key: .value)
         self.value = value
         
-        if let nonce = try decodeHexToBigUInt(container, key: .nonce) {
+        if let nonce = try decodeHexToBigUInt(container, key: .nonce, allowOptional:true) {
             self.nonce = .manual(nonce)
         } else {
             self.nonce = .pending
         }
         
-        if let callOnBlock = try decodeHexToBigUInt(container, key: .callOnBlock) {
+        if let callOnBlock = try decodeHexToBigUInt(container, key: .callOnBlock, allowOptional:true) {
             self.callOnBlock = .exactBlockNumber(callOnBlock)
         } else {
             self.callOnBlock = .pending
