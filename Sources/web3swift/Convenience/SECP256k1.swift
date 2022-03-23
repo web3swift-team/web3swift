@@ -343,7 +343,7 @@ extension SECP256K1 {
             let result = data.withUnsafeMutableBytes { (mutableRBBytes) -> Int32? in
                 if let mutableRBytes = mutableRBBytes.baseAddress, mutableRBBytes.count > 0 {
                     let mutableBytes = mutableRBytes.assumingMemoryBound(to: UInt8.self)
-                    return SecRandomCopyBytes(kSecRandomDefault, 32, mutableBytes)
+                    return SecRandomCopyBytes(kSecRandomDefault, length, mutableBytes)
                 } else {
                     return nil
                 }
