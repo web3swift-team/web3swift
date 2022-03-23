@@ -12,6 +12,21 @@ disabled_rules:
   - multiple_closures_with_trailing_closure
   - todo
 
+opt_in_rules:
+ - weak_delegate
+ - unused_import
+ - unneeded_parentheses_in_closure_argument
+ - trailing_closure
+ - static_operator
+ - redundant_nil_coalescing
+ - override_in_extension
+ - legacy_objc_type
+ - implicitly_unwrapped_optional
+ - force_unwrapping
+ - empty_string
+ - closure_body_length
+ - fallthrough
+
 # force warnings
 force_cast: error
 force_try: error 
@@ -27,18 +42,3 @@ custom_rules:
       - comment
     message: "No commented code in devel branch allowed." # violation message. optional.
     severity: warning # violation severity. optional.
-
-  force_unwrap: # rule identifier
-    included: ".*\\.swift" # regex that defines paths to include during linting. optional.
-    excluded: ".*Test(s)?\\.swift" # regex that defines paths to exclude during linting. optional
-    name: "Force unwrap function" # rule name. optional.
-    regex: "([\\}\\)\\w]!)" # matching pattern
-    capture_group: 0 # number of regex capture group to highlight the rule violation at. optional.
-    match_kinds: # SyntaxKinds to match. optional.
-      - identifier
-    message: "Please make it safe way, or disable this warning localy." # violation message. optional.
-    severity: error # violation severity. optional.
-
-
-
-
