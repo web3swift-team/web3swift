@@ -108,7 +108,7 @@ public struct TransactionOptions {
             return nil
         }
     }
-    
+
     public func merge(_ otherOptions: TransactionOptions?) -> TransactionOptions {
         guard let other = otherOptions else {return self}
         var opts = TransactionOptions()
@@ -121,45 +121,7 @@ public struct TransactionOptions {
         opts.callOnBlock = mergeIfNotNil(first: self.callOnBlock, second: other.callOnBlock)
         return opts
     }
-    
-    public static func fromJSON(_ json: [String: Any]) -> TransactionOptions? {
-        var options = TransactionOptions()
-        if let gas = json["gas"] as? String, let gasBiguint = BigUInt(gas.stripHexPrefix().lowercased(), radix: 16) {
-            options.gasLimit = .manual(gasBiguint)
-        } else if let gasLimit = json["gasLimit"] as? String, let gasgasLimitBiguint = BigUInt(gasLimit.stripHexPrefix().lowercased(), radix: 16) {
-            options.gasLimit = .limited(gasgasLimitBiguint)
-        } else {
-            options.gasLimit = .automatic
-        }
-        if let gasPrice = json["gasPrice"] as? String, let gasPriceBiguint = BigUInt(gasPrice.stripHexPrefix().lowercased(), radix: 16) {
-            options.gasPrice = .manual(gasPriceBiguint)
-        } else {
-            options.gasPrice = .automatic
-        }
-        if let value = json["value"] as? String, let valueBiguint = BigUInt(value.stripHexPrefix().lowercased(), radix: 16) {
-            options.value = valueBiguint
-        }
-        if let toString = json["to"] as? String {
-            guard let addressTo = EthereumAddress(toString) else {return nil}
-            options.to = addressTo
-        }
-        if let fromString = json["from"] as? String {
-            guard let addressFrom = EthereumAddress(fromString) else {return nil}
-            options.from = addressFrom
-        }
-        if let nonceString = json["nonce"] as? String, let nonce = BigUInt(nonceString.stripHexPrefix(), radix: 16) {
-            options.nonce = .manual(nonce)
-        } else {
-            options.nonce = .pending
-        }
-        if let callOnBlockString = json["callOnBlock"] as? String, let callOnBlock = BigUInt(callOnBlockString.stripHexPrefix(), radix: 16) {
-            options.callOnBlock = .exactBlockNumber(callOnBlock)
-        } else {
-            options.callOnBlock = .pending
-        }
-        return options
-    }
-    
+
     /// Merges two sets of topions by overriding the parameters from the first set by parameters from the second
     /// set if those are not nil.
     ///
