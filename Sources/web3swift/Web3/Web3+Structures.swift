@@ -110,11 +110,18 @@ extension EthereumTransaction:Decodable {
         case r
         case s
         case value
+        case type  // present in EIP-1559 transaction objects
     }
     
     public init(from decoder: Decoder) throws {
         let options = try TransactionOptions(from: decoder)
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // test to see if it is a EIP-1559 wrapper
+        if let envelope = try decodeHexToBigUInt(container, key: .type, allowOptional: true) {
+            // if present and non-sero we are a new wrapper we can't decode
+            if(envelope != BigInt(0)) { throw Web3Error.dataError }
+        }
         
         var data = try decodeHexToData(container, key: .data, allowOptional: true)
         if data != nil {
@@ -192,7 +199,7 @@ public struct TransactionDetails: Decodable {
         let blockHash = try decodeHexToData(container, key: .blockHash, allowOptional: true)
         self.blockHash = blockHash
         
-        let transactionIndex = try decodeHexToBigUInt(container, key: .blockNumber, allowOptional: true)
+        let transactionIndex = try decodeHexToBigUInt(container, key: .transactionIndex, allowOptional: true)
         self.transactionIndex = transactionIndex
         
         let transaction = try EthereumTransaction(from: decoder)

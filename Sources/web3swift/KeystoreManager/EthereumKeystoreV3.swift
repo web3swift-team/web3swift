@@ -182,11 +182,11 @@ public class EthereumKeystoreV3: AbstractKeystore {
             var hashVariant: HMAC.Variant?;
             switch algo {
             case "hmac-sha256":
-                hashVariant = HMAC.Variant.sha256
+                hashVariant = HMAC.Variant.sha2(.sha256)
             case "hmac-sha384":
-                hashVariant = HMAC.Variant.sha384
+                hashVariant = HMAC.Variant.sha2(.sha384)
             case "hmac-sha512":
-                hashVariant = HMAC.Variant.sha512
+                hashVariant = HMAC.Variant.sha2(.sha512)
             default:
                 hashVariant = nil
             }
