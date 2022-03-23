@@ -42,10 +42,10 @@
             default = "YES">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:Tests/web3swiftTests/local_tests/LocalTests.xctestplan">
+            reference = "container:Tests/web3swiftTests/localTests/LocalTests.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:Tests/web3swiftTests/infura_tests/RemoteTests.xctestplan">
+            reference = "container:Tests/web3swiftTests/remoteTests/RemoteTests.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>

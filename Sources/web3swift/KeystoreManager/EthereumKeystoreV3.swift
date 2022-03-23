@@ -96,7 +96,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         if (keyData == nil) {
             throw AbstractKeystoreError.encryptionError("Encryption without key data")
         }
-        let saltLen = 32;
+        let saltLen = 32
         guard let saltData = Data.randomBytes(length: saltLen) else {
             throw AbstractKeystoreError.noEntropyError
         }
@@ -182,11 +182,11 @@ public class EthereumKeystoreV3: AbstractKeystore {
             var hashVariant: HMAC.Variant?;
             switch algo {
             case "hmac-sha256":
-                hashVariant = HMAC.Variant.sha256
+                hashVariant = HMAC.Variant.sha2(.sha256)
             case "hmac-sha384":
-                hashVariant = HMAC.Variant.sha384
+                hashVariant = HMAC.Variant.sha2(.sha384)
             case "hmac-sha512":
-                hashVariant = HMAC.Variant.sha512
+                hashVariant = HMAC.Variant.sha2(.sha512)
             default:
                 hashVariant = nil
             }

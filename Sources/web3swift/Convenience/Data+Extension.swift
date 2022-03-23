@@ -9,8 +9,9 @@ import Foundation
 public extension Data {
     
     init<T>(fromArray values: [T]) {
-        var values = values
-        self.init(buffer: UnsafeBufferPointer(start: &values, count: values.count))
+        let values = values
+        let ptrUB = values.withUnsafeBufferPointer { (ptr: UnsafeBufferPointer) in return ptr }
+        self.init(buffer: ptrUB)
     }
     
     func toArray<T>(type: T.Type) throws -> [T] {
@@ -65,7 +66,7 @@ public extension Data {
             let result = data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) -> Int32? in
                 if let bodyAddress = body.baseAddress, body.count > 0 {
                     let pointer = bodyAddress.assumingMemoryBound(to: UInt8.self)
-                    return SecRandomCopyBytes(kSecRandomDefault, 32, pointer)
+                    return SecRandomCopyBytes(kSecRandomDefault, length, pointer)
                 } else {
                     return nil
                 }

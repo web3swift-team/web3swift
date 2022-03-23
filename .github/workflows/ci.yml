@@ -23,7 +23,9 @@ jobs:
   spm:
     name: Swift Package Manager 5.4
     runs-on: macOS-11
-    concurrency: spm
+    concurrency: 
+      group: spm-${{ github.run_id }}
+      cancel-in-progress: false
     env:
       DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
     steps:
@@ -32,12 +34,22 @@ jobs:
         run: swift package resolve
       - name: Build
         run: swift build --build-tests
-      # - name: Run local tests
-      #   run: swift test --skip-build -c debug --filter localTests
+      - name: Install ganache
+        run: npm install ganache --global
+      - name: Start ganache in background
+        run: ganache &
+      - name: Wait till ganache starts
+        run: sleep 1
+      - name: Run local tests
+        run: swift test --skip-build -c debug --filter localTests
+      # - name: Run remote tests
+      #   run: swift test --skip-build -c debug --filter remoteTests
   carthage:
     name: Carthage
     runs-on: macOS-11
-    concurrency: carthage
+    concurrency: 
+      group: carthage-${{ github.run_id }}
+      cancel-in-progress: false
     env:
       DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
     strategy:
@@ -53,5 +65,13 @@ jobs:
         run: carthage build --no-use-binaries --platform iOS Simulator --use-xcframeworks
       - name: Building framework
         run: xcodebuild build-for-testing -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
-      # - name: Running local tests
-      #   run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
+      - name: Install ganache
+        run: npm install ganache --global
+      - name: Start ganache in background
+        run: ganache &
+      - name: Wait till ganache starts
+        run: sleep 1
+      - name: Run local tests
+        run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
+      # - name: Run remote tests
+      #   run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan RemoteTests
