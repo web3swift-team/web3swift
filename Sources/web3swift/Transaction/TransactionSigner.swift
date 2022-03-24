@@ -49,7 +49,7 @@ public struct Web3Signer {
             guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: serializedSignature) else {
                 return false
             }
-            let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey)
+            guard let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey) else { return false }
             var d = BigUInt(0)
             if unmarshalledSignature.v >= 0 && unmarshalledSignature.v <= 3 {
                 d = BigUInt(35)
@@ -62,7 +62,7 @@ public struct Web3Signer {
             transaction.r = BigUInt(Data(unmarshalledSignature.r))
             transaction.s = BigUInt(Data(unmarshalledSignature.s))
             let recoveredPublicKey = transaction.recoverPublicKey()
-            if (!(originalPublicKey!.constantTimeComparisonTo(recoveredPublicKey))) {
+            if !(originalPublicKey.constantTimeComparisonTo(recoveredPublicKey)) {
                 return false
             }
             return true
@@ -87,7 +87,7 @@ public struct Web3Signer {
             guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: serializedSignature) else {
                 return false
             }
-            let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey)
+            guard let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey) else { return false }
             transaction.chainID = nil
             var d = BigUInt(0)
             var a = BigUInt(0)
@@ -102,7 +102,7 @@ public struct Web3Signer {
             transaction.r = BigUInt(Data(unmarshalledSignature.r))
             transaction.s = BigUInt(Data(unmarshalledSignature.s))
             let recoveredPublicKey = transaction.recoverPublicKey()
-            if (!(originalPublicKey!.constantTimeComparisonTo(recoveredPublicKey))) {
+            if !(originalPublicKey.constantTimeComparisonTo(recoveredPublicKey)) {
                 return false
             }
             return true

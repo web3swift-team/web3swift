@@ -50,13 +50,13 @@ extension TransactionOptions: Decodable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        if let gasLimit = try decodeHexToBigUInt(container, key: .gas) {
+        if let gasLimit = try decodeHexToBigUInt(container, key: .gas, allowOptional: true) {
             self.gasLimit = .manual(gasLimit)
         } else {
             self.gasLimit = .automatic
         }
 
-        if let gasPrice = try decodeHexToBigUInt(container, key: .gasPrice) {
+        if let gasPrice = try decodeHexToBigUInt(container, key: .gasPrice, allowOptional: true) {
             self.gasPrice = .manual(gasPrice)
         } else {
             self.gasPrice = .automatic
@@ -83,13 +83,13 @@ extension TransactionOptions: Decodable {
         let value = try decodeHexToBigUInt(container, key: .value)
         self.value = value
 
-        if let nonce = try decodeHexToBigUInt(container, key: .nonce) {
+        if let nonce = try decodeHexToBigUInt(container, key: .nonce, allowOptional: true) {
             self.nonce = .manual(nonce)
         } else {
             self.nonce = .pending
         }
 
-        if let callOnBlock = try decodeHexToBigUInt(container, key: .nonce) {
+        if let callOnBlock = try decodeHexToBigUInt(container, key: .callOnBlock, allowOptional: true) {
             self.callOnBlock = .exactBlockNumber(callOnBlock)
         } else {
             self.callOnBlock = .pending
@@ -107,11 +107,18 @@ extension EthereumTransaction: Decodable {
         case r
         case s
         case value
+        case type  // present in EIP-1559 transaction objects
     }
 
     public init(from decoder: Decoder) throws {
         let options = try TransactionOptions(from: decoder)
         let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        // test to see if it is a EIP-1559 wrapper
+        if let envelope = try decodeHexToBigUInt(container, key: .type, allowOptional: true) {
+            // if present and non-sero we are a new wrapper we can't decode
+            if(envelope != BigInt(0)) { throw Web3Error.dataError }
+        }
 
         var data = try decodeHexToData(container, key: .data, allowOptional: true)
         if data != nil {
@@ -193,25 +200,6 @@ public struct TransactionDetails: Decodable {
 
         let transaction = try EthereumTransaction(from: decoder)
         self.transaction = transaction
-    }
-
-    public init? (_ json: [String: AnyObject]) {
-        let bh = json["blockHash"] as? String
-        if (bh != nil) {
-            guard let blockHash = Data.fromHex(bh!) else {return nil}
-            self.blockHash = blockHash
-        }
-        let bn = json["blockNumber"] as? String
-        let ti = json["transactionIndex"] as? String
-
-        guard let transaction = EthereumTransaction.fromJSON(json) else {return nil}
-        self.transaction = transaction
-        if bn != nil {
-            blockNumber = BigUInt(bn!.stripHexPrefix(), radix: 16)
-        }
-        if ti != nil {
-            transactionIndex = BigUInt(ti!.stripHexPrefix(), radix: 16)
-        }
     }
 }
 
@@ -409,24 +397,10 @@ public enum TransactionInBlock: Decodable {
         if let string = try? value.decode(String.self) {
             guard let d = Data.fromHex(string) else {throw Web3Error.dataError}
             self = .hash(d)
-        } else if let dict = try? value.decode([String: String].self) {
-            //  guard let t = try? EthereumTransaction(from: decoder) else {throw Web3Error.dataError}
-            guard let t = EthereumTransaction.fromJSON(dict) else {throw Web3Error.dataError}
-            self = .transaction(t)
+        } else if let transaction = try? value.decode(EthereumTransaction.self) {
+            self = .transaction(transaction)
         } else {
             self = .null
-        }
-    }
-
-    public init?(_ data: AnyObject) {
-        if let string = data as? String {
-            guard let d = Data.fromHex(string) else {return nil}
-            self = .hash(d)
-        } else if let dict = data as? [String: AnyObject] {
-            guard let t = EthereumTransaction.fromJSON(dict) else {return nil}
-            self = .transaction(t)
-        } else {
-            return nil
         }
     }
 }
