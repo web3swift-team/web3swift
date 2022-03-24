@@ -8,7 +8,7 @@ import Foundation
 import BigInt
 
 fileprivate func decodeHexToData<T>(_ container: KeyedDecodingContainer<T>, key: KeyedDecodingContainer<T>.Key, allowOptional: Bool = false) throws -> Data? {
-    if (allowOptional) {
+    if allowOptional {
         let string = try? container.decode(String.self, forKey: key)
         if string != nil {
             guard let data = Data.fromHex(string!) else {throw Web3Error.dataError}
@@ -23,7 +23,7 @@ fileprivate func decodeHexToData<T>(_ container: KeyedDecodingContainer<T>, key:
 }
 
 fileprivate func decodeHexToBigUInt<T>(_ container: KeyedDecodingContainer<T>, key: KeyedDecodingContainer<T>.Key, allowOptional: Bool = false) throws -> BigUInt? {
-    if (allowOptional) {
+    if allowOptional {
         let string = try? container.decode(String.self, forKey: key)
         if string != nil {
             guard let number = BigUInt(string!.stripHexPrefix(), radix: 16) else {throw Web3Error.dataError}
@@ -117,7 +117,7 @@ extension EthereumTransaction: Decodable {
         // test to see if it is a EIP-1559 wrapper
         if let envelope = try decodeHexToBigUInt(container, key: .type, allowOptional: true) {
             // if present and non-sero we are a new wrapper we can't decode
-            if(envelope != BigInt(0)) { throw Web3Error.dataError }
+            if envelope != BigInt(0) { throw Web3Error.dataError }
         }
         var data = try decodeHexToData(container, key: .data, allowOptional: true)
         if data != nil {
@@ -168,7 +168,7 @@ extension EthereumTransaction: Decodable {
         }
 
         let inferedChainID = self.inferedChainID
-        if (self.inferedChainID != nil && self.v >= BigUInt(37)) {
+        if self.inferedChainID != nil && self.v >= BigUInt(37) {
             self.chainID = inferedChainID
         }
     }
@@ -259,7 +259,7 @@ public struct TransactionReceipt: Decodable {
         self.gasUsed = gasUsed
 
         let status = try decodeHexToBigUInt(container, key: .status, allowOptional: true)
-        if (status == nil) {
+        if status == nil {
             self.status = TXStatus.notYetProcessed
         } else if status == 1 {
             self.status = TXStatus.ok
@@ -370,7 +370,7 @@ public struct EventLog: Decodable {
         self.logIndex = logIndex
 
         let removed = try decodeHexToBigUInt(container, key: .removed, allowOptional: true)
-        if (removed == 1) {
+        if removed == 1 {
             self.removed = true
         } else {
             self.removed = false
