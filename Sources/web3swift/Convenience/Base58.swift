@@ -68,7 +68,7 @@ struct Base58 {
         let string = base58.trimmingCharacters(in: CharacterSet.whitespaces)
         guard !string.isEmpty else { return [] }
 
-        // count leading "1"'s [decodes directly to zero bytes]
+        // count leading ASCII "1"'s [decodes directly to binary zero bytes]
         var leadingZeros = 0
         for c in string {
             if c != "1" { break }
