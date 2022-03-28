@@ -21,13 +21,13 @@ extension TransactionOptions: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        if let gasLimit = try decodeHexToBigUInt(container, key: .gas, allowOptional: true) {
+        if let gasLimit = try? container.decodeHex(to: BigUInt.self, key: .gas) {
             self.gasLimit = .manual(gasLimit)
         } else {
             self.gasLimit = .automatic
         }
 
-        if let gasPrice = try decodeHexToBigUInt(container, key: .gasPrice, allowOptional: true) {
+        if let gasPrice = try? container.decodeHex(to: BigUInt.self, key: .gasPrice) {
             self.gasPrice = .manual(gasPrice)
         } else {
             self.gasPrice = .automatic
@@ -51,16 +51,15 @@ extension TransactionOptions: Decodable {
         //        }
         self.from = from
 
-        let value = try decodeHexToBigUInt(container, key: .value)
-        self.value = value
+        self.value = try container.decodeHex(to: BigUInt.self, key: .value)
 
-        if let nonce = try decodeHexToBigUInt(container, key: .nonce, allowOptional: true) {
+        if let nonce = try? container.decodeHex(to: BigUInt.self, key: .nonce) {
             self.nonce = .manual(nonce)
         } else {
             self.nonce = .pending
         }
 
-        if let callOnBlock = try decodeHexToBigUInt(container, key: .callOnBlock, allowOptional: true) {
+        if let callOnBlock = try? container.decodeHex(to: BigUInt.self, key: .callOnBlock) {
             self.callOnBlock = .exactBlockNumber(callOnBlock)
         } else {
             self.callOnBlock = .pending
@@ -86,14 +85,13 @@ extension EthereumTransaction: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // test to see if it is a EIP-1559 wrapper
-        if let envelope = try decodeHexToBigUInt(container, key: .type, allowOptional: true) {
+        if let envelope = try? container.decodeHex(to: BigUInt.self, key: .type) {
             // if present and non-sero we are a new wrapper we can't decode
             if envelope != BigInt(0) { throw Web3Error.dataError }
         }
         
-        var data = try decodeHexToData(container, key: .data, allowOptional: true)
-        if data != nil {
-            self.data = data!
+        if let data = try? container.decodeHex(to: Data.self, key: .data) {
+            self.data = data
         } else {
             guard let data = try? container.decodeHex(to: Data.self, key: .input) else { throw Web3Error.dataError }
             self.data = data
@@ -213,21 +211,6 @@ extension TransactionReceipt {
             case nil: self.status = .notYetProcessed
             case 1: self.status = .ok
             default: self.status = .failed
-        }
-
-        guard let cumulativeGasUsed = try decodeHexToBigUInt(container, key: .cumulativeGasUsed) else {throw Web3Error.dataError}
-        self.cumulativeGasUsed = cumulativeGasUsed
-
-        guard let gasUsed = try decodeHexToBigUInt(container, key: .gasUsed) else {throw Web3Error.dataError}
-        self.gasUsed = gasUsed
-
-        let status = try decodeHexToBigUInt(container, key: .status, allowOptional: true)
-        if status == nil {
-            self.status = TXStatus.notYetProcessed
-        } else if status == 1 {
-            self.status = TXStatus.ok
-        } else {
-            self.status = TXStatus.failed
         }
         
         self.logs = try container.decode([EventLog].self, forKey: .logs)
