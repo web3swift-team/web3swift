@@ -161,6 +161,13 @@ public struct EthereumTransaction: CustomStringConvertible {
     }
 }
 
+extension EthereumTransaction: Decodable {
+    public init(from decoder: Decoder) throws {
+        guard let env = try EnvelopeFactory.createEnvelope(from: decoder) else { throw Web3Error.dataError }
+        self.envelope = env
+    }
+}
+
 extension EthereumTransaction {
     // the kitchen sink init: can produce a transaction of any type
     public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
