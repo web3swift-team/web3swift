@@ -140,7 +140,6 @@
 		3AA815F52276E44100F5DB52 /* Promise+Web3+Eth+GetBlockByNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8157C2276E44100F5DB52 /* Promise+Web3+Eth+GetBlockByNumber.swift */; };
 		3AA815F62276E44100F5DB52 /* Promise+Web3+Eth+SendRawTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8157D2276E44100F5DB52 /* Promise+Web3+Eth+SendRawTransaction.swift */; };
 		3AA815F72276E44100F5DB52 /* Promise+Web3+Eth+GetTransactionCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8157E2276E44100F5DB52 /* Promise+Web3+Eth+GetTransactionCount.swift */; };
-		3AA815F82276E44100F5DB52 /* Promise+Web3+Contract+GetIndexedEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8157F2276E44100F5DB52 /* Promise+Web3+Contract+GetIndexedEvents.swift */; };
 		3AA815F92276E44100F5DB52 /* Promise+Web3+TxPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA815802276E44100F5DB52 /* Promise+Web3+TxPool.swift */; };
 		3AA815FA2276E44100F5DB52 /* Promise+Web3+Eth+GetAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA815812276E44100F5DB52 /* Promise+Web3+Eth+GetAccounts.swift */; };
 		3AA815FB2276E44100F5DB52 /* Promise+Web3+Personal+UnlockAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA815822276E44100F5DB52 /* Promise+Web3+Personal+UnlockAccount.swift */; };
@@ -193,7 +192,7 @@
 		CB50A52827060BD600D7E39B /* EIP712Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50A52727060BD600D7E39B /* EIP712Tests.swift */; };
 		E22A911F241ED71A00EC1021 /* browser.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E22A911E241ED71A00EC1021 /* browser.min.js */; };
 		E2B76710241ED479007EBFE3 /* browser.js in Resources */ = {isa = PBXBuildFile; fileRef = E2B7670F241ED479007EBFE3 /* browser.js */; };
-		E2EDC5EA241EDE3600410EA6 /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */; };
+		E2EDC5EA241EDE3600410EA6 /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */; platformFilter = ios; };
 		E2EDC5EC241EE18700410EA6 /* wk.bridge.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E2EDC5EB241EE18700410EA6 /* wk.bridge.min.js */; };
 		E2EDC5EE241EE1E600410EA6 /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5ED241EE1E600410EA6 /* Bridge.swift */; };
 		F5213FF42673849600EBDC50 /* CryptoSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5213FEF2673849600EBDC50 /* CryptoSwift.xcframework */; };
@@ -350,7 +349,6 @@
 		3AA8157C2276E44100F5DB52 /* Promise+Web3+Eth+GetBlockByNumber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Eth+GetBlockByNumber.swift"; sourceTree = "<group>"; };
 		3AA8157D2276E44100F5DB52 /* Promise+Web3+Eth+SendRawTransaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Eth+SendRawTransaction.swift"; sourceTree = "<group>"; };
 		3AA8157E2276E44100F5DB52 /* Promise+Web3+Eth+GetTransactionCount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Eth+GetTransactionCount.swift"; sourceTree = "<group>"; };
-		3AA8157F2276E44100F5DB52 /* Promise+Web3+Contract+GetIndexedEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Contract+GetIndexedEvents.swift"; sourceTree = "<group>"; };
 		3AA815802276E44100F5DB52 /* Promise+Web3+TxPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+TxPool.swift"; sourceTree = "<group>"; };
 		3AA815812276E44100F5DB52 /* Promise+Web3+Eth+GetAccounts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Eth+GetAccounts.swift"; sourceTree = "<group>"; };
 		3AA815822276E44100F5DB52 /* Promise+Web3+Personal+UnlockAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Personal+UnlockAccount.swift"; sourceTree = "<group>"; };
@@ -795,7 +793,6 @@
 				3AA8157C2276E44100F5DB52 /* Promise+Web3+Eth+GetBlockByNumber.swift */,
 				3AA8157D2276E44100F5DB52 /* Promise+Web3+Eth+SendRawTransaction.swift */,
 				3AA8157E2276E44100F5DB52 /* Promise+Web3+Eth+GetTransactionCount.swift */,
-				3AA8157F2276E44100F5DB52 /* Promise+Web3+Contract+GetIndexedEvents.swift */,
 				3AA815802276E44100F5DB52 /* Promise+Web3+TxPool.swift */,
 				3AA815812276E44100F5DB52 /* Promise+Web3+Eth+GetAccounts.swift */,
 				3AA815822276E44100F5DB52 /* Promise+Web3+Personal+UnlockAccount.swift */,
@@ -1253,7 +1250,6 @@
 				3AA815CF2276E44100F5DB52 /* Web3+Eth+Websocket.swift in Sources */,
 				3A7EA35E2280EA9A005120C2 /* Encodable+Extensions.swift in Sources */,
 				3AA815D22276E44100F5DB52 /* Web3+JSONRPC.swift in Sources */,
-				3AA815F82276E44100F5DB52 /* Promise+Web3+Contract+GetIndexedEvents.swift in Sources */,
 				3AA815E42276E44100F5DB52 /* Data+Extension.swift in Sources */,
 				3AA815C62276E44100F5DB52 /* ABI.swift in Sources */,
 				3AA815D02276E44100F5DB52 /* Web3+Utils.swift in Sources */,
