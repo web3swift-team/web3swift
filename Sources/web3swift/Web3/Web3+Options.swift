@@ -202,3 +202,85 @@ private func mergeIfNotNil<T>(first: T?, second: T?) -> T? {
     }
     return nil
 }
+
+extension TransactionOptions: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case type
+        case to
+        case from
+        case gasPrice
+        case gas
+        case maxFeePerGas
+        case maxPriorityFeePerGas
+        case value
+        case nonce
+        case callOnBlock
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let defaultOptions = TransactionOptions.defaultOptions
+
+        // type is guaranteed to be set after this
+        if let typeUInt = try? container.decodeHex(to: UInt.self, key: .type) {
+            if typeUInt < TransactionType.unknown.rawValue {
+                guard let type = TransactionType(rawValue: typeUInt) else { throw Web3Error.dataError }
+                self.type = type
+            } else { throw Web3Error.dataError }
+        } else { self.type = .legacy } // legacy streams may not have type set
+
+        let toString = try? container.decode(String.self, forKey: .to)
+        switch toString {
+        case nil, "0x", "0x0":
+            self.to = EthereumAddress.contractDeploymentAddress()
+        default:
+            guard let addressString = toString else { throw Web3Error.dataError }
+            guard let ethAddr = EthereumAddress(addressString) else { throw Web3Error.dataError }
+            self.to = ethAddr
+        }
+
+        self.from = try container.decodeIfPresent(EthereumAddress.self, forKey: .to)
+
+        if let gasPrice = try? container.decodeHex(to: BigUInt.self, key: .gasPrice) {
+            self.gasPrice = .manual(gasPrice)
+        } else {
+            self.gasPrice = defaultOptions.gasPrice
+        }
+
+        if let gasLimit = try? container.decodeHex(to: BigUInt.self, key: .gas) {
+            self.gasLimit = .manual(gasLimit)
+        } else {
+            self.gasLimit = defaultOptions.gasLimit
+        }
+
+        if let maxFeePerGas = try? container.decodeHex(to: BigUInt.self, key: .maxFeePerGas) {
+            self.maxFeePerGas = .manual(maxFeePerGas)
+        } else {
+            self.maxFeePerGas = defaultOptions.maxFeePerGas
+        }
+
+        if let maxPriorityFeePerGas = try? container.decodeHex(to: BigUInt.self, key: .maxPriorityFeePerGas) {
+            self.maxPriorityFeePerGas = .manual(maxPriorityFeePerGas)
+        } else {
+            self.maxPriorityFeePerGas = defaultOptions.maxPriorityFeePerGas
+        }
+
+        if let value = try? container.decodeHex(to: BigUInt.self, key: .value) {
+            self.value = value
+        } else {
+            self.value = defaultOptions.value
+        }
+
+        if let nonce = try? container.decodeHex(to: BigUInt.self, key: .nonce) {
+            self.nonce = .manual(nonce)
+        } else {
+            self.nonce = defaultOptions.nonce
+        }
+
+        if let callOnBlock = try? container.decodeHex(to: BigUInt.self, key: .callOnBlock) {
+            self.callOnBlock = .exactBlockNumber(callOnBlock)
+        } else {
+            self.callOnBlock = defaultOptions.callOnBlock
+        }
+    }
+}
