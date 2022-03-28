@@ -196,6 +196,7 @@
 		60A4143827F23F6900FA2434 /* EIP2718Envelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4143327F23F6900FA2434 /* EIP2718Envelope.swift */; };
 		60A4143927F23F6900FA2434 /* EIP1559Envelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4143427F23F6900FA2434 /* EIP1559Envelope.swift */; };
 		60A4143A27F23F6900FA2434 /* EIP2930Envelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4143527F23F6900FA2434 /* EIP2930Envelope.swift */; };
+		60A4143C27F2416D00FA2434 /* EnvelopeFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4143B27F2416D00FA2434 /* EnvelopeFactory.swift */; };
 		CB50A52827060BD600D7E39B /* EIP712Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50A52727060BD600D7E39B /* EIP712Tests.swift */; };
 		E22A911F241ED71A00EC1021 /* browser.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E22A911E241ED71A00EC1021 /* browser.min.js */; };
 		E2B76710241ED479007EBFE3 /* browser.js in Resources */ = {isa = PBXBuildFile; fileRef = E2B7670F241ED479007EBFE3 /* browser.js */; };
@@ -418,6 +419,7 @@
 		60A4143327F23F6900FA2434 /* EIP2718Envelope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP2718Envelope.swift; sourceTree = "<group>"; };
 		60A4143427F23F6900FA2434 /* EIP1559Envelope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP1559Envelope.swift; sourceTree = "<group>"; };
 		60A4143527F23F6900FA2434 /* EIP2930Envelope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP2930Envelope.swift; sourceTree = "<group>"; };
+		60A4143B27F2416D00FA2434 /* EnvelopeFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnvelopeFactory.swift; sourceTree = "<group>"; };
 		CB50A52727060BD600D7E39B /* EIP712Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP712Tests.swift; sourceTree = "<group>"; };
 		CB50A52927060C5300D7E39B /* EIP712.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP712.swift; sourceTree = "<group>"; };
 		E22A911E241ED71A00EC1021 /* browser.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.min.js; sourceTree = "<group>"; };
@@ -694,6 +696,7 @@
 		3AA8153C2276E44100F5DB52 /* Transaction */ = {
 			isa = PBXGroup;
 			children = (
+				60A4143B27F2416D00FA2434 /* EnvelopeFactory.swift */,
 				60A4143227F23F6900FA2434 /* AbstractEnvelope.swift */,
 				60A4143427F23F6900FA2434 /* EIP1559Envelope.swift */,
 				60A4143327F23F6900FA2434 /* EIP2718Envelope.swift */,
@@ -1312,6 +1315,7 @@
 				3AA815FF2276E44100F5DB52 /* Web3+ERC721x.swift in Sources */,
 				3AA815E52276E44100F5DB52 /* NativeTypesEncoding+Extensions.swift in Sources */,
 				3AA815D12276E44100F5DB52 /* Web3+MutatingTransaction.swift in Sources */,
+				60A4143C27F2416D00FA2434 /* EnvelopeFactory.swift in Sources */,
 				3AA815CA2276E44100F5DB52 /* Web3+HttpProvider.swift in Sources */,
 				3AA815D42276E44100F5DB52 /* Web3+Contract.swift in Sources */,
 				60A4143927F23F6900FA2434 /* EIP1559Envelope.swift in Sources */,
