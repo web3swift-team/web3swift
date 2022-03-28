@@ -6,7 +6,6 @@ on:
       - master
       - develop
       - hotfix
-      - feat/solidity-sha3
     paths:
       - Packag*.swift
       - web3swift.podspec
