@@ -186,7 +186,7 @@ extension EthereumTransaction {
     }
 }
 
-// Deprecated calls
+// Deprecated shims for the breaking changes
 extension EthereumTransaction {
     @available(*, deprecated, message: "Please use init(type:to:nonce:chainID:value:data:v:r:s:options:) instead")
     public init(nonce: BigUInt = 0, gasPrice: BigUInt, gasLimit: BigUInt,
@@ -198,10 +198,88 @@ extension EthereumTransaction {
                                         gasPrice: gasPrice, gasLimit: gasLimit,
                                         v: v, r: r, s: s)
     }
+
     @available(*, deprecated, message: "Please use hashForSignature() instead")
     public func hashForSignature(chainID: BigUInt? = nil) -> Data? {
         guard let encoded = self.envelope.encodeFor(.signature) else { return nil }
         let hash = encoded.sha3(.keccak256)
         return hash
     }
+
+    @available(*, deprecated, message: "Please access via TransactionOptions instead")
+    public var gasLimit: BigUInt {
+        get {
+            switch self.type {
+            case .legacy:
+                guard let env = self.envelope as? LegacyEnvelope else { preconditionFailure("Unable to downcast to LegacyEnvelope") }
+                return env.gasLimit
+            case .eip2930:
+                guard let env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
+                return env.gasLimit
+            case .eip1559:
+                guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                return env.gasLimit
+            default:
+                preconditionFailure("Unknown Envelope Type")
+            }
+        }
+        set(value) {
+            switch self.type {
+            case .legacy:
+                guard var env = self.envelope as? LegacyEnvelope else { preconditionFailure("Unable to downcast to LegacyEnvelope") }
+                env.gasLimit = value
+            case .eip2930:
+                guard var env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
+                env.gasLimit = value
+            case .eip1559:
+                guard var env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                env.gasLimit = value
+            default:
+                preconditionFailure("Unknown Envelope Type")
+            }
+        }
+    }
+
+    @available(*, deprecated, message: "Please access via TransactionOptions instead")
+    public var gasPrice: BigUInt {
+        get {
+            switch self.type {
+            case .legacy:
+                guard let env = self.envelope as? LegacyEnvelope else { preconditionFailure("Unable to downcast to LegacyEnvelope") }
+                return env.gasPrice
+            case .eip2930:
+                guard let env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
+                return env.gasPrice
+            case .eip1559:
+                preconditionFailure("EIP1559Envelope has no member gasPrice")
+            default:
+                preconditionFailure("Unknown Envelope Type")
+            }
+        }
+        set(value) {
+            switch self.type {
+            case .legacy:
+                guard var env = self.envelope as? LegacyEnvelope else { preconditionFailure("Unable to downcast to LegacyEnvelope") }
+                env.gasPrice = value
+            case .eip2930:
+                guard var env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
+                env.gasPrice = value
+            case .eip1559:
+                preconditionFailure("EIP1559Envelope has no member gasPrice")
+            default:
+                preconditionFailure("Unknown Envelope Type")
+            }
+        }
+    }
+
+    @available(*, deprecated, message: "use EthereumTransaction(rawValue:) instead")
+    public static func fromRaw(_ rawData: Data) -> EthereumTransaction? {
+        return EthereumTransaction(rawValue: rawData)
+    }
+
+    @available(*, deprecated, message: "use EthereumTransaction(rawValue:) instead")
+    public func encode(forSignature: Bool = false, chainID: BigUInt? = nil) -> Data? {
+        return self.envelope.encodeFor(.transaction)
+    }
+
 }
