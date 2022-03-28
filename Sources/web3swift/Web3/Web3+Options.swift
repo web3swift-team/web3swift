@@ -6,7 +6,6 @@
 
 import Foundation
 import BigInt
-//import EthereumAddress
 
 public protocol TransactionOptionsInheritable {
     var transactionOptions: TransactionOptions {get}
@@ -24,7 +23,7 @@ public struct TransactionOptions {
     ///
     /// Can be nil if one reads the information from the blockchain.
     public var from: EthereumAddress? = nil
-    
+
     public enum GasLimitPolicy {
         case automatic
         case manual(BigUInt)
@@ -42,19 +41,19 @@ public struct TransactionOptions {
 
     /// The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
     public var value: BigUInt? = nil
-    
+
     public enum NoncePolicy {
         case pending
         case latest
         case manual(BigUInt)
     }
     public var nonce: NoncePolicy?
-    
+
     public enum CallingBlockPolicy {
         case pending
         case latest
         case exactBlockNumber(BigUInt)
-        
+
         var stringValue: String {
             switch self {
             case .pending:
@@ -67,10 +66,10 @@ public struct TransactionOptions {
         }
     }
     public var callOnBlock: CallingBlockPolicy?
-    
+
     public init() {
     }
-    
+
     public static var defaultOptions: TransactionOptions {
         var opts = TransactionOptions()
         opts.callOnBlock = .pending
@@ -79,7 +78,7 @@ public struct TransactionOptions {
         opts.gasPrice = .automatic
         return opts
     }
-    
+
     public func resolveGasPrice(_ suggestedByNode: BigUInt) -> BigUInt? {
         guard let gasPricePolicy = self.gasPrice else {return nil}
         switch gasPricePolicy {
@@ -91,7 +90,7 @@ public struct TransactionOptions {
             return suggestedByNode
         }
     }
-    
+
     public func resolveGasLimit(_ suggestedByNode: BigUInt) -> BigUInt? {
         guard let gasLimitPolicy = self.gasLimit else {return nil}
         switch gasLimitPolicy {
@@ -126,7 +125,7 @@ public struct TransactionOptions {
     /// set if those are not nil.
     ///
     /// Returns default options if both parameters are nil.
-    public static func merge(_ options:TransactionOptions?, with other:TransactionOptions?) -> TransactionOptions? {
+    public static func merge(_ options: TransactionOptions?, with other: TransactionOptions?) -> TransactionOptions? {
         if (other == nil && options == nil) {
             return TransactionOptions.defaultOptions
         }
@@ -159,11 +158,11 @@ public struct TransactionOptions {
         return newOptions
     }
 //
-//    /// merges two sets of options along with a gas estimate to try to guess the final gas limit value required by user.
-//    ///
-//    /// Please refer to the source code for a logic.
+//    // merges two sets of options along with a gas estimate to try to guess the final gas limit value required by user.
+//    //
+//    // Please refer to the source code for a logic.
 //    public static func smartMergeGasLimit(originalOptions: Web3Options?, extraOptions: Web3Options?, gasEstimate: BigUInt) -> BigUInt? {
-//        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} //just require any non-nils
+//        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} // just require any non-nils
 //        if mergedOptions.gasLimit == nil {
 //            return gasEstimate // for user's convenience we just use an estimate
 //            //            return nil // there is no opinion from user, so we can not proceed
@@ -187,7 +186,7 @@ public struct TransactionOptions {
 //    }
 //
 //    public static func smartMergeGasPrice(originalOptions: Web3Options?, extraOptions: Web3Options?, priceEstimate: BigUInt) -> BigUInt? {
-//        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} //just require any non-nils
+//        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} // just require any non-nils
 //        if mergedOptions.gasPrice == nil {
 //            return priceEstimate
 //        } else if mergedOptions.gasPrice == 0 {
