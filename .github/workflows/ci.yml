@@ -6,6 +6,7 @@ on:
       - master
       - develop
       - hotfix
+      - feat/solidity-error-type
     paths:
       - Packag*.swift
       - web3swift.podspec
