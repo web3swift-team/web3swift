@@ -95,16 +95,32 @@ extension KeyedDecodingContainer {
         return try decode(type, forKey: key)
     }
 
-    /// Decodes a value of the given key from Hex to BigUInt
+    /// Decodes a value of the given key from Hex to <Type>
     ///
-    /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`
+    /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `UInt.Type`, `Date.Type`
     ///
     /// - Parameter type: Generic type `T` wich conforms to `DecodableFromHex` protocol
     /// - Parameter key: The key that the decoded value is associated with.
-    /// - Returns: A decoded value of type `BigUInt`
+    /// - Returns: A decoded value of type `DecodableFromHex`
     /// - throws: `Web3Error.dataError` if value associated with key are unable
-    ///   to be initialized as `BigUInt`.
+    ///   to be initialized as `DecodableFromHex`.
     public func decodeHex<T: DecodableFromHex>(to type: T.Type, key: KeyedDecodingContainer<K>.Key) throws -> T {
+        let string = try self.decode(String.self, forKey: key)
+        guard let number = T(from: string) else { throw Web3Error.dataError }
+        return number
+    }
+
+    /// Decodes a value of the given key from Hex to <Type>
+    ///
+    /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `UInt.Type`, `Date.Type`
+    ///
+    /// - Parameter type: Generic type `T` wich conforms to `DecodableFromHex` protocol
+    /// - Parameter key: The key that the decoded value is associated with.
+    /// - Returns: A decoded value of type Optional `DecodableFromHex?`
+    /// - throws: `Web3Error.dataError` if value associated with key are unable
+    ///   to be initialized as `DecodableFromHex`.
+    public func decodeHexIfPresent<T: DecodableFromHex>(to type: T.Type, key: KeyedDecodingContainer<K>.Key) throws -> T? {
+        if !contains(key) { return nil }
         let string = try self.decode(String.self, forKey: key)
         guard let number = T(from: string) else { throw Web3Error.dataError }
         return number
@@ -127,6 +143,14 @@ extension BigUInt: DecodableFromHex {
     public init?(from hexString: String) {
         self.init()
         guard let tmp = BigUInt(hexString.stripHexPrefix(), radix: 16) else { return nil }
+        self = tmp
+    }
+}
+
+extension UInt: DecodableFromHex {
+    public init?(from hexString: String) {
+        self.init()
+        guard let tmp = UInt(hexString.stripHexPrefix(), radix: 16) else { return nil }
         self = tmp
     }
 }
