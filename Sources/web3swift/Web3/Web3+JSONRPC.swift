@@ -15,7 +15,7 @@ public struct Counter {
         var c: UInt64 = 0
         lockQueue.sync {
             c = Counter.counter
-            Counter.counter = Counter.counter + 1
+            Counter.counter += 1
         }
         return c
     }
@@ -44,13 +44,11 @@ public struct JSONRPCrequest: Encodable {
     }
 
     public var isValid: Bool {
-        get {
-            if self.method == nil {
-                return false
-            }
-            guard let method = self.method else {return false}
-            return method.requiredNumOfParameters == self.params?.params.count
+        if self.method == nil {
+            return false
         }
+        guard let method = self.method else {return false}
+        return method.requiredNumOfParameters == self.params?.params.count
     }
 }
 
@@ -73,10 +71,10 @@ public struct JSONRPCresponse: Decodable {
     public var message: String?
 
     enum JSONRPCresponseKeys: String, CodingKey {
-        case id = "id"
-        case jsonrpc = "jsonrpc"
-        case result = "result"
-        case error = "error"
+        case id
+        case jsonrpc
+        case result
+        case error
     }
 
     public init(id: Int, jsonrpc: String, result: Any?, error: ErrorMessage?) {
@@ -118,7 +116,7 @@ public struct JSONRPCresponse: Decodable {
             self.init(id: id, jsonrpc: jsonrpc, result: nil, error: errorMessage)
             return
         }
-        var result: Any? = nil
+        var result: Any?
         if let rawValue = try? container.decodeIfPresent(String.self, forKey: .result) {
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent(Int.self, forKey: .result) {
@@ -163,61 +161,61 @@ public struct JSONRPCresponse: Decodable {
         self.init(id: id, jsonrpc: jsonrpc, result: result, error: nil)
     }
 
-    /// Get the JSON RCP reponse value by deserializing it into some native <T> class.
+    /// Get the JSON RPC reponse value by deserializing it into some native <T> class.
     ///
     /// Returns nil if serialization fails
     public func getValue<T>() -> T? {
         let slf = T.self
         if slf == BigUInt.self {
-            guard let string = self.result as? String else {return nil}
-            guard let value = BigUInt(string.stripHexPrefix(), radix: 16) else {return nil}
+            guard let string = self.result as? String else { return nil }
+            guard let value = BigUInt(string.stripHexPrefix(), radix: 16) else { return nil }
             return value as? T
         } else if slf == BigInt.self {
-            guard let string = self.result as? String else {return nil}
-            guard let value = BigInt(string.stripHexPrefix(), radix: 16) else {return nil}
+            guard let string = self.result as? String else { return nil }
+            guard let value = BigInt(string.stripHexPrefix(), radix: 16) else { return nil }
             return value as? T
         } else if slf == Data.self {
-            guard let string = self.result as? String else {return nil}
-            guard let value = Data.fromHex(string) else {return nil}
+            guard let string = self.result as? String else { return nil }
+            guard let value = Data.fromHex(string) else { return nil }
             return value as? T
         } else if slf == EthereumAddress.self {
-            guard let string = self.result as? String else {return nil}
-            guard let value = EthereumAddress(string, ignoreChecksum: true) else {return nil}
+            guard let string = self.result as? String else { return nil }
+            guard let value = EthereumAddress(string, ignoreChecksum: true) else { return nil }
             return value as? T
         }
-//        else if slf == String.self {
-//            guard let value = self.result as? T else {return nil}
-//            return value
-//        } else if slf == Int.self {
-//            guard let value = self.result as? T else {return nil}
-//            return value
-//        }
+    //    else if slf == String.self {
+    //        guard let value = self.result as? T else { return nil }
+    //        return value
+    //    } else if slf == Int.self {
+    //        guard let value = self.result as? T else { return nil }
+    //        return value
+    //    }
         else if slf == [BigUInt].self {
-            guard let string = self.result as? [String] else {return nil}
-            let values = string.compactMap { (str) -> BigUInt? in
+            guard let string = self.result as? [String] else { return nil }
+            let values = string.compactMap { str -> BigUInt? in
                 return BigUInt(str.stripHexPrefix(), radix: 16)
             }
             return values as? T
         } else if slf == [BigInt].self {
-            guard let string = self.result as? [String] else {return nil}
-            let values = string.compactMap { (str) -> BigInt? in
+            guard let string = self.result as? [String] else { return nil }
+            let values = string.compactMap { str -> BigInt? in
                 return BigInt(str.stripHexPrefix(), radix: 16)
             }
             return values as? T
         } else if slf == [Data].self {
-            guard let string = self.result as? [String] else {return nil}
-            let values = string.compactMap { (str) -> Data? in
+            guard let string = self.result as? [String] else { return nil }
+            let values = string.compactMap { str -> Data? in
                 return Data.fromHex(str)
             }
             return values as? T
         } else if slf == [EthereumAddress].self {
-            guard let string = self.result as? [String] else {return nil}
-            let values = string.compactMap { (str) -> EthereumAddress? in
+            guard let string = self.result as? [String] else { return nil }
+            let values = string.compactMap { str -> EthereumAddress? in
                 return EthereumAddress(str, ignoreChecksum: true)
             }
             return values as? T
         }
-        guard let value = self.result as? T  else {return nil}
+        guard let value = self.result as? T  else { return nil }
         return value
     }
 }
@@ -236,8 +234,8 @@ public struct JSONRPCresponseBatch: Decodable {
 /// Transaction parameters JSON structure for interaction with Ethereum node.
 public struct TransactionParameters: Codable {
     public struct AccessListEntry: Codable {
-      public var address: String
-      public var storageKeys: [String]
+        public var address: String
+        public var storageKeys: [String]
     }
 
     public var type: String?  // must be set for new EIP-2718 transaction types
