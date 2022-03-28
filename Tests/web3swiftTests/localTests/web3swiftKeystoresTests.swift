@@ -73,7 +73,7 @@ class web3swiftKeystoresTests: XCTestCase {
     func testHMAC() throws {
         let seed = Data.fromHex("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b")!
         let data = Data.fromHex("4869205468657265")!
-        let hmac = try! HMAC.init(key: seed.bytes, variant: HMAC.Variant.sha512).authenticate(data.bytes)
+        let hmac = try! HMAC.init(key: seed.bytes, variant: HMAC.Variant.sha2(.sha512)).authenticate(data.bytes)
         XCTAssert(Data(hmac).toHexString() == "87aa7cdea5ef619d4ff0b4241a1d6cb02379f4e2ce4ec2787ad0b30545e17cdedaa833b7d6b8a702038b274eaea3f4e4be9d914eeb61f1702e696c203a126854")
     }
     
@@ -198,7 +198,7 @@ class web3swiftKeystoresTests: XCTestCase {
     func testPBKDF2() throws {
         let pass = "passDATAb00AB7YxDTTl".data(using: .utf8)!
         let salt = "saltKEYbcTcXHCBxtjD2".data(using: .utf8)!
-        let dataArray = try? PKCS5.PBKDF2(password: pass.bytes, salt: salt.bytes, iterations: 100000, keyLength: 65, variant: HMAC.Variant.sha512).calculate()
+        let dataArray = try? PKCS5.PBKDF2(password: pass.bytes, salt: salt.bytes, iterations: 100000, keyLength: 65, variant: HMAC.Variant.sha2(.sha512)).calculate()
         XCTAssert(Data(dataArray!).toHexString().addHexPrefix().lowercased() == "0x594256B0BD4D6C9F21A87F7BA5772A791A10E6110694F44365CD94670E57F1AECD797EF1D1001938719044C7F018026697845EB9AD97D97DE36AB8786AAB5096E7".lowercased())
     }
     

@@ -6,9 +6,6 @@
 
 import Foundation
 import BigInt
-//import SwiftRLP
-//import secp256k1_swift
-//import EthereumAddress
 
 public struct EthereumTransaction: CustomStringConvertible {
     public var nonce: BigUInt
@@ -29,9 +26,9 @@ public struct EthereumTransaction: CustomStringConvertible {
     public var r: BigUInt = 0
     public var s: BigUInt = 0
     var chainID: BigUInt? = nil
-    
+
     public var inferedChainID: BigUInt? {
-        get{
+        get {
             if (self.r == BigUInt(0) && self.s == BigUInt(0)) {
                 return self.v
             } else if (self.v == BigUInt(27) || self.v == BigUInt(28)) {
@@ -47,7 +44,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     public mutating func UNSAFE_setChainID(_ chainID: BigUInt?) {
         self.chainID = chainID
     }
-    
+
     public var hash: Data? {
         var encoded: Data
         let inferedChainID = self.inferedChainID
@@ -87,8 +84,9 @@ public struct EthereumTransaction: CustomStringConvertible {
         guard let publicKey = self.recoverPublicKey() else { return nil }
         return Web3.Utils.publicToAddress(publicKey)
     }
-    
+
     public func recoverPublicKey() -> Data? {
+        // FIXME: AND not OR condition
         guard r != 0, s != 0 else { return nil }
         // if (self.r == 0 && self.s == 0) {
         //     return nil
@@ -126,7 +124,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
         return publicKey
     }
-    
+
     public var txhash: String? {
         guard sender != nil else { return nil }
         guard let hash = hash else { return nil }
@@ -141,8 +139,7 @@ public struct EthereumTransaction: CustomStringConvertible {
             if chainID != nil  {
                 let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value!, self.data, chainID!, BigUInt(0), BigUInt(0)] as [AnyObject]
                 return RLP.encode(fields)
-            }
-            else if self.chainID != nil  {
+            } else if self.chainID != nil  {
                 let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value!, self.data, self.chainID!, BigUInt(0), BigUInt(0)] as [AnyObject]
                 return RLP.encode(fields)
             } else {
@@ -154,7 +151,7 @@ public struct EthereumTransaction: CustomStringConvertible {
             return RLP.encode(fields)
         }
     }
-    
+
     public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? {
         var toString: String? = nil
         switch self.to.type {
@@ -178,13 +175,13 @@ public struct EthereumTransaction: CustomStringConvertible {
         }
         return params
     }
-    
+
     public func hashForSignature(chainID: BigUInt? = nil) -> Data? {
         guard let encoded = self.encode(forSignature: true, chainID: chainID) else {return nil}
         let hash = encoded.sha3(.keccak256)
         return hash
     }
-    
+
     public static func fromRaw(_ raw: Data) -> EthereumTransaction? {
         guard let totalItem = RLP.decode(raw) else {return nil}
         guard let rlpItem = totalItem[0] else {return nil}
@@ -196,7 +193,7 @@ public struct EthereumTransaction: CustomStringConvertible {
             let gasPrice = BigUInt(gasPriceData)
             guard let gasLimitData = rlpItem[2]!.data else {return nil}
             let gasLimit = BigUInt(gasLimitData)
-            var to:EthereumAddress
+            var to: EthereumAddress
             switch rlpItem[3]!.content {
             case .noItem:
                 to = EthereumAddress.contractDeploymentAddress()
@@ -228,11 +225,11 @@ public struct EthereumTransaction: CustomStringConvertible {
             return nil
         }
     }
-    
+
     static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> JSONRPCrequest? {
         let onBlock = transactionOptions?.callOnBlock?.stringValue
         var request = JSONRPCrequest()
-//        var tx = transaction
+        //  var tx = transaction
         request.method = method
         let from = transactionOptions?.from
         guard var txParams = transaction.encodeAsDictionary(from: from) else {return nil}
@@ -248,7 +245,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         if !request.isValid {return nil}
         return request
     }
-    
+
     static func createRawTransaction(transaction: EthereumTransaction) -> JSONRPCrequest? {
         guard transaction.sender != nil else {return nil}
         guard let encodedData = transaction.encode() else {return nil}
@@ -277,7 +274,7 @@ extension EthereumTransaction {
                 self.gasPrice = BigUInt("5000000000")
             }
         }
-        
+
         if let gL = merged.gasLimit {
             switch gL {
             case .manual(let value):
@@ -294,6 +291,7 @@ extension EthereumTransaction {
         self.to = to
         self.data = data
     }
+
 }
 
 public extension EthereumTransaction {
@@ -307,8 +305,8 @@ public extension EthereumTransaction {
     }
     
     func mergedWithOptions(_ options: TransactionOptions) -> EthereumTransaction {
-        var tx = self;
-        
+        var tx = self
+
         if let gP = options.gasPrice {
             switch gP {
             case .manual(let value):
@@ -317,7 +315,7 @@ public extension EthereumTransaction {
                 tx.gasPrice = BigUInt("5000000000")
             }
         }
-        
+
         if let gL = options.gasLimit {
             switch gL {
             case .manual(let value):
@@ -328,7 +326,7 @@ public extension EthereumTransaction {
                 tx.gasLimit = BigUInt(UInt64(21000))
             }
         }
-        
+
         if options.value != nil {
             tx.value = options.value!
         }
@@ -337,7 +335,7 @@ public extension EthereumTransaction {
         }
         return tx
     }
-    
+
     static func fromJSON(_ json: [String: Any]) -> EthereumTransaction? {
         guard let options = TransactionOptions.fromJSON(json) else {return nil}
         guard let toString = json["to"] as? String else {return nil}

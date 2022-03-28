@@ -6,11 +6,9 @@
 
 import Foundation
 import BigInt
-//import EthereumAddress
-//import EthereumABI
 
 extension Web3 {
-    
+
 //    request                 = "ethereum" ":" [ "pay-" ]target_address [ "@" chain_id ] [ "/" function_name ] [ "?" parameters ]
 //    target_address          = ethereum_address
 //    chain_id                = 1*DIGIT
@@ -21,7 +19,7 @@ extension Web3 {
 //    key                     = "value" / "gas" / "gasLimit" / "gasPrice" / TYPE
 //    value                   = number / ethereum_address / STRING
 //    number                  = [ "-" / "+" ] *DIGIT [ "." 1*DIGIT ] [ ( "e" / "E" ) [ 1*DIGIT ] [ "+" UNIT ]
-    
+
     public struct EIP681Code {
         public struct EIP681Parameter {
             public var type: ABI.Element.ParameterType
@@ -36,7 +34,7 @@ extension Web3 {
         public var gasPrice: BigUInt?
         public var amount: BigUInt?
         public var function: ABI.Element.Function?
-        
+
         public enum TargetAddress {
             case ethereumAddress(EthereumAddress)
             case ensAddress(String)
@@ -48,28 +46,28 @@ extension Web3 {
                 }
             }
         }
-        
+
         public init(_ targetAddress: TargetAddress, isPayRequest: Bool = false) {
             self.isPayRequest = isPayRequest
             self.targetAddress = targetAddress
         }
     }
-    
+
     public struct EIP681CodeParser {
-//        static var addressRegex = "^(pay-)?([0-9a-zA-Z]+)(@[0-9]+)?"
+        //  static var addressRegex = "^(pay-)?([0-9a-zA-Z]+)(@[0-9]+)?"
         static var addressRegex = "^(pay-)?([0-9a-zA-Z.]+)(@[0-9]+)?\\/?(.*)?$"
-        
+
         public static func parse(_ data: Data) -> EIP681Code? {
             guard let string = String(data: data, encoding: .utf8) else {return nil}
             return parse(string)
         }
-        
+
         public static func parse(_ string: String) -> EIP681Code? {
             guard string.hasPrefix("ethereum:") else {return nil}
             let striped = string.components(separatedBy: "ethereum:")
             guard striped.count == 2 else {return nil}
             guard let encoding = striped[1].removingPercentEncoding else {return nil}
-//            guard let url = URL.init(string: encoding) else {return nil}
+            //  guard let url = URL.init(string: encoding) else {return nil}
             let matcher = try! NSRegularExpression(pattern: addressRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
             let match = matcher.matches(in: encoding, options: NSRegularExpression.MatchingOptions.anchored, range: encoding.fullNSRange)
             guard match.count == 1 else {return nil}
@@ -77,10 +75,10 @@ extension Web3 {
             var addressString: String? = nil
             var chainIDString: String? = nil
             var tail: String? = nil
-//            if let payModifierRange = Range(match[0].range(at: 1), in: encoding) {
-//                let payModifierString = String(encoding[payModifierRange])
-//                print(payModifierString)
-//            }
+            //  if let payModifierRange = Range(match[0].range(at: 1), in: encoding) {
+            //      let payModifierString = String(encoding[payModifierRange])
+            //      print(payModifierString)
+            //  }
             if  let addressRange = Range(match[0].range(at: 2), in: encoding) {
                 addressString = String(encoding[addressRange])
             }
@@ -92,7 +90,7 @@ extension Web3 {
             }
             guard let address = addressString else {return nil}
             let targetAddress = EIP681Code.TargetAddress(address)
-            
+
             var code = EIP681Code(targetAddress)
             if chainIDString != nil {
                 chainIDString!.remove(at: chainIDString!.startIndex)
@@ -120,8 +118,8 @@ extension Web3 {
                         switch val {
                         case .ethereumAddress(let ethereumAddress):
                             nativeValue = ethereumAddress as AnyObject
-//                        default:
-//                            return nil
+                        //  default:
+                        //      return nil
                         case .ensAddress(let ens):
                             do {
                                 let web = web3(provider: InfuraProvider(Networks.fromInt(Int(code.chainID ?? 1)) ?? Networks.Mainnet)!)
@@ -161,7 +159,7 @@ extension Web3 {
                         }
                     case .bool:
                         switch value {
-                        case "true","True", "TRUE", "1":
+                        case "true", "True", "TRUE", "1":
                             nativeValue = true as AnyObject
                         case "false", "False", "FALSE", "0":
                             nativeValue = false as AnyObject
@@ -201,7 +199,7 @@ extension Web3 {
                                 code.amount = number * a
                             } else { return nil }
                         } else { return nil }
-                        
+
                     case "gas":
                         guard let value = comp.value else {return nil}
                         guard let val = BigUInt(value, radix: 10) else {return nil}
@@ -219,7 +217,7 @@ extension Web3 {
                     }
                 }
             }
-            
+
             if code.functionName != nil {
                 let functionEncoding = ABI.Element.Function(name: code.functionName!, inputs: inputs, outputs: [ABI.Element.InOut](), constant: false, payable: code.amount != nil)
                 code.function = functionEncoding

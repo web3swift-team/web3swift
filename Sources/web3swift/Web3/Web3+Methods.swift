@@ -7,7 +7,7 @@
 import Foundation
 
 public enum JSONRPCmethod: String, Encodable {
-    
+
     case gasPrice = "eth_gasPrice"
     case blockNumber = "eth_blockNumber"
     case getNetwork = "net_version"
@@ -32,7 +32,6 @@ public enum JSONRPCmethod: String, Encodable {
     case getTxPoolStatus = "txpool_status"
     case getTxPoolContent = "txpool_content"
 
-    
     public var requiredNumOfParameters: Int {
         get {
             switch self {
@@ -79,7 +78,7 @@ public struct JSONRPCRequestFabric {
         request.params = pars
         return request
     }
-    
+
     public static func prepareRequest(_ method: InfuraWebsocketMethod, parameters: [Encodable]) -> InfuraWebsocketRequest {
         var request = InfuraWebsocketRequest()
         request.method = method

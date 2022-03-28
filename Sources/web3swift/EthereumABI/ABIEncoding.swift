@@ -1,14 +1,12 @@
-//
+// 
 //  Created by Alex Vlasov on 25/10/2018.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
-//
+// 
 
 import Foundation
 import BigInt
 
-public struct ABIEncoder {
-    
-}
+public struct ABIEncoder { }
 
 extension ABIEncoder {
     public static func convertToBigUInt(_ value: AnyObject) -> BigUInt? {
@@ -57,7 +55,7 @@ extension ABIEncoder {
         }
         return nil
     }
-    
+
     public static func convertToBigInt(_ value: AnyObject) -> BigInt? {
         switch value {
         case let v as BigUInt:
@@ -99,7 +97,7 @@ extension ABIEncoder {
         }
         return nil
     }
-    
+
     public static func convertToData(_ value: AnyObject) -> Data? {
         switch value {
         case let d as Data:
@@ -131,8 +129,7 @@ extension ABIEncoder {
         }
         return nil
     }
-    
-    
+
     public static func encode(types: [ABI.Element.InOut], values: [AnyObject]) -> Data? {
         guard types.count == values.count else {return nil}
         let params = types.compactMap { (el) -> ABI.Element.ParameterType in
@@ -140,7 +137,7 @@ extension ABIEncoder {
         }
         return encode(types: params, values: values)
     }
-    
+
     public static func encode(types: [ABI.Element.ParameterType], values: [AnyObject]) -> Data? {
         guard types.count == values.count else {return nil}
         var tails = [Data]()
@@ -178,7 +175,7 @@ extension ABIEncoder {
         }
         return headsConcatenated + tailsConcatenated
     }
-    
+
     public static func encodeSingleType(type: ABI.Element.ParameterType, value: AnyObject) -> Data? {
         switch type {
         case .uint(_):
