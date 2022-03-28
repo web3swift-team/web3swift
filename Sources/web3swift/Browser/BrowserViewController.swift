@@ -10,7 +10,7 @@ import WebKit
 
 // FIXME: Rewrite me, because i'm building only on iOS.
 open class BrowserViewController: UIViewController {
-    
+
     public enum Method: String {
         case getAccounts
         case signTransaction
@@ -19,12 +19,12 @@ open class BrowserViewController: UIViewController {
         case publishTransaction
         case approveTransaction
     }
-    
+
     public lazy var webView: WKWebView = {
         let websiteDataTypes = NSSet(array: [WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
         let date = NSDate(timeIntervalSince1970: 0)
-        
-        WKWebsiteDataStore.default().removeData(ofTypes: websiteDataTypes as! Set<String>, modifiedSince: date as Date, completionHandler:{ })
+
+        WKWebsiteDataStore.default().removeData(ofTypes: websiteDataTypes as! Set<String>, modifiedSince: date as Date, completionHandler: { })
         let webView = WKWebView(
             frame: .zero,
             configuration: self.config
@@ -35,12 +35,12 @@ open class BrowserViewController: UIViewController {
         webView.configuration.preferences.setValue(true, forKey: "developerExtrasEnabled")
         return webView
     }()
-    
+
     lazy var config: WKWebViewConfiguration = {
         let config = WKWebViewConfiguration()
-        
+
         var js = ""
-        
+
         if let filepath = Bundle.main.path(forResource: "browser.min", ofType: "js") {
             do {
                 js += try String(contentsOfFile: filepath)
@@ -55,29 +55,29 @@ open class BrowserViewController: UIViewController {
         config.userContentController.addUserScript(userScript)
         return config
     }()
-    
+
     public func registerBridges(for web3: web3) {
         self.webView.bridge.register({ (parameters, completion) in
             let url = web3.provider.url.absoluteString
             completion(.success(["rpcURL": url as Any]))
         }, for: "getRPCurl")
-        
+
         self.webView.bridge.register({ (parameters, completion) in
             let allAccounts = web3.browserFunctions.getAccounts()
             completion(.success(["accounts": allAccounts as Any]))
         }, for: "eth_getAccounts")
-        
+
         self.webView.bridge.register({ (parameters, completion) in
             let coinbase = web3.browserFunctions.getCoinbase()
             completion(.success(["coinbase": coinbase as Any]))
         }, for: "eth_coinbase")
-        
+
         self.webView.bridge.register({ (parameters, completion) in
             if parameters == nil {
                 completion(.failure(Bridge.JSError(code: 0, description: "No parameters provided")))
                 return
             }
-            let payload = parameters!["payload"] as? [String:Any]
+            let payload = parameters!["payload"] as? [String: Any]
             if payload == nil {
                 completion(.failure(Bridge.JSError(code: 0, description: "No parameters provided")))
                 return
@@ -95,13 +95,13 @@ open class BrowserViewController: UIViewController {
             }
             completion(.success(["signedMessage": result as Any]))
         }, for: "eth_sign")
-        
+
         self.webView.bridge.register({ (parameters, completion) in
             if parameters == nil {
                 completion(.failure(Bridge.JSError(code: 0, description: "No parameters provided")))
                 return
             }
-            let transaction = parameters!["transaction"] as? [String:Any]
+            let transaction = parameters!["transaction"] as? [String: Any]
             if transaction == nil {
                 completion(.failure(Bridge.JSError(code: 0, description: "Not enough parameters provided")))
                 return
@@ -118,7 +118,7 @@ open class BrowserViewController: UIViewController {
 
 extension BrowserViewController: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        
+
     }
 }
 

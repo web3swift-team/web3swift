@@ -19,7 +19,7 @@ public protocol IWebsocketProvider {
 }
 
 public enum InfuraWebsocketMethod: String, Encodable {
-    
+
     case newPendingTransactionFilter = "eth_newPendingTransactionFilter"
     case getFilterChanges = "eth_getFilterChanges"
     case newFilter = "eth_newFilter"
@@ -28,7 +28,7 @@ public enum InfuraWebsocketMethod: String, Encodable {
     case uninstallFilter = "eth_uninstallFilter"
     case subscribe = "eth_subscribe"
     case unsubscribe = "eth_unsubscribe"
-    
+
     public var requiredNumOfParameters: Int? {
         get {
             switch self {
@@ -58,14 +58,14 @@ public struct InfuraWebsocketRequest: Encodable {
     public var method: InfuraWebsocketMethod?
     public var params: JSONRPCparams?
     public var id: UInt64 = Counter.increment()
-    
+
     enum CodingKeys: String, CodingKey {
         case jsonrpc
         case method
         case params
         case id
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(jsonrpc, forKey: .jsonrpc)
@@ -73,7 +73,7 @@ public struct InfuraWebsocketRequest: Encodable {
         try container.encode(params, forKey: .params)
         try container.encode(id, forKey: .id)
     }
-    
+
     public var isValid: Bool {
         get {
             if self.method == nil {
@@ -86,7 +86,7 @@ public struct InfuraWebsocketRequest: Encodable {
 }
 
 public protocol Web3SocketDelegate {
-    func socketConnected(_ headers: [String:String])
+    func socketConnected(_ headers: [String: String])
     func received(message: Any)
     func gotError(error: Error)
 }
@@ -97,11 +97,11 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     public func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse> {
         return Promise(error: Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'"))
     }
-    
+
     public func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue) -> Promise<JSONRPCresponseBatch> {
         return Promise(error: Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'"))
     }
-    
+
     public var network: Networks?
     public var url: URL
     public var session: URLSession = {() -> URLSession in
@@ -110,16 +110,16 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         return urlSession
     }()
     public var attachedKeystoreManager: KeystoreManager? = nil
-    
+
     public var socket: WebSocket
     public var delegate: Web3SocketDelegate
     /// A flag that is true if socket connected or false if socket doesn't connected.
     public var websocketConnected: Bool = false
-    
+
     private var writeTimer: Timer? = nil
     private var messagesStringToWrite: [String] = []
     private var messagesDataToWrite: [Data] = []
-    
+
     public init?(_ endpoint: URL,
                  delegate wsdelegate: Web3SocketDelegate,
                  projectId: String? = nil,
@@ -160,7 +160,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         socket = WebSocket(request: request)
         socket.delegate = self
     }
-    
+
     public init?(_ endpoint: String,
                  delegate wsdelegate: Web3SocketDelegate,
                  projectId: String? = nil,
@@ -202,25 +202,25 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         socket = WebSocket(request: request)
         socket.delegate = self
     }
-    
+
     deinit {
         writeTimer?.invalidate()
     }
-    
+
     public func connectSocket() {
         writeTimer?.invalidate()
         socket.connect()
     }
-    
+
     public func disconnectSocket() {
         writeTimer?.invalidate()
         socket.disconnect()
     }
-    
+
     public func isConnect() -> Bool {
         return websocketConnected
     }
-    
+
     public class func connectToSocket(_ endpoint: String,
                                       delegate: Web3SocketDelegate,
                                       projectId: String? = nil,
@@ -236,7 +236,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         socketProvider.connectSocket()
         return socketProvider
     }
-    
+
     public class func connectToSocket(_ endpoint: URL,
                                       delegate: Web3SocketDelegate,
                                       projectId: String? = nil,
@@ -252,7 +252,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         socketProvider.connectSocket()
         return socketProvider
     }
-    
+
     public func writeMessage<T>(_ message: T) {
         var sMessage: String? = nil
         var dMessage: Data? = nil
@@ -270,7 +270,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         }
         writeTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(performWriteOperations), userInfo: nil, repeats: true)
     }
-    
+
     @objc private func performWriteOperations() {
         if websocketConnected {
             writeTimer?.invalidate()
@@ -282,7 +282,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
             }
         }
     }
-    
+
     public func didReceive(event: WebSocketEvent, client: WebSocket) {
         switch event {
         case .connected(let headers):

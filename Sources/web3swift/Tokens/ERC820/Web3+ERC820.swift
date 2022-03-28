@@ -7,9 +7,8 @@
 //
 
 import Foundation
-//import EthereumAddress
 
-//Pseudo-introspection using a registry contract
+// Pseudo-introspection using a registry contract
 protocol IERC820: IERC165 {
     func canImplementInterfaceForAddress(interfaceHash: Data, addr: EthereumAddress) throws -> Data
     func getInterfaceImplementer(addr: EthereumAddress, interfaceHash: Data) throws -> EthereumAddress
