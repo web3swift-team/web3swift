@@ -24,7 +24,9 @@ jobs:
   spm:
     name: Swift Package Manager 5.4
     runs-on: macOS-11
-    concurrency: spm
+    concurrency: 
+      group: spm-${{ github.run_id }}
+      cancel-in-progress: false
     env:
       DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
     steps:
@@ -46,7 +48,9 @@ jobs:
   carthage:
     name: Carthage
     runs-on: macOS-11
-    concurrency: carthage
+    concurrency: 
+      group: carthage-${{ github.run_id }}
+      cancel-in-progress: false
     env:
       DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
     strategy:

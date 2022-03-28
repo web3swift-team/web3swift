@@ -9,7 +9,7 @@ import BigInt
 import PromiseKit
 
 extension web3.Eth {
-    
+
     public func estimateGasPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> Promise<BigUInt>{
         let queue = web3.requestDispatcher.queue
         do {
@@ -17,14 +17,14 @@ extension web3.Eth {
                 throw Web3Error.processingError(desc: "Transaction is invalid")
             }
             let rp = web3.dispatch(request)
-            return rp.map(on: queue ) { response in
+            return rp.map(on: queue) { response in
                 guard let value: BigUInt = response.getValue() else {
                     if response.error != nil {
                         throw Web3Error.nodeError(desc: response.error!.message)
                     }
                     throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
                 }
-                
+
                 if let policy = transactionOptions?.gasLimit {
                     switch policy {
                     case .automatic:
@@ -50,4 +50,3 @@ extension web3.Eth {
         }
     }
 }
-

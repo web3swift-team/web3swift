@@ -6,14 +6,12 @@
 
 import Foundation
 import CryptoSwift
-import Foundation
 
 public class EthereumKeystoreV3: AbstractKeystore {
     // Protocol
     public var isHDKeystore: Bool = false
     private var address: EthereumAddress?
     public var keystoreParams: KeystoreParamsV3?
-
 
     public var addresses: [EthereumAddress]? {
         get {
@@ -123,7 +121,6 @@ public class EthereumKeystoreV3: AbstractKeystore {
         guard let encryptedKey = try aesCipher?.encrypt(keyData!.bytes) else {
             throw AbstractKeystoreError.aesError
         }
-//        let encryptedKeyData = Data(bytes:encryptedKey)
         let encryptedKeyData = Data(encryptedKey)
         var dataForMAC = Data()
         dataForMAC.append(last16bytes)
@@ -179,7 +176,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
             guard let algo = keystoreParams.crypto.kdfparams.prf else {
                 return nil
             }
-            var hashVariant: HMAC.Variant?;
+            var hashVariant: HMAC.Variant?
             switch algo {
             case "hmac-sha256":
                 hashVariant = HMAC.Variant.sha2(.sha256)
@@ -202,7 +199,6 @@ public class EthereumKeystoreV3: AbstractKeystore {
             guard let derivedArray = try? PKCS5.PBKDF2(password: passData.bytes, salt: saltData.bytes, iterations: c, keyLength: derivedLen, variant: hashVariant!).calculate() else {
                 return nil
             }
-//            passwordDerivedKey = Data(bytes:derivedArray)
             passwordDerivedKey = Data(derivedArray)
         default:
             return nil
@@ -247,7 +243,6 @@ public class EthereumKeystoreV3: AbstractKeystore {
         guard decryptedPK != nil else {
             return nil
         }
-//        return Data(bytes:decryptedPK!)
         return Data(decryptedPK!)
     }
 

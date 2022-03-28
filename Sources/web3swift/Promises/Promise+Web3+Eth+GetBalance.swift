@@ -7,7 +7,6 @@
 import Foundation
 import PromiseKit
 import BigInt
-//import EthereumAddress
 
 extension web3.Eth {
     public func getBalancePromise(address: EthereumAddress, onBlock: String = "latest") -> Promise<BigUInt> {
@@ -18,7 +17,7 @@ extension web3.Eth {
         let request = JSONRPCRequestFabric.prepareRequest(.getBalance, parameters: [address.lowercased(), onBlock])
         let rp = web3.dispatch(request)
         let queue = web3.requestDispatcher.queue
-        return rp.map(on: queue ) { response in
+        return rp.map(on: queue) { response in
             guard let value: BigUInt = response.getValue() else {
                 if response.error != nil {
                     throw Web3Error.nodeError(desc: response.error!.message)

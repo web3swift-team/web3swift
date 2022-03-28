@@ -6,7 +6,7 @@
 import Foundation
 
 public struct ABITypeParser {
-    
+
     private enum BaseParameterType: String {
         case address
         case uint
@@ -17,7 +17,7 @@ public struct ABITypeParser {
         case string
         case tuple
     }
-    
+
     static func baseTypeMatch(from string: String, length: UInt64 = 0) -> ABI.Element.ParameterType? {
         switch BaseParameterType(rawValue: string) {
         case .address?:
@@ -43,13 +43,13 @@ public struct ABITypeParser {
             return nil
         }
     }
-    
-    public static func parseTypeString(_ string:String) throws -> ABI.Element.ParameterType {
+
+    public static func parseTypeString(_ string: String) throws -> ABI.Element.ParameterType {
         let (type, tail) = recursiveParseType(string)
         guard let t = type, tail == nil else {throw ABI.ParsingError.elementTypeInvalid}
         return t
     }
-    
+
     static func recursiveParseType(_ string: String) -> (type: ABI.Element.ParameterType?, tail: String?) {
         let matcher = try! NSRegularExpression(pattern: ABI.TypeParsingExpressions.typeEatingRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
         let match = matcher.matches(in: string, options: NSRegularExpression.MatchingOptions.anchored, range: string.fullNSRange)
@@ -82,7 +82,7 @@ public struct ABITypeParser {
         }
         return recursiveParseArray(baseType: type!, string: tail)
     }
-    
+
     static func recursiveParseArray(baseType: ABI.Element.ParameterType, string: String) -> (type: ABI.Element.ParameterType?, tail: String?) {
         let matcher = try! NSRegularExpression(pattern: ABI.TypeParsingExpressions.arrayEatingRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
         let match = matcher.matches(in: string, options: NSRegularExpression.MatchingOptions.anchored, range: string.fullNSRange)
