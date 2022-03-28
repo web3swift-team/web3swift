@@ -9,7 +9,7 @@ import PromiseKit
 
 extension web3.Eth {
     public func sendRawTransactionPromise(_ transaction: Data) -> Promise<TransactionSendingResult> {
-        guard let deserializedTX = EthereumTransaction.fromRaw(transaction) else {
+        guard let deserializedTX = EthereumTransaction(rawValue: transaction) else {
             let promise = Promise<TransactionSendingResult>.pending()
             promise.resolver.reject(Web3Error.processingError(desc: "Serialized TX is invalid"))
             return promise.promise
@@ -18,7 +18,7 @@ extension web3.Eth {
     }
 
     public func sendRawTransactionPromise(_ transaction: EthereumTransaction) -> Promise<TransactionSendingResult>{
-        //  print(transaction)
+    //    print(transaction)
         let queue = web3.requestDispatcher.queue
         do {
             guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {
