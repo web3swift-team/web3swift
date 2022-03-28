@@ -69,7 +69,7 @@ public struct TransactionOptions {
     }
 
     public var callOnBlock: CallingBlockPolicy?
-    
+
     public static var defaultOptions: TransactionOptions {
         var opts = TransactionOptions()
         opts.callOnBlock = .pending
