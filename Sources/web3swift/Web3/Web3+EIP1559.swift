@@ -15,7 +15,7 @@ import BigInt
 ///
 /// Additional info about base fee options: https://ethereum.org/en/developers/docs/gas/#post-london
 public extension Web3 {
-    func verifyGasLimit(parentGasLimit: BigUInt, currentGasLimit: BigUInt) -> Bool {
+    private func verifyGasLimit(parentGasLimit: BigUInt, currentGasLimit: BigUInt) -> Bool {
         var diff = BigInt(parentGasLimit) - BigInt(currentGasLimit)
 
         // make diff positive number
@@ -105,12 +105,6 @@ public extension Web3 {
         ///
         /// Block number: 7_280_000
         case Constantinople
-        /// Petersburg switch block
-        ///
-        /// Date: 27.11.2019
-        ///
-        /// Block number: 7_280_000
-        case Petersburg
         /// Istanbul switch block
         ///
         /// Date: 07.12.2019
@@ -146,7 +140,6 @@ public extension Web3 {
             switch self {
                 case .Byzantium: return 4_370_000
                 case .Constantinople: return 7_280_000
-                case .Petersburg: return 7_280_000
                 case .Istanbul: return 9_069_000
                 case .MuirGlacier: return 9_200_000
                 case .Berlin: return 12_244_000
