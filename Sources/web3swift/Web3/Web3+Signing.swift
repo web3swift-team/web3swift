@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-// TODO: Move to new file under Web3, as this is in the Web3 namespace
 public struct Web3Signer {
     public static func signTX(transaction: inout EthereumTransaction, keystore: AbstractKeystore, account: EthereumAddress, password: String, useExtraEntropy: Bool = false) throws {
         var privateKey = try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
