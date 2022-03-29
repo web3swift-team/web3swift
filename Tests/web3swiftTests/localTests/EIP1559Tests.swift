@@ -39,26 +39,26 @@ class EIP1559Tests: XCTestCase {
         // [3] - Should fail or not
         let headerArray: [(BigUInt, BigUInt, BigUInt, Bool) ] = [
             // Transitions from non-london to london
-            (10000000, 4, 20000000, true),  // No change
-            (10000000, 4, 20019530, true),  // Upper limit
-            (10000000, 4, 20019531, false), // Upper +1
-            (10000000, 4, 19980470, true),  // Lower limit
-            (10000000, 4, 19980469, false), // Lower limit -1
+            (10_000_000, 12_964_999, 20_000_000, true),  // No change
+            (10_000_000, 12_964_999, 20_019_530, true),  // Upper limit
+            (10_000_000, 12_964_999, 20_019_531, false), // Upper +1
+            (10_000_000, 12_964_999, 19_980_470, true),  // Lower limit
+            (10_000_000, 12_964_999, 19_980_469, false), // Lower limit -1
 
             // London to London
-            (20000000, 5, 20000000, true),
-            (20000000, 5, 20019530, true),  // Upper limit
-            (20000000, 5, 20019531, false), // Upper limit +1
-            (20000000, 5, 19980470, true),  // Lower limit
-            (20000000, 5, 19980469, false), // Lower limit -1
-            (40000000, 5, 40039061, true),  // Upper limit
-            (40000000, 5, 40039062, false), // Upper limit +1
-            (40000000, 5, 39960939, true),  // lower limit
-            (40000000, 5, 39960938, false), // Lower limit -1
+            (20_000_000, 12_965_000, 20_000_000, true),
+            (20_000_000, 12_965_000, 20_019_530, true),  // Upper limit
+            (20_000_000, 12_965_000, 20_019_531, false), // Upper limit +1
+            (20_000_000, 12_965_000, 19_980_470, true),  // Lower limit
+            (20_000_000, 12_965_000, 19_980_469, false), // Lower limit -1
+            (40_000_000, 12_965_000, 40_039_061, true),  // Upper limit
+            (40_000_000, 12_965_000, 40_039_062, false), // Upper limit +1
+            (40_000_000, 12_965_000, 39_960_939, true),  // lower limit
+            (40_000_000, 12_965_000, 39_960_938, false), // Lower limit -1
         ] 
 
-        try headerArray.forEach { ( touple: (parentGasLimit: BigUInt, parentNumber: BigUInt, currentGasLimit: BigUInt, isOk: Bool)) in
-            let parent = Block(number: touple.parentGasLimit,
+        try headerArray.forEach { (touple: (parentGasLimit: BigUInt, parentNumber: BigUInt, currentGasLimit: BigUInt, isOk: Bool)) in
+            let parent = Block(number: touple.parentNumber,
                                hash: uselessBlockPart.hash,
                                parentHash: uselessBlockPart.parentHash,
                                nonce: uselessBlockPart.nonce,
@@ -79,7 +79,7 @@ class EIP1559Tests: XCTestCase {
                                transactions: uselessBlockPart.transactions,
                                uncles: uselessBlockPart.uncles)
 
-            let current = Block(number: touple.parentGasLimit + 1,
+            let current = Block(number: touple.parentNumber + 1,
                                 hash: uselessBlockPart.hash,
                                 parentHash: uselessBlockPart.parentHash,
                                 nonce: uselessBlockPart.nonce,
@@ -103,9 +103,11 @@ class EIP1559Tests: XCTestCase {
             let web3 = Web3()
 
             if touple.isOk {
-                XCTAssertNoThrow(_ = try web3.verifyEip1559Block(chain: .London, parent: parent, current: current), "Shoult not fail, got parent: \(parent.gasLimit), current: \(current.gasLimit)")
+                XCTAssertTrue(web3.verifyEip1559Block(parent: parent, current: current),
+                              "Shoult not fail, got parent: \(parent.gasLimit), current: \(current.gasLimit)")
             } else {
-                XCTAssertThrowsError(_ = try web3.verifyEip1559Block(chain: .London, parent: parent, current: current), "Should fail, got parent: \(parent.gasLimit), current: \(current.gasLimit)")
+                XCTAssertFalse(web3.verifyEip1559Block(parent: parent, current: current),
+                               "Should fail, got parent: \(parent.gasLimit), current: \(current.gasLimit)")
             }
         }
     }
