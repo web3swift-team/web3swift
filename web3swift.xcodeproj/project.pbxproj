@@ -190,7 +190,6 @@
 		5CF7E8BB276B79380009900F /* web3swiftENSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E8B6276B79380009900F /* web3swiftENSTests.swift */; };
 		5CF7E8BC276B79380009900F /* web3swiftWebsocketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E8B7276B79380009900F /* web3swiftWebsocketTests.swift */; };
 		60A4142F27F2325500FA2434 /* Web3+EIP1559.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4142E27F2325500FA2434 /* Web3+EIP1559.swift */; };
-		60A4143027F2325500FA2434 /* Web3+EIP1559.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4142E27F2325500FA2434 /* Web3+EIP1559.swift */; };
 		60A4143627F23F6900FA2434 /* LegacyEnvelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4143127F23F6900FA2434 /* LegacyEnvelope.swift */; };
 		60A4143727F23F6900FA2434 /* AbstractEnvelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4143227F23F6900FA2434 /* AbstractEnvelope.swift */; };
 		60A4143827F23F6900FA2434 /* EIP2718Envelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4143327F23F6900FA2434 /* EIP2718Envelope.swift */; };
@@ -1419,7 +1418,6 @@
 				5CF7E8BC276B79380009900F /* web3swiftWebsocketTests.swift in Sources */,
 				5CF7E8AA276B792A0009900F /* web3swiftNumberFormattingUtilTests.swift in Sources */,
 				5CF7E8AC276B792A0009900F /* web3swiftObjCTests.swift in Sources */,
-				60A4143027F2325500FA2434 /* Web3+EIP1559.swift in Sources */,
 				5CF7E8A3276B792A0009900F /* web3swiftPersonalSignatureTests.swift in Sources */,
 				5CF7E8BB276B79380009900F /* web3swiftENSTests.swift in Sources */,
 			);
