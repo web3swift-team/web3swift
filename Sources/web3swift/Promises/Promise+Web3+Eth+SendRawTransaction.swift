@@ -18,8 +18,7 @@ extension web3.Eth {
     }
 
     public func sendRawTransactionPromise(_ transaction: EthereumTransaction) -> Promise<TransactionSendingResult>{
-    //    print(transaction)
-        let queue = web3.requestDispatcher.queue
+       let queue = web3.requestDispatcher.queue
         do {
             guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {
                 throw Web3Error.processingError(desc: "Transaction is invalid")
