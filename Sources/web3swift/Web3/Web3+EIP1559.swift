@@ -17,7 +17,8 @@ import BigInt
 public extension Web3 {
     func verifyGasLimit(parentGasLimit: BigUInt, currentGasLimit: BigUInt) -> Bool {
         var diff = BigInt(parentGasLimit) - BigInt(currentGasLimit)
-        
+
+        // make diff positive number
         diff = diff < 0 ? diff * -1 : diff
 
         let limit = parentGasLimit / Web3.GasLimitBoundDivisor
@@ -31,55 +32,61 @@ public extension Web3 {
         return true
     }
 
-    /// VerifyEip1559Header verifies some header attributes which were changed in EIP-1559,
+    /// Method to check is given block valid EIP-1559 block
+    ///
+    /// Verifies some header attributes which were changed in EIP-1559
+    ///
     /// - gas limit check
     /// - basefee check
-    /// This function make checks that this given block is valid post EIP-1559 block and returns true if it is
-    /// and thors an error if it isn't.
-    func verifyEip1559Block(parent: Block, current: Block) -> Bool {
-        var parentGasLimit = parent.gasLimit
-        if parent.chainVersion != .London {
-            parentGasLimit = parent.gasLimit * Web3.ElasticityMultiplier
-        }
+    ///
+    /// - Parameters:
+    ///   - parent: Previous Block
+    ///   - current: Current block
+    /// - Returns: True or false if block is EIP-1559 or not
+    func isEip1559Block(parent: Block, current: Block) -> Bool {
+        let parentGasLimit = parent.chainVersion >= .London ? parent.gasLimit : parent.gasLimit * Web3.ElasticityMultiplier
 
         guard verifyGasLimit(parentGasLimit: parentGasLimit, currentGasLimit: current.gasLimit) else { return false }
 
-        // ??? In go implementation this field is optional
-        // if current.baseFeePerGas == nil { throw Web3Error.unknownError }
-
-        let expectedBaseFeePerGas = self.calcBaseFee(parent)
-
-        // TODO: Make all errors trows more descriptive errors
-        // ("invalid baseFee: have %s, want %s, parentBaseFee %s, parentGasUsed %d", expectedBaseFee, header.BaseFee, parent.BaseFee, parent.GasUsed)
-        guard expectedBaseFeePerGas == current.baseFeePerGas else { return false }
+        guard calcBaseFee(parent) == current.baseFeePerGas else { return false }
 
         return true
     }
 
+    /// Calculates base fee amount
+    ///
+    /// You should pass **parent** block to that method to calculate **expected** baseFee for currently
+    /// processing by blockchain `Block`
+    ///
+    /// Calculation for current `Block` based on parents block object only
+    ///
+    /// If passed block isn't `ChainVersion.London` one will return
+    ///
+    /// - Parameter parent: Parent `Block`
+    /// - Returns: Amount of expected base fee for current `Block`
     func calcBaseFee(_ parent: Block) -> BigUInt {
-        // If the current block is the first EIP-1559 block, return the InitialBaseFee.
-        guard parent.chainVersion == .London else { return Web3.InitialBaseFee }
+        // If given blocks ChainVersion is lower than London — always returns InitialBaseFee
+        guard parent.chainVersion >= .London else { return Web3.InitialBaseFee }
 
         let parentGasTarget = parent.gasLimit / Web3.ElasticityMultiplier
 
-        // If the parent gasUsed is the same as the target, the baseFee remains unchanged.
-        if parent.gasUsed == parentGasTarget {
-            return parent.baseFeePerGas
-            
-        } else if parent.gasUsed > parentGasTarget {
+        if parent.gasUsed > parentGasTarget {
             // If the parent block used more gas than its target, the baseFee should increase.
             let gasUsedDelta = parent.gasUsed - parentGasTarget
             let baseFeePerGasDelta = max(parent.baseFeePerGas * gasUsedDelta / parentGasTarget / Web3.BaseFeeChangeDenominator, 1)
             let expectedBaseFeePerGas = parent.baseFeePerGas + baseFeePerGasDelta
 
             return expectedBaseFeePerGas
-        } else {
+        } else if parent.gasUsed < parentGasTarget  {
             // Otherwise if the parent block used less gas than its target, the baseFee should decrease.
             let gasUsedDelta = parentGasTarget - parent.gasUsed
             let baseFeePerGasDelta = parent.baseFeePerGas * gasUsedDelta / parentGasTarget / Web3.BaseFeeChangeDenominator
             let expectedBaseFeePerGas = parent.baseFeePerGas - baseFeePerGasDelta
 
             return expectedBaseFeePerGas
+        } else {
+            // If the parent gasUsed is the same as the target, the baseFee remains unchanged.
+            return parent.baseFeePerGas
         }
     }
 }
@@ -135,7 +142,7 @@ public extension Web3 {
         /// Block number: 13_773_000
         case ArrowGlacier
 
-        var blockNumber: BigUInt {
+        var mainNetFisrtBlockNumber: BigUInt {
             switch self {
                 case .Byzantium: return 4_370_000
                 case .Constantinople: return 7_280_000
@@ -152,20 +159,20 @@ public extension Web3 {
     static func getChainVersion(of block: BigUInt) -> ChainVersion {
         // Iterate given block number over each ChainVersion block numbers
         // to get the block's ChainVersion.
-        if block < ChainVersion.Constantinople.blockNumber {
+        if block < ChainVersion.Constantinople.mainNetFisrtBlockNumber {
             return .Byzantium
         // ~= means included in a given range
-        } else if ChainVersion.Constantinople.blockNumber..<ChainVersion.Istanbul.blockNumber ~= block {
+        } else if ChainVersion.Constantinople.mainNetFisrtBlockNumber..<ChainVersion.Istanbul.mainNetFisrtBlockNumber ~= block {
             return .Constantinople
-        } else if ChainVersion.Istanbul.blockNumber..<ChainVersion.MuirGlacier.blockNumber ~= block {
+        } else if ChainVersion.Istanbul.mainNetFisrtBlockNumber..<ChainVersion.MuirGlacier.mainNetFisrtBlockNumber ~= block {
             return .Istanbul
-        } else if ChainVersion.MuirGlacier.blockNumber..<ChainVersion.Berlin.blockNumber ~= block {
+        } else if ChainVersion.MuirGlacier.mainNetFisrtBlockNumber..<ChainVersion.Berlin.mainNetFisrtBlockNumber ~= block {
             return .MuirGlacier
-        } else if ChainVersion.Berlin.blockNumber..<ChainVersion.London.blockNumber ~= block {
+        } else if ChainVersion.Berlin.mainNetFisrtBlockNumber..<ChainVersion.London.mainNetFisrtBlockNumber ~= block {
             return .Berlin
-        } else if ChainVersion.London.blockNumber..<ChainVersion.ArrowGlacier.blockNumber ~= block {
+        } else if ChainVersion.London.mainNetFisrtBlockNumber..<ChainVersion.ArrowGlacier.mainNetFisrtBlockNumber ~= block {
             return .London
-        } else if block >= ChainVersion.ArrowGlacier.blockNumber {
+        } else if block >= ChainVersion.ArrowGlacier.mainNetFisrtBlockNumber {
             // Pass to the default return.
         }
         return .ArrowGlacier
@@ -173,7 +180,5 @@ public extension Web3 {
 }
 
 extension Web3.ChainVersion: Comparable {
-    public static func < (lhs: Web3.ChainVersion, rhs: Web3.ChainVersion) -> Bool { return lhs.blockNumber < rhs.blockNumber }
-
-    public static func <= (lhs: Web3.ChainVersion, rhs: Web3.ChainVersion) -> Bool { return lhs.blockNumber <= rhs.blockNumber }
+    public static func < (lhs: Web3.ChainVersion, rhs: Web3.ChainVersion) -> Bool { return lhs.mainNetFisrtBlockNumber < rhs.mainNetFisrtBlockNumber }
  }
