@@ -15,19 +15,16 @@ public enum TransactionType: UInt, CustomStringConvertible {
     case eip2930
     /// For type 2 transactions conforming to EIP1559
     case eip1559
-    /// range-checking value, not a valid type
-    case total // always keep immediately after last valid type, used for range checking
-    /// For transactions that have an unknown typing
-    case unknown = 257 // valid theoretical EIP-2718 range is 0-127
-                       // though it comes from a UInt8, so for for possible future-proofing
-                       // use a value just beyond that, leaving room for total as well
+    /// range-checking value, not a valid type, will never be returned as a type
+    case total // always keep immediately after last valid type
+    // should there be a need to handle an unknown type, place it's type after total
 
     public var description: String {
         switch self {
         case .legacy: return "Legacy"
         case .eip2930: return "EIP-2930"
         case .eip1559: return "EIP-1559"
-        default: return "Unknown EIP-2718 Type" // anything else is an invalid type (.total, or .unknown)
+        default: return "Unknown EIP-2718 Type" // anything else is an invalid type
         }
     }
 }
