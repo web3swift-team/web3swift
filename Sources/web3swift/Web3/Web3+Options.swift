@@ -105,7 +105,7 @@ public struct TransactionOptions {
         return opts
     }
 
-    public func resolveNonce(_ suggestedByNode: BigUInt?) -> BigUInt? {
+    public func resolveNonce(_ suggestedByNode: BigUInt) -> BigUInt {
         guard let noncePolicy = self.nonce else { return suggestedByNode }
         switch noncePolicy {
         case .pending, .latest:
@@ -115,7 +115,7 @@ public struct TransactionOptions {
         }
     }
 
-    public func resolveGasPrice(_ suggestedByNode: BigUInt?) -> BigUInt? {
+    public func resolveGasPrice(_ suggestedByNode: BigUInt) -> BigUInt {
         guard let gasPricePolicy = self.gasPrice else { return suggestedByNode }
         switch gasPricePolicy {
         case .automatic:
@@ -127,7 +127,7 @@ public struct TransactionOptions {
         }
     }
 
-    public func resolveGasLimit(_ suggestedByNode: BigUInt?) -> BigUInt? {
+    public func resolveGasLimit(_ suggestedByNode: BigUInt) -> BigUInt {
         guard let gasLimitPolicy = self.gasLimit else { return suggestedByNode }
         switch gasLimitPolicy {
         case .automatic:
@@ -145,7 +145,7 @@ public struct TransactionOptions {
         }
     }
 
-    public func resolveMaxFeePerGas(_ suggestedByNode: BigUInt?) -> BigUInt? {
+    public func resolveMaxFeePerGas(_ suggestedByNode: BigUInt) -> BigUInt {
         guard let maxFeePerGasPolicy = self.maxFeePerGas else { return suggestedByNode }
         switch maxFeePerGasPolicy {
         case .automatic:
@@ -155,7 +155,7 @@ public struct TransactionOptions {
         }
     }
 
-    public func resolveMaxPriorityFeePerGas(_ suggestedByNode: BigUInt?) -> BigUInt? {
+    public func resolveMaxPriorityFeePerGas(_ suggestedByNode: BigUInt) -> BigUInt {
         guard let maxPriorityFeePerGasPolicy = self.maxPriorityFeePerGas else { return suggestedByNode }
         switch maxPriorityFeePerGasPolicy {
         case .automatic:
