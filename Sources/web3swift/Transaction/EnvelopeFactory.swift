@@ -23,7 +23,7 @@ public struct EnvelopeFactory {
         let envelopeType: TransactionType
 
         if typeUInt < 0x80 {
-            if typeUInt < TransactionType.unknown.rawValue {
+            if typeUInt < TransactionType.total.rawValue {
                 guard let rawType = TransactionType(rawValue: typeUInt) else { return nil }
                 envelopeType = rawType
             } else { return nil }
@@ -54,7 +54,7 @@ public struct EnvelopeFactory {
         let envelopeType: TransactionType
         if container.contains(.type) {
             let typeUInt = try container.decodeHex(to: UInt.self, key: .type)
-            if typeUInt < TransactionType.unknown.rawValue {
+            if typeUInt < TransactionType.total.rawValue {
                 guard let type = TransactionType(rawValue: typeUInt) else { throw Web3Error.dataError } // conversion error
                 envelopeType = type
             } else { throw Web3Error.dataError } // illegal value

@@ -223,7 +223,7 @@ extension TransactionOptions: Decodable {
 
         // type is guaranteed to be set after this
         if let typeUInt = try? container.decodeHex(to: UInt.self, key: .type) {
-            if typeUInt < TransactionType.unknown.rawValue {
+            if typeUInt < TransactionType.total.rawValue {
                 guard let type = TransactionType(rawValue: typeUInt) else { throw Web3Error.dataError }
                 self.type = type
             } else { throw Web3Error.dataError }
