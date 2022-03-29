@@ -6,6 +6,7 @@ import web3swift
 
 class EIP1559Tests: XCTestCase {
 
+/* Temporarily disabled as test is incomplete
     /// testBlockGasLimits tests the gasLimit checks for blocks both across
     /// the EIP-1559 boundary and post-1559 blocks
     func testBlockGasLimits() throws {
@@ -109,7 +110,7 @@ class EIP1559Tests: XCTestCase {
             }
         }
     }
-
+*/
     /// testCalcBaseFee assumes all blocks are 1559-blocks
     func testCalcBaseFee() throws {
 
