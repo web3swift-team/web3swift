@@ -137,7 +137,7 @@ extension LegacyEnvelope {
         guard let sData = rlpItem[RlpKey.sig_s.rawValue]!.data else { return nil }
 
         switch rlpItem[RlpKey.destination.rawValue]!.content {
-            // swiftlint:enable force_unwrapping
+        // swiftlint:enable force_unwrapping
         case .noItem:
             self.to = EthereumAddress.contractDeploymentAddress()
         case .data(let addressData):

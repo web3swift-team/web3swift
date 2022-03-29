@@ -233,6 +233,7 @@ public struct JSONRPCresponseBatch: Decodable {
 
 /// Transaction parameters JSON structure for interaction with Ethereum node.
 public struct TransactionParameters: Codable {
+    /// accessList parameter JSON structure
     public struct AccessListEntry: Codable {
         public var address: String
         public var storageKeys: [String]
