@@ -277,7 +277,7 @@ extension EthereumTransaction {
         return EthereumTransaction(rawValue: rawData)
     }
 
-    @available(*, deprecated, message: "use EthereumTransaction(rawValue:) instead")
+    @available(*, deprecated, message: "use encode() instead")
     public func encode(forSignature: Bool = false, chainID: BigUInt? = nil) -> Data? {
         return self.envelope.encodeFor(.transaction)
     }
