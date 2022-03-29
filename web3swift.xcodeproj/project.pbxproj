@@ -82,7 +82,7 @@
 		3AA815BA2276E44100F5DB52 /* PlainKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA815392276E44100F5DB52 /* PlainKeystore.swift */; };
 		3AA815BB2276E44100F5DB52 /* AbstractKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8153A2276E44100F5DB52 /* AbstractKeystore.swift */; };
 		3AA815BD2276E44100F5DB52 /* BloomFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8153D2276E44100F5DB52 /* BloomFilter.swift */; };
-		3AA815BE2276E44100F5DB52 /* TransactionSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8153E2276E44100F5DB52 /* TransactionSigner.swift */; };
+		3AA815BE2276E44100F5DB52 /* Web3+Signing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8153E2276E44100F5DB52 /* Web3+Signing.swift */; };
 		3AA815BF2276E44100F5DB52 /* EthereumTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA8153F2276E44100F5DB52 /* EthereumTransaction.swift */; };
 		3AA815C02276E44100F5DB52 /* Web3+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA815412276E44100F5DB52 /* Web3+Wallet.swift */; };
 		3AA815C12276E44100F5DB52 /* Web3+BrowserFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA815422276E44100F5DB52 /* Web3+BrowserFunctions.swift */; };
@@ -299,7 +299,7 @@
 		3AA8153A2276E44100F5DB52 /* AbstractKeystore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractKeystore.swift; sourceTree = "<group>"; };
 		3AA8153B2276E44100F5DB52 /* KeystoreV3JSONStructure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeystoreV3JSONStructure.swift; sourceTree = "<group>"; };
 		3AA8153D2276E44100F5DB52 /* BloomFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BloomFilter.swift; sourceTree = "<group>"; };
-		3AA8153E2276E44100F5DB52 /* TransactionSigner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionSigner.swift; sourceTree = "<group>"; };
+		3AA8153E2276E44100F5DB52 /* Web3+Signing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+Signing.swift"; sourceTree = "<group>"; };
 		3AA8153F2276E44100F5DB52 /* EthereumTransaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EthereumTransaction.swift; sourceTree = "<group>"; };
 		3AA815412276E44100F5DB52 /* Web3+Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+Wallet.swift"; sourceTree = "<group>"; };
 		3AA815422276E44100F5DB52 /* Web3+BrowserFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+BrowserFunctions.swift"; sourceTree = "<group>"; };
@@ -696,16 +696,15 @@
 		3AA8153C2276E44100F5DB52 /* Transaction */ = {
 			isa = PBXGroup;
 			children = (
-				60A4143B27F2416D00FA2434 /* EnvelopeFactory.swift */,
 				60A4143227F23F6900FA2434 /* AbstractEnvelope.swift */,
+				3AA8153D2276E44100F5DB52 /* BloomFilter.swift */,
 				60A4143427F23F6900FA2434 /* EIP1559Envelope.swift */,
 				60A4143327F23F6900FA2434 /* EIP2718Envelope.swift */,
 				60A4143527F23F6900FA2434 /* EIP2930Envelope.swift */,
-				60A4143127F23F6900FA2434 /* LegacyEnvelope.swift */,
-				3AA8153D2276E44100F5DB52 /* BloomFilter.swift */,
-				3AA815612276E44100F5DB52 /* TransactionOptions.swift */,
-				3AA8153E2276E44100F5DB52 /* TransactionSigner.swift */,
+				60A4143B27F2416D00FA2434 /* EnvelopeFactory.swift */,
 				3AA8153F2276E44100F5DB52 /* EthereumTransaction.swift */,
+				60A4143127F23F6900FA2434 /* LegacyEnvelope.swift */,
+				3AA815612276E44100F5DB52 /* TransactionOptions.swift */,
 			);
 			path = Transaction;
 			sourceTree = "<group>";
@@ -744,27 +743,28 @@
 		3AA8154D2276E44100F5DB52 /* Web3 */ = {
 			isa = PBXGroup;
 			children = (
-				60A4142E27F2325500FA2434 /* Web3+EIP1559.swift */,
-				3AA8154E2276E44100F5DB52 /* Web3+HttpProvider.swift */,
 				3AA8154F2276E44100F5DB52 /* Web3.swift */,
-				3AA815502276E44100F5DB52 /* Web3+InfuraProviders.swift */,
-				3AA815512276E44100F5DB52 /* Web3+Personal.swift */,
-				3AA815522276E44100F5DB52 /* Web3+Eventloop.swift */,
-				3AA815532276E44100F5DB52 /* Web3+Eth+Websocket.swift */,
-				3AA815542276E44100F5DB52 /* Web3+Utils.swift */,
-				3AA815552276E44100F5DB52 /* Web3+MutatingTransaction.swift */,
-				3AA815562276E44100F5DB52 /* Web3+JSONRPC.swift */,
 				3AEF4ABE22C0B6BE00AC7929 /* Web3+Constants.swift */,
-				3AA815572276E44100F5DB52 /* Web3+Instance.swift */,
 				3AA815582276E44100F5DB52 /* Web3+Contract.swift */,
-				3AA815592276E44100F5DB52 /* Web3+EventParser.swift */,
-				3AA8155A2276E44100F5DB52 /* Web3+ReadingTransaction.swift */,
-				3AA8155B2276E44100F5DB52 /* Web3+Protocols.swift */,
-				3AA8155C2276E44100F5DB52 /* Web3+WebsocketProvider.swift */,
-				3AA8155D2276E44100F5DB52 /* Web3+Methods.swift */,
+				60A4142E27F2325500FA2434 /* Web3+EIP1559.swift */,
 				3AA8155E2276E44100F5DB52 /* Web3+Eth.swift */,
-				3AA8155F2276E44100F5DB52 /* Web3+TxPool.swift */,
+				3AA815532276E44100F5DB52 /* Web3+Eth+Websocket.swift */,
+				3AA815522276E44100F5DB52 /* Web3+Eventloop.swift */,
+				3AA815592276E44100F5DB52 /* Web3+EventParser.swift */,
+				3AA8154E2276E44100F5DB52 /* Web3+HttpProvider.swift */,
+				3AA815502276E44100F5DB52 /* Web3+InfuraProviders.swift */,
+				3AA815572276E44100F5DB52 /* Web3+Instance.swift */,
+				3AA815562276E44100F5DB52 /* Web3+JSONRPC.swift */,
+				3AA8155D2276E44100F5DB52 /* Web3+Methods.swift */,
+				3AA815552276E44100F5DB52 /* Web3+MutatingTransaction.swift */,
+				3AA815512276E44100F5DB52 /* Web3+Personal.swift */,
+				3AA8155B2276E44100F5DB52 /* Web3+Protocols.swift */,
+				3AA8155A2276E44100F5DB52 /* Web3+ReadingTransaction.swift */,
+				3AA8153E2276E44100F5DB52 /* Web3+Signing.swift */,
 				3AA815602276E44100F5DB52 /* Web3+Structures.swift */,
+				3AA8155F2276E44100F5DB52 /* Web3+TxPool.swift */,
+				3AA815542276E44100F5DB52 /* Web3+Utils.swift */,
+				3AA8155C2276E44100F5DB52 /* Web3+WebsocketProvider.swift */,
 			);
 			path = Web3;
 			sourceTree = "<group>";
@@ -1299,7 +1299,7 @@
 				3AA815EA2276E44100F5DB52 /* Promise+Web3+Eth+GetBlockNumber.swift in Sources */,
 				3AA815C72276E44100F5DB52 /* ABIEncoding.swift in Sources */,
 				3AA815E12276E44100F5DB52 /* String+Extension.swift in Sources */,
-				3AA815BE2276E44100F5DB52 /* TransactionSigner.swift in Sources */,
+				3AA815BE2276E44100F5DB52 /* Web3+Signing.swift in Sources */,
 				3AA815B02276E44100F5DB52 /* EIP67Code.swift in Sources */,
 				3AA815BB2276E44100F5DB52 /* AbstractKeystore.swift in Sources */,
 				3AA815B12276E44100F5DB52 /* EIP681.swift in Sources */,
