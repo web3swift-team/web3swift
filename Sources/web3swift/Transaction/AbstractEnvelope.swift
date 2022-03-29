@@ -15,16 +15,17 @@ public enum TransactionType: UInt, CustomStringConvertible {
     case legacy
     case eip2930
     case eip1559
-
-    case unknown // catch-all type, always place as last position, also used for range checking
-    // only used in parsing, no TransactionObject will ever return this
+    case total // always keep immediately after last valid type, used for range checking
+    case unknown = 257 // valid theoretical EIP-2718 range is 0-127
+                       // though it comes from a UInt8, so for for possible future-proofing
+                       // use a value just beyond that, leaving room for total as well
 
     public var description: String {
         switch self {
         case .legacy: return "Legacy"
         case .eip2930: return "EIP-2930"
         case .eip1559: return "EIP-1559"
-        case .unknown: return "Unknown EIP-2718 Type"
+        default: return "Unknown EIP-2718 Type" // anything else is an invalid type (.total, or .unknown)
         }
     }
 }
