@@ -30,12 +30,6 @@ public enum EncodeType {
     case signature
 }
 
-public struct SignatureData {
-    var v: BigUInt
-    var r: BigUInt
-    var s: BigUInt
-}
-
 public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
     var type: TransactionType { get }
 
