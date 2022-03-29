@@ -8,14 +8,16 @@ import Foundation
 import BigInt
 
 /// Enumeration for supported transaction types
-/// .legacy for untyped and type 0 transactions EIP155 and older
-/// .eip2930 for type 1 transactions conforming to EIP2930
-/// .eip1559 for type 2 transactions conforming to EIP1559
 public enum TransactionType: UInt, CustomStringConvertible {
+    /// For untyped and type 0 transactions EIP155 and older
     case legacy
+    /// For type 1 transactions conforming to EIP2930
     case eip2930
+    /// For type 2 transactions conforming to EIP1559
     case eip1559
+    /// range-checking value, not a valid type
     case total // always keep immediately after last valid type, used for range checking
+    /// For transactions that have an unknown typing
     case unknown = 257 // valid theoretical EIP-2718 range is 0-127
                        // though it comes from a UInt8, so for for possible future-proofing
                        // use a value just beyond that, leaving room for total as well
@@ -32,7 +34,9 @@ public enum TransactionType: UInt, CustomStringConvertible {
 
 /// Encoding selector for transaction transmission/hashing or signing
 public enum EncodeType {
+    /// Encode the transaction for transmission or hashing
     case transaction
+    /// Encode the transaction for signing
     case signature
 }
 
@@ -41,17 +45,18 @@ public enum EncodeType {
 ///   each implememtation holds all the type specific data
 ///   and implments the type specific encoding/decoding
 public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
-    /// The type of transaction this envelope represents (.legacy, .eip2930, .eip1559)
+    /// The type of transaction this envelope represents
     var type: TransactionType { get }
 
     // common parameters for any transaction
     /// the nonce value for the transaction
     var nonce: BigUInt { get set }
-    /// the chainId this transaction is , or will be, signed for
-    var chainID: BigUInt? { get set } // this unfortunately needs to remain optional due to legacy transaction typ
+    /// Blockchain ChainID that this transaction is or will be, signed for.
+    /// Remains optional to support legacy transactions.
+    var chainID: BigUInt? { get set }
     /// On chain address that this transaction is being sent to
     var to: EthereumAddress { get set }
-    /// The native value of the transaction in in Wei
+    /// The native value of the transaction in Wei
     var value: BigUInt { get set }
     /// Any encoded data accompanying the transaction
     var data: Data { get set }
