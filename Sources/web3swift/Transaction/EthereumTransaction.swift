@@ -12,8 +12,24 @@ public struct EthereumTransaction: CustomStringConvertible {
     public var gasPrice: BigUInt = 0
     public var gasLimit: BigUInt = 0
     
-    // EIP-1559
+    // MARK: - EIP-1559
+    /// Value of the tip to the miner for transaction processing.
+    ///
+    /// Full amount of this variable goes to a miner.
     public var maxPriorityFeePerGas: BigUInt = 0
+
+    /// Value of the fee for one gas unit
+    ///
+    /// This value should be greather than sum of:
+    /// - `Block.nextBlockBaseFeePerGas` - baseFee which will burnt during the transaction processing
+    /// - `self.maxPriorityFeePerGas` - explicit amount of a tip to the miner of the given block which will include this transaction
+    ///
+    /// If amount of this will be **greather** than sum of `Block.baseFeePerGas` and `maxPriorityFeePerGas`
+    /// all exceed funds will be returned to the sender.
+    ///
+    /// If amount of this will be **lower** than sum of `Block.baseFeePerGas` and `maxPriorityFeePerGas`
+    /// miner will recieve amount of the follow equation: `maxFeePerGas - Block.baseFeePerGas` if any, 
+    /// where Block is a block to which transaction will be included.
     public var maxFeePerGas: BigUInt = 0
     
     // The destination address of the message, left undefined for a contract-creation transaction.
