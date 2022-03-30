@@ -27,7 +27,22 @@ public struct EIP1559Envelope: EIP2718Envelope {
 
     // EIP-1559 specific parameters
     public var gasLimit: BigUInt
+    /// Value of the tip to the miner for transaction processing.
+    ///
+    /// Full amount of this variable goes to a miner.
     public var maxPriorityFeePerGas: BigUInt
+    /// Value of the fee for one gas unit
+    ///
+    /// This value should be greather than sum of:
+    /// - `Block.nextBlockBaseFeePerGas` - baseFee which will burnt during the transaction processing
+    /// - `self.maxPriorityFeePerGas` - explicit amount of a tip to the miner of the given block which will include this transaction
+    ///
+    /// If amount of this will be **greather** than sum of `Block.baseFeePerGas` and `maxPriorityFeePerGas`
+    /// all exceed funds will be returned to the sender.
+    ///
+    /// If amount of this will be **lower** than sum of `Block.baseFeePerGas` and `maxPriorityFeePerGas`
+    /// miner will recieve amount of the follow equation: `maxFeePerGas - Block.baseFeePerGas` if any,
+    /// where Block is a block to which transaction will be included.
     public var maxFeePerGas: BigUInt
     public var accessList: [AccessListEntry] // from EIP-2930
 
