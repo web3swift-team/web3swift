@@ -46,8 +46,7 @@ public struct TransactionReceipt: Decodable {
         case notYetProcessed
     }
 
-    enum CodingKeys: String, CodingKey
-    {
+    enum CodingKeys: String, CodingKey {
         case blockHash
         case blockNumber
         case transactionHash
@@ -85,9 +84,9 @@ extension TransactionReceipt {
 
         let status = try? container.decodeHex(to: BigUInt.self, key: .status)
         switch status {
-            case nil: self.status = .notYetProcessed
-            case 1: self.status = .ok
-            default: self.status = .failed
+        case nil: self.status = .notYetProcessed
+        case 1: self.status = .ok
+        default: self.status = .failed
         }
 
         self.logs = try container.decode([EventLog].self, forKey: .logs)
@@ -108,7 +107,7 @@ extension EthereumAddress: Codable {
     }
 }
 
-public struct EventLog : Decodable {
+public struct EventLog: Decodable {
     public var address: EthereumAddress
     public var blockHash: Data
     public var blockNumber: BigUInt
@@ -119,23 +118,21 @@ public struct EventLog : Decodable {
     public var transactionHash: Data
     public var transactionIndex: BigUInt
 
+    //    address = 0x53066cddbc0099eb6c96785d9b3df2aaeede5da3;
+    //    blockHash = 0x779c1f08f2b5252873f08fd6ec62d75bb54f956633bbb59d33bd7c49f1a3d389;
+    //    blockNumber = 0x4f58f8;
+    //    data = 0x0000000000000000000000000000000000000000000000004563918244f40000;
+    //    logIndex = 0x84;
+    //    removed = 0;
+    //    topics =     (
+    //    0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef,
+    //    0x000000000000000000000000efdcf2c36f3756ce7247628afdb632fa4ee12ec5,
+    //    0x000000000000000000000000d5395c132c791a7f46fa8fc27f0ab6bacd824484
+    //    );
+    //    transactionHash = 0x9f7bb2633abb3192d35f65e50a96f9f7ca878fa2ee7bf5d3fca489c0c60dc79a;
+    //    transactionIndex = 0x99;
 
-//    address = 0x53066cddbc0099eb6c96785d9b3df2aaeede5da3;
-//    blockHash = 0x779c1f08f2b5252873f08fd6ec62d75bb54f956633bbb59d33bd7c49f1a3d389;
-//    blockNumber = 0x4f58f8;
-//    data = 0x0000000000000000000000000000000000000000000000004563918244f40000;
-//    logIndex = 0x84;
-//    removed = 0;
-//    topics =     (
-//    0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef,
-//    0x000000000000000000000000efdcf2c36f3756ce7247628afdb632fa4ee12ec5,
-//    0x000000000000000000000000d5395c132c791a7f46fa8fc27f0ab6bacd824484
-//    );
-//    transactionHash = 0x9f7bb2633abb3192d35f65e50a96f9f7ca878fa2ee7bf5d3fca489c0c60dc79a;
-//    transactionIndex = 0x99;
-
-    enum CodingKeys: String, CodingKey
-    {
+    enum CodingKeys: String, CodingKey {
         case address
         case blockHash
         case blockNumber
@@ -205,11 +202,11 @@ public struct Block: Decodable {
     public var parentHash: Data
     public var nonce: Data? // MARK: This is optional in web3js but required in Ethereum JSON-RPC
     public var sha3Uncles: Data
-    public var logsBloom: EthereumBloomFilter? = nil // MARK: This is optional in web3js but required in Ethereum JSON-RPC
+    public var logsBloom: EthereumBloomFilter? // MARK: This is optional in web3js but required in Ethereum JSON-RPC
     public var transactionsRoot: Data
     public var stateRoot: Data
     public var receiptsRoot: Data
-    public var miner: EthereumAddress? = nil // MARK: This is NOT optional in web3js
+    public var miner: EthereumAddress? // MARK: This is NOT optional in web3js
     public var difficulty: BigUInt
     public var totalDifficulty: BigUInt
     public var extraData: Data
@@ -292,12 +289,12 @@ extension Block {
     }
 }
 
-public struct EventParserResult:EventParserResultProtocol {
+public struct EventParserResult: EventParserResultProtocol {
     public var eventName: String
     public var transactionReceipt: TransactionReceipt?
     public var contractAddress: EthereumAddress
-    public var decodedResult: [String:Any]
-    public var eventLog: EventLog? = nil
+    public var decodedResult: [String: Any]
+    public var eventLog: EventLog?
 }
 
 public struct TransactionSendingResult {
@@ -305,7 +302,7 @@ public struct TransactionSendingResult {
     public var hash: String
 }
 
-public struct TxPoolStatus : Decodable {
+public struct TxPoolStatus: Decodable {
     public var pending: BigUInt
     public var queued: BigUInt
 
@@ -323,7 +320,7 @@ public extension TxPoolStatus {
     }
 }
 
-public struct TxPoolContent : Decodable {
+public struct TxPoolContent: Decodable {
     public var pending: [EthereumAddress: [TxPoolContentForNonce]]
     public var queued: [EthereumAddress: [TxPoolContentForNonce]]
 
@@ -362,7 +359,6 @@ public struct TxPoolContent : Decodable {
         }
         return result
     }
-
 
     fileprivate struct AdditionalDataCodingKeys: CodingKey {
         var stringValue: String

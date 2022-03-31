@@ -4,9 +4,7 @@ import BigInt
 @testable
 import web3swift
 
-class EIP1559Tests: XCTestCase {
-    let web3 = Web3()
-
+class EIP1559BlockTests: XCTestCase {
     let uselessBlockPart = (
         number: BigUInt(12_965_000),
         hash: Data(from: "0xef95f2f1ed3ca60b048b4bf67cde2195961e0bba6f70bcbea9a2c4e133e34b46")!, // "hash":
@@ -100,10 +98,10 @@ class EIP1559Tests: XCTestCase {
                                 uncles: uselessBlockPart.uncles)
 
             if touple.is1559 {
-                XCTAssertTrue(web3.isEip1559Block(parent: parent, current: current),
+                XCTAssertTrue(Web3.isEip1559Block(parent: parent, current: current),
                               "Shoult not fail, got parent: \(parent.gasLimit), current: \(current.gasLimit)")
             } else {
-                XCTAssertFalse(web3.isEip1559Block(parent: parent, current: current),
+                XCTAssertFalse(Web3.isEip1559Block(parent: parent, current: current),
                                "Should fail, got parent: \(parent.gasLimit), current: \(current.gasLimit)")
             }
         }
@@ -144,7 +142,7 @@ class EIP1559Tests: XCTestCase {
                                transactions: uselessBlockPart.transactions,
                                uncles: uselessBlockPart.uncles)
 
-            let calculatedBaseFee = web3.calcBaseFee(parent)
+            let calculatedBaseFee = Web3.calcBaseFee(parent)
 
             XCTAssertEqual(calculatedBaseFee, touple.expectedBaseFee, "Base fee calculation fails: should be \(touple.expectedBaseFee), got: \(calculatedBaseFee)")
         }
