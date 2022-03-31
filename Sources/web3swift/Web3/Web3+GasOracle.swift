@@ -32,8 +32,9 @@ extension Web3 {
         /// - Parameters:
         ///   - provider: Web3 Ethereum provider
         ///   - blocksNumber: Number of block to caltulate statistics
+        ///   - transactionsNumber: Number of transacrtions to filter block for tip calculation
         public init(_ provider: web3, blocksNumber: BigUInt = 20, transactionsNumber: BigUInt = 50) {
-            web3Provider = provider
+            self.web3Provider = provider
             self.blocksNumber = blocksNumber
             self.transactionsNumber = transactionsNumber
         }
@@ -55,8 +56,8 @@ extension Web3 {
             case .mean: return noAnomalyArray.mean()!
             case .median: return noAnomalyArray.median()!
             case .maximum:
-                // Checking that suggestedBaseFee are not lower than next
-                // because in tne maximum statistic we should guarantee that transaction would pass in the next block
+                // Checking that suggestedBaseFee are not lower than will be in the next block
+                // because in tne maximum statistic we should guarantee that transaction would be included in it.
                 return max(calcBaseFee(for: latestBlock), noAnomalyArray.max()!)
             }
         }
@@ -64,9 +65,9 @@ extension Web3 {
         private func suggestTipValue(_ statistic: Statistic) throws -> BigUInt {
             let latestBlockNumber = try eth.getBlockNumber()
 
-            // TODO: Make me work with cache
             var block: Block
 
+            // TODO: Make me work with cache
             repeat {
                 block = try eth.getBlockByNumber(latestBlockNumber, fullTransactions: true)
             } while block.transactions.count < transactionsNumber
@@ -135,7 +136,7 @@ public extension Web3.Oracle {
     /// - Parameters:
     ///   - baseFee: Statistic to apply for baseFee
     ///   - tip: Statistic to apply for tip
-    /// - Returns: Touple where [0] — base fee, [1] — tip, nil if failed to predict
+    /// - Returns: Touple where [0] — base fee, [1] — tip, nil if failed to predict
     func predictBothFees(baseFee: Statistic, tip: Statistic) -> (BigUInt, BigUInt)? {
         guard let baseFee = try? suggestBaseFee(baseFee) else { return nil }
         guard let tip = try? suggestTipValue(tip) else { return nil }
