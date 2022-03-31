@@ -168,7 +168,7 @@
 		4E2DFEF425485B53001AF561 /* KeystoreParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2DFEF325485B53001AF561 /* KeystoreParams.swift */; };
 		5C03EAB4274405D20052C66D /* EIP712.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50A52927060C5300D7E39B /* EIP712.swift */; };
 		5C26D89E27F3724600431EB0 /* Web3+EIP1559.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C26D89D27F3724600431EB0 /* Web3+EIP1559.swift */; };
-		5C26D8A027F3725500431EB0 /* EIP1559Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C26D89F27F3725500431EB0 /* EIP1559Tests.swift */; };
+		5C26D8A027F3725500431EB0 /* EIP1559BlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C26D89F27F3725500431EB0 /* EIP1559BlockTests.swift */; };
 		5C26D8A227F5AC0300431EB0 /* Web3+GasOracle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C26D8A127F5AC0300431EB0 /* Web3+GasOracle.swift */; };
 		5CF7E8A2276B79290009900F /* web3swiftEIP681Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E891276B79270009900F /* web3swiftEIP681Tests.swift */; };
 		5CF7E8A3276B792A0009900F /* web3swiftPersonalSignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E892276B79270009900F /* web3swiftPersonalSignatureTests.swift */; };
@@ -384,7 +384,7 @@
 		3AEF4ABE22C0B6BE00AC7929 /* Web3+Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+Constants.swift"; sourceTree = "<group>"; };
 		4E2DFEF325485B53001AF561 /* KeystoreParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeystoreParams.swift; sourceTree = "<group>"; };
 		5C26D89D27F3724600431EB0 /* Web3+EIP1559.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+EIP1559.swift"; sourceTree = "<group>"; };
-		5C26D89F27F3725500431EB0 /* EIP1559Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP1559Tests.swift; sourceTree = "<group>"; };
+		5C26D89F27F3725500431EB0 /* EIP1559BlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP1559BlockTests.swift; sourceTree = "<group>"; };
 		5C26D8A127F5AC0300431EB0 /* Web3+GasOracle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+GasOracle.swift"; sourceTree = "<group>"; };
 		5CDEF972275A74590004A2F2 /* web3swift.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = web3swift.xctestplan; path = Tests/web3swiftTests/web3swift.xctestplan; sourceTree = SOURCE_ROOT; };
 		5CDEF973275A74670004A2F2 /* LocalTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LocalTests.xctestplan; sourceTree = "<group>"; };
@@ -988,7 +988,7 @@
 		E252E68126B542D000717C16 /* localTests */ = {
 			isa = PBXGroup;
 			children = (
-				5C26D89F27F3725500431EB0 /* EIP1559Tests.swift */,
+				5C26D89F27F3725500431EB0 /* EIP1559BlockTests.swift */,
 				5CF7E8A0276B79290009900F /* web3swiftAdvancedABIv2Tests.swift */,
 				5CF7E89C276B79280009900F /* web3swiftBasicLocalNodeTests.swift */,
 				5CF7E8A1276B79290009900F /* web3swiftEIP67Tests.swift */,
@@ -1382,7 +1382,7 @@
 			files = (
 				5CF7E8AB276B792A0009900F /* web3swiftTests.swift in Sources */,
 				5CF7E8A4276B792A0009900F /* web3swiftTransactionsTests.swift in Sources */,
-				5C26D8A027F3725500431EB0 /* EIP1559Tests.swift in Sources */,
+				5C26D8A027F3725500431EB0 /* EIP1559BlockTests.swift in Sources */,
 				5CF7E8A7276B792A0009900F /* web3swiftRLPTests.swift in Sources */,
 				5CF7E8AF276B792A0009900F /* web3swiftUserCases.swift in Sources */,
 				5CF7E8B0276B792A0009900F /* web3swiftEventloopTests.swift in Sources */,
