@@ -158,9 +158,9 @@ public struct TransactionOptions {
         return newOptions
     }
 //
-//    // merges two sets of options along with a gas estimate to try to guess the final gas limit value required by user.
-//    //
-//    // Please refer to the source code for a logic.
+//    /// merges two sets of options along with a gas estimate to try to guess the final gas limit value required by user.
+//    ///
+//    /// Please refer to the source code for a logic.
 //    public static func smartMergeGasLimit(originalOptions: Web3Options?, extraOptions: Web3Options?, gasEstimate: BigUInt) -> BigUInt? {
 //        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} // just require any non-nils
 //        if mergedOptions.gasLimit == nil {

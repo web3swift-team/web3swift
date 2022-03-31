@@ -85,8 +85,8 @@ public class ERC1155: IERC1155 {
             self._hasReadProperties = true
             }.wait()
     }
-
-    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, id: BigUInt, value: BigUInt, data: [UInt8]) throws -> WriteTransaction {
+    
+    public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, id: BigUInt, value: BigUInt, data: [UInt8]) throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.from = from
@@ -95,8 +95,8 @@ public class ERC1155: IERC1155 {
         let tx = contract.write("safeTransferFrom", parameters: [originalOwner, to, id, value, data] as [AnyObject], transactionOptions: basicOptions)!
         return tx
     }
-
-    func safeBatchTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, ids: [BigUInt], values: [BigUInt], data: [UInt8]) throws -> WriteTransaction {
+    
+    public func safeBatchTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, ids: [BigUInt], values: [BigUInt], data: [UInt8]) throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.from = from
@@ -105,8 +105,8 @@ public class ERC1155: IERC1155 {
         let tx = contract.write("safeBatchTransferFrom", parameters: [originalOwner, to, ids, values, data] as [AnyObject], transactionOptions: basicOptions)!
         return tx
     }
-
-    func balanceOf(account: EthereumAddress, id: BigUInt) throws -> BigUInt {
+    
+    public func balanceOf(account: EthereumAddress, id: BigUInt) throws -> BigUInt {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
@@ -114,8 +114,8 @@ public class ERC1155: IERC1155 {
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
-
-    func setApprovalForAll(from: EthereumAddress, operator user: EthereumAddress, approved: Bool, scope: Data) throws -> WriteTransaction {
+    
+    public func setApprovalForAll(from: EthereumAddress, operator user: EthereumAddress, approved: Bool, scope: Data) throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.from = from
@@ -124,8 +124,8 @@ public class ERC1155: IERC1155 {
         let tx = contract.write("setApprovalForAll", parameters: [user, approved, scope] as [AnyObject], transactionOptions: basicOptions)!
         return tx
     }
-
-    func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress, scope: Data) throws -> Bool {
+    
+    public func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress, scope: Data) throws -> Bool {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.callOnBlock = .latest
@@ -133,8 +133,8 @@ public class ERC1155: IERC1155 {
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
-
-    func supportsInterface(interfaceID: String) throws -> Bool {
+    
+    public func supportsInterface(interfaceID: String) throws -> Bool {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
