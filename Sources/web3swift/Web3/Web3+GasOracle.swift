@@ -99,6 +99,25 @@ extension Web3 {
 
             return try calculateStatistic(lastNthBlocksBaseFees, statistic)
         }
+
+        private func suggestGasFeeLegacy(_ statistic: Statistic) throws -> BigUInt {
+            let latestBlockNumber = try eth.getBlockNumber()
+
+            // Assigning last block to object var to predict baseFee of the next block
+            latestBlock = try eth.getBlockByNumber(latestBlockNumber)
+            // TODO: Make me work with cache
+            let lastNthBlockGasPrice = try (latestBlockNumber - blocksNumber ... latestBlockNumber)
+                .map { try eth.getBlockByNumber($0, fullTransactions: true) }
+                .flatMap { b -> [EthereumTransaction] in
+                    b.transactions.compactMap { t -> EthereumTransaction? in
+                        guard case let .transaction(transaction) = t else { return nil }
+                        return transaction
+                    }
+                }
+                .map { $0.gasPrice }
+
+            return try calculateStatistic(lastNthBlockGasPrice, statistic)
+        }
     }
 }
 
@@ -142,6 +161,15 @@ public extension Web3.Oracle {
         guard let tip = try? suggestTipValue(tip) else { return nil }
 
         return (baseFee, tip)
+    }
+
+    // MARK: - Legacy GasPrice
+    /// Method to get legacy gas price
+    /// - Parameter statistic: Statistic to apply for gas price
+    /// - Returns: Suggested gas price amount according to statistic, nil if failed to predict
+    func predictGasPriceLegacy(_ statistic: Statistic) -> BigUInt? {
+        guard let value = try? suggestGasFeeLegacy(statistic) else { return nil}
+        return value
     }
 }
 
