@@ -10,9 +10,8 @@ import BigInt
 import PromiseKit
 import Starscream
 
-
 extension web3.Eth {
-    
+
     public func getWebsocketProvider(forDelegate delegate: Web3SocketDelegate) throws -> InfuraWebsocketProvider {
         var infuraWSProvider: InfuraWebsocketProvider
         if !(provider is InfuraWebsocketProvider) {
@@ -29,12 +28,12 @@ extension web3.Eth {
         infuraWSProvider.connectSocket()
         return infuraWSProvider
     }
-    
+
     public func getLatestPendingTransactions(forDelegate delegate: Web3SocketDelegate) throws {
         let provider = try getWebsocketProvider(forDelegate: delegate)
         try provider.setFilterAndGetChanges(method: .newPendingTransactionFilter)
     }
-    
+
     public func subscribeOnPendingTransactions(forDelegate delegate: Web3SocketDelegate) throws {
         let provider = try getWebsocketProvider(forDelegate: delegate)
         try provider.subscribeOnNewPendingTransactions()

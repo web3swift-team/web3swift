@@ -8,9 +8,9 @@
 
 import Foundation
 
-//Standard Interface Detection
+// Standard Interface Detection
 protocol IERC165 {
-    
+
     func supportsInterface(interfaceID: String) throws -> Bool
-    
+
 }

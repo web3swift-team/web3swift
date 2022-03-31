@@ -11,7 +11,7 @@ import Foundation
 public struct PublicKey {
     public let x: String
     public let y: String
-    
+
     public func getComponentsWithoutPrefix() -> PublicKey {
         var x = self.x
         var y = self.y
