@@ -56,7 +56,6 @@ struct Base58 {
         }
 
         for b in base58 {
-            // str = "\(str)\(base58Alphabet[String.Index(encodedOffset: Int(b))])"
             str = "\(str)\(base58Alphabet[String.Index(utf16Offset: Int(b), in: base58Alphabet)])"
         }
 
@@ -67,23 +66,27 @@ struct Base58 {
     static func bytesFromBase58(_ base58: String) -> [UInt8] {
         // remove leading and trailing whitespaces
         let string = base58.trimmingCharacters(in: CharacterSet.whitespaces)
-
         guard !string.isEmpty else { return [] }
 
-        var zerosCount = 0
-        var length = 0
+        // count leading ASCII "1"'s [decodes directly to binary zero bytes]
+        var leadingZeros = 0
         for c in string {
             if c != "1" { break }
-            zerosCount += 1
+            leadingZeros += 1
         }
 
-        let size = string.lengthOfBytes(using: String.Encoding.utf8) * 733 / 1000 + 1 - zerosCount
-        var base58: [UInt8] = Array(repeating: 0, count: size)
+        // calculate the size of the decoded output, rounded up
+        let size = (string.lengthOfBytes(using: String.Encoding.utf8) - leadingZeros) * 733 / 1000 + 1
+
+        // allocate a buffer large enough for the decoded output
+        var base58: [UInt8] = Array(repeating: 0, count: size + leadingZeros)
+
+        // decode what remains of the data
+        var length = 0
         for c in string where c != " " {
             // search for base58 character
-            guard let base58Index = base58Alphabet.index(of: c) else { return [] }
+            guard let base58Index = base58Alphabet.firstIndex(of: c) else { return [] }
 
-            // var carry = base58Index.encodedOffset
             var carry = base58Index.utf16Offset(in: base58Alphabet)
             var i = 0
             for j in 0...base58.count where carry != 0 || i < length {
@@ -97,20 +100,16 @@ struct Base58 {
             length = i
         }
 
-        // skip leading zeros
-        var zerosToRemove = 0
-
+        // calculate how many leading zero bytes we have
+        var totalZeros = 0
         for b in base58 {
             if b != 0 { break }
-            zerosToRemove += 1
+            totalZeros += 1
         }
-        base58.removeFirst(zerosToRemove)
+        // remove the excess zero bytes
+        base58.removeFirst(totalZeros - leadingZeros)
 
-        var result: [UInt8] = Array(repeating: 0, count: zerosCount)
-        for b in base58 {
-            result.append(b)
-        }
-        return result
+        return base58
     }
 }
 
@@ -157,12 +156,5 @@ extension String {
 
         return bytes
     }
-
-//    public var littleEndianHexToUInt: UInt {
-//        let data = Data.fromHex(self)!
-//        let revensed =
-//        return UInt(sel)
-//        return UInt(self.dataWithHexString().bytes.reversed().fullHexString, radix: 16)!
-//    }
 
 }

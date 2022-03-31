@@ -189,6 +189,7 @@
 		5CF7E8BA276B79380009900F /* web3swiftGanacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E8B5276B79380009900F /* web3swiftGanacheTests.swift */; };
 		5CF7E8BB276B79380009900F /* web3swiftENSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E8B6276B79380009900F /* web3swiftENSTests.swift */; };
 		5CF7E8BC276B79380009900F /* web3swiftWebsocketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E8B7276B79380009900F /* web3swiftWebsocketTests.swift */; };
+		604FA4FF27ECBDC80021108F /* DataConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604FA4FE27ECBDC80021108F /* DataConversionTests.swift */; };
 		CB50A52827060BD600D7E39B /* EIP712Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50A52727060BD600D7E39B /* EIP712Tests.swift */; };
 		E22A911F241ED71A00EC1021 /* browser.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E22A911E241ED71A00EC1021 /* browser.min.js */; };
 		E2B76710241ED479007EBFE3 /* browser.js in Resources */ = {isa = PBXBuildFile; fileRef = E2B7670F241ED479007EBFE3 /* browser.js */; };
@@ -405,6 +406,7 @@
 		5CF7E8B5276B79380009900F /* web3swiftGanacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = web3swiftGanacheTests.swift; sourceTree = "<group>"; };
 		5CF7E8B6276B79380009900F /* web3swiftENSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = web3swiftENSTests.swift; sourceTree = "<group>"; };
 		5CF7E8B7276B79380009900F /* web3swiftWebsocketTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = web3swiftWebsocketTests.swift; sourceTree = "<group>"; };
+		604FA4FE27ECBDC80021108F /* DataConversionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataConversionTests.swift; sourceTree = "<group>"; };
 		CB50A52727060BD600D7E39B /* EIP712Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP712Tests.swift; sourceTree = "<group>"; };
 		CB50A52927060C5300D7E39B /* EIP712.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP712.swift; sourceTree = "<group>"; };
 		E22A911E241ED71A00EC1021 /* browser.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.min.js; sourceTree = "<group>"; };
@@ -980,6 +982,7 @@
 		E252E68126B542D000717C16 /* localTests */ = {
 			isa = PBXGroup;
 			children = (
+				604FA4FE27ECBDC80021108F /* DataConversionTests.swift */,
 				5CF7E8A0276B79290009900F /* web3swiftAdvancedABIv2Tests.swift */,
 				5CF7E89C276B79280009900F /* web3swiftBasicLocalNodeTests.swift */,
 				5CF7E8A1276B79290009900F /* web3swiftEIP67Tests.swift */,
@@ -1384,6 +1387,7 @@
 				5CF7E8B2276B792A0009900F /* web3swiftEIP67Tests.swift in Sources */,
 				5CF7E8AE276B792A0009900F /* web3swiftPromisesTests.swift in Sources */,
 				5CF7E8A2276B79290009900F /* web3swiftEIP681Tests.swift in Sources */,
+				604FA4FF27ECBDC80021108F /* DataConversionTests.swift in Sources */,
 				5CF7E8B1276B792A0009900F /* web3swiftAdvancedABIv2Tests.swift in Sources */,
 				5CF7E8A6276B792A0009900F /* web3swiftHelpers.swift in Sources */,
 				5CF7E8BA276B79380009900F /* web3swiftGanacheTests.swift in Sources */,
