@@ -15,6 +15,7 @@
     {
       "skippedTests" : [
         "EIP1559Tests",
+        "DataConversionTests",
         "EIP712Tests",
         "web3swiftAdvancedABIv2Tests",
         "web3swiftBasicLocalNodeTests",
