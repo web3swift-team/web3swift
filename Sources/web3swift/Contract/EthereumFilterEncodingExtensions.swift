@@ -6,7 +6,6 @@
 
 import Foundation
 import BigInt
-//import EthereumAddress
 
 extension BigUInt: EventFilterEncodable {
     public func eventFilterEncoded() -> String? {
@@ -40,5 +39,3 @@ extension String: EventFilterEncodable {
         return data.sha3(.keccak256).toHexString().addHexPrefix()
     }
 }
-
-

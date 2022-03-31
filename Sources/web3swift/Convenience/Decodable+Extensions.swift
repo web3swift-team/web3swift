@@ -10,11 +10,11 @@ import Foundation
 struct AnyCodingKey: CodingKey {
     var stringValue: String
     var intValue: Int?
-    
+
     init?(stringValue: String) {
         self.stringValue = stringValue
     }
-    
+
     init?(intValue: Int) {
         self.intValue = intValue
         self.stringValue = String(intValue)
@@ -38,7 +38,7 @@ extension KeyedDecodingContainer {
         var values = try nestedUnkeyedContainer(forKey: key)
         return try values.decode(type)
     }
-    
+
     /// Decodes a value of the given type for the given key.
     ///
     /// - parameter type: The type of value to decode.
@@ -55,7 +55,7 @@ extension KeyedDecodingContainer {
         let values = try nestedContainer(keyedBy: AnyCodingKey.self, forKey: key)
         return try values.decode(type)
     }
-    
+
     /// Decodes a value of the given type for the given key, if present.
     ///
     /// This method returns `nil` if the container does not have a value
@@ -74,7 +74,7 @@ extension KeyedDecodingContainer {
             try decodeNil(forKey: key) == false else { return nil }
         return try decode(type, forKey: key)
     }
-    
+
     /// Decodes a value of the given type for the given key, if present.
     ///
     /// This method returns `nil` if the container does not have a value

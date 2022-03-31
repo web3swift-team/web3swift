@@ -6,15 +6,13 @@
 
 import Foundation
 import BigInt
-//import secp256k1_swift
-//import EthereumAddress
 
 public enum TransactionSignerError: Error {
     case signatureError(String)
 }
 
 public struct Web3Signer {
-    public static func signTX(transaction:inout EthereumTransaction, keystore: AbstractKeystore, account: EthereumAddress, password: String, useExtraEntropy: Bool = false) throws {
+    public static func signTX(transaction: inout EthereumTransaction, keystore: AbstractKeystore, account: EthereumAddress, password: String, useExtraEntropy: Bool = false) throws {
         var privateKey = try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
         defer {Data.zero(&privateKey)}
         if (transaction.chainID != nil) {
@@ -24,16 +22,16 @@ public struct Web3Signer {
         }
     }
 
-    public static func signPersonalMessage<T:AbstractKeystore>(_ personalMessage: Data, keystore: T, account: EthereumAddress, password: String, useExtraEntropy: Bool = false) throws -> Data? {
+    public static func signPersonalMessage<T: AbstractKeystore>(_ personalMessage: Data, keystore: T, account: EthereumAddress, password: String, useExtraEntropy: Bool = false) throws -> Data? {
         var privateKey = try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
         defer {Data.zero(&privateKey)}
         guard let hash = Web3.Utils.hashPersonalMessage(personalMessage) else {return nil}
         let (compressedSignature, _) = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
         return compressedSignature
     }
-    
+
     public struct EIP155Signer {
-        public static func sign(transaction:inout EthereumTransaction, privateKey: Data, useExtraEntropy: Bool = false) throws {
+        public static func sign(transaction: inout EthereumTransaction, privateKey: Data, useExtraEntropy: Bool = false) throws {
             for _ in 0..<1024 {
                 let result = self.attemptSignature(transaction: &transaction, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
                 if (result) {
@@ -42,8 +40,8 @@ public struct Web3Signer {
             }
             throw AbstractKeystoreError.invalidAccountError
         }
-        
-        private static func attemptSignature(transaction:inout EthereumTransaction, privateKey: Data, useExtraEntropy: Bool = false) -> Bool {
+
+        private static func attemptSignature(transaction: inout EthereumTransaction, privateKey: Data, useExtraEntropy: Bool = false) -> Bool {
             guard let chainID = transaction.chainID else {return false}
             guard let hash = transaction.hashForSignature(chainID: chainID) else {return false}
             let signature  = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
@@ -51,7 +49,7 @@ public struct Web3Signer {
             guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: serializedSignature) else {
                 return false
             }
-            let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey)
+            guard let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey) else { return false }
             var d = BigUInt(0)
             if unmarshalledSignature.v >= 0 && unmarshalledSignature.v <= 3 {
                 d = BigUInt(35)
@@ -64,15 +62,15 @@ public struct Web3Signer {
             transaction.r = BigUInt(Data(unmarshalledSignature.r))
             transaction.s = BigUInt(Data(unmarshalledSignature.s))
             let recoveredPublicKey = transaction.recoverPublicKey()
-            if (!(originalPublicKey!.constantTimeComparisonTo(recoveredPublicKey))) {
+            if !(originalPublicKey.constantTimeComparisonTo(recoveredPublicKey)) {
                 return false
             }
             return true
         }
     }
-    
+
     public struct FallbackSigner {
-        public static func sign(transaction:inout EthereumTransaction, privateKey: Data, useExtraEntropy: Bool = false) throws {
+        public static func sign(transaction: inout EthereumTransaction, privateKey: Data, useExtraEntropy: Bool = false) throws {
             for _ in 0..<1024 {
                 let result = self.attemptSignature(transaction: &transaction, privateKey: privateKey)
                 if (result) {
@@ -81,15 +79,15 @@ public struct Web3Signer {
             }
             throw AbstractKeystoreError.invalidAccountError
         }
-        
-        private static func attemptSignature(transaction:inout EthereumTransaction, privateKey: Data, useExtraEntropy: Bool = false) -> Bool {
+
+        private static func attemptSignature(transaction: inout EthereumTransaction, privateKey: Data, useExtraEntropy: Bool = false) -> Bool {
             guard let hash = transaction.hashForSignature(chainID: nil) else {return false}
             let signature  = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
             guard let serializedSignature = signature.serializedSignature else {return false}
             guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: serializedSignature) else {
                 return false
             }
-            let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey)
+            guard let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey) else { return false }
             transaction.chainID = nil
             var d = BigUInt(0)
             var a = BigUInt(0)
@@ -104,34 +102,30 @@ public struct Web3Signer {
             transaction.r = BigUInt(Data(unmarshalledSignature.r))
             transaction.s = BigUInt(Data(unmarshalledSignature.s))
             let recoveredPublicKey = transaction.recoverPublicKey()
-            if (!(originalPublicKey!.constantTimeComparisonTo(recoveredPublicKey))) {
+            if !(originalPublicKey.constantTimeComparisonTo(recoveredPublicKey)) {
                 return false
             }
             return true
         }
     }
-    
+
     public static func signEIP712(safeTx: SafeTx,
               keystore: BIP32Keystore,
               verifyingContract: EthereumAddress,
               account: EthereumAddress,
               password: String? = nil,
               chainId: BigUInt? = nil) throws -> Data {
-    
+
         let domainSeparator: EIP712DomainHashable = EIP712Domain(chainId: chainId, verifyingContract: verifyingContract)
-        
+
         let password = password ?? ""
         let hash = try eip712encode(domainSeparator: domainSeparator, message: safeTx)
-        
+
         guard let signature = try Web3Signer.signPersonalMessage(hash, keystore: keystore, account: account, password: password) else {
             throw Web3Error.dataError
         }
-        
+
         return signature;
     }
-    
+
 }
-
-
-
-
