@@ -26,6 +26,7 @@ opt_in_rules:
  - empty_string
  - closure_body_length
  - fallthrough
+ - indentation_width
 
 # force warnings
 force_cast: error
