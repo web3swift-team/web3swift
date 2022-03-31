@@ -169,6 +169,7 @@
 		5C03EAB4274405D20052C66D /* EIP712.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50A52927060C5300D7E39B /* EIP712.swift */; };
 		5C26D89E27F3724600431EB0 /* Web3+EIP1559.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C26D89D27F3724600431EB0 /* Web3+EIP1559.swift */; };
 		5C26D8A027F3725500431EB0 /* EIP1559Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C26D89F27F3725500431EB0 /* EIP1559Tests.swift */; };
+		5C26D8A227F5AC0300431EB0 /* Web3+GasOracle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C26D8A127F5AC0300431EB0 /* Web3+GasOracle.swift */; };
 		5CF7E8A2276B79290009900F /* web3swiftEIP681Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E891276B79270009900F /* web3swiftEIP681Tests.swift */; };
 		5CF7E8A3276B792A0009900F /* web3swiftPersonalSignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E892276B79270009900F /* web3swiftPersonalSignatureTests.swift */; };
 		5CF7E8A4276B792A0009900F /* web3swiftTransactionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E893276B79270009900F /* web3swiftTransactionsTests.swift */; };
@@ -384,6 +385,7 @@
 		4E2DFEF325485B53001AF561 /* KeystoreParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeystoreParams.swift; sourceTree = "<group>"; };
 		5C26D89D27F3724600431EB0 /* Web3+EIP1559.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+EIP1559.swift"; sourceTree = "<group>"; };
 		5C26D89F27F3725500431EB0 /* EIP1559Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP1559Tests.swift; sourceTree = "<group>"; };
+		5C26D8A127F5AC0300431EB0 /* Web3+GasOracle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Web3+GasOracle.swift"; sourceTree = "<group>"; };
 		5CDEF972275A74590004A2F2 /* web3swift.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = web3swift.xctestplan; path = Tests/web3swiftTests/web3swift.xctestplan; sourceTree = SOURCE_ROOT; };
 		5CDEF973275A74670004A2F2 /* LocalTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LocalTests.xctestplan; sourceTree = "<group>"; };
 		5CDEF974275A747B0004A2F2 /* RemoteTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RemoteTests.xctestplan; sourceTree = "<group>"; };
@@ -727,6 +729,7 @@
 			isa = PBXGroup;
 			children = (
 				5C26D89D27F3724600431EB0 /* Web3+EIP1559.swift */,
+				5C26D8A127F5AC0300431EB0 /* Web3+GasOracle.swift */,
 				3AA8154E2276E44100F5DB52 /* Web3+HttpProvider.swift */,
 				3AA8154F2276E44100F5DB52 /* Web3.swift */,
 				3AA815502276E44100F5DB52 /* Web3+InfuraProviders.swift */,
@@ -1314,6 +1317,7 @@
 				3AA815AD2276E44100F5DB52 /* ENSRegistry.swift in Sources */,
 				3AA815CD2276E44100F5DB52 /* Web3+Personal.swift in Sources */,
 				3AA8151E2276E42F00F5DB52 /* EthereumFilterEncodingExtensions.swift in Sources */,
+				5C26D8A227F5AC0300431EB0 /* Web3+GasOracle.swift in Sources */,
 				3AA8151D2276E42F00F5DB52 /* ComparisonExtensions.swift in Sources */,
 				3AA815AF2276E44100F5DB52 /* NonceMiddleware.swift in Sources */,
 				3AA815E92276E44100F5DB52 /* EthereumAddress.swift in Sources */,

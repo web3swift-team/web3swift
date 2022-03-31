@@ -15,7 +15,7 @@ import BigInt
 ///
 /// Additional info about base fee options: https://ethereum.org/en/developers/docs/gas/#post-london
 public extension Web3 {
-    private func verifyGasLimit(parentGasLimit: BigUInt, currentGasLimit: BigUInt) -> Bool {
+    private static func verifyGasLimit(parentGasLimit: BigUInt, currentGasLimit: BigUInt) -> Bool {
         var diff = BigInt(parentGasLimit) - BigInt(currentGasLimit)
 
         // make diff positive number
@@ -43,7 +43,7 @@ public extension Web3 {
     ///   - parent: Previous Block
     ///   - current: Current block
     /// - Returns: True or false if block is EIP-1559 or not
-    func isEip1559Block(parent: Block, current: Block) -> Bool {
+    static func isEip1559Block(parent: Block, current: Block) -> Bool {
         let parentGasLimit = parent.chainVersion >= .London ? parent.gasLimit : parent.gasLimit * Web3.ElasticityMultiplier
 
         guard verifyGasLimit(parentGasLimit: parentGasLimit, currentGasLimit: current.gasLimit) else { return false }
@@ -64,7 +64,7 @@ public extension Web3 {
     ///
     /// - Parameter parent: Parent `Block`
     /// - Returns: Amount of expected base fee for current `Block`
-    func calcBaseFee(_ parent: Block) -> BigUInt {
+    static func calcBaseFee(_ parent: Block) -> BigUInt {
         // If given blocks ChainVersion is lower than London — always returns InitialBaseFee
         guard parent.chainVersion >= .London else { return Web3.InitialBaseFee }
 

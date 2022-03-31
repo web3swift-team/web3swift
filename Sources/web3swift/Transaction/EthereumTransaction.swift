@@ -8,6 +8,7 @@ import Foundation
 import BigInt
 
 public struct EthereumTransaction: CustomStringConvertible {
+    // FIXME: Add Type value https://blog.mycrypto.com/new-transaction-types-on-ethereum
     public var nonce: BigUInt
     public var gasPrice: BigUInt = 0
     public var gasLimit: BigUInt = 0
