@@ -14,8 +14,10 @@
   "testTargets" : [
     {
       "skippedTests" : [
+        "ABIEncoderSoliditySha3Test",
         "DataConversionTests",
         "EIP712Tests",
+        "SoliditySha3Test",
         "web3swiftAdvancedABIv2Tests",
         "web3swiftBasicLocalNodeTests",
         "web3swiftEIP67Tests",
