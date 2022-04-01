@@ -15,14 +15,14 @@ public protocol EIP2718Envelope: AbstractEnvelope {
 
 // Default implementation of some functions that are not likely to be different for any transaction type
 extension EIP2718Envelope {
-    public func getUnmarshalledSignatureSignatureData() -> SECP256K1.UnmarshaledSignature? {
+    public func getUnmarshalledSignatureData() -> SECP256K1.UnmarshaledSignature? {
         if self.r == 0 && self.s == 0 { return nil }
         guard let rData = self.r.serialize().setLengthLeft(32) else { return nil }
         guard let sData = self.s.serialize().setLengthLeft(32) else { return nil }
         return SECP256K1.UnmarshaledSignature(v: UInt8(self.v), r: rData, s: sData)
     }
 
-    public mutating func setUnmarshalledSignatureSignatureData(_ unmarshalledSignature: SECP256K1.UnmarshaledSignature) {
+    public mutating func setUnmarshalledSignatureData(_ unmarshalledSignature: SECP256K1.UnmarshaledSignature) {
         self.v = BigUInt(unmarshalledSignature.v) - 27 // our SECP256K1 lib is be hardcoded to return 27/28 instead of 0/1
         self.r = BigUInt(unmarshalledSignature.r)
         self.s = BigUInt(unmarshalledSignature.s)

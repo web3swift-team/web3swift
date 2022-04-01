@@ -107,10 +107,10 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     /// used by the signing algorithm to set the v, r, s parameters
     /// - Parameters:
     ///   - {default}: UnmarshalledSignature struct containing the v, r, s parameters
-    mutating func setUnmarshalledSignatureSignatureData(_ unmarshalledSignature: SECP256K1.UnmarshaledSignature)
+    mutating func setUnmarshalledSignatureData(_ unmarshalledSignature: SECP256K1.UnmarshaledSignature)
     /// used by the public-key recovery algorithm for determining the signer of the transaction
     /// - Returns: returns the 'unmarshalled' v,r,s psignatrure parameters
-    func getUnmarshalledSignatureSignatureData() -> SECP256K1.UnmarshaledSignature?
+    func getUnmarshalledSignatureData() -> SECP256K1.UnmarshaledSignature?
 }
 
 public extension AbstractEnvelope {
@@ -125,7 +125,7 @@ public extension AbstractEnvelope {
     ///   - v: Signature V component
     ///   - r: Signature R component
     ///   - s: Signature S component
-    ///   - options: TrransactionOptions struct containing any other required parameters
+    ///   - options: TransactionOptions struct containing any other required parameters
     init(to: EthereumAddress, nonce: BigUInt? = nil,
          chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
          v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,

@@ -33,16 +33,16 @@ public struct EIP1559Envelope: EIP2718Envelope {
     public var maxPriorityFeePerGas: BigUInt
     /// Value of the fee for one gas unit
     ///
-    /// This value should be greather than sum of:
-    /// - `Block.nextBlockBaseFeePerGas` - baseFee which will burnt during the transaction processing
+    /// This value should be greater than sum of:
+    /// - `Block.nextBlockBaseFeePerGas` - baseFee which will be burnt during the transaction processing
     /// - `self.maxPriorityFeePerGas` - explicit amount of a tip to the miner of the given block which will include this transaction
     ///
-    /// If amount of this will be **greather** than sum of `Block.baseFeePerGas` and `maxPriorityFeePerGas`
+    /// If amount of this will be **greater** than sum of `Block.baseFeePerGas` and `maxPriorityFeePerGas`
     /// all exceed funds will be returned to the sender.
     ///
     /// If amount of this will be **lower** than sum of `Block.baseFeePerGas` and `maxPriorityFeePerGas`
-    /// miner will recieve amount of the follow equation: `maxFeePerGas - Block.baseFeePerGas` if any,
-    /// where Block is a block to which transaction will be included.
+    /// miner will recieve amount calculated by the following equation: `maxFeePerGas - Block.baseFeePerGas`
+    /// where 'Block' is the block that the transaction will be included.
     public var maxFeePerGas: BigUInt
     public var accessList: [AccessListEntry] // from EIP-2930
 
@@ -227,7 +227,7 @@ extension EIP1559Envelope {
         self.maxPriorityFeePerGas = options?.resolveMaxPriorityFeePerGas(0) ?? 0
         self.maxFeePerGas = options?.resolveMaxFeePerGas(0) ?? 0
         self.gasLimit = options?.resolveGasLimit(0) ?? 0
-        // get teh access list, if present
+        // get the access list, if present
         self.accessList = options?.accessList ?? []
     }
 

@@ -44,10 +44,7 @@ public struct JSONRPCrequest: Encodable {
     }
 
     public var isValid: Bool {
-        if self.method == nil {
-            return false
-        }
-        guard let method = self.method else {return false}
+        guard let method = self.method else { return false }
         return method.requiredNumOfParameters == self.params?.params.count
     }
 }

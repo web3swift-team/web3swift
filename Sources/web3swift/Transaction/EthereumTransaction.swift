@@ -60,7 +60,7 @@ public struct EthereumTransaction: CustomStringConvertible {
 
     private init() { preconditionFailure("Memberwise not supported") } // disable the memberwise initializer
 
-    /// requred by CustomString convertable
+    /// required by CustomString convertable
     /// returns a string description for the transaction and its data
     public var description: String {
         var toReturn = ""
@@ -93,7 +93,7 @@ public struct EthereumTransaction: CustomStringConvertible {
 
     /// - Returns: the public key decoded from the signature data
     public func recoverPublicKey() -> Data? {
-        guard let sigData = envelope.getUnmarshalledSignatureSignatureData() else { return nil }
+        guard let sigData = envelope.getUnmarshalledSignatureData() else { return nil }
         guard let vData = BigUInt(sigData.v).serialize().setLengthLeft(1) else { return nil }
         let rData = sigData.r
         let sData = sigData.s
@@ -120,11 +120,11 @@ public struct EthereumTransaction: CustomStringConvertible {
     // actual signing algorithm implementation
     private mutating func attemptSignature(privateKey: Data, useExtraEntropy: Bool = false) -> Bool {
         guard let hash = self.hashForSignature() else { return false }
-        let signature  = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
+        let signature = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
         guard let serializedSignature = signature.serializedSignature else { return false }
         guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: serializedSignature) else { return false }
         guard let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey) else { return false }
-        self.envelope.setUnmarshalledSignatureSignatureData(unmarshalledSignature)
+        self.envelope.setUnmarshalledSignatureData(unmarshalledSignature)
         let recoveredPublicKey = self.recoverPublicKey()
         if !(originalPublicKey.constantTimeComparisonTo(recoveredPublicKey)) { return false }
         return true
@@ -175,8 +175,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     /// Encodes the transactin as set of JSON strings for transmission to a JSONRPC node, used by createRequest
     /// - Parameter from: the EthereumAddress to use as the "from" field, left unset if nil
     /// - Returns: a TransactionParameters object suitable for passing to Web3+JSONRPC provider
-    public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? { self.envelope.encodeAsDictionary(from: from)
-    }
+    public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? { self.envelope.encodeAsDictionary(from: from) }
 
     /// create a JSON RPC Request object for the given transacton
     /// - Parameters:

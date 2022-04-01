@@ -253,7 +253,7 @@ extension LegacyEnvelope {
         return params
     }
 
-    public func getUnmarshalledSignatureSignatureData() -> SECP256K1.UnmarshaledSignature? {
+    public func getUnmarshalledSignatureData() -> SECP256K1.UnmarshaledSignature? {
         if self.r == 0 && self.s == 0 { return nil }
         var normalizedV: BigUInt = 27
         let chainID: BigUInt? = self.chainID
@@ -280,7 +280,7 @@ extension LegacyEnvelope {
         return SECP256K1.UnmarshaledSignature(v: UInt8(normalizedV), r: rData, s: sData)
     }
 
-    public mutating func setUnmarshalledSignatureSignatureData(_ unmarshalledSignature: SECP256K1.UnmarshaledSignature) {
+    public mutating func setUnmarshalledSignatureData(_ unmarshalledSignature: SECP256K1.UnmarshaledSignature) {
         if let chainID = self.explicitChainID {
             var d: BigUInt = 0
             if unmarshalledSignature.v >= 0 && unmarshalledSignature.v <= 3 {
