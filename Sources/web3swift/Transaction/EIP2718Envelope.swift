@@ -23,7 +23,7 @@ extension EIP2718Envelope {
     }
 
     public mutating func setUnmarshalledSignatureSignatureData(_ unmarshalledSignature: SECP256K1.UnmarshaledSignature) {
-        self.v = BigUInt(unmarshalledSignature.v)
+        self.v = BigUInt(unmarshalledSignature.v) - 27 // our SECP256K1 lib is be hardcoded to return 27/28 instead of 0/1
         self.r = BigUInt(unmarshalledSignature.r)
         self.s = BigUInt(unmarshalledSignature.s)
     }
