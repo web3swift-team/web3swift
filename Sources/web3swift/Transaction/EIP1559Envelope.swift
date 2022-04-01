@@ -257,11 +257,9 @@ extension EIP1559Envelope {
         self.maxPriorityFeePerGas = options.resolveMaxPriorityFeePerGas(self.maxPriorityFeePerGas)
         self.maxFeePerGas = options.resolveMaxFeePerGas(self.maxFeePerGas)
         self.gasLimit = options.resolveGasLimit(self.gasLimit)
-        // swiftlint:disable force_unwrapping
-        if options.value != nil { self.value = options.value! }
-        if options.to != nil { self.to = options.to! }
-        if options.accessList != nil { self.accessList = options.accessList! }
-        // swiftlint:enable force_unwrapping
+        self.value = options.value ?? self.value
+        self.to = options.to ?? self.to
+        self.accessList = options.accessList ?? self.accessList
     }
 
     public func getOptions() -> TransactionOptions {
@@ -321,11 +319,7 @@ extension EIP1559Envelope {
         params.maxPriorityFeePerGas = maxPriorityEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
         let valueEncoding = self.value.abiEncode(bits: 256)
         params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        if self.data != Data() {
-            params.data = self.data.toHexString().addHexPrefix()
-        } else {
-            params.data = "0x"
-        }
+        params.data = self.data.toHexString().addHexPrefix()
         return params
     }
 }

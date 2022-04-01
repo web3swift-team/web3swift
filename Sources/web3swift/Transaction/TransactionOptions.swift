@@ -234,8 +234,10 @@ extension TransactionOptions: Decodable {
         case nil, "0x", "0x0":
             self.to = EthereumAddress.contractDeploymentAddress()
         default:
-            guard let addressString = toString else { throw Web3Error.dataError }
-            guard let ethAddr = EthereumAddress(addressString) else { throw Web3Error.dataError }
+            // the forced unwrap here is safe as we trap nil in the previous case
+            // swiftlint:disable force_unwrapping
+            guard let ethAddr = EthereumAddress(toString!) else { throw Web3Error.dataError }
+            // swiftlint:enable force_unwrapping
             self.to = ethAddr
         }
 

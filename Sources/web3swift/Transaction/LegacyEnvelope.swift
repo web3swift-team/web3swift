@@ -245,11 +245,7 @@ extension LegacyEnvelope {
         params.gasPrice = gasPriceEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
         let valueEncoding = self.value.abiEncode(bits: 256)
         params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        if self.data != Data() {
-            params.data = self.data.toHexString().addHexPrefix()
-        } else {
-            params.data = "0x"
-        }
+        params.data = self.data.toHexString().addHexPrefix()
         return params
     }
 
