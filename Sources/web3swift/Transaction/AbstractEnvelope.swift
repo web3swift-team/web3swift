@@ -133,4 +133,12 @@ public extension AbstractEnvelope {
         self.init(to: to, nonce: nonce, chainID: chainID, value: value,
                   data: data, v: v, r: r, s: s, options: options)
     }
+
+    /// used by Transaction.unsign() to reset/clear the signature
+    mutating func clearSignatureData() {
+        self.v = 1
+        self.r = 0
+        self.s = 0
+    }
+
 }

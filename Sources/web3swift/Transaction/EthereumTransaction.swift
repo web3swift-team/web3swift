@@ -130,6 +130,11 @@ public struct EthereumTransaction: CustomStringConvertible {
         return true
     }
 
+    /// clears the signature data
+    public mutating func unsign() {
+        self.envelope.clearSignatureData()
+    }
+
     /// Apples the provided parameters/options in to the object, if set replacing what is currently set
     /// - Parameter options: a TransactionOptions object containing parameters to be appled to the transaction
     /// if options specifies a type, and it is different from the current type the transaction will be migrated
