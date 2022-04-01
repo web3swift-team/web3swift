@@ -250,7 +250,7 @@ extension EIP2930Envelope {
         return options
     }
 
-    public func encodeFor(_ type: EncodeType = .transaction) -> Data? {
+    public func encode(for type: EncodeType = .transaction) -> Data? {
         let fields: [AnyObject]
         var list: [AnyObject] = []
 

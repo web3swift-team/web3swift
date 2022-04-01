@@ -79,14 +79,14 @@ public struct EthereumTransaction: CustomStringConvertible {
 
     /// the transaction hash
     public var hash: Data? {
-        guard let encoded: Data = self.envelope.encodeFor(.transaction) else { return nil }
+        guard let encoded: Data = self.envelope.encode(for: .transaction) else { return nil }
         let hash = encoded.sha3(.keccak256)
         return hash
     }
 
     /// - Returns: a hash of the transaction suitable for signing
     public func hashForSignature() -> Data? {
-        guard let encoded = self.envelope.encodeFor(.signature) else { return nil }
+        guard let encoded = self.envelope.encode(for: .signature) else { return nil }
         let hash = encoded.sha3(.keccak256)
         return hash
     }
@@ -205,7 +205,7 @@ public struct EthereumTransaction: CustomStringConvertible {
 
     /// - Returns: a raw bytestream of the transaction, encoded according to the transactionType
     func encode() -> Data? {
-        return self.envelope.encodeFor(.transaction)
+        return self.envelope.encode(for: .transaction)
     }
 
     /// creates a Raw RPC request transaction for the given Transaction
@@ -283,7 +283,7 @@ extension EthereumTransaction {
 
     @available(*, deprecated, message: "Please use hashForSignature() instead")
     public func hashForSignature(chainID: BigUInt? = nil) -> Data? {
-        guard let encoded = self.envelope.encodeFor(.signature) else { return nil }
+        guard let encoded = self.envelope.encode(for: .signature) else { return nil }
         let hash = encoded.sha3(.keccak256)
         return hash
     }
@@ -361,7 +361,7 @@ extension EthereumTransaction {
 
     @available(*, deprecated, message: "use encode() instead")
     public func encode(forSignature: Bool = false, chainID: BigUInt? = nil) -> Data? {
-        return self.envelope.encodeFor(.transaction)
+        return self.envelope.encode(for: .transaction)
     }
 
 }

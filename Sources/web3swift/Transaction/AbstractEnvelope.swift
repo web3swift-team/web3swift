@@ -99,7 +99,7 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     ///     - when type is .signature the transaction is encoded for signing
     ///     - when type is .transaction the thransaction is encoded for hashing or transmission to the blockchain
     /// - Returns: a raw encoding stream representing the transaction, encoded according to it's type
-    func encodeFor(_ type: EncodeType) -> Data?
+    func encode(for type: EncodeType) -> Data?
     /// Encodes the transaction as a set of strings for JSON transmission
     /// - Returns: A TransactionParameters object containg all the parameters for the transaction
     func encodeAsDictionary(from: EthereumAddress?) -> TransactionParameters?

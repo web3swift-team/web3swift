@@ -216,7 +216,7 @@ extension LegacyEnvelope {
         return options
     }
 
-    public func encodeFor(_ type: EncodeType = .transaction) -> Data? {
+    public func encode(for type: EncodeType = .transaction) -> Data? {
         let fields: [AnyObject]
         switch type {
         case .transaction: fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, v, r, s] as [AnyObject]
