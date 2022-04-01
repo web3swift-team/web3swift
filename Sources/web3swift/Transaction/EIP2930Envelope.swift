@@ -252,12 +252,7 @@ extension EIP2930Envelope {
 
     public func encode(for type: EncodeType = .transaction) -> Data? {
         let fields: [AnyObject]
-        var list: [AnyObject] = []
-
-        for listEntry in self.accessList {
-            let encoded = listEntry.encodeAsList()
-            list.append(encoded as AnyObject)
-        }
+        let list = accessList.map { $0.encodeAsList() as AnyObject }
 
         switch type {
         case .transaction: fields = [internalChainID, nonce, gasPrice, gasLimit, to.addressData, value, data, list, v, r, s] as [AnyObject]
