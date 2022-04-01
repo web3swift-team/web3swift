@@ -12,10 +12,6 @@ import BigInt
 // swiftlint:disable file_length
 // swiftlint:disable type_body_length
 
-// swiftlint:disable force_unwrapping
-// swiftlint:disable force_try
-// swiftlint:disable xctfail_message
-
 @testable import web3swift
 
 class web3swiftTransactionsTests: XCTestCase {
