@@ -7,6 +7,19 @@
 import Foundation
 import BigInt
 
+/*
+    AbstractEnvelope is the main protocol definition to enable support for different transaction types.
+    it defines the basic parameters and methods required by all transaction types.
+    other than Legacy (untyped transaction), EIP2718Envelope, no other transaction type should inherit directly
+    from AbstractEnvelope all typed transactions, should inherit from EIP2718Envelope instead, as it privides default
+    implementations for some required methods.
+
+    Adding a new transaction type in the future should be as straight forward as adding to the TransactionType enum here
+    then creating a new struct that implements to EIP2718Envelope, and implementing the required elements for the type
+    Finally adding the type specific inits to the factory routines in EnvelopeFactory so that objectts of the new type 
+    will get generated when EthereumTransaction is being created with data for the new type
+*/
+
 /// Enumeration for supported transaction types
 public enum TransactionType: UInt, CustomStringConvertible {
     /// For untyped and type 0 transactions EIP155 and older
@@ -17,11 +30,12 @@ public enum TransactionType: UInt, CustomStringConvertible {
     case eip1559
     /// range-checking value, not a valid type, will never be returned as a type
     case total // always keep immediately after last valid type
-    // should there be a need to handle an unknown type, place it's type after total
+    // should there be a need to handle an unknown type, place it after total
 
     public var description: String {
         switch self {
-        case .legacy: return "Legacy"
+        case .legacy: return "Legacy" // legacy is a pseudo-type, no EIP-2718 transaction will ever be encoded with type = 0
+                                      // though nodes do appear to return a type of 0 for legacy transactions in their JSON
         case .eip2930: return "EIP-2930"
         case .eip1559: return "EIP-1559"
         default: return "Unknown EIP-2718 Type" // anything else is an invalid type
@@ -140,5 +154,4 @@ public extension AbstractEnvelope {
         self.r = 0
         self.s = 0
     }
-
 }
