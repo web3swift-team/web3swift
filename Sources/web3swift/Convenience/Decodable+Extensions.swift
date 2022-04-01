@@ -120,10 +120,8 @@ extension KeyedDecodingContainer {
     /// - throws: `Web3Error.dataError` if value associated with key are unable
     ///   to be initialized as `DecodableFromHex`.
     public func decodeHexIfPresent<T: DecodableFromHex>(to type: T.Type, key: KeyedDecodingContainer<K>.Key) throws -> T? {
-        if !contains(key) { return nil }
-        let string = try self.decode(String.self, forKey: key)
-        guard let number = T(from: string) else { throw Web3Error.dataError }
-        return number
+        guard contains(key) else { return nil }
+        return try decodeHex(to: type, key: key)
     }
 }
 
