@@ -33,7 +33,7 @@ public struct EthereumContract: ContractProtocol {
         var toReturn = [String: ABI.Element]()
         for m in self._abi {
             switch m {
-            case .function(let function): 
+            case .function(let function):
                 guard let name = function.name else {continue}
                 toReturn[name] = m
             default:
@@ -50,7 +50,7 @@ public struct EthereumContract: ContractProtocol {
                 break
             }
             switch m {
-            case .constructor(_): 
+            case .constructor(_):
                 toReturn = m
                 break
             default:
@@ -68,10 +68,10 @@ public struct EthereumContract: ContractProtocol {
         var toReturn = [String: ABI.Element.Event]()
         for m in self._abi {
             switch m {
-            case .event(let event): 
+            case .event(let event):
                 let name = event.name
                 toReturn[name] = event
-            default: 
+            default:
                 continue
             }
         }

@@ -72,7 +72,15 @@ public struct EthereumAddress: Equatable {
         return ret
     }
 
-    public init?(_ addressString: String, type: AddressType = .normal, ignoreChecksum: Bool = false) {
+    public static func contractDeploymentAddress() -> EthereumAddress {
+        return EthereumAddress("0x", type: .contractDeployment)!
+    }
+}
+
+/// In swift structs it's better to implement initializers in extension
+/// Since it's make available syntetized initializer then for free.
+extension EthereumAddress {
+    public init?(_ addressString:String, type: AddressType = .normal, ignoreChecksum: Bool = false) {
         switch type {
         case .normal:
             guard let data = Data.fromHex(addressString) else {return nil}
@@ -108,14 +116,10 @@ public struct EthereumAddress: Equatable {
         }
     }
 
-    public init?(_ addressData: Data, type: AddressType = .normal) {
+    public init?(_ addressData:Data, type: AddressType = .normal) {
         guard addressData.count == 20 else {return nil}
         self._address = addressData.toHexString().addHexPrefix()
         self.type = type
-    }
-
-    public static func contractDeploymentAddress() -> EthereumAddress {
-        return EthereumAddress("0x", type: .contractDeployment)!
     }
 
 }

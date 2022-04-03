@@ -37,6 +37,7 @@ public struct TransactionOptions {
         case manual(BigUInt)
         case withMargin(Double)
     }
+
     public var gasPrice: GasPricePolicy?
 
     /// The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
@@ -47,6 +48,7 @@ public struct TransactionOptions {
         case latest
         case manual(BigUInt)
     }
+
     public var nonce: NoncePolicy?
 
     public enum CallingBlockPolicy {
@@ -65,11 +67,9 @@ public struct TransactionOptions {
             }
         }
     }
+
     public var callOnBlock: CallingBlockPolicy?
-
-    public init() {
-    }
-
+    
     public static var defaultOptions: TransactionOptions {
         var opts = TransactionOptions()
         opts.callOnBlock = .pending
@@ -158,9 +158,9 @@ public struct TransactionOptions {
         return newOptions
     }
 //
-//    // merges two sets of options along with a gas estimate to try to guess the final gas limit value required by user.
-//    //
-//    // Please refer to the source code for a logic.
+//    /// merges two sets of options along with a gas estimate to try to guess the final gas limit value required by user.
+//    ///
+//    /// Please refer to the source code for a logic.
 //    public static func smartMergeGasLimit(originalOptions: Web3Options?, extraOptions: Web3Options?, gasEstimate: BigUInt) -> BigUInt? {
 //        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} // just require any non-nils
 //        if mergedOptions.gasLimit == nil {
