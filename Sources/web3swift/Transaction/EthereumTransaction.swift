@@ -204,8 +204,8 @@ public struct EthereumTransaction: CustomStringConvertible {
     }
 
     /// - Returns: a raw bytestream of the transaction, encoded according to the transactionType
-    func encode() -> Data? {
-        return self.envelope.encode(for: .transaction)
+    func encode(for type: EncodeType = .transaction) -> Data? {
+        return self.envelope.encode(for: type)
     }
 
     /// creates a Raw RPC request transaction for the given Transaction
@@ -361,6 +361,7 @@ extension EthereumTransaction {
 
     @available(*, deprecated, message: "use encode() instead")
     public func encode(forSignature: Bool = false, chainID: BigUInt? = nil) -> Data? {
+        if forSignature == true { return self.envelope.encode(for: .signature) }
         return self.envelope.encode(for: .transaction)
     }
 
