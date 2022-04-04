@@ -354,6 +354,99 @@ extension EthereumTransaction {
         }
     }
 
+    // new gas parameters provided here as well for interface consistency
+    @available(*, deprecated, message: "Please access via TransactionOptions instead")
+    public var maxPriorityFeePerGas: BigUInt {
+        get {
+            switch self.type {
+            case .legacy:
+                preconditionFailure("LegacyEnvelope has no member maxPriorityFeePerGas")
+            case .eip2930:
+                preconditionFailure("EIP2930Envelope has no member maxPriorityFeePerGas")
+            case .eip1559:
+                guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                return env.maxPriorityFeePerGas
+            default:
+                preconditionFailure("Unknown Envelope Type")
+            }
+        }
+        set(value) {
+            switch self.type {
+            case .legacy:
+                preconditionFailure("LegacyEnvelope has no member maxPriorityFeePerGas")
+            case .eip2930:
+                preconditionFailure("EIP2930Envelope has no member maxPriorityFeePerGas")
+            case .eip1559:
+                guard var env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                env.maxPriorityFeePerGas = value
+            default:
+                preconditionFailure("Unknown Envelope Type")
+            }
+        }
+    }
+
+    @available(*, deprecated, message: "Please access via TransactionOptions instead")
+    public var maxFeePerGas: BigUInt {
+        get {
+            switch self.type {
+            case .legacy:
+                preconditionFailure("LegacyEnvelope has no member maxFeePerGas")
+            case .eip2930:
+                preconditionFailure("EIP2930Envelope has no member maxFeePerGas")
+            case .eip1559:
+                guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                return env.maxFeePerGas
+            default:
+                preconditionFailure("Unknown Envelope Type")
+            }
+        }
+        set(value) {
+            switch self.type {
+            case .legacy:
+                preconditionFailure("LegacyEnvelope has no member maxFeePerGas")
+            case .eip2930:
+                preconditionFailure("EIP2930Envelope has no member maxFeePerGas")
+            case .eip1559:
+                guard var env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                env.maxFeePerGas = value
+            default:
+                preconditionFailure("Unknown Envelope Type")
+            }
+        }
+    }
+
+    @available(*, deprecated, message: "Please access via TransactionOptions instead")
+    public var accessList: [AccessListEntry] {
+        get {
+            switch self.type {
+            case .legacy:
+                preconditionFailure("LegacyEnvelope has no member accessList")
+            case .eip2930:
+                guard let env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
+                return env.accessList
+            case .eip1559:
+                guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                return env.accessList
+            default:
+                preconditionFailure("Unknown Envelope Type")
+            }
+        }
+        set(value) {
+            switch self.type {
+            case .legacy:
+                preconditionFailure("LegacyEnvelope has no member accessList")
+            case .eip2930:
+                guard var env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
+                env.accessList = value
+            case .eip1559:
+                guard var env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                env.accessList = value
+            default:
+                preconditionFailure("Unknown Envelope Type")
+            }
+        }
+    }
+
     @available(*, deprecated, message: "use EthereumTransaction(rawValue:) instead")
     public static func fromRaw(_ rawData: Data) -> EthereumTransaction? {
         return EthereumTransaction(rawValue: rawData)
