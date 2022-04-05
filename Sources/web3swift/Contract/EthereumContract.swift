@@ -114,25 +114,41 @@ public struct EthereumContract: ContractProtocol {
         } else if extraData != Data() {
             fullData.append(extraData)
         }
-        let transaction = EthereumTransaction(gasPrice: BigUInt(0), gasLimit: BigUInt(0), to: to, value: BigUInt(0), data: fullData)
-        return transaction
+        var opts = TransactionOptions()
+        opts.gasPrice = .manual(0)
+        opts.gasLimit = .manual(0)
+        opts.value = 0
+        opts.to = to
+
+        return EthereumTransaction(to: to, data: fullData, options: opts)
     }
 
     public func method(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data()) -> EthereumTransaction? {
         guard let to = self.address else {return nil}
 
         if (method == "fallback") {
-            let transaction = EthereumTransaction(gasPrice: BigUInt(0), gasLimit: BigUInt(0), to: to, value: BigUInt(0), data: extraData)
-            return transaction
+            var opts = TransactionOptions()
+            opts.gasPrice = .manual(0)
+            opts.gasLimit = .manual(0)
+            opts.value = 0
+            opts.to = to
+
+            return EthereumTransaction(to: to, data: extraData, options: opts)
+
         }
         let foundMethod = self.methods.filter { (key, value) -> Bool in
             return key == method
         }
         guard foundMethod.count == 1 else {return nil}
         let abiMethod = foundMethod[method]
-        guard let encodedData = abiMethod?.encodeParameters(parameters) else {return nil}
-        let transaction = EthereumTransaction(gasPrice: BigUInt(0), gasLimit: BigUInt(0), to: to, value: BigUInt(0), data: encodedData)
-        return transaction
+        guard let encodedData = abiMethod?.encodeParameters(parameters) else { return nil }
+        var opts = TransactionOptions()
+        opts.gasPrice = .manual(0)
+        opts.gasLimit = .manual(0)
+        opts.value = 0
+        opts.to = to
+
+        return EthereumTransaction(to: to, data: encodedData, options: opts)
     }
 
     public func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?) {
