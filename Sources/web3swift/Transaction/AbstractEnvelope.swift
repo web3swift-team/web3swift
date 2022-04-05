@@ -110,6 +110,20 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
 
     // pseudo memberwise initializer
     // accepts all common parameters (full description with default implementation below)
+    // Note the `nil` parameters, even though non-optional in the struct, are there to allow
+    // fallback to pulling the value from `options`. If options also does not have a value, a suitable default is used
+    // precedence is as follows: direct parameter > options value > default value
+    /// Default memberwse initializer that all envelopes must support
+    /// - Parameters:
+    ///   - to: EthereumAddress of destination
+    ///   - nonce: nonce for the transaction
+    ///   - chainID: chainId of the network the transaction belongs to
+    ///   - value: Native value in Wei of the transaction
+    ///   - data: Payload data for the transaction
+    ///   - v: Signature V component
+    ///   - r: Signature R component
+    ///   - s: Signature S component
+    ///   - options: TransactionOptions struct containing any other required parameters
     init(to: EthereumAddress, nonce: BigUInt?, chainID: BigUInt?, value: BigUInt?,
          data: Data, v: BigUInt, r: BigUInt, s: BigUInt, options: TransactionOptions?)
 
@@ -148,29 +162,6 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
 }
 
 public extension AbstractEnvelope {
-
-    // MARK: default implementation, should be overridden by each Envelope implementation
-    // Note the `nil` parameters, even though non-optional in the struct, are there to allow
-    // fallback to pulling the value from `options`. If options also does not have a value, a suitable default is used
-    // precedence is as follows: direct parameter > options value > default value
-    /// Default memberwse initializer that all envelopes must support
-    /// - Parameters:
-    ///   - to: EthereumAddress of destination
-    ///   - nonce: nonce for the transaction
-    ///   - chainID: chainId of the network the transaction belongs to
-    ///   - value: Native value in Wei of the transaction
-    ///   - data: Payload data for the transaction
-    ///   - v: Signature V component
-    ///   - r: Signature R component
-    ///   - s: Signature S component
-    ///   - options: TransactionOptions struct containing any other required parameters
-    init(to: EthereumAddress, nonce: BigUInt? = nil,
-         chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
-         v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,
-         options: TransactionOptions? = nil) {
-        self.init(to: to, nonce: nonce, chainID: chainID, value: value,
-                  data: data, v: v, r: r, s: s, options: options)
-    }
 
     mutating func clearSignatureData() {
         self.v = 1
