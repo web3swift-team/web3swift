@@ -71,16 +71,16 @@ extension web3.BrowserFunctions {
 
     public func sendTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") -> [String: Any]? {
         do {
-            let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
-            let transaction: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
-            let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
-            var transactionOptions = TransactionOptions()
-            transactionOptions.from = options.from
-            transactionOptions.to = options.to
-            transactionOptions.value = options.value ?? 0
-            transactionOptions.gasLimit = options.gasLimit ?? .automatic
-            transactionOptions.gasPrice = options.gasPrice ?? .automatic
-            return self.sendTransaction(transaction, transactionOptions: transactionOptions, password: password)
+          let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
+          let transaction: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+          let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
+          var transactionOptions = TransactionOptions()
+          transactionOptions.from = options.from
+          transactionOptions.to = options.to
+          transactionOptions.value = options.value ?? 0
+          transactionOptions.gasLimit = options.gasLimit ?? .automatic
+          transactionOptions.gasPrice = options.gasPrice ?? .automatic
+          return self.sendTransaction(transaction, transactionOptions: transactionOptions, password: password)
         } catch { return nil }
     }
 
