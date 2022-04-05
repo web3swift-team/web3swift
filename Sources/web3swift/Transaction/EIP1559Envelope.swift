@@ -122,7 +122,7 @@ extension EIP1559Envelope {
         self.s = try container.decodeHex(to: BigUInt.self, key: .s)
     }
 
-    private enum RlpKey: Int {
+    private enum RlpKey: Int, CaseIterable {
         case chainId
         case nonce
         case maxPriorityFeePerGas
@@ -135,17 +135,16 @@ extension EIP1559Envelope {
         case sig_v
         case sig_r
         case sig_s
-        case total // not a real entry, used to auto-size based on number of keys
     }
 
     public init?(rawValue: Data) {
         // pop the first byte from the stream [EIP-2718]
         let typeByte: UInt8 = rawValue.first ?? 0 // can't decode if we're the wrong type
-        if typeByte != self.type.rawValue { return nil }
+        guard self.type.rawValue == typeByte else { return nil }
 
         guard let totalItem = RLP.decode(rawValue.dropFirst(1)) else { return nil }
         guard let rlpItem = totalItem[0] else { return nil }
-        if rlpItem.count != RlpKey.total.rawValue { return nil }
+        guard RlpKey.allCases.count == rlpItem.count else { return nil }
 
         // we've validated the item count, so rlpItem[keyName] is guaranteed to return something not nil
         // swiftlint:disable force_unwrapping

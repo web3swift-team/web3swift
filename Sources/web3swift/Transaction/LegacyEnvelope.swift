@@ -107,7 +107,7 @@ extension LegacyEnvelope {
         self.s = try container.decodeHex(to: BigUInt.self, key: .s)
     }
 
-    fileprivate enum RlpKey: Int {
+    private enum RlpKey: Int, CaseIterable {
         case nonce
         case gasPrice
         case gasLimit
@@ -117,13 +117,12 @@ extension LegacyEnvelope {
         case sig_v
         case sig_r
         case sig_s
-        case total
     }
 
     public init?(rawValue: Data) {
         guard let totalItem = RLP.decode(rawValue) else { return nil }
         guard let rlpItem = totalItem[0] else { return nil }
-        if rlpItem.count != RlpKey.total.rawValue { return nil }
+        guard RlpKey.allCases.count == rlpItem.count else { return nil }
 
         // we've validated the item count, so rlpItem[key] is guaranteed to return something not nil
         // swiftlint:disable force_unwrapping
