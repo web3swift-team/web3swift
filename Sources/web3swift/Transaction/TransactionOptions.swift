@@ -47,17 +47,12 @@ public struct TransactionOptions {
     public var gasPrice: GasPricePolicy?
 
     // new gas parameters for EIP-1559 support
-    public enum MaxFeePerGasPolicy {
+    public enum FeePerGasPolicy {
         case automatic
         case manual(BigUInt)
     }
-    public var maxFeePerGas: MaxFeePerGasPolicy?
-
-    public enum MaxPriorityFeePerGasPolicy {
-        case automatic
-        case manual(BigUInt)
-    }
-    public var maxPriorityFeePerGas: MaxPriorityFeePerGasPolicy?
+    public var maxFeePerGas: FeePerGasPolicy?
+    public var maxPriorityFeePerGas: FeePerGasPolicy?
 
     /// The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
     public var value: BigUInt?
@@ -130,12 +125,10 @@ public struct TransactionOptions {
     public func resolveGasLimit(_ suggestedByNode: BigUInt) -> BigUInt {
         guard let gasLimitPolicy = self.gasLimit else { return suggestedByNode }
         switch gasLimitPolicy {
-        case .automatic:
+        case .automatic, .withMargin:
             return suggestedByNode
         case .manual(let value):
             return value
-        case .withMargin:
-            return suggestedByNode
         case .limited(let limit):
             if limit <= suggestedByNode {
                 return suggestedByNode
