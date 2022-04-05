@@ -27,7 +27,7 @@ public class WriteTransaction: ReadTransaction {
                         seal.reject(Web3Error.inputError(desc: "Trying to transact to the constant function"))
                         return
                     }
-                case .constructor:
+                case .constructor(_):
                     break
                 default:
                     seal.reject(Web3Error.inputError(desc: "Contract's ABI does not have such method"))
@@ -141,7 +141,7 @@ public class WriteTransaction: ReadTransaction {
                 forAssemblyPipeline = (assembledTransaction, self.contract, mergedOptions)
 
                 for hook in self.web3.postAssemblyHooks {
-                    let prom: Promise<Bool> = Promise<Bool> { seal in
+                    let prom: Promise<Bool> = Promise<Bool> {seal in
                         hook.queue.async {
                             let hookResult = hook.function(forAssemblyPipeline)
                             if hookResult.3 {
@@ -160,16 +160,16 @@ public class WriteTransaction: ReadTransaction {
                 mergedOptions = forAssemblyPipeline.2
 
                 return assembledTransaction
-            }).done(on: queue) { tx in
+            }).done(on: queue) {tx in
                 seal.fulfill(tx)
-                }.catch(on: queue) { err in
+                }.catch(on: queue) {err in
                     seal.reject(err)
             }
         }
         return returnPromise
     }
 
-    public func sendPromise(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) -> Promise<TransactionSendingResult> {
+    public func sendPromise(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) -> Promise<TransactionSendingResult>{
         let queue = self.web3.requestDispatcher.queue
         return self.assemblePromise(transactionOptions: transactionOptions).then(on: queue) { transaction throws -> Promise<TransactionSendingResult> in
             let mergedOptions = self.transactionOptions.merge(transactionOptions)

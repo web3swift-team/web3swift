@@ -12,17 +12,17 @@ public struct TransactionDetails: Decodable {
     public var blockNumber: BigUInt?
     public var transactionIndex: BigUInt?
     public var transaction: EthereumTransaction
-
+    
     enum CodingKeys: String, CodingKey {
         case blockHash
         case blockNumber
         case transactionIndex
     }
-
+    
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.blockNumber = try? container.decodeHex(to: BigUInt.self, key: .blockNumber)
-        self.blockHash = try?  container.decodeHex(to: Data.self, key: .blockHash)
+        self.blockHash = try?  container.decodeHex(to: Data.self, key: .blockHash)        
         self.transactionIndex = try? container.decodeHex(to: BigUInt.self, key: .blockNumber)
         self.transaction = try EthereumTransaction(from: decoder)
     }
@@ -39,14 +39,15 @@ public struct TransactionReceipt: Decodable {
     public var logs: [EventLog]
     public var status: TXStatus
     public var logsBloom: EthereumBloomFilter?
-
+    
     public enum TXStatus {
         case ok
         case failed
         case notYetProcessed
     }
-
-    enum CodingKeys: String, CodingKey {
+    
+    enum CodingKeys: String, CodingKey
+    {
         case blockHash
         case blockNumber
         case transactionHash
@@ -58,7 +59,7 @@ public struct TransactionReceipt: Decodable {
         case logsBloom
         case status
     }
-
+    
     static func notProcessed(transactionHash: Data) -> TransactionReceipt {
         TransactionReceipt(transactionHash: transactionHash, blockHash: Data(), blockNumber: BigUInt(0), transactionIndex: BigUInt(0), contractAddress: nil, cumulativeGasUsed: BigUInt(0), gasUsed: BigUInt(0), logs: [EventLog](), status: .notYetProcessed, logsBloom: nil)
     }
@@ -69,26 +70,26 @@ extension TransactionReceipt {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         self.blockNumber = try container.decodeHex(to: BigUInt.self, key: .blockNumber)
-
+        
         self.blockHash = try container.decodeHex(to: Data.self, key: .blockHash)
-
+        
         self.transactionIndex = try container.decodeHex(to: BigUInt.self, key: .transactionIndex)
-
+        
         self.transactionHash = try container.decodeHex(to: Data.self, key: .transactionHash)
-
+        
         self.contractAddress = try? container.decodeIfPresent(EthereumAddress.self, forKey: .contractAddress)
-
+        
         self.cumulativeGasUsed = try container.decodeHex(to: BigUInt.self, key: .cumulativeGasUsed)
-
+        
         self.gasUsed = try container.decodeHex(to: BigUInt.self, key: .gasUsed)
-
-        let status = try? container.decodeHex(to: BigUInt.self, key: .status)
+        
+        let status = try? container.decodeHex(to: BigUInt.self, key: .status) 
         switch status {
-        case nil: self.status = .notYetProcessed
-        case 1: self.status = .ok
-        default: self.status = .failed
+            case nil: self.status = .notYetProcessed
+            case 1: self.status = .ok
+            default: self.status = .failed
         }
-
+        
         self.logs = try container.decode([EventLog].self, forKey: .logs)
     }
 }
@@ -107,7 +108,7 @@ extension EthereumAddress: Codable {
     }
 }
 
-public struct EventLog: Decodable {
+public struct EventLog : Decodable {
     public var address: EthereumAddress
     public var blockHash: Data
     public var blockNumber: BigUInt
@@ -117,22 +118,24 @@ public struct EventLog: Decodable {
     public var topics: [Data]
     public var transactionHash: Data
     public var transactionIndex: BigUInt
-
-    //    address = 0x53066cddbc0099eb6c96785d9b3df2aaeede5da3;
-    //    blockHash = 0x779c1f08f2b5252873f08fd6ec62d75bb54f956633bbb59d33bd7c49f1a3d389;
-    //    blockNumber = 0x4f58f8;
-    //    data = 0x0000000000000000000000000000000000000000000000004563918244f40000;
-    //    logIndex = 0x84;
-    //    removed = 0;
-    //    topics =     (
-    //    0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef,
-    //    0x000000000000000000000000efdcf2c36f3756ce7247628afdb632fa4ee12ec5,
-    //    0x000000000000000000000000d5395c132c791a7f46fa8fc27f0ab6bacd824484
-    //    );
-    //    transactionHash = 0x9f7bb2633abb3192d35f65e50a96f9f7ca878fa2ee7bf5d3fca489c0c60dc79a;
-    //    transactionIndex = 0x99;
-
-    enum CodingKeys: String, CodingKey {
+    
+    
+//    address = 0x53066cddbc0099eb6c96785d9b3df2aaeede5da3;
+//    blockHash = 0x779c1f08f2b5252873f08fd6ec62d75bb54f956633bbb59d33bd7c49f1a3d389;
+//    blockNumber = 0x4f58f8;
+//    data = 0x0000000000000000000000000000000000000000000000004563918244f40000;
+//    logIndex = 0x84;
+//    removed = 0;
+//    topics =     (
+//    0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef,
+//    0x000000000000000000000000efdcf2c36f3756ce7247628afdb632fa4ee12ec5,
+//    0x000000000000000000000000d5395c132c791a7f46fa8fc27f0ab6bacd824484
+//    );
+//    transactionHash = 0x9f7bb2633abb3192d35f65e50a96f9f7ca878fa2ee7bf5d3fca489c0c60dc79a;
+//    transactionIndex = 0x99;
+    
+    enum CodingKeys: String, CodingKey
+    {
         case address
         case blockHash
         case blockNumber
@@ -143,31 +146,31 @@ public struct EventLog: Decodable {
         case transactionHash
         case transactionIndex
     }
-
+    
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-
+        
         let address = try container.decode(EthereumAddress.self, forKey: .address)
         self.address = address
-
+        
         self.blockNumber = try container.decodeHex(to: BigUInt.self, key: .blockNumber)
-
+        
         self.blockHash = try container.decodeHex(to: Data.self, key: .blockHash)
-
+        
         self.transactionIndex = try container.decodeHex(to: BigUInt.self, key: .transactionIndex)
-
+        
         self.transactionHash = try container.decodeHex(to: Data.self, key: .transactionHash)
-
+    
         self.data = try container.decodeHex(to: Data.self, key: .data)
-
+        
         self.logIndex = try container.decodeHex(to: BigUInt.self, key: .logIndex)
-
+        
         let removed = try? container.decodeHex(to: BigUInt.self, key: .removed)
         self.removed = removed == 1 ? true : false
-
+    
         let topicsStrings = try container.decode([String].self, forKey: .topics)
 
-        self.topics = try topicsStrings.map {
+        self.topics = try topicsStrings.map { 
             guard let topic = Data.fromHex($0) else { throw Web3Error.dataError }
             return topic
         }
@@ -178,7 +181,7 @@ public enum TransactionInBlock: Decodable {
     case hash(Data)
     case transaction(EthereumTransaction)
     case null
-
+    
     public init(from decoder: Decoder) throws {
         let value = try decoder.singleValueContainer()
         if let string = try? value.decode(String.self) {
@@ -202,11 +205,11 @@ public struct Block: Decodable {
     public var parentHash: Data
     public var nonce: Data? // MARK: This is optional in web3js but required in Ethereum JSON-RPC
     public var sha3Uncles: Data
-    public var logsBloom: EthereumBloomFilter? // MARK: This is optional in web3js but required in Ethereum JSON-RPC
+    public var logsBloom: EthereumBloomFilter? = nil // MARK: This is optional in web3js but required in Ethereum JSON-RPC
     public var transactionsRoot: Data
     public var stateRoot: Data
     public var receiptsRoot: Data
-    public var miner: EthereumAddress? // MARK: This is NOT optional in web3js
+    public var miner: EthereumAddress? = nil // MARK: This is NOT optional in web3js
     public var difficulty: BigUInt
     public var totalDifficulty: BigUInt
     public var extraData: Data
@@ -217,7 +220,7 @@ public struct Block: Decodable {
     public var timestamp: Date
     public var transactions: [TransactionInBlock]
     public var uncles: [Data]
-
+    
     enum CodingKeys: String, CodingKey {
         case number
         case hash
@@ -233,11 +236,11 @@ public struct Block: Decodable {
         case totalDifficulty
         case extraData
         case size
-
+        
         case gasLimit
         case gasUsed
         case baseFeePerGas
-
+        
         case timestamp
         case transactions
         case uncles
@@ -289,12 +292,12 @@ extension Block {
     }
 }
 
-public struct EventParserResult: EventParserResultProtocol {
+public struct EventParserResult:EventParserResultProtocol {
     public var eventName: String
     public var transactionReceipt: TransactionReceipt?
     public var contractAddress: EthereumAddress
-    public var decodedResult: [String: Any]
-    public var eventLog: EventLog?
+    public var decodedResult: [String:Any]
+    public var eventLog: EventLog? = nil
 }
 
 public struct TransactionSendingResult {
@@ -302,10 +305,10 @@ public struct TransactionSendingResult {
     public var hash: String
 }
 
-public struct TxPoolStatus: Decodable {
+public struct TxPoolStatus : Decodable {
     public var pending: BigUInt
     public var queued: BigUInt
-
+ 
     enum CodingKeys: String, CodingKey {
         case pending
         case queued
@@ -320,15 +323,15 @@ public extension TxPoolStatus {
     }
 }
 
-public struct TxPoolContent: Decodable {
+public struct TxPoolContent : Decodable {
     public var pending: [EthereumAddress: [TxPoolContentForNonce]]
     public var queued: [EthereumAddress: [TxPoolContentForNonce]]
-
+    
     enum CodingKeys: String, CodingKey {
         case pending
         case queued
     }
-
+    
     fileprivate static func decodePoolContentForKey<T>(container: KeyedDecodingContainer<T>, key: KeyedDecodingContainer<T>.Key) throws -> [EthereumAddress: [TxPoolContentForNonce]] {
         let raw = try container.nestedContainer(keyedBy: AdditionalDataCodingKeys.self, forKey: key)
         var result = [EthereumAddress: [TxPoolContentForNonce]]()
@@ -359,13 +362,14 @@ public struct TxPoolContent: Decodable {
         }
         return result
     }
-
+    
+    
     fileprivate struct AdditionalDataCodingKeys: CodingKey {
         var stringValue: String
         init?(stringValue: String) {
             self.stringValue = stringValue
         }
-
+        
         var intValue: Int?
         init?(intValue: Int) {
             return nil

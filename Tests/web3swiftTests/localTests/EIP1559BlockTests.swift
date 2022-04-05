@@ -106,6 +106,7 @@ class EIP1559BlockTests: XCTestCase {
             }
         }
     }
+
     /// testCalcBaseFee assumes all blocks are 1559-blocks
     func testCalcBaseFee() throws {
         // [0] - parentBaseFee

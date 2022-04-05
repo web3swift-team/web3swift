@@ -8,6 +8,7 @@
 import Foundation
 import BigInt
 
+
 /// EIP-1559 Base fee extension
 ///
 /// Source: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md
@@ -76,7 +77,7 @@ public extension Web3 {
             let expectedBaseFeePerGas = parent.baseFeePerGas + baseFeePerGasDelta
 
             return expectedBaseFeePerGas
-        } else if parent.gasUsed < parentGasTarget {
+        } else if parent.gasUsed < parentGasTarget  {
             // Otherwise if the parent block used less gas than its target, the baseFee should decrease.
             let gasUsedDelta = parentGasTarget - parent.gasUsed
             let baseFeePerGasDelta = parent.baseFeePerGas * gasUsedDelta / parentGasTarget / Web3.BaseFeeChangeDenominator
@@ -137,13 +138,13 @@ public extension Web3 {
 
         var mainNetFisrtBlockNumber: BigUInt {
             switch self {
-            case .Byzantium: return 4_370_000
-            case .Constantinople: return 7_280_000
-            case .Istanbul: return 9_069_000
-            case .MuirGlacier: return 9_200_000
-            case .Berlin: return 12_244_000
-            case .London: return 12_965_000
-            case .ArrowGlacier: return 13_773_000
+                case .Byzantium: return 4_370_000
+                case .Constantinople: return 7_280_000
+                case .Istanbul: return 9_069_000
+                case .MuirGlacier: return 9_200_000
+                case .Berlin: return 12_244_000
+                case .London: return 12_965_000
+                case .ArrowGlacier: return 13_773_000
             }
         }
     }
@@ -173,4 +174,4 @@ public extension Web3 {
 
 extension Web3.ChainVersion: Comparable {
     public static func < (lhs: Web3.ChainVersion, rhs: Web3.ChainVersion) -> Bool { return lhs.mainNetFisrtBlockNumber < rhs.mainNetFisrtBlockNumber }
-}
+ }

@@ -8,7 +8,7 @@ import BigInt
 
 public struct EthereumContract: ContractProtocol {
     public var transactionOptions: TransactionOptions? = TransactionOptions.defaultOptions
-    public var address: EthereumAddress?
+    public var address: EthereumAddress? = nil
 
     var _abi: [ABI.Element]
 
@@ -34,7 +34,7 @@ public struct EthereumContract: ContractProtocol {
         for m in self._abi {
             switch m {
             case .function(let function):
-                guard let name = function.name else { continue }
+                guard let name = function.name else {continue}
                 toReturn[name] = m
             default:
                 continue
@@ -44,7 +44,7 @@ public struct EthereumContract: ContractProtocol {
     }
 
     public var constructor: ABI.Element? {
-        var toReturn: ABI.Element?
+        var toReturn: ABI.Element? = nil
         for m in self._abi {
             if toReturn != nil {
                 break
@@ -89,7 +89,10 @@ public struct EthereumContract: ContractProtocol {
             if at != nil {
                 self.address = at
             }
-        } catch { return nil }
+        }
+        catch{
+            return nil
+        }
     }
 
     public init(abi: [ABI.Element]) {
@@ -103,58 +106,42 @@ public struct EthereumContract: ContractProtocol {
 
     public func deploy(bytecode: Data, parameters: [AnyObject] = [AnyObject](), extraData: Data = Data()) -> EthereumTransaction? {
         let to: EthereumAddress = EthereumAddress.contractDeploymentAddress()
-        guard let constructor = self.constructor else { return nil }
-        guard let encodedData = constructor.encodeParameters(parameters) else { return nil }
+        guard let constructor = self.constructor else {return nil}
+        guard let encodedData = constructor.encodeParameters(parameters) else {return nil}
         var fullData = bytecode
         if encodedData != Data() {
             fullData.append(encodedData)
         } else if extraData != Data() {
             fullData.append(extraData)
         }
-
-        var opts = TransactionOptions()
-        opts.gasPrice = .manual(0)
-        opts.gasLimit = .manual(0)
-        opts.value = 0
-        opts.to = to
-
-        return EthereumTransaction(to: to, data: fullData, options: opts)
+        let transaction = EthereumTransaction(gasPrice: BigUInt(0), gasLimit: BigUInt(0), to: to, value: BigUInt(0), data: fullData)
+        return transaction
     }
 
     public func method(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data()) -> EthereumTransaction? {
-        guard let to = self.address else { return nil }
+        guard let to = self.address else {return nil}
 
         if (method == "fallback") {
-            var opts = TransactionOptions()
-            opts.gasPrice = .manual(0)
-            opts.gasLimit = .manual(0)
-            opts.value = 0
-            opts.to = to
-
-            return EthereumTransaction(to: to, data: extraData, options: opts)
-
+            let transaction = EthereumTransaction(gasPrice: BigUInt(0), gasLimit: BigUInt(0), to: to, value: BigUInt(0), data: extraData)
+            return transaction
         }
         let foundMethod = self.methods.filter { (key, value) -> Bool in
             return key == method
         }
-        guard foundMethod.count == 1 else { return nil }
+        guard foundMethod.count == 1 else {return nil}
         let abiMethod = foundMethod[method]
-        guard let encodedData = abiMethod?.encodeParameters(parameters) else { return nil }
-        var opts = TransactionOptions()
-        opts.gasPrice = .manual(0)
-        opts.gasLimit = .manual(0)
-        opts.value = 0
-        opts.to = to
-
-        return EthereumTransaction(to: to, data: encodedData, options: opts)
+        guard let encodedData = abiMethod?.encodeParameters(parameters) else {return nil}
+        let transaction = EthereumTransaction(gasPrice: BigUInt(0), gasLimit: BigUInt(0), to: to, value: BigUInt(0), data: encodedData)
+        return transaction
     }
 
     public func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?) {
         for (eName, ev) in self.events {
-            if !ev.anonymous {
+            if (!ev.anonymous) {
                 if eventLog.topics[0] != ev.topic {
                     continue
-                } else {
+                }
+                else {
                     let logTopics = eventLog.topics
                     let logData = eventLog.data
                     let parsed = ev.decodeReturnedLogs(eventLogTopics: logTopics, eventLogData: logData)
@@ -175,8 +162,10 @@ public struct EthereumContract: ContractProtocol {
     }
 
     public func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool? {
-        guard let event = events[eventName] else { return nil }
-        if event.anonymous { return true }
+        guard let event = events[eventName] else {return nil}
+        if event.anonymous {
+            return true
+        }
         let eventOfSuchTypeIsPresent = bloom.test(topic: event.topic)
         return eventOfSuchTypeIsPresent
     }
@@ -185,18 +174,20 @@ public struct EthereumContract: ContractProtocol {
         if method == "fallback" {
             return [String: Any]()
         }
-        guard let function = methods[method] else { return nil }
-        guard case .function(_) = function else { return nil }
+        guard let function = methods[method] else {return nil}
+        guard case .function(_) = function else {return nil}
         return function.decodeReturnData(data)
     }
 
     public func decodeInputData(_ method: String, data: Data) -> [String: Any]? {
-        if method == "fallback" { return nil }
-        guard let function = methods[method] else { return nil }
+        if method == "fallback" {
+            return nil
+        }
+        guard let function = methods[method] else {return nil}
         switch function {
-        case .function:
+        case .function(_):
             return function.decodeInputData(data)
-        case .constructor:
+        case .constructor(_):
             return function.decodeInputData(data)
         default:
             return nil
@@ -204,7 +195,7 @@ public struct EthereumContract: ContractProtocol {
     }
 
     public func decodeInputData(_ data: Data) -> [String: Any]? {
-        guard data.count % 32 == 4 else { return nil }
+        guard data.count % 32 == 4 else {return nil}
         let methodSignature = data[0..<4]
         let foundFunction = self._abi.filter { (m) -> Bool in
             switch m {
