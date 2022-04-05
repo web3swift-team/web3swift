@@ -118,6 +118,7 @@ public struct JSONRPCresponse: Decodable{
             self.init(id: id, jsonrpc: jsonrpc, result: nil, error: errorMessage)
             return
         }
+        // TODO: refactor me
         var result: Any? = nil
         if let rawValue = try? container.decodeIfPresent(String.self, forKey: .result) {
             result = rawValue
