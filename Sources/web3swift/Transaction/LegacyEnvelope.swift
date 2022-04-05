@@ -78,9 +78,9 @@ extension LegacyEnvelope {
     public init?(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        if !container.contains(.to) || !container.contains(.nonce) || !container.contains(.value) { return nil }
+        guard container.contains(.to), container.contains(.nonce), container.contains(.value) else { return nil }
         if !container.contains(.data) && !container.contains(.input) { return nil }
-        if !container.contains(.v) || !container.contains(.r) || !container.contains(.s) { return nil }
+        guard container.contains(.v), container.contains(.r), container.contains(.s) else { return nil }
 
         // everything we need is present, so we should only have to throw from here
         self.explicitChainID = try container.decodeHexIfPresent(to: BigUInt.self, key: .chainId)
