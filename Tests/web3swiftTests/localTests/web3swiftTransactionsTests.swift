@@ -189,11 +189,11 @@ class web3swiftTransactionsTests: XCTestCase {
         do {
             let jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
             // check that the transaction type is legacy
-            XCTAssert(jsonTxn.type == .legacy)
+            XCTAssertEqual(jsonTxn.type, .legacy, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(jsonTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
             // check that we recovered the address correctly
-            XCTAssert(jsonTxn.sender!.address == expectedAddress.address)
+            XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
             print(error)
             return XCTFail(String(describing: error))
@@ -211,11 +211,11 @@ class web3swiftTransactionsTests: XCTestCase {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is legacy
-        XCTAssert(rlpTxn.type == .legacy)
+        XCTAssertEqual(rlpTxn.type, .legacy, "Transaction Type Mismatch")
         // check the hash, if they match everything was parsed, and re-encoded correctly
-        XCTAssert(rlpTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+        XCTAssertEqual(rlpTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
         // check that we recovered the address correctly
-        XCTAssert(rlpTxn.sender!.address == expectedAddress.address)
+        XCTAssertEqual(rlpTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
     }
 
     // test signing a fallback legacy transaction (chainId not part of the signing process)
@@ -237,11 +237,11 @@ class web3swiftTransactionsTests: XCTestCase {
             let rawTxn = jsonTxn.encode()!.toHexString().addHexPrefix()
 
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(rawTxn == vector.RLP)
+            XCTAssertEqual(rawTxn, vector.RLP, "Transaction Encoding Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(jsonTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
             // check that we recovered the address correctly
-            XCTAssert(jsonTxn.sender!.address == expectedAddress.address)
+            XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
             print(error)
             return XCTFail(String(describing: error))
@@ -258,11 +258,11 @@ class web3swiftTransactionsTests: XCTestCase {
         do {
             let jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
             // check that the transaction type is legacy
-            XCTAssert(jsonTxn.type == .legacy)
+            XCTAssertEqual(jsonTxn.type, .legacy, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(jsonTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
             // check that we recovered the address correctly
-            XCTAssert(jsonTxn.sender!.address == expectedAddress.address)
+            XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
             print(error)
             return XCTFail(String(describing: error))
@@ -280,11 +280,11 @@ class web3swiftTransactionsTests: XCTestCase {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is legacy
-        XCTAssert(rlpTxn.type == .legacy)
+        XCTAssertEqual(rlpTxn.type, .legacy, "Transaction Type Mismatch")
         // check the hash, if they match everything was parsed, and re-encoded correctly
-        XCTAssert(rlpTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+        XCTAssertEqual(rlpTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
         // check that we recovered the address correctly
-        XCTAssert(rlpTxn.sender!.address == expectedAddress.address)
+        XCTAssertEqual(rlpTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
     }
 
     // test signing a normal legacy transaction conforming to EIP155
@@ -306,11 +306,11 @@ class web3swiftTransactionsTests: XCTestCase {
             let rawTxn = jsonTxn.encode()!.toHexString().addHexPrefix()
 
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(rawTxn == vector.RLP)
+            XCTAssertEqual(rawTxn, vector.RLP, "Transaction Encoding Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(jsonTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
             // check that we recovered the address correctly
-            XCTAssert(jsonTxn.sender!.address == expectedAddress.address)
+            XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
             print(error)
             return XCTFail(String(describing: error))
@@ -327,11 +327,11 @@ class web3swiftTransactionsTests: XCTestCase {
         do {
             let jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
             // check that the transaction type is eip2930
-            XCTAssert(jsonTxn.type == .eip2930)
+            XCTAssertEqual(jsonTxn.type, .eip2930, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(jsonTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
             // check that we recovered the address correctly
-            XCTAssert(jsonTxn.sender!.address == expectedAddress.address)
+            XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
             print(error)
             return XCTFail(String(describing: error))
@@ -349,11 +349,11 @@ class web3swiftTransactionsTests: XCTestCase {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is eip2930
-        XCTAssert(rlpTxn.type == .eip2930)
+        XCTAssertEqual(rlpTxn.type, .eip2930, "Transaction Type Mismatch")
         // check the hash, if they match everything was parsed, and re-encoded correctly
-        XCTAssert(rlpTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+        XCTAssertEqual(rlpTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
         // check that we recovered the address correctly
-        XCTAssert(rlpTxn.sender!.address == expectedAddress.address)
+        XCTAssertEqual(rlpTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
     }
 
     // test signing a EIP-2930 transaction (without accessList)
@@ -375,11 +375,11 @@ class web3swiftTransactionsTests: XCTestCase {
             let rawTxn = jsonTxn.encode()!.toHexString().addHexPrefix()
 
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(rawTxn == vector.RLP)
+            XCTAssertEqual(rawTxn, vector.RLP, "Transaction Encoding Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(jsonTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
             // check that we recovered the address correctly
-            XCTAssert(jsonTxn.sender!.address == expectedAddress.address)
+            XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
             print(error)
             return XCTFail(String(describing: error))
@@ -396,11 +396,11 @@ class web3swiftTransactionsTests: XCTestCase {
         do {
             let jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
             // check that the transaction type is eip2930
-            XCTAssert(jsonTxn.type == .eip2930)
+            XCTAssertEqual(jsonTxn.type, .eip2930, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(jsonTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
             // check that we recovered the address correctly
-            XCTAssert(jsonTxn.sender!.address == expectedAddress.address)
+            XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
             print(error)
             return XCTFail(String(describing: error))
@@ -418,11 +418,11 @@ class web3swiftTransactionsTests: XCTestCase {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is eip2930
-        XCTAssert(rlpTxn.type == .eip2930)
+        XCTAssertEqual(rlpTxn.type, .eip2930, "Transaction Type Mismatch")
         // check the hash, if they match everything was parsed, and re-encoded correctly
-        XCTAssert(rlpTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+        XCTAssertEqual(rlpTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
         // check that we recovered the address correctly
-        XCTAssert(rlpTxn.sender!.address == expectedAddress.address)
+        XCTAssertEqual(rlpTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
     }
 
     // test signing a EIP-2930 transaction (with accessList)
@@ -444,11 +444,11 @@ class web3swiftTransactionsTests: XCTestCase {
             let rawTxn = jsonTxn.encode()!.toHexString().addHexPrefix()
 
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(rawTxn == vector.RLP)
+            XCTAssertEqual(rawTxn, vector.RLP, "Transaction Encoding Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(jsonTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
             // check that we recovered the address correctly
-            XCTAssert(jsonTxn.sender!.address == expectedAddress.address)
+            XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
             print(error)
             return XCTFail(String(describing: error))
@@ -465,11 +465,11 @@ class web3swiftTransactionsTests: XCTestCase {
         do {
             let jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
             // check that the transaction type is eip1559
-            XCTAssert(jsonTxn.type == .eip1559)
+            XCTAssertEqual(jsonTxn.type, .eip1559, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(jsonTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
             // check that we recovered the address correctly
-            XCTAssert(jsonTxn.sender!.address == expectedAddress.address)
+            XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
             print(error)
             return XCTFail(String(describing: error))
@@ -487,11 +487,11 @@ class web3swiftTransactionsTests: XCTestCase {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is eip1559
-        XCTAssert(rlpTxn.type == .eip1559)
+        XCTAssertEqual(rlpTxn.type, .eip1559, "Transaction Type Mismatch")
         // check the hash, if they match everything was parsed, and re-encoded correctly
-        XCTAssert(rlpTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+        XCTAssertEqual(rlpTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
         // check that we recovered the address correctly
-        XCTAssert(rlpTxn.sender!.address == expectedAddress.address)
+        XCTAssertEqual(rlpTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
     }
 
     // test signing a EIP-1559 transaction (without accessList)
@@ -513,11 +513,11 @@ class web3swiftTransactionsTests: XCTestCase {
             let rawTxn = jsonTxn.encode()!.toHexString().addHexPrefix()
 
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(rawTxn == vector.RLP)
+            XCTAssertEqual(rawTxn, vector.RLP, "Transaction Encoding Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(jsonTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
             // check that we recovered the address correctly
-            XCTAssert(jsonTxn.sender!.address == expectedAddress.address)
+            XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
             print(error)
             return XCTFail(String(describing: error))
@@ -534,11 +534,11 @@ class web3swiftTransactionsTests: XCTestCase {
         do {
             let jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
             // check that the transaction type is eip1559
-            XCTAssert(jsonTxn.type == .eip1559)
+            XCTAssertEqual(jsonTxn.type, .eip1559, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(jsonTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
             // check that we recovered the address correctly
-            XCTAssert(jsonTxn.sender!.address == expectedAddress.address)
+            XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
             print(error)
             return XCTFail(String(describing: error))
@@ -556,11 +556,11 @@ class web3swiftTransactionsTests: XCTestCase {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is eip1559
-        XCTAssert(rlpTxn.type == .eip1559)
+        XCTAssertEqual(rlpTxn.type, .eip1559, "Transaction Type Mismatch")
         // check the hash, if they match everything was parsed, and re-encoded correctly
-        XCTAssert(rlpTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+        XCTAssertEqual(rlpTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
         // check that we recovered the address correctly
-        XCTAssert(rlpTxn.sender!.address == expectedAddress.address)
+        XCTAssertEqual(rlpTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
     }
 
     // test signing a EIP-1559 transaction (with accessList)
@@ -582,11 +582,11 @@ class web3swiftTransactionsTests: XCTestCase {
             let rawTxn = jsonTxn.encode()!.toHexString().addHexPrefix()
 
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(rawTxn == vector.RLP)
+            XCTAssertEqual(rawTxn, vector.RLP, "Transaction Encoding Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssert(jsonTxn.hash!.toHexString().addHexPrefix() == vector.hash)
+            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
             // check that we recovered the address correctly
-            XCTAssert(jsonTxn.sender!.address == expectedAddress.address)
+            XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
             print(error)
             return XCTFail(String(describing: error))
@@ -594,6 +594,7 @@ class web3swiftTransactionsTests: XCTestCase {
     }
 
     // ***** Legacy Tests *****
+    // TODO: Replace `XCTAssert` with more explicite `XCTAssertEqual`, where Applicable
 
     func testDirectTransaction() throws {
         do {
