@@ -92,9 +92,7 @@ class web3swiftBasicLocalNodeTests: XCTestCase {
         print("Balance after from: " + balanceAfterFrom.description)
         
         XCTAssert(balanceAfterTo - balanceBeforeTo == valueToSend)
-        let options = details.transaction.getOptions()
-        let txnGasPrice = options.resolveGasPrice(0)
-        XCTAssert(balanceBeforeFrom - (balanceAfterFrom + receipt.gasUsed * txnGasPrice) == valueToSend)
+        XCTAssert(balanceBeforeFrom - (balanceAfterFrom + receipt.gasUsed * details.transaction.gasPrice) == valueToSend)
     }
 
     // FIXME: Crashes on CI/CD
