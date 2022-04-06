@@ -191,7 +191,7 @@
 		5CF7E8BC276B79380009900F /* web3swiftWebsocketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E8B7276B79380009900F /* web3swiftWebsocketTests.swift */; };
 		604FA4FF27ECBDC80021108F /* DataConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604FA4FE27ECBDC80021108F /* DataConversionTests.swift */; };
 		60FFB09D27F6455000DBC22B /* EIP1559Envelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FFB09627F6455000DBC22B /* EIP1559Envelope.swift */; };
-		60FFB09E27F6455000DBC22B /* TransactionOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FFB09727F6455000DBC22B /* TransactionOptions.swift */; };
+		60FFB09E27F6455000DBC22B /* Web3+Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FFB09727F6455000DBC22B /* Web3+Options.swift */; };
 		60FFB09F27F6455000DBC22B /* EnvelopeFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FFB09827F6455000DBC22B /* EnvelopeFactory.swift */; };
 		60FFB0A027F6455000DBC22B /* EIP2718Envelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FFB09927F6455000DBC22B /* EIP2718Envelope.swift */; };
 		60FFB0A127F6455000DBC22B /* AbstractEnvelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FFB09A27F6455000DBC22B /* AbstractEnvelope.swift */; };
@@ -418,7 +418,7 @@
 		5CF7E8B7276B79380009900F /* web3swiftWebsocketTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = web3swiftWebsocketTests.swift; sourceTree = "<group>"; };
 		604FA4FE27ECBDC80021108F /* DataConversionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataConversionTests.swift; sourceTree = "<group>"; };
 		60FFB09627F6455000DBC22B /* EIP1559Envelope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP1559Envelope.swift; sourceTree = "<group>"; };
-		60FFB09727F6455000DBC22B /* TransactionOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionOptions.swift; sourceTree = "<group>"; };
+		60FFB09727F6455000DBC22B /* Web3+Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+Options.swift"; sourceTree = "<group>"; };
 		60FFB09827F6455000DBC22B /* EnvelopeFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnvelopeFactory.swift; sourceTree = "<group>"; };
 		60FFB09927F6455000DBC22B /* EIP2718Envelope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP2718Envelope.swift; sourceTree = "<group>"; };
 		60FFB09A27F6455000DBC22B /* AbstractEnvelope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbstractEnvelope.swift; sourceTree = "<group>"; };
@@ -709,7 +709,6 @@
 				60FFB09B27F6455000DBC22B /* EIP2930Envelope.swift */,
 				60FFB09827F6455000DBC22B /* EnvelopeFactory.swift */,
 				60FFB09C27F6455000DBC22B /* LegacyEnvelope.swift */,
-				60FFB09727F6455000DBC22B /* TransactionOptions.swift */,
 				3AA8153D2276E44100F5DB52 /* BloomFilter.swift */,
 				3AA8153F2276E44100F5DB52 /* EthereumTransaction.swift */,
 			);
@@ -772,6 +771,7 @@
 				3AA8155D2276E44100F5DB52 /* Web3+Methods.swift */,
 				3AA8155E2276E44100F5DB52 /* Web3+Eth.swift */,
 				3AA8155F2276E44100F5DB52 /* Web3+TxPool.swift */,
+				60FFB09727F6455000DBC22B /* Web3+Options.swift */,
 				3AA815602276E44100F5DB52 /* Web3+Structures.swift */,
 			);
 			path = Web3;
@@ -1349,7 +1349,7 @@
 				3AA815E92276E44100F5DB52 /* EthereumAddress.swift in Sources */,
 				3AA816072276E44100F5DB52 /* Web3+ERC1643.swift in Sources */,
 				3AA815DA2276E44100F5DB52 /* Web3+Eth.swift in Sources */,
-				60FFB09E27F6455000DBC22B /* TransactionOptions.swift in Sources */,
+				60FFB09E27F6455000DBC22B /* Web3+Options.swift in Sources */,
 				3AA816082276E44100F5DB52 /* Web3+ERC1644.swift in Sources */,
 				3AA815AB2276E44100F5DB52 /* ETHRegistrarController.swift in Sources */,
 				3A7EA3602280EB27005120C2 /* Decodable+Extensions.swift in Sources */,

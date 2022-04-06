@@ -8,7 +8,7 @@ import Foundation
 import BigInt
 
 public protocol TransactionOptionsInheritable {
-    var transactionOptions: TransactionOptions {get}
+    var transactionOptions: TransactionOptions { get }
 }
 
 /// Options for sending or calling a particular Ethereum transaction
@@ -86,8 +86,6 @@ public struct TransactionOptions {
 
     public var accessList: [AccessListEntry]?
 
-    // default options
-    // used by all routines here that fall back to defaults
     public static var defaultOptions: TransactionOptions {
         var opts = TransactionOptions()
         opts.type = .legacy
@@ -113,12 +111,10 @@ public struct TransactionOptions {
     public func resolveGasPrice(_ suggestedByNode: BigUInt) -> BigUInt {
         guard let gasPricePolicy = self.gasPrice else { return suggestedByNode }
         switch gasPricePolicy {
-        case .automatic:
+        case .automatic, .withMargin:
             return suggestedByNode
         case .manual(let value):
             return value
-        case .withMargin:
-            return suggestedByNode
         }
     }
 
@@ -158,7 +154,6 @@ public struct TransactionOptions {
         }
     }
 
-    // Merges new options with the current set
     public func merge(_ otherOptions: TransactionOptions?) -> TransactionOptions {
         guard let other = otherOptions else { return self }
         var opts = TransactionOptions()
@@ -178,7 +173,7 @@ public struct TransactionOptions {
     /// Merges two sets of options by overriding the parameters from the first set by parameters from the second
     /// set if those are not nil.
     ///
-    /// Returns default option if both parameters are nil.
+    /// Returns default options if both parameters are nil.
     public static func merge(_ options: TransactionOptions?, with other: TransactionOptions?) -> TransactionOptions? {
         var newOptions = TransactionOptions.defaultOptions // default has lowest priority
         newOptions = newOptions.merge(options)
