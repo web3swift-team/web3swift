@@ -22,6 +22,7 @@
         "SoliditySha3Test",
         "web3swiftAdvancedABIv2Tests",
         "web3swiftBasicLocalNodeTests",
+        "web3swiftDecodeSolidityErrorType",
         "web3swiftEIP67Tests",
         "web3swiftEIP681Tests",
         "web3swiftERC20ClassTests",
