@@ -4,6 +4,7 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
+// TODO: Replace `XCTAssert` with more explicite `XCTAssertEqual`, where Applicable
 
 import XCTest
 import CryptoSwift
