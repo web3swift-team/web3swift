@@ -22,21 +22,21 @@ extension Web3 {
         /// Ethereum scope shortcut
         private var eth: web3.Eth { web3Provider.eth }
 
-        /// Count of block to calculate statistics
-        public private(set) var blocksCount: BigUInt
+        /// Count of blocks to calculate statistics
+        public private(set) var blockCount: BigUInt
 
         /// Count of transactions to filter block for tip calculation
-        public private(set) var transactionsCount: BigUInt
+        public private(set) var transactionCount: BigUInt
 
         /// Oracle initializer
         /// - Parameters:
         ///   - provider: Web3 Ethereum provider
-        ///   - blocksCount: Count of block to caltulate statistics
+        ///   - blocksCount: Count of block to calculate statistics
         ///   - transactionsCount: Count of transacrtions to filter block for tip calculation
-        public init(_ provider: web3, blocksCount: BigUInt = 20, transactionsCount: BigUInt = 50) {
+        public init(_ provider: web3, blockCount: BigUInt = 20, transactionCount: BigUInt = 50) {
             self.web3Provider = provider
-            self.blocksCount = blocksCount
-            self.transactionsCount = transactionsCount
+            self.blockCount = blockCount
+            self.transactionCount = transactionCount
         }
 
         private func calcBaseFee(for block: Block?) -> BigUInt {
@@ -70,7 +70,7 @@ extension Web3 {
             // TODO: Make me work with cache
             repeat {
                 block = try eth.getBlockByNumber(latestBlockNumber, fullTransactions: true)
-            } while block.transactions.count < transactionsCount
+            } while block.transactions.count < transactionCount
 
             // Storing last block to calculate baseFee of the next block
             latestBlock = block
@@ -92,7 +92,7 @@ extension Web3 {
             // Assigning last block to object var to predict baseFee of the next block
             latestBlock = try eth.getBlockByNumber(latestBlockNumber)
             // TODO: Make me work with cache
-            let lastNthBlocksBaseFees = try (latestBlockNumber - blocksCount ... latestBlockNumber)
+            let lastNthBlocksBaseFees = try (latestBlockNumber - blockCount ... latestBlockNumber)
                 .map { try eth.getBlockByNumber($0) }
                 .filter { !$0.transactions.isEmpty }
                 .map { $0.baseFeePerGas }
@@ -106,7 +106,7 @@ extension Web3 {
             // Assigning last block to object var to predict baseFee of the next block
             latestBlock = try eth.getBlockByNumber(latestBlockNumber)
             // TODO: Make me work with cache
-            let lastNthBlockGasPrice = try (latestBlockNumber - blocksCount ... latestBlockNumber)
+            let lastNthBlockGasPrice = try (latestBlockNumber - blockCount ... latestBlockNumber)
                 .map { try eth.getBlockByNumber($0, fullTransactions: true) }
                 .flatMap { b -> [EthereumTransaction] in
                     b.transactions.compactMap { t -> EthereumTransaction? in
@@ -141,7 +141,7 @@ public extension Web3.Oracle {
     ///
     /// Normalized means that most high and most low value were droped from calculation.
     ///
-    /// Method will takes in accounting a latest block that have transactions included more than `transactionsCount` property.
+    /// Method calculates the suggested tip based on the most recent block that contains more than transactionsCount transactions
     ///
     /// - Parameter statistic: Statistic to apply for tip calculation
     /// - Returns: Suggested tip amount according to statistic, nil if failed to perdict
