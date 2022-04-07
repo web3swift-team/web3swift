@@ -1,4 +1,4 @@
-# Contribution guidelines
+# Contribution guide
 ## Version convention
 We’re conforming [default versions convension](https://semver.org/).
 So in the `1.0.0` version each position means follow:
