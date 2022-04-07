@@ -8,7 +8,7 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 
 // Document Management Standard
 protocol IERC1643: IERC20 {

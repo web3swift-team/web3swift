@@ -8,7 +8,7 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 
 // Re-Fungible Token Standard (RFT)
 protocol IERC1633: IERC20, IERC165 {

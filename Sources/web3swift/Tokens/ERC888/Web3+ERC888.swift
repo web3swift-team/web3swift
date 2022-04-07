@@ -8,7 +8,7 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 
 // MultiDimensional Token Standard
 protocol IERC888 {

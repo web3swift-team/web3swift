@@ -6,7 +6,6 @@
 
 import Foundation
 import BigInt
-import class PromiseKit.Promise
 
 /// Protocol for generic Ethereum event parsing results
 public protocol EventParserResultProtocol {

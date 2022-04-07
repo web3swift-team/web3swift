@@ -6,7 +6,7 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 
 extension web3.Personal {
     public func createAccountPromise(password: String = "web3swift") -> Promise<EthereumAddress> {

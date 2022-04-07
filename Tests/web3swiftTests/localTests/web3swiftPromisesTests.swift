@@ -5,7 +5,7 @@
 //
 
 import XCTest
-import PromiseKit
+
 import BigInt
 //import EthereumAddress
 

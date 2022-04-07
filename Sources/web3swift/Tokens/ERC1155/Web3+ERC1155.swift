@@ -8,7 +8,7 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 
 // Multi Token Standard
 protocol IERC1155: IERC165 {

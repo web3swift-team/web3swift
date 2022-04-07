@@ -6,7 +6,7 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 
 extension web3.Eth {
     public func getBlockByNumberPromise(_ number: UInt64, fullTransactions: Bool = false) -> Promise<Block> {

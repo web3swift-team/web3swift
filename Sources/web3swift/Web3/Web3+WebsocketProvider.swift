@@ -6,7 +6,7 @@
 //  Copyright © 2019 The Matter Inc. All rights reserved.
 //
 import Starscream
-import PromiseKit
+
 import BigInt
 import Foundation
 
@@ -94,12 +94,12 @@ public protocol Web3SocketDelegate {
 /// The default websocket provider.
 public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDelegate {
 
-    public func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse> {
-        return Promise(error: Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'"))
+    public func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) throws -> JSONRPCresponse {
+        throw Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'")
     }
 
-    public func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue) -> Promise<JSONRPCresponseBatch> {
-        return Promise(error: Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'"))
+    public func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue) throws -> JSONRPCresponseBatch {
+        throw Web3Error.inputError(desc: "Sending is unsupported for Websocket provider. Please, use \'sendMessage\'")
     }
 
     public var network: Networks?

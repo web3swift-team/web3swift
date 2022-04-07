@@ -6,7 +6,7 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 fileprivate typealias PromiseResult = PromiseKit.Result
 
 extension web3.web3contract {

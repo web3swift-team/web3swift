@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import PromiseKit
+
 import BigInt
 
 extension web3.Eth {

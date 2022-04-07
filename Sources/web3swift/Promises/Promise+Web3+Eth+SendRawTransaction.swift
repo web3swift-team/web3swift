@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import PromiseKit
+
 
 extension web3.Eth {
     public func sendRawTransactionPromise(_ transaction: Data) -> Promise<TransactionSendingResult> {

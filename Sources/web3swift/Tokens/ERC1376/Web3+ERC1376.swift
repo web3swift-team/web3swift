@@ -8,7 +8,7 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 
 public enum IERC1376DelegateMode: UInt {
     case PublicMsgSender = 0

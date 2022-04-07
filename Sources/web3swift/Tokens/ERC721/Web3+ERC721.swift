@@ -6,7 +6,7 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 
 // Non-Fungible Token Standard
 protocol IERC721: IERC165 {

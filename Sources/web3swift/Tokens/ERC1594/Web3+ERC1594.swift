@@ -8,7 +8,7 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 
 // Core Security Token Standard
 protocol IERC1594: IERC20 {

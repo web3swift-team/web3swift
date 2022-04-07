@@ -6,12 +6,12 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 
 /// Providers abstraction for custom providers (websockets, other custom private key managers). At the moment should not be used.
 public protocol Web3Provider {
-    func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) -> Promise<JSONRPCresponse>
-    func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue) -> Promise<JSONRPCresponseBatch>
+    func sendAsync(_ request: JSONRPCrequest, queue: DispatchQueue) async throws -> JSONRPCresponse
+    func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue) async throws -> JSONRPCresponseBatch
     var network: Networks? {get set}
     var attachedKeystoreManager: KeystoreManager? {get set}
     var url: URL {get}

@@ -8,7 +8,7 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 
 // NPolymath Token Standard
 protocol IST20: IERC20 {

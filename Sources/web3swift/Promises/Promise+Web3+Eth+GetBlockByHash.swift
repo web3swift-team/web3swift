@@ -6,7 +6,7 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 
 extension web3.Eth {
     public func getBlockByHashPromise(_ hash: Data, fullTransactions: Bool = false) -> Promise<Block> {

@@ -7,7 +7,7 @@
 //
 import Foundation
 import BigInt
-import PromiseKit
+
 
 // A New Advanced Token Standard
 protocol IERC777: IERC20, IERC820 {

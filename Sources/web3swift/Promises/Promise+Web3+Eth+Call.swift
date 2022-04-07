@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import PromiseKit
+
 
 extension web3.Eth {
 

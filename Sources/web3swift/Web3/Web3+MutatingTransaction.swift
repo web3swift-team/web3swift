@@ -6,7 +6,7 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 fileprivate typealias PromiseResult = PromiseKit.Result
 
 public class WriteTransaction: ReadTransaction {
