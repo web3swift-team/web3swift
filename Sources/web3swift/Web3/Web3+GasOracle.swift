@@ -10,33 +10,33 @@ import Foundation
 import BigInt
 
 extension Web3 {
-    /// Oracle is the class to of a transaction fee suggestion
+    /// Oracle is the class to do a transaction fee suggestion
     ///
-    /// It designed for EIP-1559 transactions only.
+    /// Designed for EIP-1559 transactions only.
     final public class Oracle {
         private var latestBlock: Block?
 
-        /// Web3 provider by wich accessing to the blockchain
+        /// Web3 provider by which accessing to the blockchain
         private let web3Provider: web3
 
         /// Ethereum scope shortcut
         private var eth: web3.Eth { web3Provider.eth }
 
-        /// Number of block to caltulate statistics
-        public private(set) var blocksNumber: BigUInt
+        /// Count of block to calculate statistics
+        public private(set) var blocksCount: BigUInt
 
-        /// Number of transacrtions to filter block for tip calculation
-        public private(set) var transactionsNumber: BigUInt
+        /// Count of transactions to filter block for tip calculation
+        public private(set) var transactionsCount: BigUInt
 
         /// Oracle initializer
         /// - Parameters:
         ///   - provider: Web3 Ethereum provider
-        ///   - blocksNumber: Number of block to caltulate statistics
-        ///   - transactionsNumber: Number of transacrtions to filter block for tip calculation
-        public init(_ provider: web3, blocksNumber: BigUInt = 20, transactionsNumber: BigUInt = 50) {
+        ///   - blocksCount: Count of block to caltulate statistics
+        ///   - transactionsCount: Count of transacrtions to filter block for tip calculation
+        public init(_ provider: web3, blocksCount: BigUInt = 20, transactionsCount: BigUInt = 50) {
             self.web3Provider = provider
-            self.blocksNumber = blocksNumber
-            self.transactionsNumber = transactionsNumber
+            self.blocksCount = blocksCount
+            self.transactionsCount = transactionsCount
         }
 
         private func calcBaseFee(for block: Block?) -> BigUInt {
@@ -45,20 +45,20 @@ extension Web3 {
         }
 
         private func calculateStatistic(_ data: [BigUInt], _ statistic: Statistic) throws -> BigUInt {
-            let sortedData = data.sorted()
-            let noAnomalyArray = sortedData.cropAnomalyValues()
+            let noAnomalyArray = data.cropAnomalyValues()
 
-            guard !noAnomalyArray.isEmpty else { throw Web3Error.unknownError }
+            // FIXME: Set appropriate error thrown.
+            guard let unwrappedArray = noAnomalyArray, !unwrappedArray.isEmpty else { throw Web3Error.unknownError }
 
             switch statistic {
             // Force unwrapping is ok, since array checked for epmtiness above
-            case .minimum: return noAnomalyArray.min()!
-            case .mean: return noAnomalyArray.mean()!
-            case .median: return noAnomalyArray.median()!
+            case .minimum: return unwrappedArray.min()!
+            case .mean: return unwrappedArray.mean()!
+            case .median: return unwrappedArray.median()!
             case .maximum:
-                // Checking that suggestedBaseFee are not lower than will be in the next block
-                // because in tne maximum statistic we should guarantee that transaction would be included in it.
-                return max(calcBaseFee(for: latestBlock), noAnomalyArray.max()!)
+                // Checking that suggestedBaseFee is not lower than it will be in the next block
+                // because in the maximum statistic we should guarantee that transaction would be included in it.
+                return max(calcBaseFee(for: latestBlock), unwrappedArray.max()!)
             }
         }
 
@@ -70,7 +70,7 @@ extension Web3 {
             // TODO: Make me work with cache
             repeat {
                 block = try eth.getBlockByNumber(latestBlockNumber, fullTransactions: true)
-            } while block.transactions.count < transactionsNumber
+            } while block.transactions.count < transactionsCount
 
             // Storing last block to calculate baseFee of the next block
             latestBlock = block
@@ -92,7 +92,7 @@ extension Web3 {
             // Assigning last block to object var to predict baseFee of the next block
             latestBlock = try eth.getBlockByNumber(latestBlockNumber)
             // TODO: Make me work with cache
-            let lastNthBlocksBaseFees = try (latestBlockNumber - blocksNumber ... latestBlockNumber)
+            let lastNthBlocksBaseFees = try (latestBlockNumber - blocksCount ... latestBlockNumber)
                 .map { try eth.getBlockByNumber($0) }
                 .filter { !$0.transactions.isEmpty }
                 .map { $0.baseFeePerGas }
@@ -106,7 +106,7 @@ extension Web3 {
             // Assigning last block to object var to predict baseFee of the next block
             latestBlock = try eth.getBlockByNumber(latestBlockNumber)
             // TODO: Make me work with cache
-            let lastNthBlockGasPrice = try (latestBlockNumber - blocksNumber ... latestBlockNumber)
+            let lastNthBlockGasPrice = try (latestBlockNumber - blocksCount ... latestBlockNumber)
                 .map { try eth.getBlockByNumber($0, fullTransactions: true) }
                 .flatMap { b -> [EthereumTransaction] in
                     b.transactions.compactMap { t -> EthereumTransaction? in
@@ -141,7 +141,7 @@ public extension Web3.Oracle {
     ///
     /// Normalized means that most high and most low value were droped from calculation.
     ///
-    /// Account first of the latest block that have more than `transactionsNumber` value.
+    /// Method will takes in accounting a latest block that have transactions included more than `transactionsCount` property.
     ///
     /// - Parameter statistic: Statistic to apply for tip calculation
     /// - Returns: Suggested tip amount according to statistic, nil if failed to perdict
@@ -155,12 +155,12 @@ public extension Web3.Oracle {
     /// - Parameters:
     ///   - baseFee: Statistic to apply for baseFee
     ///   - tip: Statistic to apply for tip
-    /// - Returns: Touple where [0] — base fee, [1] — tip, nil if failed to predict
-    func predictBothFees(baseFee: Statistic, tip: Statistic) -> (BigUInt, BigUInt)? {
+    /// - Returns: Tuple where `baseFee` — base fee, `tip` — tip, nil if failed to predict
+    func predictBothFees(baseFee: Statistic, tip: Statistic) -> (baseFee: BigUInt, tip: BigUInt)? {
         guard let baseFee = try? suggestBaseFee(baseFee) else { return nil }
         guard let tip = try? suggestTipValue(tip) else { return nil }
 
-        return (baseFee, tip)
+        return (baseFee: baseFee, tip: tip)
     }
 
     // MARK: - Legacy GasPrice
@@ -174,7 +174,7 @@ public extension Web3.Oracle {
 }
 
 public extension Web3.Oracle {
-    // TODO: Make me struct and incapsulate math within to make me extendable
+    // TODO: Make me struct and encapsulate math within to make me extendable
     enum Statistic {
         /// Mininum statistic
         case minimum
@@ -187,11 +187,17 @@ public extension Web3.Oracle {
     }
 }
 
-extension Array {
-    func cropAnomalyValues() -> Self {
-        var tmpArr = self.dropFirst()
-        tmpArr = self.dropLast()
-        return Array(tmpArr)
+extension Array where Element: Comparable {
+
+    /// Sorts array and drops most and least values.
+    /// - Returns: Sorted array without most and least values, nil if `array.count` <= 2
+    func cropAnomalyValues() -> Self? {
+        var sortedArray = self.sorted()
+        // Array should at least counts two to pass that formations.
+        guard sortedArray.count > 1 else { return nil }
+        sortedArray.removeLast()
+        sortedArray.removeFirst()
+        return sortedArray
     }
 }
 
