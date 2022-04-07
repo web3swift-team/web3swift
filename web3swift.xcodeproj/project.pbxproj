@@ -194,6 +194,7 @@
 		5CF7E8BC276B79380009900F /* web3swiftWebsocketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E8B7276B79380009900F /* web3swiftWebsocketTests.swift */; };
 		604FA4FF27ECBDC80021108F /* DataConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604FA4FE27ECBDC80021108F /* DataConversionTests.swift */; };
 		CB50A52827060BD600D7E39B /* EIP712Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50A52727060BD600D7E39B /* EIP712Tests.swift */; };
+		D606A56B279F5D59003643ED /* web3swiftDecodeSolidityErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D606A56A279F5D59003643ED /* web3swiftDecodeSolidityErrorType.swift */; };
 		D6A3D9B827F1E785009E3BCF /* ABIEncoderSoliditySha3Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3D9B727F1E785009E3BCF /* ABIEncoderSoliditySha3Test.swift */; };
 		E22A911F241ED71A00EC1021 /* browser.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E22A911E241ED71A00EC1021 /* browser.min.js */; };
 		E2B76710241ED479007EBFE3 /* browser.js in Resources */ = {isa = PBXBuildFile; fileRef = E2B7670F241ED479007EBFE3 /* browser.js */; };
@@ -416,6 +417,7 @@
 		604FA4FE27ECBDC80021108F /* DataConversionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataConversionTests.swift; sourceTree = "<group>"; };
 		CB50A52727060BD600D7E39B /* EIP712Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP712Tests.swift; sourceTree = "<group>"; };
 		CB50A52927060C5300D7E39B /* EIP712.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP712.swift; sourceTree = "<group>"; };
+		D606A56A279F5D59003643ED /* web3swiftDecodeSolidityErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftDecodeSolidityErrorType.swift; sourceTree = "<group>"; };
 		D6A3D9B727F1E785009E3BCF /* ABIEncoderSoliditySha3Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABIEncoderSoliditySha3Test.swift; sourceTree = "<group>"; };
 		E22A911E241ED71A00EC1021 /* browser.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.min.js; sourceTree = "<group>"; };
 		E2B7670F241ED479007EBFE3 /* browser.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.js; sourceTree = "<group>"; };
@@ -1014,6 +1016,7 @@
 				CB50A52727060BD600D7E39B /* EIP712Tests.swift */,
 				D6A3D9B727F1E785009E3BCF /* ABIEncoderSoliditySha3Test.swift */,
 				5CDEF973275A74670004A2F2 /* LocalTests.xctestplan */,
+				D606A56A279F5D59003643ED /* web3swiftDecodeSolidityErrorType.swift */,
 			);
 			path = localTests;
 			sourceTree = "<group>";
@@ -1386,6 +1389,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB50A52827060BD600D7E39B /* EIP712Tests.swift in Sources */,
+				D606A56B279F5D59003643ED /* web3swiftDecodeSolidityErrorType.swift in Sources */,
 				5CF7E8AB276B792A0009900F /* web3swiftTests.swift in Sources */,
 				5CF7E8A4276B792A0009900F /* web3swiftTransactionsTests.swift in Sources */,
 				5C26D8A027F3725500431EB0 /* EIP1559BlockTests.swift in Sources */,
