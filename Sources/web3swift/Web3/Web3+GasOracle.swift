@@ -31,8 +31,8 @@ extension Web3 {
         /// Oracle initializer
         /// - Parameters:
         ///   - provider: Web3 Ethereum provider
-        ///   - blocksCount: Count of block to calculate statistics
-        ///   - transactionsCount: Count of transacrtions to filter block for tip calculation
+        ///   - blockCount: Count of block to calculate statistics
+        ///   - transactionCount: Count of transaction to filter block for tip calculation
         public init(_ provider: web3, blockCount: BigUInt = 20, transactionCount: BigUInt = 50) {
             self.web3Provider = provider
             self.blockCount = blockCount
@@ -44,7 +44,7 @@ extension Web3 {
             return Web3.calcBaseFee(block)
         }
 
-        private func calculateStatistic(_ data: [BigUInt], _ statistic: Statistic) throws -> BigUInt {
+        private func calculateStatistic(for statistic: Statistic, data: [BigUInt]) throws -> BigUInt {
             let noAnomalyArray = data.cropAnomalyValues()
 
             // FIXME: Set appropriate error thrown.
@@ -52,6 +52,7 @@ extension Web3 {
 
             switch statistic {
             // Force unwrapping is ok, since array checked for epmtiness above
+            // swiftlint:disable force_unwrapping
             case .minimum: return unwrappedArray.min()!
             case .mean: return unwrappedArray.mean()!
             case .median: return unwrappedArray.median()!
@@ -60,6 +61,7 @@ extension Web3 {
                 // because in the maximum statistic we should guarantee that transaction would be included in it.
                 return max(calcBaseFee(for: latestBlock), unwrappedArray.max()!)
             }
+            // swiftlint:enable force_unwrapping
         }
 
         private func suggestTipValue(_ statistic: Statistic) throws -> BigUInt {
@@ -83,7 +85,7 @@ extension Web3 {
                 // TODO: Add filter for transaction types
                 .map { $0.maxPriorityFeePerGas }
 
-            return try calculateStatistic(transactionsTips, statistic)
+            return try calculateStatistic(for: statistic, data: transactionsTips)
         }
 
         private func suggestBaseFee(_ statistic: Statistic) throws -> BigUInt {
@@ -97,7 +99,7 @@ extension Web3 {
                 .filter { !$0.transactions.isEmpty }
                 .map { $0.baseFeePerGas }
 
-            return try calculateStatistic(lastNthBlocksBaseFees, statistic)
+            return try calculateStatistic(for: statistic, data: lastNthBlocksBaseFees)
         }
 
         private func suggestGasFeeLegacy(_ statistic: Statistic) throws -> BigUInt {
@@ -116,7 +118,7 @@ extension Web3 {
                 }
                 .map { $0.gasPrice }
 
-            return try calculateStatistic(lastNthBlockGasPrice, statistic)
+            return try calculateStatistic(for: statistic, data: lastNthBlockGasPrice)
         }
     }
 }
