@@ -1,6 +1,6 @@
 # Contribution guide
 ## Version convention
-We’re conforming [default versions convension](https://semver.org/).
+We’re conforming [default versions convention](https://semver.org/).
 So in the `1.0.0` version each position means follow:
 - 1.\*.* — **major release**, includes API groundbreaking changes (ie: your old code will not work).
 - \*.1.* — **minor release**, we’ve added some new feature to the lib, but we didn’t break something in anyway (ie: everything will work as expected without any moves after update).
@@ -19,15 +19,21 @@ Please take it from the [roadmap](https://hackmd.io/G5znP3xAQY-BVc1X8Y1jSg) or f
 - `swiftlint` check should goes with no warnings.
 - Here’s some more detailed and human readable code style [guidelines](https://hackmd.io/8bACoAnTSsKc55Os596yCg "") (you can add there some suggestion if you’d like to). 
 ## Tests guideline
-
+1. Cover each new public method with tests.
+2. If you’re implementing some big feature encapsulate it in Separate file.
+3. Choose one of the two directory to add test case:
+	* `localTests` — tests which could be ran without needing to connecting to real Ethereum network.
+	* `remoteTests` — tests which needing connection to real Ethereum network to be ran.
+4. Exclude added file from opposite `*.xctestplan` file (e.g. if you’re adding file to `localTests` please exclude it from `RemoteTests.xctestplan`.
+5. Add test file to `web3swift.xcodeproj` to make it working within Carthage building system.
 
 ## Hacks & tricks & magic
 ### TestPlans
-In ci/cd we’re using Xcode testplans feature to spread tests to local and remote one. 
+In ci/cd we’re using Xcode test plans feature to spread tests to local and remote one. So any time you’re adding any new test suit (file) please exclude it from `LocalTests.xctestplan` rather `RemoteTests.xctestplan` depends on what tests group it included.
 ### Swift package manager
 Please add any files unused due build process to `excludeFiles` array in `Package.swift`.
 ### Carthage
-Please do not forget to add & remove all new or droped files and dependencies in carthage `.xcodeproj` file if you’re working with project anywhere but carthage project.
+Please do not forget to add & remove all new or dropped files and dependencies in carthage `.xcodeproj` file if you’re working with project anywhere but carthage project.
 ### Cocoapods
 Please do not forget to add & remove all dependencies within `web3swift.podspec` file.
 ### GitHub actions
@@ -61,5 +67,3 @@ on:
 - [ ] All magic or nonintuitive internal code parts are clearly explained in inline comments.
 - [ ] `swiftlint` ran have no warnings.
 - [ ] No commented out code lefts in PR.
-
-
