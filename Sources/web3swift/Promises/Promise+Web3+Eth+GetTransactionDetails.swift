@@ -9,23 +9,22 @@ import BigInt
 
 
 extension web3.Eth {
-    public func getTransactionDetailsPromise(_ txhash: Data) -> Promise<TransactionDetails> {
+    public func getTransactionDetailsPromise(_ txhash: Data) async throws -> TransactionDetails {
         let hashString = txhash.toHexString().addHexPrefix()
-        return self.getTransactionDetailsPromise(hashString)
+        return try await self.getTransactionDetailsPromise(hashString)
     }
 
-    public func getTransactionDetailsPromise(_ txhash: String) -> Promise<TransactionDetails> {
+    public func getTransactionDetailsPromise(_ txhash: String) async throws -> TransactionDetails {
         let request = JSONRPCRequestFabric.prepareRequest(.getTransactionByHash, parameters: [txhash])
-        let rp = web3.dispatch(request)
-        let queue = web3.requestDispatcher.queue
-        return rp.map(on: queue) { response in
-            guard let value: TransactionDetails = response.getValue() else {
-                if response.error != nil {
-                    throw Web3Error.nodeError(desc: response.error!.message)
-                }
-                throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
+        let response = try await web3.dispatch(request)
+
+        guard let value: TransactionDetails = response.getValue() else {
+            if response.error != nil {
+                throw Web3Error.nodeError(desc: response.error!.message)
             }
-            return value
+            throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
         }
+        return value
+
     }
 }

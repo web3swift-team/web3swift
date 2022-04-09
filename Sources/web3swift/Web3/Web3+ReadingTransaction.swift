@@ -26,80 +26,63 @@ public class ReadTransaction {
         }
     }
 
-    public func callPromise(transactionOptions: TransactionOptions? = nil) -> Promise<[String: Any]> {
+    public func callPromise(transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
         var assembledTransaction: EthereumTransaction = self.transaction
-        let queue = self.web3.requestDispatcher.queue
-        let returnPromise = Promise<[String: Any]> { seal in
-            let mergedOptions = self.transactionOptions.merge(transactionOptions)
-            var optionsForCall = TransactionOptions()
-            optionsForCall.from = mergedOptions.from
-            optionsForCall.to = mergedOptions.to
-            optionsForCall.value = mergedOptions.value
-            optionsForCall.callOnBlock = mergedOptions.callOnBlock
-            if mergedOptions.value != nil {
-                assembledTransaction.value = mergedOptions.value!
-            }
-            let callPromise: Promise<Data> = self.web3.eth.callPromise(assembledTransaction, transactionOptions: optionsForCall)
-            callPromise.done(on: queue) {(data: Data) throws in
-                do {
-                    if (self.method == "fallback") {
-                        let resultHex = data.toHexString().addHexPrefix()
-                        seal.fulfill(["result": resultHex as Any])
-                        return
-                    }
-                    guard let decodedData = self.contract.decodeReturnData(self.method, data: data) else {
-                        throw Web3Error.processingError(desc: "Can not decode returned parameters")
-                    }
-                    seal.fulfill(decodedData)
-                } catch{
-                    seal.reject(error)
-                }
-                }.catch(on: queue) {err in
-                    seal.reject(err)
+        let mergedOptions = self.transactionOptions.merge(transactionOptions)
+        var optionsForCall = TransactionOptions()
+        optionsForCall.from = mergedOptions.from
+        optionsForCall.to = mergedOptions.to
+        optionsForCall.value = mergedOptions.value
+        optionsForCall.callOnBlock = mergedOptions.callOnBlock
+        if let value = mergedOptions.value {
+            assembledTransaction.value = value
+        }
+
+        let data: Data = try await self.web3.eth.callPromise(assembledTransaction, transactionOptions: optionsForCall)
+
+        if self.method == "fallback" {
+            let resultHex = data.toHexString().addHexPrefix()
+            return ["result": resultHex as Any]
+        }
+        guard let decodedData = self.contract.decodeReturnData(self.method, data: data) else {
+            throw Web3Error.processingError(desc: "Can not decode returned parameters")
+        }
+        return decodedData
+    }
+
+    public func estimateGasPromise(transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
+        var assembledTransaction: EthereumTransaction = self.transaction
+
+        let mergedOptions = self.transactionOptions.merge(transactionOptions)
+        var optionsForGasEstimation = TransactionOptions()
+        optionsForGasEstimation.from = mergedOptions.from
+        optionsForGasEstimation.to = mergedOptions.to
+        optionsForGasEstimation.value = mergedOptions.value
+
+        // MARK: - Fixing estimate gas problem: gas price param shouldn't be nil
+        if let gasPricePolicy = mergedOptions.gasPrice {
+            switch gasPricePolicy {
+            case .manual(_):
+                optionsForGasEstimation.gasPrice = gasPricePolicy
+            default:
+                optionsForGasEstimation.gasPrice = .manual(1) // 1 wei to fix wrong estimating gas problem
             }
         }
-        return returnPromise
-    }
 
-    public func estimateGasPromise(transactionOptions: TransactionOptions? = nil) -> Promise<BigUInt>{
-        var assembledTransaction: EthereumTransaction = self.transaction
-        let queue = self.web3.requestDispatcher.queue
-        let returnPromise = Promise<BigUInt> { seal in
-            let mergedOptions = self.transactionOptions.merge(transactionOptions)
-            var optionsForGasEstimation = TransactionOptions()
-            optionsForGasEstimation.from = mergedOptions.from
-            optionsForGasEstimation.to = mergedOptions.to
-            optionsForGasEstimation.value = mergedOptions.value
-
-            // MARK: - Fixing estimate gas problem: gas price param shouldn't be nil
-            if let gasPricePolicy = mergedOptions.gasPrice {
-                switch gasPricePolicy {
-                case .manual(_):
-                    optionsForGasEstimation.gasPrice = gasPricePolicy
-                default:
-                    optionsForGasEstimation.gasPrice = .manual(1) // 1 wei to fix wrong estimating gas problem
-                }
-            }
-
-            optionsForGasEstimation.callOnBlock = mergedOptions.callOnBlock
-            if mergedOptions.value != nil {
-                assembledTransaction.value = mergedOptions.value!
-            }
-            let promise = self.web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
-            promise.done(on: queue) {(estimate: BigUInt) in
-                seal.fulfill(estimate)
-                }.catch(on: queue) {err in
-                    seal.reject(err)
-            }
+        optionsForGasEstimation.callOnBlock = mergedOptions.callOnBlock
+        if mergedOptions.value != nil {
+            assembledTransaction.value = mergedOptions.value!
         }
-        return returnPromise
+
+        return try await self.web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
+
     }
 
-    public func estimateGas(transactionOptions: TransactionOptions? = nil) throws -> BigUInt {
-        return try self.estimateGasPromise(transactionOptions: transactionOptions).wait()
+    public func estimateGas(transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
+        return try await self.estimateGasPromise(transactionOptions: transactionOptions)
     }
 
-    public func call(transactionOptions: TransactionOptions? = nil) throws -> [String: Any] {
-        return try self.callPromise(transactionOptions: transactionOptions).wait()
+    public func call(transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
+        return try await self.callPromise(transactionOptions: transactionOptions)
     }
 }

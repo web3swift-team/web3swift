@@ -169,19 +169,17 @@ public class WriteTransaction: ReadTransaction {
         return returnPromise
     }
 
-    public func sendPromise(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) -> Promise<TransactionSendingResult>{
-        let queue = self.web3.requestDispatcher.queue
-        return self.assemblePromise(transactionOptions: transactionOptions).then(on: queue) { transaction throws -> Promise<TransactionSendingResult> in
-            let mergedOptions = self.transactionOptions.merge(transactionOptions)
-            var cleanedOptions = TransactionOptions()
-            cleanedOptions.from = mergedOptions.from
-            cleanedOptions.to = mergedOptions.to
-            return self.web3.eth.sendTransactionPromise(transaction, transactionOptions: cleanedOptions, password: password)
-        }
+    public func sendPromise(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) -> TransactionSendingResult{
+        let transaction = self.assemblePromise(transactionOptions: transactionOptions)
+        let mergedOptions = self.transactionOptions.merge(transactionOptions)
+        var cleanedOptions = TransactionOptions()
+        cleanedOptions.from = mergedOptions.from
+        cleanedOptions.to = mergedOptions.to
+        return self.web3.eth.sendTransactionPromise(transaction, transactionOptions: cleanedOptions, password: password)
     }
 
     public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) throws -> TransactionSendingResult {
-        return try self.sendPromise(password: password, transactionOptions: transactionOptions).wait()
+        return try self.sendPromise(password: password, transactionOptions: transactionOptions)
     }
 
     public func assemble(transactionOptions: TransactionOptions? = nil) throws -> EthereumTransaction {
