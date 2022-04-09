@@ -339,7 +339,7 @@ public struct Block: Decodable {
     public var size: BigUInt
     public var gasLimit: BigUInt
     public var gasUsed: BigUInt
-    public var baseFeePerGas: BigUInt
+    public var baseFeePerGas: BigUInt?
     public var timestamp: Date
     public var transactions: [TransactionInBlock]
     public var uncles: [Data]
@@ -401,7 +401,9 @@ extension Block {
         self.size = try container.decodeHex(to: BigUInt.self, key: .size)
         self.gasLimit = try container.decodeHex(to: BigUInt.self, key: .gasLimit)
         self.gasUsed = try container.decodeHex(to: BigUInt.self, key: .gasUsed)
-        self.baseFeePerGas = try container.decodeHex(to: BigUInt.self, key: .baseFeePerGas)
+
+        // optional, since pre EIP-1559 block haven't such property.
+        self.baseFeePerGas = try? container.decodeHex(to: BigUInt.self, key: .baseFeePerGas)
 
         self.timestamp = try container.decodeHex(to: Date.self, key: .timestamp)
 
