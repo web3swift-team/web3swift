@@ -18,6 +18,7 @@ Please take it from the [roadmap](https://hackmd.io/G5znP3xAQY-BVc1X8Y1jSg) or f
 ## Codestyle guideline
 - `swiftlint` check should goes with no warnings.
 - Here’s some more detailed and human readable code style [guidelines](https://hackmd.io/8bACoAnTSsKc55Os596yCg "") (you can add there some suggestion if you’d like to). 
+- We use [swift](https://www.swift.org/documentation/api-design-guidelines/ "") name convention.
 ## Tests guideline
 1. Cover each new public method with tests.
 2. If you’re implementing some big feature encapsulate it in Separate file.
