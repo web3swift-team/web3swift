@@ -22,10 +22,10 @@ public protocol EventParserProtocol {
     func parseTransactionByHash(_ hash: Data) throws -> [EventParserResultProtocol]
     func parseBlock(_ block: Block) throws -> [EventParserResultProtocol]
     func parseBlockByNumber(_ blockNumber: UInt64) throws -> [EventParserResultProtocol]
-    func parseTransactionPromise(_ transaction: EthereumTransaction) -> Promise<[EventParserResultProtocol]>
-    func parseTransactionByHashPromise(_ hash: Data) -> Promise<[EventParserResultProtocol]>
-    func parseBlockByNumberPromise(_ blockNumber: UInt64) -> Promise<[EventParserResultProtocol]>
-    func parseBlockPromise(_ block: Block) -> Promise<[EventParserResultProtocol]>
+    func parseTransactionPromise(_ transaction: EthereumTransaction) -> [EventParserResultProtocol]
+    func parseTransactionByHashPromise(_ hash: Data) -> [EventParserResultProtocol]
+    func parseBlockByNumberPromise(_ blockNumber: UInt64) -> [EventParserResultProtocol]
+    func parseBlockPromise(_ block: Block) -> [EventParserResultProtocol]
 }
 
 /// Enum for the most-used Ethereum networks. Network ID is crucial for EIP155 support

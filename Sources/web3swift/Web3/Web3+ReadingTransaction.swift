@@ -7,8 +7,6 @@
 import Foundation
 import BigInt
 
-fileprivate typealias PromiseResult = PromiseKit.Result
-
 public class ReadTransaction {
     public var transaction: EthereumTransaction
     public var contract: EthereumContract
