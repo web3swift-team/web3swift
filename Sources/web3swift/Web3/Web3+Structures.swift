@@ -370,7 +370,7 @@ public struct Block: Decodable {
     }
 
     /// Returns chain version of mainnet block with such number
-    var chainVersion: Web3.ChainVersion { Web3.getChainVersion(of: number) }
+    var mainChainVersion: Web3.MainChainVersion { Web3.getChainVersion(of: number) }
 }
 
 extension Block {
