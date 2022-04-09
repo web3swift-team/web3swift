@@ -56,7 +56,7 @@ class SpyDelegate: Web3SocketDelegate {
 }
 
 // MARK: Works only with network connection
-class web3swiftWebsocketTests: XCTestCase {
+class WebsocketTests: XCTestCase {
     
     let spyDelegate = SpyDelegate()
     var socketProvider: InfuraWebsocketProvider?

@@ -11,7 +11,7 @@ import BigInt
 @testable import web3swift
 
 // MARK: Works only with network connection
-class web3swiftST20AndSecurityTokenTests: XCTestCase {
+class ST20AndSecurityTokenTests: XCTestCase {
     
     func testERC20TokenCreation() throws {
         let web3 = Web3.InfuraKovanWeb3(accessToken: Constants.infuraToken)

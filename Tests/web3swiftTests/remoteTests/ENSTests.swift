@@ -9,7 +9,7 @@ import XCTest
 @testable import web3swift
 
 // MARK: Works only with network connection
-class web3swiftENSTests: XCTestCase {
+class ENSTests: XCTestCase {
     
     func testDomainNormalization() throws {
         let normalizedString = NameHash.normalizeDomainName("example.ens")
