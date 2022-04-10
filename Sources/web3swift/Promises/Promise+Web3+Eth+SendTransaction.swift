@@ -19,20 +19,15 @@ extension web3.Eth {
         var forAssemblyPipeline: (EthereumTransaction, TransactionOptions) = (assembledTransaction, mergedOptions)
 
         for hook in self.web3.preSubmissionHooks {
-            let prom: Promise<Bool> = Promise<Bool> {seal in
-                hook.queue.async {
-                    let hookResult = hook.function(forAssemblyPipeline)
-                    if hookResult.2 {
-                        forAssemblyPipeline = (hookResult.0, hookResult.1)
-                    }
-                    seal.fulfill(hookResult.2)
-                }
+            let hookResult = hook.function(forAssemblyPipeline)
+            if hookResult.2 {
+                forAssemblyPipeline = (hookResult.0, hookResult.1)
             }
-            let shouldContinue = try prom.wait()
+
+            let shouldContinue = hookResult.2
             if !shouldContinue {
                 throw Web3Error.processingError(desc: "Transaction is canceled by middleware")
             }
-
         }
 
         assembledTransaction = forAssemblyPipeline.0

@@ -9,167 +9,133 @@ import BigInt
 
 public class WriteTransaction: ReadTransaction {
 
-    public func assemblePromise(transactionOptions: TransactionOptions? = nil) -> Promise<EthereumTransaction> {
+    public func assemblePromise(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
         var assembledTransaction: EthereumTransaction = self.transaction
-        let queue = self.web3.requestDispatcher.queue
-        let returnPromise = Promise<EthereumTransaction> { seal in
-            if self.method != "fallback" {
-                let m = self.contract.methods[self.method]
-                if m == nil {
-                    seal.reject(Web3Error.inputError(desc: "Contract's ABI does not have such method"))
-                    return
-                }
-                switch m! {
-                case .function(let function):
-                    if function.constant {
-                        seal.reject(Web3Error.inputError(desc: "Trying to transact to the constant function"))
-                        return
-                    }
-                case .constructor(_):
-                    break
-                default:
-                    seal.reject(Web3Error.inputError(desc: "Contract's ABI does not have such method"))
-                    return
-                }
+
+        guard self.method == "fallback" else {
+            guard let m = self.contract.methods[self.method] else {
+                throw Web3Error.inputError(desc: "Contract's ABI does not have such method")
             }
 
-            var mergedOptions = self.transactionOptions.merge(transactionOptions)
-            if mergedOptions.value != nil {
-                assembledTransaction.value = mergedOptions.value!
-            }
-            var forAssemblyPipeline: (EthereumTransaction, EthereumContract, TransactionOptions) = (assembledTransaction, self.contract, mergedOptions)
-
-            for hook in self.web3.preAssemblyHooks {
-                let prom: Promise<Bool> = Promise<Bool> {seal in
-                    hook.queue.async {
-                        let hookResult = hook.function(forAssemblyPipeline)
-                        if hookResult.3 {
-                            forAssemblyPipeline = (hookResult.0, hookResult.1, hookResult.2)
-                        }
-                        seal.fulfill(hookResult.3)
-                    }
+            switch m {
+            case .function(let function):
+                if function.constant {
+                    throw Web3Error.inputError(desc: "Trying to transact to the constant function")
                 }
-                let shouldContinue = try prom.wait()
-                if !shouldContinue {
-                    seal.reject(Web3Error.processingError(desc: "Transaction is canceled by middleware"))
-                    return
-                }
-            }
-
-            assembledTransaction = forAssemblyPipeline.0
-            mergedOptions = forAssemblyPipeline.2
-
-            guard let from = mergedOptions.from else {
-                seal.reject(Web3Error.inputError(desc: "No 'from' field provided"))
-                return
-            }
-
-            // assemble promise for gas estimation
-            var optionsForGasEstimation = TransactionOptions()
-            optionsForGasEstimation.from = mergedOptions.from
-            optionsForGasEstimation.to = mergedOptions.to
-            optionsForGasEstimation.value = mergedOptions.value
-            optionsForGasEstimation.gasLimit = mergedOptions.gasLimit
-            optionsForGasEstimation.callOnBlock = mergedOptions.callOnBlock
-
-            // assemble promise for gasLimit
-            var gasEstimatePromise: Promise<BigUInt>? = nil
-            guard let gasLimitPolicy = mergedOptions.gasLimit else {
-                seal.reject(Web3Error.inputError(desc: "No gasLimit policy provided"))
-                return
-            }
-            switch gasLimitPolicy {
-            case .automatic, .withMargin, .limited:
-                gasEstimatePromise = self.web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
-            case .manual(let gasLimit):
-                gasEstimatePromise = Promise<BigUInt>.value(gasLimit)
-            }
-
-            // assemble promise for nonce
-            var getNoncePromise: Promise<BigUInt>?
-            guard let noncePolicy = mergedOptions.nonce else {
-                seal.reject(Web3Error.inputError(desc: "No nonce policy provided"))
-                return
-            }
-            switch noncePolicy {
-            case .latest:
-                getNoncePromise = self.web3.eth.getTransactionCountPromise(address: from, onBlock: "latest")
-            case .pending:
-                getNoncePromise = self.web3.eth.getTransactionCountPromise(address: from, onBlock: "pending")
-            case .manual(let nonce):
-                getNoncePromise = Promise<BigUInt>.value(nonce)
-            }
-
-            // assemble promise for gasPrice
-            var gasPricePromise: Promise<BigUInt>? = nil
-            guard let gasPricePolicy = mergedOptions.gasPrice else {
-                seal.reject(Web3Error.inputError(desc: "No gasPrice policy provided"))
-                return
-            }
-            switch gasPricePolicy {
-            case .automatic, .withMargin:
-                gasPricePromise = self.web3.eth.getGasPricePromise()
-            case .manual(let gasPrice):
-                gasPricePromise = Promise<BigUInt>.value(gasPrice)
-            }
-            var promisesToFulfill: [Promise<BigUInt>] = [getNoncePromise!, gasPricePromise!, gasEstimatePromise!]
-            when(resolved: getNoncePromise!, gasEstimatePromise!, gasPricePromise!).map(on: queue, { (results: [PromiseResult<BigUInt>]) throws -> EthereumTransaction in
-
-                promisesToFulfill.removeAll()
-                guard case .fulfilled(let nonce) = results[0] else {
-                    throw Web3Error.processingError(desc: "Failed to fetch nonce")
-                }
-                guard case .fulfilled(let gasEstimate) = results[1] else {
-                    throw Web3Error.processingError(desc: "Failed to fetch gas estimate")
-                }
-                guard case .fulfilled(let gasPrice) = results[2] else {
-                    throw Web3Error.processingError(desc: "Failed to fetch gas price")
-                }
-
-                guard let estimate = mergedOptions.resolveGasLimit(gasEstimate) else {
-                    throw Web3Error.processingError(desc: "Failed to calculate gas estimate that satisfied options")
-                }
-
-                guard let finalGasPrice = mergedOptions.resolveGasPrice(gasPrice) else {
-                    throw Web3Error.processingError(desc: "Missing parameter of gas price for transaction")
-                }
-
-                assembledTransaction.nonce = nonce
-                assembledTransaction.gasLimit = estimate
-                assembledTransaction.gasPrice = finalGasPrice
-
-                forAssemblyPipeline = (assembledTransaction, self.contract, mergedOptions)
-
-                for hook in self.web3.postAssemblyHooks {
-                    let prom: Promise<Bool> = Promise<Bool> {seal in
-                        hook.queue.async {
-                            let hookResult = hook.function(forAssemblyPipeline)
-                            if hookResult.3 {
-                                forAssemblyPipeline = (hookResult.0, hookResult.1, hookResult.2)
-                            }
-                            seal.fulfill(hookResult.3)
-                        }
-                    }
-                    let shouldContinue = try prom.wait()
-                    if !shouldContinue {
-                        throw Web3Error.processingError(desc: "Transaction is canceled by middleware")
-                    }
-                }
-
-                assembledTransaction = forAssemblyPipeline.0
-                mergedOptions = forAssemblyPipeline.2
-
-                return assembledTransaction
-            }).done(on: queue) {tx in
-                seal.fulfill(tx)
-                }.catch(on: queue) {err in
-                    seal.reject(err)
+            case .constructor(_):
+                break
+            default:
+                throw Web3Error.inputError(desc: "Contract's ABI does not have such method")
             }
         }
-        return returnPromise
+
+        var mergedOptions = self.transactionOptions.merge(transactionOptions)
+        if let mergedOptionsValue = mergedOptions.value {
+            assembledTransaction.value = mergedOptionsValue
+        }
+
+        var forAssemblyPipeline: (EthereumTransaction, EthereumContract, TransactionOptions) = (assembledTransaction, self.contract, mergedOptions)
+
+        for hook in self.web3.preAssemblyHooks {
+
+            let hookResult = hook.function(forAssemblyPipeline)
+            if hookResult.3 {
+                forAssemblyPipeline = (hookResult.0, hookResult.1, hookResult.2)
+            }
+
+            let shouldContinue = hookResult.3
+            if !shouldContinue {
+                throw Web3Error.processingError(desc: "Transaction is canceled by middleware")
+            }
+        }
+
+        let assembledtx = forAssemblyPipeline.0
+        mergedOptions = forAssemblyPipeline.2
+
+        guard let from = mergedOptions.from else {
+            throw Web3Error.inputError(desc: "No 'from' field provided")
+        }
+
+        guard let gasLimitPolicy = mergedOptions.gasLimit else {
+            throw Web3Error.inputError(desc: "No gasLimit policy provided")
+        }
+
+        guard let gasPricePolicy = mergedOptions.gasPrice else {
+            throw Web3Error.inputError(desc: "No gasPrice policy provided")
+        }
+
+        guard let noncePolicy = mergedOptions.nonce else {
+            throw Web3Error.inputError(desc: "No nonce policy provided")
+        }
+
+        // assemble promise for gas estimation
+        let optionsForGasEstimation = TransactionOptions(
+            to: mergedOptions.to,
+            from: mergedOptions.from,
+            gasLimit: mergedOptions.gasLimit,
+            value: mergedOptions.value,
+            callOnBlock: mergedOptions.callOnBlock
+        )
+
+        async let gasEstimatePromise: BigUInt = gasEstimate(for: gasLimitPolicy, assembledTransaction: assembledtx, optionsForGasEstimation: optionsForGasEstimation)
+
+        async let getNoncePromise: BigUInt = nonce(for: noncePolicy, from: from)
+
+        async let gasPricePromise: BigUInt = gasPrice(for: gasPricePolicy)
+
+        var results: [BigUInt] = try await [getNoncePromise, gasEstimatePromise, gasPricePromise ]
+
+        guard results.count >= 3 else {
+            throw Web3Error.processingError(desc: "Failed to fetch Data")
+        }
+
+        guard let gasPrice = results.popLast() else {
+            throw Web3Error.processingError(desc: "Failed to fetch gas price")
+        }
+
+        guard let gasEstimate = results.popLast() else {
+            throw Web3Error.processingError(desc: "Failed to fetch gas estimate")
+        }
+
+        guard let nonce = results.popLast() else {
+            throw Web3Error.processingError(desc: "Failed to fetch nonce")
+        }
+
+        guard let estimate = mergedOptions.resolveGasLimit(gasEstimate) else {
+            throw Web3Error.processingError(desc: "Failed to calculate gas estimate that satisfied options")
+        }
+
+        guard let finalGasPrice = mergedOptions.resolveGasPrice(gasPrice) else {
+            throw Web3Error.processingError(desc: "Missing parameter of gas price for transaction")
+        }
+
+        assembledTransaction.nonce = nonce
+        assembledTransaction.gasLimit = estimate
+        assembledTransaction.gasPrice = finalGasPrice
+
+        forAssemblyPipeline = (assembledTransaction, self.contract, mergedOptions)
+
+        for hook in self.web3.postAssemblyHooks {
+
+            let hookResult = hook.function(forAssemblyPipeline)
+            if hookResult.3 {
+                forAssemblyPipeline = (hookResult.0, hookResult.1, hookResult.2)
+            }
+
+            let shouldContinue = hookResult.3
+            if !shouldContinue {
+                throw Web3Error.processingError(desc: "Transaction is canceled by middleware")
+            }
+        }
+
+        assembledTransaction = forAssemblyPipeline.0
+        mergedOptions = forAssemblyPipeline.2
+
+        return assembledTransaction
+
     }
 
-    public func sendPromise(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) -> TransactionSendingResult{
+    public func sendPromise(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async -> TransactionSendingResult{
         let transaction = self.assemblePromise(transactionOptions: transactionOptions)
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
         var cleanedOptions = TransactionOptions()
@@ -182,7 +148,37 @@ public class WriteTransaction: ReadTransaction {
         return try self.sendPromise(password: password, transactionOptions: transactionOptions)
     }
 
-    public func assemble(transactionOptions: TransactionOptions? = nil) throws -> EthereumTransaction {
-        return try self.assemblePromise(transactionOptions: transactionOptions).wait()
+    public func assemble(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
+        return try await self.assemblePromise(transactionOptions: transactionOptions)
+    }
+
+    func gasEstimate(for policy:  TransactionOptions.GasLimitPolicy
+                     , assembledTransaction: EthereumTransaction, optionsForGasEstimation: TransactionOptions) async throws -> BigUInt {
+        switch policy {
+        case .automatic, .withMargin, .limited:
+            return try await self.web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
+        case .manual(let gasLimit):
+            return gasLimit
+        }
+    }
+
+    func nonce(for policy:  TransactionOptions.NoncePolicy,  from: EthereumAddress) async throws -> BigUInt {
+        switch policy {
+        case .latest:
+            return try await self.web3.eth.getTransactionCountPromise(address: from, onBlock: "latest")
+        case .pending:
+            return try await self.web3.eth.getTransactionCountPromise(address: from, onBlock: "pending")
+        case .manual(let nonce):
+            return nonce
+        }
+    }
+
+    func gasPrice(for policy:  TransactionOptions.GasPricePolicy) async throws -> BigUInt {
+        switch policy {
+        case .automatic, .withMargin:
+            return try await self.web3.eth.getGasPricePromise()
+        case .manual(let gasPrice):
+            return gasPrice
+        }
     }
 }

@@ -17,7 +17,6 @@ extension web3.Eth {
     public func getTransactionCountPromise(address: String, onBlock: String = "latest") async throws -> BigUInt {
         let request = JSONRPCRequestFabric.prepareRequest(.getTransactionCount, parameters: [address.lowercased(), onBlock])
         let response = try await web3.dispatch(request)
-        let queue = web3.requestDispatcher.queue
 
         guard let value: BigUInt = response.getValue() else {
             if response.error != nil {

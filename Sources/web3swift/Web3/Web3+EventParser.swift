@@ -87,23 +87,23 @@ extension web3.web3contract {
          - important: This call is synchronous
 
          */
-        public func parseTransaction(_ transaction: EthereumTransaction) throws -> [EventParserResultProtocol] {
-            let result = try self.parseTransactionPromise(transaction)
+        public func parseTransaction(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol] {
+            let result = try await self.parseTransactionPromise(transaction)
             return result
         }
     }
 }
 
 extension web3.web3contract.EventParser {
-    public func parseTransactionPromise(_ transaction: EthereumTransaction) throws -> [EventParserResultProtocol] {
+    public func parseTransactionPromise(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol] {
         guard let hash = transaction.hash else {
             throw Web3Error.processingError(desc: "Failed to get transaction hash")
         }
-        return try self.parseTransactionByHashPromise(hash)
+        return try await self.parseTransactionByHashPromise(hash)
     }
 
-    public func parseTransactionByHashPromise(_ hash: Data) throws -> [EventParserResultProtocol] {
-        let receipt = self.web3.eth.getTransactionReceiptPromise(hash)
+    public func parseTransactionByHashPromise(_ hash: Data) async throws -> [EventParserResultProtocol] {
+        let receipt = try await self.web3.eth.getTransactionReceiptPromise(hash)
 
         guard let results = parseReceiptForLogs(receipt: receipt, contract: contract, eventName: eventName, filter: filter) else {
             throw Web3Error.processingError(desc: "Failed to parse receipt for events")
@@ -143,41 +143,39 @@ extension web3.web3contract.EventParser {
         }
 
 
-            return Promise {seal in
 
-                var pendingEvents: [Promise<[EventParserResultProtocol]>] = [Promise<[EventParserResultProtocol]>]()
-                for transaction in block.transactions {
-                    switch transaction {
-                    case .null:
-                        seal.reject(Web3Error.processingError(desc: "No information about transactions in block"))
-                        return
-                    case .transaction(let tx):
-                        guard let hash = tx.hash else {
-                            seal.reject(Web3Error.processingError(desc: "Failed to get transaction hash"))
-                            return
-                        }
-                        let subresultPromise = self.parseTransactionByHashPromise(hash)
-                        pendingEvents.append(subresultPromise)
-                    case .hash(let hash):
-                        let subresultPromise = self.parseTransactionByHashPromise(hash)
-                        pendingEvents.append(subresultPromise)
-                    }
-                }
 
-                when(resolved: pendingEvents).done(on: queue){ (results: [PromiseResult<[EventParserResultProtocol]>]) throws in
-                    var allResults = [EventParserResultProtocol]()
-                    for res in results {
-                        guard case .fulfilled(let subresult) = res else {
-                            throw Web3Error.processingError(desc: "Failed to parse event for one transaction in block")
-                        }
-                        allResults.append(contentsOf: subresult)
+            var pendingEvents: [[EventParserResultProtocol]] = [[EventParserResultProtocol]]()
+            for transaction in block.transactions {
+                switch transaction {
+                case .null:
+                    throw Web3Error.processingError(desc: "No information about transactions in block")
+                case .transaction(let tx):
+                    guard let hash = tx.hash else {
+                        throw Web3Error.processingError(desc: "Failed to get transaction hash")
                     }
-                    seal.fulfill(allResults)
-                }
-                .catch(on: queue) {err in
-                    seal.reject(err)
+                    let subresultPromise = try self.parseTransactionByHashPromise(hash)
+                    pendingEvents.append(subresultPromise)
+                case .hash(let hash):
+                    let subresultPromise = try self.parseTransactionByHashPromise(hash)
+                    pendingEvents.append(subresultPromise)
                 }
             }
+
+            when(resolved: pendingEvents).done(on: queue){ (results: [PromiseResult<[EventParserResultProtocol]>]) throws in
+                var allResults = [EventParserResultProtocol]()
+                for res in results {
+                    guard case .fulfilled(let subresult) = res else {
+                        throw Web3Error.processingError(desc: "Failed to parse event for one transaction in block")
+                    }
+                    allResults.append(contentsOf: subresult)
+                }
+                seal.fulfill(allResults)
+            }
+            .catch(on: queue) {err in
+                seal.reject(err)
+            }
+
 
     }
 
@@ -206,9 +204,8 @@ extension web3.web3contract {
 }
 
 extension web3.web3contract {
-    public func getIndexedEventsPromise(eventName: String?, filter: EventFilter, joinWithReceipts: Bool = false) -> Promise<[EventParserResultProtocol]> {
-        let queue = self.web3.requestDispatcher.queue
-        do {
+    public func getIndexedEventsPromise(eventName: String?, filter: EventFilter, joinWithReceipts: Bool = false) async throws -> [EventParserResultProtocol] {
+
             let rawContract = self.contract
             guard let preEncoding = encodeTopicToGetLogs(contract: rawContract, eventName: eventName, filter: filter) else {
                 throw Web3Error.processingError(desc: "Failed to encode topic for request")
@@ -220,52 +217,50 @@ extension web3.web3contract {
                 }
             }
             let request = JSONRPCRequestFabric.prepareRequest(.getLogs, parameters: [preEncoding])
-            let fetchLogsPromise = self.web3.dispatch(request).map(on: queue) {response throws -> [EventParserResult] in
-                guard let value: [EventLog] = response.getValue() else {
-                    if response.error != nil {
-                        throw Web3Error.nodeError(desc: response.error!.message)
-                    }
-                    throw Web3Error.nodeError(desc: "Empty or malformed response")
+            let response = try await self.web3.dispatch(request)
+
+            guard let allLogs: [EventLog] = response.getValue() else {
+                if response.error != nil {
+                    throw Web3Error.nodeError(desc: response.error!.message)
                 }
-                let allLogs = value
-                let decodedLogs = allLogs.compactMap({ (log) -> EventParserResult? in
-                    let (n, d) = self.contract.parseEvent(log)
-                    guard let evName = n, let evData = d else {return nil}
-                    var res = EventParserResult(eventName: evName, transactionReceipt: nil, contractAddress: log.address, decodedResult: evData)
-                    res.eventLog = log
-                    return res
-                }).filter{ (res: EventParserResult?) -> Bool in
-                    if eventName != nil {
-                        if res != nil && res?.eventName == eventName && res!.eventLog != nil {
-                            return true
-                        }
-                    } else {
-                        if res != nil && res!.eventLog != nil {
-                            return true
-                        }
-                    }
-                    return false
-                }
-                return decodedLogs
+                throw Web3Error.nodeError(desc: "Empty or malformed response")
             }
+
+
+            let decodedLogs = allLogs.compactMap { (log) -> EventParserResult? in
+                let (n, d) = self.contract.parseEvent(log)
+                guard let evName = n, let evData = d else {return nil}
+                var res = EventParserResult(eventName: evName, transactionReceipt: nil, contractAddress: log.address, decodedResult: evData)
+                res.eventLog = log
+                return res
+            }
+            .filter{ res in res.eventLog != nil || (res.eventName == eventName && eventName != nil)}
+
+
             if (!joinWithReceipts) {
-                return fetchLogsPromise.mapValues(on: queue) {res -> EventParserResultProtocol in
-                    return res as EventParserResultProtocol
-                }
+                return decodedLogs as [EventParserResultProtocol]
             }
-            return fetchLogsPromise.thenMap(on: queue) {singleEvent in
-                return self.web3.eth.getTransactionReceiptPromise(singleEvent.eventLog!.transactionHash).map(on: queue) { receipt in
+
+
+        return await withTaskGroup(of: EventParserResultProtocol.self, returning: [EventParserResultProtocol].self) { group -> [EventParserResultProtocol] in
+
+            decodedLogs.forEach { singleEvent in
+                group.addTask {
                     var joinedEvent = singleEvent
+                    let receipt = try? await self.web3.eth.getTransactionReceiptPromise(singleEvent.eventLog!.transactionHash)
                     joinedEvent.transactionReceipt = receipt
                     return joinedEvent as EventParserResultProtocol
                 }
             }
-        } catch {
-            let returnPromise = Promise<[EventParserResultProtocol]>.pending()
-            queue.async {
-                returnPromise.resolver.reject(error)
+
+            var collected = [EventParserResultProtocol]()
+
+            for await value in group {
+                collected.append(value)
             }
-            return returnPromise.promise
+
+            return collected
+
         }
     }
 }
