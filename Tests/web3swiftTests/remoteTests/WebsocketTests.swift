@@ -107,6 +107,7 @@ class WebsocketTests: XCTestCase {
         }
     }
     
+    // FIXME: Fails on Carthage
 //    func testSubscribeOnLogs() {
 //        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
 //            return XCTFail()

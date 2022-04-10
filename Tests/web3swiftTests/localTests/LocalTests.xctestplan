@@ -15,7 +15,7 @@
     {
       "skippedTests" : [
         "ENSTests",
-        "GanacheTests",
+        "RemoteTests",
         "RemoteParsingTests",
         "ST20AndSecurityTokenTests",
         "WebsocketTests",

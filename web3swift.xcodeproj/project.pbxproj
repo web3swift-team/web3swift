@@ -173,7 +173,7 @@
 		5CC0333928023387006AD710 /* ENSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0333428023387006AD710 /* ENSTests.swift */; };
 		5CC0333A28023387006AD710 /* ST20AndSecurityTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0333528023387006AD710 /* ST20AndSecurityTokenTests.swift */; };
 		5CC0333B28023387006AD710 /* WebsocketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0333628023387006AD710 /* WebsocketTests.swift */; };
-		5CC0333C28023387006AD710 /* GanacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0333728023387006AD710 /* GanacheTests.swift */; };
+		5CC0333E28034CED006AD710 /* InfuraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0333D28034CED006AD710 /* InfuraTests.swift */; };
 		5CF7E8A2276B79290009900F /* web3swiftEIP681Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E891276B79270009900F /* web3swiftEIP681Tests.swift */; };
 		5CF7E8A3276B792A0009900F /* web3swiftPersonalSignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E892276B79270009900F /* web3swiftPersonalSignatureTests.swift */; };
 		5CF7E8A4276B792A0009900F /* web3swiftTransactionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E893276B79270009900F /* web3swiftTransactionsTests.swift */; };
@@ -391,7 +391,7 @@
 		5CC0333428023387006AD710 /* ENSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ENSTests.swift; sourceTree = "<group>"; };
 		5CC0333528023387006AD710 /* ST20AndSecurityTokenTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ST20AndSecurityTokenTests.swift; sourceTree = "<group>"; };
 		5CC0333628023387006AD710 /* WebsocketTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsocketTests.swift; sourceTree = "<group>"; };
-		5CC0333728023387006AD710 /* GanacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GanacheTests.swift; sourceTree = "<group>"; };
+		5CC0333D28034CED006AD710 /* InfuraTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfuraTests.swift; sourceTree = "<group>"; };
 		5CDEF972275A74590004A2F2 /* web3swift.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = web3swift.xctestplan; path = Tests/web3swiftTests/web3swift.xctestplan; sourceTree = SOURCE_ROOT; };
 		5CDEF973275A74670004A2F2 /* LocalTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LocalTests.xctestplan; sourceTree = "<group>"; };
 		5CDEF974275A747B0004A2F2 /* RemoteTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RemoteTests.xctestplan; sourceTree = "<group>"; };
@@ -979,7 +979,7 @@
 			isa = PBXGroup;
 			children = (
 				5CC0333428023387006AD710 /* ENSTests.swift */,
-				5CC0333728023387006AD710 /* GanacheTests.swift */,
+				5CC0333D28034CED006AD710 /* InfuraTests.swift */,
 				5CC0333328023387006AD710 /* RemoteParsingTests.swift */,
 				5CC0333528023387006AD710 /* ST20AndSecurityTokenTests.swift */,
 				5CC0333628023387006AD710 /* WebsocketTests.swift */,
@@ -1398,8 +1398,8 @@
 				5CF7E8A5276B792A0009900F /* web3swiftKeystoresTests.swift in Sources */,
 				CB50A52827060BD600D7E39B /* EIP712Tests.swift in Sources */,
 				5CF7E8AD276B792A0009900F /* web3swiftBasicLocalNodeTests.swift in Sources */,
+				5CC0333E28034CED006AD710 /* InfuraTests.swift in Sources */,
 				5CC0333928023387006AD710 /* ENSTests.swift in Sources */,
-				5CC0333C28023387006AD710 /* GanacheTests.swift in Sources */,
 				5CF7E8A9276B792A0009900F /* web3swiftERC20ClassTests.swift in Sources */,
 				5CF7E8A8276B792A0009900F /* web3swiftERC20Tests.swift in Sources */,
 				5CF7E8B2276B792A0009900F /* web3swiftEIP67Tests.swift in Sources */,
