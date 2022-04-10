@@ -145,7 +145,7 @@ class EIP1559BlockTests: XCTestCase {
 
             let calculatedBaseFee = Web3.calcBaseFee(parent)
 
-            XCTAssertEqual(calculatedBaseFee, touple.expectedBaseFee, "Base fee calculation fails: should be \(touple.expectedBaseFee), got: \(calculatedBaseFee)")
+            XCTAssertEqual(calculatedBaseFee, touple.expectedBaseFee, "Base fee calculation fails: should be \(touple.expectedBaseFee), got: \(String(describing: calculatedBaseFee))")
         }
     }
 }
