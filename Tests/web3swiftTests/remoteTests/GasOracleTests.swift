@@ -13,7 +13,7 @@ import XCTest
 class OracleTests: XCTestCase {
 
     func testPretictBaseFee() throws {
-
+        
     }
 
     func testPredictTip() throws {

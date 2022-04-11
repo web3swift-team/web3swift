@@ -176,6 +176,7 @@
 		5CC0333B28023387006AD710 /* WebsocketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0333628023387006AD710 /* WebsocketTests.swift */; };
 		5CC0333E28034CED006AD710 /* InfuraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0333D28034CED006AD710 /* InfuraTests.swift */; };
 		5CC0334228043805006AD710 /* GasOracleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0334128043805006AD710 /* GasOracleTests.swift */; };
+		5CC033442804432F006AD710 /* Promise+Web3+Eth+FeeHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC033432804432F006AD710 /* Promise+Web3+Eth+FeeHistory.swift */; };
 		5CF7E8A2276B79290009900F /* web3swiftEIP681Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E891276B79270009900F /* web3swiftEIP681Tests.swift */; };
 		5CF7E8A3276B792A0009900F /* web3swiftPersonalSignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E892276B79270009900F /* web3swiftPersonalSignatureTests.swift */; };
 		5CF7E8A4276B792A0009900F /* web3swiftTransactionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF7E893276B79270009900F /* web3swiftTransactionsTests.swift */; };
@@ -396,6 +397,7 @@
 		5CC0333628023387006AD710 /* WebsocketTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsocketTests.swift; sourceTree = "<group>"; };
 		5CC0333D28034CED006AD710 /* InfuraTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfuraTests.swift; sourceTree = "<group>"; };
 		5CC0334128043805006AD710 /* GasOracleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GasOracleTests.swift; sourceTree = "<group>"; };
+		5CC033432804432F006AD710 /* Promise+Web3+Eth+FeeHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Eth+FeeHistory.swift"; sourceTree = "<group>"; };
 		5CDEF972275A74590004A2F2 /* web3swift.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = web3swift.xctestplan; path = Tests/web3swiftTests/web3swift.xctestplan; sourceTree = SOURCE_ROOT; };
 		5CDEF973275A74670004A2F2 /* LocalTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LocalTests.xctestplan; sourceTree = "<group>"; };
 		5CDEF974275A747B0004A2F2 /* RemoteTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RemoteTests.xctestplan; sourceTree = "<group>"; };
@@ -814,6 +816,7 @@
 				3AA815822276E44100F5DB52 /* Promise+Web3+Personal+UnlockAccount.swift */,
 				3AA815832276E44100F5DB52 /* Promise+Web3+Personal+CreateAccount.swift */,
 				3AA815842276E44100F5DB52 /* Promise+Web3+Eth+Call.swift */,
+				5CC033432804432F006AD710 /* Promise+Web3+Eth+FeeHistory.swift */,
 			);
 			path = Promises;
 			sourceTree = "<group>";
@@ -1320,6 +1323,7 @@
 				3AA815B42276E44100F5DB52 /* BIP39.swift in Sources */,
 				3AA815E22276E44100F5DB52 /* NSRegularExpressionExtension.swift in Sources */,
 				5C26D89E27F3724600431EB0 /* Web3+EIP1559.swift in Sources */,
+				5CC033442804432F006AD710 /* Promise+Web3+Eth+FeeHistory.swift in Sources */,
 				3AA815C12276E44100F5DB52 /* Web3+BrowserFunctions.swift in Sources */,
 				3AA815E82276E44100F5DB52 /* Extensions.swift in Sources */,
 				3AA815FE2276E44100F5DB52 /* Web3+ERC820.swift in Sources */,

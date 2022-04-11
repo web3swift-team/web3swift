@@ -352,4 +352,9 @@ extension web3.Eth {
         return sendERC20tokensWithKnownDecimals(tokenAddress: tokenAddress, from: from, to: to, amount: value, transactionOptions: mergedOptions)
     }
 
+    public func feeHistory(blockCount: Int = 10, block: String = "latest", percentiles:[Double] = [25, 50, 75]) throws -> Oracle.FeeHistory {
+        let result = try self.feeHistory(blockCount: blockCount, block: block, percentiles: percentiles).wait()
+        return result
+    }
+
 }

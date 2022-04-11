@@ -95,19 +95,32 @@ extension KeyedDecodingContainer {
         return try decode(type, forKey: key)
     }
 
-    /// Decodes a value of the given key from Hex to BigUInt
+    /// Decodes a value of the given key from Hex to `DecodableFromHex`
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`
     ///
     /// - Parameter type: Generic type `T` wich conforms to `DecodableFromHex` protocol
     /// - Parameter key: The key that the decoded value is associated with.
     /// - Returns: A decoded value of type `BigUInt`
-    /// - throws: `Web3Error.dataError` if value associated with key are unable
-    ///   to be initialized as `BigUInt`.
+    /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `DecodableFromHex`.
     public func decodeHex<T: DecodableFromHex>(to type: T.Type, key: KeyedDecodingContainer<K>.Key) throws -> T {
         let string = try self.decode(String.self, forKey: key)
         guard let number = T(fromHex: string) else { throw Web3Error.dataError }
         return number
+    }
+
+    /// Decodes a value of the given key from Hex to `[DecodableFromHex]`
+    ///
+    /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`
+    ///
+    /// - Parameter type: Array of a generic type `T` wich conforms to `DecodableFromHex` protocol
+    /// - Parameter key: The key that the decoded value is associated with.
+    /// - Returns: A decoded value of type `BigUInt`
+    /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `[DecodableFromHex]`.
+    public func decodeHex<T: DecodableFromHex>(to type: Array<T>.Type, key: KeyedDecodingContainer<K>.Key) throws -> Array<T> {
+        var container = try self.nestedUnkeyedContainer(forKey: key)
+        guard let array = try? container.decode(type) else { throw Web3Error.dataError }
+        return array
     }
 }
 

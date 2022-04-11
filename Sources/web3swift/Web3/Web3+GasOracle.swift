@@ -9,12 +9,9 @@
 import Foundation
 import BigInt
 
-extension Web3 {
+extension web3.Eth {
     /// Oracle is the class to do a transaction fee suggestion
-    ///
-    /// Designed for EIP-1559 transactions only.
     final public class Oracle {
-        private var latestBlock: Block?
 
         /// Web3 provider by which accessing to the blockchain
         private let web3Provider: web3
@@ -22,27 +19,32 @@ extension Web3 {
         /// Ethereum scope shortcut
         private var eth: web3.Eth { web3Provider.eth }
 
+        /// Block to start getting history
+        var block: String
+
         /// Count of blocks to calculate statistics
-        public private(set) var blockCount: BigUInt
+        var blockCount: BigUInt
 
         /// Count of transactions to filter block for tip calculation
-        public private(set) var transactionCount: BigUInt
+        var percentiles: [Double]
 
         /// Oracle initializer
         /// - Parameters:
         ///   - provider: Web3 Ethereum provider
+        ///   - block: Number of block from which counts starts
         ///   - blockCount: Count of block to calculate statistics
-        ///   - transactionCount: Count of transaction to filter block for tip calculation
-        public init(_ provider: web3, blockCount: BigUInt = 20, transactionCount: BigUInt = 50) {
+        ///   - percentiles: Percentiles of fees which will split in fees history
+        public init(_ provider: web3, block: String = "latest", blockCount: BigUInt = 20, percentiles: [Double] = [25, 50, 75]) {
             self.web3Provider = provider
+            self.block = block
             self.blockCount = blockCount
-            self.transactionCount = transactionCount
+            self.percentiles = percentiles
         }
 
-        private func calcBaseFee(for block: Block?) -> BigUInt {
-            guard let block = block else { return 0 }
-            return Web3.calcBaseFee(block) ?? 0
-        }
+//        private func calcBaseFee(for block: Block?) -> BigUInt {
+//            guard let block = block else { return 0 }
+//            return Web3.calcBaseFee(block) ?? 0
+//        }
 
         private func calculateStatistic(for statistic: Statistic, data: [BigUInt]) throws -> BigUInt {
             let noAnomalyArray = data.cropAnomalyValues()
@@ -59,12 +61,18 @@ extension Web3 {
             case .maximum:
                 // Checking that suggestedBaseFee is not lower than it will be in the next block
                 // because in the maximum statistic we should guarantee that transaction would be included in it.
-                return max(calcBaseFee(for: latestBlock), unwrappedArray.max()!)
+//                return max(calcBaseFee(for: latestBlock), unwrappedArray.max()!)
+                return unwrappedArray.max()!
             }
             // swiftlint:enable force_unwrapping
         }
 
+//        private func suggestGasValues( statistic: Statistic) throws -> FeeHistory {
+//
+//        }
+
         private func suggestTipValue(_ statistic: Statistic) throws -> BigUInt {
+
             let latestBlockNumber = try eth.getBlockNumber()
 
             var block: Block
@@ -72,10 +80,10 @@ extension Web3 {
             // TODO: Make me work with cache
             repeat {
                 block = try eth.getBlockByNumber(latestBlockNumber, fullTransactions: true)
-            } while block.transactions.count < transactionCount
+            } while block.transactions.count < 20
 
             // Storing last block to calculate baseFee of the next block
-            latestBlock = block
+//            latestBlock = block
 
             let transactionsTips = block.transactions
                 .compactMap { t -> EthereumTransaction? in
@@ -92,7 +100,7 @@ extension Web3 {
             let latestBlockNumber = try eth.getBlockNumber()
 
             // Assigning last block to object var to predict baseFee of the next block
-            latestBlock = try eth.getBlockByNumber(latestBlockNumber)
+//            latestBlock = try eth.getBlockByNumber(latestBlockNumber)
             // TODO: Make me work with cache
             let lastNthBlocksBaseFees = try (latestBlockNumber - blockCount ... latestBlockNumber)
                 .map { try eth.getBlockByNumber($0) }
@@ -106,7 +114,7 @@ extension Web3 {
             let latestBlockNumber = try eth.getBlockNumber()
 
             // Assigning last block to object var to predict baseFee of the next block
-            latestBlock = try eth.getBlockByNumber(latestBlockNumber)
+//            latestBlock = try eth.getBlockByNumber(latestBlockNumber)
             // TODO: Make me work with cache
             let lastNthBlockGasPrice = try (latestBlockNumber - blockCount ... latestBlockNumber)
                 .map { try eth.getBlockByNumber($0, fullTransactions: true) }
@@ -123,7 +131,7 @@ extension Web3 {
     }
 }
 
-public extension Web3.Oracle {
+public extension web3.Eth.Oracle {
     // MARK: - Base Fee
     /// Base fee amount based on last Nth blocks
     ///
@@ -175,7 +183,7 @@ public extension Web3.Oracle {
     }
 }
 
-public extension Web3.Oracle {
+public extension web3.Eth.Oracle {
     // TODO: Make me struct and encapsulate math within to make me extendable
     enum Statistic {
         /// Mininum statistic
@@ -186,6 +194,33 @@ public extension Web3.Oracle {
         case median
         /// Maximum statistic
         case maximum
+    }
+}
+
+public extension web3.Eth.Oracle {
+    struct FeeHistory {
+        let baseFeePerGas: [BigUInt]
+        let gasUsedRatio: [Double]
+        let oldestBlock: BigUInt
+        let reward: [[BigUInt]]
+    }
+}
+
+extension web3.Eth.Oracle.FeeHistory: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case baseFeePerGas
+        case gasUsedRatio
+        case oldestBlock
+        case reward
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.baseFeePerGas = try values.decodeHex(to: [BigUInt].self, key: .baseFeePerGas)
+        self.gasUsedRatio = try values.decodeHex(to: [Double].self, key: .gasUsedRatio)
+        self.oldestBlock = try values.decodeHex(to: BigUInt.self, key: .oldestBlock)
+        self.reward = try values.decodeHex(to: [[BigUInt]].self, key: .reward)
     }
 }
 
