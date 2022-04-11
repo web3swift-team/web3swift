@@ -41,7 +41,7 @@ extension Web3 {
 
         private func calcBaseFee(for block: Block?) -> BigUInt {
             guard let block = block else { return 0 }
-            return Web3.calcBaseFee(block)
+            return Web3.calcBaseFee(block) ?? 0
         }
 
         private func calculateStatistic(for statistic: Statistic, data: [BigUInt]) throws -> BigUInt {
@@ -97,7 +97,7 @@ extension Web3 {
             let lastNthBlocksBaseFees = try (latestBlockNumber - blockCount ... latestBlockNumber)
                 .map { try eth.getBlockByNumber($0) }
                 .filter { !$0.transactions.isEmpty }
-                .map { $0.baseFeePerGas }
+                .compactMap { $0.baseFeePerGas }
 
             return try calculateStatistic(for: statistic, data: lastNthBlocksBaseFees)
         }
