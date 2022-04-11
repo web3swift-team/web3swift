@@ -27,6 +27,7 @@ public class WriteTransaction: ReadTransaction {
             default:
                 throw Web3Error.inputError(desc: "Contract's ABI does not have such method")
             }
+            throw Web3Error.inputError(desc: "Contract's ABI does not have such method")
         }
 
         var mergedOptions = self.transactionOptions.merge(transactionOptions)
@@ -135,17 +136,17 @@ public class WriteTransaction: ReadTransaction {
 
     }
 
-    public func sendPromise(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async -> TransactionSendingResult{
-        let transaction = self.assemblePromise(transactionOptions: transactionOptions)
+    public func sendPromise(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult{
+        let transaction = try await self.assemblePromise(transactionOptions: transactionOptions)
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
         var cleanedOptions = TransactionOptions()
         cleanedOptions.from = mergedOptions.from
         cleanedOptions.to = mergedOptions.to
-        return self.web3.eth.sendTransactionPromise(transaction, transactionOptions: cleanedOptions, password: password)
+        return try await self.web3.eth.sendTransactionPromise(transaction, transactionOptions: cleanedOptions, password: password)
     }
 
-    public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) throws -> TransactionSendingResult {
-        return try self.sendPromise(password: password, transactionOptions: transactionOptions)
+    public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult {
+        return try await self.sendPromise(password: password, transactionOptions: transactionOptions)
     }
 
     public func assemble(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {

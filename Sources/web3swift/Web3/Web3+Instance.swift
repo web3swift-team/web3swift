@@ -160,12 +160,11 @@ public class web3 {
 
     public class Eventloop: TransactionOptionsInheritable {
 
-        public typealias EventLoopCall = (web3) -> Void
+        public typealias EventLoopCall = (web3) async -> Void
         public typealias EventLoopContractCall = (web3contract) -> Void
 
         public struct MonitoredProperty {
             public var name: String
-            public var queue: DispatchQueue
             public var calledFunction: EventLoopCall
         }
 
@@ -200,17 +199,14 @@ public class web3 {
     public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> ()
 
     public struct AssemblyHook {
-        public var queue: DispatchQueue
         public var function: AssemblyHookFunction
     }
 
     public struct SubmissionHook {
-        public var queue: DispatchQueue
         public var function: SubmissionHookFunction
     }
 
     public struct SubmissionResultHook {
-        public var queue: DispatchQueue
         public var function: SubmissionResultHookFunction
     }
 

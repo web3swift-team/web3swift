@@ -30,7 +30,7 @@ extension web3.Eth {
         }
         let result = TransactionSendingResult(transaction: transaction, hash: value)
         for hook in self.web3.postSubmissionHooks {
-            hook.queue.async {
+            Task {
                 hook.function(result)
             }
         }

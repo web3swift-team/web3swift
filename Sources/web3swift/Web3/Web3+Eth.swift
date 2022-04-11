@@ -18,8 +18,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func sendTransaction(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") throws -> TransactionSendingResult {
-        let result = try self.sendTransactionPromise(transaction, transactionOptions: transactionOptions, password: password).wait()
+    public func sendTransaction(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") async throws -> TransactionSendingResult {
+        let result = try await self.sendTransactionPromise(transaction, transactionOptions: transactionOptions, password: password)
         return result
     }
 
@@ -34,8 +34,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    func call(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions) throws -> Data {
-        let result = try self.callPromise(transaction, transactionOptions: transactionOptions).wait()
+    func call(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions) async throws -> Data {
+        let result = try await self.callPromise(transaction, transactionOptions: transactionOptions)
         return result
     }
 
@@ -44,8 +44,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func sendRawTransaction(_ transaction: Data) throws -> TransactionSendingResult {
-        let result = try self.sendRawTransactionPromise(transaction).wait()
+    public func sendRawTransaction(_ transaction: Data) async throws -> TransactionSendingResult {
+        let result = try await self.sendRawTransactionPromise(transaction)
         return result
     }
 
@@ -54,8 +54,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func sendRawTransaction(_ transaction: EthereumTransaction) throws -> TransactionSendingResult {
-        let result = try self.sendRawTransactionPromise(transaction).wait()
+    public func sendRawTransaction(_ transaction: EthereumTransaction) async throws -> TransactionSendingResult {
+        let result = try await self.sendRawTransactionPromise(transaction)
         return result
     }
 
@@ -67,8 +67,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest") throws -> BigUInt {
-        let result = try self.getTransactionCountPromise(address: address, onBlock: onBlock).wait()
+    public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest") async throws -> BigUInt {
+        let result = try await self.getTransactionCountPromise(address: address, onBlock: onBlock)
         return result
     }
 
@@ -80,8 +80,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getBalance(address: EthereumAddress, onBlock: String = "latest") throws -> BigUInt {
-        let result = try self.getBalancePromise(address: address, onBlock: onBlock).wait()
+    public func getBalance(address: EthereumAddress, onBlock: String = "latest") async throws -> BigUInt {
+        let result = try await self.getBalancePromise(address: address, onBlock: onBlock)
         return result
     }
 
@@ -90,8 +90,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getBlockNumber() throws -> BigUInt {
-        let result = try self.getBlockNumberPromise().wait()
+    public func getBlockNumber() async throws -> BigUInt {
+        let result = try await self.getBlockNumberPromise()
         return result
     }
 
@@ -100,8 +100,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getGasPrice() throws -> BigUInt {
-        let result = try self.getGasPricePromise().wait()
+    public func getGasPrice() async throws -> BigUInt {
+        let result = try await self.getGasPricePromise()
         return result
     }
 
@@ -111,8 +111,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getTransactionDetails(_ txhash: Data) throws -> TransactionDetails {
-        let result = try self.getTransactionDetailsPromise(txhash).wait()
+    public func getTransactionDetails(_ txhash: Data) async throws -> TransactionDetails {
+        let result = try await self.getTransactionDetailsPromise(txhash)
        return result
     }
 
@@ -122,8 +122,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getTransactionDetails(_ txhash: String) throws -> TransactionDetails {
-        let result = try self.getTransactionDetailsPromise(txhash).wait()
+    public func getTransactionDetails(_ txhash: String) async throws -> TransactionDetails {
+        let result = try await self.getTransactionDetailsPromise(txhash)
         return result
     }
 
@@ -133,8 +133,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getTransactionReceipt(_ txhash: Data) throws -> TransactionReceipt {
-        let result = try self.getTransactionReceiptPromise(txhash).wait()
+    public func getTransactionReceipt(_ txhash: Data) async throws -> TransactionReceipt {
+        let result = try await self.getTransactionReceiptPromise(txhash)
         return result
     }
 
@@ -144,8 +144,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getTransactionReceipt(_ txhash: String) throws -> TransactionReceipt {
-        let result = try self.getTransactionReceiptPromise(txhash).wait()
+    public func getTransactionReceipt(_ txhash: String) async throws -> TransactionReceipt {
+        let result = try await self.getTransactionReceiptPromise(txhash)
         return result
     }
 
@@ -161,8 +161,8 @@ extension web3.Eth {
     /// Returns the Result object that indicates either success of failure.
     /// Error can also indicate that transaction is invalid in the current state, so formally it's gas limit is infinite.
     /// An example of such transaction can be sending an amount of ETH that is larger than the current account balance.
-    public func estimateGas(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) throws -> BigUInt {
-        let result = try self.estimateGasPromise(transaction, transactionOptions: transactionOptions).wait()
+    public func estimateGas(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> BigUInt {
+        let result = try await self.estimateGasPromise(transaction, transactionOptions: transactionOptions)
         return result
     }
 
@@ -172,8 +172,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getAccounts() throws -> [EthereumAddress] {
-        let result = try self.getAccountsPromise().wait()
+    public func getAccounts() async throws -> [EthereumAddress] {
+        let result = try await self.getAccountsPromise()
         return result
     }
 
@@ -184,8 +184,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getBlockByHash(_ hash: String, fullTransactions: Bool = false) throws -> Block {
-        let result = try self.getBlockByHashPromise(hash, fullTransactions: fullTransactions).wait()
+    public func getBlockByHash(_ hash: String, fullTransactions: Bool = false) async throws -> Block {
+        let result = try await self.getBlockByHashPromise(hash, fullTransactions: fullTransactions)
         return result
     }
 
@@ -196,8 +196,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getBlockByHash(_ hash: Data, fullTransactions: Bool = false) throws -> Block {
-        let result = try self.getBlockByHashPromise(hash, fullTransactions: fullTransactions).wait()
+    public func getBlockByHash(_ hash: Data, fullTransactions: Bool = false) async throws -> Block {
+        let result = try await self.getBlockByHashPromise(hash, fullTransactions: fullTransactions)
         return result
     }
 
@@ -208,8 +208,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getBlockByNumber(_ number: UInt64, fullTransactions: Bool = false) throws -> Block {
-        let result = try self.getBlockByNumberPromise(number, fullTransactions: fullTransactions).wait()
+    public func getBlockByNumber(_ number: UInt64, fullTransactions: Bool = false) async throws -> Block {
+        let result = try await self.getBlockByNumberPromise(number, fullTransactions: fullTransactions)
         return result
     }
 
@@ -220,8 +220,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getBlockByNumber(_ number: BigUInt, fullTransactions: Bool = false) throws -> Block {
-        let result = try self.getBlockByNumberPromise(number, fullTransactions: fullTransactions).wait()
+    public func getBlockByNumber(_ number: BigUInt, fullTransactions: Bool = false) async throws -> Block {
+        let result = try await self.getBlockByNumberPromise(number, fullTransactions: fullTransactions)
         return result
     }
 
@@ -232,8 +232,8 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     ///
-    public func getBlockByNumber(_ block: String, fullTransactions: Bool = false) throws -> Block {
-        let result = try self.getBlockByNumberPromise(block, fullTransactions: fullTransactions).wait()
+    public func getBlockByNumber(_ block: String, fullTransactions: Bool = false) async throws -> Block {
+        let result = try await self.getBlockByNumberPromise(block, fullTransactions: fullTransactions)
         return result
     }
 
@@ -339,11 +339,11 @@ extension web3.Eth {
 
      * If the amount is  "1.01" and token has 9 decimals it will result in sending 1010000000 of the smallest invidisible token units.*
      */
-    public func sendERC20tokensWithNaturalUnits(tokenAddress: EthereumAddress, from: EthereumAddress, to: EthereumAddress, amount: String,  transactionOptions: TransactionOptions? = nil) throws -> WriteTransaction? {
+    public func sendERC20tokensWithNaturalUnits(tokenAddress: EthereumAddress, from: EthereumAddress, to: EthereumAddress, amount: String,  transactionOptions: TransactionOptions? = nil) async throws -> WriteTransaction? {
         let contract = self.web3.contract(Web3.Utils.erc20ABI, at: tokenAddress, abiVersion: 2)
         var mergedOptions = self.web3.transactionOptions.merge(transactionOptions)
         mergedOptions.from = from
-        let resp = try contract?.read("decimals", transactionOptions: mergedOptions)?.callPromise().wait()
+        let resp = try await contract?.read("decimals", transactionOptions: mergedOptions)?.callPromise()
         var decimals = BigUInt(0)
         guard let response = resp, let dec = response["0"], let decTyped = dec as? BigUInt else {return nil}
         decimals = decTyped

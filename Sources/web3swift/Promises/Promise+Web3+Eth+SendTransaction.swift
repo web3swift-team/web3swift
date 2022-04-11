@@ -48,7 +48,7 @@ extension web3.Eth {
             }
             let result = TransactionSendingResult(transaction: assembledTransaction, hash: value)
             for hook in self.web3.postSubmissionHooks {
-                hook.queue.async {
+                Task {
                     hook.function(result)
                 }
             }

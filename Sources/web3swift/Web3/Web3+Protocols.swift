@@ -18,14 +18,14 @@ public protocol EventParserResultProtocol {
 
 /// Protocol for generic Ethereum event parser
 public protocol EventParserProtocol {
-    func parseTransaction(_ transaction: EthereumTransaction) throws -> [EventParserResultProtocol]
-    func parseTransactionByHash(_ hash: Data) throws -> [EventParserResultProtocol]
-    func parseBlock(_ block: Block) throws -> [EventParserResultProtocol]
-    func parseBlockByNumber(_ blockNumber: UInt64) throws -> [EventParserResultProtocol]
-    func parseTransactionPromise(_ transaction: EthereumTransaction) -> [EventParserResultProtocol]
-    func parseTransactionByHashPromise(_ hash: Data) -> [EventParserResultProtocol]
-    func parseBlockByNumberPromise(_ blockNumber: UInt64) -> [EventParserResultProtocol]
-    func parseBlockPromise(_ block: Block) -> [EventParserResultProtocol]
+    func parseTransaction(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol]
+    func parseTransactionByHash(_ hash: Data) async throws -> [EventParserResultProtocol]
+    func parseBlock(_ block: Block) async throws -> [EventParserResultProtocol]
+    func parseBlockByNumber(_ blockNumber: UInt64) async throws -> [EventParserResultProtocol]
+    func parseTransactionPromise(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol]
+    func parseTransactionByHashPromise(_ hash: Data) async throws -> [EventParserResultProtocol]
+    func parseBlockByNumberPromise(_ blockNumber: UInt64) async throws -> [EventParserResultProtocol]
+    func parseBlockPromise(_ block: Block) async throws -> [EventParserResultProtocol]
 }
 
 /// Enum for the most-used Ethereum networks. Network ID is crucial for EIP155 support
@@ -83,6 +83,5 @@ extension Networks: Equatable {
 
 public protocol EventLoopRunnableProtocol {
     var name: String {get}
-    var queue: DispatchQueue {get}
     func functionToRun()
 }
