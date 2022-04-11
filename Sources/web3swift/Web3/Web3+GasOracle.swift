@@ -217,10 +217,10 @@ extension web3.Eth.Oracle.FeeHistory: Decodable {
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.baseFeePerGas = try values.decodeHex(to: [BigUInt].self, key: .baseFeePerGas)
-        self.gasUsedRatio = try values.decodeHex(to: [Double].self, key: .gasUsedRatio)
-        self.oldestBlock = try values.decodeHex(to: BigUInt.self, key: .oldestBlock)
-        self.reward = try values.decodeHex(to: [[BigUInt]].self, key: .reward)
+        self.baseFeePerGas = try values.decodeHex([BigUInt].self, forKey: .baseFeePerGas)
+        self.gasUsedRatio = try values.decode([Double].self, forKey: .gasUsedRatio)
+        self.oldestBlock = try values.decodeHex(BigUInt.self, forKey: .oldestBlock)
+        self.reward = try values.decodeHex([[BigUInt]].self, forKey: .reward)
     }
 }
 

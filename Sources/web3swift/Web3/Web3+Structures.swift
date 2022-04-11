@@ -21,13 +21,13 @@ extension TransactionOptions: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        if let gasLimit = try? container.decodeHex(to: BigUInt.self, key: .gas) {
+        if let gasLimit = try? container.decodeHex(BigUInt.self, forKey: .gas) {
             self.gasLimit = .manual(gasLimit)
         } else {
             self.gasLimit = .automatic
         }
 
-        if let gasPrice = try? container.decodeHex(to: BigUInt.self, key: .gasPrice) {
+        if let gasPrice = try? container.decodeHex(BigUInt.self, forKey: .gasPrice) {
             self.gasPrice = .manual(gasPrice)
         } else {
             self.gasPrice = .automatic
@@ -51,15 +51,15 @@ extension TransactionOptions: Decodable {
         //        }
         self.from = from
 
-        self.value = try container.decodeHex(to: BigUInt.self, key: .value)
+        self.value = try container.decodeHex(BigUInt.self, forKey: .value)
 
-        if let nonce = try? container.decodeHex(to: BigUInt.self, key: .nonce) {
+        if let nonce = try? container.decodeHex(BigUInt.self, forKey: .nonce) {
             self.nonce = .manual(nonce)
         } else {
             self.nonce = .pending
         }
 
-        if let callOnBlock = try? container.decodeHex(to: BigUInt.self, key: .callOnBlock) {
+        if let callOnBlock = try? container.decodeHex(BigUInt.self, forKey: .callOnBlock) {
             self.callOnBlock = .exactBlockNumber(callOnBlock)
         } else {
             self.callOnBlock = .pending
@@ -85,22 +85,22 @@ extension EthereumTransaction: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         // test to see if it is a EIP-1559 wrapper
-        if let envelope = try? container.decodeHex(to: BigUInt.self, key: .type) {
+        if let envelope = try? container.decodeHex(BigUInt.self, forKey: .type) {
             // if present and non-sero we are a new wrapper we can't decode
             if envelope != BigInt(0) { throw Web3Error.dataError }
         }
         
-        if let data = try? container.decodeHex(to: Data.self, key: .data) {
+        if let data = try? container.decodeHex(Data.self, forKey: .data) {
             self.data = data
         } else {
-            guard let data = try? container.decodeHex(to: Data.self, key: .input) else { throw Web3Error.dataError }
+            guard let data = try? container.decodeHex(Data.self, forKey: .input) else { throw Web3Error.dataError }
             self.data = data
         }
         
-        nonce = try container.decodeHex(to: BigUInt.self, key: .nonce)
-        v = try container.decodeHex(to: BigUInt.self, key: .v)     
-        r = try container.decodeHex(to: BigUInt.self, key: .r)
-        s = try container.decodeHex(to: BigUInt.self, key: .s)
+        nonce = try container.decodeHex(BigUInt.self, forKey: .nonce)
+        v = try container.decodeHex(BigUInt.self, forKey: .v)     
+        r = try container.decodeHex(BigUInt.self, forKey: .r)
+        s = try container.decodeHex(BigUInt.self, forKey: .s)
         
         guard let to = options.to, 
             let gasLimit = options.gasLimit, 
@@ -144,9 +144,9 @@ public struct TransactionDetails: Decodable {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.blockNumber = try? container.decodeHex(to: BigUInt.self, key: .blockNumber)
-        self.blockHash = try?  container.decodeHex(to: Data.self, key: .blockHash)        
-        self.transactionIndex = try? container.decodeHex(to: BigUInt.self, key: .blockNumber)
+        self.blockNumber = try? container.decodeHex(BigUInt.self, forKey: .blockNumber)
+        self.blockHash = try?  container.decodeHex(Data.self, forKey: .blockHash)        
+        self.transactionIndex = try? container.decodeHex(BigUInt.self, forKey: .blockNumber)
         self.transaction = try EthereumTransaction(from: decoder)
     }
 }
@@ -192,21 +192,21 @@ extension TransactionReceipt {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.blockNumber = try container.decodeHex(to: BigUInt.self, key: .blockNumber)
+        self.blockNumber = try container.decodeHex(BigUInt.self, forKey: .blockNumber)
         
-        self.blockHash = try container.decodeHex(to: Data.self, key: .blockHash)
+        self.blockHash = try container.decodeHex(Data.self, forKey: .blockHash)
         
-        self.transactionIndex = try container.decodeHex(to: BigUInt.self, key: .transactionIndex)
+        self.transactionIndex = try container.decodeHex(BigUInt.self, forKey: .transactionIndex)
         
-        self.transactionHash = try container.decodeHex(to: Data.self, key: .transactionHash)
+        self.transactionHash = try container.decodeHex(Data.self, forKey: .transactionHash)
         
         self.contractAddress = try? container.decodeIfPresent(EthereumAddress.self, forKey: .contractAddress)
         
-        self.cumulativeGasUsed = try container.decodeHex(to: BigUInt.self, key: .cumulativeGasUsed)
+        self.cumulativeGasUsed = try container.decodeHex(BigUInt.self, forKey: .cumulativeGasUsed)
         
-        self.gasUsed = try container.decodeHex(to: BigUInt.self, key: .gasUsed)
+        self.gasUsed = try container.decodeHex(BigUInt.self, forKey: .gasUsed)
         
-        let status = try? container.decodeHex(to: BigUInt.self, key: .status) 
+        let status = try? container.decodeHex(BigUInt.self, forKey: .status) 
         switch status {
             case nil: self.status = .notYetProcessed
             case 1: self.status = .ok
@@ -276,19 +276,19 @@ public struct EventLog : Decodable {
         let address = try container.decode(EthereumAddress.self, forKey: .address)
         self.address = address
         
-        self.blockNumber = try container.decodeHex(to: BigUInt.self, key: .blockNumber)
+        self.blockNumber = try container.decodeHex(BigUInt.self, forKey: .blockNumber)
         
-        self.blockHash = try container.decodeHex(to: Data.self, key: .blockHash)
+        self.blockHash = try container.decodeHex(Data.self, forKey: .blockHash)
         
-        self.transactionIndex = try container.decodeHex(to: BigUInt.self, key: .transactionIndex)
+        self.transactionIndex = try container.decodeHex(BigUInt.self, forKey: .transactionIndex)
         
-        self.transactionHash = try container.decodeHex(to: Data.self, key: .transactionHash)
+        self.transactionHash = try container.decodeHex(Data.self, forKey: .transactionHash)
     
-        self.data = try container.decodeHex(to: Data.self, key: .data)
+        self.data = try container.decodeHex(Data.self, forKey: .data)
         
-        self.logIndex = try container.decodeHex(to: BigUInt.self, key: .logIndex)
+        self.logIndex = try container.decodeHex(BigUInt.self, forKey: .logIndex)
         
-        let removed = try? container.decodeHex(to: BigUInt.self, key: .removed)
+        let removed = try? container.decodeHex(BigUInt.self, forKey: .removed)
         self.removed = removed == 1 ? true : false
     
         let topicsStrings = try container.decode([String].self, forKey: .topics)
@@ -377,35 +377,35 @@ extension Block {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.number = try container.decodeHex(to: BigUInt.self, key: .number)
-        self.hash = try container.decodeHex(to: Data.self, key: .hash)
-        self.parentHash = try container.decodeHex(to: Data.self, key: .parentHash)
-        self.nonce = try? container.decodeHex(to: Data.self, key: .nonce)
-        self.sha3Uncles = try container.decodeHex(to: Data.self, key: .sha3Uncles)
+        self.number = try container.decodeHex(BigUInt.self, forKey: .number)
+        self.hash = try container.decodeHex(Data.self, forKey: .hash)
+        self.parentHash = try container.decodeHex(Data.self, forKey: .parentHash)
+        self.nonce = try? container.decodeHex(Data.self, forKey: .nonce)
+        self.sha3Uncles = try container.decodeHex(Data.self, forKey: .sha3Uncles)
 
-        if let logsBloomData = try? container.decodeHex(to: Data.self, key: .logsBloom) {
+        if let logsBloomData = try? container.decodeHex(Data.self, forKey: .logsBloom) {
             self.logsBloom = EthereumBloomFilter(logsBloomData)
         }
 
-        self.transactionsRoot = try container.decodeHex(to: Data.self, key: .transactionsRoot)
-        self.stateRoot = try container.decodeHex(to: Data.self, key: .stateRoot)
-        self.receiptsRoot = try container.decodeHex(to: Data.self, key: .receiptsRoot)
+        self.transactionsRoot = try container.decodeHex(Data.self, forKey: .transactionsRoot)
+        self.stateRoot = try container.decodeHex(Data.self, forKey: .stateRoot)
+        self.receiptsRoot = try container.decodeHex(Data.self, forKey: .receiptsRoot)
 
         if let minerAddress = try? container.decode(String.self, forKey: .miner) {
             self.miner = EthereumAddress(minerAddress)
         }
 
-        self.difficulty = try container.decodeHex(to: BigUInt.self, key: .difficulty)
-        self.totalDifficulty = try container.decodeHex(to: BigUInt.self, key: .totalDifficulty)
-        self.extraData = try container.decodeHex(to: Data.self, key: .extraData)
-        self.size = try container.decodeHex(to: BigUInt.self, key: .size)
-        self.gasLimit = try container.decodeHex(to: BigUInt.self, key: .gasLimit)
-        self.gasUsed = try container.decodeHex(to: BigUInt.self, key: .gasUsed)
+        self.difficulty = try container.decodeHex(BigUInt.self, forKey: .difficulty)
+        self.totalDifficulty = try container.decodeHex(BigUInt.self, forKey: .totalDifficulty)
+        self.extraData = try container.decodeHex(Data.self, forKey: .extraData)
+        self.size = try container.decodeHex(BigUInt.self, forKey: .size)
+        self.gasLimit = try container.decodeHex(BigUInt.self, forKey: .gasLimit)
+        self.gasUsed = try container.decodeHex(BigUInt.self, forKey: .gasUsed)
 
         // optional, since pre EIP-1559 block haven't such property.
-        self.baseFeePerGas = try? container.decodeHex(to: BigUInt.self, key: .baseFeePerGas)
+        self.baseFeePerGas = try? container.decodeHex(BigUInt.self, forKey: .baseFeePerGas)
 
-        self.timestamp = try container.decodeHex(to: Date.self, key: .timestamp)
+        self.timestamp = try container.decodeHex(Date.self, forKey: .timestamp)
 
         self.transactions = try container.decode([TransactionInBlock].self, forKey: .transactions)
 
@@ -443,8 +443,8 @@ public struct TxPoolStatus : Decodable {
 public extension TxPoolStatus {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.pending = try container.decodeHex(to: BigUInt.self, key: .pending)
-        self.queued = try container.decodeHex(to: BigUInt.self, key: .queued)
+        self.pending = try container.decodeHex(BigUInt.self, forKey: .pending)
+        self.queued = try container.decodeHex(BigUInt.self, forKey: .queued)
     }
 }
 
