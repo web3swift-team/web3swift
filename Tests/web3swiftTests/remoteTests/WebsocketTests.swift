@@ -83,7 +83,7 @@ class WebsocketTests: XCTestCase {
         }
     }
     
-    // FIXME: Occasionaly fails on ci/cd
+    // FIXME: Occasionally fails on ci/cd
 //     func testSubscribeOnPendingTXs() {
 //         guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
 //             return XCTFail()
@@ -108,7 +108,7 @@ class WebsocketTests: XCTestCase {
 //         }
 //     }
     
-    // FIXME: Occasionaly fails on ci/cd
+    // FIXME: Occasionally fails on ci/cd
 //    func testSubscribeOnLogs() {
 //        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
 //            return XCTFail()
@@ -133,7 +133,7 @@ class WebsocketTests: XCTestCase {
 //        }
 //    }
 
-    // FIXME: Occasionaly fails on ci/cd
+    // FIXME: Occasionally fails on ci/cd
 //    func testSubscribeOnNewHeads() {
 //        guard let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: spyDelegate) else {
 //            return XCTFail()
