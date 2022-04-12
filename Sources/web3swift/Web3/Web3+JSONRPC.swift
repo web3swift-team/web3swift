@@ -109,6 +109,7 @@ public struct JSONRPCresponse: Decodable{
                                   [String: Int].self,
                                   [String: [String: [String: [String]]]].self]
 
+    // FIXME: Make me a real generic
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: JSONRPCresponseKeys.self)
         let id: Int = try container.decode(Int.self, forKey: .id)
@@ -164,24 +165,26 @@ public struct JSONRPCresponse: Decodable{
         self.init(id: id, jsonrpc: jsonrpc, result: result, error: nil)
     }
 
+    // FIXME: Make me a real generic
     /// Get the JSON RCP reponse value by deserializing it into some native <T> class.
     ///
     /// Returns nil if serialization fails
     public func getValue<T>() -> T? {
-        let slf = T.self
-        if slf == BigUInt.self {
+        let type = T.self
+
+        if type == BigUInt.self {
             guard let string = self.result as? String else {return nil}
             guard let value = BigUInt(string.stripHexPrefix(), radix: 16) else {return nil}
             return value as? T
-        } else if slf == BigInt.self {
+        } else if type == BigInt.self {
             guard let string = self.result as? String else {return nil}
             guard let value = BigInt(string.stripHexPrefix(), radix: 16) else {return nil}
             return value as? T
-        } else if slf == Data.self {
+        } else if type == Data.self {
             guard let string = self.result as? String else {return nil}
             guard let value = Data.fromHex(string) else {return nil}
             return value as? T
-        } else if slf == EthereumAddress.self {
+        } else if type == EthereumAddress.self {
             guard let string = self.result as? String else {return nil}
             guard let value = EthereumAddress(string, ignoreChecksum: true) else {return nil}
             return value as? T
@@ -193,25 +196,25 @@ public struct JSONRPCresponse: Decodable{
 //            guard let value = self.result as? T else {return nil}
 //            return value
 //        }
-        else if slf == [BigUInt].self {
+        else if type == [BigUInt].self {
             guard let string = self.result as? [String] else {return nil}
             let values = string.compactMap { (str) -> BigUInt? in
                 return BigUInt(str.stripHexPrefix(), radix: 16)
             }
             return values as? T
-        } else if slf == [BigInt].self {
+        } else if type == [BigInt].self {
             guard let string = self.result as? [String] else {return nil}
             let values = string.compactMap { (str) -> BigInt? in
                 return BigInt(str.stripHexPrefix(), radix: 16)
             }
             return values as? T
-        } else if slf == [Data].self {
+        } else if type == [Data].self {
             guard let string = self.result as? [String] else {return nil}
             let values = string.compactMap { (str) -> Data? in
                 return Data.fromHex(str)
             }
             return values as? T
-        } else if slf == [EthereumAddress].self {
+        } else if type == [EthereumAddress].self {
             guard let string = self.result as? [String] else {return nil}
             let values = string.compactMap { (str) -> EthereumAddress? in
                 return EthereumAddress(str, ignoreChecksum: true)
