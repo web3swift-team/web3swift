@@ -144,7 +144,7 @@ extension BigUInt: DecodableFromHex {
 }
 
 extension UInt: DecodableFromHex {
-    public init?(from hexString: String) {
+    public init?(fromHex hexString: String) {
         self.init()
         guard let tmp = UInt(hexString.stripHexPrefix(), radix: 16) else { return nil }
         self = tmp
