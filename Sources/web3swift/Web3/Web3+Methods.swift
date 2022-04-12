@@ -48,8 +48,7 @@ public enum JSONRPCmethod: String, Encodable {
                 .getAccounts,
                 .getTxPoolStatus,
                 .getTxPoolContent,
-                .getTxPoolInspect,
-                .estimateGas:
+                .getTxPoolInspect:
             return 0
         case .sendRawTransaction,
                 .sendTransaction,
@@ -58,7 +57,8 @@ public enum JSONRPCmethod: String, Encodable {
                 .personalSign,
                 .unlockAccount,
                 .createAccount,
-                .getLogs:
+                .getLogs,
+                .estimateGas:
             return 1
         case .call,
                 .getTransactionCount,

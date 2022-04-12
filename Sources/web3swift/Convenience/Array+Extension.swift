@@ -44,9 +44,9 @@ extension Array where Element: BinaryInteger {
 
         let normalizedValue = value / 100 * Double(self.count)
         let index = Int(ceil(normalizedValue))
-        guard index < self.count else { return nil }
 
         let sorted_data = self.sorted()
+        guard index < self.count else { return sorted_data[sorted_data.endIndex] }
         return sorted_data[index]
     }
 }

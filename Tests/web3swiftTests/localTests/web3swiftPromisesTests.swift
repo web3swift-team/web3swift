@@ -94,7 +94,7 @@ class web3swiftPromisesTests: XCTestCase {
         options.from = fromAddress
         
         let amount1 = Web3.Utils.parseToBigUInt("0.000000000000000001", units: .eth) // 1 wei
-        
+
         guard let tx1 = contract.write("test",
                                        parameters: [amount1] as [AnyObject],
                                        extraData: Data(),
