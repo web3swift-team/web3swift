@@ -91,23 +91,26 @@ public struct JSONRPCresponse: Decodable{
         public var message: String
     }
 
-    internal var decodableTypes: [Decodable.Type] = [[EventLog].self,
-                                  [TransactionDetails].self,
-                                  [TransactionReceipt].self,
-                                  [Block].self,
-                                  [String].self,
-                                  [Int].self,
-                                  [Bool].self,
-                                  EventLog.self,
-                                  TransactionDetails.self,
-                                  TransactionReceipt.self,
-                                  Block.self,
-                                  String.self,
-                                  Int.self,
-                                  Bool.self,
-                                  [String: String].self,
-                                  [String: Int].self,
-                                  [String: [String: [String: [String]]]].self]
+    internal var decodableTypes: [Decodable.Type] = [
+        [EventLog].self,
+        [TransactionDetails].self,
+        [TransactionReceipt].self,
+        [Block].self,
+        [String].self,
+        [Int].self,
+        [Bool].self,
+        EventLog.self,
+        TransactionDetails.self,
+        TransactionReceipt.self,
+        Block.self,
+        String.self,
+        Int.self,
+        Bool.self,
+        [String: String].self,
+        [String: Int].self,
+        [String: [String: [String: [String]]]].self,
+        Web3.Oracle.FeeHistory.self
+    ]
 
     // FIXME: Make me a real generic
     public init(from decoder: Decoder) throws {
@@ -159,6 +162,8 @@ public struct JSONRPCresponse: Decodable{
         } else if let rawValue = try? container.decodeIfPresent([String: [String: [String: String]]].self, forKey: .result) {
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent([String: [String: [String: [String: String?]]]].self, forKey: .result) {
+            result = rawValue
+        } else if let rawValue = try? container.decodeIfPresent(Web3.Oracle.FeeHistory.self, forKey: .result) {
             result = rawValue
         }
         self.init(id: id, jsonrpc: jsonrpc, result: result, error: nil)
@@ -261,6 +266,7 @@ public struct EventFilterParameters: Codable {
 
 /// Raw JSON RCP 2.0 internal flattening wrapper.
 public struct JSONRPCparams: Encodable{
+    // TODO: Rewrite me to generic
     public var params = [Any]()
 
     public func encode(to encoder: Encoder) throws {
@@ -273,6 +279,8 @@ public struct JSONRPCparams: Encodable{
             } else if let p = par as? Bool {
                 try container.encode(p)
             } else if let p = par as? EventFilterParameters {
+                try container.encode(p)
+            } else if let p = par as? [Double] {
                 try container.encode(p)
             }
         }

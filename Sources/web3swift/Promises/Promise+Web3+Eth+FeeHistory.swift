@@ -15,12 +15,12 @@ extension web3.Eth {
 //        return feeHistory(address: addr, onBlock: onBlock)
 //    }
 
-    public func feeHistory(blockCount: BigUInt, block: String, percentiles:[Double]) throws -> Oracle.FeeHistory {
+    func feeHistory(blockCount: BigUInt, block: String, percentiles:[Double]) throws -> Web3.Oracle.FeeHistory {
         let request = JSONRPCRequestFabric.prepareRequest(.feeHistory, parameters: [blockCount.description.addHexPrefix(), block, percentiles])
         let rp = web3.dispatch(request)
         let queue = web3.requestDispatcher.queue
         return try rp.map(on: queue) { response in
-            guard let value: Oracle.FeeHistory = response.getValue() else {
+            guard let value: Web3.Oracle.FeeHistory = response.getValue() else {
                 if response.error != nil {
                     throw Web3Error.nodeError(desc: response.error!.message)
                 }

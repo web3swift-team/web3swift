@@ -9,7 +9,7 @@
 import Foundation
 import BigInt
 
-extension web3.Eth {
+extension Web3 {
     /// Oracle is the class to do a transaction fee suggestion
     final public class Oracle {
 
@@ -33,10 +33,10 @@ extension web3.Eth {
         /// Oracle initializer
         /// - Parameters:
         ///   - provider: Web3 Ethereum provider
-        ///   - block: Number of block from which counts starts
+        ///   - block: Number of block from which counts starts backward
         ///   - blockCount: Count of block to calculate statistics
         ///   - percentiles: Percentiles of fees which will split in fees history
-        public init(_ provider: web3, block: String = "latest", blockCount: BigUInt = 20, percentiles: [Double] = [10, 50, 90]) {
+        public init(_ provider: web3, block: String = "latest", blockCount: BigUInt = 20, percentiles: [Double] = [25, 50, 75]) {
             self.web3Provider = provider
             self.block = block
             self.blockCount = blockCount
@@ -72,7 +72,7 @@ extension web3.Eth {
         private func soft(twoDimentsion array: [[BigUInt]]) -> [BigUInt] {
             /// We've got `[[min],[middle],[max]]` 2 dimensional array
             /// we're getting `[min, middle, max].count == self.percentiles.count`,
-            /// where each value are mean from the input percentile array
+            /// where each value are mean from the input percentile arrays
             array.compactMap { percentileArray -> [BigUInt]? in
                 guard !percentileArray.isEmpty else { return nil }
                 // swiftlint:disable force_unwrapping
@@ -98,28 +98,37 @@ extension web3.Eth {
         }
 
         /// Suggesting tip values
-        /// - Returns: `[percentile 1, percentile 2, percentile 3].count == self.percentile.count`
+        /// - Returns: `[percentile_1, percentile_2, percentile_3, ...].count == self.percentile.count`
         /// by default there's 3 percentile.
         private func suggestTipValue() throws -> [BigUInt] {
+            var rearrengedArray: [[BigUInt]] = []
+
             /// reaarange `[[min, middle, max]]` to `[[min], [middle], [max]]`
-            let rearrengedArray = try suggestGasValues().reward
-                .map { internalArray -> [BigUInt] in
-                    var newArray = [BigUInt]()
-                    internalArray.enumerated().forEach { newArray[$0] = $1 }
-                    return newArray
+            try suggestGasValues().reward
+                .forEach { percentiles in
+                    percentiles.enumerated().forEach { (index, percentile) in
+                        /// if `rearrengedArray` have not that enough items
+                        /// as `percentiles` current item index
+                        if rearrengedArray.endIndex <= index {
+                            /// append its as an array
+                            rearrengedArray.append([percentile])
+                        } else {
+                            /// append `percentile` value to appropriate `percentiles` array.
+                            rearrengedArray[index].append(percentile)
+                        }
+                    }
                 }
             return soft(twoDimentsion: rearrengedArray)
         }
 
         private func suggestBaseFee() throws -> [BigUInt] {
-            calculatePercentiles(for: try suggestGasValues().baseFeePerGas)
+            self.feeHistory = try suggestGasValues()
+            return calculatePercentiles(for: feeHistory!.baseFeePerGas)
         }
 
         private func suggestGasFeeLegacy(_ statistic: Statistic) throws -> BigUInt {
             let latestBlockNumber = try eth.getBlockNumber()
 
-            // Assigning last block to object var to predict baseFee of the next block
-//            latestBlock = try eth.getBlockByNumber(latestBlockNumber)
             // TODO: Make me work with cache
             let lastNthBlockGasPrice = try (latestBlockNumber - blockCount ... latestBlockNumber)
                 .map { try eth.getBlockByNumber($0, fullTransactions: true) }
@@ -136,17 +145,14 @@ extension web3.Eth {
     }
 }
 
-public extension web3.Eth.Oracle {
+public extension Web3.Oracle {
     // MARK: - Base Fee
-    /// Base fee amount based on last Nth blocks
+    /// Softed baseFee amount
     ///
     /// Normalized means that most high and most low value were droped from calculation.
     ///
-    /// Nth block may include empty ones.
-    ///
-    /// - Parameter statistic: Statistic to apply for base fee calculation
     /// - Returns: Suggested base fee amount according to statistic, nil if failed to perdict
-    func predictBaseFee() -> [BigUInt] {
+    var baseFeePercentiles: [BigUInt] {
         guard let value = try? suggestBaseFee() else { return [] }
         return value
     }
@@ -160,7 +166,7 @@ public extension web3.Eth.Oracle {
     ///
     /// - Parameter statistic: Statistic to apply for tip calculation
     /// - Returns: Suggested tip amount according to statistic, nil if failed to perdict
-    func predictTip() -> [BigUInt] {
+    var tipFeePercentiles: [BigUInt] {
         guard let value = try? suggestTipValue() else { return [] }
         return value
     }
@@ -171,7 +177,7 @@ public extension web3.Eth.Oracle {
     ///   - baseFee: Statistic to apply for baseFee
     ///   - tip: Statistic to apply for tip
     /// - Returns: Tuple where `baseFee` — base fee, `tip` — tip, nil if failed to predict
-    func predictBothFees() -> (baseFee: [BigUInt], tip: [BigUInt])? {
+    var bothFeesPercentiles: (baseFee: [BigUInt], tip: [BigUInt])? {
         guard let baseFee = try? suggestBaseFee() else { return nil }
         guard let tip = try? suggestTipValue() else { return nil }
 
@@ -188,7 +194,7 @@ public extension web3.Eth.Oracle {
 //    }
 }
 
-public extension web3.Eth.Oracle {
+public extension Web3.Oracle {
     // TODO: Make me struct and encapsulate math within to make me extendable
     enum Statistic {
         /// Mininum statistic
@@ -202,7 +208,7 @@ public extension web3.Eth.Oracle {
     }
 }
 
-public extension web3.Eth.Oracle {
+extension Web3.Oracle {
     struct FeeHistory {
         let timestamp = Date()
         let baseFeePerGas: [BigUInt]
@@ -212,7 +218,7 @@ public extension web3.Eth.Oracle {
     }
 }
 
-extension web3.Eth.Oracle.FeeHistory: Decodable {
+extension Web3.Oracle.FeeHistory: Decodable {
     enum CodingKeys: String, CodingKey {
         case baseFeePerGas
         case gasUsedRatio
@@ -227,37 +233,5 @@ extension web3.Eth.Oracle.FeeHistory: Decodable {
         self.gasUsedRatio = try values.decode([Double].self, forKey: .gasUsedRatio)
         self.oldestBlock = try values.decodeHex(BigUInt.self, forKey: .oldestBlock)
         self.reward = try values.decodeHex([[BigUInt]].self, forKey: .reward)
-    }
-}
-
-extension Array where Element: Comparable {
-
-    /// Sorts array and drops most and least values.
-    /// - Returns: Sorted array without most and least values, nil if `array.count` <= 2
-    func cropAnomalyValues() -> Self? {
-        var sortedArray = self.sorted()
-        // Array should at least counts two to pass that formations.
-        guard sortedArray.count > 1 else { return nil }
-        sortedArray.removeLast()
-        sortedArray.removeFirst()
-        return sortedArray
-    }
-}
-
-extension Array where Element: BinaryInteger {
-    func mean() -> BigUInt? {
-        guard !self.isEmpty else { return nil }
-        return BigUInt(self.reduce(0, +)) / BigUInt(self.count)
-    }
-
-    func percentile(of value: Double) -> BigUInt? {
-        guard !self.isEmpty else { return nil }
-
-        let sorted_data = self.sorted()
-//        if self.count % 2 == 1 {
-            return BigUInt(sorted_data[Int(floor(Double(self.count) / value / 10))])
-//        } else {
-//            return BigUInt(sorted_data[self.count / Int(value) / 10] + sorted_data[(self.count / Int(value) / 10) - 1] /( value) / 10)
-//        }
     }
 }
