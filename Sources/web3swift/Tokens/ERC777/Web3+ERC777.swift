@@ -11,31 +11,31 @@ import BigInt
 
 // A New Advanced Token Standard
 protocol IERC777: IERC20, IERC820 {
-    func getDefaultOperators() throws -> [EthereumAddress]
-    func getGranularity() throws -> BigUInt
-    func getBalance(account: EthereumAddress) throws -> BigUInt
-    func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) throws -> BigUInt
-    func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) throws -> WriteTransaction
-    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) throws -> WriteTransaction
-    func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) throws -> WriteTransaction
-    func authorize(from: EthereumAddress, operator user: EthereumAddress) throws -> WriteTransaction
-    func revoke(from: EthereumAddress, operator user: EthereumAddress) throws -> WriteTransaction
-    func isOperatorFor(operator user: EthereumAddress, tokenHolder: EthereumAddress) throws -> Bool
-    func send(from: EthereumAddress, to: EthereumAddress, amount: String, data: [UInt8]) throws -> WriteTransaction
-    func operatorSend(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String, data: [UInt8], operatorData: [UInt8]) throws -> WriteTransaction
-    func burn(from: EthereumAddress, amount: String, data: [UInt8]) throws -> WriteTransaction
-    func operatorBurn(from: EthereumAddress, amount: String, originalOwner: EthereumAddress, data: [UInt8], operatorData: [UInt8]) throws -> WriteTransaction
+    func getDefaultOperators() async throws -> [EthereumAddress]
+    func getGranularity() async throws -> BigUInt
+    func getBalance(account: EthereumAddress) async throws -> BigUInt
+    func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt
+    func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction
+    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteTransaction
+    func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteTransaction
+    func authorize(from: EthereumAddress, operator user: EthereumAddress) async throws -> WriteTransaction
+    func revoke(from: EthereumAddress, operator user: EthereumAddress) async throws -> WriteTransaction
+    func isOperatorFor(operator user: EthereumAddress, tokenHolder: EthereumAddress) async throws -> Bool
+    func send(from: EthereumAddress, to: EthereumAddress, amount: String, data: [UInt8]) async throws -> WriteTransaction
+    func operatorSend(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String, data: [UInt8], operatorData: [UInt8]) async throws -> WriteTransaction
+    func burn(from: EthereumAddress, amount: String, data: [UInt8]) async throws -> WriteTransaction
+    func operatorBurn(from: EthereumAddress, amount: String, originalOwner: EthereumAddress, data: [UInt8], operatorData: [UInt8]) async throws -> WriteTransaction
 }
 
 // This namespace contains functions to work with ERC777 tokens.
 // can be imperatively read and saved
-public class ERC777: IERC777 {
+public class ERC777: IERC777, ERC20BaseProperties {
 
-    private var _name: String? = nil
-    private var _symbol: String? = nil
-    private var _decimals: UInt8? = nil
+    internal var _name: String? = nil
+    internal var _symbol: String? = nil
+    internal var _decimals: UInt8? = nil
 
-    private var _hasReadProperties: Bool = false
+    internal var _hasReadProperties: Bool = false
 
     public var transactionOptions: TransactionOptions
     public var web3: web3
@@ -59,101 +59,53 @@ public class ERC777: IERC777 {
         self.transactionOptions = mergedOptions
     }
 
-    public var name: String {
-        self.readProperties()
-        if self._name != nil {
-            return self._name!
-        }
-        return ""
-    }
-
-    public var symbol: String {
-        self.readProperties()
-        if self._symbol != nil {
-            return self._symbol!
-        }
-        return ""
-    }
 
     // Must be 18!
-    public var decimals: UInt8 {
-        self.readProperties()
+    public func decimals() async throws -> UInt8 {
+        try await self.readProperties()
         if self._decimals != nil {
             return self._decimals!
         }
         return 18
     }
 
-    public func readProperties() {
-        if self._hasReadProperties {
-            return
-        }
-        let contract = self.contract
-        guard contract.contract.address != nil else {return}
-        var transactionOptions = TransactionOptions.defaultOptions
-        transactionOptions.callOnBlock = .latest
-        guard let namePromise = contract.read("name", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
-
-        guard let symbolPromise = contract.read("symbol", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
-
-        guard let decimalPromise = contract.read("decimals", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
-
-        let allPromises = [namePromise, symbolPromise, decimalPromise]
-        let queue = self.web3.requestDispatcher.queue
-        when(resolved: allPromises).map(on: queue) { (resolvedPromises) -> Void in
-            guard case .fulfilled(let nameResult) = resolvedPromises[0] else {return}
-            guard let name = nameResult["0"] as? String else {return}
-            self._name = name
-
-            guard case .fulfilled(let symbolResult) = resolvedPromises[1] else {return}
-            guard let symbol = symbolResult["0"] as? String else {return}
-            self._symbol = symbol
-
-            guard case .fulfilled(let decimalsResult) = resolvedPromises[2] else {return}
-            guard let decimals = decimalsResult["0"] as? BigUInt else {return}
-            self._decimals = UInt8(decimals)
-
-            self._hasReadProperties = true
-            }.wait()
-    }
-
-    public func getGranularity() throws -> BigUInt {
+    public func getGranularity() async throws -> BigUInt {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try contract.read("granularity", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract.read("granularity", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
-    public func getDefaultOperators() throws -> [EthereumAddress] {
+    public func getDefaultOperators() async throws -> [EthereumAddress] {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try contract.read("defaultOperators", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract.read("defaultOperators", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
         guard let res = result["0"] as? [EthereumAddress] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
-    public func getBalance(account: EthereumAddress) throws -> BigUInt {
+    public func getBalance(account: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try contract.read("balanceOf", parameters: [account] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract.read("balanceOf", parameters: [account] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
-    public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) throws -> BigUInt {
+    public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try contract.read("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract.read("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
-    public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) throws -> WriteTransaction {
+    public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.from = from
@@ -161,7 +113,7 @@ public class ERC777: IERC777 {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try contract.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract.read("decimals", transactionOptions: basicOptions)!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -175,7 +127,7 @@ public class ERC777: IERC777 {
         return tx
     }
 
-    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) throws -> WriteTransaction {
+    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.from = from
@@ -183,7 +135,7 @@ public class ERC777: IERC777 {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try contract.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract.read("decimals", transactionOptions: basicOptions)!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -198,7 +150,7 @@ public class ERC777: IERC777 {
         return tx
     }
 
-    public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) throws -> WriteTransaction {
+    public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.from = from
@@ -206,7 +158,7 @@ public class ERC777: IERC777 {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try contract.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract.read("decimals", transactionOptions: basicOptions)!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -221,11 +173,11 @@ public class ERC777: IERC777 {
         return tx
     }
 
-    public func totalSupply() throws -> BigUInt {
+    public func totalSupply() async throws -> BigUInt {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try contract.read("totalSupply", parameters: [AnyObject](), extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract.read("totalSupply", parameters: [AnyObject](), extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -253,16 +205,16 @@ public class ERC777: IERC777 {
         return tx
     }
 
-    public func isOperatorFor(operator user: EthereumAddress, tokenHolder: EthereumAddress) throws -> Bool {
+    public func isOperatorFor(operator user: EthereumAddress, tokenHolder: EthereumAddress) async throws -> Bool {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try contract.read("isOperatorFor", parameters: [user, tokenHolder] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract.read("isOperatorFor", parameters: [user, tokenHolder] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
-    public func send(from: EthereumAddress, to: EthereumAddress, amount: String, data: [UInt8]) throws -> WriteTransaction {
+    public func send(from: EthereumAddress, to: EthereumAddress, amount: String, data: [UInt8]) async throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.from = from
@@ -270,7 +222,7 @@ public class ERC777: IERC777 {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try contract.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract.read("decimals", transactionOptions: basicOptions)!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -284,7 +236,7 @@ public class ERC777: IERC777 {
         return tx
     }
 
-    public func operatorSend(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String, data: [UInt8], operatorData: [UInt8]) throws -> WriteTransaction {
+    public func operatorSend(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String, data: [UInt8], operatorData: [UInt8]) async throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.from = from
@@ -292,7 +244,7 @@ public class ERC777: IERC777 {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try contract.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract.read("decimals", transactionOptions: basicOptions)!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -306,7 +258,7 @@ public class ERC777: IERC777 {
         return tx
     }
 
-    public func burn(from: EthereumAddress, amount: String, data: [UInt8]) throws -> WriteTransaction {
+    public func burn(from: EthereumAddress, amount: String, data: [UInt8]) async throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.from = from
@@ -314,7 +266,7 @@ public class ERC777: IERC777 {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try contract.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract.read("decimals", transactionOptions: basicOptions)!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -328,7 +280,7 @@ public class ERC777: IERC777 {
         return tx
     }
 
-    public func operatorBurn(from: EthereumAddress, amount: String, originalOwner: EthereumAddress, data: [UInt8], operatorData: [UInt8]) throws -> WriteTransaction {
+    public func operatorBurn(from: EthereumAddress, amount: String, originalOwner: EthereumAddress, data: [UInt8], operatorData: [UInt8]) async throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.from = from
@@ -336,7 +288,7 @@ public class ERC777: IERC777 {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try contract.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract.read("decimals", transactionOptions: basicOptions)!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -350,20 +302,20 @@ public class ERC777: IERC777 {
         return tx
     }
 
-    public func canImplementInterfaceForAddress(interfaceHash: Data, addr: EthereumAddress) throws -> Data {
+    public func canImplementInterfaceForAddress(interfaceHash: Data, addr: EthereumAddress) async throws -> Data {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try contract.read("canImplementInterfaceForAddress", parameters: [interfaceHash, addr] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract.read("canImplementInterfaceForAddress", parameters: [interfaceHash, addr] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
         guard let res = result["0"] as? Data else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
-    public func getInterfaceImplementer(addr: EthereumAddress, interfaceHash: Data) throws -> EthereumAddress {
+    public func getInterfaceImplementer(addr: EthereumAddress, interfaceHash: Data) async throws -> EthereumAddress {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try contract.read("getInterfaceImplementer", parameters: [addr, interfaceHash] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract.read("getInterfaceImplementer", parameters: [addr, interfaceHash] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
         guard let res = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -388,11 +340,11 @@ public class ERC777: IERC777 {
         return tx
     }
 
-    public func interfaceHash(interfaceName: String) throws -> Data {
+    public func interfaceHash(interfaceName: String) async throws -> Data {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try contract.read("interfaceHash", parameters: [interfaceName] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract.read("interfaceHash", parameters: [interfaceName] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
         guard let res = result["0"] as? Data else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -407,7 +359,7 @@ public class ERC777: IERC777 {
         return tx
     }
 
-    public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) throws -> WriteTransaction {
+    public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.from = from
@@ -415,7 +367,7 @@ public class ERC777: IERC777 {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try contract.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract.read("decimals", transactionOptions: basicOptions)!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -430,12 +382,12 @@ public class ERC777: IERC777 {
         return tx
     }
 
-    public func supportsInterface(interfaceID: String) throws -> Bool {
+    public func supportsInterface(interfaceID: String) async throws -> Bool {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
         transactionOptions.gasLimit = .manual(30000)
-        let result = try contract.read("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract.read("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
