@@ -14,16 +14,11 @@
   "testTargets" : [
     {
       "skippedTests" : [
-        "web3swiftENSTests",
-        "web3swiftGanacheTests",
-        "web3swiftRemoteParsingTests",
-        "web3swiftST20AndSecurityTokenTests",
-        "web3swiftWebsocketTests",
-        "web3swift_ENS_Tests",
-        "web3swift_ST20AndSecurityToken_Tests",
-        "web3swift_infura_Tests",
-        "web3swift_remoteParsing_Tests",
-        "web3swift_websocket_Tests"
+        "ENSTests",
+        "RemoteTests",
+        "RemoteParsingTests",
+        "ST20AndSecurityTokenTests",
+        "WebsocketTests",
       ],
       "target" : {
         "containerPath" : "container:web3swift.xcodeproj",
