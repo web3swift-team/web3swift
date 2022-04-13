@@ -48,7 +48,15 @@ public extension Data {
         //# valid_entropy_bit_sizes = [128, 160, 192, 224, 256], count: [12, 15, 18, 21, 24]
         var entropy_bytes = [UInt8](repeating: 0, count: entropy_bit_size)// / 8)
 
-        arc4random_buf(&entropy_bytes, entropy_bytes.count)
+        let status = SecRandomCopyBytes(kSecRandomDefault, entropy_bytes.count, &entropy_bytes)
+
+        if status != errSecSuccess { // Always test the status.
+
+        } else {
+            entropy_bytes = [UInt8](repeating: 0, count: entropy_bit_size)// / 8)
+            arc4random_buf(&entropy_bytes, entropy_bytes.count)
+        }
+
         let source1 = MTLCreateSystemDefaultDevice()?.makeBuffer(length: length)?.hash.description.data(using: .utf8)
 
         let entropyData = entropy_bytes.shuffled().map{ bit in
