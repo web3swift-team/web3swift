@@ -17,7 +17,6 @@ extension Array {
 }
 
 extension Array where Element: Comparable {
-
     /// Sorts array and drops most and least values.
     /// - Returns: Sorted array without most and least values, nil if `array.count` <= 2
     func cropAnomalyValues() -> Self? {

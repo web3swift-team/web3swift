@@ -148,10 +148,10 @@ extension Web3 {
 
 public extension Web3.Oracle {
     // MARK: - Base Fee
-    /// Softed baseFee amount
+    /// Soften baseFee amount
     ///
     /// - Returns: `[percentile_1, percentile_2, percentile_3, ...].count == self.percentile.count`
-    /// empty array if failed to perdict. By default there's 3 percentile.
+    /// empty array if failed to predict. By default there's 3 percentile.
     var baseFeePercentiles: [BigUInt] {
         guard let value = try? suggestBaseFee() else { return [] }
         return value
@@ -161,7 +161,7 @@ public extension Web3.Oracle {
     /// Tip amount
     ///
     /// - Returns: `[percentile_1, percentile_2, percentile_3, ...].count == self.percentile.count`
-    /// empty array if failed to perdict. By default there's 3 percentile.
+    /// empty array if failed to predict. By default there's 3 percentile.
     var tipFeePercentiles: [BigUInt] {
         guard let value = try? suggestTipValue() else { return [] }
         return value
@@ -171,7 +171,7 @@ public extension Web3.Oracle {
     /// Summary fees amount
     ///
     /// - Returns: `[percentile_1, percentile_2, percentile_3, ...].count == self.percentile.count`
-    /// nil if failed to perdict. By default there's 3 percentile.
+    /// nil if failed to predict. By default there's 3 percentile.
     var bothFeesPercentiles: (baseFee: [BigUInt], tip: [BigUInt])? {
         var baseFeeArr: [BigUInt] = []
         var tipArr: [BigUInt] = []
@@ -188,7 +188,7 @@ public extension Web3.Oracle {
     /// Legacy gasPrice amount
     ///
     /// - Returns: `[percentile_1, percentile_2, percentile_3, ...].count == self.percentile.count`
-    /// empty array if failed to perdict. By default there's 3 percentile.
+    /// empty array if failed to predict. By default there's 3 percentile.
     var gasPriceLegacyPercentiles: [BigUInt] {
         guard let value = try? suggestGasFeeLegacy() else { return [] }
         return value
