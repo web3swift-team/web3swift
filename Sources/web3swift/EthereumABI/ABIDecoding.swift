@@ -6,9 +6,7 @@
 import Foundation
 import BigInt
 
-public struct ABIDecoder {
-    
-}
+public struct ABIDecoder { }
 
 extension ABIDecoder {
     public static func decode(types: [ABI.Element.InOut], data: Data) -> [AnyObject]? {
@@ -17,13 +15,13 @@ extension ABIDecoder {
         }
         return decode(types: params, data: data)
     }
-    
+
     public static func decode(types: [ABI.Element.ParameterType], data: Data) -> [AnyObject]? {
         //        print("Full data: \n" + data.toHexString())
         var toReturn = [AnyObject]()
         var consumed: UInt64 = 0
         for i in 0 ..< types.count {
-            let (v, c) = decodeSignleType(type: types[i], data: data, pointer: consumed)
+            let (v, c) = decodeSingleType(type: types[i], data: data, pointer: consumed)
             guard let valueUnwrapped = v, let consumedUnwrapped = c else {return nil}
             toReturn.append(valueUnwrapped)
             consumed = consumed + consumedUnwrapped
@@ -31,8 +29,8 @@ extension ABIDecoder {
         guard toReturn.count == types.count else {return nil}
         return toReturn
     }
-    
-    public static func decodeSignleType(type: ABI.Element.ParameterType, data: Data, pointer: UInt64 = 0) -> (value: AnyObject?, bytesConsumed: UInt64?) {
+
+    public static func decodeSingleType(type: ABI.Element.ParameterType, data: Data, pointer: UInt64 = 0) -> (value: AnyObject?, bytesConsumed: UInt64?) {
         let (elData, nextPtr) = followTheData(type: type, data: data, pointer: pointer)
         guard let elementItself = elData, let nextElementPointer = nextPtr else {
             return (nil, nil)
@@ -114,10 +112,10 @@ extension ABIDecoder {
                     let length = UInt64(BigUInt(dataSlice))
                     guard elementItself.count >= 32 + subType.memoryUsage*length else {break}
                     dataSlice = elementItself[32 ..< 32 + subType.memoryUsage*length]
-                    var subpointer: UInt64 = 32;
+                    var subpointer: UInt64 = 32
                     var toReturn = [AnyObject]()
                     for _ in 0 ..< length {
-                        let (v, c) = decodeSignleType(type: subType, data: elementItself, pointer: subpointer)
+                        let (v, c) = decodeSingleType(type: subType, data: elementItself, pointer: subpointer)
                         guard let valueUnwrapped = v, let consumedUnwrapped = c else {break}
                         toReturn.append(valueUnwrapped)
                         subpointer = subpointer + consumedUnwrapped
@@ -130,11 +128,11 @@ extension ABIDecoder {
                     let length = UInt64(BigUInt(dataSlice))
                     guard elementItself.count >= 32 else {break}
                     dataSlice = Data(elementItself[32 ..< elementItself.count])
-                    var subpointer: UInt64 = 0;
+                    var subpointer: UInt64 = 0
                     var toReturn = [AnyObject]()
                     //                    print("Dynamic array sub element itself: \n" + dataSlice.toHexString())
                     for _ in 0 ..< length {
-                        let (v, c) = decodeSignleType(type: subType, data: dataSlice, pointer: subpointer)
+                        let (v, c) = decodeSingleType(type: subType, data: dataSlice, pointer: subpointer)
                         guard let valueUnwrapped = v, let consumedUnwrapped = c else {break}
                         toReturn.append(valueUnwrapped)
                         if (subType.isStatic) {
@@ -150,9 +148,9 @@ extension ABIDecoder {
                 //                print("Static array element itself: \n" + elementItself.toHexString())
                 guard length == staticLength else {break}
                 var toReturn = [AnyObject]()
-                var consumed:UInt64 = 0
+                var consumed: UInt64 = 0
                 for _ in 0 ..< length {
-                    let (v, c) = decodeSignleType(type: subType, data: elementItself, pointer: consumed)
+                    let (v, c) = decodeSingleType(type: subType, data: elementItself, pointer: consumed)
                     guard let valueUnwrapped = v, let consumedUnwrapped = c else {return (nil, nil)}
                     toReturn.append(valueUnwrapped)
                     consumed = consumed + consumedUnwrapped
@@ -168,12 +166,30 @@ extension ABIDecoder {
         case .tuple(types: let subTypes):
             //            print("Tuple element itself: \n" + elementItself.toHexString())
             var toReturn = [AnyObject]()
-            var consumed:UInt64 = 0
+            var consumed: UInt64 = 0
             for i in 0 ..< subTypes.count {
-                let (v, c) = decodeSignleType(type: subTypes[i], data: elementItself, pointer: consumed)
+                let (v, c) = decodeSingleType(type: subTypes[i], data: elementItself, pointer: consumed)
                 guard let valueUnwrapped = v, let consumedUnwrapped = c else {return (nil, nil)}
                 toReturn.append(valueUnwrapped)
-                consumed = consumed + consumedUnwrapped
+                /*
+                 When decoding a tuple that is not static or an array with a subtype that is not static, the second value in the tuple returned by decodeSignleType is a pointer to the next element, NOT the length of the consumed element. So when decoding such an element, consumed should be set to consumedUnwrapped, NOT incremented by consumedUnwrapped.
+                 */
+                switch subTypes[i] {
+                case .array(type: let subType, length: _):
+                    if !subType.isStatic {
+                        consumed = consumedUnwrapped
+                    } else {
+                        consumed = consumed + consumedUnwrapped
+                    }
+                case .tuple(types: _):
+                    if !subTypes[i].isStatic {
+                        consumed = consumedUnwrapped
+                    } else {
+                        consumed = consumed + consumedUnwrapped
+                    }
+                default:
+                    consumed = consumed + consumedUnwrapped
+                }
             }
             //            print("Tuple element is: \n" + String(describing: toReturn))
             if type.isStatic {
@@ -190,7 +206,7 @@ extension ABIDecoder {
         }
         return (nil, nil)
     }
-    
+
     fileprivate static func followTheData(type: ABI.Element.ParameterType, data: Data, pointer: UInt64 = 0) -> (elementEncoding: Data?, nextElementPointer: UInt64?) {
         //        print("Follow the data: \n" + data.toHexString())
         //        print("At pointer: \n" + String(pointer))
@@ -226,8 +242,8 @@ extension ABIDecoder {
             return (Data(elementItself), nextElement)
         }
     }
-    
-    public static func decodeLog(event: ABI.Element.Event, eventLogTopics: [Data], eventLogData: Data) -> [String:Any]? {
+
+    public static func decodeLog(event: ABI.Element.Event, eventLogTopics: [Data], eventLogData: Data) -> [String: Any]? {
         if event.topic != eventLogTopics[0] && !event.anonymous {
             return nil
         }
@@ -253,11 +269,11 @@ extension ABIDecoder {
             let data = logs[i+1]
             let input = indexedInputs[i]
             if !input.type.isStatic || input.type.isArray || input.type.memoryUsage != 32 {
-                let (v, _) = ABIDecoder.decodeSignleType(type: .bytes(length: 32), data: data)
+                let (v, _) = ABIDecoder.decodeSingleType(type: .bytes(length: 32), data: data)
                 guard let valueUnwrapped = v else {return nil}
                 indexedValues.append(valueUnwrapped)
             } else {
-                let (v, _) = ABIDecoder.decodeSignleType(type: input.type, data: data)
+                let (v, _) = ABIDecoder.decodeSingleType(type: input.type, data: data)
                 guard let valueUnwrapped = v else {return nil}
                 indexedValues.append(valueUnwrapped)
             }

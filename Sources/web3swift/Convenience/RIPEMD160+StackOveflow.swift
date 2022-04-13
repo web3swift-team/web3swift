@@ -5,121 +5,121 @@
 //  Created by Alexander Vlasov on 10.01.2018.
 //
 
-//From https://stackoverflow.com/questions/43091858/swift-hash-a-string-using-hash-hmac-with-ripemd160/43191938
+// From https://stackoverflow.com/questions/43091858/swift-hash-a-string-using-hash-hmac-with-ripemd160/43191938
 
 import Foundation
 
 public struct RIPEMD160 {
-    
+
     private var MDbuf: (UInt32, UInt32, UInt32, UInt32, UInt32)
     private var buffer: Data
     private var count: Int64 // Total # of bytes processed.
-    
+
     public init() {
         MDbuf = (0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0)
         buffer = Data()
         count = 0
     }
-    
+
     private mutating func compress(_ X: UnsafePointer<UInt32>) {
-        
+
         // *** Helper functions (originally macros in rmd160.h) ***
-        
+
         /* ROL(x, n) cyclically rotates x over n bits to the left */
         /* x must be of an unsigned 32 bits type and 0 <= n < 32. */
         func ROL(_ x: UInt32, _ n: UInt32) -> UInt32 {
-            return (x << n) | ( x >> (32 - n))
+            return (x << n) | (x >> (32 - n))
         }
-        
+
         /* the five basic functions F(), G() and H() */
-        
+
         func F(_ x: UInt32, _ y: UInt32, _ z: UInt32) -> UInt32 {
             return x ^ y ^ z
         }
-        
+
         func G(_ x: UInt32, _ y: UInt32, _ z: UInt32) -> UInt32 {
             return (x & y) | (~x & z)
         }
-        
+
         func H(_ x: UInt32, _ y: UInt32, _ z: UInt32) -> UInt32 {
             return (x | ~y) ^ z
         }
-        
+
         func I(_ x: UInt32, _ y: UInt32, _ z: UInt32) -> UInt32 {
             return (x & z) | (y & ~z)
         }
-        
+
         func J(_ x: UInt32, _ y: UInt32, _ z: UInt32) -> UInt32 {
             return x ^ (y | ~z)
         }
-        
+
         /* the ten basic operations FF() through III() */
-        
+
         func FF(_ a: inout UInt32, _ b: UInt32, _ c: inout UInt32, _ d: UInt32, _ e: UInt32, _ x: UInt32, _ s: UInt32) {
             a = a &+ F(b, c, d) &+ x
             a = ROL(a, s) &+ e
             c = ROL(c, 10)
         }
-        
+
         func GG(_ a: inout UInt32, _ b: UInt32, _ c: inout UInt32, _ d: UInt32, _ e: UInt32, _ x: UInt32, _ s: UInt32) {
             a = a &+ G(b, c, d) &+ x &+ 0x5a827999
             a = ROL(a, s) &+ e
             c = ROL(c, 10)
         }
-        
+
         func HH(_ a: inout UInt32, _ b: UInt32, _ c: inout UInt32, _ d: UInt32, _ e: UInt32, _ x: UInt32, _ s: UInt32) {
             a = a &+ H(b, c, d) &+ x &+ 0x6ed9eba1
             a = ROL(a, s) &+ e
             c = ROL(c, 10)
         }
-        
+
         func II(_ a: inout UInt32, _ b: UInt32, _ c: inout UInt32, _ d: UInt32, _ e: UInt32, _ x: UInt32, _ s: UInt32) {
             a = a &+ I(b, c, d) &+ x &+ 0x8f1bbcdc
             a = ROL(a, s) &+ e
             c = ROL(c, 10)
         }
-        
+
         func JJ(_ a: inout UInt32, _ b: UInt32, _ c: inout UInt32, _ d: UInt32, _ e: UInt32, _ x: UInt32, _ s: UInt32) {
             a = a &+ J(b, c, d) &+ x &+ 0xa953fd4e
             a = ROL(a, s) &+ e
             c = ROL(c, 10)
         }
-        
+
         func FFF(_ a: inout UInt32, _ b: UInt32, _ c: inout UInt32, _ d: UInt32, _ e: UInt32, _ x: UInt32, _ s: UInt32) {
             a = a &+ F(b, c, d) &+ x
             a = ROL(a, s) &+ e
             c = ROL(c, 10)
         }
-        
+
         func GGG(_ a: inout UInt32, _ b: UInt32, _ c: inout UInt32, _ d: UInt32, _ e: UInt32, _ x: UInt32, _ s: UInt32) {
             a = a &+ G(b, c, d) &+ x &+ 0x7a6d76e9
             a = ROL(a, s) &+ e
             c = ROL(c, 10)
         }
-        
+
         func HHH(_ a: inout UInt32, _ b: UInt32, _ c: inout UInt32, _ d: UInt32, _ e: UInt32, _ x: UInt32, _ s: UInt32) {
             a = a &+ H(b, c, d) &+ x &+ 0x6d703ef3
             a = ROL(a, s) &+ e
             c = ROL(c, 10)
         }
-        
+
         func III(_ a: inout UInt32, _ b: UInt32, _ c: inout UInt32, _ d: UInt32, _ e: UInt32, _ x: UInt32, _ s: UInt32) {
             a = a &+ I(b, c, d) &+ x &+ 0x5c4dd124
             a = ROL(a, s) &+ e
             c = ROL(c, 10)
         }
-        
+
         func JJJ(_ a: inout UInt32, _ b: UInt32, _ c: inout UInt32, _ d: UInt32, _ e: UInt32, _ x: UInt32, _ s: UInt32) {
             a = a &+ J(b, c, d) &+ x &+ 0x50a28be6
             a = ROL(a, s) &+ e
             c = ROL(c, 10)
         }
-        
+
         // *** The function starts here ***
-        
+
         var (aa, bb, cc, dd, ee) = MDbuf
         var (aaa, bbb, ccc, ddd, eee) = MDbuf
-        
+
         /* round 1 */
         FF(&aa, bb, &cc, dd, ee, X[ 0], 11)
         FF(&ee, aa, &bb, cc, dd, X[ 1], 14)
@@ -137,7 +137,7 @@ public struct RIPEMD160 {
         FF(&cc, dd, &ee, aa, bb, X[13],  7)
         FF(&bb, cc, &dd, ee, aa, X[14],  9)
         FF(&aa, bb, &cc, dd, ee, X[15],  8)
-        
+
         /* round 2 */
         GG(&ee, aa, &bb, cc, dd, X[ 7],  7)
         GG(&dd, ee, &aa, bb, cc, X[ 4],  6)
@@ -155,7 +155,7 @@ public struct RIPEMD160 {
         GG(&bb, cc, &dd, ee, aa, X[14],  7)
         GG(&aa, bb, &cc, dd, ee, X[11], 13)
         GG(&ee, aa, &bb, cc, dd, X[ 8], 12)
-        
+
         /* round 3 */
         HH(&dd, ee, &aa, bb, cc, X[ 3], 11)
         HH(&cc, dd, &ee, aa, bb, X[10], 13)
@@ -173,7 +173,7 @@ public struct RIPEMD160 {
         HH(&aa, bb, &cc, dd, ee, X[11], 12)
         HH(&ee, aa, &bb, cc, dd, X[ 5],  7)
         HH(&dd, ee, &aa, bb, cc, X[12],  5)
-        
+
         /* round 4 */
         II(&cc, dd, &ee, aa, bb, X[ 1], 11)
         II(&bb, cc, &dd, ee, aa, X[ 9], 12)
@@ -191,7 +191,7 @@ public struct RIPEMD160 {
         II(&ee, aa, &bb, cc, dd, X[ 5],  6)
         II(&dd, ee, &aa, bb, cc, X[ 6],  5)
         II(&cc, dd, &ee, aa, bb, X[ 2], 12)
-        
+
         /* round 5 */
         JJ(&bb, cc, &dd, ee, aa, X[ 4],  9)
         JJ(&aa, bb, &cc, dd, ee, X[ 0], 15)
@@ -209,7 +209,7 @@ public struct RIPEMD160 {
         JJ(&dd, ee, &aa, bb, cc, X[ 6],  8)
         JJ(&cc, dd, &ee, aa, bb, X[15],  5)
         JJ(&bb, cc, &dd, ee, aa, X[13],  6)
-        
+
         /* parallel round 1 */
         JJJ(&aaa, bbb, &ccc, ddd, eee, X[ 5],  8)
         JJJ(&eee, aaa, &bbb, ccc, ddd, X[14],  9)
@@ -227,7 +227,7 @@ public struct RIPEMD160 {
         JJJ(&ccc, ddd, &eee, aaa, bbb, X[10], 14)
         JJJ(&bbb, ccc, &ddd, eee, aaa, X[ 3], 12)
         JJJ(&aaa, bbb, &ccc, ddd, eee, X[12],  6)
-        
+
         /* parallel round 2 */
         III(&eee, aaa, &bbb, ccc, ddd, X[ 6],  9)
         III(&ddd, eee, &aaa, bbb, ccc, X[11], 13)
@@ -245,7 +245,7 @@ public struct RIPEMD160 {
         III(&bbb, ccc, &ddd, eee, aaa, X[ 9], 15)
         III(&aaa, bbb, &ccc, ddd, eee, X[ 1], 13)
         III(&eee, aaa, &bbb, ccc, ddd, X[ 2], 11)
-        
+
         /* parallel round 3 */
         HHH(&ddd, eee, &aaa, bbb, ccc, X[15],  9)
         HHH(&ccc, ddd, &eee, aaa, bbb, X[ 5],  7)
@@ -263,7 +263,7 @@ public struct RIPEMD160 {
         HHH(&aaa, bbb, &ccc, ddd, eee, X[ 0], 13)
         HHH(&eee, aaa, &bbb, ccc, ddd, X[ 4],  7)
         HHH(&ddd, eee, &aaa, bbb, ccc, X[13],  5)
-        
+
         /* parallel round 4 */
         GGG(&ccc, ddd, &eee, aaa, bbb, X[ 8], 15)
         GGG(&bbb, ccc, &ddd, eee, aaa, X[ 6],  5)
@@ -281,7 +281,7 @@ public struct RIPEMD160 {
         GGG(&eee, aaa, &bbb, ccc, ddd, X[ 7],  5)
         GGG(&ddd, eee, &aaa, bbb, ccc, X[10], 15)
         GGG(&ccc, ddd, &eee, aaa, bbb, X[14],  8)
-        
+
         /* parallel round 5 */
         FFF(&bbb, ccc, &ddd, eee, aaa, X[12] ,  8)
         FFF(&aaa, bbb, &ccc, ddd, eee, X[15] ,  5)
@@ -299,7 +299,7 @@ public struct RIPEMD160 {
         FFF(&ddd, eee, &aaa, bbb, ccc, X[ 3] , 13)
         FFF(&ccc, ddd, &eee, aaa, bbb, X[ 9] , 11)
         FFF(&bbb, ccc, &ddd, eee, aaa, X[11] , 11)
-        
+
         /* combine results */
         MDbuf = (MDbuf.1 &+ cc &+ ddd,
                  MDbuf.2 &+ dd &+ eee,
@@ -307,14 +307,14 @@ public struct RIPEMD160 {
                  MDbuf.4 &+ aa &+ bbb,
                  MDbuf.0 &+ bb &+ ccc)
     }
-    
+
     public mutating func update(data: Data) throws {
         try data.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
             if let bodyAddress = body.baseAddress, body.count > 0 {
                 var ptr = bodyAddress.assumingMemoryBound(to: UInt8.self)
                 var length = data.count
                 var X = [UInt32](repeating: 0, count: 16)
-                
+
                 // Process remaining bytes from last call:
                 if buffer.count > 0 && buffer.count + length >= 64 {
                     let amount = 64 - buffer.count
@@ -346,7 +346,7 @@ public struct RIPEMD160 {
         }
         count += Int64(data.count)
     }
-    
+
     public mutating func finalize() throws -> Data {
         var X = [UInt32](repeating: 0, count: 16)
         /* append the bit m_n == 1 */
@@ -359,20 +359,20 @@ public struct RIPEMD160 {
                 throw Web3Error.dataError
             }
         }
-        
+
         if (count & 63) > 55 {
             /* length goes to next block */
             compress(X)
             X = [UInt32](repeating: 0, count: 16)
         }
-        
+
         /* append length in bits */
         let lswlen = UInt32(truncatingIfNeeded: count)
         let mswlen = UInt32(UInt64(count) >> 32)
         X[14] = lswlen << 3
         X[15] = (lswlen >> 29) | (mswlen << 3)
         compress(X)
-        
+
         var data = Data(count: 20)
         try data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) in
             if let bodyAddress = body.baseAddress, body.count > 0 {
@@ -386,12 +386,12 @@ public struct RIPEMD160 {
                 throw Web3Error.dataError
             }
         }
-        
+
         buffer = Data()
-        
+
         return data
     }
-    
+
     //    public mutating func update(data: Data) throws {
     //        try data.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
     //
@@ -480,14 +480,14 @@ public struct RIPEMD160 {
 }
 
 public extension RIPEMD160 {
-    
+
     static func hash(message: Data) throws -> Data {
         var md = RIPEMD160()
         try md.update(data: message)
         return try md.finalize()
         //        return try md.finalize()
     }
-    
+
     static func hash(message: String) throws -> Data {
         return try RIPEMD160.hash(message: message.data(using: .utf8)!)
         //        return try RIPEMD160.hash(message: message.data(using: .utf8)!)
@@ -495,38 +495,38 @@ public extension RIPEMD160 {
 }
 
 public extension RIPEMD160 {
-    
+
     static func hmac(key: Data, message: Data) throws -> Data {
-        
+
         var key = key
         key.count = 64 // Truncate to 64 bytes or fill-up with zeros.
-        
+
         //        let outerKeyPad = Data(bytes: key.map { $0 ^ 0x5c })
         //        let innerKeyPad = Data(bytes: key.map { $0 ^ 0x36 })
         let outerKeyPad = Data(key.map { $0 ^ 0x5c })
         let innerKeyPad = Data(key.map { $0 ^ 0x36 })
-        
+
         var innerMd = RIPEMD160()
         try innerMd.update(data: innerKeyPad)
         try innerMd.update(data: message)
         //        try innerMd.update(data: innerKeyPad)
         //        try innerMd.update(data: message)
-        
+
         var outerMd = RIPEMD160()
         try outerMd.update(data: outerKeyPad)
         try outerMd.update(data: innerMd.finalize())
         //        try outerMd.update(data: outerKeyPad)
         //        try outerMd.update(data: innerMd.finalize())
-        
+
         return try outerMd.finalize()
         //        return try outerMd.finalize()
     }
-    
+
     static func hmac(key: Data, message: String) throws -> Data {
         return try RIPEMD160.hmac(key: key, message: message.data(using: .utf8)!)
         //        return try RIPEMD160.hmac(key: key, message: message.data(using: .utf8)!)
     }
-    
+
     static func hmac(key: String, message: String) throws -> Data {
         return try RIPEMD160.hmac(key: key.data(using: .utf8)!, message: message)
         //        return try RIPEMD160.hmac(key: key.data(using: .utf8)!, message: message)

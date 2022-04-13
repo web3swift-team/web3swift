@@ -5,16 +5,17 @@
 //  Created by levantAJ on 1/18/19.
 //  Copyright © 2019 levantAJ. All rights reserved.
 //
+import BigInt
 import Foundation
 
 struct AnyCodingKey: CodingKey {
     var stringValue: String
     var intValue: Int?
-    
+
     init?(stringValue: String) {
         self.stringValue = stringValue
     }
-    
+
     init?(intValue: Int) {
         self.intValue = intValue
         self.stringValue = String(intValue)
@@ -38,7 +39,7 @@ extension KeyedDecodingContainer {
         var values = try nestedUnkeyedContainer(forKey: key)
         return try values.decode(type)
     }
-    
+
     /// Decodes a value of the given type for the given key.
     ///
     /// - parameter type: The type of value to decode.
@@ -55,7 +56,7 @@ extension KeyedDecodingContainer {
         let values = try nestedContainer(keyedBy: AnyCodingKey.self, forKey: key)
         return try values.decode(type)
     }
-    
+
     /// Decodes a value of the given type for the given key, if present.
     ///
     /// This method returns `nil` if the container does not have a value
@@ -74,7 +75,7 @@ extension KeyedDecodingContainer {
             try decodeNil(forKey: key) == false else { return nil }
         return try decode(type, forKey: key)
     }
-    
+
     /// Decodes a value of the given type for the given key, if present.
     ///
     /// This method returns `nil` if the container does not have a value
@@ -92,6 +93,54 @@ extension KeyedDecodingContainer {
         guard contains(key),
             try decodeNil(forKey: key) == false else { return nil }
         return try decode(type, forKey: key)
+    }
+
+    /// Decodes a value of the given key from Hex to BigUInt
+    ///
+    /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`
+    ///
+    /// - Parameter type: Generic type `T` wich conforms to `DecodableFromHex` protocol
+    /// - Parameter key: The key that the decoded value is associated with.
+    /// - Returns: A decoded value of type `BigUInt`
+    /// - throws: `Web3Error.dataError` if value associated with key are unable
+    ///   to be initialized as `BigUInt`.
+    public func decodeHex<T: DecodableFromHex>(to type: T.Type, key: KeyedDecodingContainer<K>.Key) throws -> T {
+        let string = try self.decode(String.self, forKey: key)
+        guard let number = T(fromHex: string) else { throw Web3Error.dataError }
+        return number
+    }
+}
+
+public protocol DecodableFromHex: Decodable {
+    init?(fromHex hexString: String)
+}
+
+extension Data: DecodableFromHex {
+    public init?(fromHex hexString: String) {
+        self.init()
+        guard let tmp = Self.fromHex(hexString) else { return nil }
+        self = tmp
+    }
+}
+
+extension BigUInt: DecodableFromHex {
+    public init?(fromHex hexString: String) {
+        self.init(hexString.stripHexPrefix(), radix: 16)
+    }
+}
+
+extension Date: DecodableFromHex {
+    public init?(fromHex hexString: String) {
+        self.init()
+        let stripedHexString = hexString.stripHexPrefix()
+        guard let timestampInt = UInt64(stripedHexString, radix: 16) else { return nil }
+        self = Date(timeIntervalSince1970: TimeInterval(timestampInt))
+    }
+}
+
+extension EthereumAddress: DecodableFromHex {
+    public init?(fromHex hexString: String) {
+        self.init(hexString, ignoreChecksum: true)
     }
 }
 

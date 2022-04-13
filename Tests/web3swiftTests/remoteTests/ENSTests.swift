@@ -9,7 +9,7 @@ import XCTest
 @testable import web3swift
 
 // MARK: Works only with network connection
-class web3swiftENSTests: XCTestCase {
+class ENSTests: XCTestCase {
     
     func testDomainNormalization() throws {
         let normalizedString = NameHash.normalizeDomainName("example.ens")
@@ -23,25 +23,25 @@ class web3swiftENSTests: XCTestCase {
     }
     
     func testResolverAddress() throws {
-        let web = web3(provider: GanacheProvider()!)
-        let ens = ENS(web3: web)
+        let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let address = try ens?.registry.getResolver(forDomain: domain).resolverContractAddress
-        print(address)
+        print(address as Any)
         XCTAssertEqual(address?.address.lowercased(), "0x5ffc014343cd971b7eb70732021e26c35b744cc4")
     }
     
     func testResolver() throws {
-        let web = web3(provider: GanacheProvider()!)
-        let ens = ENS(web3: web)
+        let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let address = try ens?.getAddress(forNode: domain)
         XCTAssertEqual(address?.address.lowercased(), "0x3487acfb1479ad1df6c0eb56ae743d34897798ac")
     }
     
     func testSupportsInterface() throws {
-        let web = web3(provider: GanacheProvider()!)
-        let ens = ENS(web3: web)
+        let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try ens?.registry.getResolver(forDomain: domain)
         let isAddrSupports = try resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.addr.hash())
@@ -55,8 +55,8 @@ class web3swiftENSTests: XCTestCase {
     }
     
     func testABI() throws {
-        let web = web3(provider: GanacheProvider()!)
-        let ens = ENS(web3: web)
+        let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try ens?.registry.getResolver(forDomain: domain)
         if let isABIsupported = try resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.ABI.hash()),
@@ -70,24 +70,24 @@ class web3swiftENSTests: XCTestCase {
     }
     
     func testOwner() throws {
-        let web = web3(provider: GanacheProvider()!)
-        let ens = ENS(web3: web)
+        let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let owner = try ens?.registry.getOwner(node: domain)
         XCTAssertEqual("0xc67247454e720328714c4e17bec7640572657bee", owner?.address.lowercased())
     }
     
     func testTTL() throws {
-        let web = web3(provider: GanacheProvider()!)
-        let ens = ENS(web3: web)
+        let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let ttl = try ens?.registry.getTTL(node: domain)
         print(ttl!.description)
     }
     
     func testGetAddress() throws {
-        let web = web3(provider: GanacheProvider()!)
-        let ens = ENS(web3: web)
+        let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try ens?.registry.getResolver(forDomain: domain)
         let address = try resolver?.getAddress(forNode: domain)
@@ -95,8 +95,8 @@ class web3swiftENSTests: XCTestCase {
     }
     
     func testGetPubkey() throws {
-        let web = web3(provider: GanacheProvider()!)
-        let ens = ENS(web3: web)
+        let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try ens?.registry.getResolver(forDomain: domain)
         let pubkey = try resolver?.getPublicKey(forNode: domain)

@@ -6,12 +6,8 @@
 
 import Foundation
 import CryptoSwift
-import Foundation
-
-//import EthereumAddress
 
 public class BIP32Keystore: AbstractKeystore {
-
 
     // Protocol
     public var isHDKeystore: Bool = true
@@ -64,11 +60,11 @@ public class BIP32Keystore: AbstractKeystore {
     }
 
     // --------------
-    
+
     private static let KeystoreParamsBIP32Version = 4
-    
+
     private (set) var addressStorage: PathAddressStorage
-    
+
     public convenience init?(_ jsonString: String) {
         let lowercaseJSON = jsonString.lowercased()
         guard let jsonData = lowercaseJSON.data(using: .utf8) else {
@@ -84,7 +80,7 @@ public class BIP32Keystore: AbstractKeystore {
         if (!keystorePars.isHDWallet) {return nil}
 
         addressStorage = PathAddressStorage(pathAddressPairs: keystorePars.pathAddressPairs)
-        
+
         if keystorePars.rootPath == nil {
             keystorePars.rootPath = HDNode.defaultPathPrefix
         }
@@ -101,8 +97,9 @@ public class BIP32Keystore: AbstractKeystore {
         }
         try self.init(seed: seed, password: password, prefixPath: prefixPath, aesMode: aesMode)
     }
-    
+
     public init(seed: Data, password: String = "web3swift", prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
+
         addressStorage = PathAddressStorage()
         guard let rootNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else {
             throw AbstractKeystoreError.keyDerivationError
@@ -221,6 +218,7 @@ public class BIP32Keystore: AbstractKeystore {
             throw AbstractKeystoreError.encryptionError("Invalid expected data length")
         }
         let saltData = Data.randomBytes(length: 32)
+
         guard let derivedKey = scrypt(password: password, salt: saltData, length: dkLen, N: N, R: R, P: P) else {
             throw AbstractKeystoreError.keyDerivationError
         }
@@ -250,7 +248,7 @@ public class BIP32Keystore: AbstractKeystore {
         let kdfparams = KdfParamsV3(salt: saltData.toHexString(), dklen: dkLen, n: N, p: P, r: R, c: nil, prf: nil)
         let cipherparams = CipherParamsV3(iv: IV.toHexString())
         let crypto = CryptoParamsV3(ciphertext: encryptedKeyData.toHexString(), cipher: aesMode, cipherparams: cipherparams, kdf: "scrypt", kdfparams: kdfparams, mac: mac.toHexString(), version: nil)
-        
+
         var keystorePars = KeystoreParamsBIP32(crypto: crypto, id: UUID().uuidString.lowercased(), version: Self.KeystoreParamsBIP32Version)
         keystorePars.pathAddressPairs = addressStorage.toPathAddressPairs()
         keystorePars.rootPath = self.rootPrefix
@@ -316,7 +314,6 @@ public class BIP32Keystore: AbstractKeystore {
             guard let derivedArray = try? PKCS5.PBKDF2(password: passData.bytes, salt: saltData.bytes, iterations: c, keyLength: derivedLen, variant: hashVariant!).calculate() else {
                 return nil
             }
-//            passwordDerivedKey = Data(bytes:derivedArray)
             passwordDerivedKey = Data(derivedArray)
         default:
             return nil
@@ -364,7 +361,6 @@ public class BIP32Keystore: AbstractKeystore {
         guard decryptedPK?.count == 82 else {
             return nil
         }
-//        return Data(bytes:decryptedPK!)
         return Data(decryptedPK!)
     }
 

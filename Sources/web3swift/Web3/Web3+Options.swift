@@ -6,7 +6,6 @@
 
 import Foundation
 import BigInt
-//import EthereumAddress
 
 public protocol TransactionOptionsInheritable {
     var transactionOptions: TransactionOptions {get}
@@ -24,7 +23,7 @@ public struct TransactionOptions {
     ///
     /// Can be nil if one reads the information from the blockchain.
     public var from: EthereumAddress? = nil
-    
+
     public enum GasLimitPolicy {
         case automatic
         case manual(BigUInt)
@@ -38,23 +37,25 @@ public struct TransactionOptions {
         case manual(BigUInt)
         case withMargin(Double)
     }
+
     public var gasPrice: GasPricePolicy?
 
     /// The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
     public var value: BigUInt? = nil
-    
+
     public enum NoncePolicy {
         case pending
         case latest
         case manual(BigUInt)
     }
+
     public var nonce: NoncePolicy?
-    
+
     public enum CallingBlockPolicy {
         case pending
         case latest
         case exactBlockNumber(BigUInt)
-        
+
         var stringValue: String {
             switch self {
             case .pending:
@@ -66,10 +67,8 @@ public struct TransactionOptions {
             }
         }
     }
+
     public var callOnBlock: CallingBlockPolicy?
-    
-    public init() {
-    }
     
     public static var defaultOptions: TransactionOptions {
         var opts = TransactionOptions()
@@ -79,7 +78,7 @@ public struct TransactionOptions {
         opts.gasPrice = .automatic
         return opts
     }
-    
+
     public func resolveGasPrice(_ suggestedByNode: BigUInt) -> BigUInt? {
         guard let gasPricePolicy = self.gasPrice else {return nil}
         switch gasPricePolicy {
@@ -91,7 +90,7 @@ public struct TransactionOptions {
             return suggestedByNode
         }
     }
-    
+
     public func resolveGasLimit(_ suggestedByNode: BigUInt) -> BigUInt? {
         guard let gasLimitPolicy = self.gasLimit else {return nil}
         switch gasLimitPolicy {
@@ -108,7 +107,7 @@ public struct TransactionOptions {
             return nil
         }
     }
-    
+
     public func merge(_ otherOptions: TransactionOptions?) -> TransactionOptions {
         guard let other = otherOptions else {return self}
         var opts = TransactionOptions()
@@ -121,50 +120,12 @@ public struct TransactionOptions {
         opts.callOnBlock = mergeIfNotNil(first: self.callOnBlock, second: other.callOnBlock)
         return opts
     }
-    
-    public static func fromJSON(_ json: [String: Any]) -> TransactionOptions? {
-        var options = TransactionOptions()
-        if let gas = json["gas"] as? String, let gasBiguint = BigUInt(gas.stripHexPrefix().lowercased(), radix: 16) {
-            options.gasLimit = .manual(gasBiguint)
-        } else if let gasLimit = json["gasLimit"] as? String, let gasgasLimitBiguint = BigUInt(gasLimit.stripHexPrefix().lowercased(), radix: 16) {
-            options.gasLimit = .limited(gasgasLimitBiguint)
-        } else {
-            options.gasLimit = .automatic
-        }
-        if let gasPrice = json["gasPrice"] as? String, let gasPriceBiguint = BigUInt(gasPrice.stripHexPrefix().lowercased(), radix: 16) {
-            options.gasPrice = .manual(gasPriceBiguint)
-        } else {
-            options.gasPrice = .automatic
-        }
-        if let value = json["value"] as? String, let valueBiguint = BigUInt(value.stripHexPrefix().lowercased(), radix: 16) {
-            options.value = valueBiguint
-        }
-        if let toString = json["to"] as? String {
-            guard let addressTo = EthereumAddress(toString) else {return nil}
-            options.to = addressTo
-        }
-        if let fromString = json["from"] as? String {
-            guard let addressFrom = EthereumAddress(fromString) else {return nil}
-            options.from = addressFrom
-        }
-        if let nonceString = json["nonce"] as? String, let nonce = BigUInt(nonceString.stripHexPrefix(), radix: 16) {
-            options.nonce = .manual(nonce)
-        } else {
-            options.nonce = .pending
-        }
-        if let callOnBlockString = json["callOnBlock"] as? String, let callOnBlock = BigUInt(callOnBlockString.stripHexPrefix(), radix: 16) {
-            options.callOnBlock = .exactBlockNumber(callOnBlock)
-        } else {
-            options.callOnBlock = .pending
-        }
-        return options
-    }
-    
+
     /// Merges two sets of topions by overriding the parameters from the first set by parameters from the second
     /// set if those are not nil.
     ///
     /// Returns default options if both parameters are nil.
-    public static func merge(_ options:TransactionOptions?, with other:TransactionOptions?) -> TransactionOptions? {
+    public static func merge(_ options: TransactionOptions?, with other: TransactionOptions?) -> TransactionOptions? {
         if (other == nil && options == nil) {
             return TransactionOptions.defaultOptions
         }
@@ -201,7 +162,7 @@ public struct TransactionOptions {
 //    ///
 //    /// Please refer to the source code for a logic.
 //    public static func smartMergeGasLimit(originalOptions: Web3Options?, extraOptions: Web3Options?, gasEstimate: BigUInt) -> BigUInt? {
-//        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} //just require any non-nils
+//        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} // just require any non-nils
 //        if mergedOptions.gasLimit == nil {
 //            return gasEstimate // for user's convenience we just use an estimate
 //            //            return nil // there is no opinion from user, so we can not proceed
@@ -225,7 +186,7 @@ public struct TransactionOptions {
 //    }
 //
 //    public static func smartMergeGasPrice(originalOptions: Web3Options?, extraOptions: Web3Options?, priceEstimate: BigUInt) -> BigUInt? {
-//        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} //just require any non-nils
+//        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} // just require any non-nils
 //        if mergedOptions.gasPrice == nil {
 //            return priceEstimate
 //        } else if mergedOptions.gasPrice == 0 {

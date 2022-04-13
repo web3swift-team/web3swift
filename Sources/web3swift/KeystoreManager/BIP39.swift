@@ -44,7 +44,7 @@ public enum BIP39Language {
             return " "
         }
     }
-    
+
     init?(language: String) {
         switch language {
         case "english":
@@ -114,14 +114,8 @@ public class BIP39 {
     
     /**
     Initializes a new mnemonics set with the provided bitsOfEntropy.
+     **/
 
-    - Parameters:
-       - bitsOfEntropy: 128 - 12 words, 192 - 18 words , 256 - 24 words in output.
-       - language: words language, default english
-
-    - Returns: random 12-24 words, that represent new Mnemonic phrase.
-    */
-    
     /// Initializes a new mnemonics set with the provided bitsOfEntropy.
     /// - Parameters:
     ///   - bitsOfEntropy: 128 - 12 words, 192 - 18 words , 256 - 24 words in output.
@@ -174,7 +168,7 @@ public class BIP39 {
         guard let seedArray = try? PKCS5.PBKDF2(password: mnemData.bytes, salt: saltData.bytes, iterations: 2048, keyLength: 64, variant: HMAC.Variant.sha2(.sha512)).calculate() else {return nil}
         return Data(seedArray)
     }
-    
+
     static public func seedFromEntropy(_ entropy: Data, password: String = "", language: BIP39Language = BIP39Language.english) -> Data? {
         let mnemonics = generateMnemonicsFrom(entropy: entropy, language: language)
         return seedFromMmemonics(mnemonics, password: password, language: language)

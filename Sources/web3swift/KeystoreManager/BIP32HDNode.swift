@@ -24,9 +24,11 @@ extension UInt32 {
 }
 
 public class HDNode {
+
     private struct HDversion{
         public static var privatePrefix: Data? = Data.fromHex("0x0488ADE4")
         public static var publicPrefix: Data? = Data.fromHex("0x0488B21E")
+
     }
     public var path: String? = "m"
     public var privateKey: Data? = nil
@@ -35,7 +37,7 @@ public class HDNode {
     public var depth: UInt8
     public var parentFingerprint: Data = Data(repeating: 0, count: 4)
     public var childNumber: UInt32 = UInt32(0)
-    public var isHardened:Bool {
+    public var isHardened: Bool {
         get {
             return self.childNumber >= (UInt32(1) << 31)
         }
@@ -49,18 +51,18 @@ public class HDNode {
             }
         }
     }
-    
+
     init() {
         publicKey = Data()
         chaincode = Data()
         depth = UInt8(0)
     }
-    
+
     public convenience init?(_ serializedString: String) {
         let data = Data(Base58.bytesFromBase58(serializedString))
         self.init(data)
     }
-    
+
     public init?(_ data: Data) {
         guard data.count == 82 else {return nil}
         let header = data[0..<4]
@@ -84,11 +86,13 @@ public class HDNode {
         let checksum = hashedData[0..<4]
         if checksum != data[78..<82] {return nil}
     }
-    
+
     public init?(seed: Data) {
         guard seed.count >= 16 else {return nil}
+
         guard let hmacKey = "Bitcoin seed".data(using: .ascii) else {return nil}
         let hmac:Authenticator = HMAC(key: hmacKey.bytes, variant: HMAC.Variant.sha2(.sha512))
+
         guard let entropy = try? hmac.authenticate(seed.bytes) else {return nil}
         guard entropy.count == 64 else { return nil}
         let I_L = entropy[0..<32]
@@ -103,7 +107,7 @@ public class HDNode {
         depth = 0x00
         childNumber = UInt32(0)
     }
-    
+
     private static var curveOrder = BigUInt("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", radix: 16)!
     public static var defaultPath: String = "m/44'/60'/0'/0"
     public static var defaultPathPrefix: String = "m/44'/60'/0'"
@@ -212,7 +216,7 @@ extension HDNode {
             let bn = BigUInt(Data(I_L))
             if bn > HDNode.curveOrder {
                 if index < UInt32.max {
-                    return self.derive(index:index+1, derivePrivateKey: derivePrivateKey, hardened:hardened)
+                    return self.derive(index: index+1, derivePrivateKey: derivePrivateKey, hardened: hardened)
                 }
                 return nil
             }
@@ -243,10 +247,10 @@ extension HDNode {
             return newNode
     }
 
-    
     public func derive(path: String, derivePrivateKey: Bool = true) -> HDNode? {
+
         let components = path.components(separatedBy: "/")
-        var currentNode:HDNode = self
+        var currentNode: HDNode = self
         var firstComponent = 0
         if path.hasPrefix("m") {
             firstComponent = 1
@@ -270,6 +274,7 @@ extension HDNode {
     }
     
     public func serialize(serializePublic: Bool = true) -> Data? {
+
         var data = Data()
 
         guard serializePublic || privateKey != nil else {
@@ -296,6 +301,5 @@ extension HDNode {
         data.append(checksum)
         return data
     }
-    
-}
 
+}
