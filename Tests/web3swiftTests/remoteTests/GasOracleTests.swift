@@ -15,7 +15,7 @@ class OracleTests: XCTestCase {
 
     let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
 
-    lazy var oracle: Web3.Oracle = .init(web3, block: "0xde5910", blockCount: 20, percentiles: [10, 40, 60, 90])
+    lazy var oracle: Web3.Oracle = .init(web3, block: .exact(14571792), blockCount: 20, percentiles: [10, 40, 60, 90])
 
     func testPretictBaseFee() throws {
         let etalonPercentiles: [BigUInt] = [
@@ -26,7 +26,6 @@ class OracleTests: XCTestCase {
         ]
 
         let baseFeePercentiles = oracle.baseFeePercentiles
-        print("baseFeePercentiles: \(baseFeePercentiles)")
         XCTAssertEqual(baseFeePercentiles, etalonPercentiles, "Arrays should be equal")
     }
 
@@ -38,12 +37,40 @@ class OracleTests: XCTestCase {
             11394017894     // 90 percentile
         ]
 
-        let predictTip = oracle.tipFeePercentiles
-        print("predictTip: \(predictTip)")
-        XCTAssertEqual(predictTip, etalonPercentiles, "Arrays should be equal")
+        let tipFeePercentiles = oracle.tipFeePercentiles
+        XCTAssertEqual(tipFeePercentiles, etalonPercentiles, "Arrays should be equal")
     }
 
-    func testPredictGasPrice() throws {
+    func testPredictBothFee() throws {
+        let etalonPercentiles: ([BigUInt], [BigUInt]) = (
+            baseFee: [
+                71456911562,    // 10 percentile
+                92735433497,    // 40 percentile
+                105739785122,   // 60 percentile
+                118929912191    // 90 percentile
+            ],
+            tip: [
+                1251559157,     // 10 percentile
+                1594062500,     // 40 percentile
+                2268157275,     // 60 percentile
+                11394017894     // 90 percentile
+            ]
+        )
+
+        let bothFeesPercentiles = oracle.bothFeesPercentiles
+        XCTAssertEqual(bothFeesPercentiles?.baseFee, etalonPercentiles.0, "Arrays should be equal")
+        XCTAssertEqual(bothFeesPercentiles?.tip, etalonPercentiles.1, "Arrays should be equal")
+    }
+
+    func testPredictLegacyGasPrice() throws {
+        let etalonPercentiles: [BigUInt] = [
+            100474449775,    // 10 percentile
+            114000000000,    // 40 percentile
+            125178275323,    // 60 percentile
+            146197706224     // 90 percentile
+        ]
         
+        let gasPriceLegacyPercentiles = oracle.gasPriceLegacyPercentiles
+        XCTAssertEqual(gasPriceLegacyPercentiles, etalonPercentiles, "Arrays should be equal")
     }
 }

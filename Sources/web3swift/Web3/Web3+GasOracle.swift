@@ -21,58 +21,50 @@ extension Web3 {
         /// Ethereum scope shortcut
         private var eth: web3.Eth { web3Provider.eth }
 
-        /// Block to start getting history
-        var block: String
+        /// Block to start getting history backward
+        var block: BlockNumber
 
-        /// Count of blocks to calculate statistics
+        /// Count of blocks to include in dataset
         var blockCount: BigUInt
 
-        /// Count of transactions to filter block for tip calculation
+        /// Percentiles
+        ///
+        /// This property set values by which dataset would be sliced.
+        ///
+        /// If you set it to `[25.0, 50.0, 75.0]` on any prediction property read you'll get
+        /// `[71456911562, 92735433497, 105739785122]` which means that first item in array is more
+        /// than 25% of the whole dataset, second one more than 50% of the dataset and third one
+        /// more than 75% of the dataset.
+        ///
+        /// Another example: If you set it [100.0] you'll get the very highest value of a dataset e.g. max Tip amount.
         var percentiles: [Double]
+
+        // TODO: Disabled until 3.0 version, coz will be enabled from 3.0.0.
+//        var forceDropCache = false
 
         /// Oracle initializer
         /// - Parameters:
         ///   - provider: Web3 Ethereum provider
         ///   - block: Number of block from which counts starts backward
         ///   - blockCount: Count of block to calculate statistics
-        ///   - percentiles: Percentiles of fees which will split in fees history
-        public init(_ provider: web3, block: String = "latest", blockCount: BigUInt = 20, percentiles: [Double] = [25, 50, 75]) {
+        ///   - percentiles: Percentiles of fees to which result of predictions will be split in
+        public init(_ provider: web3, block: BlockNumber = .latest, blockCount: BigUInt = 20, percentiles: [Double] = [25, 50, 75]) {
             self.web3Provider = provider
             self.block = block
             self.blockCount = blockCount
             self.percentiles = percentiles
         }
 
-//        private func calcBaseFee(for block: Block?) -> BigUInt {
-//            guard let block = block else { return 0 }
-//            return Web3.calcBaseFee(block) ?? 0
-//        }
 
-        private func calculateStatistic(for statistic: Statistic, data: [BigUInt]) throws -> BigUInt {
-            let noAnomalyArray = data.cropAnomalyValues()
-
-            // FIXME: Set appropriate error thrown.
-            guard let unwrappedArray = noAnomalyArray, !unwrappedArray.isEmpty else { throw Web3Error.unknownError }
-
-            switch statistic {
-            // Force unwrapping is ok, since array checked for epmtiness above
-            // swiftlint:disable force_unwrapping
-            case .minimum: return unwrappedArray.min()!
-            case .mean: return unwrappedArray.mean()!
-            case .median: return unwrappedArray.mean()!
-            case .maximum:
-                // Checking that suggestedBaseFee is not lower than it will be in the next block
-                // because in the maximum statistic we should guarantee that transaction would be included in it.
-//                return max(calcBaseFee(for: latestBlock), unwrappedArray.max()!)
-                return unwrappedArray.max()!
-            }
-            // swiftlint:enable force_unwrapping
-        }
-
+        /// Returning one dimensional array from two dimensional array
+        ///
+        /// We've got `[[min],[middle],[max]]` 2 dimensional array
+        /// we're getting `[min, middle, max].count == self.percentiles.count`,
+        /// where each value are mean from the input percentile arrays
+        ///
+        /// - Parameter array: `[[min], [middle], [max]]` 2 dimensional array
+        /// - Returns: `[min, middle, max].count == self.percentiles.count`
         private func soft(twoDimentsion array: [[BigUInt]]) -> [BigUInt] {
-            /// We've got `[[min],[middle],[max]]` 2 dimensional array
-            /// we're getting `[min, middle, max].count == self.percentiles.count`,
-            /// where each value are mean from the input percentile arrays
             array.compactMap { percentileArray -> [BigUInt]? in
                 guard !percentileArray.isEmpty else { return nil }
                 // swiftlint:disable force_unwrapping
@@ -82,6 +74,9 @@ extension Web3 {
             .flatMap { $0 }
         }
 
+        /// Method calculates percentiles array based on `self.percetniles` value
+        /// - Parameter data: Integer data from which percentiles should be calculated
+        /// - Returns: Array of values which is in positions in dataset to given percentiles
         private func calculatePercentiles(for data: [BigUInt]) -> [BigUInt] {
             percentiles.compactMap { percentile in
                 data.percentile(of: percentile)
@@ -92,9 +87,9 @@ extension Web3 {
             // This is some kind of cache.
             // It stores about 9 seconds, than it rewrites it with newer data.
             // TODO: Disabled until 3.0 version, coz `distance` available from iOS 13.
-//            guard feeHistory != nil, feeHistory!.timestamp.distance(to: Date()) < cacheTimeout else { return feeHistory! }
+//            guard feeHistory == nil, forceDropCache, feeHistory!.timestamp.distance(to: Date()) > cacheTimeout else { return feeHistory! }
 
-            return try eth.feeHistory(blockCount: blockCount, block: block, percentiles: percentiles)
+            return try eth.feeHistory(blockCount: blockCount, block: block.hexValue, percentiles: percentiles)
         }
 
         /// Suggesting tip values
@@ -126,8 +121,14 @@ extension Web3 {
             return calculatePercentiles(for: feeHistory!.baseFeePerGas)
         }
 
-        private func suggestGasFeeLegacy(_ statistic: Statistic) throws -> BigUInt {
-            let latestBlockNumber = try eth.getBlockNumber()
+        private func suggestGasFeeLegacy() throws -> [BigUInt] {
+            var latestBlockNumber: BigUInt = 0
+            switch block {
+            case .latest: latestBlockNumber = try eth.getBlockNumber()
+            case let .exact(number): latestBlockNumber = number
+            }
+
+            guard latestBlockNumber != 0 else { return [] }
 
             // TODO: Make me work with cache
             let lastNthBlockGasPrice = try (latestBlockNumber - blockCount ... latestBlockNumber)
@@ -140,7 +141,7 @@ extension Web3 {
                 }
                 .map { $0.gasPrice }
 
-            return try calculateStatistic(for: statistic, data: lastNthBlockGasPrice)
+            return calculatePercentiles(for: lastNthBlockGasPrice)
         }
     }
 }
@@ -149,62 +150,48 @@ public extension Web3.Oracle {
     // MARK: - Base Fee
     /// Softed baseFee amount
     ///
-    /// Normalized means that most high and most low value were droped from calculation.
-    ///
-    /// - Returns: Suggested base fee amount according to statistic, nil if failed to perdict
+    /// - Returns: `[percentile_1, percentile_2, percentile_3, ...].count == self.percentile.count`
+    /// empty array if failed to perdict. By default there's 3 percentile.
     var baseFeePercentiles: [BigUInt] {
         guard let value = try? suggestBaseFee() else { return [] }
         return value
     }
 
     // MARK: - Tip
-    /// Maximum tip amount based on last block tips
+    /// Tip amount
     ///
-    /// Normalized means that most high and most low value were droped from calculation.
-    ///
-    /// Method calculates the suggested tip based on the most recent block that contains more than transactionsCount transactions
-    ///
-    /// - Parameter statistic: Statistic to apply for tip calculation
-    /// - Returns: Suggested tip amount according to statistic, nil if failed to perdict
+    /// - Returns: `[percentile_1, percentile_2, percentile_3, ...].count == self.percentile.count`
+    /// empty array if failed to perdict. By default there's 3 percentile.
     var tipFeePercentiles: [BigUInt] {
         guard let value = try? suggestTipValue() else { return [] }
         return value
     }
 
     // MARK: - Summary fees
-    /// Method to get summary fees
-    /// - Parameters:
-    ///   - baseFee: Statistic to apply for baseFee
-    ///   - tip: Statistic to apply for tip
-    /// - Returns: Tuple where `baseFee` — base fee, `tip` — tip, nil if failed to predict
+    /// Summary fees amount
+    ///
+    /// - Returns: `[percentile_1, percentile_2, percentile_3, ...].count == self.percentile.count`
+    /// nil if failed to perdict. By default there's 3 percentile.
     var bothFeesPercentiles: (baseFee: [BigUInt], tip: [BigUInt])? {
-        guard let baseFee = try? suggestBaseFee() else { return nil }
-        guard let tip = try? suggestTipValue() else { return nil }
-
-        return (baseFee: baseFee, tip: tip)
+        var baseFeeArr: [BigUInt] = []
+        var tipArr: [BigUInt] = []
+        if let baseFee = try? suggestBaseFee() {
+            baseFeeArr = baseFee
+        }
+        if let tip = try? suggestTipValue() {
+            tipArr = tip
+        }
+        return (baseFee: baseFeeArr, tip: tipArr)
     }
 
     // MARK: - Legacy GasPrice
-    /// Method to get legacy gas price
-    /// - Parameter statistic: Statistic to apply for gas price
-    /// - Returns: Suggested gas price amount according to statistic, nil if failed to predict
-//    func predictGasPriceLegacy() -> BigUInt? {
-//        guard let value = try? suggestGasFeeLegacy() else { return nil}
-//        return value
-//    }
-}
-
-public extension Web3.Oracle {
-    // TODO: Make me struct and encapsulate math within to make me extendable
-    enum Statistic {
-        /// Mininum statistic
-        case minimum
-        /// Mean statistic
-        case mean
-        /// Median statistic
-        case median
-        /// Maximum statistic
-        case maximum
+    /// Legacy gasPrice amount
+    ///
+    /// - Returns: `[percentile_1, percentile_2, percentile_3, ...].count == self.percentile.count`
+    /// empty array if failed to perdict. By default there's 3 percentile.
+    var gasPriceLegacyPercentiles: [BigUInt] {
+        guard let value = try? suggestGasFeeLegacy() else { return [] }
+        return value
     }
 }
 
@@ -233,5 +220,26 @@ extension Web3.Oracle.FeeHistory: Decodable {
         self.gasUsedRatio = try values.decode([Double].self, forKey: .gasUsedRatio)
         self.oldestBlock = try values.decodeHex(BigUInt.self, forKey: .oldestBlock)
         self.reward = try values.decodeHex([[BigUInt]].self, forKey: .reward)
+    }
+}
+
+
+public extension Web3 {
+    /// Enum for convenient type safe work with block number
+    enum BlockNumber {
+        /// Latest block of a chain
+        case latest
+        /// Exact block number
+        case exact(BigUInt)
+
+        /// Block number as a string
+        ///
+        /// Could be `hexString` either `latest`
+        internal var hexValue: String {
+            switch self {
+            case .latest: return "latest"
+            case let .exact(number): return String(number, radix: 16).addHexPrefix()
+            }
+        }
     }
 }

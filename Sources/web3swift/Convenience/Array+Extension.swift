@@ -32,13 +32,17 @@ extension Array where Element: Comparable {
 
 extension Array where Element: BinaryInteger {
     // TODO: Make me generic
-    // FIXME: Add doc comment
+    /// Calculates mean value of a dataset
+    /// - Returns: Mean value of a dataset, nil if dataset is empty
     func mean() -> BigUInt? {
         guard !self.isEmpty else { return nil }
         return BigUInt(self.reduce(0, +)) / BigUInt(self.count)
     }
 
-    // FIXME: Add doc comment
+
+    /// Calculates percentile of dataset on which get called.
+    /// - Parameter value: Percentile value.
+    /// - Returns: Item from dataset that is belongs to given percentile, nil if dataset is empty.
     func percentile(of value: Double) -> Element? {
         guard !self.isEmpty else { return nil }
 
