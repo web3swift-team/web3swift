@@ -90,8 +90,8 @@ public class ReadTransaction {
             let promise = self.web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
             promise.done(on: queue) {(estimate: BigUInt) in
                 seal.fulfill(estimate)
-            }.catch(on: queue) {err in
-                seal.reject(err)
+                }.catch(on: queue) {err in
+                    seal.reject(err)
             }
         }
         return returnPromise

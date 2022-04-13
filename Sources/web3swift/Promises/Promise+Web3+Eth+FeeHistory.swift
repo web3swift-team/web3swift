@@ -11,10 +11,6 @@ import PromiseKit
 import BigInt
 
 extension web3.Eth {
-//    public func feeHistory(blockCount: Int = 10, onBlock: String = "latest", percentiles:[Double] = [25, 50, 75]) -> Promise<FeeHistory> {
-//        return feeHistory(address: addr, onBlock: onBlock)
-//    }
-
     func feeHistory(blockCount: BigUInt, block: String, percentiles:[Double]) throws -> Web3.Oracle.FeeHistory {
         let request = JSONRPCRequestFabric.prepareRequest(.feeHistory, parameters: [blockCount.description.addHexPrefix(), block, percentiles])
         let rp = web3.dispatch(request)

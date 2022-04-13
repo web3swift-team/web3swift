@@ -351,4 +351,5 @@ extension web3.Eth {
         guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {return nil}
         return sendERC20tokensWithKnownDecimals(tokenAddress: tokenAddress, from: from, to: to, amount: value, transactionOptions: mergedOptions)
     }
+
 }

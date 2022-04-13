@@ -64,7 +64,7 @@ class web3swiftBasicLocalNodeTests: XCTestCase {
         let balanceBeforeFrom = try web3.eth.getBalancePromise(address: allAddresses[0]).wait()
         print("Balance before to: " + balanceBeforeTo.description)
         print("Balance before from: " + balanceBeforeFrom.description)
-
+        
         let result = try sendTx.sendPromise().wait()
         let txHash = result.hash
         print("Transaction with hash " + txHash)

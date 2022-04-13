@@ -30,23 +30,25 @@ public enum InfuraWebsocketMethod: String, Encodable {
     case unsubscribe = "eth_unsubscribe"
 
     public var requiredNumOfParameters: Int? {
-        switch self {
-        case .newPendingTransactionFilter:
-            return 0
-        case .getFilterChanges:
-            return 1
-        case .newFilter:
-            return nil
-        case .newBlockFilter:
-            return 0
-        case .getFilterLogs:
-            return nil
-        case .uninstallFilter:
-            return 1
-        case .subscribe:
-            return nil
-        case .unsubscribe:
-            return 1
+        get {
+            switch self {
+            case .newPendingTransactionFilter:
+                return 0
+            case .getFilterChanges:
+                return 1
+            case .newFilter:
+                return nil
+            case .newBlockFilter:
+                return 0
+            case .getFilterLogs:
+                return nil
+            case .uninstallFilter:
+                return 1
+            case .subscribe:
+                return nil
+            case .unsubscribe:
+                return 1
+            }
         }
     }
 }
@@ -73,11 +75,13 @@ public struct InfuraWebsocketRequest: Encodable {
     }
 
     public var isValid: Bool {
-        if self.method == nil {
-            return false
+        get {
+            if self.method == nil {
+                return false
+            }
+            guard let method = self.method else {return false}
+            return method.requiredNumOfParameters == self.params?.params.count
         }
-        guard let method = self.method else {return false}
-        return method.requiredNumOfParameters == self.params?.params.count
     }
 }
 
