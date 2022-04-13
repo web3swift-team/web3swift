@@ -39,7 +39,7 @@ extension web3.Eventloop {
 
         for prop in self.monitoredUserFunctions {
             Task {
-                prop.functionToRun()
+                await prop.functionToRun()
             }
         }
     }

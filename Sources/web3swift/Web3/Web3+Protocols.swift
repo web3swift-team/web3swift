@@ -83,5 +83,5 @@ extension Networks: Equatable {
 
 public protocol EventLoopRunnableProtocol {
     var name: String {get}
-    func functionToRun()
+    func functionToRun() async
 }
