@@ -66,7 +66,7 @@ public class Web3HttpProvider: Web3Provider {
 
         let parsedResponse = try JSONDecoder().decode(T.self, from: data)
 
-        if let response = parsedResponse as? JSONRPCresponse, response.error == nil {
+        if let response = parsedResponse as? JSONRPCresponse, response.error != nil {
             throw Web3Error.nodeError(desc: "Received an error message from node\n" + String(describing: response.error!))
         }
         return parsedResponse
