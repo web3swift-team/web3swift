@@ -49,7 +49,7 @@ extension Array where Element: BinaryInteger {
         let index = Int(ceil(normalizedValue))
 
         let sorted_data = self.sorted()
-        guard index < self.count else { return sorted_data[sorted_data.endIndex] }
+        guard index < self.count else { return sorted_data[sorted_data.count - 1] }
         return sorted_data[index]
     }
 }
