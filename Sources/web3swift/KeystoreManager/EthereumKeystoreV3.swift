@@ -95,13 +95,13 @@ public class EthereumKeystoreV3: AbstractKeystore {
             throw AbstractKeystoreError.encryptionError("Encryption without key data")
         }
         let saltLen = 32;
-        let saltData = Data.randomBytes(length: saltLen)
+        let saltData = Data.randomBytes(length: saltLen)!
         guard let derivedKey = scrypt(password: password, salt: saltData, length: dkLen, N: N, R: R, P: P) else {
             throw AbstractKeystoreError.keyDerivationError
         }
         let last16bytes = Data(derivedKey[(derivedKey.count - 16)...(derivedKey.count - 1)])
         let encryptionKey = Data(derivedKey[0...15])
-        let IV = Data.randomBytes(length: 16)
+        let IV = Data.randomBytes(length: 16)!
         var aesCipher: AES?
         switch aesMode {
         case "aes-128-cbc":

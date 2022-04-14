@@ -43,7 +43,7 @@ public extension Data {
         }
     }
 
-    static func randomBytes(length: Int) -> Data {
+    static func randomBytes(length: Int) -> Data? {
         let entropy_bit_size = length//128
         //# valid_entropy_bit_sizes = [128, 160, 192, 224, 256], count: [12, 15, 18, 21, 24]
         var entropy_bytes = [UInt8](repeating: 0, count: entropy_bit_size)// / 8)
