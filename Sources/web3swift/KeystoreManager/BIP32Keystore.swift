@@ -45,7 +45,6 @@ public class BIP32Keystore: AbstractKeystore {
             guard let decryptedRootNode = try? self.getPrefixNodeData(password) else {throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")}
             guard let rootNode = HDNode(decryptedRootNode) else {throw AbstractKeystoreError.encryptionError("Failed to deserialize a root node")}
             guard rootNode.depth == (self.rootPrefix.components(separatedBy: "/").count - 1) else {throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")}
-//            guard rootNode.depth == HDNode.defaultPathPrefix.components(separatedBy: "/").count - 1 else {throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")}
             guard let index = UInt32(key.components(separatedBy: "/").last!) else {
                 throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
             }
@@ -89,8 +88,15 @@ public class BIP32Keystore: AbstractKeystore {
         rootPrefix = keystoreParams!.rootPath!
     }
 
-    public convenience init?(mnemonics: String, password: String = "web3swift", mnemonicsPassword: String = "", language: BIP39Language = BIP39Language.english, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
-        guard var seed = BIP39.seedFromMmemonics(mnemonics, password: mnemonicsPassword, language: language) else {
+    public convenience init?(mnemonics: String, password: String = "web3swift", mnemonicsPassword: String = "", language: BIP39Language = .english, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
+        do {
+            try self.init(mnemonicsPhrase: mnemonics.components(separatedBy: language.separator))
+        } catch {
+            return nil
+        }
+    }
+    public convenience init(mnemonicsPhrase: [String], password: String = "web3swift", mnemonicsPassword: String = "", language: BIP39Language = .english, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
+        guard var seed = BIP39.seedFromMmemonics(mnemonicsPhrase, password: mnemonicsPassword, language: language) else {
             throw AbstractKeystoreError.noEntropyError
         }
         defer{
@@ -99,9 +105,12 @@ public class BIP32Keystore: AbstractKeystore {
         try self.init(seed: seed, password: password, prefixPath: prefixPath, aesMode: aesMode)
     }
 
-    public init? (seed: Data, password: String = "web3swift", prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
+    public init(seed: Data, password: String = "web3swift", prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
+
         addressStorage = PathAddressStorage()
-        guard let rootNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else {return nil}
+        guard let rootNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else {
+            throw AbstractKeystoreError.keyDerivationError
+        }
         self.rootPrefix = prefixPath
         try createNewAccount(parentNode: rootNode, password: password)
         guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {
@@ -129,13 +138,20 @@ public class BIP32Keystore: AbstractKeystore {
     }
 
     func createNewAccount(parentNode: HDNode, password: String = "web3swift") throws {
-        var newIndex = UInt32(0)
-        for p in addressStorage.paths {
-            guard let idx = UInt32(p.components(separatedBy: "/").last!) else {continue}
-            if idx >= newIndex {
-                newIndex = idx + 1
-            }
+
+        let maxIndex = addressStorage.paths
+            .compactMap { $0.components(separatedBy: "/").last }
+            .compactMap { UInt32($0) }
+            .max()
+
+        let newIndex: UInt32
+
+        if let idx = maxIndex {
+            newIndex = idx + 1
+        } else {
+            newIndex = UInt32.zero
         }
+
         guard let newNode = parentNode.derive(index: newIndex, derivePrivateKey: true, hardened: false) else {
             throw AbstractKeystoreError.keyDerivationError
         }
@@ -204,38 +220,31 @@ public class BIP32Keystore: AbstractKeystore {
         try encryptDataToStorage(password, data: serializedRootNode, aesMode: self.keystoreParams!.crypto.cipher)
     }
 
-    fileprivate func encryptDataToStorage(_ password: String, data: Data?, dkLen: Int = 32, N: Int = 4096, R: Int = 6, P: Int = 1, aesMode: String = "aes-128-cbc") throws {
-        if (data == nil) {
-            throw AbstractKeystoreError.encryptionError("Encryption without key data")
-        }
-        if (data!.count != 82) {
+    fileprivate func encryptDataToStorage(_ password: String, data: Data, dkLen: Int = 32, N: Int = 4096, R: Int = 6, P: Int = 1, aesMode: String = "aes-128-cbc") throws {
+        guard data.count == 82 else {
             throw AbstractKeystoreError.encryptionError("Invalid expected data length")
         }
-        let saltLen = 32
-        guard let saltData = Data.randomBytes(length: saltLen) else {
-            throw AbstractKeystoreError.noEntropyError
-        }
-        guard let derivedKey = scrypt(password: password, salt: saltData, length: dkLen, N: N, R: R, P: P) else {
+        let saltData = Data.randomBytes(length: 32)
+
+        guard let derivedKey = scrypt(password: password, salt: saltData!, length: dkLen, N: N, R: R, P: P) else {
             throw AbstractKeystoreError.keyDerivationError
         }
         let last16bytes = derivedKey[(derivedKey.count - 16)...(derivedKey.count - 1)]
         let encryptionKey = derivedKey[0...15]
-        guard let IV = Data.randomBytes(length: 16) else {
-            throw AbstractKeystoreError.noEntropyError
-        }
+        let IV = Data.randomBytes(length: 16)
         var aesCipher: AES?
         switch aesMode {
         case "aes-128-cbc":
-            aesCipher = try? AES(key: encryptionKey.bytes, blockMode: CBC(iv: IV.bytes), padding: .pkcs7)
+            aesCipher = try? AES(key: encryptionKey.bytes, blockMode: CBC(iv: IV!.bytes), padding: .pkcs7)
         case "aes-128-ctr":
-            aesCipher = try? AES(key: encryptionKey.bytes, blockMode: CTR(iv: IV.bytes), padding: .pkcs7)
+            aesCipher = try? AES(key: encryptionKey.bytes, blockMode: CTR(iv: IV!.bytes), padding: .pkcs7)
         default:
             aesCipher = nil
         }
         if aesCipher == nil {
             throw AbstractKeystoreError.aesError
         }
-        guard let encryptedKey = try aesCipher?.encrypt(data!.bytes) else {
+        guard let encryptedKey = try aesCipher?.encrypt(data.bytes) else {
             throw AbstractKeystoreError.aesError
         }
         let encryptedKeyData = Data(encryptedKey)
@@ -243,8 +252,8 @@ public class BIP32Keystore: AbstractKeystore {
         dataForMAC.append(last16bytes)
         dataForMAC.append(encryptedKeyData)
         let mac = dataForMAC.sha3(.keccak256)
-        let kdfparams = KdfParamsV3(salt: saltData.toHexString(), dklen: dkLen, n: N, p: P, r: R, c: nil, prf: nil)
-        let cipherparams = CipherParamsV3(iv: IV.toHexString())
+        let kdfparams = KdfParamsV3(salt: saltData!.toHexString(), dklen: dkLen, n: N, p: P, r: R, c: nil, prf: nil)
+        let cipherparams = CipherParamsV3(iv: IV!.toHexString())
         let crypto = CryptoParamsV3(ciphertext: encryptedKeyData.toHexString(), cipher: aesMode, cipherparams: cipherparams, kdf: "scrypt", kdfparams: kdfparams, mac: mac.toHexString(), version: nil)
 
         var keystorePars = KeystoreParamsBIP32(crypto: crypto, id: UUID().uuidString.lowercased(), version: Self.KeystoreParamsBIP32Version)

@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import Metal
 
 public extension Data {
 
@@ -43,32 +44,34 @@ public extension Data {
     }
 
     static func randomBytes(length: Int) -> Data? {
-        for _ in 0...1024 {
-            var data = Data(repeating: 0, count: length)
-            let result = data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) -> Int32? in
-                if let bodyAddress = body.baseAddress, body.count > 0 {
-                    let pointer = bodyAddress.assumingMemoryBound(to: UInt8.self)
-                    return SecRandomCopyBytes(kSecRandomDefault, length, pointer)
-                } else {
-                    return nil
-                }
-            }
-            if let notNilResult = result, notNilResult == errSecSuccess {
-                return data
-            }
+        let entropy_bit_size = length//128
+        //# valid_entropy_bit_sizes = [128, 160, 192, 224, 256], count: [12, 15, 18, 21, 24]
+        var entropy_bytes = [UInt8](repeating: 0, count: entropy_bit_size)// / 8)
+
+        let status = SecRandomCopyBytes(kSecRandomDefault, entropy_bytes.count, &entropy_bytes)
+
+        if status != errSecSuccess { // Always test the status.
+
+        } else {
+            entropy_bytes = [UInt8](repeating: 0, count: entropy_bit_size)// / 8)
+            arc4random_buf(&entropy_bytes, entropy_bytes.count)
         }
-        return nil
+
+        let source1 = MTLCreateSystemDefaultDevice()?.makeBuffer(length: length)?.hash.description.data(using: .utf8)
+
+        let entropyData = entropy_bytes.shuffled().map{ bit in
+            return bit ^ (source1?.randomElement() ?? 0)
+
+        }
+
+        return Data(entropyData)
     }
 
     static func fromHex(_ hex: String) -> Data? {
         let string = hex.lowercased().stripHexPrefix()
         let array = Array<UInt8>(hex: string)
         if (array.count == 0) {
-            if (hex == "0x" || hex == "") {
-                return Data()
-            } else {
-                return nil
-            }
+            return (hex == "0x" || hex.isEmpty) ? Data() : nil
         }
         return Data(array)
     }
