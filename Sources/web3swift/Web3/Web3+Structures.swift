@@ -140,7 +140,7 @@ public struct TransactionDetails: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.blockNumber = try? container.decodeHex(BigUInt.self, forKey: .blockNumber)
         self.blockHash = try?  container.decodeHex(Data.self, forKey: .blockHash)
-        self.transactionIndex = try? container.decodeHex(BigUInt.self, forKey: .blockNumber)
+        self.transactionIndex = try? container.decodeHex(BigUInt.self, forKey: .transactionIndex)
         self.transaction = try EthereumTransaction(from: decoder)
     }
 }
