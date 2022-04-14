@@ -15,7 +15,9 @@ class OracleTests: XCTestCase {
 
     let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
 
-    lazy var oracle: Web3.Oracle = .init(web3, block: .exact(14571792), blockCount: 20, percentiles: [10, 40, 60, 90])
+    let blockNumber: BigUInt = 14571792
+
+    lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
 
     func testPretictBaseFee() throws {
         let etalonPercentiles: [BigUInt] = [
@@ -64,13 +66,24 @@ class OracleTests: XCTestCase {
 
     func testPredictLegacyGasPrice() throws {
         let etalonPercentiles: [BigUInt] = [
-            100474449775,    // 10 percentile
-            114000000000,    // 40 percentile
-            125178275323,    // 60 percentile
-            146197706224     // 90 percentile
+            93253857566,     // 10 percentile
+            106634912620,    // 40 percentile
+            111000000000,    // 60 percentile
+            127210686305     // 90 percentile
         ]
         
         let gasPriceLegacyPercentiles = oracle.gasPriceLegacyPercentiles
         XCTAssertEqual(gasPriceLegacyPercentiles, etalonPercentiles, "Arrays should be equal")
+    }
+
+    func testAllTransactionInBlockDecodesWell() throws {
+        let blockWithTransaction = try web3.eth.getBlockByNumber(blockNumber, fullTransactions: true)
+
+        let nullTransactions = blockWithTransaction.transactions.filter {
+            guard case .null = $0 else { return false }
+            return true
+        }
+
+        XCTAssert(nullTransactions.isEmpty, "This amount transaction fails to decode: \(nullTransactions.count)")
     }
 }
