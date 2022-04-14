@@ -8,64 +8,68 @@ import Foundation
 
 public enum JSONRPCmethod: String, Encodable {
 
+    // 0 parameter in call
     case gasPrice = "eth_gasPrice"
     case blockNumber = "eth_blockNumber"
     case getNetwork = "net_version"
+    case getAccounts = "eth_accounts"
+    case getTxPoolStatus = "txpool_status"
+    case getTxPoolContent = "txpool_content"
+    case getTxPoolInspect = "txpool_inspect"
+    case estimateGas = "eth_estimateGas"
+
+    // 1 parameter in call
     case sendRawTransaction = "eth_sendRawTransaction"
     case sendTransaction = "eth_sendTransaction"
-    case estimateGas = "eth_estimateGas"
-    case call = "eth_call"
-    case getTransactionCount = "eth_getTransactionCount"
-    case getBalance = "eth_getBalance"
-    case getCode = "eth_getCode"
-    case getStorageAt = "eth_getStorageAt"
     case getTransactionByHash = "eth_getTransactionByHash"
     case getTransactionReceipt = "eth_getTransactionReceipt"
-    case getAccounts = "eth_accounts"
-    case getBlockByHash = "eth_getBlockByHash"
-    case getBlockByNumber = "eth_getBlockByNumber"
     case personalSign = "eth_sign"
     case unlockAccount = "personal_unlockAccount"
     case createAccount = "personal_createAccount"
     case getLogs = "eth_getLogs"
-    case getTxPoolInspect = "txpool_inspect"
-    case getTxPoolStatus = "txpool_status"
-    case getTxPoolContent = "txpool_content"
+
+    // 2 parameters in call
+    case call = "eth_call"
+    case getTransactionCount = "eth_getTransactionCount"
+    case getBalance = "eth_getBalance"
+    case getStorageAt = "eth_getStorageAt"
+    case getCode = "eth_getCode"
+    case getBlockByHash = "eth_getBlockByHash"
+    case getBlockByNumber = "eth_getBlockByNumber"
+
+    // 3 parameters in call
+    case feeHistory = "eth_feeHistory"
 
     public var requiredNumOfParameters: Int {
-        get {
-            switch self {
-            case .call:
-                return 2
-            case .getTransactionCount:
-                return 2
-            case .getBalance:
-                return 2
-            case .getStorageAt:
-                return 2
-            case .getCode:
-                return 2
-            case .getBlockByHash:
-                return 2
-            case .getBlockByNumber:
-                return 2
-            case .gasPrice:
-                return 0
-            case .blockNumber:
-                return 0
-            case .getNetwork:
-                return 0
-            case .getAccounts:
-                return 0
-            case .getTxPoolStatus:
-                return 0
-            case .getTxPoolContent:
-                return 0
-            case .getTxPoolInspect:
-                return 0
-            default:
-                return 1
-            }
+        switch self {
+        case .gasPrice,
+                .blockNumber,
+                .getNetwork,
+                .getAccounts,
+                .getTxPoolStatus,
+                .getTxPoolContent,
+                .getTxPoolInspect:
+            return 0
+        case .sendRawTransaction,
+                .sendTransaction,
+                .getTransactionByHash,
+                .getTransactionReceipt,
+                .personalSign,
+                .unlockAccount,
+                .createAccount,
+                .getLogs,
+                .estimateGas:
+            return 1
+        case .call,
+                .getTransactionCount,
+                .getBalance,
+                .getStorageAt,
+                .getCode,
+                .getBlockByHash,
+                .getBlockByNumber:
+            return 2
+        case .feeHistory:
+            return 3
         }
     }
 }

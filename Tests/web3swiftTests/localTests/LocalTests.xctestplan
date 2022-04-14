@@ -16,6 +16,8 @@
       "skippedTests" : [
         "ENSTests",
         "RemoteTests",
+        "GasOracleTests",
+        "InfuraTests",
         "RemoteParsingTests",
         "ST20AndSecurityTokenTests",
         "WebsocketTests",
