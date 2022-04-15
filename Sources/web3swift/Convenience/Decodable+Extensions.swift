@@ -207,6 +207,12 @@ extension Data: DecodableFromHex {
     }
 }
 
+extension UInt: DecodableFromHex {
+    public init?(fromHex hexString: String) {
+        self.init(hexString.stripHexPrefix(), radix: 16)
+    }
+}
+
 extension BigUInt: DecodableFromHex {
     public init?(fromHex hexString: String) {
         self.init(hexString.stripHexPrefix(), radix: 16)
