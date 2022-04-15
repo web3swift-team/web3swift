@@ -336,10 +336,7 @@ extension EthereumTransaction {
                 guard let env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
                 return env.parameters.gasPrice ?? 0
             case .eip1559:
-                // MARK: workaround for gasPrice coming from nodes for EIP-1159 - this allows Oracle to work for now
-                guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
-                return env.parameters.gasPrice ?? 0
-                // preconditionFailure("EIP1559Envelope has no member gasPrice")
+                preconditionFailure("EIP1559Envelope has no member gasPrice")
             }
         }
         set(value) {
