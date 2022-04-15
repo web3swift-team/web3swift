@@ -47,9 +47,10 @@ class web3swiftUserCases: XCTestCase {
         let gasEstimate = try writeTX.estimateGasPromise().wait()
         writeTX.transactionOptions.gasLimit = .manual(gasEstimate + 1234)
         let assembled = try writeTX.assemblePromise().wait()
-        XCTAssert(assembled.gasLimit == gasEstimate + 1234)
+        let txnGasLimit = assembled.parameters.gasLimit
+        XCTAssert(txnGasLimit == gasEstimate + 1234)
     }
-    
+
     func testProperGasPrice() throws {
         let web3 = try Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
         let allAddresses = try web3.eth.getAccounts()
@@ -61,8 +62,11 @@ class web3swiftUserCases: XCTestCase {
         let gasEstimate = try writeTX.estimateGasPromise().wait()
         writeTX.transactionOptions.gasLimit = .manual(gasEstimate + 1234)
         let assembled = try writeTX.assemblePromise().wait()
-        XCTAssert(assembled.gasLimit == gasEstimate + 1234)
-        XCTAssert(assembled.gasPrice == gasPrice * 2)
+        let txnGasLimit = assembled.parameters.gasLimit
+        let txnGasPrice = assembled.parameters.gasPrice
+      
+        XCTAssert(txnGasLimit == gasEstimate + 1234)
+        XCTAssert(txnGasPrice == gasPrice * 2)
     }
     
     func testParseTransactionDetailsForContractCreation() throws {// Deploy contract

@@ -1,30 +1,37 @@
-//  web3swift
-//
+//  Package: web3swift
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
+// Additions to support new transaction types by Mark Loit March 2022
 
 import Foundation
 import BigInt
-//import EthereumAddress
 
 public protocol TransactionOptionsInheritable {
-    var transactionOptions: TransactionOptions {get}
+    var transactionOptions: TransactionOptions { get }
 }
 
 /// Options for sending or calling a particular Ethereum transaction
 public struct TransactionOptions {
+    // Sets the transaction envelope type.
+    // default here is legacy, so it will work on all chains
+    // but the provider should perhaps set better defaults based on what chain is connected
+    // id for Ethereum, default to EIP-1559
+    public var type: TransactionType?
+
     /// Sets the transaction destination. It can either be a contract address or a private key controlled wallet address.
     ///
     /// Usually should never be nil, left undefined for a contract-creation transaction.
-    public var to: EthereumAddress? = nil
+    public var to: EthereumAddress?
     /// Sets from what account a transaction should be sent. Used only internally as the sender of Ethereum transaction
     /// is determined purely from the transaction signature. Indicates to the Ethereum node or to the local keystore what private key
     /// should be used to sign a transaction.
     ///
     /// Can be nil if one reads the information from the blockchain.
-    public var from: EthereumAddress? = nil
-    
+    public var from: EthereumAddress?
+
+    public var chainID: BigUInt?
+
     public enum GasLimitPolicy {
         case automatic
         case manual(BigUInt)
@@ -38,23 +45,33 @@ public struct TransactionOptions {
         case manual(BigUInt)
         case withMargin(Double)
     }
+
     public var gasPrice: GasPricePolicy?
 
+    // new gas parameters for EIP-1559 support
+    public enum FeePerGasPolicy {
+        case automatic
+        case manual(BigUInt)
+    }
+    public var maxFeePerGas: FeePerGasPolicy?
+    public var maxPriorityFeePerGas: FeePerGasPolicy?
+
     /// The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
-    public var value: BigUInt? = nil
-    
+    public var value: BigUInt?
+
     public enum NoncePolicy {
         case pending
         case latest
         case manual(BigUInt)
     }
+
     public var nonce: NoncePolicy?
-    
+
     public enum CallingBlockPolicy {
         case pending
         case latest
         case exactBlockNumber(BigUInt)
-        
+
         var stringValue: String {
             switch self {
             case .pending:
@@ -66,143 +83,200 @@ public struct TransactionOptions {
             }
         }
     }
+
     public var callOnBlock: CallingBlockPolicy?
-    
-    public init() {
-    }
-    
+
+    public var accessList: [AccessListEntry]?
+
     public static var defaultOptions: TransactionOptions {
         var opts = TransactionOptions()
-        opts.callOnBlock = .pending
-        opts.nonce = .pending
+        opts.type = .legacy
         opts.gasLimit = .automatic
         opts.gasPrice = .automatic
+        opts.maxFeePerGas = .automatic
+        opts.maxPriorityFeePerGas = .automatic
+        opts.nonce = .pending
+        opts.callOnBlock = .pending
         return opts
     }
-    
-    public func resolveGasPrice(_ suggestedByNode: BigUInt) -> BigUInt? {
-        guard let gasPricePolicy = self.gasPrice else {return nil}
-        switch gasPricePolicy {
-        case .automatic:
+
+    public func resolveNonce(_ suggestedByNode: BigUInt) -> BigUInt {
+        guard let noncePolicy = self.nonce else { return suggestedByNode }
+        switch noncePolicy {
+        case .pending, .latest:
             return suggestedByNode
         case .manual(let value):
             return value
-        case .withMargin(_):
-            return suggestedByNode
         }
     }
-    
-    public func resolveGasLimit(_ suggestedByNode: BigUInt) -> BigUInt? {
-        guard let gasLimitPolicy = self.gasLimit else {return nil}
-        switch gasLimitPolicy {
-        case .automatic:
+
+    public func resolveGasPrice(_ suggestedByNode: BigUInt) -> BigUInt {
+        guard let gasPricePolicy = self.gasPrice else { return suggestedByNode }
+        switch gasPricePolicy {
+        case .automatic, .withMargin:
             return suggestedByNode
         case .manual(let value):
             return value
-        case .withMargin(_):
+        }
+    }
+
+    public func resolveGasLimit(_ suggestedByNode: BigUInt) -> BigUInt {
+        guard let gasLimitPolicy = self.gasLimit else { return suggestedByNode }
+        switch gasLimitPolicy {
+        case .automatic, .withMargin:
             return suggestedByNode
+        case .manual(let value):
+            return value
         case .limited(let limit):
             if limit <= suggestedByNode {
                 return suggestedByNode
+            } else {
+                return limit
             }
-            return nil
+        }
+    }
+
+    public func resolveMaxFeePerGas(_ suggestedByNode: BigUInt) -> BigUInt {
+        guard let maxFeePerGasPolicy = self.maxFeePerGas else { return suggestedByNode }
+        switch maxFeePerGasPolicy {
+        case .automatic:
+            return suggestedByNode
+        case .manual(let value):
+            return value
+        }
+    }
+
+    public func resolveMaxPriorityFeePerGas(_ suggestedByNode: BigUInt) -> BigUInt {
+        guard let maxPriorityFeePerGasPolicy = self.maxPriorityFeePerGas else { return suggestedByNode }
+        switch maxPriorityFeePerGasPolicy {
+        case .automatic:
+            return suggestedByNode
+        case .manual(let value):
+            return value
         }
     }
 
     public func merge(_ otherOptions: TransactionOptions?) -> TransactionOptions {
-        guard let other = otherOptions else {return self}
+        guard let other = otherOptions else { return self }
         var opts = TransactionOptions()
-        opts.from = mergeIfNotNil(first: self.from, second: other.from)
+        opts.type = mergeIfNotNil(first: self.type, second: other.type)
         opts.to = mergeIfNotNil(first: self.to, second: other.to)
+        opts.from = mergeIfNotNil(first: self.from, second: other.from)
+        opts.chainID = mergeIfNotNil(first: self.chainID, second: other.chainID)
         opts.gasLimit = mergeIfNotNil(first: self.gasLimit, second: other.gasLimit)
         opts.gasPrice = mergeIfNotNil(first: self.gasPrice, second: other.gasPrice)
+        opts.maxFeePerGas = mergeIfNotNil(first: self.maxFeePerGas, second: other.maxFeePerGas)
+        opts.maxPriorityFeePerGas = mergeIfNotNil(first: self.maxPriorityFeePerGas, second: other.maxPriorityFeePerGas)
         opts.value = mergeIfNotNil(first: self.value, second: other.value)
         opts.nonce = mergeIfNotNil(first: self.nonce, second: other.nonce)
         opts.callOnBlock = mergeIfNotNil(first: self.callOnBlock, second: other.callOnBlock)
         return opts
     }
 
-    /// Merges two sets of topions by overriding the parameters from the first set by parameters from the second
+    /// Merges two sets of options by overriding the parameters from the first set by parameters from the second
     /// set if those are not nil.
     ///
     /// Returns default options if both parameters are nil.
-    public static func merge(_ options:TransactionOptions?, with other:TransactionOptions?) -> TransactionOptions? {
-        if (other == nil && options == nil) {
-            return TransactionOptions.defaultOptions
-        }
-        var newOptions = TransactionOptions.defaultOptions
-        if (other?.to != nil) {
-            newOptions.to = other?.to
-        } else {
-            newOptions.to = options?.to
-        }
-        if (other?.from != nil) {
-            newOptions.from = other?.from
-        } else {
-            newOptions.from = options?.from
-        }
-        if (other?.gasLimit != nil) {
-            newOptions.gasLimit = other?.gasLimit
-        } else {
-            newOptions.gasLimit = options?.gasLimit
-        }
-        if (other?.gasPrice != nil) {
-            newOptions.gasPrice = other?.gasPrice
-        } else {
-            newOptions.gasPrice = options?.gasPrice
-        }
-        if (other?.value != nil) {
-            newOptions.value = other?.value
-        } else {
-            newOptions.value = options?.value
-        }
+    public static func merge(_ options: TransactionOptions?, with other: TransactionOptions?) -> TransactionOptions? {
+        var newOptions = TransactionOptions.defaultOptions // default has lowest priority
+        newOptions = newOptions.merge(options)
+        newOptions = newOptions.merge(other) // other has highest priority
         return newOptions
     }
-//
-//    /// merges two sets of options along with a gas estimate to try to guess the final gas limit value required by user.
-//    ///
-//    /// Please refer to the source code for a logic.
-//    public static func smartMergeGasLimit(originalOptions: Web3Options?, extraOptions: Web3Options?, gasEstimate: BigUInt) -> BigUInt? {
-//        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} //just require any non-nils
-//        if mergedOptions.gasLimit == nil {
-//            return gasEstimate // for user's convenience we just use an estimate
-//            //            return nil // there is no opinion from user, so we can not proceed
-//        } else {
-//            if originalOptions != nil, originalOptions!.gasLimit != nil, originalOptions!.gasLimit! < gasEstimate { // original gas estimate was less than what's required, so we check extra options
-//                if extraOptions != nil, extraOptions!.gasLimit != nil, extraOptions!.gasLimit! >= gasEstimate {
-//                    return extraOptions!.gasLimit!
-//                } else {
-//                    return gasEstimate // for user's convenience we just use an estimate
-//                    //                    return nil // estimate is lower than allowed
-//                }
-//            } else {
-//                if extraOptions != nil, extraOptions!.gasLimit != nil, extraOptions!.gasLimit! >= gasEstimate {
-//                    return extraOptions!.gasLimit!
-//                } else {
-//                    return gasEstimate // for user's convenience we just use an estimate
-//                    //                    return nil // estimate is lower than allowed
-//                }
-//            }
-//        }
-//    }
-//
-//    public static func smartMergeGasPrice(originalOptions: Web3Options?, extraOptions: Web3Options?, priceEstimate: BigUInt) -> BigUInt? {
-//        guard let mergedOptions = Web3Options.merge(originalOptions, with: extraOptions) else {return nil} //just require any non-nils
-//        if mergedOptions.gasPrice == nil {
-//            return priceEstimate
-//        } else if mergedOptions.gasPrice == 0 {
-//            return priceEstimate
-//        } else {
-//            return mergedOptions.gasPrice!
-//        }
-//    }
 }
 
-fileprivate func mergeIfNotNil<T>(first: T?, second: T?) -> T? {
+private func mergeIfNotNil<T>(first: T?, second: T?) -> T? {
     if second != nil {
         return second
     } else if first != nil {
         return first
     }
     return nil
+}
+
+extension TransactionOptions: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case type
+        case to
+        case from
+        case chainId
+        case gasPrice
+        case gas
+        case maxFeePerGas
+        case maxPriorityFeePerGas
+        case value
+        case nonce
+        case callOnBlock
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let defaultOptions = TransactionOptions.defaultOptions
+
+        // type is guaranteed to be set after this
+        if let typeUInt = try? container.decodeHex(UInt.self, forKey: .type) {
+            if typeUInt < TransactionType.allCases.count {
+                guard let type = TransactionType(rawValue: typeUInt) else { throw Web3Error.dataError }
+                self.type = type
+            } else { throw Web3Error.dataError }
+        } else { self.type = .legacy } // legacy streams may not have type set
+
+        self.chainID = try container.decodeHexIfPresent(BigUInt.self, forKey: .chainId)
+
+        let toString = try? container.decode(String.self, forKey: .to)
+        switch toString {
+        case nil, "0x", "0x0":
+            self.to = EthereumAddress.contractDeploymentAddress()
+        default:
+            // the forced unwrap here is safe as we trap nil in the previous case
+            // swiftlint:disable force_unwrapping
+            guard let ethAddr = EthereumAddress(toString!) else { throw Web3Error.dataError }
+            // swiftlint:enable force_unwrapping
+            self.to = ethAddr
+        }
+
+        self.from = try container.decodeIfPresent(EthereumAddress.self, forKey: .to)
+
+        if let gasPrice = try? container.decodeHex(BigUInt.self, forKey: .gasPrice) {
+            self.gasPrice = .manual(gasPrice)
+        } else {
+            self.gasPrice = defaultOptions.gasPrice
+        }
+
+        if let gasLimit = try? container.decodeHex(BigUInt.self, forKey: .gas) {
+            self.gasLimit = .manual(gasLimit)
+        } else {
+            self.gasLimit = defaultOptions.gasLimit
+        }
+
+        if let maxFeePerGas = try? container.decodeHex(BigUInt.self, forKey: .maxFeePerGas) {
+            self.maxFeePerGas = .manual(maxFeePerGas)
+        } else {
+            self.maxFeePerGas = defaultOptions.maxFeePerGas
+        }
+
+        if let maxPriorityFeePerGas = try? container.decodeHex(BigUInt.self, forKey: .maxPriorityFeePerGas) {
+            self.maxPriorityFeePerGas = .manual(maxPriorityFeePerGas)
+        } else {
+            self.maxPriorityFeePerGas = defaultOptions.maxPriorityFeePerGas
+        }
+
+        if let value = try? container.decodeHex(BigUInt.self, forKey: .value) {
+            self.value = value
+        } else {
+            self.value = defaultOptions.value
+        }
+
+        if let nonce = try? container.decodeHex(BigUInt.self, forKey: .nonce) {
+            self.nonce = .manual(nonce)
+        } else {
+            self.nonce = defaultOptions.nonce
+        }
+
+        if let callOnBlock = try? container.decodeHex(BigUInt.self, forKey: .callOnBlock) {
+            self.callOnBlock = .exactBlockNumber(callOnBlock)
+        } else {
+            self.callOnBlock = defaultOptions.callOnBlock
+        }
+    }
 }

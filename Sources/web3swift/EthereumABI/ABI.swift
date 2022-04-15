@@ -5,9 +5,7 @@
 
 import Foundation
 
-public struct ABI {
-    
-}
+public struct ABI { }
 
 protocol ABIElementPropertiesProtocol {
     var isStatic: Bool {get}

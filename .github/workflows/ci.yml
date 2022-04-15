@@ -42,8 +42,8 @@ jobs:
         run: sleep 1
       - name: Run local tests
         run: swift test --skip-build -c debug --filter localTests
-      # - name: Run remote tests
-      #   run: swift test --skip-build -c debug --filter remoteTests
+      - name: Run remote tests
+        run: swift test --skip-build -c debug --filter remoteTests
   carthage:
     name: Carthage
     runs-on: macOS-11
@@ -64,7 +64,7 @@ jobs:
       - name: Building dependencies
         run: carthage build --no-use-binaries --platform iOS Simulator --use-xcframeworks
       - name: Building framework
-        run: xcodebuild build-for-testing -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
+        run: xcodebuild build-for-testing -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}"
       - name: Install ganache
         run: npm install ganache --global
       - name: Start ganache in background
@@ -73,5 +73,5 @@ jobs:
         run: sleep 1
       - name: Run local tests
         run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
-      # - name: Run remote tests
-      #   run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan RemoteTests
+      - name: Run remote tests
+        run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan RemoteTests

@@ -4,6 +4,8 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
+// TODO: Replace `XCTAssert` with more explicite `XCTAssertEqual`, where Applicable
+
 import XCTest
 import PromiseKit
 import BigInt
@@ -32,7 +34,7 @@ class web3swiftPromisesTests: XCTestCase {
         let txHash = writeResult.hash
         let result = try web3.eth.getTransactionDetailsPromise(txHash).wait()
         print(result)
-        XCTAssert(result.transaction.gasLimit == BigUInt(gasLimit))
+        XCTAssert(result.transaction.parameters.gasLimit == BigUInt(gasLimit))
     }
     
     func testEstimateGasPromise() throws {

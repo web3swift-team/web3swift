@@ -47,31 +47,31 @@ extension EIP712Hashable {
         let name = fullName.components(separatedBy: ".").last ?? fullName
         return name
     }
-    
+
     private func dependencies() -> [EIP712Hashable] {
         let dependencies = Mirror(reflecting: self).children
             .compactMap { $0.value as? EIP712Hashable }
             .flatMap { [$0] + $0.dependencies() }
         return dependencies
     }
-    
+
     private func encodePrimaryType() -> String {
         let parametrs: [String] = Mirror(reflecting: self).children.compactMap { key, value in
             guard let key = key else { return nil }
-            
+
             func checkIfValueIsNil(value: Any) -> Bool {
-                let mirror = Mirror(reflecting : value)
+                let mirror = Mirror(reflecting: value)
                 if mirror.displayStyle == .optional {
                     if mirror.children.count == 0 {
                         return true
                     }
                 }
-                
+
                 return false
             }
-            
+
             guard !checkIfValueIsNil(value: value) else { return nil }
-            
+
             let typeName: String
             switch value {
             case is EIP712.UInt8: typeName = "uint8"
@@ -85,21 +85,21 @@ extension EIP712Hashable {
         }
         return self.name + "(" + parametrs.joined(separator: ",") + ")"
     }
-    
+
     func encodeType() -> String {
         let dependencies = self.dependencies().map { $0.encodePrimaryType() }
         let selfPrimaryType = self.encodePrimaryType()
-        
+
         let result = Set(dependencies).filter { $0 != selfPrimaryType }
         return selfPrimaryType + result.sorted().joined()
     }
-    
+
     // MARK: - Default implementation
-    
+
     var typehash: Data {
         keccak256(encodeType())
     }
-    
+
     func hash() throws -> Data {
         typealias SolidityValue = (value: Any, type: ABI.Element.ParameterType)
         var parametrs: [Data] = [self.typehash]

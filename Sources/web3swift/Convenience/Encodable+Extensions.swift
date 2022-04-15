@@ -18,7 +18,7 @@ extension KeyedEncodingContainer {
         var container = nestedContainer(keyedBy: AnyCodingKey.self, forKey: key)
         try container.encode(value)
     }
-    
+
     /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -29,7 +29,7 @@ extension KeyedEncodingContainer {
         var container = nestedUnkeyedContainer(forKey: key)
         try container.encode(value)
     }
-    
+
     /// Encodes the given value for the given key if it is not `nil`.
     ///
     /// - parameter value: The value to encode.
@@ -44,7 +44,7 @@ extension KeyedEncodingContainer {
             try encodeNil(forKey: key)
         }
     }
-    
+
     /// Encodes the given value for the given key if it is not `nil`.
     ///
     /// - parameter value: The value to encode.
@@ -117,7 +117,7 @@ private extension UnkeyedEncodingContainer {
             }
         }
     }
-    
+
     /// Encodes the given value.
     ///
     /// - parameter value: The value to encode.
