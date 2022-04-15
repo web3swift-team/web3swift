@@ -598,13 +598,13 @@ class web3swiftTransactionsTests: XCTestCase {
 
     func testDirectTransaction() throws {
         do {
-            var options = TransactionOptions()
-            options.gasPrice = .manual(20000000000)
-            options.gasLimit = .manual(21000)
+            var params = EthereumParameters()
+            params.gasPrice = 20000000000
+            params.gasLimit = 21000
             var transaction = EthereumTransaction(
                 to: EthereumAddress("0x3535353535353535353535353535353535353535")!,
                 nonce: 9, value: 1000000000000000000, data: Data(),
-                v: 0, r: 0, s: 0, options: options)
+                v: 0, r: 0, s: 0, parameters: params)
             let privateKeyData = Data.fromHex("0x4646464646464646464646464646464646464646464646464646464646464646")!
             let publicKey = Web3.Utils.privateToPublic(privateKeyData, compressed: false)
             let sender = Web3.Utils.publicToAddress(publicKey!)
@@ -654,7 +654,7 @@ class web3swiftTransactionsTests: XCTestCase {
 
             let details = try web3.eth.getTransactionDetails(txHash)
             print(details)
-            let txnGasLimit = details.transaction.gasLimit
+            let txnGasLimit = details.transaction.parameters.gasLimit
             XCTAssert(txnGasLimit == BigUInt(78423))
         } catch Web3Error.nodeError(let descr) {
             guard descr == "insufficient funds for gas * price + value" else {return XCTFail()}

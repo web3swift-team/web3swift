@@ -48,7 +48,11 @@ public struct EthereumTransaction: CustomStringConvertible {
         set(newValue) { envelope.parameters.data = newValue }
     }
 
-    // transaction type specific parameters should be accessed with TransactionOptions via getOptions()
+    // transaction type specific parameters should be accessed with EthereumParameters
+    public var parameters: EthereumParameters {
+        get { return envelope.parameters }
+        set(val) { envelope.parameters = val }
+    }
 
     // signature data is read-only
     /// signature v component (read only)
@@ -239,15 +243,12 @@ extension EthereumTransaction {
     ///   - v: signature v parameter (default 1) - will get set properly once signed
     ///   - r: signature r parameter (default 0) - will get set properly once signed
     ///   - s: signature s parameter (default 0) - will get set properly once signed
-    ///   - options: TransactionObject containing additional parametrs for the transaction like gas
+    ///   - parameters: EthereumParameters object containing additional parametrs for the transaction like gas
     public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
                 chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
-                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, options: TransactionOptions? = nil) {
+                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: EthereumParameters? = nil) {
 
-        var params: EthereumParameters
-        // swiftlint:disable force_unwrapping
-        if options != nil { params = EthereumParameters(from: options!) } else { params = EthereumParameters() }
-        // swiftlint:enable force_unwrapping
+        var params = parameters ?? EthereumParameters()
 
         params.chainID = chainID ?? params.chainID
         params.value = value ?? params.value

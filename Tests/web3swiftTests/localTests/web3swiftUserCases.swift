@@ -47,7 +47,7 @@ class web3swiftUserCases: XCTestCase {
         let gasEstimate = try writeTX.estimateGasPromise().wait()
         writeTX.transactionOptions.gasLimit = .manual(gasEstimate + 1234)
         let assembled = try writeTX.assemblePromise().wait()
-        let txnGasLimit = assembled.gasLimit
+        let txnGasLimit = assembled.parameters.gasLimit
         XCTAssert(txnGasLimit == gasEstimate + 1234)
     }
 
@@ -62,8 +62,8 @@ class web3swiftUserCases: XCTestCase {
         let gasEstimate = try writeTX.estimateGasPromise().wait()
         writeTX.transactionOptions.gasLimit = .manual(gasEstimate + 1234)
         let assembled = try writeTX.assemblePromise().wait()
-        let txnGasLimit = assembled.gasLimit
-        let txnGasPrice = assembled.gasPrice
+        let txnGasLimit = assembled.parameters.gasLimit
+        let txnGasPrice = assembled.parameters.gasPrice
       
         XCTAssert(txnGasLimit == gasEstimate + 1234)
         XCTAssert(txnGasPrice == gasPrice * 2)

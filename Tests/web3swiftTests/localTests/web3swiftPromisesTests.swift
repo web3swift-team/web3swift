@@ -34,7 +34,7 @@ class web3swiftPromisesTests: XCTestCase {
         let txHash = writeResult.hash
         let result = try web3.eth.getTransactionDetailsPromise(txHash).wait()
         print(result)
-        XCTAssert(result.transaction.gasLimit == BigUInt(gasLimit))
+        XCTAssert(result.transaction.parameters.gasLimit == BigUInt(gasLimit))
     }
     
     func testEstimateGasPromise() throws {
