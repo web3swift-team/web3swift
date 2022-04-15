@@ -51,7 +51,7 @@ public struct EnvelopeFactory {
 
         let envelopeType: TransactionType
         if container.contains(.type) {
-            let typeUInt = try container.decodeHex(to: UInt.self, key: .type)
+            let typeUInt = try container.decodeHex(UInt.self, forKey: .type)
             if typeUInt < TransactionType.total.rawValue {
                 guard let type = TransactionType(rawValue: typeUInt) else { throw Web3Error.dataError } // conversion error
                 envelopeType = type

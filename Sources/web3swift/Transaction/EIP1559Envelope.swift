@@ -94,8 +94,8 @@ extension EIP1559Envelope {
         guard container.contains(.v), container.contains(.r), container.contains(.s) else { return nil }
 
         // everything we need is present, so we should only have to throw from here
-        self.internalChainID = try container.decodeHexIfPresent(to: BigUInt.self, key: .chainId) ?? 0
-        self.nonce = try container.decodeHex(to: BigUInt.self, key: .nonce)
+        self.internalChainID = try container.decodeHexIfPresent(BigUInt.self, forKey: .chainId) ?? 0
+        self.nonce = try container.decodeHex(BigUInt.self, forKey: .nonce)
 
         let list = try? container.decode([AccessListEntry].self, forKey: .accessList)
         self.accessList = list ?? []
@@ -111,15 +111,15 @@ extension EIP1559Envelope {
             // swiftlint:enable force_unwrapping
             self.to = ethAddr
         }
-        self.value = try container.decodeHexIfPresent(to: BigUInt.self, key: .value) ?? 0
-        self.maxPriorityFeePerGas = try container.decodeHexIfPresent(to: BigUInt.self, key: .maxPriorityFeePerGas) ?? 0
-        self.maxFeePerGas = try container.decodeHexIfPresent(to: BigUInt.self, key: .maxFeePerGas) ?? 0
-        self.gasLimit = try container.decodeHexIfPresent(to: BigUInt.self, key: .gas) ?? container.decodeHexIfPresent(to: BigUInt.self, key: .gasLimit) ?? 0
+        self.value = try container.decodeHexIfPresent(BigUInt.self, forKey: .value) ?? 0
+        self.maxPriorityFeePerGas = try container.decodeHexIfPresent(BigUInt.self, forKey: .maxPriorityFeePerGas) ?? 0
+        self.maxFeePerGas = try container.decodeHexIfPresent(BigUInt.self, forKey: .maxFeePerGas) ?? 0
+        self.gasLimit = try container.decodeHexIfPresent(BigUInt.self, forKey: .gas) ?? container.decodeHexIfPresent(BigUInt.self, forKey: .gasLimit) ?? 0
 
-        self.data = try container.decodeHexIfPresent(to: Data.self, key: .input) ?? container.decodeHex(to: Data.self, key: .data)
-        self.v = try container.decodeHex(to: BigUInt.self, key: .v)
-        self.r = try container.decodeHex(to: BigUInt.self, key: .r)
-        self.s = try container.decodeHex(to: BigUInt.self, key: .s)
+        self.data = try container.decodeHexIfPresent(Data.self, forKey: .input) ?? container.decodeHex(Data.self, forKey: .data)
+        self.v = try container.decodeHex(BigUInt.self, forKey: .v)
+        self.r = try container.decodeHex(BigUInt.self, forKey: .r)
+        self.s = try container.decodeHex(BigUInt.self, forKey: .s)
     }
 
     private enum RlpKey: Int, CaseIterable {
