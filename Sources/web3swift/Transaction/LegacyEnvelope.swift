@@ -57,6 +57,31 @@ public struct LegacyEnvelope: AbstractEnvelope {
         toReturn += "s: " + String(self.s) + "\n"
         return toReturn
     }
+
+    public var parameters: EthereumParameters {
+        get {
+            return EthereumParameters(
+                type: type,
+                to: to,
+                nonce: nonce,
+                chainID: chainID,
+                value: value,
+                data: data,
+                gasLimit: gasLimit,
+                gasPrice: gasPrice
+            )
+        }
+        set(val) {
+            nonce = val.nonce ?? nonce
+            explicitChainID = val.chainID ?? explicitChainID
+            to = val.to ?? to
+            value = val.value ?? value
+            data = val.data ?? data
+            gasLimit = val.gasLimit ?? gasLimit
+            gasPrice = val.gasPrice ?? gasPrice
+        }
+    }
+
 }
 
 extension LegacyEnvelope {
@@ -161,20 +186,18 @@ extension LegacyEnvelope {
     }
 
     public init(to: EthereumAddress, nonce: BigUInt? = nil,
-                chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
                 v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,
-                options: TransactionOptions? = nil) {
+                parameters: EthereumParameters? = nil) {
         self.to = to
-        self.nonce = nonce ?? options?.resolveNonce(0) ?? 0
-        self.explicitChainID = chainID
-        self.value = value ?? options?.value ?? 0
-        self.data = data
+        self.nonce = nonce ?? parameters?.nonce ?? 0
+        self.explicitChainID = parameters?.chainID // Legacy can have a nil ChainID
+        self.value = parameters?.value ?? 0
+        self.data = parameters?.data ?? Data()
         self.v = v
         self.r = r
         self.s = s
-        // decode gas options, if present
-        self.gasPrice = options?.resolveGasPrice(0) ?? 0
-        self.gasLimit = options?.resolveGasLimit(0) ?? 0
+        self.gasPrice = parameters?.gasPrice ?? 0
+        self.gasLimit = parameters?.gasLimit ?? 0
     }
 
     // memberwise
@@ -203,16 +226,6 @@ extension LegacyEnvelope {
         if options.value != nil { self.value = options.value! }
         if options.to != nil { self.to = options.to! }
         // swiftlint:enable force_unwrapping
-    }
-
-    public func getOptions() -> TransactionOptions {
-        var options = TransactionOptions()
-        options.nonce = .manual(self.nonce)
-        options.gasPrice = .manual(self.gasPrice)
-        options.gasLimit = .manual(self.gasLimit)
-        options.value = self.nonce
-        options.to = self.to
-        return options
     }
 
     public func encode(for type: EncodeType = .transaction) -> Data? {

@@ -26,14 +26,14 @@ public struct EthereumTransaction: CustomStringConvertible {
 
     /// The chainId of the blockchain the transaction belongs to
     public var chainID: BigUInt? {
-        get { return envelope.chainID }
-        set(newID) { envelope.chainID = newID }
+        get { return envelope.parameters.chainID }
+        set(newID) { envelope.parameters.chainID = newID }
     }
 
     /// the chain-native value of the transaction in Wei
     public var value: BigUInt {
-        get { return envelope.value }
-        set(newValue) { envelope.value = newValue }
+        get { return envelope.parameters.value ?? 0 }
+        set(newValue) { envelope.parameters.value = newValue }
     }
 
     /// the EthereumAddress object holding the destination address for the transaction
@@ -44,8 +44,8 @@ public struct EthereumTransaction: CustomStringConvertible {
 
     /// the payload data for the transaction
     public var data: Data {
-        get { return envelope.data }
-        set(newValue) { envelope.data = newValue }
+        get { return envelope.parameters.data ?? Data() }
+        set(newValue) { envelope.parameters.data = newValue }
     }
 
     // transaction type specific parameters should be accessed with TransactionOptions via getOptions()
@@ -148,21 +148,13 @@ public struct EthereumTransaction: CustomStringConvertible {
         self.envelope.applyOptions(options)
     }
 
-    /// gets an options opbject representing the settable parameters of the transaction
-    /// - Returns: a TransactionOptions object with all relavant values set for the transaction type
-    public func getOptions() -> TransactionOptions {
-        return self.envelope.getOptions()
-    }
-
     /// Descriptionconverts transaction to the new selected type
     /// - Parameter to: TransactionType to select what transaction type to convert to
-    public mutating func migrate(to: TransactionType) {
-        if self.type == to { return }
-        let opts = self.envelope.getOptions()
+    public mutating func migrate(to type: TransactionType) {
+        if self.type == type { return }
 
-        let newEnvelope = EnvelopeFactory.createEnvelope(type: to, to: self.envelope.to, nonce: self.envelope.nonce,
-                                                         chainID: self.envelope.chainID, value: self.envelope.value,
-                                                         data: self.envelope.data, options: opts)
+        let newEnvelope = EnvelopeFactory.createEnvelope(type: type, to: self.envelope.to,
+                                                         nonce: self.envelope.nonce, parameters: self.envelope.parameters)
         self.envelope = newEnvelope
     }
 
@@ -251,9 +243,17 @@ extension EthereumTransaction {
     public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
                 chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
                 v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, options: TransactionOptions? = nil) {
-        self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce,
-                                                       chainID: chainID, value: value, data: data,
-                                                       v: v, r: r, s: s, options: options)
+
+        var params: EthereumParameters
+        // swiftlint:disable force_unwrapping
+        if options != nil { params = EthereumParameters(from: options!) } else { params = EthereumParameters() }
+        // swiftlint:enable force_unwrapping
+
+        params.chainID = chainID ?? params.chainID
+        params.value = value ?? params.value
+        params.data = data
+
+        self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, v: v, r: r, s: s, parameters: params)
     }
 
     /// basic intializer that accepts an already created transaction envelope
@@ -288,74 +288,66 @@ extension EthereumTransaction {
         return hash
     }
 
-    @available(*, deprecated, message: "Please access via TransactionOptions instead")
+    @available(*, deprecated, message: "Please access via EthereumParameters instead")
     public var gasLimit: BigUInt {
         get {
             switch self.type {
             case .legacy:
                 guard let env = self.envelope as? LegacyEnvelope else { preconditionFailure("Unable to downcast to LegacyEnvelope") }
-                return env.gasLimit
+                return env.parameters.gasLimit ?? 0
             case .eip2930:
                 guard let env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
-                return env.gasLimit
+                return env.parameters.gasLimit ?? 0
             case .eip1559:
                 guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
-                return env.gasLimit
-            default:
-                preconditionFailure("Unknown Envelope Type")
+                return env.parameters.gasLimit ?? 0
             }
         }
         set(value) {
             switch self.type {
             case .legacy:
                 guard var env = self.envelope as? LegacyEnvelope else { preconditionFailure("Unable to downcast to LegacyEnvelope") }
-                env.gasLimit = value
+                env.parameters.gasLimit = value
             case .eip2930:
                 guard var env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
-                env.gasLimit = value
+                env.parameters.gasLimit = value
             case .eip1559:
                 guard var env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
-                env.gasLimit = value
-            default:
-                preconditionFailure("Unknown Envelope Type")
+                env.parameters.gasLimit = value
             }
         }
     }
 
-    @available(*, deprecated, message: "Please access via TransactionOptions instead")
+    @available(*, deprecated, message: "Please access via EthereumParameters instead")
     public var gasPrice: BigUInt {
         get {
             switch self.type {
             case .legacy:
                 guard let env = self.envelope as? LegacyEnvelope else { preconditionFailure("Unable to downcast to LegacyEnvelope") }
-                return env.gasPrice
+                return env.parameters.gasPrice ?? 0
             case .eip2930:
                 guard let env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
-                return env.gasPrice
+                return env.parameters.gasPrice ?? 0
             case .eip1559:
                 preconditionFailure("EIP1559Envelope has no member gasPrice")
-            default:
-                preconditionFailure("Unknown Envelope Type")
             }
         }
         set(value) {
             switch self.type {
             case .legacy:
                 guard var env = self.envelope as? LegacyEnvelope else { preconditionFailure("Unable to downcast to LegacyEnvelope") }
-                env.gasPrice = value
+                env.parameters.gasPrice = value
             case .eip2930:
                 guard var env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
-                env.gasPrice = value
+                env.parameters.gasPrice = value
             case .eip1559:
                 preconditionFailure("EIP1559Envelope has no member gasPrice")
-            default:
-                preconditionFailure("Unknown Envelope Type")
             }
         }
     }
 
     // new gas parameters provided here as well for interface consistency
-    @available(*, deprecated, message: "Please access via TransactionOptions instead")
+    @available(*, deprecated, message: "Please access via EthereumParameters instead")
     public var maxPriorityFeePerGas: BigUInt {
         get {
             switch self.type {
@@ -365,9 +357,7 @@ extension EthereumTransaction {
                 preconditionFailure("EIP2930Envelope has no member maxPriorityFeePerGas")
             case .eip1559:
                 guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
-                return env.maxPriorityFeePerGas
-            default:
-                preconditionFailure("Unknown Envelope Type")
+                return env.parameters.maxPriorityFeePerGas ?? 0
             }
         }
         set(value) {
@@ -378,14 +368,12 @@ extension EthereumTransaction {
                 preconditionFailure("EIP2930Envelope has no member maxPriorityFeePerGas")
             case .eip1559:
                 guard var env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
-                env.maxPriorityFeePerGas = value
-            default:
-                preconditionFailure("Unknown Envelope Type")
+                env.parameters.maxPriorityFeePerGas = value
             }
         }
     }
 
-    @available(*, deprecated, message: "Please access via TransactionOptions instead")
+    @available(*, deprecated, message: "Please access via EthereumParameters instead")
     public var maxFeePerGas: BigUInt {
         get {
             switch self.type {
@@ -395,9 +383,7 @@ extension EthereumTransaction {
                 preconditionFailure("EIP2930Envelope has no member maxFeePerGas")
             case .eip1559:
                 guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
-                return env.maxFeePerGas
-            default:
-                preconditionFailure("Unknown Envelope Type")
+                return env.parameters.maxFeePerGas ?? 0
             }
         }
         set(value) {
@@ -408,14 +394,12 @@ extension EthereumTransaction {
                 preconditionFailure("EIP2930Envelope has no member maxFeePerGas")
             case .eip1559:
                 guard var env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
-                env.maxFeePerGas = value
-            default:
-                preconditionFailure("Unknown Envelope Type")
+                env.parameters.maxFeePerGas = value
             }
         }
     }
 
-    @available(*, deprecated, message: "Please access via TransactionOptions instead")
+    @available(*, deprecated, message: "Please access via EthereumParameters instead")
     public var accessList: [AccessListEntry] {
         get {
             switch self.type {
@@ -423,12 +407,10 @@ extension EthereumTransaction {
                 preconditionFailure("LegacyEnvelope has no member accessList")
             case .eip2930:
                 guard let env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
-                return env.accessList
+                return env.parameters.accessList ?? []
             case .eip1559:
                 guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
-                return env.accessList
-            default:
-                preconditionFailure("Unknown Envelope Type")
+                return env.parameters.accessList ?? []
             }
         }
         set(value) {
@@ -437,12 +419,10 @@ extension EthereumTransaction {
                 preconditionFailure("LegacyEnvelope has no member accessList")
             case .eip2930:
                 guard var env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
-                env.accessList = value
+                env.parameters.accessList = value
             case .eip1559:
                 guard var env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
-                env.accessList = value
-            default:
-                preconditionFailure("Unknown Envelope Type")
+                env.parameters.accessList = value
             }
         }
     }

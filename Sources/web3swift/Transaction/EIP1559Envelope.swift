@@ -12,12 +12,7 @@ public struct EIP1559Envelope: EIP2718Envelope {
 
     // common parameters for any transaction
     public var nonce: BigUInt = 0
-    public var chainID: BigUInt? {
-        get { return internalChainID }
-        // swiftlint:disable force_unwrapping
-        set(newID) { if newID != nil { internalChainID = newID! } }
-        // swiftlint:enable force_unwrapping
-    }
+    public var chainID: BigUInt
     public var to: EthereumAddress
     public var value: BigUInt
     public var data: Data
@@ -46,8 +41,6 @@ public struct EIP1559Envelope: EIP2718Envelope {
     public var maxFeePerGas: BigUInt
     public var accessList: [AccessListEntry] // from EIP-2930
 
-    private var internalChainID: BigUInt
-
     // for CustomStringConvertible
     public var description: String {
         var toReturn = ""
@@ -66,6 +59,35 @@ public struct EIP1559Envelope: EIP2718Envelope {
         toReturn += "s: " + String(self.s) + "\n"
         return toReturn
     }
+
+    public var parameters: EthereumParameters {
+        get {
+            return EthereumParameters(
+                type: type,
+                to: to,
+                nonce: nonce,
+                chainID: chainID,
+                value: value,
+                data: data,
+                gasLimit: gasLimit,
+                maxFeePerGas: maxFeePerGas,
+                maxPriorityFeePerGas: maxPriorityFeePerGas,
+                accessList: accessList
+            )
+        }
+        set(val) {
+            nonce = val.nonce ?? nonce
+            chainID = val.chainID ?? chainID
+            to = val.to ?? to
+            value = val.value ?? value
+            data = val.data ?? data
+            gasLimit = val.gasLimit ?? gasLimit
+            maxFeePerGas = val.maxFeePerGas ?? maxFeePerGas
+            maxPriorityFeePerGas = val.maxPriorityFeePerGas ?? maxPriorityFeePerGas
+            accessList = val.accessList ?? accessList
+        }
+    }
+
 }
 
 extension EIP1559Envelope {
@@ -94,7 +116,7 @@ extension EIP1559Envelope {
         guard container.contains(.v), container.contains(.r), container.contains(.s) else { return nil }
 
         // everything we need is present, so we should only have to throw from here
-        self.internalChainID = try container.decodeHexIfPresent(BigUInt.self, forKey: .chainId) ?? 0
+        self.chainID = try container.decodeHexIfPresent(BigUInt.self, forKey: .chainId) ?? 0
         self.nonce = try container.decodeHex(BigUInt.self, forKey: .nonce)
 
         let list = try? container.decode([AccessListEntry].self, forKey: .accessList)
@@ -160,7 +182,7 @@ extension EIP1559Envelope {
         guard let sData = rlpItem[RlpKey.sig_s.rawValue]!.data else { return nil }
         // swiftlint:enable force_unwrapping
 
-        self.internalChainID = BigUInt(chainData)
+        self.chainID = BigUInt(chainData)
         self.nonce = BigUInt(nonceData)
         self.maxPriorityFeePerGas = BigUInt(maxPriorityData)
         self.maxFeePerGas = BigUInt(maxFeeData)
@@ -211,23 +233,20 @@ extension EIP1559Envelope {
     }
 
     public init(to: EthereumAddress, nonce: BigUInt? = nil,
-                chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
                 v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,
-                options: TransactionOptions? = nil) {
+                parameters: EthereumParameters? = nil) {
         self.to = to
-        self.nonce = nonce ?? options?.resolveNonce(0) ?? 0
-        self.internalChainID = chainID ?? 0
-        self.value = value ?? options?.value ?? 0
-        self.data = data
+        self.nonce = nonce ?? parameters?.nonce ?? 0
+        self.chainID = parameters?.chainID ?? 0
+        self.value = parameters?.value ?? 0
+        self.data =  parameters?.data ?? Data()
         self.v = v
         self.r = r
         self.s = s
-        // decode gas options, if present
-        self.maxPriorityFeePerGas = options?.resolveMaxPriorityFeePerGas(0) ?? 0
-        self.maxFeePerGas = options?.resolveMaxFeePerGas(0) ?? 0
-        self.gasLimit = options?.resolveGasLimit(0) ?? 0
-        // get the access list, if present
-        self.accessList = options?.accessList ?? []
+        self.maxPriorityFeePerGas = parameters?.maxPriorityFeePerGas ?? 0
+        self.maxFeePerGas = parameters?.maxFeePerGas ?? 0
+        self.gasLimit = parameters?.gasLimit ?? 0
+        self.accessList = parameters?.accessList ?? []
     }
 
     // memberwise
@@ -238,7 +257,7 @@ extension EIP1559Envelope {
                 v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
         self.to = to
         self.nonce = nonce
-        self.internalChainID = chainID
+        self.chainID = chainID
         self.value = value
         self.data = data
         self.maxPriorityFeePerGas = maxPriorityFeePerGas
@@ -261,25 +280,13 @@ extension EIP1559Envelope {
         self.accessList = options.accessList ?? self.accessList
     }
 
-    public func getOptions() -> TransactionOptions {
-        var options = TransactionOptions()
-        options.nonce = .manual(self.nonce)
-        options.maxPriorityFeePerGas = .manual(self.maxPriorityFeePerGas)
-        options.maxFeePerGas = .manual(self.maxFeePerGas)
-        options.gasLimit = .manual(self.gasLimit)
-        options.value = self.nonce
-        options.to = self.to
-        options.accessList = self.accessList
-        return options
-    }
-
     public func encode(for type: EncodeType = .transaction) -> Data? {
         let fields: [AnyObject]
         let list = accessList.map { $0.encodeAsList() as AnyObject }
 
         switch type {
-        case .transaction: fields = [internalChainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list, v, r, s] as [AnyObject]
-        case .signature: fields = [internalChainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list] as [AnyObject]
+        case .transaction: fields = [chainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list, v, r, s] as [AnyObject]
+        case .signature: fields = [chainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list] as [AnyObject]
         }
         guard var result = RLP.encode(fields) else { return nil }
         result.insert(UInt8(self.type.rawValue), at: 0)
@@ -297,7 +304,7 @@ extension EIP1559Envelope {
         var params = TransactionParameters(from: from?.address.lowercased(), to: toString)
         let typeEncoding = String(UInt8(self.type.rawValue), radix: 16).addHexPrefix()
         params.type = typeEncoding
-        let chainEncoding = self.internalChainID.abiEncode(bits: 256)
+        let chainEncoding = self.chainID.abiEncode(bits: 256)
         params.chainID = chainEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
         var accessEncoding: [TransactionParameters.AccessListEntry] = []
         for listEntry in self.accessList {

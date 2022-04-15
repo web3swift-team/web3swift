@@ -21,7 +21,7 @@ import BigInt
 */
 
 /// Enumeration for supported transaction types
-public enum TransactionType: UInt, CustomStringConvertible {
+public enum TransactionType: UInt, CustomStringConvertible, CaseIterable {
 
     /// For untyped and type 0 transactions EIP155 and older
     case legacy
@@ -33,16 +33,15 @@ public enum TransactionType: UInt, CustomStringConvertible {
     case eip1559
 
     /// range-checking value, not a valid type, will never be returned as a type
-    case total // always keep immediately after last valid type
+    // case total // always keep immediately after last valid type
     // should there be a need to handle an unknown type, place it after total
 
     public var description: String {
         switch self {
-        case .legacy: return "Legacy" // legacy is a pseudo-type, no EIP-2718 transaction will ever be encoded with type = 0
-                                      // though nodes do appear to return a type of 0 for legacy transactions in their JSON
+        case .legacy: return "Legacy"   // legacy is a pseudo-type, no EIP-2718 transaction will ever be encoded with type = 0
+        //                                 though nodes do appear to return a type of 0 for legacy transactions in their JSON
         case .eip2930: return "EIP-2930"
         case .eip1559: return "EIP-1559"
-        default: return "Unknown EIP-2718 Type" // anything else is an invalid type
         }
     }
 }
@@ -70,18 +69,14 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     /// the nonce value for the transaction
     var nonce: BigUInt { get set }
 
-    /// Blockchain `ChainID` that this transaction is or will be, signed for.
-    /// Remains optional to support legacy transactions.
-    var chainID: BigUInt? { get set }
-
     /// On chain address that this transaction is being sent to
     var to: EthereumAddress { get set }
 
-    /// The native value of the transaction in Wei
-    var value: BigUInt { get set }
+    // /// The native value of the transaction in Wei
+    // var value: BigUInt { get set }
 
-    /// Any encoded data accompanying the transaction
-    var data: Data { get set }
+    // /// Any encoded data accompanying the transaction
+    // var data: Data { get set }
 
     // Signature data should not be set directly
     /// signature V compoonent
@@ -92,6 +87,11 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
 
     /// signature S compoonent
     var s: BigUInt { get set }
+
+    /// Transaction Parameters object
+    /// used to provide external access to the otherwise
+    /// protected parameters of the object
+    var parameters: EthereumParameters { get set }
 
     // required initializers
     // for Decodable support
@@ -117,24 +117,16 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     /// - Parameters:
     ///   - to: EthereumAddress of destination
     ///   - nonce: nonce for the transaction
-    ///   - chainID: chainId of the network the transaction belongs to
-    ///   - value: Native value in Wei of the transaction
-    ///   - data: Payload data for the transaction
     ///   - v: Signature V component
     ///   - r: Signature R component
     ///   - s: Signature S component
-    ///   - options: TransactionOptions struct containing any other required parameters
-    init(to: EthereumAddress, nonce: BigUInt?, chainID: BigUInt?, value: BigUInt?,
-         data: Data, v: BigUInt, r: BigUInt, s: BigUInt, options: TransactionOptions?)
+    ///   - parameters: EthereumParameters struct containing any other required parameters
+    init(to: EthereumAddress, nonce: BigUInt?, v: BigUInt, r: BigUInt, s: BigUInt, parameters: EthereumParameters?)
 
     /// Applies the passed options to the transaction envelope
     ///   - Parameters:
     ///     - {default}: TransactionOptions struct
     mutating func applyOptions(_ options: TransactionOptions)
-
-    ///  Create a TransactionOptions object representing this transaction
-    /// - Returns: A TransactionOptions object with all parameters from the transaction set
-    func getOptions() -> TransactionOptions
 
     /// Transaction encoder for transmission or signing
     ///  - Parameters:

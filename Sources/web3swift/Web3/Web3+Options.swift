@@ -30,6 +30,8 @@ public struct TransactionOptions {
     /// Can be nil if one reads the information from the blockchain.
     public var from: EthereumAddress?
 
+    public var chainID: BigUInt?
+
     public enum GasLimitPolicy {
         case automatic
         case manual(BigUInt)
@@ -160,6 +162,7 @@ public struct TransactionOptions {
         opts.type = mergeIfNotNil(first: self.type, second: other.type)
         opts.to = mergeIfNotNil(first: self.to, second: other.to)
         opts.from = mergeIfNotNil(first: self.from, second: other.from)
+        opts.chainID = mergeIfNotNil(first: self.chainID, second: other.chainID)
         opts.gasLimit = mergeIfNotNil(first: self.gasLimit, second: other.gasLimit)
         opts.gasPrice = mergeIfNotNil(first: self.gasPrice, second: other.gasPrice)
         opts.maxFeePerGas = mergeIfNotNil(first: self.maxFeePerGas, second: other.maxFeePerGas)
@@ -196,6 +199,7 @@ extension TransactionOptions: Decodable {
         case type
         case to
         case from
+        case chainId
         case gasPrice
         case gas
         case maxFeePerGas
@@ -211,11 +215,13 @@ extension TransactionOptions: Decodable {
 
         // type is guaranteed to be set after this
         if let typeUInt = try? container.decodeHex(UInt.self, forKey: .type) {
-            if typeUInt < TransactionType.total.rawValue {
+            if typeUInt < TransactionType.allCases.count {
                 guard let type = TransactionType(rawValue: typeUInt) else { throw Web3Error.dataError }
                 self.type = type
             } else { throw Web3Error.dataError }
         } else { self.type = .legacy } // legacy streams may not have type set
+
+        self.chainID = try container.decodeHexIfPresent(BigUInt.self, forKey: .chainId)
 
         let toString = try? container.decode(String.self, forKey: .to)
         switch toString {

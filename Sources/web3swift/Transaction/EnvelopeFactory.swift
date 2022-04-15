@@ -21,7 +21,7 @@ public struct EnvelopeFactory {
         let envelopeType: TransactionType
 
         if typeUInt < 0x80 {
-            if typeUInt < TransactionType.total.rawValue {
+            if typeUInt < TransactionType.allCases.count {
                 guard let rawType = TransactionType(rawValue: typeUInt) else { return nil }
                 envelopeType = rawType
             } else { return nil }
@@ -33,7 +33,6 @@ public struct EnvelopeFactory {
         case .legacy: return LegacyEnvelope(rawValue: rawValue)
         case .eip2930: return EIP2930Envelope(rawValue: rawValue)
         case .eip1559: return EIP1559Envelope(rawValue: rawValue)
-        default: return nil
         }
     }
 
@@ -52,7 +51,7 @@ public struct EnvelopeFactory {
         let envelopeType: TransactionType
         if container.contains(.type) {
             let typeUInt = try container.decodeHex(UInt.self, forKey: .type)
-            if typeUInt < TransactionType.total.rawValue {
+            if typeUInt < TransactionType.allCases.count {
                 guard let type = TransactionType(rawValue: typeUInt) else { throw Web3Error.dataError } // conversion error
                 envelopeType = type
             } else { throw Web3Error.dataError } // illegal value
@@ -62,7 +61,6 @@ public struct EnvelopeFactory {
         case .legacy: return try LegacyEnvelope(from: decoder)
         case .eip2930: return try EIP2930Envelope(from: decoder)
         case .eip1559: return try EIP1559Envelope(from: decoder)
-        default: return nil
         }
     }
 
@@ -71,29 +69,19 @@ public struct EnvelopeFactory {
     ///   - type: TransactionType enum, dictates what kind of envelope to create defaults to .legacy if nil
     ///   - to: EthereumAddress of the destination for this transaction (required)
     ///   - nonce: nonce for this transaction (default 0)
-    ///   - chainID: chainId the transaction belongs to (default: type specific)
-    ///   - value: Native value for the transaction (default 0)
-    ///   - data: Payload data for the transaction (required)
     ///   - v: signature v parameter (default 1) - will get set properly once signed
     ///   - r: signature r parameter (default 0) - will get set properly once signed
     ///   - s: signature s parameter (default 0) - will get set properly once signed
-    ///   - options: TransactionObject containing additional parametrs for the transaction like gas
+    ///   - options: EthereumParameters containing additional parametrs for the transaction like gas
     /// - Returns: a new envelope of type dictated by 'type'
     static func createEnvelope(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
-                               chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
-                               v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, options: TransactionOptions? = nil) -> AbstractEnvelope {
-        let envelopeType: TransactionType = type ?? options?.type ?? .legacy
+                               v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: EthereumParameters? = nil) -> AbstractEnvelope {
+        let envelopeType: TransactionType = type ?? parameters?.type ?? .legacy
 
         switch envelopeType {
-        case .eip2930: return EIP2930Envelope(to: to, nonce: nonce,
-                                              chainID: chainID, value: value, data: data,
-                                              v: v, r: r, s: s, options: options)
-        case .eip1559: return EIP1559Envelope(to: to, nonce: nonce,
-                                              chainID: chainID, value: value, data: data,
-                                              v: v, r: r, s: s, options: options)
-        default: return LegacyEnvelope(to: to, nonce: nonce,
-                                       chainID: chainID, value: value, data: data,
-                                       v: v, r: r, s: s, options: options)
+        case .eip2930: return EIP2930Envelope(to: to, nonce: nonce, v: v, r: r, s: s, parameters: parameters)
+        case .eip1559: return EIP1559Envelope(to: to, nonce: nonce, v: v, r: r, s: s, parameters: parameters)
+        default: return LegacyEnvelope(to: to, nonce: nonce, v: v, r: r, s: s, parameters: parameters)
         }
     }
 }
