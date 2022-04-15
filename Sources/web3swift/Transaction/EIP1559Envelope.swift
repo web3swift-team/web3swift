@@ -41,12 +41,6 @@ public struct EIP1559Envelope: EIP2718Envelope {
     public var maxFeePerGas: BigUInt
     public var accessList: [AccessListEntry] // from EIP-2930
 
-    /// EIP-1159 trnsactions do not have a gasPrice parameter
-    /// However, it appears that some nodes report a gasPrice, even for EIP-1159 transactions
-    /// thus for a temporary workaround we capture and store gasPrice if initialized from a JSON transaction
-    /// decided form a node. This is currently needed for Oracle to work
-    private var gasPrice: BigUInt = 0
-
     // for CustomStringConvertible
     public var description: String {
         var toReturn = ""
@@ -76,9 +70,6 @@ public struct EIP1559Envelope: EIP2718Envelope {
                 value: value,
                 data: data,
                 gasLimit: gasLimit,
-                // MARK: workaround for gasPrice coming from nodes for EIP-1159 - this allows Oracle to work for now
-                gasPrice: gasPrice,
-
                 maxFeePerGas: maxFeePerGas,
                 maxPriorityFeePerGas: maxPriorityFeePerGas,
                 accessList: accessList
@@ -94,8 +85,6 @@ public struct EIP1559Envelope: EIP2718Envelope {
             maxFeePerGas = val.maxFeePerGas ?? maxFeePerGas
             maxPriorityFeePerGas = val.maxPriorityFeePerGas ?? maxPriorityFeePerGas
             accessList = val.accessList ?? accessList
-            // MARK: workaround for gasPrice coming from nodes for EIP-1159 - this allows Oracle to work for now
-            gasPrice = val.gasPrice ?? gasPrice
         }
     }
 
@@ -117,8 +106,6 @@ extension EIP1559Envelope {
         case v
         case r
         case s
-        // MARK: workaround for gasPrice coming from nodes for EIP-1159 - this allows Oracle to work for now
-        case gasPrice
     }
 
     public init?(from decoder: Decoder) throws {
@@ -146,9 +133,6 @@ extension EIP1559Envelope {
             // swiftlint:enable force_unwrapping
             self.to = ethAddr
         }
-
-        // MARK: workaround for gasPrice coming from nodes for EIP-1159 - this allows Oracle to work for now
-        self.gasPrice = try container.decodeHexIfPresent(BigUInt.self, forKey: .gasPrice) ?? 5000000000
 
         self.value = try container.decodeHexIfPresent(BigUInt.self, forKey: .value) ?? 0
         self.maxPriorityFeePerGas = try container.decodeHexIfPresent(BigUInt.self, forKey: .maxPriorityFeePerGas) ?? 0
@@ -212,7 +196,7 @@ extension EIP1559Envelope {
 
         // swiftlint:disable force_unwrapping
         switch rlpItem[RlpKey.destination.rawValue]!.content {
-            // swiftlint:enable force_unwrapping
+        // swiftlint:enable force_unwrapping
         case .noItem:
             self.to = EthereumAddress.contractDeploymentAddress()
         case .data(let addressData):
