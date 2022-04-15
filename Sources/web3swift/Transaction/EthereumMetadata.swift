@@ -29,7 +29,7 @@ public struct EthereumMetadata {
 
     /// gasPrice value returned by the node
     /// note this is a duplicate value for legacy and EIP-2930 transaction types
-    /// but is included here since EIP-1159 does not contain a `gasPrice`, but 
+    /// but is included here since EIP-1559 does not contain a `gasPrice`, but 
     /// nodes still report the value.
     var gasPrice: BigUInt?
 }
