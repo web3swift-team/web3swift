@@ -128,17 +128,15 @@ public class WriteTransaction: ReadTransaction {
                     throw Web3Error.processingError(desc: "Failed to fetch gas price")
                 }
 
-                guard let estimate = mergedOptions.resolveGasLimit(gasEstimate) else {
-                    throw Web3Error.processingError(desc: "Failed to calculate gas estimate that satisfied options")
-                }
+                let estimate = mergedOptions.resolveGasLimit(gasEstimate)
+                let finalGasPrice = mergedOptions.resolveGasPrice(gasPrice)
 
-                guard let finalGasPrice = mergedOptions.resolveGasPrice(gasPrice) else {
-                    throw Web3Error.processingError(desc: "Missing parameter of gas price for transaction")
-                }
+                var finalOptions = TransactionOptions()
+                finalOptions.nonce = .manual(nonce)
+                finalOptions.gasLimit = .manual(estimate)
+                finalOptions.gasPrice = .manual(finalGasPrice)
 
-                assembledTransaction.nonce = nonce
-                assembledTransaction.gasLimit = estimate
-                assembledTransaction.gasPrice = finalGasPrice
+                assembledTransaction.applyOptions(finalOptions)
 
                 forAssemblyPipeline = (assembledTransaction, self.contract, mergedOptions)
 

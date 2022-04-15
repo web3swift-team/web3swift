@@ -1,8 +1,8 @@
-//  web3swift
-//
+//  Package: web3swift
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
+//  Additions to support new transaction types by Mark Loit March 2022
 
 import Foundation
 import BigInt
@@ -122,6 +122,7 @@ public struct JSONRPCresponse: Decodable{
             self.init(id: id, jsonrpc: jsonrpc, result: nil, error: errorMessage)
             return
         }
+        // TODO: refactor me
         var result: Any? = nil
         if let rawValue = try? container.decodeIfPresent(String.self, forKey: .result) {
             result = rawValue
@@ -243,10 +244,21 @@ public struct JSONRPCresponseBatch: Decodable {
 
 /// Transaction parameters JSON structure for interaction with Ethereum node.
 public struct TransactionParameters: Codable {
+    /// accessList parameter JSON structure
+    public struct AccessListEntry: Codable {
+        public var address: String
+        public var storageKeys: [String]
+    }
+
+    public var type: String?  // must be set for new EIP-2718 transaction types
+    public var chainID: String?
     public var data: String?
     public var from: String?
     public var gas: String?
-    public var gasPrice: String?
+    public var gasPrice: String? // Legacy & EIP-2930
+    public var maxFeePerGas: String? // EIP-1559
+    public var maxPriorityFeePerGas: String? // EIP-1559
+    public var accessList: [AccessListEntry]? // EIP-1559 & EIP-2930
     public var to: String?
     public var value: String? = "0x0"
 

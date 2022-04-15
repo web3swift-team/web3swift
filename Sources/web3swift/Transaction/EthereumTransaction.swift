@@ -1,357 +1,445 @@
-//  web3swift
-//
+//  Package: web3swift
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
+//  Refactor to support EIP-2718 enveloping by Mark Loit 2022
 
 import Foundation
 import BigInt
 
+/// Abstraction object for a transaction pulled from, or destined for the blockchain
+/// provides all the necessary functionality to encode/decode sign/verify transactions
 public struct EthereumTransaction: CustomStringConvertible {
-    // FIXME: Add Type value https://blog.mycrypto.com/new-transaction-types-on-ethereum
-    public var nonce: BigUInt
-    public var gasPrice: BigUInt = 0
-    public var gasLimit: BigUInt = 0
-    
-    // MARK: - EIP-1559
-    /// Value of the tip to the miner for transaction processing.
-    ///
-    /// Full amount of this variable goes to a miner.
-    public var maxPriorityFeePerGas: BigUInt = 0
+    /// internal acccess only. The transaction envelope object itself that contains all the transaction data
+    /// and type specific implementation
+    internal var envelope: AbstractEnvelope
 
-    /// Value of the fee for one gas unit
-    ///
-    /// This value should be greather than sum of:
-    /// - `Block.nextBlockBaseFeePerGas` - baseFee which will burnt during the transaction processing
-    /// - `self.maxPriorityFeePerGas` - explicit amount of a tip to the miner of the given block which will include this transaction
-    ///
-    /// If amount of this will be **greather** than sum of `Block.baseFeePerGas` and `maxPriorityFeePerGas`
-    /// all exceed funds will be returned to the sender.
-    ///
-    /// If amount of this will be **lower** than sum of `Block.baseFeePerGas` and `maxPriorityFeePerGas`
-    /// miner will recieve amount of the follow equation: `maxFeePerGas - Block.baseFeePerGas` if any, 
-    /// where Block is a block to which transaction will be included.
-    public var maxFeePerGas: BigUInt = 0
-    
-    // The destination address of the message, left undefined for a contract-creation transaction.
-    public var to: EthereumAddress
-    // (optional) The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
-    // TODO - split EthereumTransaction to two classes: with optional and required value property, depends on type of transaction
-    public var value: BigUInt?
-    public var data: Data
-    public var v: BigUInt = 1
-    public var r: BigUInt = 0
-    public var s: BigUInt = 0
-    var chainID: BigUInt? = nil
-
-    public var inferedChainID: BigUInt? {
-        get {
-            if (self.r == BigUInt(0) && self.s == BigUInt(0)) {
-                return self.v
-            } else if (self.v == BigUInt(27) || self.v == BigUInt(28) || self.v < BigUInt(35)) {
-                return nil
-            } else {
-                return ((self.v - BigUInt(1)) / BigUInt(2)) - BigUInt(17)
-            }
-        }
-    }
-    
-    public var intrinsicChainID: BigUInt? { chainID }
-    
-    public mutating func UNSAFE_setChainID(_ chainID: BigUInt?) {
-        self.chainID = chainID
+    // convenience accessors to the common envelope fields
+    // everything else should come from getOpts/setOpts
+    /// The type of the transacton being represented, see TransactionType enum
+    public var type: TransactionType { return envelope.type }
+    /// the unique nonce value for the transaction
+    public var nonce: BigUInt {
+        get { return envelope.nonce }
+        set(nonce) { envelope.nonce = nonce }
     }
 
-    public var hash: Data? {
-        var encoded: Data
-        let inferedChainID = self.inferedChainID
-        if let inferedChainID = inferedChainID {
-            guard let enc = self.self.encode(forSignature: false, chainID: inferedChainID) else { return nil }
-            encoded = enc
-        } else {
-            guard let enc = self.self.encode(forSignature: false, chainID: chainID) else { return nil }
-            encoded = enc
-        }
-        let hash = encoded.sha3(.keccak256)
-        return hash
+    /// The chainId of the blockchain the transaction belongs to
+    public var chainID: BigUInt? {
+        get { return envelope.parameters.chainID }
+        set(newID) { envelope.parameters.chainID = newID }
     }
-    
+
+    /// the chain-native value of the transaction in Wei
+    public var value: BigUInt {
+        get { return envelope.parameters.value ?? 0 }
+        set(newValue) { envelope.parameters.value = newValue }
+    }
+
+    /// the EthereumAddress object holding the destination address for the transaction
+    public var to: EthereumAddress {
+        get { return envelope.to }
+        set(newValue) { envelope.to = newValue }
+    }
+
+    /// the payload data for the transaction
+    public var data: Data {
+        get { return envelope.parameters.data ?? Data() }
+        set(newValue) { envelope.parameters.data = newValue }
+    }
+
+    // transaction type specific parameters should be accessed with EthereumParameters
+    public var parameters: EthereumParameters {
+        get { return envelope.parameters }
+        set(val) { envelope.parameters = val }
+    }
+
+    // signature data is read-only
+    /// signature v component (read only)
+    public var v: BigUInt { return envelope.v }
+    /// signature r component (read only)
+    public var r: BigUInt { return envelope.r }
+    /// signature s component (read only)
+    public var s: BigUInt { return envelope.s }
+
+    private init() { preconditionFailure("Memberwise not supported") } // disable the memberwise initializer
+
+    /// required by CustomString convertable
+    /// returns a string description for the transaction and its data
     public var description: String {
         var toReturn = ""
         toReturn += "Transaction" + "\n"
-        toReturn += "Nonce: " + String(self.nonce) + "\n"
-        toReturn += "Gas price: " + String(self.gasPrice) + "\n"
-        toReturn += "Gas limit: " + String(describing: self.gasLimit) + "\n"
-        toReturn += "Max priority fee per gas: " + String(describing: self.maxPriorityFeePerGas)
-        toReturn += "Max fee per gas: " + String(describing: maxFeePerGas)
-        toReturn += "To: " + self.to.address + "\n"
-        toReturn += "Value: " + String(self.value ?? "nil") + "\n"
-        toReturn += "Data: " + self.data.toHexString().addHexPrefix().lowercased() + "\n"
-        toReturn += "v: " + String(self.v) + "\n"
-        toReturn += "r: " + String(self.r) + "\n"
-        toReturn += "s: " + String(self.s) + "\n"
-        toReturn += "Intrinsic chainID: " + String(describing:self.chainID) + "\n"
-        toReturn += "Infered chainID: " + String(describing:self.inferedChainID) + "\n"
+        toReturn += String(describing: self.envelope)
         toReturn += "sender: " + String(describing: self.sender?.address)  + "\n"
         toReturn += "hash: " + String(describing: self.hash?.toHexString().addHexPrefix()) + "\n"
         return toReturn
     }
 
+    /// the address of the sender of the transaction recovered from the signature
     public var sender: EthereumAddress? {
         guard let publicKey = self.recoverPublicKey() else { return nil }
         return Web3.Utils.publicToAddress(publicKey)
     }
 
-    public func recoverPublicKey() -> Data? {
-        // FIXME: AND not OR condition
-        guard r != 0, s != 0 else { return nil }
-        // if (self.r == 0 && self.s == 0) {
-        //     return nil
-        // }
-        var normalizedV: BigUInt = 27
-        let inferedChainID = self.inferedChainID
-        var d: BigUInt = 0
-
-        if self.v >= 35 && self.v <= 38 {
-            d = 35
-        } else if self.v >= 31 && self.v <= 34 {
-            d = 31
-        } else if self.v >= 27 && self.v <= 30 {
-            d = 27
-        }
-        if let testID = self.chainID, testID != BigUInt(0) && self.v >= (d + testID + testID) {
-            normalizedV = self.v - d - testID - testID
-        } else if let testID = inferedChainID, self.v >= (d + testID + testID) {
-            normalizedV = self.v - d - testID - testID
-        } else {
-            if(d > v) { d = 0 }
-            normalizedV = self.v - d
-        }
-        guard let vData = normalizedV.serialize().setLengthLeft(1) else {return nil}
-        guard let rData = r.serialize().setLengthLeft(32) else {return nil}
-        guard let sData = s.serialize().setLengthLeft(32) else {return nil}
-        guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else {return nil}
-        var hash: Data
-        if inferedChainID != nil {
-            guard let h = self.hashForSignature(chainID: inferedChainID) else {return nil}
-            hash = h
-        } else {
-            guard let h = self.hashForSignature(chainID: self.chainID) else {return nil}
-            hash = h
-        }
-        guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
-        return publicKey
-    }
-
-    public var txhash: String? {
-        guard sender != nil else { return nil }
-        guard let hash = hash else { return nil }
-        let txid = hash.toHexString().addHexPrefix().lowercased()
-        return txid
-    }
-    
-    public var txid: String? { txhash }
-    
-    public func encode(forSignature: Bool = false, chainID: BigUInt? = nil) -> Data? {
-        if forSignature {
-            if chainID != nil  {
-                let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value!, self.data, chainID!, BigUInt(0), BigUInt(0)] as [AnyObject]
-                return RLP.encode(fields)
-            } else if self.chainID != nil  {
-                let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value!, self.data, self.chainID!, BigUInt(0), BigUInt(0)] as [AnyObject]
-                return RLP.encode(fields)
-            } else {
-                let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value!, self.data] as [AnyObject]
-                return RLP.encode(fields)
-            }
-        } else {
-            let fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value!, self.data, self.v, self.r, self.s] as [AnyObject]
-            return RLP.encode(fields)
-        }
-    }
-
-    public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? {
-        var toString: String? = nil
-        switch self.to.type {
-        case .normal:
-            toString = self.to.address.lowercased()
-        case .contractDeployment:
-            break
-        }
-        var params = TransactionParameters(from: from?.address.lowercased(),
-                                           to: toString)
-        let gasEncoding = self.gasLimit.abiEncode(bits: 256)
-        params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let gasPriceEncoding = self.gasPrice.abiEncode(bits: 256)
-        params.gasPrice = gasPriceEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let valueEncoding = self.value?.abiEncode(bits: 256)
-        params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        if (self.data != Data()) {
-            params.data = self.data.toHexString().addHexPrefix()
-        } else {
-            params.data = "0x"
-        }
-        return params
-    }
-
-    public func hashForSignature(chainID: BigUInt? = nil) -> Data? {
-        guard let encoded = self.encode(forSignature: true, chainID: chainID) else {return nil}
+    /// the transaction hash
+    public var hash: Data? {
+        guard let encoded: Data = self.envelope.encode(for: .transaction) else { return nil }
         let hash = encoded.sha3(.keccak256)
         return hash
     }
 
-    public static func fromRaw(_ raw: Data) -> EthereumTransaction? {
-        guard let totalItem = RLP.decode(raw) else {return nil}
-        guard let rlpItem = totalItem[0] else {return nil}
-        switch rlpItem.count {
-        case 9?:
-            guard let nonceData = rlpItem[0]!.data else {return nil}
-            let nonce = BigUInt(nonceData)
-            guard let gasPriceData = rlpItem[1]!.data else {return nil}
-            let gasPrice = BigUInt(gasPriceData)
-            guard let gasLimitData = rlpItem[2]!.data else {return nil}
-            let gasLimit = BigUInt(gasLimitData)
-            var to: EthereumAddress
-            switch rlpItem[3]!.content {
-            case .noItem:
-                to = EthereumAddress.contractDeploymentAddress()
-            case .data(let addressData):
-                if addressData.count == 0 {
-                    to = EthereumAddress.contractDeploymentAddress()
-                } else if addressData.count == 20 {
-                    guard let addr = EthereumAddress(addressData) else {return nil}
-                    to = addr
-                } else {
-                    return nil
-                }
-            case .list(_, _, _):
-                return nil
-            }
-            guard let valueData = rlpItem[4]!.data else {return nil}
-            let value = BigUInt(valueData)
-            guard let transactionData = rlpItem[5]!.data else {return nil}
-            guard let vData = rlpItem[6]!.data else {return nil}
-            let v = BigUInt(vData)
-            guard let rData = rlpItem[7]!.data else {return nil}
-            let r = BigUInt(rData)
-            guard let sData = rlpItem[8]!.data else {return nil}
-            let s = BigUInt(sData)
-            return EthereumTransaction.init(nonce: nonce, gasPrice: gasPrice, gasLimit: gasLimit, to: to, value: value, data: transactionData, v: v, r: r, s: s)
-        case 6?:
-            return nil
-        default:
-            return nil
-        }
+    /// - Returns: a hash of the transaction suitable for signing
+    public func hashForSignature() -> Data? {
+        guard let encoded = self.envelope.encode(for: .signature) else { return nil }
+        let hash = encoded.sha3(.keccak256)
+        return hash
     }
 
+    /// - Returns: the public key decoded from the signature data
+    public func recoverPublicKey() -> Data? {
+        guard let sigData = envelope.getUnmarshalledSignatureData() else { return nil }
+        guard let vData = BigUInt(sigData.v).serialize().setLengthLeft(1) else { return nil }
+        let rData = sigData.r
+        let sData = sigData.s
+
+        guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else { return nil }
+        guard let hash = hashForSignature() else { return nil }
+
+        guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else { return nil }
+        return publicKey
+    }
+
+    /// Signs the transaction
+    /// - Parameters:
+    ///   - privateKey: the private key to use for signing
+    ///   - useExtraEntropy: boolean whether to use extra entropy when signing (default false)
+    public mutating func sign(privateKey: Data, useExtraEntropy: Bool = false) throws {
+        for _ in 0..<1024 {
+            let result = self.attemptSignature(privateKey: privateKey, useExtraEntropy: useExtraEntropy)
+            if result { return }
+        }
+        throw AbstractKeystoreError.invalidAccountError
+    }
+
+    // actual signing algorithm implementation
+    private mutating func attemptSignature(privateKey: Data, useExtraEntropy: Bool = false) -> Bool {
+        guard let hash = self.hashForSignature() else { return false }
+        let signature = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
+        guard let serializedSignature = signature.serializedSignature else { return false }
+        guard let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: serializedSignature) else { return false }
+        guard let originalPublicKey = SECP256K1.privateToPublic(privateKey: privateKey) else { return false }
+        self.envelope.setUnmarshalledSignatureData(unmarshalledSignature)
+        let recoveredPublicKey = self.recoverPublicKey()
+        if !(originalPublicKey.constantTimeComparisonTo(recoveredPublicKey)) { return false }
+        return true
+    }
+
+    /// clears the signature data
+    public mutating func unsign() {
+        self.envelope.clearSignatureData()
+    }
+
+    /// Apples the provided parameters/options in to the object, if set replacing what is currently set
+    /// - Parameter options: a TransactionOptions object containing parameters to be appled to the transaction
+    /// if options specifies a type, and it is different from the current type the transaction will be migrated
+    /// to the new type. migrating will invalidate any signature data
+    public mutating func applyOptions(_ options: TransactionOptions) {
+        if options.type != nil && self.type != options.type {
+            // swiftlint:disable force_unwrapping
+            self.migrate(to: options.type!)
+            // swiftlint:enable force_unwrapping
+        }
+        self.envelope.applyOptions(options)
+    }
+
+    /// Descriptionconverts transaction to the new selected type
+    /// - Parameter to: TransactionType to select what transaction type to convert to
+    public mutating func migrate(to type: TransactionType) {
+        if self.type == type { return }
+
+        let newEnvelope = EnvelopeFactory.createEnvelope(type: type, to: self.envelope.to,
+                                                         nonce: self.envelope.nonce, parameters: self.envelope.parameters)
+        self.envelope = newEnvelope
+    }
+
+    /// Create a new EthereumTransaction from a raw stream of bytes from the blockchain
+    public init?(rawValue: Data) {
+        guard let env = EnvelopeFactory.createEnvelope(rawValue: rawValue) else { return nil }
+        self.envelope = env
+    }
+
+    /// Encodes the transactin as set of JSON strings for transmission to a JSONRPC node, used by createRequest
+    /// - Parameter from: the EthereumAddress to use as the "from" field, left unset if nil
+    /// - Returns: a TransactionParameters object suitable for passing to Web3+JSONRPC provider
+    public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? { self.envelope.encodeAsDictionary(from: from) }
+
+    /// create a JSON RPC Request object for the given transacton
+    /// - Parameters:
+    ///   - method: RPC request method
+    ///   - transaction: the transaction to encode/send
+    ///   - transactionOptions: additional options for the transaction
+    /// - Returns: a JSONRPCrequest object
     static func createRequest(method: JSONRPCmethod, transaction: EthereumTransaction, transactionOptions: TransactionOptions?) -> JSONRPCrequest? {
         let onBlock = transactionOptions?.callOnBlock?.stringValue
         var request = JSONRPCrequest()
-        //  var tx = transaction
+
         request.method = method
         let from = transactionOptions?.from
-        guard var txParams = transaction.encodeAsDictionary(from: from) else {return nil}
+        guard var txParams = transaction.encodeAsDictionary(from: from) else { return nil }
         if method == .estimateGas || transactionOptions?.gasLimit == nil {
             txParams.gas = nil
         }
-        var params = [txParams] as Array<Encodable>
+        var params = [txParams] as [Encodable]
         if method.requiredNumOfParameters == 2 && onBlock != nil {
             params.append(onBlock as Encodable)
         }
         let pars = JSONRPCparams(params: params)
         request.params = pars
-        if !request.isValid {return nil}
+        if !request.isValid { return nil }
         return request
     }
 
+    /// - Returns: a raw bytestream of the transaction, encoded according to the transactionType
+    func encode(for type: EncodeType = .transaction) -> Data? {
+        return self.envelope.encode(for: type)
+    }
+
+    /// creates a Raw RPC request transaction for the given Transaction
+    /// - Parameter transaction: EthereumTransaction to encode
+    /// - Returns: a JSONRPCrequest object
     static func createRawTransaction(transaction: EthereumTransaction) -> JSONRPCrequest? {
-        guard transaction.sender != nil else {return nil}
-        guard let encodedData = transaction.encode() else {return nil}
+        guard transaction.sender != nil else { return nil }
+        guard let encodedData = transaction.encode() else { return nil }
         let hex = encodedData.toHexString().addHexPrefix().lowercased()
         var request = JSONRPCrequest()
         request.method = JSONRPCmethod.sendRawTransaction
-        let params = [hex] as Array<Encodable>
+        let params = [hex] as [Encodable]
         let pars = JSONRPCparams(params: params)
         request.params = pars
-        if !request.isValid {return nil}
+        if !request.isValid { return nil }
         return request
+    }
+}
+
+extension EthereumTransaction: Decodable {
+    /// initializer required to support the Decodable protocol
+    /// - Parameter decoder: the decoder stream for the input data
+    public init(from decoder: Decoder) throws {
+        guard let env = try EnvelopeFactory.createEnvelope(from: decoder) else { throw Web3Error.dataError }
+        self.envelope = env
     }
 }
 
 extension EthereumTransaction {
-    init(to: EthereumAddress, data: Data, options: TransactionOptions) {
-        let defaults = TransactionOptions.defaultOptions
-        let merged = defaults.merge(options)
-        nonce = 0
-        
-        if let gP = merged.gasPrice {
-            switch gP {
-            case .manual(let value):
-                self.gasPrice = value
-            default:
-                self.gasPrice = BigUInt("5000000000")
-            }
-        }
+    // the kitchen sink init: can produce a transaction of any type
+    /// Universal initializer to create a new EthereumTransaction object
+    /// - Parameters:
+    ///   - type: TransactionType enum for selecting the type of transaction to create (default is .legacy)
+    ///   - to: EthereumAddress of the destination for this transaction (required)
+    ///   - nonce: nonce for this transaction (default 0)
+    ///   - chainID: chainId the transaction belongs to (default: type specific)
+    ///   - value: Native value for the transaction (default 0)
+    ///   - data: Payload data for the transaction (required)
+    ///   - v: signature v parameter (default 1) - will get set properly once signed
+    ///   - r: signature r parameter (default 0) - will get set properly once signed
+    ///   - s: signature s parameter (default 0) - will get set properly once signed
+    ///   - parameters: EthereumParameters object containing additional parametrs for the transaction like gas
+    public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
+                chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
+                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: EthereumParameters? = nil) {
 
-        if let gL = merged.gasLimit {
-            switch gL {
-            case .manual(let value):
-                self.gasLimit = value
-            default:
-                self.gasLimit = BigUInt(UInt64(21000))
-            }
-        }
+        var params = parameters ?? EthereumParameters()
 
-        if let value = merged.value {
-            self.value = value
-        }
+        params.chainID = chainID ?? params.chainID
+        params.value = value ?? params.value
+        params.data = data
 
-        self.to = to
-        self.data = data
+        self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, v: v, r: r, s: s, parameters: params)
     }
 
+    /// basic intializer that accepts an already created transaction envelope
+    /// - Parameters:
+    ///   - with: An envelope object conforming to the AbstractEnvelope protocol
+    ///   - options: a TransactionOptions object containing additional options to apply to the transaction
+    public init(with: AbstractEnvelope, options: TransactionOptions? = nil) {
+        self.envelope = with
+        // swiftlint:disable force_unwrapping
+        if options != nil { self.envelope.applyOptions(options!) }
+        // swiftlint:enable force_unwrapping
+    }
 }
 
-public extension EthereumTransaction {
-    init(gasPrice: BigUInt, gasLimit: BigUInt, to: EthereumAddress, value: BigUInt, data: Data) {
-        self.nonce = BigUInt(0)
-        self.gasPrice = gasPrice
-        self.gasLimit = gasLimit
-        self.value = value
-        self.data = data
-        self.to = to
+// Deprecated shims for the breaking changes
+extension EthereumTransaction {
+    @available(*, deprecated, message: "Please use init(type:to:nonce:chainID:value:data:v:r:s:options:) instead")
+    public init(nonce: BigUInt = 0, gasPrice: BigUInt, gasLimit: BigUInt,
+                to: EthereumAddress, value: BigUInt = 0, data: Data, chainID: BigUInt? = nil,
+                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
+
+        self.envelope = LegacyEnvelope( to: to, nonce: nonce,
+                                        chainID: chainID, value: value, data: data,
+                                        gasPrice: gasPrice, gasLimit: gasLimit,
+                                        v: v, r: r, s: s)
     }
-    
-    func mergedWithOptions(_ options: TransactionOptions) -> EthereumTransaction {
-        var tx = self
 
-        if let gP = options.gasPrice {
-            switch gP {
-            case .manual(let value):
-                tx.gasPrice = value
-            default:
-                tx.gasPrice = BigUInt("5000000000")
+    @available(*, deprecated, message: "Please use hashForSignature() instead")
+    public func hashForSignature(chainID: BigUInt? = nil) -> Data? {
+        guard let encoded = self.envelope.encode(for: .signature) else { return nil }
+        let hash = encoded.sha3(.keccak256)
+        return hash
+    }
+
+    @available(*, deprecated, message: "Please access via EthereumParameters instead")
+    public var gasLimit: BigUInt {
+        get {
+            switch self.type {
+            case .legacy:
+                guard let env = self.envelope as? LegacyEnvelope else { preconditionFailure("Unable to downcast to LegacyEnvelope") }
+                return env.parameters.gasLimit ?? 0
+            case .eip2930:
+                guard let env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
+                return env.parameters.gasLimit ?? 0
+            case .eip1559:
+                guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                return env.parameters.gasLimit ?? 0
             }
         }
-
-        if let gL = options.gasLimit {
-            switch gL {
-            case .manual(let value):
-                tx.gasLimit = value
-            case .limited(let value):
-                tx.gasLimit = value
-            default:
-                tx.gasLimit = BigUInt(UInt64(21000))
+        set(value) {
+            switch self.type {
+            case .legacy:
+                guard var env = self.envelope as? LegacyEnvelope else { preconditionFailure("Unable to downcast to LegacyEnvelope") }
+                env.parameters.gasLimit = value
+            case .eip2930:
+                guard var env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
+                env.parameters.gasLimit = value
+            case .eip1559:
+                guard var env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                env.parameters.gasLimit = value
             }
         }
+    }
 
-        if options.value != nil {
-            tx.value = options.value!
+    @available(*, deprecated, message: "Please access via EthereumParameters instead")
+    public var gasPrice: BigUInt {
+        get {
+            switch self.type {
+            case .legacy:
+                guard let env = self.envelope as? LegacyEnvelope else { preconditionFailure("Unable to downcast to LegacyEnvelope") }
+                return env.parameters.gasPrice ?? 0
+            case .eip2930:
+                guard let env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
+                return env.parameters.gasPrice ?? 0
+            case .eip1559:
+                // MARK: workaround for gasPrice coming from nodes for EIP-1159 - this allows Oracle to work for now
+                guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                return env.parameters.gasPrice ?? 0
+                // preconditionFailure("EIP1559Envelope has no member gasPrice")
+            }
         }
-        if options.to != nil {
-            tx.to = options.to!
+        set(value) {
+            switch self.type {
+            case .legacy:
+                guard var env = self.envelope as? LegacyEnvelope else { preconditionFailure("Unable to downcast to LegacyEnvelope") }
+                env.parameters.gasPrice = value
+            case .eip2930:
+                guard var env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
+                env.parameters.gasPrice = value
+            case .eip1559:
+                preconditionFailure("EIP1559Envelope has no member gasPrice")
+            }
         }
-        return tx
+    }
+
+    // new gas parameters provided here as well for interface consistency
+    @available(*, deprecated, message: "Please access via EthereumParameters instead")
+    public var maxPriorityFeePerGas: BigUInt {
+        get {
+            switch self.type {
+            case .legacy:
+                preconditionFailure("LegacyEnvelope has no member maxPriorityFeePerGas")
+            case .eip2930:
+                preconditionFailure("EIP2930Envelope has no member maxPriorityFeePerGas")
+            case .eip1559:
+                guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                return env.parameters.maxPriorityFeePerGas ?? 0
+            }
+        }
+        set(value) {
+            switch self.type {
+            case .legacy:
+                preconditionFailure("LegacyEnvelope has no member maxPriorityFeePerGas")
+            case .eip2930:
+                preconditionFailure("EIP2930Envelope has no member maxPriorityFeePerGas")
+            case .eip1559:
+                guard var env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                env.parameters.maxPriorityFeePerGas = value
+            }
+        }
+    }
+
+    @available(*, deprecated, message: "Please access via EthereumParameters instead")
+    public var maxFeePerGas: BigUInt {
+        get {
+            switch self.type {
+            case .legacy:
+                preconditionFailure("LegacyEnvelope has no member maxFeePerGas")
+            case .eip2930:
+                preconditionFailure("EIP2930Envelope has no member maxFeePerGas")
+            case .eip1559:
+                guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                return env.parameters.maxFeePerGas ?? 0
+            }
+        }
+        set(value) {
+            switch self.type {
+            case .legacy:
+                preconditionFailure("LegacyEnvelope has no member maxFeePerGas")
+            case .eip2930:
+                preconditionFailure("EIP2930Envelope has no member maxFeePerGas")
+            case .eip1559:
+                guard var env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                env.parameters.maxFeePerGas = value
+            }
+        }
+    }
+
+    @available(*, deprecated, message: "Please access via EthereumParameters instead")
+    public var accessList: [AccessListEntry] {
+        get {
+            switch self.type {
+            case .legacy:
+                preconditionFailure("LegacyEnvelope has no member accessList")
+            case .eip2930:
+                guard let env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
+                return env.parameters.accessList ?? []
+            case .eip1559:
+                guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                return env.parameters.accessList ?? []
+            }
+        }
+        set(value) {
+            switch self.type {
+            case .legacy:
+                preconditionFailure("LegacyEnvelope has no member accessList")
+            case .eip2930:
+                guard var env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
+                env.parameters.accessList = value
+            case .eip1559:
+                guard var env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
+                env.parameters.accessList = value
+            }
+        }
+    }
+
+    @available(*, deprecated, message: "use EthereumTransaction(rawValue:) instead")
+    public static func fromRaw(_ rawData: Data) -> EthereumTransaction? {
+        return EthereumTransaction(rawValue: rawData)
+    }
+
+    @available(*, deprecated, message: "use encode() instead")
+    public func encode(forSignature: Bool = false, chainID: BigUInt? = nil) -> Data? {
+        if forSignature == true { return self.envelope.encode(for: .signature) }
+        return self.envelope.encode(for: .transaction)
     }
 
 }

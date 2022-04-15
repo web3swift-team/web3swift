@@ -113,6 +113,7 @@ public struct RLP {
         return encoded.bytes[0]
     }
 
+    // FIXME: Make encode generic to avoid casting it's argument to [AnyObject]
     public static func encode(_ elements: Array<AnyObject>) -> Data? {
         var encodedData = Data()
         for e in elements {
