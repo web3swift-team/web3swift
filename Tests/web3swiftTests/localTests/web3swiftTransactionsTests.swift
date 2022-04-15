@@ -654,8 +654,7 @@ class web3swiftTransactionsTests: XCTestCase {
 
             let details = try web3.eth.getTransactionDetails(txHash)
             print(details)
-            let options = details.transaction.getOptions()
-            let txnGasLimit = options.resolveGasLimit(0)
+            let txnGasLimit = details.transaction.gasLimit
             XCTAssert(txnGasLimit == BigUInt(78423))
         } catch Web3Error.nodeError(let descr) {
             guard descr == "insufficient funds for gas * price + value" else {return XCTFail()}
