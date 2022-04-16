@@ -134,10 +134,11 @@ extension web3.BrowserFunctions {
             var options = opts
             guard let _ = options.from else {return (nil, nil)}
             let gasPrice = try await self.web3.eth.getGasPrice()
-            transaction.gasPrice = gasPrice
+            transaction.parameters.gasPrice = gasPrice
             options.gasPrice = .manual(gasPrice)
             guard let gasEstimate = await self.estimateGas(transaction, transactionOptions: options) else {return (nil, nil)}
-            transaction.gasLimit = gasEstimate
+            transaction.parameters.gasLimit = gasEstimate
+
             options.gasLimit = .limited(gasEstimate)
             print(transaction)
             return (transaction, options)
@@ -176,18 +177,18 @@ extension web3.BrowserFunctions {
             guard let noncePolicy = transactionOptions.nonce else {return nil}
             switch gasPricePolicy {
             case .manual(let gasPrice):
-                transaction.gasPrice = gasPrice
+                transaction.parameters.gasPrice = gasPrice
             default:
                 let gasPrice = try await self.web3.eth.getGasPrice()
-                transaction.gasPrice = gasPrice
+                transaction.parameters.gasPrice = gasPrice
             }
 
             switch gasLimitPolicy {
             case .manual(let gasLimit):
-                transaction.gasLimit = gasLimit
+                transaction.parameters.gasLimit = gasLimit
             default:
                 let gasLimit = try await self.web3.eth.estimateGas(transaction, transactionOptions: transactionOptions)
-                transaction.gasLimit = gasLimit
+                transaction.parameters.gasLimit = gasLimit
             }
 
             switch noncePolicy {
@@ -205,7 +206,7 @@ extension web3.BrowserFunctions {
             guard let keystore = keystoreManager.walletForAddress(from) else {return nil}
             try Web3Signer.signTX(transaction: &transaction, keystore: keystore, account: from, password: password)
             print(transaction)
-            let signedData = transaction.encode(forSignature: false, chainID: nil)?.toHexString().addHexPrefix()
+            let signedData = transaction.encode()?.toHexString().addHexPrefix()
             return signedData
         } catch {
             return nil

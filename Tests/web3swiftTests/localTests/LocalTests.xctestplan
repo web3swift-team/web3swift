@@ -15,10 +15,13 @@
     {
       "skippedTests" : [
         "ENSTests",
-        "RemoteTests",
+        "GasOracleTests",
+        "InfuraTests",
+        "OracleTests",
         "RemoteParsingTests",
+        "RemoteTests",
         "ST20AndSecurityTokenTests",
-        "WebsocketTests",
+        "WebsocketTests"
       ],
       "target" : {
         "containerPath" : "container:web3swift.xcodeproj",

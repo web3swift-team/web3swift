@@ -114,7 +114,8 @@ public struct EthereumContract: ContractProtocol {
         } else if extraData != Data() {
             fullData.append(extraData)
         }
-        let transaction = EthereumTransaction(gasPrice: BigUInt(0), gasLimit: BigUInt(0), to: to, value: BigUInt(0), data: fullData)
+        let params = EthereumParameters(gasLimit: BigUInt(0), gasPrice: BigUInt(0))
+        let transaction = EthereumTransaction(to: to, value: BigUInt(0), data: fullData, parameters: params)
         return transaction
     }
 
@@ -122,7 +123,9 @@ public struct EthereumContract: ContractProtocol {
         guard let to = self.address else {return nil}
 
         if (method == "fallback") {
-            let transaction = EthereumTransaction(gasPrice: BigUInt(0), gasLimit: BigUInt(0), to: to, value: BigUInt(0), data: extraData)
+            let params = EthereumParameters(gasLimit: BigUInt(0), gasPrice: BigUInt(0))
+            let transaction = EthereumTransaction(to: to, value: BigUInt(0), data: extraData, parameters: params)
+
             return transaction
         }
         let foundMethod = self.methods.filter { (key, value) -> Bool in
@@ -131,7 +134,8 @@ public struct EthereumContract: ContractProtocol {
         guard foundMethod.count == 1 else {return nil}
         let abiMethod = foundMethod[method]
         guard let encodedData = abiMethod?.encodeParameters(parameters) else {return nil}
-        let transaction = EthereumTransaction(gasPrice: BigUInt(0), gasLimit: BigUInt(0), to: to, value: BigUInt(0), data: encodedData)
+        let params = EthereumParameters(gasLimit: BigUInt(0), gasPrice: BigUInt(0))
+        let transaction = EthereumTransaction(to: to, value: BigUInt(0), data: encodedData, parameters: params)
         return transaction
     }
 

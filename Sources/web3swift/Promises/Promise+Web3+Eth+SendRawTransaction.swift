@@ -8,23 +8,36 @@ import Foundation
 
 
 extension web3.Eth {
-    public func sendRawTransactionPromise(_ transaction: Data) async throws -> TransactionSendingResult {
-        guard let deserializedTX = EthereumTransaction.fromRaw(transaction) else {
-            throw Web3Error.processingError(desc: "Serialized TX is invalid")
+    public func sendRawTransactionPromise(_ transaction: Data) -> Promise<TransactionSendingResult> {
+        guard let deserializedTX = EthereumTransaction(rawValue: transaction) else {
+            let promise = Promise<TransactionSendingResult>.pending()
+            promise.resolver.reject(Web3Error.processingError(desc: "Serialized TX is invalid"))
+            return promise.promise
         }
         return try await sendRawTransactionPromise(deserializedTX)
     }
 
-    public func sendRawTransactionPromise(_ transaction: EthereumTransaction) async throws -> TransactionSendingResult {
-
-        guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {
-            throw Web3Error.processingError(desc: "Transaction is invalid")
-        }
-        let response = try await web3.dispatch(request)
-
-        guard let value: String = response.getValue() else {
-            if response.error != nil {
-                throw Web3Error.nodeError(desc: response.error!.message)
+    public func sendRawTransactionPromise(_ transaction: EthereumTransaction) -> Promise<TransactionSendingResult>{
+        let queue = web3.requestDispatcher.queue
+        do {
+            guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {
+                throw Web3Error.processingError(desc: "Transaction is invalid")
+            }
+            let rp = web3.dispatch(request)
+            return rp.map(on: queue) { response in
+                guard let value: String = response.getValue() else {
+                    if response.error != nil {
+                        throw Web3Error.nodeError(desc: response.error!.message)
+                    }
+                    throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
+                }
+                let result = TransactionSendingResult(transaction: transaction, hash: value)
+                for hook in self.web3.postSubmissionHooks {
+                    hook.queue.async {
+                        hook.function(result)
+                    }
+                }
+                return result
             }
             throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
         }

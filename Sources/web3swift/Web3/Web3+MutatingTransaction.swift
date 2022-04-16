@@ -53,36 +53,33 @@ public class WriteTransaction: ReadTransaction {
         let assembledtx = forAssemblyPipeline.0
         mergedOptions = forAssemblyPipeline.2
 
-        guard let from = mergedOptions.from else {
-            throw Web3Error.inputError(desc: "No 'from' field provided")
-        }
+                let estimate = mergedOptions.resolveGasLimit(gasEstimate)
+                let finalGasPrice = mergedOptions.resolveGasPrice(gasPrice)
 
-        guard let gasLimitPolicy = mergedOptions.gasLimit else {
-            throw Web3Error.inputError(desc: "No gasLimit policy provided")
-        }
+                var finalOptions = TransactionOptions()
+                finalOptions.nonce = .manual(nonce)
+                finalOptions.gasLimit = .manual(estimate)
+                finalOptions.gasPrice = .manual(finalGasPrice)
 
-        guard let gasPricePolicy = mergedOptions.gasPrice else {
-            throw Web3Error.inputError(desc: "No gasPrice policy provided")
-        }
+                assembledTransaction.applyOptions(finalOptions)
 
-        guard let noncePolicy = mergedOptions.nonce else {
-            throw Web3Error.inputError(desc: "No nonce policy provided")
-        }
+                forAssemblyPipeline = (assembledTransaction, self.contract, mergedOptions)
 
-        // assemble promise for gas estimation
-        let optionsForGasEstimation = TransactionOptions(
-            to: mergedOptions.to,
-            from: mergedOptions.from,
-            gasLimit: mergedOptions.gasLimit,
-            value: mergedOptions.value,
-            callOnBlock: mergedOptions.callOnBlock
-        )
-
-        async let gasEstimatePromise: BigUInt = gasEstimate(for: gasLimitPolicy, assembledTransaction: assembledtx, optionsForGasEstimation: optionsForGasEstimation)
-
-        async let getNoncePromise: BigUInt = nonce(for: noncePolicy, from: from)
-
-        async let gasPricePromise: BigUInt = gasPrice(for: gasPricePolicy)
+                for hook in self.web3.postAssemblyHooks {
+                    let prom: Promise<Bool> = Promise<Bool> {seal in
+                        hook.queue.async {
+                            let hookResult = hook.function(forAssemblyPipeline)
+                            if hookResult.3 {
+                                forAssemblyPipeline = (hookResult.0, hookResult.1, hookResult.2)
+                            }
+                            seal.fulfill(hookResult.3)
+                        }
+                    }
+                    let shouldContinue = try prom.wait()
+                    if !shouldContinue {
+                        throw Web3Error.processingError(desc: "Transaction is canceled by middleware")
+                    }
+                }
 
         var results: [BigUInt] = try await [getNoncePromise, gasEstimatePromise, gasPricePromise ]
 
