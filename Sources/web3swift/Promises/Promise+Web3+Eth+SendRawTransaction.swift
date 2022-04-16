@@ -9,7 +9,7 @@ import Foundation
 
 extension web3.Eth {
     public func sendRawTransactionPromise(_ transaction: Data) async throws -> TransactionSendingResult {
-        guard let deserializedTX = EthereumTransaction.fromRaw(transaction) else {
+        guard let deserializedTX = EthereumTransaction(rawValue: transaction) else {
             throw Web3Error.processingError(desc: "Serialized TX is invalid")
         }
         return try await sendRawTransactionPromise(deserializedTX)
@@ -22,6 +22,7 @@ extension web3.Eth {
         }
         let response = try await web3.dispatch(request)
 
+
         guard let value: String = response.getValue() else {
             if response.error != nil {
                 throw Web3Error.nodeError(desc: response.error!.message)
@@ -30,11 +31,10 @@ extension web3.Eth {
         }
         let result = TransactionSendingResult(transaction: transaction, hash: value)
         for hook in self.web3.postSubmissionHooks {
-            Task {
-                hook.function(result)
-            }
+            hook.function(result)
         }
         return result
+
 
     }
 }

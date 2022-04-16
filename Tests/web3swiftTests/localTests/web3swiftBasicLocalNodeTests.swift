@@ -4,6 +4,7 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
+// TODO: Replace `XCTAssert` with more explicite `XCTAssertEqual`, where Applicable
 
 import XCTest
 import CryptoSwift
@@ -91,7 +92,8 @@ class web3swiftBasicLocalNodeTests: XCTestCase {
         print("Balance after from: " + balanceAfterFrom.description)
         
         XCTAssert(balanceAfterTo - balanceBeforeTo == valueToSend)
-        XCTAssert(balanceBeforeFrom - (balanceAfterFrom + receipt.gasUsed * details.transaction.gasPrice) == valueToSend)
+        let txnGasPrice = details.transaction.parameters.gasPrice ?? 0
+        XCTAssert(balanceBeforeFrom - (balanceAfterFrom + receipt.gasUsed * txnGasPrice) == valueToSend)
     }
 
     // FIXME: Crashes on CI/CD
