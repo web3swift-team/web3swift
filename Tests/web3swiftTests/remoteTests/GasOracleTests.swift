@@ -13,13 +13,15 @@ import BigInt
 // MARK: Works only with network connection
 class OracleTests: XCTestCase {
 
-    let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+
 
     let blockNumber: BigUInt = 14571792
 
-    lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
 
-    func testPretictBaseFee() throws {
+
+    func testPretictBaseFee() async throws {
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
         let etalonPercentiles: [BigUInt] = [
             71456911562,    // 10 percentile
             92735433497,    // 40 percentile
@@ -27,11 +29,13 @@ class OracleTests: XCTestCase {
             118929912191    // 90 percentile
         ]
 
-        let baseFeePercentiles = oracle.baseFeePercentiles
+        let baseFeePercentiles = await oracle.baseFeePercentiles()
         XCTAssertEqual(baseFeePercentiles, etalonPercentiles, "Arrays should be equal")
     }
 
-    func testPredictTip() throws {
+    func testPredictTip() async throws {
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
         let etalonPercentiles: [BigUInt] = [
             1251559157,     // 10 percentile
             1594062500,     // 40 percentile
@@ -39,11 +43,13 @@ class OracleTests: XCTestCase {
             11394017894     // 90 percentile
         ]
 
-        let tipFeePercentiles = oracle.tipFeePercentiles
+        let tipFeePercentiles = await oracle.tipFeePercentiles()
         XCTAssertEqual(tipFeePercentiles, etalonPercentiles, "Arrays should be equal")
     }
 
-    func testPredictBothFee() throws {
+    func testPredictBothFee() async throws {
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
         let etalonPercentiles: ([BigUInt], [BigUInt]) = (
             baseFee: [
                 71456911562,    // 10 percentile
@@ -59,12 +65,14 @@ class OracleTests: XCTestCase {
             ]
         )
 
-        let bothFeesPercentiles = oracle.bothFeesPercentiles
+        let bothFeesPercentiles = await oracle.bothFeesPercentiles()
         XCTAssertEqual(bothFeesPercentiles?.baseFee, etalonPercentiles.0, "Arrays should be equal")
         XCTAssertEqual(bothFeesPercentiles?.tip, etalonPercentiles.1, "Arrays should be equal")
     }
 
-    func testPredictLegacyGasPrice() throws {
+    func testPredictLegacyGasPrice() async throws {
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
         let etalonPercentiles: [BigUInt] = [
             93253857566,     // 10 percentile
             106634912620,    // 40 percentile
@@ -72,12 +80,14 @@ class OracleTests: XCTestCase {
             127210686305     // 90 percentile
         ]
         
-        let gasPriceLegacyPercentiles = oracle.gasPriceLegacyPercentiles
+        let gasPriceLegacyPercentiles = await oracle.gasPriceLegacyPercentiles()
         XCTAssertEqual(gasPriceLegacyPercentiles, etalonPercentiles, "Arrays should be equal")
     }
 
-    func testAllTransactionInBlockDecodesWell() throws {
-        let blockWithTransaction = try web3.eth.getBlockByNumber(blockNumber, fullTransactions: true)
+    func testAllTransactionInBlockDecodesWell() async throws {
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
+        let blockWithTransaction = try await web3.eth.getBlockByNumber(blockNumber, fullTransactions: true)
 
         let nullTransactions = blockWithTransaction.transactions.filter {
             guard case .null = $0 else { return false }

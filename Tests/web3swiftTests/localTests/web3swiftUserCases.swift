@@ -54,11 +54,10 @@ class web3swiftUserCases: XCTestCase {
         let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
         let allAddresses = try await web3.eth.getAccounts()
         let gasPrice = try await web3.eth.getGasPrice()
-        let assembled = try writeTX.assemblePromise().wait()
-        let txnGasLimit = assembled.parameters.gasLimit
-        XCTAssert(txnGasLimit == gasEstimate + 1234)
         let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-        guard let writeTX = web3.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
+        guard let writeTX = web3.eth.sendETH(to: sendToAddress, amount: "0.001") else {
+            return XCTFail()
+        }
         writeTX.transactionOptions.from = allAddresses[0]
         writeTX.transactionOptions.gasPrice = .manual(gasPrice * 2)
         let gasEstimate = try await writeTX.estimateGasPromise()
@@ -66,7 +65,7 @@ class web3swiftUserCases: XCTestCase {
         let assembled = try await writeTX.assemblePromise()
         let txnGasLimit = assembled.parameters.gasLimit
         let txnGasPrice = assembled.parameters.gasPrice
-      
+        
         XCTAssert(txnGasLimit == gasEstimate + 1234)
         XCTAssert(txnGasPrice == gasPrice * 2)
     }

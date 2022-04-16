@@ -641,7 +641,7 @@ class web3swiftTransactionsTests: XCTestCase {
 
             Thread.sleep(forTimeInterval: 1.0)
 
-            let receipt = try web3.eth.getTransactionReceipt(txHash)
+            let receipt = try await web3.eth.getTransactionReceipt(txHash)
             print(receipt)
             XCTAssert(receipt.status == .ok)
 
@@ -652,7 +652,7 @@ class web3swiftTransactionsTests: XCTestCase {
                 break
             }
 
-            let details = try web3.eth.getTransactionDetails(txHash)
+            let details = try await web3.eth.getTransactionDetails(txHash)
             print(details)
             let txnGasLimit = details.transaction.parameters.gasLimit
             XCTAssert(txnGasLimit == BigUInt(78423))
