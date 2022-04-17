@@ -38,21 +38,31 @@ public enum Networks {
 
     public var name: String {
         switch self {
-        case .Rinkeby: return "rinkeby"
-        case .Ropsten: return "ropsten"
-        case .Mainnet: return "mainnet"
-        case .Kovan: return "kovan"
-        case .Custom: return ""
+        case .Rinkeby:
+            return "rinkeby"
+        case .Ropsten:
+            return "ropsten"
+        case .Mainnet:
+            return "mainnet"
+        case .Kovan:
+            return "kovan"
+        case .Custom:
+            return ""
         }
     }
 
     public var chainID: BigUInt {
         switch self {
-        case .Custom(let networkID): return networkID
-        case .Mainnet: return BigUInt(1)
-        case .Ropsten: return BigUInt(3)
-        case .Rinkeby: return BigUInt(4)
-        case .Kovan: return BigUInt(42)
+        case .Custom(let networkID):
+            return networkID
+        case .Mainnet:
+            return BigUInt(1)
+        case .Ropsten:
+            return BigUInt(3)
+        case .Rinkeby:
+            return BigUInt(4)
+        case .Kovan:
+            return BigUInt(42)
         }
     }
 

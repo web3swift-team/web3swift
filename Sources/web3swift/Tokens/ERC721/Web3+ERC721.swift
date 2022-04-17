@@ -55,7 +55,7 @@ protocol IERC721Enumerable {
 public class ERC721: IERC721 {
 
     private var _tokenId: BigUInt?
-    private var _hasReadProperties: Bool = false
+    private var _hasReadProperties = false
 
     public var transactionOptions: TransactionOptions
     public var web3: Web3

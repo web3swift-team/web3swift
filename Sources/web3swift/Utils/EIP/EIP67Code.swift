@@ -51,7 +51,7 @@ public struct EIP67Code {
 
     public func toString() -> String {
         var urlComponents = URLComponents()
-        let mainPart = "ethereum:"+self.address.address.lowercased()
+        let mainPart = "ethereum:" + self.address.address.lowercased()
         var queryItems = [URLQueryItem]()
         if let amount = self.amount {
             queryItems.append(URLQueryItem(name: "value", value: String(amount, radix: 10)))

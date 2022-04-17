@@ -242,8 +242,10 @@ extension EIP2930Envelope {
         let list = accessList.map { $0.encodeAsList() as AnyObject }
 
         switch type {
-        case .transaction: fields = [chainID, nonce, gasPrice, gasLimit, to.addressData, value, data, list, v, r, s] as [AnyObject]
-        case .signature: fields = [chainID, nonce, gasPrice, gasLimit, to.addressData, value, data, list] as [AnyObject]
+        case .transaction:
+            fields = [chainID, nonce, gasPrice, gasLimit, to.addressData, value, data, list, v, r, s] as [AnyObject]
+        case .signature:
+            fields = [chainID, nonce, gasPrice, gasLimit, to.addressData, value, data, list] as [AnyObject]
         }
         guard var result = RLP.encode(fields) else { return nil }
         result.insert(UInt8(self.type.rawValue), at: 0)

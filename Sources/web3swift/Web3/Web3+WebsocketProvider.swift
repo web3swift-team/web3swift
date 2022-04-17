@@ -111,7 +111,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     public var socket: WebSocket
     public var delegate: Web3SocketDelegate
     /// A flag that is true if socket connected or false if socket doesn't connected.
-    public var websocketConnected: Bool = false
+    public var websocketConnected = false
 
     private var writeTimer: Timer?
     private var messagesStringToWrite: [String] = []

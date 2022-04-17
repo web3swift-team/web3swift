@@ -221,20 +221,20 @@ extension ABIEncoder {
                     dataGuess = string.data(using: .utf8)
                 }
                 guard let data = dataGuess else {break}
-                let minLength = ((data.count + 31) / 32)*32
+                let minLength = ((data.count + 31) / 32) * 32
                 guard let paddedData = data.setLengthRight(UInt64(minLength)) else {break}
                 let length = BigUInt(data.count)
                 guard let head = length.abiEncode(bits: 256) else {break}
-                let total = head+paddedData
+                let total = head + paddedData
                 return total
             }
         case .dynamicBytes:
             guard let data = convertToData(value) else {break}
-            let minLength = ((data.count + 31) / 32)*32
+            let minLength = ((data.count + 31) / 32) * 32
             guard let paddedData = data.setLengthRight(UInt64(minLength)) else {break}
             let length = BigUInt(data.count)
             guard let head = length.abiEncode(bits: 256) else {break}
-            let total = head+paddedData
+            let total = head + paddedData
             return total
         case .array(type: let subType, length: let length):
             switch type.arraySize {
@@ -283,7 +283,7 @@ extension ABIEncoder {
                             tailsConcatenated.append(tail)
                         }
                     }
-                    let total =  lengthEncoding + headsConcatenated + tailsConcatenated
+                    let total = lengthEncoding + headsConcatenated + tailsConcatenated
                     //                    print("Dynamic array of dynamic types encoding :\n" + String(total.toHexString()))
                     return total
                 }

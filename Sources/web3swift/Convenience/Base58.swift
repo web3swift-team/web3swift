@@ -29,7 +29,7 @@ struct Base58 {
             var carry = Int(b)
             var i = 0
 
-            for j in 0...base58.count-1 where carry != 0 || i < length {
+            for j in 0...base58.count - 1 where carry != 0 || i < length {
                 carry += 256 * Int(base58[base58.count - j - 1])
                 base58[base58.count - j - 1] = UInt8(carry % 58)
                 carry /= 58
@@ -148,8 +148,8 @@ extension String {
         var bytes = Base58.bytesFromBase58(self)
         guard 4 <= bytes.count else { return nil }
 
-        let checksum = [UInt8](bytes[bytes.count-4..<bytes.count])
-        bytes = [UInt8](bytes[0..<bytes.count-4])
+        let checksum = [UInt8](bytes[bytes.count - 4..<bytes.count])
+        bytes = [UInt8](bytes[0..<bytes.count - 4])
 
         let calculatedChecksum = [UInt8](bytes.sha256().sha256()[0...3])
         if checksum != calculatedChecksum { return nil }

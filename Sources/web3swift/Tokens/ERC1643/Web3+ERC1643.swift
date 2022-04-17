@@ -25,7 +25,7 @@ public class ERC1643: IERC1643, ERC20BaseProperties {
     internal var _name: String?
     internal var _symbol: String?
     internal var _decimals: UInt8?
-    internal var _hasReadProperties: Bool = false
+    internal var _hasReadProperties = false
 
     public var transactionOptions: TransactionOptions
     public var web3: Web3

@@ -8,7 +8,7 @@ import Foundation
 
 public class PlainKeystore: AbstractKeystore {
 
-    public var isHDKeystore: Bool = false
+    public var isHDKeystore = false
 
     private var privateKey: Data
 

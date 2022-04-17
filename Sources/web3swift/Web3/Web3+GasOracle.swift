@@ -121,8 +121,10 @@ extension Web3 {
         private func suggestGasFeeLegacy() async throws -> [BigUInt] {
             var latestBlockNumber: BigUInt = 0
             switch block {
-            case .latest: latestBlockNumber = try await eth.getBlockNumber()
-            case let .exact(number): latestBlockNumber = number
+            case .latest:
+                latestBlockNumber = try await eth.getBlockNumber()
+            case let .exact(number):
+                latestBlockNumber = number
             }
 
             guard latestBlockNumber != 0 else { return [] }
@@ -249,8 +251,10 @@ public extension Web3 {
         /// Could be `hexString` either `latest`
         internal var hexValue: String {
             switch self {
-            case .latest: return "latest"
-            case let .exact(number): return String(number, radix: 16).addHexPrefix()
+            case .latest:
+                return "latest"
+            case let .exact(number):
+                return String(number, radix: 16).addHexPrefix()
             }
         }
     }

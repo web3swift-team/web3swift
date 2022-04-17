@@ -215,9 +215,9 @@ extension ABI.Element {
                 // check data[00-31] and data[32-63]
                 if check00_31 == BigUInt(data[0...31]) && check32_63 == BigUInt(data[32...63]) {
                     // data.bytes[64-67] contains the length of require message
-                    let len = (Int(data.bytes[64])<<24) | (Int(data.bytes[65])<<16) | (Int(data.bytes[66])<<8) | Int(data.bytes[67])
+                    let len = (Int(data.bytes[64]) << 24) | (Int(data.bytes[65]) << 16) | (Int(data.bytes[66]) << 8) | Int(data.bytes[67])
 
-                    let message = String(bytes: data.bytes[68..<(68+len)], encoding: .utf8)!
+                    let message = String(bytes: data.bytes[68..<(68 + len)], encoding: .utf8)!
 
                     print("read function aborted by require statement: \(message)")
 
@@ -251,7 +251,7 @@ extension ABI.Element {
                 return returnArray
             }
 
-            guard function.outputs.count*32 <= data.count else {return nil}
+            guard function.outputs.count * 32 <= data.count else {return nil}
             var returnArray = [String: Any]()
             var i = 0
             guard let values = ABIDecoder.decode(types: function.outputs, data: data) else {return nil}
@@ -298,7 +298,7 @@ extension ABI.Element {
                 return returnArray
             }
 
-            guard function.inputs.count*32 <= data.count else {return nil}
+            guard function.inputs.count * 32 <= data.count else {return nil}
             var returnArray = [String: Any]()
             var i = 0
             guard let values = ABIDecoder.decode(types: function.inputs, data: data) else {return nil}
@@ -330,7 +330,7 @@ extension ABI.Element {
                 return returnArray
             }
 
-            guard function.inputs.count*32 <= data.count else {return nil}
+            guard function.inputs.count * 32 <= data.count else {return nil}
             var returnArray = [String: Any]()
             var i = 0
             guard let values = ABIDecoder.decode(types: function.inputs, data: data) else {return nil}

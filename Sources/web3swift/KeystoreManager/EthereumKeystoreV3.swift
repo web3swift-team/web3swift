@@ -9,7 +9,7 @@ import Foundation
 
 public class EthereumKeystoreV3: AbstractKeystore {
     // Protocol
-    public var isHDKeystore: Bool = false
+    public var isHDKeystore = false
     private var address: EthereumAddress?
     public var keystoreParams: KeystoreParamsV3?
 

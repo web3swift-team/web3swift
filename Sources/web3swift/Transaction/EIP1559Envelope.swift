@@ -241,7 +241,7 @@ extension EIP1559Envelope {
         self.nonce = nonce ?? parameters?.nonce ?? 0
         self.chainID = parameters?.chainID ?? 0
         self.value = parameters?.value ?? 0
-        self.data =  parameters?.data ?? Data()
+        self.data = parameters?.data ?? Data()
         self.v = v
         self.r = r
         self.s = s
@@ -283,8 +283,10 @@ extension EIP1559Envelope {
         let list = accessList.map { $0.encodeAsList() as AnyObject }
 
         switch type {
-        case .transaction: fields = [chainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list, v, r, s] as [AnyObject]
-        case .signature: fields = [chainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list] as [AnyObject]
+        case .transaction:
+            fields = [chainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list, v, r, s] as [AnyObject]
+        case .signature:
+            fields = [chainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list] as [AnyObject]
         }
         guard var result = RLP.encode(fields) else { return nil }
         result.insert(UInt8(self.type.rawValue), at: 0)

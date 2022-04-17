@@ -11,7 +11,7 @@ public class ReadTransaction {
     public var transaction: EthereumTransaction
     public var contract: EthereumContract
     public var method: String
-    public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
+    public var transactionOptions: TransactionOptions = .defaultOptions
 
     var web3: Web3
 

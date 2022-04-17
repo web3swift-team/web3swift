@@ -124,13 +124,13 @@ public class BIP39 {
     ///   - language: words language, default english
     public static func generateMnemonics(bitsOfEntropy: Int, language: BIP39Language = BIP39Language.english) -> String? {
         guard bitsOfEntropy >= 128 && bitsOfEntropy <= 256 && bitsOfEntropy.isMultiple(of: 32) else {return nil}
-        let entropy = Data.randomBytes(length: bitsOfEntropy/8)!
+        let entropy = Data.randomBytes(length: bitsOfEntropy / 8)!
         return generateMnemonicsFromEntropy(entropy: entropy, language: language)
     }
 
     public static func generateMnemonics(entropy: Int, language: BIP39Language = BIP39Language.english) -> [String]? {
         guard entropy >= 128 && entropy <= 256 && entropy.isMultiple(of: 32) else {return nil}
-        let entropy = Data.randomBytes(length: entropy/8)!
+        let entropy = Data.randomBytes(length: entropy / 8)!
         return generateMnemonicsFrom(entropy: entropy, language: language)
     }
 
@@ -151,8 +151,8 @@ public class BIP39 {
         if !stringCount.isMultiple(of: 33) {
             return nil
         }
-        let entropyBits = bitString[0 ..< (bitString.count - bitString.count/33)]
-        let checksumBits = bitString[(bitString.count - bitString.count/33) ..< bitString.count]
+        let entropyBits = bitString[0 ..< (bitString.count - bitString.count / 33)]
+        let checksumBits = bitString[(bitString.count - bitString.count / 33) ..< bitString.count]
         guard let entropy = entropyBits.interpretAsBinaryData() else {
             return nil
         }

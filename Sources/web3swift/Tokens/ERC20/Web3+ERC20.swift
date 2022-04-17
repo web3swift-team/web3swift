@@ -25,7 +25,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
     var _name: String?
     var _symbol: String?
     var _decimals: UInt8?
-    var _hasReadProperties: Bool = false
+    var _hasReadProperties = false
 
     public var transactionOptions: TransactionOptions
     public var web3: Web3

@@ -37,7 +37,7 @@ extension EthereumBloomFilter {
         let mask = BigUInt(2047)
         for i in stride(from: 0, to: 6, by: 2) {
             var t = BigUInt(1)
-            let num = (BigUInt(b[i+1]) + (BigUInt(b[i]) << 8)) & mask
+            let num = (BigUInt(b[i + 1]) + (BigUInt(b[i]) << 8)) & mask
             //  b = num.serialize().setLengthLeft(8)!
             t = t << num
             r = r | t

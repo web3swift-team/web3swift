@@ -130,7 +130,7 @@ extension Web3.Web3contract.EventParser {
             throw Web3Error.processingError(desc: "Block doesn't have a bloom filter log")
         }
 
-        if let contractAddress =  contract.address {
+        if let contractAddress = contract.address {
             if !(block.logsBloom?.test(topic: contractAddress.addressData) ?? true) {
                 return [EventParserResultProtocol]()
             }

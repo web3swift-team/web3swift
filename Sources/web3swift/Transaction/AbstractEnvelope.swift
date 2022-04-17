@@ -38,10 +38,13 @@ public enum TransactionType: UInt, CustomStringConvertible, CaseIterable {
 
     public var description: String {
         switch self {
-        case .legacy: return "Legacy"   // legacy is a pseudo-type, no EIP-2718 transaction will ever be encoded with type = 0
+        case .legacy:
+            return "Legacy"   // legacy is a pseudo-type, no EIP-2718 transaction will ever be encoded with type = 0
         //                                 though nodes do appear to return a type of 0 for legacy transactions in their JSON
-        case .eip2930: return "EIP-2930"
-        case .eip1559: return "EIP-1559"
+        case .eip2930:
+            return "EIP-2930"
+        case .eip1559:
+            return "EIP-1559"
         }
     }
 }

@@ -75,12 +75,18 @@ extension EIP712Hashable {
 
             let typeName: String
             switch value {
-            case is EIP712.UInt8: typeName = "uint8"
-            case is EIP712.UInt256: typeName = "uint256"
-            case is EIP712.Address: typeName = "address"
-            case is EIP712.Bytes: typeName = "bytes"
-            case let hashable as EIP712Hashable: typeName = hashable.name
-            default: typeName = "\(type(of: value))".lowercased()
+            case is EIP712.UInt8:
+                typeName = "uint8"
+            case is EIP712.UInt256:
+                typeName = "uint256"
+            case is EIP712.Address:
+                typeName = "address"
+            case is EIP712.Bytes:
+                typeName = "bytes"
+            case let hashable as EIP712Hashable:
+                typeName = hashable.name
+            default:
+                typeName = "\(type(of: value))".lowercased()
             }
             return typeName + " " + key
         }

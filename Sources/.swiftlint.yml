@@ -40,7 +40,7 @@ opt_in_rules:
 - lower_acl_than_parent
 - modifier_order
 - multiline_function_chains
-#- operator_usage_whitespace
+- operator_usage_whitespace
 - optional_enum_case_matching
 - overridden_super_call
 - override_in_extension
@@ -48,11 +48,11 @@ opt_in_rules:
 - prefer_self_type_over_type_of_self
 - prefer_zero_over_explicit_init
 - redundant_nil_coalescing
-#- redundant_type_annotation
+- redundant_type_annotation
 - sorted_first_last
 - sorted_imports
 - static_operator
-#- switch_case_on_newline
+- switch_case_on_newline
 - trailing_closure
 - unneeded_parentheses_in_closure_argument
 - unowned_variable_capture

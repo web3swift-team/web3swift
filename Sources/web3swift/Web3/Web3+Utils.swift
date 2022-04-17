@@ -5982,12 +5982,12 @@ extension Web3.Utils {
         guard components.count == 1 || components.count == 2 else {return nil}
         let unitDecimals = decimals
         guard let beforeDecPoint = BigUInt(components[0], radix: 10) else {return nil}
-        var mainPart = beforeDecPoint*BigUInt(10).power(unitDecimals)
+        var mainPart = beforeDecPoint * BigUInt(10).power(unitDecimals)
         if components.count == 2 {
             let numDigits = components[1].count
             guard numDigits <= unitDecimals else {return nil}
             guard let afterDecPoint = BigUInt(components[1], radix: 10) else {return nil}
-            let extraPart = afterDecPoint*BigUInt(10).power(unitDecimals-numDigits)
+            let extraPart = afterDecPoint * BigUInt(10).power(unitDecimals - numDigits)
             mainPart += extraPart
         }
         return mainPart
@@ -6060,16 +6060,16 @@ extension Web3.Utils {
                     if char == "0" {
                         firstDigit += 1
                     } else {
-                        let firstDecimalUnit = String(fullPaddedRemainder[firstDigit ..< firstDigit+1])
+                        let firstDecimalUnit = String(fullPaddedRemainder[firstDigit ..< firstDigit + 1])
                         var remainingDigits = ""
                         let numOfRemainingDecimals = fullPaddedRemainder.count - firstDigit - 1
                         if numOfRemainingDecimals <= 0 {
                             remainingDigits = ""
                         } else if numOfRemainingDecimals > formattingDecimals {
-                            let end = firstDigit+1+formattingDecimals > fullPaddedRemainder.count ? fullPaddedRemainder.count: firstDigit+1+formattingDecimals
-                            remainingDigits = String(fullPaddedRemainder[firstDigit+1 ..< end])
+                            let end = firstDigit + 1 + formattingDecimals > fullPaddedRemainder.count ? fullPaddedRemainder.count: firstDigit + 1 + formattingDecimals
+                            remainingDigits = String(fullPaddedRemainder[firstDigit + 1 ..< end])
                         } else {
-                            remainingDigits = String(fullPaddedRemainder[firstDigit+1 ..< fullPaddedRemainder.count])
+                            remainingDigits = String(fullPaddedRemainder[firstDigit + 1 ..< fullPaddedRemainder.count])
                         }
                         if !remainingDigits.isEmpty {
                             fullRemainder = firstDecimalUnit + decimalSeparator + remainingDigits

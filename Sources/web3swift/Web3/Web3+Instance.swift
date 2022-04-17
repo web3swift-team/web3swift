@@ -10,7 +10,7 @@ import Foundation
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class Web3 {
     public var provider: Web3Provider
-    public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
+    public var transactionOptions: TransactionOptions = .defaultOptions
     public var defaultBlock = "latest"
 
     /// Add a provider request to the dispatch queue.

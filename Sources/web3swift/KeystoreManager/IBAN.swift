@@ -123,7 +123,7 @@ public struct IBAN {
         let prefix = "XE"
         let remainder = Self.calculateChecksumMod97(Self.decodeToInts(prefix + "00" + padded))
         let checkDigits = "0" + String(98 - remainder)
-        let twoDigits = checkDigits[checkDigits.count-2..<checkDigits.count]
+        let twoDigits = checkDigits[checkDigits.count - 2..<checkDigits.count]
         let fullIban = prefix + twoDigits + padded
         self.iban = fullIban.uppercased()
     }

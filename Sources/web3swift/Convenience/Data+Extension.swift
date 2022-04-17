@@ -19,7 +19,7 @@ public extension Data {
         return try self.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
             if let bodyAddress = body.baseAddress, !body.isEmpty {
                 let pointer = bodyAddress.assumingMemoryBound(to: T.self)
-                return [T](UnsafeBufferPointer(start: pointer, count: self.count/MemoryLayout<T>.stride))
+                return [T](UnsafeBufferPointer(start: pointer, count: self.count / MemoryLayout<T>.stride))
             } else {
                 throw Web3Error.dataError
             }
@@ -78,7 +78,7 @@ public extension Data {
 
     func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public
         if startingBit + length / 8 > self.count, length > 64, startingBit > 0, length >= 1 {return nil}
-        let bytes = self[(startingBit/8) ..< (startingBit+length+7)/8]
+        let bytes = self[(startingBit / 8) ..< (startingBit + length + 7) / 8]
         let padding = Data(repeating: 0, count: 8 - bytes.count)
         let padded = bytes + padding
         guard padded.count == 8 else {return nil}

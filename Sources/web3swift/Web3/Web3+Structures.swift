@@ -84,9 +84,12 @@ extension TransactionReceipt {
 
         let status = try? container.decodeHex(BigUInt.self, forKey: .status)
         switch status {
-        case nil: self.status = .notYetProcessed
-        case 1: self.status = .ok
-        default: self.status = .failed
+        case nil:
+            self.status = .notYetProcessed
+        case 1:
+            self.status = .ok
+        default:
+            self.status = .failed
         }
 
         self.logs = try container.decode([EventLog].self, forKey: .logs)

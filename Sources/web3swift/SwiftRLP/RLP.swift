@@ -96,7 +96,7 @@ public struct RLP {
         }
         let divisor = BigUInt(256)
         var encoded = Data()
-        guard let prefix = lengthToBinary(length/divisor) else {return nil}
+        guard let prefix = lengthToBinary(length / divisor) else {return nil}
         let suffix = length % divisor
 
         var prefixData = Data([prefix])
@@ -291,7 +291,7 @@ public struct RLP {
             return BigUInt(raw)
         } else {
             let slice = raw[0 ..< raw.count - 1]
-            return try BigUInt(raw[raw.count-1]) + toBigUInt(slice)*256
+            return try BigUInt(raw[raw.count - 1]) + toBigUInt(slice) * 256
         }
     }
 }

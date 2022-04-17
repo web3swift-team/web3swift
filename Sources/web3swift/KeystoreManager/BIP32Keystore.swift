@@ -10,7 +10,7 @@ import Foundation
 public class BIP32Keystore: AbstractKeystore {
 
     // Protocol
-    public var isHDKeystore: Bool = true
+    public var isHDKeystore = true
 
     public var keystoreParams: KeystoreParamsBIP32?
 

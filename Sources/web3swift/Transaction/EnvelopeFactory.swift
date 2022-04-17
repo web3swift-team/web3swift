@@ -17,7 +17,7 @@ public struct EnvelopeFactory {
     static func createEnvelope(rawValue: Data) -> AbstractEnvelope? {
         // RLP encoding of anything larger than one byte will never have a value below 0x80 as the first byte
         // no valid transaction will be only 1 byte
-        let typeUInt: UInt = UInt(rawValue[0])
+        let typeUInt = UInt(rawValue[0])
         let envelopeType: TransactionType
 
         if typeUInt < 0x80 {
@@ -30,9 +30,12 @@ public struct EnvelopeFactory {
         if typeUInt == 0xff { return nil } // reserved value per EIP-2718
 
         switch envelopeType {
-        case .legacy: return LegacyEnvelope(rawValue: rawValue)
-        case .eip2930: return EIP2930Envelope(rawValue: rawValue)
-        case .eip1559: return EIP1559Envelope(rawValue: rawValue)
+        case .legacy:
+            return LegacyEnvelope(rawValue: rawValue)
+        case .eip2930:
+            return EIP2930Envelope(rawValue: rawValue)
+        case .eip1559:
+            return EIP1559Envelope(rawValue: rawValue)
         }
     }
 
@@ -58,9 +61,12 @@ public struct EnvelopeFactory {
         } else { envelopeType = .legacy } // legacy streams may not have type set
 
         switch envelopeType {
-        case .legacy: return try LegacyEnvelope(from: decoder)
-        case .eip2930: return try EIP2930Envelope(from: decoder)
-        case .eip1559: return try EIP1559Envelope(from: decoder)
+        case .legacy:
+            return try LegacyEnvelope(from: decoder)
+        case .eip2930:
+            return try EIP2930Envelope(from: decoder)
+        case .eip1559:
+            return try EIP1559Envelope(from: decoder)
         }
     }
 
@@ -78,9 +84,12 @@ public struct EnvelopeFactory {
         let envelopeType: TransactionType = type ?? parameters?.type ?? .legacy
 
         switch envelopeType {
-        case .eip2930: return EIP2930Envelope(to: to, nonce: nonce, v: v, r: r, s: s, parameters: parameters)
-        case .eip1559: return EIP1559Envelope(to: to, nonce: nonce, v: v, r: r, s: s, parameters: parameters)
-        default: return LegacyEnvelope(to: to, nonce: nonce, v: v, r: r, s: s, parameters: parameters)
+        case .eip2930:
+            return EIP2930Envelope(to: to, nonce: nonce, v: v, r: r, s: s, parameters: parameters)
+        case .eip1559:
+            return EIP1559Envelope(to: to, nonce: nonce, v: v, r: r, s: s, parameters: parameters)
+        default:
+            return LegacyEnvelope(to: to, nonce: nonce, v: v, r: r, s: s, parameters: parameters)
         }
     }
 }

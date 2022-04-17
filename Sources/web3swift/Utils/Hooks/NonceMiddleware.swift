@@ -16,9 +16,9 @@ extension Web3.Utils {
         var web3: Web3?
         var nonceLookups: [EthereumAddress: BigUInt] = [EthereumAddress: BigUInt]()
         public var name: String = "Nonce lookup middleware"
-        public let queue: DispatchQueue = DispatchQueue(label: "Nonce middleware queue")
+        public let queue = DispatchQueue(label: "Nonce middleware queue")
         public var synchronizationPeriod: TimeInterval = 300.0 // 5 minutes
-        var lastSyncTime: Date = Date()
+        var lastSyncTime = Date()
 
         public func functionToRun() async {
             guard let w3 = self.web3 else {return}

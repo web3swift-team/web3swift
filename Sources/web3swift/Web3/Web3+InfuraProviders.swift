@@ -45,7 +45,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     private var filterTimer: Timer?
 
     /// if set debugMode True then show websocket events logs in the console
-    public var debugMode: Bool = false
+    public var debugMode = false
 
     public init?(_ network: Networks, delegate: Web3SocketDelegate, projectId: String? = nil, keystoreManager manager: KeystoreManager? = nil) {
         guard network == Networks.Kovan

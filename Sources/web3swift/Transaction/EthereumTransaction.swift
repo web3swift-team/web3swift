@@ -69,7 +69,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         var toReturn = ""
         toReturn += "Transaction" + "\n"
         toReturn += String(describing: self.envelope)
-        toReturn += "sender: " + String(describing: self.sender?.address)  + "\n"
+        toReturn += "sender: " + String(describing: self.sender?.address) + "\n"
         toReturn += "hash: " + String(describing: self.hash?.toHexString().addHexPrefix()) + "\n"
         return toReturn
     }

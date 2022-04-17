@@ -46,7 +46,7 @@ extension NSRegularExpression {
     func rangesOfNamedCaptureGroups(match: NSTextCheckingResult) throws -> [String: Range<Int>] {
         var ranges = [String: Range<Int>]()
         for (name, (_, _, n)) in self.textCheckingResultsOfNamedCaptureGroups() {
-            ranges[name] = Range(match.range(at: n+1))
+            ranges[name] = Range(match.range(at: n + 1))
         }
         return ranges
     }

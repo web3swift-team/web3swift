@@ -36,8 +36,8 @@ public class HDNode {
     public var publicKey: Data
     public var chaincode: Data
     public var depth: UInt8
-    public var parentFingerprint: Data = Data(repeating: 0, count: 4)
-    public var childNumber: UInt32 = UInt32(0)
+    public var parentFingerprint = Data(repeating: 0, count: 4)
+    public var childNumber = UInt32(0)
     public var isHardened: Bool {
         return self.childNumber >= (UInt32(1) << 31)
     }
@@ -155,14 +155,14 @@ extension HDNode {
         let bn = BigUInt(Data(I_L))
         if bn > HDNode.curveOrder {
             if trueIndex < UInt32.max {
-                return self.derive(index: index+1, derivePrivateKey: derivePrivateKey, hardened: hardened)
+                return self.derive(index: index + 1, derivePrivateKey: derivePrivateKey, hardened: hardened)
             }
             return nil
         }
         let newPK = (bn + BigUInt(privateKey)) % HDNode.curveOrder
         if newPK == BigUInt(0) {
             if trueIndex < UInt32.max {
-                return self.derive(index: index+1, derivePrivateKey: derivePrivateKey, hardened: hardened)
+                return self.derive(index: index + 1, derivePrivateKey: derivePrivateKey, hardened: hardened)
             }
             return nil
         }
@@ -213,7 +213,7 @@ extension HDNode {
             let bn = BigUInt(Data(I_L))
             if bn > HDNode.curveOrder {
                 if index < UInt32.max {
-                    return self.derive(index: index+1, derivePrivateKey: derivePrivateKey, hardened: hardened)
+                    return self.derive(index: index + 1, derivePrivateKey: derivePrivateKey, hardened: hardened)
                 }
                 return nil
             }

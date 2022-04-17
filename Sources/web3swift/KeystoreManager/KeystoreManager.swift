@@ -7,7 +7,7 @@
 import Foundation
 
 public class KeystoreManager: AbstractKeystore {
-    public var isHDKeystore: Bool = false
+    public var isHDKeystore = false
 
     public var addresses: [EthereumAddress]? {
         var toReturn = [EthereumAddress]()

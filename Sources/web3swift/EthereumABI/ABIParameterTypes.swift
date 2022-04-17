@@ -83,7 +83,7 @@ extension ABI.Element {
                     return 32
                 }
                 if self.isStatic {
-                    return 32*length
+                    return 32 * length
                 }
                 return 32
             case .tuple(types: let types):

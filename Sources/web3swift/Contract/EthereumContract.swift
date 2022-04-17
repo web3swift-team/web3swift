@@ -97,7 +97,7 @@ public struct EthereumContract: ContractProtocol {
     }
 
     public func deploy(bytecode: Data, parameters: [AnyObject] = [AnyObject](), extraData: Data = Data()) -> EthereumTransaction? {
-        let to: EthereumAddress = EthereumAddress.contractDeploymentAddress()
+        let to = EthereumAddress.contractDeploymentAddress()
         guard let constructor = self.constructor else {return nil}
         guard let encodedData = constructor.encodeParameters(parameters) else {return nil}
         var fullData = bytecode

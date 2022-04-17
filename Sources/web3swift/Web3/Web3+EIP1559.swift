@@ -138,13 +138,20 @@ public extension Web3 {
 
         var mainNetFisrtBlockNumber: BigUInt {
             switch self {
-            case .Byzantium: return 4_370_000
-            case .Constantinople: return 7_280_000
-            case .Istanbul: return 9_069_000
-            case .MuirGlacier: return 9_200_000
-            case .Berlin: return 12_244_000
-            case .London: return 12_965_000
-            case .ArrowGlacier: return 13_773_000
+            case .Byzantium:
+                return 4_370_000
+            case .Constantinople:
+                return 7_280_000
+            case .Istanbul:
+                return 9_069_000
+            case .MuirGlacier:
+                return 9_200_000
+            case .Berlin:
+                return 12_244_000
+            case .London:
+                return 12_965_000
+            case .ArrowGlacier:
+                return 13_773_000
             }
         }
     }

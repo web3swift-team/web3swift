@@ -85,7 +85,7 @@ extension ABIDecoder {
             guard elementItself.count >= 32 else {break}
             var dataSlice = elementItself[0 ..< 32]
             let length = UInt64(BigUInt(dataSlice))
-            guard elementItself.count >= 32+length else {break}
+            guard elementItself.count >= 32 + length else {break}
             dataSlice = elementItself[32 ..< 32 + length]
             guard let string = String(data: dataSlice, encoding: .utf8) else {break}
             //            print("String element is: \n" + String(string))
@@ -95,7 +95,7 @@ extension ABIDecoder {
             guard elementItself.count >= 32 else {break}
             var dataSlice = elementItself[0 ..< 32]
             let length = UInt64(BigUInt(dataSlice))
-            guard elementItself.count >= 32+length else {break}
+            guard elementItself.count >= 32 + length else {break}
             dataSlice = elementItself[32 ..< 32 + length]
             //            print("Bytes element is: \n" + String(dataSlice.toHexString()))
             return (dataSlice as AnyObject, type.memoryUsage)
@@ -108,8 +108,8 @@ extension ABIDecoder {
                     guard elementItself.count >= 32 else {break}
                     var dataSlice = elementItself[0 ..< 32]
                     let length = UInt64(BigUInt(dataSlice))
-                    guard elementItself.count >= 32 + subType.memoryUsage*length else {break}
-                    dataSlice = elementItself[32 ..< 32 + subType.memoryUsage*length]
+                    guard elementItself.count >= 32 + subType.memoryUsage * length else {break}
+                    dataSlice = elementItself[32 ..< 32 + subType.memoryUsage * length]
                     var subpointer: UInt64 = 32
                     var toReturn = [AnyObject]()
                     for _ in 0 ..< length {
@@ -246,7 +246,7 @@ extension ABIDecoder {
             return nil
         }
         var eventContent = [String: Any]()
-        eventContent["name"]=event.name
+        eventContent["name"] = event.name
         let logs = eventLogTopics
         let dataForProcessing = eventLogData
         let indexedInputs = event.inputs.filter { $0.indexed }
@@ -258,7 +258,7 @@ extension ABIDecoder {
         guard logs.count == indexedInputs.count + 1 else {return nil}
         var indexedValues = [AnyObject]()
         for i in 0 ..< indexedInputs.count {
-            let data = logs[i+1]
+            let data = logs[i + 1]
             let input = indexedInputs[i]
             if !input.type.isStatic || input.type.isArray || input.type.memoryUsage != 32 {
                 let (v, _) = ABIDecoder.decodeSingleType(type: .bytes(length: 32), data: data)
