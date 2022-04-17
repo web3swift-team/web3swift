@@ -209,7 +209,7 @@ extension ERC20BaseProperties {
 
         async let decimalPromise = try await contract.read("decimals", parameters: [AnyObject](), extraData: Data(), transactionOptions: transactionOptions)?.decodedData()
 
-        let resolvedPromises = try await ["name":namePromise, "symbol":symbolPromise, "decimals":decimalPromise]
+        let resolvedPromises = try await ["name": namePromise, "symbol": symbolPromise, "decimals": decimalPromise]
 
         if let nameResult = resolvedPromises["name"], let name = nameResult?["0"] as? String {
             _name = name

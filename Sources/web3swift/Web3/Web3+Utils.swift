@@ -5894,7 +5894,7 @@ extension Web3.Utils {
 
     /// Convert the private key (32 bytes of Data) to compressed (33 bytes) or non-compressed (65 bytes) public key.
     public static func privateToPublic(_ privateKey: Data, compressed: Bool = false) -> Data? {
-        guard let publicKey = SECP256K1.privateToPublic(privateKey:  privateKey, compressed: compressed) else {return nil}
+        guard let publicKey = SECP256K1.privateToPublic(privateKey: privateKey, compressed: compressed) else {return nil}
         return publicKey
     }
 

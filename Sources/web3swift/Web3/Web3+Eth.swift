@@ -274,7 +274,7 @@ extension web3.Eth {
      */
     public func sendETH(to: EthereumAddress, amount: String, units: Web3.Utils.Units = .eth, extraData: Data = Data(), transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
         guard let value = Web3.Utils.parseToBigUInt(amount, units: .eth) else {return nil}
-        return sendETH(to: to, amount: value, extraData: extraData,  transactionOptions: transactionOptions)
+        return sendETH(to: to, amount: value, extraData: extraData, transactionOptions: transactionOptions)
     }
 
     /**
@@ -293,7 +293,7 @@ extension web3.Eth {
 
      * String "1.01" and units: .eth will result in sending 1.01 ETH to another address*
      */
-    public func sendETH(from: EthereumAddress, to: EthereumAddress, amount: String, units: Web3.Utils.Units = .eth, extraData: Data = Data(),  transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
+    public func sendETH(from: EthereumAddress, to: EthereumAddress, amount: String, units: Web3.Utils.Units = .eth, extraData: Data = Data(), transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
         guard let value = Web3.Utils.parseToBigUInt(amount, units: .eth) else {return nil}
         var mergedOptions = self.web3.transactionOptions.merge(transactionOptions)
         mergedOptions.from = from
@@ -339,7 +339,7 @@ extension web3.Eth {
 
      * If the amount is  "1.01" and token has 9 decimals it will result in sending 1010000000 of the smallest invidisible token units.*
      */
-    public func sendERC20tokensWithNaturalUnits(tokenAddress: EthereumAddress, from: EthereumAddress, to: EthereumAddress, amount: String,  transactionOptions: TransactionOptions? = nil) async throws -> WriteTransaction? {
+    public func sendERC20tokensWithNaturalUnits(tokenAddress: EthereumAddress, from: EthereumAddress, to: EthereumAddress, amount: String, transactionOptions: TransactionOptions? = nil) async throws -> WriteTransaction? {
         let contract = self.web3.contract(Web3.Utils.erc20ABI, at: tokenAddress, abiVersion: 2)
         var mergedOptions = self.web3.transactionOptions.merge(transactionOptions)
         mergedOptions.from = from

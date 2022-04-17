@@ -115,8 +115,8 @@ public struct RIPEMD160 {
             c = ROL(c, 10)
         }
 
+        // swiftlint:disable comma
         // *** The function starts here ***
-
         var (aa, bb, cc, dd, ee) = MDbuf
         var (aaa, bbb, ccc, ddd, eee) = MDbuf
 

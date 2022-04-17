@@ -57,13 +57,5 @@ disabled_rules:
 - reduce_boolean
 - self_in_property_initialization
 #-------------------------
-- statement_position
-- superfluous_disable_command
-- switch_case_alignment
-- syntactic_sugar
 - todo
-- trailing_comma
-- trailing_newline
-- trailing_semicolon
-- colon
-- comma
+

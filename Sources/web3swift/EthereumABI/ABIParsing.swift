@@ -75,7 +75,7 @@ fileprivate func parseFunction(abiRecord: ABI.Record) throws -> ABI.Element.Func
         return nativeInput
     })
     let abiInputs = inputs ?? [ABI.Element.InOut]()
-    let outputs = try abiRecord.outputs?.map({ (output:ABI.Output) throws -> ABI.Element.InOut in
+    let outputs = try abiRecord.outputs?.map({ (output: ABI.Output) throws -> ABI.Element.InOut in
         let nativeOutput = try output.parse()
         return nativeOutput
     })
@@ -128,8 +128,8 @@ fileprivate func parseReceive(abiRecord: ABI.Record) throws -> ABI.Element.Recei
     return functionElement
 }
 
-fileprivate func parseError(abiRecord:ABI.Record) throws -> ABI.Element.EthError {
-    let inputs = try abiRecord.inputs?.map({ (input:ABI.Input) throws -> ABI.Element.EthError.Input in
+fileprivate func parseError(abiRecord: ABI.Record) throws -> ABI.Element.EthError {
+    let inputs = try abiRecord.inputs?.map({ (input: ABI.Input) throws -> ABI.Element.EthError.Input in
         let nativeInput = try input.parseForError()
         return nativeInput
     })
@@ -150,8 +150,7 @@ extension ABI.Input {
             let type = ABI.Element.ParameterType.tuple(types: components!)
             let nativeInput = ABI.Element.InOut(name: name, type: type)
             return nativeInput
-        }
-        else if case .array(type: .tuple(types: _), length: _) = parameterType {
+        } else if case .array(type: .tuple(types: _), length: _) = parameterType {
             let components = try self.components?.compactMap({ (inp: ABI.Input) throws -> ABI.Element.ParameterType in
                 let input = try inp.parse()
                 return input.type
@@ -161,8 +160,7 @@ extension ABI.Input {
             let newType: ABI.Element.ParameterType = .array(type: tupleType, length: 0)
             let nativeInput = ABI.Element.InOut(name: name, type: newType)
             return nativeInput
-        }
-        else {
+        } else {
             let nativeInput = ABI.Element.InOut(name: name, type: parameterType)
             return nativeInput
         }
@@ -178,7 +176,7 @@ extension ABI.Input {
     func parseForError() throws -> ABI.Element.EthError.Input {
         let name = self.name ?? ""
         let parameterType = try ABITypeParser.parseTypeString(self.type)
-        return ABI.Element.EthError.Input(name:name, type: parameterType)
+        return ABI.Element.EthError.Input(name: name, type: parameterType)
     }
 }
 

@@ -137,8 +137,7 @@ extension ABIDecoder {
                         toReturn.append(valueUnwrapped)
                         if (subType.isStatic) {
                             subpointer = subpointer + consumedUnwrapped
-                        }
-                        else {
+                        } else {
                             subpointer = consumedUnwrapped // need to go by nextElementPointer
                         }
                     }

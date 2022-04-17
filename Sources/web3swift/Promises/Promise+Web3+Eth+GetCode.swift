@@ -12,7 +12,7 @@ import BigInt
 extension web3.Eth {
     public func code(for address: EthereumAddress, onBlock: String = "latest") async throws -> String {
         let addr = address.address
-        return try await code(for : addr, onBlock: onBlock)
+        return try await code(for: addr, onBlock: onBlock)
     }
     public func code(for address: String, onBlock: String = "latest") async throws -> String {
         let request = JSONRPCRequestFabric.prepareRequest(.getCode, parameters: [address.lowercased(), onBlock])

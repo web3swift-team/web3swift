@@ -3,23 +3,23 @@ import CryptoSwift
 import Foundation
 
 struct EIP712Domain: EIP712DomainHashable {
-    let chainId:            EIP712.UInt256?
-    let verifyingContract:  EIP712.Address
+    let chainId: EIP712.UInt256?
+    let verifyingContract: EIP712.Address
 }
 
 protocol EIP712DomainHashable: EIP712Hashable {}
 
 public struct SafeTx: EIP712Hashable {
-    let to:             EIP712.Address
-    let value:          EIP712.UInt256
-    let data:           EIP712.Bytes
-    let operation:      EIP712.UInt8
-    let safeTxGas:      EIP712.UInt256
-    let baseGas:        EIP712.UInt256
-    let gasPrice:       EIP712.UInt256
-    let gasToken:       EIP712.Address
+    let to: EIP712.Address
+    let value: EIP712.UInt256
+    let data: EIP712.Bytes
+    let operation: EIP712.UInt8
+    let safeTxGas: EIP712.UInt256
+    let baseGas: EIP712.UInt256
+    let gasPrice: EIP712.UInt256
+    let gasToken: EIP712.Address
     let refundReceiver: EIP712.Address
-    let nonce:          EIP712.UInt256
+    let nonce: EIP712.UInt256
 }
 
 /// Protocol defines EIP712 struct encoding

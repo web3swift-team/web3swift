@@ -133,8 +133,7 @@ public class WriteTransaction: ReadTransaction {
         return try await self.assembleTransaction(transactionOptions: transactionOptions)
     }
 
-    func gasEstimate(for policy:  TransactionOptions.GasLimitPolicy
-                     , assembledTransaction: EthereumTransaction, optionsForGasEstimation: TransactionOptions) async throws -> BigUInt {
+    func gasEstimate(for policy: TransactionOptions.GasLimitPolicy, assembledTransaction: EthereumTransaction, optionsForGasEstimation: TransactionOptions) async throws -> BigUInt {
         switch policy {
         case .automatic, .withMargin, .limited:
             return try await self.web3.eth.estimateGas(for: assembledTransaction, transactionOptions: optionsForGasEstimation)
@@ -143,7 +142,7 @@ public class WriteTransaction: ReadTransaction {
         }
     }
 
-    func nonce(for policy:  TransactionOptions.NoncePolicy,  from: EthereumAddress) async throws -> BigUInt {
+    func nonce(for policy: TransactionOptions.NoncePolicy, from: EthereumAddress) async throws -> BigUInt {
         switch policy {
         case .latest:
             return try await self.web3.eth.getTransactionCount(address: from, onBlock: "latest")
@@ -154,7 +153,7 @@ public class WriteTransaction: ReadTransaction {
         }
     }
 
-    func gasPrice(for policy:  TransactionOptions.GasPricePolicy) async throws -> BigUInt {
+    func gasPrice(for policy: TransactionOptions.GasPricePolicy) async throws -> BigUInt {
         switch policy {
         case .automatic, .withMargin:
             return try await self.web3.eth.gasPrice()

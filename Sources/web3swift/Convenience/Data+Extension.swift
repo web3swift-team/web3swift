@@ -69,7 +69,7 @@ public extension Data {
 
     static func fromHex(_ hex: String) -> Data? {
         let string = hex.lowercased().stripHexPrefix()
-        let array = Array<UInt8>(hex: string)
+        let array = [UInt8](hex: string)
         if (array.count == 0) {
             return (hex == "0x" || hex.isEmpty) ? Data() : nil
         }

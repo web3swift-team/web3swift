@@ -221,8 +221,7 @@ extension ABIEncoder {
                 var dataGuess: Data?
                 if string.hasHexPrefix() {
                     dataGuess = Data.fromHex(string.lowercased().stripHexPrefix())
-                }
-                else {
+                } else {
                     dataGuess = string.data(using: .utf8)
                 }
                 guard let data = dataGuess else {break}

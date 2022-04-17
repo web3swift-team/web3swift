@@ -89,8 +89,7 @@ public struct EthereumContract: ContractProtocol {
             if at != nil {
                 self.address = at
             }
-        }
-        catch{
+        } catch {
             return nil
         }
     }
@@ -144,8 +143,7 @@ public struct EthereumContract: ContractProtocol {
             if (!ev.anonymous) {
                 if eventLog.topics[0] != ev.topic {
                     continue
-                }
-                else {
+                } else {
                     let logTopics = eventLog.topics
                     let logData = eventLog.data
                     let parsed = ev.decodeReturnedLogs(eventLogTopics: logTopics, eventLogData: logData)

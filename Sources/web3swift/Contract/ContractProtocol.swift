@@ -20,7 +20,7 @@ public protocol ContractProtocol {
     func decodeReturnData(_ method: String, data: Data) -> [String: Any]?
     func decodeInputData(_ method: String, data: Data) -> [String: Any]?
     func decodeInputData(_ data: Data) -> [String: Any]?
-    func parseEvent(_ eventLog: EventLog) -> (eventName:String?, eventData:[String: Any]?)
+    func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?)
     func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool?
 }
 

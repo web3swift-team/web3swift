@@ -347,7 +347,7 @@ public class BIP32Keystore: AbstractKeystore {
         guard let IV = Data.fromHex(keystorePars.crypto.cipherparams.iv) else {
             return nil
         }
-        var decryptedPK: Array<UInt8>?
+        var decryptedPK: [UInt8]?
         switch cipher {
         case "aes-128-ctr":
             guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: IV.bytes), padding: .pkcs7) else {

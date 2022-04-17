@@ -94,7 +94,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         if (keyData == nil) {
             throw AbstractKeystoreError.encryptionError("Encryption without key data")
         }
-        let saltLen = 32;
+        let saltLen = 32
         let saltData = Data.randomBytes(length: saltLen)!
         guard let derivedKey = scrypt(password: password, salt: saltData, length: dkLen, N: N, R: R, P: P) else {
             throw AbstractKeystoreError.keyDerivationError
@@ -221,7 +221,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         guard let IV = Data.fromHex(keystoreParams.crypto.cipherparams.iv) else {
             return nil
         }
-        var decryptedPK: Array<UInt8>?
+        var decryptedPK: [UInt8]?
         switch cipher {
         case "aes-128-ctr":
             guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: IV.bytes), padding: .noPadding) else {

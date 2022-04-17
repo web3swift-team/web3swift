@@ -21,11 +21,9 @@ public struct RLP {
     internal static func encode(_ element: AnyObject) -> Data? {
         if let string = element as? String {
             return encode(string)
-
         } else if let data = element as? Data {
             return encode(data)
-        }
-        else if let biguint = element as? BigUInt {
+        } else if let biguint = element as? BigUInt {
             return encode(biguint)
         }
         return nil
@@ -114,13 +112,13 @@ public struct RLP {
     }
 
     // FIXME: Make encode generic to avoid casting it's argument to [AnyObject]
-    public static func encode(_ elements: Array<AnyObject>) -> Data? {
+    public static func encode(_ elements: [AnyObject]) -> Data? {
         var encodedData = Data()
         for e in elements {
             if let encoded = encode(e) {
                 encodedData.append(encoded)
             } else {
-                guard let asArray = e as? Array<AnyObject> else {return nil}
+                guard let asArray = e as? [AnyObject] else {return nil}
                 guard let encoded = encode(asArray) else {return nil}
                 encodedData.append(encoded)
             }
@@ -301,7 +299,7 @@ public struct RLP {
 
 fileprivate extension Data {
 
-    var bytes: Array<UInt8> {
+    var bytes: [UInt8] {
         return Array(self)
     }
 }
