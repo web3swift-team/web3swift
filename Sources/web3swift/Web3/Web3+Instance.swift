@@ -196,7 +196,7 @@ public class web3 {
 
     public typealias SubmissionHookFunction = ((EthereumTransaction, TransactionOptions)) -> (EthereumTransaction, TransactionOptions, Bool)
 
-    public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> ()
+    public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> Void
 
     public struct AssemblyHook {
         public var function: AssemblyHookFunction

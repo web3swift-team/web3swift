@@ -1,5 +1,4 @@
 disabled_rules:
-- valid_docs
 - block_based_kvo
 - class_delegate_protocol
 - closing_brace
@@ -86,5 +85,3 @@ disabled_rules:
 - valid_ibinspectable
 - vertical_parameter_alignment
 - vertical_whitespace
-- void_return
-- xctfail_message
