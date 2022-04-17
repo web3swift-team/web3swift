@@ -27,7 +27,7 @@ extension SECP256K1 {
     static let context = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_SIGN|SECP256K1_CONTEXT_VERIFY))
 
     public static func signForRecovery(hash: Data, privateKey: Data, useExtraEntropy: Bool = false) -> (serializedSignature: Data?, rawSignature: Data?) {
-        if (hash.count != 32 || privateKey.count != 32) {return (nil, nil)}
+        if hash.count != 32 || privateKey.count != 32 {return (nil, nil)}
         if !SECP256K1.verifyPrivateKey(privateKey: privateKey) {
             return (nil, nil)
         }
@@ -48,7 +48,7 @@ extension SECP256K1 {
     }
 
     public static func privateToPublic(privateKey: Data, compressed: Bool = false) -> Data? {
-        if (privateKey.count != 32) {return nil}
+        if privateKey.count != 32 {return nil}
         guard var publicKey = SECP256K1.privateKeyToPublicKey(privateKey: privateKey) else {return nil}
         guard let serializedKey = serializePublicKey(publicKey: &publicKey, compressed: compressed) else {return nil}
         return serializedKey
@@ -110,7 +110,7 @@ extension SECP256K1 {
     }
 
     internal static func privateKeyToPublicKey(privateKey: Data) -> secp256k1_pubkey? {
-        if (privateKey.count != 32) {return nil}
+        if privateKey.count != 32 {return nil}
         var publicKey = secp256k1_pubkey()
         let result = privateKey.withUnsafeBytes { (pkRawBufferPointer: UnsafeRawBufferPointer) -> Int32? in
             if let pkRawPointer = pkRawBufferPointer.baseAddress, pkRawBufferPointer.count > 0 {
@@ -222,9 +222,9 @@ extension SECP256K1 {
         guard let res = result, res != 0 else {
             return nil
         }
-        if (v == 0 || v == 27 || v == 31 || v == 35) {
+        if v == 0 || v == 27 || v == 31 || v == 35 {
             serializedSignature.append(0x1b)
-        } else if (v == 1 || v == 28 || v == 32 || v == 36) {
+        } else if v == 1 || v == 28 || v == 32 || v == 36 {
             serializedSignature.append(0x1c)
         } else {
             return nil
@@ -233,7 +233,7 @@ extension SECP256K1 {
     }
 
     internal static func recoverableSign(hash: Data, privateKey: Data, useExtraEntropy: Bool = false) -> secp256k1_ecdsa_recoverable_signature? {
-        if (hash.count != 32 || privateKey.count != 32) {
+        if hash.count != 32 || privateKey.count != 32 {
             return nil
         }
         if !SECP256K1.verifyPrivateKey(privateKey: privateKey) {
@@ -282,7 +282,7 @@ extension SECP256K1 {
     }
 
     public static func verifyPrivateKey(privateKey: Data) -> Bool {
-        if (privateKey.count != 32) {return false}
+        if privateKey.count != 32 {return false}
         let result = privateKey.withUnsafeBytes { (privateKeyRBPointer) -> Int32? in
             if let privateKeyRPointer = privateKeyRBPointer.baseAddress, privateKeyRBPointer.count > 0 {
                 let privateKeyPointer = privateKeyRPointer.assumingMemoryBound(to: UInt8.self)
@@ -312,7 +312,7 @@ extension SECP256K1 {
     }
 
     public static func unmarshalSignature(signatureData: Data) -> UnmarshaledSignature? {
-        if (signatureData.count != 65) {return nil}
+        if signatureData.count != 65 {return nil}
         let v = signatureData[64]
         let r = Data(signatureData[0..<32])
         let s = Data(signatureData[32..<64])

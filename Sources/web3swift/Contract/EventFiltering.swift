@@ -121,7 +121,7 @@ internal func parseReceiptForLogs(receipt: TransactionReceipt, contract: Contrac
     guard let bloom = receipt.logsBloom else {return nil}
     if contract.address != nil {
         let addressPresent = bloom.test(topic: contract.address!.addressData)
-        if (addressPresent != true) {
+        if addressPresent != true {
             return [EventParserResultProtocol]()
         }
     }
@@ -129,21 +129,21 @@ internal func parseReceiptForLogs(receipt: TransactionReceipt, contract: Contrac
         var oneIsPresent = false
         for addr in filterAddresses {
             let addressPresent = bloom.test(topic: addr.addressData)
-            if (addressPresent == true) {
+            if addressPresent == true {
                 oneIsPresent = true
                 break
             }
         }
-        if (oneIsPresent != true) {
+        if oneIsPresent != true {
             return [EventParserResultProtocol]()
         }
     }
     guard let eventOfSuchTypeIsPresent = contract.testBloomForEventPrecence(eventName: eventName, bloom: bloom) else {return nil}
-    if (!eventOfSuchTypeIsPresent) {
+    if !eventOfSuchTypeIsPresent {
         return [EventParserResultProtocol]()
     }
     var allLogs = receipt.logs
-    if (contract.address != nil) {
+    if contract.address != nil {
         allLogs = receipt.logs.filter({ (log) -> Bool in
             log.address == contract.address
         })
@@ -158,7 +158,7 @@ internal func parseReceiptForLogs(receipt: TransactionReceipt, contract: Contrac
         return res != nil && res?.eventName == eventName
     }
     var allResults = [EventParserResultProtocol]()
-    if (filter != nil) {
+    if filter != nil {
         let eventFilter = filter!
         let filteredLogs = filterLogs(decodedLogs: decodedLogs, eventFilter: eventFilter)
         allResults = filteredLogs

@@ -73,9 +73,9 @@ public class BIP32Keystore: AbstractKeystore {
 
     public init?(_ jsonData: Data) {
         guard var keystorePars = try? JSONDecoder().decode(KeystoreParamsBIP32.self, from: jsonData) else {return nil}
-        if (keystorePars.version != Self.KeystoreParamsBIP32Version) {return nil}
-        if (keystorePars.crypto.version != nil && keystorePars.crypto.version != "1") {return nil}
-        if (!keystorePars.isHDWallet) {return nil}
+        if keystorePars.version != Self.KeystoreParamsBIP32Version {return nil}
+        if keystorePars.crypto.version != nil && keystorePars.crypto.version != "1" {return nil}
+        if !keystorePars.isHDWallet {return nil}
 
         addressStorage = PathAddressStorage(pathAddressPairs: keystorePars.pathAddressPairs)
 
@@ -305,7 +305,7 @@ public class BIP32Keystore: AbstractKeystore {
             default:
                 hashVariant = nil
             }
-            guard (hashVariant != nil) else {
+            guard hashVariant != nil else {
                 return nil
             }
             guard let c = keystorePars.crypto.kdfparams.c else {
@@ -330,7 +330,7 @@ public class BIP32Keystore: AbstractKeystore {
         guard let cipherText = Data.fromHex(keystorePars.crypto.ciphertext) else {
             return nil
         }
-        guard (cipherText.count.isMultiple(of: 32)) else {
+        guard cipherText.count.isMultiple(of: 32) else {
             return nil
         }
         dataForMAC.append(cipherText)

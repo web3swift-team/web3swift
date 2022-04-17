@@ -100,7 +100,7 @@ extension EthereumBloomFilter {
     }
 
     mutating func setBytes(_ data: Data) {
-        if (self.bytes.count < data.count) {
+        if self.bytes.count < data.count {
             fatalError("bloom bytes are too big")
         }
         self.bytes = self.bytes[0 ..< data.count] + data

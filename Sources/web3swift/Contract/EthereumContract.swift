@@ -121,7 +121,7 @@ public struct EthereumContract: ContractProtocol {
     public func method(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data()) -> EthereumTransaction? {
         guard let to = self.address else {return nil}
 
-        if (method == "fallback") {
+        if method == "fallback" {
             let params = EthereumParameters(gasLimit: BigUInt(0), gasPrice: BigUInt(0))
             let transaction = EthereumTransaction(to: to, value: BigUInt(0), data: extraData, parameters: params)
 
@@ -140,7 +140,7 @@ public struct EthereumContract: ContractProtocol {
 
     public func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?) {
         for (eName, ev) in self.events {
-            if (!ev.anonymous) {
+            if !ev.anonymous {
                 if eventLog.topics[0] != ev.topic {
                     continue
                 } else {

@@ -138,7 +138,7 @@ extension web3.web3contract.EventParser {
         guard let eventOfSuchTypeIsPresent = self.contract.testBloomForEventPrecence(eventName: self.eventName, bloom: bloom) else {
             throw Web3Error.processingError(desc: "Error processing bloom for events")
         }
-        if (!eventOfSuchTypeIsPresent) {
+        if !eventOfSuchTypeIsPresent {
             return [EventParserResultProtocol]()
         }
 
@@ -226,7 +226,7 @@ extension web3.web3contract {
             }
             .filter { res in res.eventLog != nil || (res.eventName == eventName && eventName != nil)}
 
-            if (!joinWithReceipts) {
+            if !joinWithReceipts {
                 return decodedLogs as [EventParserResultProtocol]
             }
 

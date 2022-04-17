@@ -5907,13 +5907,13 @@ extension Web3.Utils {
             return publicToAddressData(decompressedKey)
         }
         var stipped = publicKey
-        if (stipped.count == 65) {
-            if (stipped[0] != 4) {
+        if stipped.count == 65 {
+            if stipped[0] != 4 {
                 return nil
             }
             stipped = stipped[1...64]
         }
-        if (stipped.count != 64) {
+        if stipped.count != 64 {
             return nil
         }
         let sha3 = stipped.sha3(.keccak256)
@@ -5983,7 +5983,7 @@ extension Web3.Utils {
         let unitDecimals = decimals
         guard let beforeDecPoint = BigUInt(components[0], radix: 10) else {return nil}
         var mainPart = beforeDecPoint*BigUInt(10).power(unitDecimals)
-        if (components.count == 2) {
+        if components.count == 2 {
             let numDigits = components[1].count
             guard numDigits <= unitDecimals else {return nil}
             guard let afterDecPoint = BigUInt(components[1], radix: 10) else {return nil}
@@ -6057,7 +6057,7 @@ extension Web3.Utils {
             } else if fallbackToScientific {
                 var firstDigit = 0
                 for char in fullPaddedRemainder {
-                    if (char == "0") {
+                    if char == "0" {
                         firstDigit = firstDigit + 1
                     } else {
                         let firstDecimalUnit = String(fullPaddedRemainder[firstDigit ..< firstDigit+1])
@@ -6083,7 +6083,7 @@ extension Web3.Utils {
                 return fullRemainder + "e-" + String(firstDigit)
             }
         }
-        if (toDecimals == 0) {
+        if toDecimals == 0 {
             return String(quotient)
         }
         return String(quotient) + decimalSeparator + remainderPadded
@@ -6163,7 +6163,7 @@ extension Web3.Utils {
 
     /// Unmarshals a 65 byte recoverable EC signature into internal structure.
     static func unmarshalSignature(signatureData: Data) -> SECP256K1.UnmarshaledSignature? {
-        if (signatureData.count != 65) {return nil}
+        if signatureData.count != 65 {return nil}
         let bytes = signatureData.bytes
         let r = Array(bytes[0..<32])
         let s = Array(bytes[32..<64])

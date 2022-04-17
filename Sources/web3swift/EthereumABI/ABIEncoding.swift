@@ -206,7 +206,7 @@ extension ABIEncoder {
             }
         case .bool:
             if let bool = value as? Bool {
-                if (bool) {
+                if bool {
                     return BigUInt(1).abiEncode(bits: 256)
                 } else {
                     return BigUInt(0).abiEncode(bits: 256)

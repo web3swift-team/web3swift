@@ -54,10 +54,10 @@ public class EthereumKeystoreV3: AbstractKeystore {
     }
 
     public init?(_ keystoreParams: KeystoreParamsV3) {
-        if (keystoreParams.version != 3) {
+        if keystoreParams.version != 3 {
             return nil
         }
-        if (keystoreParams.crypto.version != nil && keystoreParams.crypto.version != "1") {
+        if keystoreParams.crypto.version != nil && keystoreParams.crypto.version != "1" {
             return nil
         }
         self.keystoreParams = keystoreParams
@@ -89,7 +89,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
     }
 
     fileprivate func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int = 32, N: Int = 4096, R: Int = 6, P: Int = 1, aesMode: String = "aes-128-cbc") throws {
-        if (keyData == nil) {
+        if keyData == nil {
             throw AbstractKeystoreError.encryptionError("Encryption without key data")
         }
         let saltLen = 32
@@ -206,7 +206,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         guard let cipherText = Data.fromHex(keystoreParams.crypto.ciphertext) else {
             return nil
         }
-        if (cipherText.count != 32) {
+        if cipherText.count != 32 {
             return nil
         }
         dataForMAC.append(cipherText)

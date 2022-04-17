@@ -207,7 +207,7 @@ extension ABI.Element {
         case .function(let function):
             // the response size greater than equal 100 bytes, when read function aborted by "require" statement.
             // if "require" statement has no message argument, the response is empty (0 byte).
-            if(data.bytes.count >= 100) {
+            if data.bytes.count >= 100 {
                 let check00_31 = BigUInt("08C379A000000000000000000000000000000000000000000000000000000000", radix: 16)!
                 let check32_63 = BigUInt("0000002000000000000000000000000000000000000000000000000000000000", radix: 16)!
 
@@ -239,7 +239,7 @@ extension ABI.Element {
                 }
             }
             // the "require" statement with no message argument will be caught here
-            if (data.count == 0 && function.outputs.count == 1) {
+            if data.count == 0 && function.outputs.count == 1 {
                 let name = "0"
                 let value = function.outputs[0].type.emptyValue
                 var returnArray = [String: Any]()
@@ -286,7 +286,7 @@ extension ABI.Element {
         }
         switch self {
         case .constructor(let function):
-            if (data.count == 0 && function.inputs.count == 1) {
+            if data.count == 0 && function.inputs.count == 1 {
                 let name = "0"
                 let value = function.inputs[0].type.emptyValue
                 var returnArray = [String: Any]()
@@ -318,7 +318,7 @@ extension ABI.Element {
             if sig != nil && sig != function.methodEncoding {
                 return nil
             }
-            if (data.count == 0 && function.inputs.count == 1) {
+            if data.count == 0 && function.inputs.count == 1 {
                 let name = "0"
                 let value = function.inputs[0].type.emptyValue
                 var returnArray = [String: Any]()

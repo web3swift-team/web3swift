@@ -199,7 +199,7 @@ extension web3.BrowserFunctions {
                 transaction.nonce = nonce
             }
 
-            if (self.web3.provider.network != nil) {
+            if self.web3.provider.network != nil {
                 transaction.chainID = self.web3.provider.network?.chainID
             }
 

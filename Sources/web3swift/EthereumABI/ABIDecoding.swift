@@ -135,7 +135,7 @@ extension ABIDecoder {
                         let (v, c) = decodeSingleType(type: subType, data: dataSlice, pointer: subpointer)
                         guard let valueUnwrapped = v, let consumedUnwrapped = c else {break}
                         toReturn.append(valueUnwrapped)
-                        if (subType.isStatic) {
+                        if subType.isStatic {
                             subpointer = subpointer + consumedUnwrapped
                         } else {
                             subpointer = consumedUnwrapped // need to go by nextElementPointer
@@ -253,7 +253,7 @@ extension ABIDecoder {
         let indexedInputs = event.inputs.filter { (inp) -> Bool in
             return inp.indexed
         }
-        if (logs.count == 1 && indexedInputs.count > 0) {
+        if logs.count == 1 && indexedInputs.count > 0 {
             return nil
         }
         let nonIndexedInputs = event.inputs.filter { (inp) -> Bool in

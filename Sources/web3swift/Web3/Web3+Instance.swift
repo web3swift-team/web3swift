@@ -33,7 +33,7 @@ public class web3 {
 
     /// Public web3.eth.* namespace.
     public var eth: web3.Eth {
-        if (self.ethInstance != nil) {
+        if self.ethInstance != nil {
             return self.ethInstance!
         }
         self.ethInstance = web3.Eth(provider: self.provider, web3: self)
@@ -57,7 +57,7 @@ public class web3 {
 
     /// Public web3.personal.* namespace.
     public var personal: web3.Personal {
-        if (self.personalInstance != nil) {
+        if self.personalInstance != nil {
             return self.personalInstance!
         }
         self.personalInstance = web3.Personal(provider: self.provider, web3: self)
@@ -81,7 +81,7 @@ public class web3 {
 
     /// Public web3.personal.* namespace.
     public var txPool: web3.TxPool {
-        if (self.txPoolInstance != nil) {
+        if self.txPoolInstance != nil {
             return self.txPoolInstance!
         }
         self.txPoolInstance = web3.TxPool(provider: self.provider, web3: self)
@@ -105,7 +105,7 @@ public class web3 {
 
     /// Public web3.wallet.* namespace.
     public var wallet: web3.Web3Wallet {
-        if (self.walletInstance != nil) {
+        if self.walletInstance != nil {
             return self.walletInstance!
         }
         self.walletInstance = web3.Web3Wallet(provider: self.provider, web3: self)
@@ -126,7 +126,7 @@ public class web3 {
 
     /// Public web3.browserFunctions.* namespace.
     public var browserFunctions: web3.BrowserFunctions {
-        if (self.browserFunctionsInstance != nil) {
+        if self.browserFunctionsInstance != nil {
             return self.browserFunctionsInstance!
         }
         self.browserFunctionsInstance = web3.BrowserFunctions(provider: self.provider, web3: self)
@@ -150,7 +150,7 @@ public class web3 {
 
     /// Public web3.browserFunctions.* namespace.
     public var eventLoop: web3.Eventloop {
-        if (self.eventLoopInstance != nil) {
+        if self.eventLoopInstance != nil {
             return self.eventLoopInstance!
         }
         self.eventLoopInstance = web3.Eventloop(provider: self.provider, web3: self)

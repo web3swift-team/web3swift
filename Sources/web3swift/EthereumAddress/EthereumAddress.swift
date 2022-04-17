@@ -58,7 +58,7 @@ public struct EthereumAddress: Equatable {
             let hashChar = String(hash[startIdx..<endIdx])
             let c = String(char)
             guard let int = Int(hashChar, radix: 16) else {return nil}
-            if (int >= 8) {
+            if int >= 8 {
                 ret += c.uppercased()
             } else {
                 ret += c
@@ -83,7 +83,7 @@ extension EthereumAddress {
             if !addressString.hasHexPrefix() {
                 return nil
             }
-            if (!ignoreChecksum) {
+            if !ignoreChecksum {
                 // check for checksum
                 if data.toHexString() == addressString.stripHexPrefix() {
                     self._address = data.toHexString().addHexPrefix()

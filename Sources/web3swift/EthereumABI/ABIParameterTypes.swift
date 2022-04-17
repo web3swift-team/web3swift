@@ -28,16 +28,16 @@ extension ABI.Element {
             case .dynamicBytes:
                 return false
             case .array(type: let type, length: let length):
-                if (length == 0) {
+                if length == 0 {
                     return false
                 }
-                if (!type.isStatic) {
+                if !type.isStatic {
                     return false
                 }
                 return true
             case .tuple(types: let types):
                 for t in types {
-                    if (!t.isStatic) {
+                    if !t.isStatic {
                         return false
                     }
                 }
@@ -129,7 +129,7 @@ extension ABI.Element {
         var arraySize: ABI.Element.ArraySize {
             switch self {
             case .array(type: _, length: let length):
-                if (length == 0) {
+                if length == 0 {
                     return ArraySize.dynamicSize
                 }
                 return ArraySize.staticSize(length)
@@ -210,7 +210,7 @@ extension ABI.Element.ParameterType: ABIEncoding {
         case .function:
             return "function"
         case .array(type: let type, length: let length):
-            if (length == 0) {
+            if length == 0 {
                 return  "\(type.abiRepresentation)[]"
             }
             return "\(type.abiRepresentation)[\(length)]"
@@ -235,7 +235,7 @@ extension ABI.Element.ParameterType: ABIValidation {
             return type.isValid
         case .tuple(types: let types):
             for t in types {
-                if (!t.isValid) {
+                if !t.isValid {
                     return false
                 }
             }
