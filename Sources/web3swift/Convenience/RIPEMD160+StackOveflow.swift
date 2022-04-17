@@ -311,17 +311,17 @@ public struct RIPEMD160 {
 
     public mutating func update(data: Data) throws {
         try data.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
-            if let bodyAddress = body.baseAddress, body.count > 0 {
+            if let bodyAddress = body.baseAddress, !body.isEmpty {
                 var ptr = bodyAddress.assumingMemoryBound(to: UInt8.self)
                 var length = data.count
                 var X = [UInt32](repeating: 0, count: 16)
 
                 // Process remaining bytes from last call:
-                if buffer.count > 0 && buffer.count + length >= 64 {
+                if !buffer.isEmpty && buffer.count + length >= 64 {
                     let amount = 64 - buffer.count
                     buffer.append(ptr, count: amount)
                     try buffer.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
-                        if let bodyAddress = body.baseAddress, body.count > 0 {
+                        if let bodyAddress = body.baseAddress, !body.isEmpty {
                             let pointer = bodyAddress.assumingMemoryBound(to: Void.self)
                             _ = memcpy(&X, pointer, 64)
                         } else {
@@ -353,7 +353,7 @@ public struct RIPEMD160 {
         /* append the bit m_n == 1 */
         buffer.append(0x80)
         try buffer.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
-            if let bodyAddress = body.baseAddress, body.count > 0 {
+            if let bodyAddress = body.baseAddress, !body.isEmpty {
                 let pointer = bodyAddress.assumingMemoryBound(to: Void.self)
                 _ = memcpy(&X, pointer, buffer.count)
             } else {
@@ -376,7 +376,7 @@ public struct RIPEMD160 {
 
         var data = Data(count: 20)
         try data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) in
-            if let bodyAddress = body.baseAddress, body.count > 0 {
+            if let bodyAddress = body.baseAddress, !body.isEmpty {
                 let pointer = bodyAddress.assumingMemoryBound(to: UInt32.self)
                 pointer[0] = MDbuf.0
                 pointer[1] = MDbuf.1

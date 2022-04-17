@@ -1,11 +1,11 @@
 disabled_rules:
-- force_cast
 #----------Need addressing in the future---------------
 - function_parameter_count
 - cyclomatic_complexity
 - block_based_kvo
 - class_delegate_protocol
 #-------------------------
+#required unless we do cleanup to resolve
 - type_body_length
 - identifier_name
 - file_length
@@ -13,7 +13,25 @@ disabled_rules:
 - function_body_length
 - empty_enum_arguments
 - todo
+#---------------------------
+opt_in_rules:
+#- force_unwrapping
+- anyobject_protocol
+- contains_over_filter_is_empty
+- contains_over_first_not_nil
+- contains_over_range_nil_comparison
+- discouraged_assert
+- discouraged_none_name
+- empty_collection_literal
+- empty_count
+- empty_string
+- explicit_init
+- explicit_self
+#---------------------------
 
+
+
+#---------------------------
 excluded:
 - Carthage
 - Pods

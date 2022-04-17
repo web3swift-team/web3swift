@@ -136,12 +136,12 @@ public struct RLP {
     }
 
     public static func decode(_ raw: Data) -> RLPItem? {
-        if raw.count == 0 {
+        if raw.isEmpty {
             return RLPItem.noItem
         }
         var outputArray = [RLPItem]()
         var bytesToParse = Data(raw)
-        while bytesToParse.count != 0 {
+        while !bytesToParse.isEmpty {
             let (of, dl, t) = decodeLength(bytesToParse)
             guard let offset = of, let dataLength = dl, let type = t else {return nil}
             switch type {
@@ -150,7 +150,7 @@ public struct RLP {
             case .data:
                 guard let slice = try? slice(data: bytesToParse, offset: offset, length: dataLength) else {return nil}
                 let data = Data(slice)
-                let rlpItem = RLPItem.init(content: .data(data))
+                let rlpItem = RLPItem(content: .data(data))
                 outputArray.append(rlpItem)
             case .list:
                 guard let slice = try? slice(data: bytesToParse, offset: offset, length: dataLength) else {return nil}
@@ -165,7 +165,7 @@ public struct RLP {
             guard let tail = try? slice(data: bytesToParse, start: offset + dataLength) else {return nil}
             bytesToParse = tail
         }
-        return RLPItem.init(content: .list(outputArray, 0, Data(raw)))
+        return RLPItem(content: .list(outputArray, 0, Data(raw)))
     }
     // swiftlint:disable nesting
     public struct RLPItem {
@@ -236,7 +236,7 @@ public struct RLP {
         }
 
         public static var noItem: RLPItem {
-            return RLPItem.init(content: .noItem)
+            return RLPItem(content: .noItem)
         }
     }
     // TODO: convert return tuple to a struct
@@ -285,10 +285,10 @@ public struct RLP {
     }
 
     internal static func toBigUInt(_ raw: Data) throws -> BigUInt {
-        if raw.count == 0 {
+        if raw.isEmpty {
             throw Error.encodingError
         } else if raw.count == 1 {
-            return BigUInt.init(raw)
+            return BigUInt(raw)
         } else {
             let slice = raw[0 ..< raw.count - 1]
             return try BigUInt(raw[raw.count-1]) + toBigUInt(slice)*256

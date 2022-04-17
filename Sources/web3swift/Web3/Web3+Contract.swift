@@ -54,7 +54,7 @@ extension Web3 {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             guard var tx = self.contract.deploy(bytecode: bytecode, parameters: parameters, extraData: extraData) else {return nil}
             tx.chainID = self.web3.provider.network?.chainID
-            let writeTX = WriteTransaction.init(transaction: tx, web3: self.web3, contract: self.contract, method: "fallback", transactionOptions: mergedOptions)
+            let writeTX = WriteTransaction(transaction: tx, web3: self.web3, contract: self.contract, method: "fallback", transactionOptions: mergedOptions)
             return writeTX
         }
 
@@ -68,7 +68,7 @@ extension Web3 {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             tx.chainID = self.web3.provider.network?.chainID
-            let writeTX = WriteTransaction.init(transaction: tx, web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
+            let writeTX = WriteTransaction(transaction: tx, web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
             return writeTX
         }
 
@@ -82,7 +82,7 @@ extension Web3 {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             tx.chainID = self.web3.provider.network?.chainID
-            let writeTX = ReadTransaction.init(transaction: tx, web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
+            let writeTX = ReadTransaction(transaction: tx, web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
             return writeTX
         }
 
@@ -96,7 +96,7 @@ extension Web3 {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             tx.chainID = self.web3.provider.network?.chainID
-            let writeTX = WriteTransaction.init(transaction: tx, web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
+            let writeTX = WriteTransaction(transaction: tx, web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
             return writeTX
         }
 

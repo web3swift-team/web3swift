@@ -62,7 +62,7 @@ extension EIP712Hashable {
             func checkIfValueIsNil(value: Any) -> Bool {
                 let mirror = Mirror(reflecting: value)
                 if mirror.displayStyle == .optional {
-                    if mirror.children.count == 0 {
+                    if mirror.children.isEmpty {
                         return true
                     }
                 }

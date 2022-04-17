@@ -17,7 +17,7 @@ public extension Data {
 
     func toArray<T>(type: T.Type) throws -> [T] {
         return try self.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
-            if let bodyAddress = body.baseAddress, body.count > 0 {
+            if let bodyAddress = body.baseAddress, !body.isEmpty {
                 let pointer = bodyAddress.assumingMemoryBound(to: T.self)
                 return [T](UnsafeBufferPointer(start: pointer, count: self.count/MemoryLayout<T>.stride))
             } else {
@@ -70,7 +70,7 @@ public extension Data {
     static func fromHex(_ hex: String) -> Data? {
         let string = hex.lowercased().stripHexPrefix()
         let array = [UInt8](hex: string)
-        if array.count == 0 {
+        if array.isEmpty {
             return (hex == "0x" || hex.isEmpty) ? Data() : nil
         }
         return Data(array)

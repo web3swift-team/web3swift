@@ -100,7 +100,7 @@ extension Web3 {
                 return code
             }
             guard let components = URLComponents(string: tail!) else {return code}
-            if components.path == "" {
+            if components.path.isEmpty {
                 code.isPayRequest = true
             } else {
                 code.functionName = components.path

@@ -6071,7 +6071,7 @@ extension Web3.Utils {
                         } else {
                             remainingDigits = String(fullPaddedRemainder[firstDigit+1 ..< fullPaddedRemainder.count])
                         }
-                        if remainingDigits != "" {
+                        if !remainingDigits.isEmpty {
                             fullRemainder = firstDecimalUnit + decimalSeparator + remainingDigits
                         } else {
                             fullRemainder = firstDecimalUnit
@@ -6145,19 +6145,19 @@ extension Web3.Utils {
 
     /// returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
     static public func keccak256(_ data: Data) -> Data? {
-        if data.count == 0 {return nil}
+        if data.isEmpty {return nil}
         return data.sha3(.keccak256)
     }
 
     /// returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
     static public func sha3(_ data: Data) -> Data? {
-        if data.count == 0 {return nil}
+        if data.isEmpty {return nil}
         return data.sha3(.keccak256)
     }
 
     /// returns sha256 of data. Returns nil is data is empty
     static public func sha256(_ data: Data) -> Data? {
-        if data.count == 0 {return nil}
+        if data.isEmpty {return nil}
         return data.sha256()
     }
 

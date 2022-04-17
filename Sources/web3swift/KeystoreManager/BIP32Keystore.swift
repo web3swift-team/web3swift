@@ -32,7 +32,7 @@ public class BIP32Keystore: AbstractKeystore {
 
     public var addresses: [EthereumAddress]? {
         let addresses = self.addressStorage.addresses
-        if addresses.count == 0 {
+        if addresses.isEmpty {
             return nil
         }
         return addresses
@@ -186,11 +186,11 @@ public class BIP32Keystore: AbstractKeystore {
                 throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
             }
             if pathAppendix!.hasPrefix("/") {
-                pathAppendix = pathAppendix?.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
+                pathAppendix = pathAppendix?.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
             }
         } else {
             if path.hasPrefix("/") {
-                pathAppendix = path.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
+                pathAppendix = path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
             }
         }
         guard pathAppendix != nil else {
@@ -207,7 +207,7 @@ public class BIP32Keystore: AbstractKeystore {
         }
         var newPath: String
         if newNode.isHardened {
-            newPath = prefixPath + "/" + pathAppendix!.trimmingCharacters(in: CharacterSet.init(charactersIn: "'")) + "'"
+            newPath = prefixPath + "/" + pathAppendix!.trimmingCharacters(in: CharacterSet(charactersIn: "'")) + "'"
         } else {
             newPath = prefixPath + "/" + pathAppendix!
         }

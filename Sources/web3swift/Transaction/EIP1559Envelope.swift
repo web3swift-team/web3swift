@@ -208,7 +208,7 @@ extension EIP1559Envelope {
         case .noItem:
             self.to = EthereumAddress.contractDeploymentAddress()
         case .data(let addressData):
-            if addressData.count == 0 {
+            if addressData.isEmpty {
                 self.to = EthereumAddress.contractDeploymentAddress()
             } else if addressData.count == 20 {
                 guard let addr = EthereumAddress(addressData) else { return nil }

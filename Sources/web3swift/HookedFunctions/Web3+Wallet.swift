@@ -21,7 +21,7 @@ extension Web3.Web3Wallet {
 
     public func getCoinbase() throws -> EthereumAddress {
         let addresses = try self.getAccounts()
-        guard addresses.count > 0 else {
+        guard !addresses.isEmpty else {
             throw Web3Error.walletError
         }
         return addresses[0]
@@ -35,8 +35,8 @@ extension Web3.Web3Wallet {
             try Web3Signer.signTX(transaction: &transaction, keystore: keystoreManager, account: account, password: password)
             return true
         } catch {
-            if error is AbstractKeystoreError {
-                throw Web3Error.keystoreError(err: error as! AbstractKeystoreError)
+            if let error = error as? AbstractKeystoreError {
+                throw Web3Error.keystoreError(err: error)
             }
             throw Web3Error.generalError(err: error)
         }
@@ -59,8 +59,8 @@ extension Web3.Web3Wallet {
             }
             return data
         } catch {
-            if error is AbstractKeystoreError {
-                throw Web3Error.keystoreError(err: error as! AbstractKeystoreError)
+            if let error = error as? AbstractKeystoreError {
+                throw Web3Error.keystoreError(err: error)
             }
             throw Web3Error.generalError(err: error)
         }

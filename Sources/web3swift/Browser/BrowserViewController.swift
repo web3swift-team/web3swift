@@ -21,10 +21,10 @@ open class BrowserViewController: UIViewController {
     }
 
     public lazy var webView: WKWebView = {
-        let websiteDataTypes = NSSet(array: [WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
+        let websiteDataTypes = Set([WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
         let date = NSDate(timeIntervalSince1970: 0)
 
-        WKWebsiteDataStore.default().removeData(ofTypes: websiteDataTypes as! Set<String>, modifiedSince: date as Date, completionHandler: { })
+        WKWebsiteDataStore.default().removeData(ofTypes: websiteDataTypes, modifiedSince: date as Date, completionHandler: { })
         let webView = WKWebView(
             frame: .zero,
             configuration: self.config

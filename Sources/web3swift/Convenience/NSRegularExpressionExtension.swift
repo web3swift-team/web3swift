@@ -26,7 +26,7 @@ extension NSRegularExpression {
             let r = self.pattern.range(from: g.range(at: 0))
             let gstring = String(self.pattern[r!])
             let gmatch = greg.matches(in: gstring, options: NSRegularExpression.MatchingOptions.anchored, range: NSRange(location: 0, length: gstring.utf16.count))
-            if gmatch.count > 0 {
+            if !gmatch.isEmpty {
                 let r2 = gstring.range(from: gmatch[0].range(at: 1))!
                 groupnames[String(gstring[r2])] = (g, gmatch[0], n)
             }

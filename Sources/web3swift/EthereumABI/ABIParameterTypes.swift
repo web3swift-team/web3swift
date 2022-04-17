@@ -116,7 +116,7 @@ extension ABI.Element {
                 return Data(repeating: 0x00, count: Int(length))
             case .array(type: let type, length: let length):
                 let emptyValueOfType = type.emptyValue
-                return Array.init(repeating: emptyValueOfType, count: Int(length))
+                return Array(repeating: emptyValueOfType, count: Int(length))
             case .dynamicBytes:
                 return Data()
             case .string:

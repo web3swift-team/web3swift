@@ -106,7 +106,7 @@ extension Web3 {
             let striped = string.components(separatedBy: "ethereum:")
             guard striped.count == 2 else {return nil}
             guard let encoding = striped[1].removingPercentEncoding else {return nil}
-            guard let url = URL.init(string: encoding) else {return nil}
+            guard let url = URL(string: encoding) else {return nil}
             guard let address = EthereumAddress(url.lastPathComponent) else {return nil}
             var code = EIP67Code(address: address)
             guard let components = URLComponents(string: encoding)?.queryItems else {return code}

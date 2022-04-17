@@ -230,7 +230,7 @@ extension ABI.Element {
                     for i in 0 ..< function.outputs.count {
                         let name = "\(i)"
                         returnArray[name] = function.outputs[i].type.emptyValue
-                        if function.outputs[i].name != "" {
+                        if !function.outputs[i].name.isEmpty {
                             returnArray[function.outputs[i].name] = function.outputs[i].type.emptyValue
                         }
                     }
@@ -239,12 +239,12 @@ extension ABI.Element {
                 }
             }
             // the "require" statement with no message argument will be caught here
-            if data.count == 0 && function.outputs.count == 1 {
+            if data.isEmpty && function.outputs.count == 1 {
                 let name = "0"
                 let value = function.outputs[0].type.emptyValue
                 var returnArray = [String: Any]()
                 returnArray[name] = value
-                if function.outputs[0].name != "" {
+                if !function.outputs[0].name.isEmpty {
                     returnArray[function.outputs[0].name] = value
                 }
                 return returnArray
@@ -257,7 +257,7 @@ extension ABI.Element {
             for output in function.outputs {
                 let name = "\(i)"
                 returnArray[name] = values[i]
-                if output.name != "" {
+                if !output.name.isEmpty {
                     returnArray[output.name] = values[i]
                 }
                 i += 1
@@ -286,12 +286,12 @@ extension ABI.Element {
         }
         switch self {
         case .constructor(let function):
-            if data.count == 0 && function.inputs.count == 1 {
+            if data.isEmpty && function.inputs.count == 1 {
                 let name = "0"
                 let value = function.inputs[0].type.emptyValue
                 var returnArray = [String: Any]()
                 returnArray[name] = value
-                if function.inputs[0].name != "" {
+                if !function.inputs[0].name.isEmpty {
                     returnArray[function.inputs[0].name] = value
                 }
                 return returnArray
@@ -304,7 +304,7 @@ extension ABI.Element {
             for input in function.inputs {
                 let name = "\(i)"
                 returnArray[name] = values[i]
-                if input.name != "" {
+                if !input.name.isEmpty {
                     returnArray[input.name] = values[i]
                 }
                 i += 1
@@ -318,12 +318,12 @@ extension ABI.Element {
             if sig != nil && sig != function.methodEncoding {
                 return nil
             }
-            if data.count == 0 && function.inputs.count == 1 {
+            if data.isEmpty && function.inputs.count == 1 {
                 let name = "0"
                 let value = function.inputs[0].type.emptyValue
                 var returnArray = [String: Any]()
                 returnArray[name] = value
-                if function.inputs[0].name != "" {
+                if !function.inputs[0].name.isEmpty {
                     returnArray[function.inputs[0].name] = value
                 }
                 return returnArray
@@ -336,7 +336,7 @@ extension ABI.Element {
             for input in function.inputs {
                 let name = "\(i)"
                 returnArray[name] = values[i]
-                if input.name != "" {
+                if !input.name.isEmpty {
                     returnArray[input.name] = values[i]
                 }
                 i += 1

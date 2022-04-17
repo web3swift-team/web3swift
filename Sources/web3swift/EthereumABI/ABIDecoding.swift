@@ -253,7 +253,7 @@ extension ABIDecoder {
         let indexedInputs = event.inputs.filter { (inp) -> Bool in
             return inp.indexed
         }
-        if logs.count == 1 && indexedInputs.count > 0 {
+        if logs.count == 1 && !indexedInputs.isEmpty {
             return nil
         }
         let nonIndexedInputs = event.inputs.filter { (inp) -> Bool in
@@ -287,7 +287,7 @@ extension ABIDecoder {
                 let name = "\(i)"
                 let value = indexedValues[indexedInputCounter]
                 eventContent[name] = value
-                if el.name != "" {
+                if !el.name.isEmpty {
                     eventContent[el.name] = value
                 }
                 indexedInputCounter += 1
@@ -295,7 +295,7 @@ extension ABIDecoder {
                 let name = "\(i)"
                 let value = nonIndexedValues[nonIndexedInputCounter]
                 eventContent[name] = value
-                if el.name != "" {
+                if !el.name.isEmpty {
                     eventContent[el.name] = value
                 }
                 nonIndexedInputCounter += 1

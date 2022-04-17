@@ -169,7 +169,7 @@ extension EIP2930Envelope {
         case .noItem:
             self.to = EthereumAddress.contractDeploymentAddress()
         case .data(let addressData):
-            if addressData.count == 0 {
+            if addressData.isEmpty {
                 self.to = EthereumAddress.contractDeploymentAddress()
             } else if addressData.count == 20 {
                 guard let addr = EthereumAddress(addressData) else { return nil }
@@ -336,7 +336,7 @@ public struct AccessListEntry: CustomStringConvertible, Decodable {
         case .noItem, .list:
             return nil
         case .data(let addressData):
-            if addressData.count == 0 {
+            if addressData.isEmpty {
                 return nil
             } else if addressData.count == 20 {
                 guard let addr = EthereumAddress(addressData) else { return nil }

@@ -416,11 +416,11 @@ public extension ABIEncoder {
     }
 
     static func abiEncode(_ values: [Any]) throws -> Data {
-        return try values.map {
-            try abiEncode($0)
-        }.reduce(into: Data()) { partialResult, nextElement in
-            partialResult.append(nextElement)
-        }
+        try values
+            .map { try abiEncode($0)}
+            .reduce(into: Data()) { partialResult, nextElement in
+                partialResult.append(nextElement)
+            }
     }
 
     static func abiEncode(_ value: Any) throws -> Data {

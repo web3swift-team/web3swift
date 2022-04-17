@@ -92,7 +92,7 @@ extension String {
         let match = matcher.captureGroups(string: hex, options: NSRegularExpression.MatchingOptions.anchored)
         guard let prefix = match["prefix"] else {return nil}
         guard let end = match["end"] else {return nil}
-        if end != "" {
+        if !end.isEmpty {
             return prefix + end
         }
         return "0x0"

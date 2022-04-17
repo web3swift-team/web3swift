@@ -20,7 +20,7 @@ extension Web3.BrowserFunctions {
 
     public func getCoinbase() async -> String? {
         guard let addresses = await self.getAccounts() else {return nil}
-        guard addresses.count > 0 else {return nil}
+        guard !addresses.isEmpty else {return nil}
         return addresses[0]
     }
 

@@ -46,7 +46,7 @@ public class KeystoreManager: AbstractKeystore {
 
     public static var allManagers = [KeystoreManager]()
     public static var defaultManager: KeystoreManager? {
-        if KeystoreManager.allManagers.count == 0 {
+        if KeystoreManager.allManagers.isEmpty {
             return nil
         }
         return KeystoreManager.allManagers[0]
