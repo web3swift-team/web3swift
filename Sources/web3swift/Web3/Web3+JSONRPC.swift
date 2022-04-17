@@ -4,8 +4,8 @@
 //
 //  Additions to support new transaction types by Mark Loit March 2022
 
-import Foundation
 import BigInt
+import Foundation
 
 /// Global counter object to enumerate JSON RPC requests.
 public struct Counter {
@@ -15,8 +15,8 @@ public struct Counter {
     public static func increment() -> UInt64 {
         var c: UInt64 = 0
         lockQueue.sync {
-            c = Counter.counter
-            Counter.counter += 1
+            c = Self.counter
+            Self.counter += 1
         }
         return c
     }

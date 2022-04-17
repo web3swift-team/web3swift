@@ -6,12 +6,12 @@
 //  Copyright © 2022 web3swift. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 extension Web3 {
     /// Oracle is the class to do a transaction fee suggestion
-    final public class Oracle {
+    public final class Oracle {
 
         /// Web3 provider by which accessing to the blockchain
         private let web3Provider: Web3

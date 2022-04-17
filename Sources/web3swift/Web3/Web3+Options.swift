@@ -4,8 +4,8 @@
 //
 // Additions to support new transaction types by Mark Loit March 2022
 
-import Foundation
 import BigInt
+import Foundation
 
 public protocol TransactionOptionsInheritable {
     var transactionOptions: TransactionOptions { get }
@@ -180,7 +180,7 @@ public struct TransactionOptions {
     ///
     /// Returns default options if both parameters are nil.
     public static func merge(_ options: TransactionOptions?, with other: TransactionOptions?) -> TransactionOptions? {
-        var newOptions = TransactionOptions.defaultOptions // default has lowest priority
+        var newOptions = Self.defaultOptions // default has lowest priority
         newOptions = newOptions.merge(options)
         newOptions = newOptions.merge(other) // other has highest priority
         return newOptions

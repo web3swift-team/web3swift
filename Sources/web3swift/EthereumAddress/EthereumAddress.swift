@@ -6,8 +6,8 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import CryptoSwift
+import Foundation
 
 public struct EthereumAddress: Equatable {
     public enum AddressType {
@@ -42,7 +42,7 @@ public struct EthereumAddress: Equatable {
     public var address: String {
         switch self.type {
         case .normal:
-            return EthereumAddress.toChecksumAddress(_address)!
+            return Self.toChecksumAddress(_address)!
         case .contractDeployment:
             return "0x"
         }

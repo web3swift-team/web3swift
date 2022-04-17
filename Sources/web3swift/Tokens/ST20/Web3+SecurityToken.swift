@@ -6,8 +6,8 @@
 //  Copyright © 2019 The Matter Inc. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 /// The Ownable contract has an owner address, and provides basic authorization control functions, this simplifies the implementation of "user permissions".
 protocol IOwnable {

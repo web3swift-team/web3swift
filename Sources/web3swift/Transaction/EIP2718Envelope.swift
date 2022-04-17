@@ -4,8 +4,8 @@
 //
 //  EIP-2718 Envelope Support by Mark Loit 2022
 
-import Foundation
 import BigInt
+import Foundation
 
 // EIP-2718 is an abstract envelope type
 // All typed transactions should inherit from this type and not AbstractEnvelope

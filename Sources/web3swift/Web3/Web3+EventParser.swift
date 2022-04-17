@@ -4,8 +4,8 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 extension Web3.Web3contract {
     /// An event parser to fetch events produced by smart-contract related transactions. Should not be constructed manually, but rather by calling the corresponding function on the web3contract object.

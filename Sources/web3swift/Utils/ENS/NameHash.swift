@@ -4,8 +4,8 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import CryptoSwift
+import Foundation
 
 public struct NameHash {
     public static func normalizeDomainName(_ domain: String) -> String? {
@@ -15,7 +15,7 @@ public struct NameHash {
     }
 
     public static func nameHash(_ domain: String) -> Data? {
-        guard let normalized = NameHash.normalizeDomainName(domain) else {return nil}
+        guard let normalized = Self.normalizeDomainName(domain) else {return nil}
         return namehash(normalized)
     }
 

@@ -6,8 +6,8 @@
 //  Copyright © 2019 The Matter Inc. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 public extension ENS {
     class ReverseRegistrar {

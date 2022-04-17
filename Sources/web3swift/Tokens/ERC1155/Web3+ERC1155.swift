@@ -6,8 +6,8 @@
 //  Copyright © 2018 The Matter Inc. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 // Multi Token Standard
 protocol IERC1155: IERC165 {

@@ -4,8 +4,8 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 extension Web3.Eth {
     public func getTransactionCount(for address: EthereumAddress, onBlock: String = "latest") async throws -> BigUInt {

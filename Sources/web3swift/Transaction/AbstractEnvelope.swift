@@ -4,8 +4,8 @@
 //
 // Support for EIP-2718 by Mark Loit 2022
 
-import Foundation
 import BigInt
+import Foundation
 
 /*
     AbstractEnvelope is the main protocol definition to enable support for different transaction types.

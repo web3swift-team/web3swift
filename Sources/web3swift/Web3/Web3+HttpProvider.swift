@@ -4,8 +4,8 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 /// Providers abstraction for custom providers (websockets, other custom private key managers). At the moment should not be used.
 public protocol Web3Provider {
@@ -37,7 +37,7 @@ public class Web3HttpProvider: Web3Provider {
             url = httpProviderURL
             if net == nil {
                 let request = JSONRPCRequestFabric.prepareRequest(.getNetwork, parameters: [])
-                let response: JSONRPCresponse = try await Web3HttpProvider.post(request, providerURL: httpProviderURL, session: session)
+                let response: JSONRPCresponse = try await Self.post(request, providerURL: httpProviderURL, session: session)
                 if response.error != nil {
                     if response.message != nil {
                         print(response.message!)
@@ -83,10 +83,10 @@ public class Web3HttpProvider: Web3Provider {
             throw Web3Error.nodeError(desc: "RPC method is nill")
         }
 
-        return try await Web3HttpProvider.post(request, providerURL: self.url, session: self.session)
+        return try await Self.post(request, providerURL: self.url, session: self.session)
     }
 
     public func sendAsync(_ requests: JSONRPCrequestBatch) async throws -> JSONRPCresponseBatch {
-        return try await Web3HttpProvider.post(requests, providerURL: self.url, session: self.session)
+        return try await Self.post(requests, providerURL: self.url, session: self.session)
     }
 }

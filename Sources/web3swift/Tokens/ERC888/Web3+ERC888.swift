@@ -6,8 +6,8 @@
 //  Copyright © 2018 The Matter Inc. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 // MultiDimensional Token Standard
 protocol IERC888 {

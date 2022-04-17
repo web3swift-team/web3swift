@@ -5,8 +5,8 @@
 //
 //  Support for EIP-2930 transaction type by Mark Loit 2022
 
-import Foundation
 import BigInt
+import Foundation
 
 public struct EIP2930Envelope: EIP2718Envelope {
     public let type: TransactionType = .eip2930

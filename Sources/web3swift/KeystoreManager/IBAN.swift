@@ -4,8 +4,8 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 public struct ICAP {
     public var asset: String
@@ -110,7 +110,7 @@ public struct IBAN {
 
     public init?(_ ibanString: String) {
         let matched = ibanString.replacingOccurrences(of: " ", with: "").uppercased()
-        guard IBAN.isValidIBANaddress(matched) else {return nil}
+        guard Self.isValidIBANaddress(matched) else {return nil}
         self.iban = matched
     }
 
@@ -121,7 +121,7 @@ public struct IBAN {
         guard base36EncodedString.count <= 30 else {return nil}
         let padded = base36EncodedString.leftPadding(toLength: 30, withPad: "0")
         let prefix = "XE"
-        let remainder = IBAN.calculateChecksumMod97(IBAN.decodeToInts(prefix + "00" + padded))
+        let remainder = Self.calculateChecksumMod97(Self.decodeToInts(prefix + "00" + padded))
         let checkDigits = "0" + String(98 - remainder)
         let twoDigits = checkDigits[checkDigits.count-2..<checkDigits.count]
         let fullIban = prefix + twoDigits + padded

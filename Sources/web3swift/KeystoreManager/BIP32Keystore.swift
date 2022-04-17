@@ -4,8 +4,8 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import CryptoSwift
+import Foundation
 
 public class BIP32Keystore: AbstractKeystore {
 

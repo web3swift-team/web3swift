@@ -4,9 +4,9 @@
 //
 //  Created by Anton Grigorev on 14/12/2018.
 //  Copyright © 2018 The Matter Inc. All rights reserved.
-//
-import Foundation
+
 import BigInt
+import Foundation
 
 // Security Token Standard
 protocol IERC1400: IERC20 {

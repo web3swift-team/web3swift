@@ -4,9 +4,9 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import BigInt
 import CryptoSwift
+import Foundation
 
 public struct EthereumBloomFilter {
     public var bytes = Data(repeatElement(UInt8(0), count: 256))

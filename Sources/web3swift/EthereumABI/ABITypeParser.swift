@@ -20,24 +20,24 @@ public struct ABITypeParser {
 
     static func baseTypeMatch(from string: String, length: UInt64 = 0) -> ABI.Element.ParameterType? {
         switch BaseParameterType(rawValue: string) {
-        case .address?:
+        case .address:
             return .address
-        case .uint?:
+        case .uint:
             return .uint(bits: length == 0 ? 256: length)
-        case .int?:
+        case .int:
             return .int(bits: length == 0 ? 256: length)
-        case .bool?:
+        case .bool:
             return .bool
-        case .function?:
+        case .function:
             return .function
-        case .bytes?:
+        case .bytes:
             if length == 0 {
                 return .dynamicBytes
             }
             return .bytes(length: length)
-        case .string?:
+        case .string:
             return .string
-        case .tuple?:
+        case .tuple:
             return .tuple(types: [ABI.Element.ParameterType]())
         default:
             return nil

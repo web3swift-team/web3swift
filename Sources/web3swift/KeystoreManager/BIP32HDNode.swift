@@ -4,9 +4,9 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import BigInt
 import CryptoSwift
+import Foundation
 
 extension UInt32 {
     public func serialize32() -> Data {

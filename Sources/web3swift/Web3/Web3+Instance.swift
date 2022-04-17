@@ -4,8 +4,8 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class Web3 {

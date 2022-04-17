@@ -4,8 +4,8 @@
 //
 // Support for EIP-2718 by Mark Loit March 2022
 
-import Foundation
 import BigInt
+import Foundation
 
 /// Utility class for creating transaction envelopes. Generally not used directly, but are used by EthereumTransaction
 public struct EnvelopeFactory {

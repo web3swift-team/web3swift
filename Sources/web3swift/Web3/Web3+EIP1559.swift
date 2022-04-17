@@ -4,9 +4,8 @@
 //
 //  Created by Yaroslav on 14.03.2022.
 //
-
-import Foundation
 import BigInt
+import Foundation
 
 /// EIP-1559 Base fee extension
 ///

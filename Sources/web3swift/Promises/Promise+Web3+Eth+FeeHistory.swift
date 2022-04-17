@@ -6,8 +6,8 @@
 //  Copyright © 2022 web3swift. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 extension Web3.Eth {
     func feeHistory(blockCount: BigUInt, block: String, percentiles: [Double]) async throws -> Web3.Oracle.FeeHistory {

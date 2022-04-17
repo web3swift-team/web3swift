@@ -4,9 +4,9 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import BigInt
 import CryptoSwift
+import Foundation
 
 public typealias Web3Utils = Web3.Utils
 
@@ -6093,7 +6093,7 @@ extension Web3.Utils {
     /// BE WARNED - changing a message will result in different Ethereum address, but not in error.
     ///
     /// Input parameters should be hex Strings.
-    static public func personalECRecover(_ personalMessage: String, signature: String) -> EthereumAddress? {
+    public static func personalECRecover(_ personalMessage: String, signature: String) -> EthereumAddress? {
         guard let data = Data.fromHex(personalMessage) else {return nil}
         guard let sig = Data.fromHex(signature) else {return nil}
         return Web3.Utils.personalECRecover(data, signature: sig)
@@ -6103,7 +6103,7 @@ extension Web3.Utils {
     /// BE WARNED - changing a message will result in different Ethereum address, but not in error.
     ///
     /// Input parameters should be Data objects.
-    static public func personalECRecover(_ personalMessage: Data, signature: Data) -> EthereumAddress? {
+    public static func personalECRecover(_ personalMessage: Data, signature: Data) -> EthereumAddress? {
         if signature.count != 65 { return nil}
         let rData = signature[0..<32].bytes
         let sData = signature[32..<64].bytes
@@ -6126,7 +6126,7 @@ extension Web3.Utils {
     /// Takes a hash of some message. What message is hashed should be checked by user separately.
     ///
     /// Input parameters should be Data objects.
-    static public func hashECRecover(hash: Data, signature: Data) -> EthereumAddress? {
+    public static func hashECRecover(hash: Data, signature: Data) -> EthereumAddress? {
         if signature.count != 65 { return nil}
         let rData = signature[0..<32].bytes
         let sData = signature[32..<64].bytes
@@ -6144,19 +6144,19 @@ extension Web3.Utils {
     }
 
     /// returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
-    static public func keccak256(_ data: Data) -> Data? {
+    public static func keccak256(_ data: Data) -> Data? {
         if data.isEmpty {return nil}
         return data.sha3(.keccak256)
     }
 
     /// returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
-    static public func sha3(_ data: Data) -> Data? {
+    public static func sha3(_ data: Data) -> Data? {
         if data.isEmpty {return nil}
         return data.sha3(.keccak256)
     }
 
     /// returns sha256 of data. Returns nil is data is empty
-    static public func sha256(_ data: Data) -> Data? {
+    public static func sha256(_ data: Data) -> Data? {
         if data.isEmpty {return nil}
         return data.sha256()
     }

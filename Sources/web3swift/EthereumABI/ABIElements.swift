@@ -2,9 +2,9 @@
 //  Created by Alex Vlasov on 25/10/2018.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
-
-import Foundation
 import BigInt
+import Foundation
+
 // swiftlint:disable nesting
 public extension ABI {
     // JSON Decoding

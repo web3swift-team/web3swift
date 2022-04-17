@@ -4,8 +4,8 @@
 //
 //  Support for EIP-1559 Transaction type by Mark Loit March 2022
 
-import Foundation
 import BigInt
+import Foundation
 
 public struct EIP1559Envelope: EIP2718Envelope {
     public let type: TransactionType = .eip1559

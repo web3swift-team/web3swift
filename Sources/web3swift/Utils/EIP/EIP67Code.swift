@@ -4,9 +4,9 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
-import CoreImage
 import BigInt
+import CoreImage
+import Foundation
 
 public struct EIP67Code {
     public var address: EthereumAddress

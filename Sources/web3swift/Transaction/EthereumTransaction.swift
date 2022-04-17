@@ -3,9 +3,8 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 //  Refactor to support EIP-2718 enveloping by Mark Loit 2022
-
-import Foundation
 import BigInt
+import Foundation
 
 /// Abstraction object for a transaction pulled from, or destined for the blockchain
 /// provides all the necessary functionality to encode/decode sign/verify transactions

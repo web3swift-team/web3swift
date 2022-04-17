@@ -3,8 +3,8 @@
 //  Copyright © 2018 Alexander Vlasov. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 public struct EthereumContract: ContractProtocol {
     public var transactionOptions: TransactionOptions? = TransactionOptions.defaultOptions

@@ -4,8 +4,8 @@
 //
 // Refactor to support EIP-2718 enveloping by Mark Loit 2022
 
-import Foundation
 import BigInt
+import Foundation
 
 public struct LegacyEnvelope: AbstractEnvelope {
     public let type: TransactionType = .legacy

@@ -6,8 +6,8 @@
 //  Copyright © 2018 The Matter Inc. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 // Partially Fungible Token Standard
 protocol IERC1410: IERC20 {

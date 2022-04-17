@@ -4,8 +4,8 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 /// Protocol for generic Ethereum event parsing results
 public protocol EventParserResultProtocol {
@@ -61,15 +61,15 @@ public enum Networks {
     static func fromInt(_ networkID: Int) -> Networks? {
         switch networkID {
         case 1:
-            return Networks.Mainnet
+            return Self.Mainnet
         case 3:
-            return Networks.Ropsten
+            return Self.Ropsten
         case 4:
-            return Networks.Rinkeby
+            return Self.Rinkeby
         case 42:
-            return Networks.Kovan
+            return Self.Kovan
         default:
-            return Networks.Custom(networkID: BigUInt(networkID))
+            return Self.Custom(networkID: BigUInt(networkID))
         }
     }
 }

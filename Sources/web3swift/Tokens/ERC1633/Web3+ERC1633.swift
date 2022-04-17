@@ -6,8 +6,8 @@
 //  Copyright © 2018 The Matter Inc. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 // Re-Fungible Token Standard (RFT)
 protocol IERC1633: IERC20, IERC165 {

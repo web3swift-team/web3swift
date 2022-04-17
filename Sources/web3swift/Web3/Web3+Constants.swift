@@ -6,8 +6,8 @@
 //  Copyright © 2019 Matter Labs. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 struct Constants {
     static let infuraHttpScheme = ".infura.io/v3/"

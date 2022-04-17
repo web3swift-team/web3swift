@@ -4,8 +4,8 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 extension Web3.Personal {
     public func unlock(account: EthereumAddress, password: String = "web3swift", seconds: UInt64 = 300) async throws -> Bool {

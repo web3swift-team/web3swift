@@ -5,8 +5,8 @@
 //  Created by Anton Grigorev on 07/12/2018.
 //  Copyright © 2018 The Matter Inc. All rights reserved.
 //
-import Foundation
 import BigInt
+import Foundation
 
 // A New Advanced Token Standard
 protocol IERC777: IERC20, IERC820 {

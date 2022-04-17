@@ -4,8 +4,8 @@
 //
 //  Additions for new transaction types by Mark Loit 2022
 
-import Foundation
 import BigInt
+import Foundation
 
 ///  Structure capable of carying the parameters for any transaction type.
 ///  while all fields in this struct are optional, they are not necessarily

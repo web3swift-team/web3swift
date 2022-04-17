@@ -4,8 +4,8 @@
 //
 // Refactor to support EIP-2718 Enveloping by Mark Loit 2022
 
-import Foundation
 import BigInt
+import Foundation
 
 public struct Web3Signer {
     public static func signTX(transaction: inout EthereumTransaction, keystore: AbstractKeystore, account: EthereumAddress, password: String, useExtraEntropy: Bool = false) throws {
@@ -29,7 +29,7 @@ public struct Web3Signer {
         let password = password ?? ""
         let hash = try eip712encode(domainSeparator: domainSeparator, message: safeTx)
 
-        guard let signature = try Web3Signer.signPersonalMessage(hash, keystore: keystore, account: account, password: password) else {
+        guard let signature = try Self.signPersonalMessage(hash, keystore: keystore, account: account, password: password) else {
             throw Web3Error.dataError
         }
 

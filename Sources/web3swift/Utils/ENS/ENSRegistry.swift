@@ -6,8 +6,8 @@
 //  Copyright © 2019 The Matter Inc. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 public extension ENS {
     class Registry {
@@ -17,11 +17,11 @@ public extension ENS {
         public init?(web3: Web3) {
             self.web3 = web3
             switch web3.provider.network {
-            case .Mainnet?:
+            case .Mainnet:
                 registryContractAddress = EthereumAddress("0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e")
-            case .Rinkeby?:
+            case .Rinkeby:
                 registryContractAddress = EthereumAddress("0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e")
-            case .Ropsten?:
+            case .Ropsten:
                 registryContractAddress = EthereumAddress("0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e")
             default:
                 let url = web3.provider.url.absoluteString

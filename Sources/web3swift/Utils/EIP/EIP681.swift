@@ -4,8 +4,8 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-import Foundation
 import BigInt
+import Foundation
 
 public struct EIP681Code {
     public struct EIP681Parameter {
@@ -28,9 +28,9 @@ public struct EIP681Code {
         case ensAddress(String)
         public init(_ string: String) {
             if let ethereumAddress = EthereumAddress(string) {
-                self = TargetAddress.ethereumAddress(ethereumAddress)
+                self = Self.ethereumAddress(ethereumAddress)
             } else {
-                self = TargetAddress.ensAddress(string)
+                self = Self.ensAddress(string)
             }
         }
     }
