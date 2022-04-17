@@ -9,7 +9,7 @@ import BigInt
 
 
 extension web3.Personal {
-    public func createAccountPromise(password: String = "web3swift") async throws -> EthereumAddress {
+    public func createAccount(password: String = "web3swift") async throws -> EthereumAddress {
 
         guard self.web3.provider.attachedKeystoreManager == nil else {
             throw Web3Error.inputError(desc: "Creating account in a local keystore with this method is not supported")

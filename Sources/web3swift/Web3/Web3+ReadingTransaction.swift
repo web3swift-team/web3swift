@@ -38,7 +38,7 @@ public class ReadTransaction {
             assembledTransaction.value = value
         }
 
-        let data: Data = try await self.web3.eth.callPromise(assembledTransaction, transactionOptions: optionsForCall)
+        let data: Data = try await self.web3.eth.callTransaction(assembledTransaction, transactionOptions: optionsForCall)
 
         if self.method == "fallback" {
             let resultHex = data.toHexString().addHexPrefix()
@@ -74,7 +74,7 @@ public class ReadTransaction {
             assembledTransaction.value = mergedOptions.value!
         }
 
-        return try await self.web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
+        return try await self.web3.eth.estimateGas(for: assembledTransaction, transactionOptions: optionsForGasEstimation)
 
     }
 

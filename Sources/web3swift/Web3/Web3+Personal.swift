@@ -24,7 +24,7 @@ extension web3.Personal {
 
      */
     public func signPersonalMessage(message: Data, from: EthereumAddress, password: String = "web3swift") async throws -> Data {
-        let result = try await self.signPersonalMessagePromise(message: message, from: from, password: password)
+        let result = try await self.signPersonal(message: message, from: from, password: password)
         return result
     }
 
@@ -43,7 +43,7 @@ extension web3.Personal {
 
      */
     public func unlockAccount(account: EthereumAddress, password: String = "web3swift", seconds: UInt64 = 300) async throws -> Bool {
-        let result = try await self.unlockAccountPromise(account: account)
+        let result = try await self.unlock(account: account)
         return result
     }
 

@@ -131,7 +131,7 @@ public class WriteTransaction: ReadTransaction {
         var cleanedOptions = TransactionOptions()
         cleanedOptions.from = mergedOptions.from
         cleanedOptions.to = mergedOptions.to
-        return try await self.web3.eth.sendTransactionPromise(transaction, transactionOptions: cleanedOptions, password: password)
+        return try await self.web3.eth.send(transaction, transactionOptions: cleanedOptions, password: password)
     }
 
     public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult {
@@ -146,7 +146,7 @@ public class WriteTransaction: ReadTransaction {
                      , assembledTransaction: EthereumTransaction, optionsForGasEstimation: TransactionOptions) async throws -> BigUInt {
         switch policy {
         case .automatic, .withMargin, .limited:
-            return try await self.web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
+            return try await self.web3.eth.estimateGas(for: assembledTransaction, transactionOptions: optionsForGasEstimation)
         case .manual(let gasLimit):
             return gasLimit
         }
@@ -166,7 +166,7 @@ public class WriteTransaction: ReadTransaction {
     func gasPrice(for policy:  TransactionOptions.GasPricePolicy) async throws -> BigUInt {
         switch policy {
         case .automatic, .withMargin:
-            return try await self.web3.eth.getGasPricePromise()
+            return try await self.web3.eth.gasPrice()
         case .manual(let gasPrice):
             return gasPrice
         }

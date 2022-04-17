@@ -10,7 +10,7 @@ import BigInt
 
 extension web3.Eth {
 
-    public func sendTransactionPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions? = nil, password: String = "web3swift") async throws -> TransactionSendingResult {
+    public func send(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions? = nil, password: String = "web3swift") async throws -> TransactionSendingResult {
         //  print(transaction)
         var assembledTransaction: EthereumTransaction = transaction
 

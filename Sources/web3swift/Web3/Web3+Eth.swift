@@ -19,7 +19,7 @@ extension web3.Eth {
     ///
     /// Returns the Result object that indicates either success of failure.
     public func sendTransaction(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") async throws -> TransactionSendingResult {
-        let result = try await self.sendTransactionPromise(transaction, transactionOptions: transactionOptions, password: password)
+        let result = try await self.send(transaction, transactionOptions: transactionOptions, password: password)
         return result
     }
 
@@ -35,7 +35,7 @@ extension web3.Eth {
     ///
     /// Returns the Result object that indicates either success of failure.
     func call(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions) async throws -> Data {
-        let result = try await self.callPromise(transaction, transactionOptions: transactionOptions)
+        let result = try await self.callTransaction(transaction, transactionOptions: transactionOptions)
         return result
     }
 
@@ -91,7 +91,7 @@ extension web3.Eth {
     ///
     /// Returns the Result object that indicates either success of failure.
     public func getBlockNumber() async throws -> BigUInt {
-        let result = try await self.getBlockNumberPromise()
+        let result = try await self.blockNumber()
         return result
     }
 
@@ -101,7 +101,7 @@ extension web3.Eth {
     ///
     /// Returns the Result object that indicates either success of failure.
     public func getGasPrice() async throws -> BigUInt {
-        let result = try await self.getGasPricePromise()
+        let result = try await self.gasPrice()
         return result
     }
 
@@ -162,7 +162,7 @@ extension web3.Eth {
     /// Error can also indicate that transaction is invalid in the current state, so formally it's gas limit is infinite.
     /// An example of such transaction can be sending an amount of ETH that is larger than the current account balance.
     public func estimateGas(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> BigUInt {
-        let result = try await self.estimateGasPromise(transaction, transactionOptions: transactionOptions)
+        let result = try await self.estimateGas(for: transaction, transactionOptions: transactionOptions)
         return result
     }
 

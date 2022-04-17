@@ -9,7 +9,7 @@ import BigInt
 
 
 extension web3.Eth {
-    public func getBlockNumberPromise() async throws -> BigUInt {
+    public func blockNumber() async throws -> BigUInt {
         let request = JSONRPCRequestFabric.prepareRequest(.blockNumber, parameters: [])
         let response = try await web3.dispatch(request)
 
