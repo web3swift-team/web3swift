@@ -141,7 +141,7 @@ extension ABI.Element {
 }
 
 extension ABI.Element.ParameterType: Equatable {
-    public static func ==(lhs: ABI.Element.ParameterType, rhs: ABI.Element.ParameterType) -> Bool {
+    public static func == (lhs: ABI.Element.ParameterType, rhs: ABI.Element.ParameterType) -> Bool {
         switch (lhs, rhs) {
         case let (.uint(length1), .uint(length2)):
             return length1 == length2

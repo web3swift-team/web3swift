@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 extension web3.Eth {
     public func getBlockNumberPromise() async throws -> BigUInt {
         let request = JSONRPCRequestFabric.prepareRequest(.blockNumber, parameters: [])
@@ -20,7 +19,6 @@ extension web3.Eth {
             throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
         }
         return value
-
 
     }
 }

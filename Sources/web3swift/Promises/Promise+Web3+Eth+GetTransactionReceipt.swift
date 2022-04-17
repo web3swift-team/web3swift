@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 extension web3.Eth {
     public func getTransactionReceiptPromise(_ txhash: Data) async throws -> TransactionReceipt {
         let hashString = txhash.toHexString().addHexPrefix()

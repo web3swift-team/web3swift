@@ -9,7 +9,6 @@
 import Foundation
 import BigInt
 
-
 // Multi Token Standard
 protocol IERC1155: IERC165 {
 

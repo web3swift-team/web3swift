@@ -174,7 +174,7 @@ extension ABI.Input {
         let indexed = self.indexed == true
         return ABI.Element.Event.Input(name: name, type: parameterType, indexed: indexed)
     }
-    
+
     func parseForError() throws -> ABI.Element.EthError.Input {
         let name = self.name ?? ""
         let parameterType = try ABITypeParser.parseTypeString(self.type)

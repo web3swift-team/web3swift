@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 extension Web3.Utils {
 
     fileprivate typealias AssemblyHook = web3.AssemblyHook

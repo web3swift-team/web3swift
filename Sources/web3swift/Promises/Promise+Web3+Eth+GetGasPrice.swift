@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 extension web3.Eth {
     public func getGasPricePromise() async throws -> BigUInt {
         let request = JSONRPCRequestFabric.prepareRequest(.gasPrice, parameters: [])

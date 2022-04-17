@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 extension web3.TxPool {
     public func getInspectPromise() async throws -> [String: [String: [String: String]]] {
         let request = JSONRPCRequestFabric.prepareRequest(.getTxPoolInspect, parameters: [])

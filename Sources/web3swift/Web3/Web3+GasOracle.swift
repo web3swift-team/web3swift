@@ -55,7 +55,6 @@ extension Web3 {
             self.percentiles = percentiles
         }
 
-
         /// Returning one dimensional array from two dimensional array
         ///
         /// We've got `[[min],[middle],[max]]` 2 dimensional array
@@ -139,7 +138,6 @@ extension Web3 {
                             try await self.eth.getBlockByNumber(transaction, fullTransactions: true)
                         }
                     }
-
 
                 var collected = [Block]()
 
@@ -239,7 +237,6 @@ extension Web3.Oracle.FeeHistory: Decodable {
         self.reward = try values.decodeHex([[BigUInt]].self, forKey: .reward)
     }
 }
-
 
 public extension Web3 {
     /// Enum for convenient type safe work with block number

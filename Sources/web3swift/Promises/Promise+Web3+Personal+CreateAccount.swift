@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 extension web3.Personal {
     public func createAccountPromise(password: String = "web3swift") async throws -> EthereumAddress {
 

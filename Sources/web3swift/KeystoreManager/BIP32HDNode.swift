@@ -266,13 +266,13 @@ extension HDNode {
         }
         return currentNode
     }
-    
+
     public func serializeToString(serializePublic: Bool = true) -> String? {
         guard let data = self.serialize(serializePublic: serializePublic) else {return nil}
         let encoded = Base58.base58FromBytes(data.bytes)
         return encoded
     }
-    
+
     public func serialize(serializePublic: Bool = true) -> Data? {
 
         var data = Data()

@@ -9,7 +9,6 @@
 import Foundation
 import BigInt
 
-
 public enum IERC1376DelegateMode: UInt {
     case PublicMsgSender = 0
     case PublicTxOrigin = 1

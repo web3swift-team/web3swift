@@ -70,7 +70,7 @@ public enum BIP39Language {
 }
 
 public class BIP39 {
-    
+
     static public func generateMnemonicsFromEntropy(entropy: Data, language: BIP39Language = BIP39Language.english) -> String?  {
         let wordList = generateMnemonicsFrom(entropy: entropy)
         let separator = language.separator
@@ -80,7 +80,7 @@ public class BIP39 {
     static public func generateMnemonicsFrom(entropy: Data, language: BIP39Language = BIP39Language.english) -> [String]  {
         let entropy_bit_size = entropy.count * 8
         let checksum_length = entropy_bit_size / 32
-        
+
         var entropy_bits = bitarray(from: entropy)
         print("array: \(entropy_bits)")
         guard let checksumTest = generateChecksum(entropyBytes: entropy, checksumLength: checksum_length) else {
@@ -111,7 +111,7 @@ public class BIP39 {
         let checksum = String(checksumData, radix: 2).leftPadding(toLength: checksumLength, withPad: "0")
         return checksum
     }
-    
+
     /**
     Initializes a new mnemonics set with the provided bitsOfEntropy.
      **/

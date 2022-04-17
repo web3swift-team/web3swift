@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
     public var provider: Web3Provider

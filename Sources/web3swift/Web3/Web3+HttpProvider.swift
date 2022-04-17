@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 /// Providers abstraction for custom providers (websockets, other custom private key managers). At the moment should not be used.
 public protocol Web3Provider {
     func sendAsync(_ request: JSONRPCrequest) async throws -> JSONRPCresponse

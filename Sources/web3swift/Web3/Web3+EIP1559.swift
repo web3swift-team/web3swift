@@ -8,7 +8,6 @@
 import Foundation
 import BigInt
 
-
 /// EIP-1559 Base fee extension
 ///
 /// Source: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md

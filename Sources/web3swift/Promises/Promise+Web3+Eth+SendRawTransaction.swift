@@ -6,7 +6,6 @@
 
 import Foundation
 
-
 extension web3.Eth {
     public func sendRawTransactionPromise(_ transaction: Data) async throws -> TransactionSendingResult {
         guard let deserializedTX = EthereumTransaction(rawValue: transaction) else {
@@ -22,7 +21,6 @@ extension web3.Eth {
         }
         let response = try await web3.dispatch(request)
 
-
         guard let value: String = response.getValue() else {
             if response.error != nil {
                 throw Web3Error.nodeError(desc: response.error!.message)
@@ -34,7 +32,6 @@ extension web3.Eth {
             hook.function(result)
         }
         return result
-
 
     }
 }

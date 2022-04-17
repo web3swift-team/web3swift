@@ -50,7 +50,7 @@ extension String {
         let end = self.endIndex
         return String(self[start..<end])
     }
-    
+
     public func leftPadding(toLength: Int, withPad character: Character) -> String {
 
         let stringLength = self.count
@@ -147,7 +147,6 @@ extension String {
        return result
    }
 }
-
 
 extension Character {
     var asciiValue: Int {

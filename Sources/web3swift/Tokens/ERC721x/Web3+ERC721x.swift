@@ -9,7 +9,6 @@
 import Foundation
 import BigInt
 
-
 // A Smarter Token for the Future of Crypto Collectibles
 // ERC721x is an extension of ERC721 that adds support for multi-fungible tokens and batch transfers, while being fully backward-compatible.
 

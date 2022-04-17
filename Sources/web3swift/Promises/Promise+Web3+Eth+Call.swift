@@ -6,7 +6,6 @@
 
 import Foundation
 
-
 extension web3.Eth {
 
     public func callPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> Data {

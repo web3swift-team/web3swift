@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 // Non-Fungible Token Standard
 protocol IERC721: IERC165 {
 
@@ -102,7 +101,6 @@ public class ERC721: IERC721 {
         guard let tokenIdResult = try await tokenIdPromise else {return}
         guard let tokenId = tokenIdResult["0"] as? BigUInt else {return}
         self._tokenId = tokenId
-
 
         self._hasReadProperties = true
 

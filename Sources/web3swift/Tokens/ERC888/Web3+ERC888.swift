@@ -9,7 +9,6 @@
 import Foundation
 import BigInt
 
-
 // MultiDimensional Token Standard
 protocol IERC888 {
     func getBalance(account: EthereumAddress) async throws -> BigUInt

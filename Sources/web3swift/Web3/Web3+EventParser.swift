@@ -142,7 +142,6 @@ extension web3.web3contract.EventParser {
             return [EventParserResultProtocol]()
         }
 
-
         return try await withThrowingTaskGroup(of: [EventParserResultProtocol].self, returning: [EventParserResultProtocol].self) { group in
 
             block.transactions.forEach { transaction in
@@ -218,7 +217,6 @@ extension web3.web3contract {
                 throw Web3Error.nodeError(desc: "Empty or malformed response")
             }
 
-
             let decodedLogs = allLogs.compactMap { (log) -> EventParserResult? in
                 let (n, d) = self.contract.parseEvent(log)
                 guard let evName = n, let evData = d else {return nil}
@@ -228,11 +226,9 @@ extension web3.web3contract {
             }
             .filter{ res in res.eventLog != nil || (res.eventName == eventName && eventName != nil)}
 
-
             if (!joinWithReceipts) {
                 return decodedLogs as [EventParserResultProtocol]
             }
-
 
         return await withTaskGroup(of: EventParserResultProtocol.self, returning: [EventParserResultProtocol].self) { group -> [EventParserResultProtocol] in
 

@@ -175,7 +175,6 @@ public extension UnkeyedDecodingContainer {
         return array
     }
 
-
     /// Decodes a unkeyed value from Hex to `DecodableFromHex`
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `EthereumAddress`

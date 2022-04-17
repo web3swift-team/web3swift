@@ -6123,7 +6123,6 @@ extension Web3.Utils {
         return Web3.Utils.publicToAddress(publicKey)
     }
 
-
     /// Recover the Ethereum address from recoverable secp256k1 signature.
     /// Takes a hash of some message. What message is hashed should be checked by user separately.
     ///

@@ -33,7 +33,6 @@ disabled_rules:
 - inert_defer
 - is_disjoint
 - large_tuple
-- leading_whitespace
 - legacy_cggeometry_functions
 - legacy_constant
 - legacy_constructor
@@ -49,7 +48,6 @@ disabled_rules:
 - notification_center_detachment
 - nsobject_prefer_isequal
 - opening_brace
-- operator_whitespace
 - orphaned_doc_comment
 - private_over_fileprivate
 - private_unit_test
@@ -61,7 +59,6 @@ disabled_rules:
 - redundant_set_access_control
 - redundant_string_enum_value
 - redundant_void_return
-- return_arrow_whitespace
 - self_in_property_initialization
 - shorthand_operator
 - statement_position
@@ -72,7 +69,6 @@ disabled_rules:
 - trailing_comma
 - trailing_newline
 - trailing_semicolon
-- trailing_whitespace
 - type_body_length
 - type_name
 - unneeded_break_in_switch
@@ -84,4 +80,3 @@ disabled_rules:
 - unused_setter_value
 - valid_ibinspectable
 - vertical_parameter_alignment
-- vertical_whitespace

@@ -9,7 +9,6 @@
 import Foundation
 import BigInt
 
-
 // Controller Token Operation Standard
 protocol IERC1644: IERC20 {
 

@@ -8,7 +8,6 @@
 import Foundation
 import BigInt
 
-
 // A New Advanced Token Standard
 protocol IERC777: IERC20, IERC820 {
     func getDefaultOperators() async throws -> [EthereumAddress]
@@ -58,7 +57,6 @@ public class ERC777: IERC777, ERC20BaseProperties {
         self.abi = abi
         self.transactionOptions = mergedOptions
     }
-
 
     // Must be 18!
     public func decimals() async throws -> UInt8 {

@@ -9,7 +9,6 @@
 import Foundation
 import BigInt
 
-
 // Core Security Token Standard
 protocol IERC1594: IERC20 {
 

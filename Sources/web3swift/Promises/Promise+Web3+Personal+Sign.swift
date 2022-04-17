@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 extension web3.Personal {
 
     public func signPersonalMessagePromise(message: Data, from: EthereumAddress, password: String = "web3swift") async throws -> Data {
@@ -26,7 +25,6 @@ extension web3.Personal {
             }
             return value
         }
-
 
         guard let signature = try Web3Signer.signPersonalMessage(message, keystore: attachedKeystoreManager, account: from, password: password) else {
             throw Web3Error.inputError(desc: "Failed to locally sign a message")

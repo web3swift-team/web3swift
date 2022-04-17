@@ -157,11 +157,11 @@ public extension ABI {
         public struct EthError {
             public let name: String
             public let inputs: [Input]
-            
+
             public struct Input {
                 public let name: String
                 public let type: ParameterType
-                
+
                 public init(name: String, type: ParameterType) {
                     self.name = name
                     self.type = type
@@ -356,5 +356,3 @@ extension ABI.Element.Event {
         return eventContent
     }
 }
-
-

@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 extension web3.Eth {
     public func getBlockByNumberPromise(_ number: UInt64, fullTransactions: Bool = false) async throws -> Block {
         let block = String(number, radix: 16).addHexPrefix()

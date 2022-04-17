@@ -14,7 +14,7 @@ extension web3.Eventloop {
             self.timer!.suspend()
             self.timer = nil
         }
-        
+
         self.timer = RepeatingTimer(timeInterval: timeInterval)
         self.timer?.eventHandler = self.runnable
         self.timer?.resume()

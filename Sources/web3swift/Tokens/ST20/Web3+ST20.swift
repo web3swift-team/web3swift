@@ -9,7 +9,6 @@
 import Foundation
 import BigInt
 
-
 // NPolymath Token Standard
 protocol IST20: IERC20 {
     // off-chain hash

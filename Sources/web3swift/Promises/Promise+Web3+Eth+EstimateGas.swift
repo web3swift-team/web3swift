@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 extension web3.Eth {
 
     public func estimateGasPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> BigUInt {
@@ -39,7 +38,6 @@ extension web3.Eth {
         } else {
             return value
         }
-
 
     }
 }

@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 // Token Standard
 protocol IERC20 {
     func getBalance(account: EthereumAddress) async throws -> BigUInt

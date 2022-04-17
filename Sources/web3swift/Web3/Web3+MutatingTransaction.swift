@@ -76,7 +76,6 @@ public class WriteTransaction: ReadTransaction {
             throw Web3Error.inputError(desc: "No nonce policy provided")
         }
 
-
         let assembledTransactionPostHood = assembledTransaction
         let optionsForGasEstimationPostHood = optionsForGasEstimation
 
@@ -85,17 +84,14 @@ public class WriteTransaction: ReadTransaction {
         // assemble promise for nonce
         async let getNoncePromise = nonce(for: noncePolicy, from: from)
 
-
         // assemble promise for gasPrice
         async let gasPricePromise = gasPrice(for: gasPricePolicy)
-
 
         let results = try await [getNoncePromise, gasPricePromise, gasEstimatePromise]
 
         let nonce = results[0]
         let gasEstimate = results[1]
         let gasPrice = results[2]
-
 
         let estimate = mergedOptions.resolveGasLimit(gasEstimate)
         let finalGasPrice = mergedOptions.resolveGasPrice(gasPrice)
@@ -119,7 +115,6 @@ public class WriteTransaction: ReadTransaction {
                 throw Web3Error.processingError(desc: "Transaction is canceled by middleware")
             }
         }
-
 
         return assembledTransaction
 

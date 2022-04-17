@@ -9,7 +9,6 @@
 import Foundation
 import BigInt
 
-
 // Re-Fungible Token Standard (RFT)
 protocol IERC1633: IERC20, IERC165 {
 

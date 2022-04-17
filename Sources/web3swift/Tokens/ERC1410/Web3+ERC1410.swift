@@ -9,7 +9,6 @@
 import Foundation
 import BigInt
 
-
 // Partially Fungible Token Standard
 protocol IERC1410: IERC20 {
 
