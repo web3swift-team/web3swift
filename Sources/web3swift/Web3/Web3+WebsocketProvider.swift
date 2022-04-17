@@ -109,14 +109,14 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         let urlSession = URLSession(configuration: config)
         return urlSession
     }()
-    public var attachedKeystoreManager: KeystoreManager? = nil
+    public var attachedKeystoreManager: KeystoreManager?
 
     public var socket: WebSocket
     public var delegate: Web3SocketDelegate
     /// A flag that is true if socket connected or false if socket doesn't connected.
     public var websocketConnected: Bool = false
 
-    private var writeTimer: Timer? = nil
+    private var writeTimer: Timer?
     private var messagesStringToWrite: [String] = []
     private var messagesDataToWrite: [Data] = []
 
@@ -254,8 +254,8 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     }
 
     public func writeMessage<T>(_ message: T) {
-        var sMessage: String? = nil
-        var dMessage: Data? = nil
+        var sMessage: String?
+        var dMessage: Data?
         if !(message.self is String) && !(message.self is Data) {
             sMessage = "\(message)"
         } else if message.self is String {

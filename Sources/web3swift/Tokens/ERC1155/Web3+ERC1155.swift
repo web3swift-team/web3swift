@@ -30,7 +30,7 @@ protocol IERC1155Metadata {
 
 public class ERC1155: IERC1155 {
 
-    private var _tokenId: BigUInt? = nil
+    private var _tokenId: BigUInt?
     private var _hasReadProperties: Bool = false
 
     public var transactionOptions: TransactionOptions

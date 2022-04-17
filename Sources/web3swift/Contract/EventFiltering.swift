@@ -57,8 +57,8 @@ internal func filterLogs(decodedLogs: [EventParserResultProtocol], eventFilter: 
 }
 
 internal func encodeTopicToGetLogs(contract: EthereumContract, eventName: String?, filter: EventFilter) -> EventFilterParameters? {
-    var eventTopic: Data? = nil
-    var event: ABI.Element.Event? = nil
+    var eventTopic: Data?
+    var event: ABI.Element.Event?
     if eventName != nil {
         guard let ev = contract.events[eventName!] else {return nil}
         event = ev

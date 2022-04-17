@@ -31,7 +31,7 @@ public class HDNode {
 
     }
     public var path: String? = "m"
-    public var privateKey: Data? = nil
+    public var privateKey: Data?
     public var publicKey: Data
     public var chaincode: Data
     public var depth: UInt8

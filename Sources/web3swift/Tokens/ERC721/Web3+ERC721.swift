@@ -54,7 +54,7 @@ protocol IERC721Enumerable {
 // can be imperatively read and saved
 public class ERC721: IERC721 {
 
-    private var _tokenId: BigUInt? = nil
+    private var _tokenId: BigUInt?
     private var _hasReadProperties: Bool = false
 
     public var transactionOptions: TransactionOptions

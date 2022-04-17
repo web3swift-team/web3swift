@@ -18,7 +18,7 @@ extension web3 {
     public class web3contract {
         var contract: EthereumContract
         var web3: web3
-        public var transactionOptions: TransactionOptions? = nil
+        public var transactionOptions: TransactionOptions?
 
         /// Initialize the bound contract instance by supplying the Web3 provider bound object, ABI, Ethereum address and some default
         /// options for further function calls. By default the contract inherits options from the web3 object. Additionally supplied "options"

@@ -176,7 +176,7 @@ public class web3 {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        var timer: RepeatingTimer? = nil
+        var timer: RepeatingTimer?
 
         public var monitoredProperties: [MonitoredProperty] = [MonitoredProperty]()
         //  public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()

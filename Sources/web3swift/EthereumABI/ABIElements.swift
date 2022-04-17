@@ -274,7 +274,7 @@ extension ABI.Element {
 
     public func decodeInputData(_ rawData: Data) -> [String: Any]? {
         var data = rawData
-        var sig: Data? = nil
+        var sig: Data?
         switch rawData.count % 32 {
         case 0:
             break

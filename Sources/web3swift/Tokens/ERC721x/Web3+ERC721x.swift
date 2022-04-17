@@ -36,7 +36,7 @@ protocol IERC721x: IERC721, IERC721Metadata, IERC721Enumerable {
 
 public class ERC721x: IERC721x {
 
-    private var _tokenId: BigUInt? = nil
+    private var _tokenId: BigUInt?
     private var _hasReadProperties: Bool = false
 
     public var transactionOptions: TransactionOptions

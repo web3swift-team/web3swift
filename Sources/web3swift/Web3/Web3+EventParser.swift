@@ -145,7 +145,7 @@ extension web3.web3contract.EventParser {
         return try await withThrowingTaskGroup(of: [EventParserResultProtocol].self, returning: [EventParserResultProtocol].self) { group in
 
             block.transactions.forEach { transaction in
-                var txHash: Data? = nil
+                var txHash: Data?
 
                 switch transaction {
                 case .null:

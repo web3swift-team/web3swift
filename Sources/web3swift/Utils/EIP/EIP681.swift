@@ -72,9 +72,9 @@ extension Web3 {
             let match = matcher.matches(in: encoding, options: NSRegularExpression.MatchingOptions.anchored, range: encoding.fullNSRange)
             guard match.count == 1 else {return nil}
             guard match[0].numberOfRanges == 5 else {return nil}
-            var addressString: String? = nil
-            var chainIDString: String? = nil
-            var tail: String? = nil
+            var addressString: String?
+            var chainIDString: String?
+            var tail: String?
             //  if let payModifierRange = Range(match[0].range(at: 1), in: encoding) {
             //      let payModifierString = String(encoding[payModifierRange])
             //      print(payModifierString)
@@ -111,7 +111,7 @@ extension Web3 {
             for comp in queryItems {
                 if let inputType = try? ABITypeParser.parseTypeString(comp.name) {
                     guard let value = comp.value else {continue}
-                    var nativeValue: AnyObject? = nil
+                    var nativeValue: AnyObject?
                     switch inputType {
                     case .address:
                         let val = EIP681Code.TargetAddress(value)

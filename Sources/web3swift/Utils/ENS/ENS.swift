@@ -11,10 +11,10 @@ public class ENS {
 
     public let web3: web3
     public var registry: Registry
-    public var resolver: Resolver? = nil
-    public var baseRegistrar: BaseRegistrar? = nil
-    public var registrarController: ETHRegistrarController? = nil
-    public var reverseRegistrar: ReverseRegistrar? = nil
+    public var resolver: Resolver?
+    public var baseRegistrar: BaseRegistrar?
+    public var registrarController: ETHRegistrarController?
+    public var reverseRegistrar: ReverseRegistrar?
 
     public init?(web3: web3) {
         self.web3 = web3

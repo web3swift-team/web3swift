@@ -41,7 +41,7 @@ public final class InfuraProvider: Web3HttpProvider {
 public final class InfuraWebsocketProvider: WebsocketProvider {
     public var filterID: String?
     public var subscriptionIDs = Set<String>()
-    private var subscriptionIDforUnsubscribing: String? = nil
+    private var subscriptionIDforUnsubscribing: String?
     private var filterTimer: Timer?
 
     /// if set debugMode True then show websocket events logs in the console

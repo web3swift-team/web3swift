@@ -73,10 +73,10 @@ public struct JSONRPCresponse: Decodable{
     public var message: String?
 
     enum JSONRPCresponseKeys: String, CodingKey {
-        case id = "id"
-        case jsonrpc = "jsonrpc"
-        case result = "result"
-        case error = "error"
+        case id
+        case jsonrpc
+        case result
+        case error
     }
 
     public init(id: Int, jsonrpc: String, result: Any?, error: ErrorMessage?) {
@@ -123,7 +123,7 @@ public struct JSONRPCresponse: Decodable{
             return
         }
         // TODO: refactor me
-        var result: Any? = nil
+        var result: Any?
         if let rawValue = try? container.decodeIfPresent(String.self, forKey: .result) {
             result = rawValue
         } else if let rawValue = try? container.decodeIfPresent(Int.self, forKey: .result) {

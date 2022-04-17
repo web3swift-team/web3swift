@@ -175,7 +175,7 @@ public class BIP32Keystore: AbstractKeystore {
             throw AbstractKeystoreError.encryptionError("Failed to deserialize a root node")
         }
         let prefixPath = self.rootPrefix
-        var pathAppendix: String? = nil
+        var pathAppendix: String?
         if path.hasPrefix(prefixPath) {
             let upperIndex = (path.range(of: prefixPath)?.upperBound)!
             if upperIndex < path.endIndex

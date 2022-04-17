@@ -8,7 +8,7 @@ import BigInt
 
 public struct EthereumContract: ContractProtocol {
     public var transactionOptions: TransactionOptions? = TransactionOptions.defaultOptions
-    public var address: EthereumAddress? = nil
+    public var address: EthereumAddress?
 
     var _abi: [ABI.Element]
 
@@ -44,7 +44,7 @@ public struct EthereumContract: ContractProtocol {
     }
 
     public var constructor: ABI.Element? {
-        var toReturn: ABI.Element? = nil
+        var toReturn: ABI.Element?
         for m in self._abi {
             if toReturn != nil {
                 break
