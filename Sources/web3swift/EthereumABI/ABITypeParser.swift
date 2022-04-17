@@ -51,8 +51,10 @@ public struct ABITypeParser {
     }
 
     static func recursiveParseType(_ string: String) -> (type: ABI.Element.ParameterType?, tail: String?) {
-        let matcher = try! NSRegularExpression(pattern: ABI.TypeParsingExpressions.typeEatingRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
-        let match = matcher.matches(in: string, options: NSRegularExpression.MatchingOptions.anchored, range: string.fullNSRange)
+        let matcher = try? NSRegularExpression(pattern: ABI.TypeParsingExpressions.typeEatingRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
+        guard let match = matcher?.matches(in: string, options: NSRegularExpression.MatchingOptions.anchored, range: string.fullNSRange) else {
+            return (nil, nil)
+        }
         guard match.count == 1 else {
             return (nil, nil)
         }
@@ -84,8 +86,8 @@ public struct ABITypeParser {
     }
 
     static func recursiveParseArray(baseType: ABI.Element.ParameterType, string: String) -> (type: ABI.Element.ParameterType?, tail: String?) {
-        let matcher = try! NSRegularExpression(pattern: ABI.TypeParsingExpressions.arrayEatingRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
-        let match = matcher.matches(in: string, options: NSRegularExpression.MatchingOptions.anchored, range: string.fullNSRange)
+        let matcher = try? NSRegularExpression(pattern: ABI.TypeParsingExpressions.arrayEatingRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
+        guard let match = matcher?.matches(in: string, options: NSRegularExpression.MatchingOptions.anchored, range: string.fullNSRange) else {return (nil, nil)}
         guard match.count == 1 else {return (nil, nil)}
         var tail: String = ""
         var type: ABI.Element.ParameterType?

@@ -68,8 +68,8 @@ extension Web3 {
             guard striped.count == 2 else {return nil}
             guard let encoding = striped[1].removingPercentEncoding else {return nil}
             //  guard let url = URL.init(string: encoding) else {return nil}
-            let matcher = try! NSRegularExpression(pattern: addressRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
-            let match = matcher.matches(in: encoding, options: NSRegularExpression.MatchingOptions.anchored, range: encoding.fullNSRange)
+            let matcher = try? NSRegularExpression(pattern: addressRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
+            guard let match = matcher?.matches(in: encoding, options: NSRegularExpression.MatchingOptions.anchored, range: encoding.fullNSRange) else {return nil}
             guard match.count == 1 else {return nil}
             guard match[0].numberOfRanges == 5 else {return nil}
             var addressString: String?

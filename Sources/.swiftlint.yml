@@ -1,7 +1,5 @@
 disabled_rules:
-#error producing
 - force_cast
-- force_try
 #----------Need addressing in the future---------------
 - function_parameter_count
 - cyclomatic_complexity
@@ -16,3 +14,6 @@ disabled_rules:
 - empty_enum_arguments
 - todo
 
+excluded:
+- Carthage
+- Pods
