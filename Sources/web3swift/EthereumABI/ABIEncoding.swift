@@ -29,7 +29,6 @@ extension ABIEncoder {
             if base16 != nil {
                 return base16!
             }
-            break
         case let v as UInt:
             return BigUInt(v)
         case let v as UInt8:
@@ -71,7 +70,6 @@ extension ABIEncoder {
             if base16 != nil {
                 return base16
             }
-            break
         case let v as UInt:
             return BigInt(v)
         case let v as UInt8:

@@ -290,7 +290,6 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
             delegate.gotError(error: Web3Error.connectionError)
         case .text(let string):
             delegate.received(message: string)
-            break
         case .binary(let data):
             delegate.received(message: data)
         case .ping(_):

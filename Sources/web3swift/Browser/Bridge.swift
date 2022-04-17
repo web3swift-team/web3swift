@@ -213,10 +213,7 @@ public extension WKWebView {
 
 fileprivate extension WKWebView {
 
-    func st_dispatchBridgeEvent(_ eventName: String,
-                                            parameters: [String: Any],
-                                            results: Bridge.Results,
-                                            completionHandler: ((Any?, Error?) -> Void)? = nil) {
+    func st_dispatchBridgeEvent(_ eventName: String, parameters: [String: Any], results: Bridge.Results, completionHandler: ((Any?, Error?) -> Void)? = nil) {
 
         var eventDetail: [String: Any] = parameters
         switch results {

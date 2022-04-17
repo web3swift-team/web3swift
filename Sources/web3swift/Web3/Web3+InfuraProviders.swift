@@ -259,22 +259,17 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         case .text(let string):
             debugMode ? print("received text: \(string)") : nil
             websocketDidReceiveMessage(text: string)
-            break
         case .binary(let data):
             debugMode ? print("received text: \(String(data: data, encoding: .utf8) ?? "empty")") : nil
             delegate.received(message: data)
         case .ping(_):
             debugMode ? print("ping") : nil
-            break
         case .pong(_):
             debugMode ? print("pong") : nil
-            break
         case .viabilityChanged(_):
             debugMode ? print("viabilityChanged") : nil
-            break
         case .reconnectSuggested(_):
             debugMode ? print("reconnectSuggested") : nil
-            break
         case .cancelled:
             debugMode ? print("cancelled") : nil
             websocketConnected = false

@@ -4880,7 +4880,7 @@ extension Web3.Utils {
 ]
 """
 
-    //function setAddr(bytes32 node, address addr)
+    // function setAddr(bytes32 node, address addr)
     public static var legacyResolverABI = """
 [
     {

@@ -12,21 +12,10 @@ disabled_rules:
 - shorthand_operator
 - type_body_length
 - type_name
-#Warning Producing
-- unneeded_break_in_switch
-- valid_ibinspectable
-- vertical_parameter_alignment
-- block_based_kvo
-- class_delegate_protocol
-- closing_brace
-- closure_parameter_position
-- comment_spacing
-- compiler_protocol_init
-- computed_accessors_order
+
 #-------------------------
 - empty_enum_arguments
-#-------------------------
-#-------------------------
-#-------------------------
+- block_based_kvo
+- class_delegate_protocol
 - todo
 

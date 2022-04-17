@@ -52,7 +52,6 @@ public struct EthereumContract: ContractProtocol {
             switch m {
             case .constructor(_):
                 toReturn = m
-                break
             default:
                 continue
             }
