@@ -10,7 +10,7 @@ import BigInt
 
 extension web3.Eth {
 
-    public func estimateGasPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> BigUInt {
+    public func estimateGas(for transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> BigUInt {
 
         guard let request = EthereumTransaction.createRequest(method: .estimateGas, transaction: transaction, transactionOptions: transactionOptions) else {
             throw Web3Error.processingError(desc: "Transaction is invalid")

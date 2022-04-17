@@ -9,7 +9,7 @@ import BigInt
 
 
 extension web3.TxPool {
-    public func getInspectPromise() async throws -> [String: [String: [String: String]]] {
+    public func txPoolInspect() async throws -> [String: [String: [String: String]]] {
         let request = JSONRPCRequestFabric.prepareRequest(.getTxPoolInspect, parameters: [])
         let response = try await web3.dispatch(request)
 
@@ -23,7 +23,7 @@ extension web3.TxPool {
 
     }
 
-    public func getStatusPromise() async throws -> TxPoolStatus {
+    public func txPoolStatus() async throws -> TxPoolStatus {
         let request = JSONRPCRequestFabric.prepareRequest(.getTxPoolStatus, parameters: [])
         let response = try await web3.dispatch(request)
 
@@ -37,7 +37,7 @@ extension web3.TxPool {
 
     }
 
-    public func getContentPromise() async throws -> TxPoolContent {
+    public func txPoolContent() async throws -> TxPoolContent {
         let request = JSONRPCRequestFabric.prepareRequest(.getTxPoolContent, parameters: [])
         let response = try await web3.dispatch(request)
 

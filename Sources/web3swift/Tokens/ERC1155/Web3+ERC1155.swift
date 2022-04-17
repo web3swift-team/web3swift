@@ -73,7 +73,7 @@ public class ERC1155: IERC1155 {
         var transactionOptions = TransactionOptions.defaultOptions
         transactionOptions.callOnBlock = .latest
 
-        guard let tokenIdPromise = try await contract.read("id", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
+        guard let tokenIdPromise = try await contract.read("id", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.decodedData() else {return}
 
         guard let tokenId = tokenIdPromise["0"] as? BigUInt else {return}
         self._tokenId = tokenId

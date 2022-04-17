@@ -10,11 +10,11 @@ import Foundation
 import BigInt
 
 extension web3.Eth {
-    public func getCodePromise(address: EthereumAddress, onBlock: String = "latest") async throws -> String {
+    public func code(for address: EthereumAddress, onBlock: String = "latest") async throws -> String {
         let addr = address.address
-        return try await getCodePromise(address: addr, onBlock: onBlock)
+        return try await code(for : addr, onBlock: onBlock)
     }
-    public func getCodePromise(address: String, onBlock: String = "latest") async throws -> String {
+    public func code(for address: String, onBlock: String = "latest") async throws -> String {
         let request = JSONRPCRequestFabric.prepareRequest(.getCode, parameters: [address.lowercased(), onBlock])
         let response = try await web3.dispatch(request)
 

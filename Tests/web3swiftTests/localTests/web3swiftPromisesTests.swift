@@ -18,7 +18,7 @@ class web3swiftPromisesTests: XCTestCase {
     
     func testGetBalancePromise() async throws {
         let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
-        let balance = try await web3.eth.getBalancePromise(address: "0xe22b8979739D724343bd002F9f432F5990879901")
+        let balance = try await web3.eth.getBalance(address: "0xe22b8979739D724343bd002F9f432F5990879901")
         print(balance)
     }
     
@@ -30,9 +30,9 @@ class web3swiftPromisesTests: XCTestCase {
         guard let writeTX = web3.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
         writeTX.transactionOptions.from = allAddresses[0]
         writeTX.transactionOptions.gasLimit = .manual(gasLimit)
-        let writeResult = try await writeTX.sendPromise()
+        let writeResult = try await writeTX.send()
         let txHash = writeResult.hash
-        let result = try await web3.eth.getTransactionDetailsPromise(txHash)
+        let result = try await web3.eth.transactionDetails(txHash)
         print(result)
         XCTAssert(result.transaction.parameters.gasLimit == BigUInt(gasLimit))
     }
@@ -47,7 +47,7 @@ class web3swiftPromisesTests: XCTestCase {
         guard let writeTX = contract?.write("fallback") else {return XCTFail()}
         writeTX.transactionOptions.from = tempKeystore!.addresses?.first
         writeTX.transactionOptions.value = BigUInt("1.0", .eth)
-        let estimate = try await writeTX.estimateGasPromise()
+        let estimate = try await writeTX.estimateGas(with: nil)
         print(estimate)
         XCTAssert(estimate == 21000)
     }
@@ -64,7 +64,7 @@ class web3swiftPromisesTests: XCTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let result = try await deployTx.sendPromise()
+        let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
@@ -103,7 +103,7 @@ class web3swiftPromisesTests: XCTestCase {
                                        transactionOptions: options) else {
                                         return
         }
-        let estimate1 = try await tx1.estimateGasPromise()
+        let estimate1 = try await tx1.estimateGas(with: nil)
         print(estimate1)
         
         let amount2 = Web3.Utils.parseToBigUInt("0.00000005", units: .eth) // 50 gwei
@@ -113,20 +113,20 @@ class web3swiftPromisesTests: XCTestCase {
                                        transactionOptions: options) else {
                                         return
         }
-        let estimate2 = try await tx2.estimateGasPromise()
+        let estimate2 = try await tx2.estimateGas(with: nil)
         print(estimate2)
         XCTAssert(estimate2 - estimate1 <= 22000)
     }
     
     func testSendETHPromise() async throws {
-        let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
+        let web3 = try await Web3.new(URL(string: "http://127.0.0.1:8545")!)
         let allAddresses = try await web3.eth.getAccounts()
         let gasPrice = try await web3.eth.getGasPrice()
         let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         guard let writeTX = web3.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
         writeTX.transactionOptions.from = allAddresses[0]
         writeTX.transactionOptions.gasPrice = .manual(gasPrice)
-        let result = try await writeTX.sendPromise()
+        let result = try await writeTX.send()
         print(result)
     }
     
@@ -136,7 +136,7 @@ class web3swiftPromisesTests: XCTestCase {
         let token = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress, abiVersion: 2)!
         
         let userAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-        let tokenBalance = try await token.read("balanceOf", parameters: [userAddress] as [AnyObject])!.callPromise()
+        let tokenBalance = try await token.read("balanceOf", parameters: [userAddress] as [AnyObject])!.decodedData()
         guard let bal = tokenBalance["0"] as? BigUInt else {return XCTFail()}
         print(String(bal))
     }

@@ -204,11 +204,11 @@ extension ERC20BaseProperties {
         var transactionOptionsVAR = TransactionOptions.defaultOptions
         transactionOptionsVAR.callOnBlock = .latest
         let transactionOptions = transactionOptionsVAR
-        async let namePromise = contract.read("name", parameters: [AnyObject](), extraData: Data(), transactionOptions: transactionOptions)?.callPromise()
+        async let namePromise = contract.read("name", parameters: [AnyObject](), extraData: Data(), transactionOptions: transactionOptions)?.decodedData()
 
-        async let symbolPromise = try await contract.read("symbol", parameters: [AnyObject](), extraData: Data(), transactionOptions: transactionOptions)?.callPromise()
+        async let symbolPromise = try await contract.read("symbol", parameters: [AnyObject](), extraData: Data(), transactionOptions: transactionOptions)?.decodedData()
 
-        async let decimalPromise = try await contract.read("decimals", parameters: [AnyObject](), extraData: Data(), transactionOptions: transactionOptions)?.callPromise()
+        async let decimalPromise = try await contract.read("decimals", parameters: [AnyObject](), extraData: Data(), transactionOptions: transactionOptions)?.decodedData()
 
         let resolvedPromises = try await ["name":namePromise, "symbol":symbolPromise, "decimals":decimalPromise]
 

@@ -10,7 +10,7 @@ import BigInt
 
 extension web3.Personal {
 
-    public func signPersonalMessagePromise(message: Data, from: EthereumAddress, password: String = "web3swift") async throws -> Data {
+    public func signPersonal(message: Data, from: EthereumAddress, password: String = "web3swift") async throws -> Data {
 
         guard let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager else {
             let hexData = message.toHexString().addHexPrefix()

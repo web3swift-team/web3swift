@@ -26,7 +26,7 @@ public class ReadTransaction {
         }
     }
 
-    public func callPromise(transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
+    public func decodedData(with transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
         var assembledTransaction: EthereumTransaction = self.transaction
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
         var optionsForCall = TransactionOptions()
@@ -38,7 +38,7 @@ public class ReadTransaction {
             assembledTransaction.value = value
         }
 
-        let data: Data = try await self.web3.eth.callPromise(assembledTransaction, transactionOptions: optionsForCall)
+        let data: Data = try await self.web3.eth.callTransaction(assembledTransaction, transactionOptions: optionsForCall)
 
         if self.method == "fallback" {
             let resultHex = data.toHexString().addHexPrefix()
@@ -50,7 +50,7 @@ public class ReadTransaction {
         return decodedData
     }
 
-    public func estimateGasPromise(transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
+    public func estimateGas(with transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
         var assembledTransaction: EthereumTransaction = self.transaction
 
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
@@ -74,15 +74,15 @@ public class ReadTransaction {
             assembledTransaction.value = mergedOptions.value!
         }
 
-        return try await self.web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
+        return try await self.web3.eth.estimateGas(for: assembledTransaction, transactionOptions: optionsForGasEstimation)
 
     }
 
     public func estimateGas(transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
-        return try await self.estimateGasPromise(transactionOptions: transactionOptions)
+        return try await self.estimateGas(with: transactionOptions)
     }
 
     public func call(transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
-        return try await self.callPromise(transactionOptions: transactionOptions)
+        return try await self.decodedData(with: transactionOptions)
     }
 }
