@@ -260,7 +260,7 @@ extension ABI.Element {
                 if output.name != "" {
                     returnArray[output.name] = values[i]
                 }
-                i = i + 1
+                i += 1
             }
             // set a flag to detect the request succeeded
             returnArray["_success"] = true
@@ -307,7 +307,7 @@ extension ABI.Element {
                 if input.name != "" {
                     returnArray[input.name] = values[i]
                 }
-                i = i + 1
+                i += 1
             }
             return returnArray
         case .event(_):
@@ -339,7 +339,7 @@ extension ABI.Element {
                 if input.name != "" {
                     returnArray[input.name] = values[i]
                 }
-                i = i + 1
+                i += 1
             }
             return returnArray
         case .receive(_):

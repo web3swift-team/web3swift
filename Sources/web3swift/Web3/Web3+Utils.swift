@@ -5988,7 +5988,7 @@ extension Web3.Utils {
             guard numDigits <= unitDecimals else {return nil}
             guard let afterDecPoint = BigUInt(components[1], radix: 10) else {return nil}
             let extraPart = afterDecPoint*BigUInt(10).power(unitDecimals-numDigits)
-            mainPart = mainPart + extraPart
+            mainPart += extraPart
         }
         return mainPart
     }
@@ -6058,7 +6058,7 @@ extension Web3.Utils {
                 var firstDigit = 0
                 for char in fullPaddedRemainder {
                     if char == "0" {
-                        firstDigit = firstDigit + 1
+                        firstDigit += 1
                     } else {
                         let firstDecimalUnit = String(fullPaddedRemainder[firstDigit ..< firstDigit+1])
                         var remainingDigits = ""
@@ -6076,7 +6076,7 @@ extension Web3.Utils {
                         } else {
                             fullRemainder = firstDecimalUnit
                         }
-                        firstDigit = firstDigit + 1
+                        firstDigit += 1
                         break
                     }
                 }

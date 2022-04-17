@@ -15,7 +15,7 @@ public struct Counter {
         var c: UInt64 = 0
         lockQueue.sync {
             c = Counter.counter
-            Counter.counter = Counter.counter + 1
+            Counter.counter += 1
         }
         return c
     }

@@ -147,7 +147,7 @@ public class KeystoreManager: AbstractKeystore {
                 if !path.hasSuffix("/") {
                     filePath = path + "/"
                 }
-                filePath = filePath + file
+                filePath += file
                 guard let content = fileManager.contents(atPath: filePath) else {
                     continue
                 }
@@ -169,7 +169,7 @@ public class KeystoreManager: AbstractKeystore {
                 if !path.hasSuffix("/") {
                     filePath = path + "/"
                 }
-                filePath = filePath + file
+                filePath += file
                 guard let content = fileManager.contents(atPath: filePath) else {
                     continue
                 }

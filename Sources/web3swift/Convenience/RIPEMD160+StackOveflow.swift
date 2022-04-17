@@ -11,6 +11,7 @@ import Foundation
 
 public struct RIPEMD160 {
 
+    // swiftlint:disable large_tuple
     private var MDbuf: (UInt32, UInt32, UInt32, UInt32, UInt32)
     private var buffer: Data
     private var count: Int64 // Total # of bytes processed.

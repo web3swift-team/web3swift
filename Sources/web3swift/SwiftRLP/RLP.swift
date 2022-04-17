@@ -239,7 +239,8 @@ public struct RLP {
             return RLPItem.init(content: .noItem)
         }
     }
-
+    // TODO: convert return tuple to a struct
+    // swiftlint:disable large_tuple
     internal static func decodeLength(_ input: Data) -> (offset: BigUInt?, length: BigUInt?, type: RLPItem.UnderlyingType?) {
         do {
             let length = BigUInt(input.count)

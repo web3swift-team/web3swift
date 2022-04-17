@@ -2,19 +2,17 @@ disabled_rules:
 #error producing
 - force_cast
 - force_try
+#----------Need addressing in the future---------------
 - function_parameter_count
-- large_tuple
-- shorthand_operator
-- type_body_length
-#-------------------------
 - cyclomatic_complexity
+- block_based_kvo
+- class_delegate_protocol
+#-------------------------
+- type_body_length
 - identifier_name
 - file_length
 - line_length
 - function_body_length
-#-------------------------
 - empty_enum_arguments
-- block_based_kvo
-- class_delegate_protocol
 - todo
 

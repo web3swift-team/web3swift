@@ -24,7 +24,7 @@ extension ABIDecoder {
             let (v, c) = decodeSingleType(type: types[i], data: data, pointer: consumed)
             guard let valueUnwrapped = v, let consumedUnwrapped = c else {return nil}
             toReturn.append(valueUnwrapped)
-            consumed = consumed + consumedUnwrapped
+            consumed += consumedUnwrapped
         }
         guard toReturn.count == types.count else {return nil}
         return toReturn
@@ -118,7 +118,7 @@ extension ABIDecoder {
                         let (v, c) = decodeSingleType(type: subType, data: elementItself, pointer: subpointer)
                         guard let valueUnwrapped = v, let consumedUnwrapped = c else {break}
                         toReturn.append(valueUnwrapped)
-                        subpointer = subpointer + consumedUnwrapped
+                        subpointer += consumedUnwrapped
                     }
                     return (toReturn as AnyObject, type.memoryUsage)
                 } else {
@@ -136,7 +136,7 @@ extension ABIDecoder {
                         guard let valueUnwrapped = v, let consumedUnwrapped = c else {break}
                         toReturn.append(valueUnwrapped)
                         if subType.isStatic {
-                            subpointer = subpointer + consumedUnwrapped
+                            subpointer += consumedUnwrapped
                         } else {
                             subpointer = consumedUnwrapped // need to go by nextElementPointer
                         }
@@ -152,7 +152,7 @@ extension ABIDecoder {
                     let (v, c) = decodeSingleType(type: subType, data: elementItself, pointer: consumed)
                     guard let valueUnwrapped = v, let consumedUnwrapped = c else {return (nil, nil)}
                     toReturn.append(valueUnwrapped)
-                    consumed = consumed + consumedUnwrapped
+                    consumed += consumedUnwrapped
                 }
                 if subType.isStatic {
                     return (toReturn as AnyObject, consumed)
@@ -178,16 +178,16 @@ extension ABIDecoder {
                     if !subType.isStatic {
                         consumed = consumedUnwrapped
                     } else {
-                        consumed = consumed + consumedUnwrapped
+                        consumed += consumedUnwrapped
                     }
                 case .tuple(types: _):
                     if !subTypes[i].isStatic {
                         consumed = consumedUnwrapped
                     } else {
-                        consumed = consumed + consumedUnwrapped
+                        consumed += consumedUnwrapped
                     }
                 default:
-                    consumed = consumed + consumedUnwrapped
+                    consumed += consumedUnwrapped
                 }
             }
             //            print("Tuple element is: \n" + String(describing: toReturn))
@@ -290,7 +290,7 @@ extension ABIDecoder {
                 if el.name != "" {
                     eventContent[el.name] = value
                 }
-                indexedInputCounter = indexedInputCounter + 1
+                indexedInputCounter += 1
             } else {
                 let name = "\(i)"
                 let value = nonIndexedValues[nonIndexedInputCounter]
@@ -298,7 +298,7 @@ extension ABIDecoder {
                 if el.name != "" {
                     eventContent[el.name] = value
                 }
-                nonIndexedInputCounter = nonIndexedInputCounter + 1
+                nonIndexedInputCounter += 1
             }
         }
         return eventContent

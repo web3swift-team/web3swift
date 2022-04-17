@@ -56,6 +56,7 @@ protocol IERC1400: IERC20 {
     // Transfer Validity
     func canTransfer(to: EthereumAddress, amount: String, data: [UInt8]) async throws -> ([UInt8], Data)
     func canTransferFrom(originalOwner: EthereumAddress, to: EthereumAddress, amount: String, data: [UInt8]) async throws -> ([UInt8], Data)
+    // swiftlint:disable large_tuple
     func canTransferByPartition(originalOwner: EthereumAddress, to: EthereumAddress, partition: Data, amount: String, data: [UInt8]) async throws -> ([UInt8], Data, Data)
 }
 
@@ -642,6 +643,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         return res
     }
 
+    // swiftlint:disable large_tuple
     public func canTransferByPartition(originalOwner: EthereumAddress, to: EthereumAddress, partition: Data, amount: String, data: [UInt8]) async throws -> ([UInt8], Data, Data) {
         let contract = self.contract
         var transactionOptions = TransactionOptions()

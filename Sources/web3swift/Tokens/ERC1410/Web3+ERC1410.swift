@@ -21,6 +21,7 @@ protocol IERC1410: IERC20 {
     // Token Transfers
     func transferByPartition(partition: Data, from: EthereumAddress, to: EthereumAddress, amount: String, data: [UInt8]) async throws -> WriteTransaction
     func operatorTransferByPartition(partition: Data, from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String, data: [UInt8], operatorData: [UInt8]) async throws -> WriteTransaction
+    // swiftlint:disable large_tuple
     func canTransferByPartition(originalOwner: EthereumAddress, to: EthereumAddress, partition: Data, amount: String, data: [UInt8]) async throws -> ([UInt8], Data, Data)
 
     // Operator Information
@@ -253,6 +254,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
         return tx
     }
 
+    // swiftlint:disable large_tuple
     public func canTransferByPartition(originalOwner: EthereumAddress, to: EthereumAddress, partition: Data, amount: String, data: [UInt8]) async throws -> ([UInt8], Data, Data) {
         let contract = self.contract
         var transactionOptions = TransactionOptions()

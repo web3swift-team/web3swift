@@ -38,7 +38,7 @@ extension Web3.Utils {
                 for await value in group {
                     let key = knownKeys[i]
                     self.nonceLookups[key] = value
-                    i = i + 1
+                    i += 1
                 }
 
             }
@@ -48,6 +48,7 @@ extension Web3.Utils {
 
         }
 
+        // swiftlint:disable large_tuple
         func preAssemblyFunction(tx: EthereumTransaction, contract: EthereumContract, transactionOptions: TransactionOptions) -> (EthereumTransaction, EthereumContract, TransactionOptions, Bool) {
             guard let from = transactionOptions.from else {
                 // do nothing

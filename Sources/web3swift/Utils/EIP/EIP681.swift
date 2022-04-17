@@ -172,7 +172,7 @@ extension Web3 {
                     if nativeValue != nil {
                         inputs.append(ABI.Element.InOut(name: String(inputNumber), type: inputType))
                         code.parameters.append(EIP681Code.EIP681Parameter(type: inputType, value: nativeValue!))
-                        inputNumber = inputNumber + 1
+                        inputNumber += 1
                     } else {
                         return nil
                     }
@@ -194,7 +194,7 @@ extension Web3 {
                             } else if splittedNumber.count == 2 {
                                 let stringNumber = String(splittedNumber[0]) + String(splittedNumber[1])
                                 let am = BigUInt(pow(10, Double(splittedNumber[1].count)))
-                                a = a / am
+                                a /= am
                                 guard let number = BigUInt(stringNumber, radix: 10) else { return nil }
                                 code.amount = number * a
                             } else { return nil }

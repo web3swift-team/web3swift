@@ -88,8 +88,8 @@ public struct IBAN {
     internal static func calculateChecksumMod97(_ preparedString: String) -> Int {
         var m = 0
         for digit in preparedString.split(intoChunksOf: 1) {
-            m = m * 10
-            m = m + Int(digit)!
+            m *= 10
+            m += Int(digit)!
             m = m % 97
         }
         return m

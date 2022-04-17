@@ -165,7 +165,7 @@ extension ABIEncoder {
                 guard let newHead = tailsPointer.abiEncode(bits: 256) else {return nil}
                 headsConcatenated.append(newHead)
                 tailsConcatenated.append(tail)
-                tailsPointer = tailsPointer + BigUInt(tail.count)
+                tailsPointer += BigUInt(tail.count)
             } else {
                 headsConcatenated.append(head)
                 tailsConcatenated.append(tail)
@@ -279,7 +279,7 @@ extension ABIEncoder {
                             guard let newHead = tailsPointer.abiEncode(bits: 256) else {return nil}
                             headsConcatenated.append(newHead)
                             tailsConcatenated.append(tail)
-                            tailsPointer = tailsPointer + BigUInt(tail.count)
+                            tailsPointer += BigUInt(tail.count)
                         } else {
                             headsConcatenated.append(head)
                             tailsConcatenated.append(tail)
@@ -326,7 +326,7 @@ extension ABIEncoder {
                         guard let newHead = tailsPointer.abiEncode(bits: 256) else {return nil}
                         headsConcatenated.append(newHead)
                         tailsConcatenated.append(tail)
-                        tailsPointer = tailsPointer + BigUInt(tail.count)
+                        tailsPointer += BigUInt(tail.count)
                     }
                     let total = headsConcatenated + tailsConcatenated
                     //                    print("Static array of dynamic types encoding :\n" + String(total.toHexString()))
@@ -364,7 +364,7 @@ extension ABIEncoder {
                     guard let newHead = tailsPointer.abiEncode(bits: 256) else {return nil}
                     headsConcatenated.append(newHead)
                     tailsConcatenated.append(tail)
-                    tailsPointer = tailsPointer + BigUInt(tail.count)
+                    tailsPointer += BigUInt(tail.count)
                 } else {
                     headsConcatenated.append(head)
                     tailsConcatenated.append(tail)

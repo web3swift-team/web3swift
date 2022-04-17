@@ -92,7 +92,7 @@ extension ABI.Element {
                 }
                 var sum: UInt64 = 0
                 for t in types {
-                    sum = sum + t.memoryUsage
+                    sum += t.memoryUsage
                 }
                 return sum
             default:

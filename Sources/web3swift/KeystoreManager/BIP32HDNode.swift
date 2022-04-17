@@ -128,7 +128,7 @@ extension HDNode {
         if index >= (UInt32(1) << 31) || hardened {
             trueIndex = index
             if trueIndex < (UInt32(1) << 31) {
-                trueIndex = trueIndex + (UInt32(1) << 31)
+                trueIndex += (UInt32(1) << 31)
             }
             let hmac: Authenticator = HMAC(key: self.chaincode.bytes, variant: .sha2(.sha512))
             var inputForHMAC = Data()
