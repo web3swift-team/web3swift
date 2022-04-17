@@ -30,7 +30,9 @@ public class Web3HttpProvider: Web3Provider {
     }()
     public init?(_ httpProviderURL: URL, network net: Networks? = nil, keystoreManager manager: KeystoreManager? = nil) async {
         do {
-            guard httpProviderURL.scheme == "http" || httpProviderURL.scheme == "https" else {return nil}
+            guard httpProviderURL.scheme == "http" || httpProviderURL.scheme == "https" else {
+                return nil
+            }
             url = httpProviderURL
             if net == nil {
                 let request = JSONRPCRequestFabric.prepareRequest(.getNetwork, parameters: [])
@@ -43,7 +45,9 @@ public class Web3HttpProvider: Web3Provider {
                 }
                 guard let result: String = response.getValue(), let intNetworkNumber = Int(result) else {return nil}
                 network = Networks.fromInt(intNetworkNumber)
-                if network == nil {return nil}
+                if network == nil {
+                    return nil
+                }
             } else {
                 network = net
             }
