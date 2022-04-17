@@ -46,17 +46,7 @@ protocol IERC1376: IERC20 {
 
     func nonceOf(owner: EthereumAddress) async throws -> BigUInt
     func increaseNonce(from: EthereumAddress) async throws -> WriteTransaction
-    func delegateTransferAndCall(from: EthereumAddress,
-                                 nonce: BigUInt,
-                                 fee: BigUInt,
-                                 gasAmount: BigUInt,
-                                 to: EthereumAddress,
-                                 value: String,
-                                 data: [UInt8],
-                                 mode: IERC1376DelegateMode,
-                                 v: UInt8,
-                                 r: Data,
-                                 s: Data) async throws -> WriteTransaction
+    func delegateTransferAndCall(from: EthereumAddress, nonce: BigUInt, fee: BigUInt, gasAmount: BigUInt, to: EthereumAddress, value: String, data: [UInt8], mode: IERC1376DelegateMode, v: UInt8, r: Data, s: Data) async throws -> WriteTransaction
 
     func directDebit(debtor: EthereumAddress, receiver: EthereumAddress) async throws -> DirectDebit
     func setupDirectDebit(from: EthereumAddress, receiver: EthereumAddress, info: DirectDebitInfo) async throws -> WriteTransaction

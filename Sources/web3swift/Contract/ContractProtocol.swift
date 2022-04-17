@@ -14,6 +14,7 @@ public protocol ContractProtocol {
     var transactionOptions: TransactionOptions? {get set}
     var allMethods: [String] {get}
     var allEvents: [String] {get}
+
     func deploy(bytecode: Data, parameters: [AnyObject], extraData: Data) -> EthereumTransaction?
     func method(_ method: String, parameters: [AnyObject], extraData: Data) -> EthereumTransaction?
     init?(_ abiString: String, at: EthereumAddress?)
@@ -60,9 +61,7 @@ public struct EventFilter {
 
     public init() { }
 
-    public init(fromBlock: Block?, toBlock: Block?,
-                addresses: [EthereumAddress]? = nil,
-                parameterFilters: [[EventFilterable]?]? = nil) {
+    public init(fromBlock: Block?, toBlock: Block?, addresses: [EthereumAddress]? = nil, parameterFilters: [[EventFilterable]?]? = nil) {
         self.fromBlock = fromBlock
         self.toBlock = toBlock
         self.addresses = addresses

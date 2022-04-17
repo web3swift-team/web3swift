@@ -47,10 +47,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     /// if set debugMode True then show websocket events logs in the console
     public var debugMode: Bool = false
 
-    public init?(_ network: Networks,
-                 delegate: Web3SocketDelegate,
-                 projectId: String? = nil,
-                 keystoreManager manager: KeystoreManager? = nil) {
+    public init?(_ network: Networks, delegate: Web3SocketDelegate, projectId: String? = nil, keystoreManager manager: KeystoreManager? = nil) {
         guard network == Networks.Kovan
             || network == Networks.Rinkeby
             || network == Networks.Ropsten
@@ -58,39 +55,20 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         let networkName = network.name
         let urlString = "wss://" + networkName + Constants.infuraWsScheme
         guard URL(string: urlString) != nil else {return nil}
-        super.init(urlString,
-                   delegate: delegate,
-                   projectId: projectId,
-                   keystoreManager: manager,
-                   network: network)
+        super.init(urlString, delegate: delegate, projectId: projectId, keystoreManager: manager, network: network)
     }
 
-    public init?(_ endpoint: String,
-                 delegate: Web3SocketDelegate,
-                 projectId: String? = nil,
-                 keystoreManager manager: KeystoreManager? = nil) {
+    public init?(_ endpoint: String, delegate: Web3SocketDelegate, projectId: String? = nil, keystoreManager manager: KeystoreManager? = nil) {
         guard URL(string: endpoint) != nil else {return nil}
-        super.init(endpoint,
-                   delegate: delegate,
-                   projectId: projectId,
-                   keystoreManager: manager)
+        super.init(endpoint, delegate: delegate, projectId: projectId, keystoreManager: manager)
     }
 
-    public init?(_ endpoint: URL,
-                 delegate: Web3SocketDelegate,
-                 projectId: String? = nil,
-                 keystoreManager manager: KeystoreManager? = nil) {
-        super.init(endpoint,
-                   delegate: delegate,
-                   projectId: projectId,
-                   keystoreManager: manager)
+    public init?(_ endpoint: URL, delegate: Web3SocketDelegate, projectId: String? = nil, keystoreManager manager: KeystoreManager? = nil) {
+        super.init(endpoint, delegate: delegate, projectId: projectId, keystoreManager: manager)
     }
+    // swiftlint:disable indentation_width
+    override public class func connectToSocket(_ endpoint: String, delegate: Web3SocketDelegate, projectId: String? = nil, keystoreManager manager: KeystoreManager? = nil, network net: Networks? = nil) -> WebsocketProvider? {
 
-    override public class func connectToSocket(_ endpoint: String,
-                                               delegate: Web3SocketDelegate,
-                                               projectId: String? = nil,
-                                               keystoreManager manager: KeystoreManager? = nil,
-                                               network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(endpoint,
                                                            delegate: delegate,
                                                            projectId: projectId,
@@ -99,11 +77,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         return socketProvider
     }
 
-    override public class func connectToSocket(_ endpoint: URL,
-                                               delegate: Web3SocketDelegate,
-                                               projectId: String? = nil,
-                                               keystoreManager manager: KeystoreManager? = nil,
-                                               network net: Networks? = nil) -> WebsocketProvider? {
+    override public class func connectToSocket(_ endpoint: URL, delegate: Web3SocketDelegate, projectId: String? = nil, keystoreManager manager: KeystoreManager? = nil, network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(endpoint,
                                                            delegate: delegate,
                                                            projectId: projectId,
@@ -112,10 +86,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         return socketProvider
     }
 
-    public static func connectToInfuraSocket(_ network: Networks,
-                                             delegate: Web3SocketDelegate,
-                                             projectId: String? = nil,
-                                             keystoreManager manager: KeystoreManager? = nil) -> InfuraWebsocketProvider? {
+    public static func connectToInfuraSocket(_ network: Networks, delegate: Web3SocketDelegate, projectId: String? = nil, keystoreManager manager: KeystoreManager? = nil) -> InfuraWebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(network,
                                                            delegate: delegate,
                                                            projectId: projectId,

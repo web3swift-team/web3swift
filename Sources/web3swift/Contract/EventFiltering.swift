@@ -7,7 +7,8 @@
 import Foundation
 
 internal func filterLogs(decodedLogs: [EventParserResultProtocol], eventFilter: EventFilter) -> [EventParserResultProtocol] {
-    let filteredLogs = decodedLogs.filter { (result) -> Bool in
+    // swiftlint:disable indentation_width
+    let filteredLogs = decodedLogs.filter { result -> Bool in
             if eventFilter.addresses == nil {
                 return true
             } else {
@@ -18,16 +19,16 @@ internal func filterLogs(decodedLogs: [EventParserResultProtocol], eventFilter: 
                 }
             }
         }
-        .filter { (result) -> Bool in
+        .filter { result -> Bool in
             if eventFilter.parameterFilters == nil {
                 return true
             } else {
-                let keys = result.decodedResult.keys.filter({ (key) -> Bool in
+                let keys = result.decodedResult.keys.filter { key -> Bool in
                     if UInt64(key) != nil {
                         return true
                     }
                     return false
-                })
+                }
                 if keys.count < eventFilter.parameterFilters!.count {
                     return false
                 }
@@ -144,19 +145,17 @@ internal func parseReceiptForLogs(receipt: TransactionReceipt, contract: Contrac
     }
     var allLogs = receipt.logs
     if contract.address != nil {
-        allLogs = receipt.logs.filter({ (log) -> Bool in
-            log.address == contract.address
-        })
+        allLogs = receipt.logs.filter { $0.address == contract.address }
     }
-    let decodedLogs = allLogs.compactMap({ (log) -> EventParserResultProtocol? in
+    let decodedLogs = allLogs.compactMap { log -> EventParserResultProtocol? in
         let (n, d) = contract.parseEvent(log)
         guard let evName = n, let evData = d else {return nil}
         var result = EventParserResult(eventName: evName, transactionReceipt: receipt, contractAddress: log.address, decodedResult: evData)
         result.eventLog = log
         return result
-    }).filter { (res: EventParserResultProtocol?) -> Bool in
-        return res != nil && res?.eventName == eventName
     }
+    .filter { $0.eventName == eventName }
+
     var allResults = [EventParserResultProtocol]()
     if filter != nil {
         let eventFilter = filter!

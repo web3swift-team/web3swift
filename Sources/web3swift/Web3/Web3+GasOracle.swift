@@ -41,7 +41,7 @@ extension Web3 {
 
         // TODO: Disabled until 3.0 version, coz will be enabled from 3.0.0.
 //        var forceDropCache = false
-
+// swiftlint:disable indentation_width
         /// Oracle initializer
         /// - Parameters:
         ///   - provider: Web3 Ethereum provider
@@ -98,7 +98,7 @@ extension Web3 {
             /// reaarange `[[min, middle, max]]` to `[[min], [middle], [max]]`
             try await suggestGasValues().reward
                 .forEach { percentiles in
-                    percentiles.enumerated().forEach { (index, percentile) in
+                    percentiles.enumerated().forEach { index, percentile in
                         /// if `rearrengedArray` have not that enough items
                         /// as `percentiles` current item index
                         if rearrengedArray.endIndex <= index {

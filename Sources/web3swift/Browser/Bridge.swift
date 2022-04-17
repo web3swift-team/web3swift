@@ -138,12 +138,13 @@ open class Bridge: NSObject {
 }
 
 extension Bridge: WKScriptMessageHandler {
-
+    // swiftlint:disable indentation_width
     /*! @abstract Invoked when a script message is received from a webpage.
      @param userContentController The user content controller invoking the
      delegate method.
      @param message The script message received.
      */
+    // swiftlint:disable legacy_objc_type
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         guard let body = message.body as? [String: Any], let name = body[MessageKey.action] as? String else {
             return
@@ -156,7 +157,7 @@ extension Bridge: WKScriptMessageHandler {
                 return
             }
             if let callbackID = (body[MessageKey.callback] as? NSNumber) {
-                defaultHandler(name, body[MessageKey.parameters] as? [String: Any]) { [weak self] (results) in
+                defaultHandler(name, body[MessageKey.parameters] as? [String: Any]) { [weak self] results in
                     guard let strongSelf = self else {
                         return
                     }
@@ -171,7 +172,7 @@ extension Bridge: WKScriptMessageHandler {
         }
 
         if let callbackID = (body[MessageKey.callback] as? NSNumber) {
-            handler(body[MessageKey.parameters] as? [String: Any]) { [weak self] (results) in
+            handler(body[MessageKey.parameters] as? [String: Any]) { [weak self] results in
                 guard let strongSelf = self else {
                     return
                 }

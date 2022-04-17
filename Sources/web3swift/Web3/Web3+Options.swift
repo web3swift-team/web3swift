@@ -38,6 +38,7 @@ public struct TransactionOptions {
         case limited(BigUInt)
         case withMargin(Double)
     }
+
     public var gasLimit: GasLimitPolicy?
 
     public enum GasPricePolicy {
@@ -53,6 +54,7 @@ public struct TransactionOptions {
         case automatic
         case manual(BigUInt)
     }
+
     public var maxFeePerGas: FeePerGasPolicy?
     public var maxPriorityFeePerGas: FeePerGasPolicy?
 

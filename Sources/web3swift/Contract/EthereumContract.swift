@@ -13,15 +13,11 @@ public struct EthereumContract: ContractProtocol {
     var _abi: [ABI.Element]
 
     public var allEvents: [String] {
-        return events.keys.compactMap({ (s) -> String in
-            return s
-        })
+        return events.keys.compactMap { $0 }
     }
 
     public var allMethods: [String] {
-        return methods.keys.compactMap({ (s) -> String in
-            return s
-        })
+        return methods.keys.compactMap { $0 }
     }
 
     public struct EventFilter {
@@ -81,9 +77,7 @@ public struct EthereumContract: ContractProtocol {
         do {
             let jsonData = abiString.data(using: .utf8)
             let abi = try JSONDecoder().decode([ABI.Record].self, from: jsonData!)
-            let abiNative = try abi.map({ (record) -> ABI.Element in
-                return try record.parse()
-            })
+            let abiNative = try abi.map { try $0.parse() }
             _abi = abiNative
             if at != nil {
                 self.address = at
@@ -126,9 +120,7 @@ public struct EthereumContract: ContractProtocol {
 
             return transaction
         }
-        let foundMethod = self.methods.filter { (key, _) -> Bool in
-            return key == method
-        }
+        let foundMethod = self.methods.filter { $0.key == method }
         guard foundMethod.count == 1 else {return nil}
         let abiMethod = foundMethod[method]
         guard let encodedData = abiMethod?.encodeParameters(parameters) else {return nil}
@@ -198,7 +190,7 @@ public struct EthereumContract: ContractProtocol {
     public func decodeInputData(_ data: Data) -> [String: Any]? {
         guard data.count % 32 == 4 else {return nil}
         let methodSignature = data[0..<4]
-        let foundFunction = self._abi.filter { (m) -> Bool in
+        let foundFunction = self._abi.filter { m -> Bool in
             switch m {
             case .function(let function):
                 return function.methodEncoding == methodSignature

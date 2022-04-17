@@ -16,6 +16,7 @@ public enum BIP39Language {
     case french
     case italian
     case spanish
+
     public var words: [String] {
         switch self {
         case .english:
@@ -111,7 +112,7 @@ public class BIP39 {
         let checksum = String(checksumData, radix: 2).leftPadding(toLength: checksumLength, withPad: "0")
         return checksum
     }
-
+    // swiftlint:disable indentation_width
     /**
     Initializes a new mnemonics set with the provided bitsOfEntropy.
      **/

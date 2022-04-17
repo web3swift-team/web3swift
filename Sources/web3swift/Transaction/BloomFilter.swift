@@ -10,6 +10,7 @@ import CryptoSwift
 
 public struct EthereumBloomFilter {
     public var bytes = Data(repeatElement(UInt8(0), count: 256))
+
     public init?(_ biguint: BigUInt) {
         guard let data = biguint.serialize().setLengthLeft(256) else {return nil}
         bytes = data

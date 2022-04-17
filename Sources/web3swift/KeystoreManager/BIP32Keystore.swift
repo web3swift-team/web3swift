@@ -166,7 +166,8 @@ public class BIP32Keystore: AbstractKeystore {
         addressStorage.add(address: newAddress, for: newPath)
     }
 
-    public func createNewCustomChildAccount(password: String = "web3swift", path: String) throws {guard let decryptedRootNode = try? self.getPrefixNodeData(password) else {
+    public func createNewCustomChildAccount(password: String = "web3swift", path: String) throws {
+        guard let decryptedRootNode = try? self.getPrefixNodeData(password) else {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
         guard let rootNode = HDNode(decryptedRootNode) else {

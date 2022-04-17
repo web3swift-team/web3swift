@@ -22,16 +22,15 @@ open class BrowserViewController: UIViewController {
 
     public lazy var webView: WKWebView = {
         let websiteDataTypes = Set([WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
-        let date = NSDate(timeIntervalSince1970: 0)
+        let date = Date(timeIntervalSince1970: 0)
 
-        WKWebsiteDataStore.default().removeData(ofTypes: websiteDataTypes, modifiedSince: date as Date, completionHandler: { })
+        WKWebsiteDataStore.default().removeData(ofTypes: websiteDataTypes, modifiedSince: date as Date) { /* NO-OP */ }
         let webView = WKWebView(
             frame: .zero,
             configuration: self.config
         )
         webView.allowsBackForwardNavigationGestures = true
         webView.scrollView.isScrollEnabled = true
-        webView.navigationDelegate = self
         webView.configuration.preferences.setValue(true, forKey: "developerExtrasEnabled")
         return webView
     }()
@@ -57,26 +56,26 @@ open class BrowserViewController: UIViewController {
     }()
 
     public func registerBridges(for web3: Web3) {
-        self.webView.bridge.register({ (_, completion) in
+        self.webView.bridge.register({ _, completion in
             let url = web3.provider.url.absoluteString
             completion(.success(["rpcURL": url as Any]))
         }, for: "getRPCurl")
 
-        self.webView.bridge.register({ (_, completion) in
+        self.webView.bridge.register({ _, completion in
             Task {
                 let allAccounts = await web3.browserFunctions.getAccounts()
                 completion(.success(["accounts": allAccounts as Any]))
             }
         }, for: "eth_getAccounts")
 
-        self.webView.bridge.register({ (_, completion) in
+        self.webView.bridge.register({ _, completion in
             Task {
                 let coinbase = await web3.browserFunctions.getCoinbase()
                 completion(.success(["coinbase": coinbase as Any]))
             }
         }, for: "eth_coinbase")
 
-        self.webView.bridge.register({ (parameters, completion) in
+        self.webView.bridge.register({ parameters, completion in
             if parameters == nil {
                 completion(.failure(Bridge.JSError(code: 0, description: "No parameters provided")))
                 return
@@ -100,7 +99,7 @@ open class BrowserViewController: UIViewController {
             completion(.success(["signedMessage": result as Any]))
         }, for: "eth_sign")
 
-        self.webView.bridge.register({ (parameters, completion) in
+        self.webView.bridge.register({ parameters, completion in
             Task {
             if parameters == nil {
                 completion(.failure(Bridge.JSError(code: 0, description: "No parameters provided")))
@@ -119,12 +118,6 @@ open class BrowserViewController: UIViewController {
             completion(.success(["signedTransaction": result as Any]))
             }
         }, for: "eth_signTransaction")
-    }
-}
-
-extension BrowserViewController: WKNavigationDelegate {
-    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-
     }
 }
 

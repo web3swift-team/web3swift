@@ -175,4 +175,4 @@ public extension Web3 {
 
 extension Web3.MainChainVersion: Comparable {
     public static func < (lhs: Web3.MainChainVersion, rhs: Web3.MainChainVersion) -> Bool { return lhs.mainNetFisrtBlockNumber < rhs.mainNetFisrtBlockNumber }
- }
+    }

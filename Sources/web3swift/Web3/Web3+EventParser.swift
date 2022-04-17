@@ -15,6 +15,7 @@ extension Web3.Web3contract {
         public var eventName: String
         public var filter: EventFilter?
         var web3: Web3
+
         public init? (web3 web3Instance: Web3, eventName: String, contract: ContractProtocol, filter: EventFilter? = nil) {
             //  guard let _ = contract.allEvents.index(of: eventName) else {return nil}
             guard contract.allEvents.contains(eventName) else {return nil}
@@ -23,7 +24,7 @@ extension Web3.Web3contract {
             self.contract = contract
             self.filter = filter
         }
-
+// swiftlint:disable indentation_width
         /**
          *Parses the block for events matching the EventParser settings.*
 
@@ -197,38 +198,38 @@ extension Web3.Web3contract {
 extension Web3.Web3contract {
     public func getIndexedEventsPromise(eventName: String?, filter: EventFilter, joinWithReceipts: Bool = false) async throws -> [EventParserResultProtocol] {
 
-            let rawContract = self.contract
-            guard let preEncoding = encodeTopicToGetLogs(contract: rawContract, eventName: eventName, filter: filter) else {
-                throw Web3Error.processingError(desc: "Failed to encode topic for request")
-            }
+        let rawContract = self.contract
+        guard let preEncoding = encodeTopicToGetLogs(contract: rawContract, eventName: eventName, filter: filter) else {
+            throw Web3Error.processingError(desc: "Failed to encode topic for request")
+        }
 
-            if eventName != nil {
-                guard rawContract.events[eventName!] != nil else {
-                    throw Web3Error.processingError(desc: "No such event in a contract")
-                }
+        if eventName != nil {
+            guard rawContract.events[eventName!] != nil else {
+                throw Web3Error.processingError(desc: "No such event in a contract")
             }
-            let request = JSONRPCRequestFabric.prepareRequest(.getLogs, parameters: [preEncoding])
-            let response = try await self.web3.dispatch(request)
+        }
+        let request = JSONRPCRequestFabric.prepareRequest(.getLogs, parameters: [preEncoding])
+        let response = try await self.web3.dispatch(request)
 
-            guard let allLogs: [EventLog] = response.getValue() else {
-                if response.error != nil {
-                    throw Web3Error.nodeError(desc: response.error!.message)
-                }
-                throw Web3Error.nodeError(desc: "Empty or malformed response")
+        guard let allLogs: [EventLog] = response.getValue() else {
+            if response.error != nil {
+                throw Web3Error.nodeError(desc: response.error!.message)
             }
+            throw Web3Error.nodeError(desc: "Empty or malformed response")
+        }
 
-            let decodedLogs = allLogs.compactMap { (log) -> EventParserResult? in
-                let (n, d) = self.contract.parseEvent(log)
-                guard let evName = n, let evData = d else {return nil}
-                var res = EventParserResult(eventName: evName, transactionReceipt: nil, contractAddress: log.address, decodedResult: evData)
-                res.eventLog = log
-                return res
-            }
-            .filter { res in res.eventLog != nil || (res.eventName == eventName && eventName != nil)}
+        let decodedLogs = allLogs.compactMap { log -> EventParserResult? in
+            let (n, d) = self.contract.parseEvent(log)
+            guard let evName = n, let evData = d else {return nil}
+            var res = EventParserResult(eventName: evName, transactionReceipt: nil, contractAddress: log.address, decodedResult: evData)
+            res.eventLog = log
+            return res
+        }
+        .filter { res in res.eventLog != nil || (res.eventName == eventName && eventName != nil)}
 
-            if !joinWithReceipts {
-                return decodedLogs as [EventParserResultProtocol]
-            }
+        if !joinWithReceipts {
+            return decodedLogs as [EventParserResultProtocol]
+        }
 
         return await withTaskGroup(of: EventParserResultProtocol.self, returning: [EventParserResultProtocol].self) { group -> [EventParserResultProtocol] in
 

@@ -15,7 +15,7 @@ public class Web3 {
 
     /// Add a provider request to the dispatch queue.
     public func dispatch(_ request: JSONRPCrequest) async throws -> JSONRPCresponse {
-         try await provider.sendAsync(request)
+        try await provider.sendAsync(request)
     }
 
     /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
@@ -47,6 +47,7 @@ public class Web3 {
         public var transactionOptions: TransactionOptions {
             return self.web3.transactionOptions
         }
+
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
             web3 = web3instance
@@ -71,6 +72,7 @@ public class Web3 {
         public var transactionOptions: TransactionOptions {
             return self.web3.transactionOptions
         }
+
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
             web3 = web3instance
@@ -95,6 +97,7 @@ public class Web3 {
         public var transactionOptions: TransactionOptions {
             return self.web3.transactionOptions
         }
+
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
             web3 = web3instance
@@ -116,6 +119,7 @@ public class Web3 {
         var provider: Web3Provider
         //  weak var web3: web3?
         var web3: Web3
+
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
             web3 = web3instance
@@ -140,6 +144,7 @@ public class Web3 {
         public var transactionOptions: TransactionOptions {
             return self.web3.transactionOptions
         }
+
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
             web3 = web3instance
@@ -186,6 +191,7 @@ public class Web3 {
         public var transactionOptions: TransactionOptions {
             return self.web3.transactionOptions
         }
+
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
             web3 = web3instance

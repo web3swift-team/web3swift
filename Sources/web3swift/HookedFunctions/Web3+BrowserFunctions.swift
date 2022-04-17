@@ -12,7 +12,7 @@ extension Web3.BrowserFunctions {
     public func getAccounts() async -> [String]? {
         do {
             let accounts = try await self.web3.eth.getAccounts()
-            return accounts.compactMap({$0.address})
+            return accounts.compactMap {$0.address}
         } catch {
             return [String]()
         }
@@ -71,17 +71,19 @@ extension Web3.BrowserFunctions {
 
     public func sendTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") async -> [String: Any]? {
         do {
-          let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
-          let transaction: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
-          let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
-          var transactionOptions = TransactionOptions()
-          transactionOptions.from = options.from
-          transactionOptions.to = options.to
-          transactionOptions.value = options.value ?? 0
-          transactionOptions.gasLimit = options.gasLimit ?? .automatic
-          transactionOptions.gasPrice = options.gasPrice ?? .automatic
+            let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
+            let transaction: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+            let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
+            var transactionOptions = TransactionOptions()
+            transactionOptions.from = options.from
+            transactionOptions.to = options.to
+            transactionOptions.value = options.value ?? 0
+            transactionOptions.gasLimit = options.gasLimit ?? .automatic
+            transactionOptions.gasPrice = options.gasPrice ?? .automatic
             return await self.sendTransaction(transaction, transactionOptions: transactionOptions, password: password)
-        } catch { return nil }
+        } catch {
+            return nil
+        }
     }
 
     public func sendTransaction(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") async -> [String: Any]? {

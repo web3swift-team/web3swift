@@ -8,7 +8,7 @@ import Foundation
 import BigInt
 
 extension Web3.Personal {
-
+    // swiftlint:disable indentation_width
     /**
      *Locally or remotely sign a message (arbitrary data) with the private key. To avoid potential signing of a transaction the message is first prepended by a special header and then hashed.*
 

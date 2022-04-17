@@ -57,9 +57,9 @@ class RepeatingTimer {
     private lazy var timer: DispatchSourceTimer = {
         let t = DispatchSource.makeTimerSource()
         t.schedule(deadline: .now() + self.timeInterval, repeating: self.timeInterval)
-        t.setEventHandler(handler: { [weak self] in
+        t.setEventHandler { [weak self] in
             self?.eventHandler?()
-        })
+        }
         return t
     }()
 
@@ -75,6 +75,7 @@ class RepeatingTimer {
     deinit {
         timer.setEventHandler {}
         timer.cancel()
+        // swiftlint:disable indentation_width
         /*
          If the timer is suspended, calling cancel without resuming
          triggers a crash. This is documented here https://forums.developer.apple.com/thread/15902

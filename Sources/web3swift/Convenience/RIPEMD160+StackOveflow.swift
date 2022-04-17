@@ -300,7 +300,7 @@ public struct RIPEMD160 {
         FFF(&ddd, eee, &aaa, bbb, ccc, X[ 3] , 13)
         FFF(&ccc, ddd, &eee, aaa, bbb, X[ 9] , 11)
         FFF(&bbb, ccc, &ddd, eee, aaa, X[11] , 11)
-
+        // swiftlint:disable indentation_width
         /* combine results */
         MDbuf = (MDbuf.1 &+ cc &+ ddd,
                  MDbuf.2 &+ dd &+ eee,

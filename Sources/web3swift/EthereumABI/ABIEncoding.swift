@@ -130,9 +130,7 @@ extension ABIEncoder {
 
     public static func encode(types: [ABI.Element.InOut], values: [AnyObject]) -> Data? {
         guard types.count == values.count else {return nil}
-        let params = types.compactMap { (el) -> ABI.Element.ParameterType in
-            return el.type
-        }
+        let params = types.compactMap { $0.type }
         return encode(types: params, values: values)
     }
 
@@ -384,6 +382,7 @@ extension ABIEncoder {
 // MARK: - SoliditySHA3 implementation based on web3js
 
 public extension ABIEncoder {
+    // swiftlint:disable indentation_width
     /**
      A convenience implementation of web3js [soliditySha3](https://web3js.readthedocs.io/en/v1.2.11/web3-utils.html?highlight=soliditySha3#soliditysha3)
      that is based on web3swift [`ABIEncoder`](https://github.com/skywinder/web3swift/blob/develop/Sources/web3swift/EthereumABI/ABIEncoding.swift ).

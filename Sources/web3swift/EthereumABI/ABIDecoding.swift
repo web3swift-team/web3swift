@@ -10,9 +10,7 @@ public struct ABIDecoder { }
 
 extension ABIDecoder {
     public static func decode(types: [ABI.Element.InOut], data: Data) -> [AnyObject]? {
-        let params = types.compactMap { (el) -> ABI.Element.ParameterType in
-            return el.type
-        }
+        let params = types.compactMap { $0.type }
         return decode(types: params, data: data)
     }
 
@@ -170,6 +168,7 @@ extension ABIDecoder {
                 let (v, c) = decodeSingleType(type: subTypes[i], data: elementItself, pointer: consumed)
                 guard let valueUnwrapped = v, let consumedUnwrapped = c else {return (nil, nil)}
                 toReturn.append(valueUnwrapped)
+                // swiftlint:disable indentation_width
                 /*
                  When decoding a tuple that is not static or an array with a subtype that is not static, the second value in the tuple returned by decodeSignleType is a pointer to the next element, NOT the length of the consumed element. So when decoding such an element, consumed should be set to consumedUnwrapped, NOT incremented by consumedUnwrapped.
                  */
@@ -250,18 +249,12 @@ extension ABIDecoder {
         eventContent["name"]=event.name
         let logs = eventLogTopics
         let dataForProcessing = eventLogData
-        let indexedInputs = event.inputs.filter { (inp) -> Bool in
-            return inp.indexed
-        }
+        let indexedInputs = event.inputs.filter { $0.indexed }
         if logs.count == 1 && !indexedInputs.isEmpty {
             return nil
         }
-        let nonIndexedInputs = event.inputs.filter { (inp) -> Bool in
-            return !inp.indexed
-        }
-        let nonIndexedTypes = nonIndexedInputs.compactMap { (inp) -> ABI.Element.ParameterType in
-            return inp.type
-        }
+        let nonIndexedInputs = event.inputs.filter { !$0.indexed }
+        let nonIndexedTypes = nonIndexedInputs.compactMap { $0.type }
         guard logs.count == indexedInputs.count + 1 else {return nil}
         var indexedValues = [AnyObject]()
         for i in 0 ..< indexedInputs.count {

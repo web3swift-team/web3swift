@@ -155,8 +155,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     public mutating func migrate(to type: TransactionType) {
         if self.type == type { return }
 
-        let newEnvelope = EnvelopeFactory.createEnvelope(type: type, to: self.envelope.to,
-                                                         nonce: self.envelope.nonce, parameters: self.envelope.parameters)
+        let newEnvelope = EnvelopeFactory.createEnvelope(type: type, to: self.envelope.to, nonce: self.envelope.nonce, parameters: self.envelope.parameters)
         self.envelope = newEnvelope
     }
 
@@ -242,9 +241,7 @@ extension EthereumTransaction {
     ///   - r: signature r parameter (default 0) - will get set properly once signed
     ///   - s: signature s parameter (default 0) - will get set properly once signed
     ///   - parameters: EthereumParameters object containing additional parametrs for the transaction like gas
-    public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
-                chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
-                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: EthereumParameters? = nil) {
+    public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0, chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data, v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: EthereumParameters? = nil) {
 
         var params = parameters ?? EthereumParameters()
 
@@ -268,11 +265,9 @@ extension EthereumTransaction {
 // Deprecated shims for the breaking changes
 extension EthereumTransaction {
     @available(*, deprecated, message: "Please use init(type:to:nonce:chainID:value:data:v:r:s:options:) instead")
-    public init(nonce: BigUInt = 0, gasPrice: BigUInt, gasLimit: BigUInt,
-                to: EthereumAddress, value: BigUInt = 0, data: Data, chainID: BigUInt? = nil,
-                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
-
-        self.envelope = LegacyEnvelope( to: to, nonce: nonce,
+    public init(nonce: BigUInt = 0, gasPrice: BigUInt, gasLimit: BigUInt, to: EthereumAddress, value: BigUInt = 0, data: Data, chainID: BigUInt? = nil, v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
+        // swiftlint:disable indentation_width
+        self.envelope = LegacyEnvelope(to: to, nonce: nonce,
                                         chainID: chainID, value: value, data: data,
                                         gasPrice: gasPrice, gasLimit: gasLimit,
                                         v: v, r: r, s: s)

@@ -12,6 +12,7 @@ public struct EIP681Code {
         public var type: ABI.Element.ParameterType
         public var value: AnyObject
     }
+
     public var isPayRequest: Bool
     public var targetAddress: TargetAddress
     public var chainID: BigUInt?

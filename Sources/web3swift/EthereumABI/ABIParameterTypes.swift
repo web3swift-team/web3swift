@@ -228,7 +228,7 @@ extension ABI.Element.ParameterType: ABIValidation {
     public var isValid: Bool {
         switch self {
         case .uint(let bits), .int(let bits):
-            return bits > 0 && bits <= 256 && bits % 8 == 0
+            return bits > 0 && bits <= 256 && bits.isMultiple(of: 8)
         case .bytes(let length):
             return length > 0 && length <= 32
         case .array(type: let type, _):

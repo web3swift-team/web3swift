@@ -11,6 +11,7 @@ import BigInt
 public protocol Web3Provider {
     func sendAsync(_ request: JSONRPCrequest) async throws -> JSONRPCresponse
     func sendAsync(_ requests: JSONRPCrequestBatch) async throws -> JSONRPCresponseBatch
+
     var network: Networks? {get set}
     var attachedKeystoreManager: KeystoreManager? {get set}
     var url: URL {get}
@@ -27,6 +28,7 @@ public class Web3HttpProvider: Web3Provider {
         let urlSession = URLSession(configuration: config)
         return urlSession
     }()
+
     public init?(_ httpProviderURL: URL, network net: Networks? = nil, keystoreManager manager: KeystoreManager? = nil) async {
         do {
             guard httpProviderURL.scheme == "http" || httpProviderURL.scheme == "https" else {

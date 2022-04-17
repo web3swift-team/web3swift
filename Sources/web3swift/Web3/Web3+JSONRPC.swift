@@ -11,6 +11,7 @@ import BigInt
 public struct Counter {
     public static var counter = UInt64(1)
     public static var lockQueue = DispatchQueue(label: "counterQueue")
+
     public static func increment() -> UInt64 {
         var c: UInt64 = 0
         lockQueue.sync {
@@ -199,29 +200,22 @@ public struct JSONRPCresponse: Decodable {
 //            guard let value = self.result as? T else {return nil}
 //            return value
 //        }
+// swiftlint:disable indentation_width
         else if type == [BigUInt].self {
             guard let string = self.result as? [String] else {return nil}
-            let values = string.compactMap { (str) -> BigUInt? in
-                return BigUInt(str.stripHexPrefix(), radix: 16)
-            }
+            let values = string.compactMap { BigUInt($0.stripHexPrefix(), radix: 16) }
             return values as? T
         } else if type == [BigInt].self {
             guard let string = self.result as? [String] else {return nil}
-            let values = string.compactMap { (str) -> BigInt? in
-                return BigInt(str.stripHexPrefix(), radix: 16)
-            }
+            let values = string.compactMap { BigInt($0.stripHexPrefix(), radix: 16) }
             return values as? T
         } else if type == [Data].self {
             guard let string = self.result as? [String] else {return nil}
-            let values = string.compactMap { (str) -> Data? in
-                return Data.fromHex(str)
-            }
+            let values = string.compactMap { Data.fromHex($0) }
             return values as? T
         } else if type == [EthereumAddress].self {
             guard let string = self.result as? [String] else {return nil}
-            let values = string.compactMap { (str) -> EthereumAddress? in
-                return EthereumAddress(str, ignoreChecksum: true)
-            }
+            let values = string.compactMap { EthereumAddress($0, ignoreChecksum: true) }
             return values as? T
         }
         guard let value = self.result as? T  else {return nil}

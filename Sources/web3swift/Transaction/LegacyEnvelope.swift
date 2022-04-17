@@ -180,9 +180,7 @@ extension LegacyEnvelope {
         self.s = BigUInt(sData)
     }
 
-    public init(to: EthereumAddress, nonce: BigUInt? = nil,
-                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,
-                parameters: EthereumParameters? = nil) {
+    public init(to: EthereumAddress, nonce: BigUInt? = nil, v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: EthereumParameters? = nil) {
         self.to = to
         self.nonce = nonce ?? parameters?.nonce ?? 0
         self.explicitChainID = parameters?.chainID // Legacy can have a nil ChainID
@@ -196,10 +194,7 @@ extension LegacyEnvelope {
     }
 
     // memberwise
-    public init(to: EthereumAddress, nonce: BigUInt = 0,
-                chainID: BigUInt? = nil, value: BigUInt = 0, data: Data,
-                gasPrice: BigUInt = 0, gasLimit: BigUInt = 0,
-                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
+    public init(to: EthereumAddress, nonce: BigUInt = 0, chainID: BigUInt? = nil, value: BigUInt = 0, data: Data, gasPrice: BigUInt = 0, gasLimit: BigUInt = 0, v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
         self.to = to
         self.nonce = nonce
         self.explicitChainID = chainID

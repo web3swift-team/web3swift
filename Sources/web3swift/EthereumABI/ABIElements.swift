@@ -104,6 +104,7 @@ public extension ABI {
             public let inputs: [InOut]
             public let constant: Bool
             public let payable: Bool
+
             public init(inputs: [InOut], constant: Bool, payable: Bool) {
                 self.inputs = inputs
                 self.constant = constant

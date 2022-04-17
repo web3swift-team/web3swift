@@ -13,6 +13,7 @@ import Foundation
 public protocol IWebsocketProvider {
     var socket: WebSocket {get}
     var delegate: Web3SocketDelegate {get set}
+
     func connectSocket() throws
     func disconnectSocket() throws
     func writeMessage<T>(_ message: T)
@@ -116,11 +117,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     private var messagesStringToWrite: [String] = []
     private var messagesDataToWrite: [Data] = []
 
-    public init?(_ endpoint: URL,
-                 delegate wsdelegate: Web3SocketDelegate,
-                 projectId: String? = nil,
-                 keystoreManager manager: KeystoreManager? = nil,
-                 network net: Networks? = nil) {
+    public init?(_ endpoint: URL, delegate wsdelegate: Web3SocketDelegate, projectId: String? = nil, keystoreManager manager: KeystoreManager? = nil, network net: Networks? = nil) {
         websocketConnected = false
         var endpointString = endpoint.absoluteString
         if !(endpointString.hasPrefix("wss://") || endpointString.hasPrefix("ws://")) {
@@ -157,11 +154,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         socket.delegate = self
     }
 
-    public init?(_ endpoint: String,
-                 delegate wsdelegate: Web3SocketDelegate,
-                 projectId: String? = nil,
-                 keystoreManager manager: KeystoreManager? = nil,
-                 network net: Networks? = nil) {
+    public init?(_ endpoint: String, delegate wsdelegate: Web3SocketDelegate, projectId: String? = nil, keystoreManager manager: KeystoreManager? = nil, network net: Networks? = nil) {
         guard URL(string: endpoint) != nil else {return nil}
         var finalEndpoint = endpoint
         websocketConnected = false
@@ -217,11 +210,8 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         return websocketConnected
     }
 
-    public class func connectToSocket(_ endpoint: String,
-                                      delegate: Web3SocketDelegate,
-                                      projectId: String? = nil,
-                                      keystoreManager manager: KeystoreManager? = nil,
-                                      network net: Networks? = nil) -> WebsocketProvider? {
+    public class func connectToSocket(_ endpoint: String, delegate: Web3SocketDelegate, projectId: String? = nil, keystoreManager manager: KeystoreManager? = nil, network net: Networks? = nil) -> WebsocketProvider? {
+        // swiftlint:disable indentation_width
         guard let socketProvider = WebsocketProvider(endpoint,
                                                      delegate: delegate,
                                                      projectId: projectId,
@@ -233,11 +223,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         return socketProvider
     }
 
-    public class func connectToSocket(_ endpoint: URL,
-                                      delegate: Web3SocketDelegate,
-                                      projectId: String? = nil,
-                                      keystoreManager manager: KeystoreManager? = nil,
-                                      network net: Networks? = nil) -> WebsocketProvider? {
+    public class func connectToSocket(_ endpoint: URL, delegate: Web3SocketDelegate, projectId: String? = nil, keystoreManager manager: KeystoreManager? = nil, network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = WebsocketProvider(endpoint,
                                                      delegate: delegate,
                                                      projectId: projectId,

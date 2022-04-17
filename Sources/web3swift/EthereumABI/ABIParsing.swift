@@ -69,15 +69,9 @@ extension ABI.Record {
     }
 
     private func parseFunction(abiRecord: ABI.Record) throws -> ABI.Element.Function {
-        let inputs = try abiRecord.inputs?.map({ (input: ABI.Input) throws -> ABI.Element.InOut in
-            let nativeInput = try input.parse()
-            return nativeInput
-        })
+        let inputs = try abiRecord.inputs?.map { try $0.parse() }
         let abiInputs = inputs ?? [ABI.Element.InOut]()
-        let outputs = try abiRecord.outputs?.map({ (output: ABI.Output) throws -> ABI.Element.InOut in
-            let nativeOutput = try output.parse()
-            return nativeOutput
-        })
+        let outputs = try abiRecord.outputs?.map { try $0.parse() }
         let abiOutputs = outputs ?? [ABI.Element.InOut]()
         let name = abiRecord.name ?? ""
         let payable = abiRecord.stateMutability == "payable" || abiRecord.payable == true
@@ -94,10 +88,7 @@ extension ABI.Record {
     }
 
     private func parseConstructor(abiRecord: ABI.Record) throws -> ABI.Element.Constructor {
-        let inputs = try abiRecord.inputs?.map({ (input: ABI.Input) throws -> ABI.Element.InOut in
-            let nativeInput = try input.parse()
-            return nativeInput
-        })
+        let inputs = try abiRecord.inputs?.map { try $0.parse() }
         let abiInputs = inputs ?? [ABI.Element.InOut]()
         let payable = abiRecord.stateMutability == "payable" || abiRecord.payable == true
         let functionElement = ABI.Element.Constructor(inputs: abiInputs, constant: false, payable: payable)
@@ -105,10 +96,7 @@ extension ABI.Record {
     }
 
     private func parseEvent(abiRecord: ABI.Record) throws -> ABI.Element.Event {
-        let inputs = try abiRecord.inputs?.map({ (input: ABI.Input) throws -> ABI.Element.Event.Input in
-            let nativeInput = try input.parseForEvent()
-            return nativeInput
-        })
+        let inputs = try abiRecord.inputs?.map { try $0.parseForEvent() }
         let abiInputs = inputs ?? [ABI.Element.Event.Input]()
         let name = abiRecord.name ?? ""
         let anonymous = abiRecord.anonymous ?? false
@@ -117,10 +105,7 @@ extension ABI.Record {
     }
 
     private func parseReceive(abiRecord: ABI.Record) throws -> ABI.Element.Receive {
-        let inputs = try abiRecord.inputs?.map({ (input: ABI.Input) throws -> ABI.Element.InOut in
-            let nativeInput = try input.parse()
-            return nativeInput
-        })
+        let inputs = try abiRecord.inputs?.map { try $0.parse() }
         let abiInputs = inputs ?? [ABI.Element.InOut]()
         let payable = abiRecord.stateMutability == "payable" || abiRecord.payable == true
         let functionElement = ABI.Element.Receive(inputs: abiInputs, payable: payable)
@@ -128,10 +113,7 @@ extension ABI.Record {
     }
 
     private func parseError(abiRecord: ABI.Record) throws -> ABI.Element.EthError {
-        let inputs = try abiRecord.inputs?.map({ (input: ABI.Input) throws -> ABI.Element.EthError.Input in
-            let nativeInput = try input.parseForError()
-            return nativeInput
-        })
+        let inputs = try abiRecord.inputs?.map { try $0.parseForError() }
         let abiInputs = inputs ?? []
         let name = abiRecord.name ?? ""
         return ABI.Element.EthError(name: name, inputs: abiInputs)
@@ -143,10 +125,7 @@ extension ABI.Input {
         let name = self.name ?? ""
         let parameterType = try ABITypeParser.parseTypeString(self.type)
         if case .tuple(types: _) = parameterType {
-            let components = try self.components?.compactMap({ (inp: ABI.Input) throws -> ABI.Element.ParameterType in
-                let input = try inp.parse()
-                return input.type
-            })
+            let components = try self.components?.compactMap { try $0.parse().type }
             let type = ABI.Element.ParameterType.tuple(types: components!)
             let nativeInput = ABI.Element.InOut(name: name, type: type)
             return nativeInput

@@ -23,7 +23,7 @@ public struct EIP67Code {
         public var parameters: [(ABI.Element.ParameterType, AnyObject)]
 
         public func toString() -> String? {
-            let encoding = method + "(" + parameters.map({ (el) -> String in
+            let encoding = method + "(" + parameters.map { el -> String in
                 if let string = el.1 as? String {
                     return el.0.abiRepresentation + " " + string
                 } else if let number = el.1 as? BigUInt {
@@ -34,7 +34,8 @@ public struct EIP67Code {
                     return el.0.abiRepresentation + " " + data.toHexString().addHexPrefix()
                 }
                 return ""
-            }).joined(separator: ", ") + ")"
+            }
+            .joined(separator: ", ") + ")"
             return encoding
         }
     }

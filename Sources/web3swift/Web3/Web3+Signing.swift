@@ -8,21 +8,13 @@ import Foundation
 import BigInt
 
 public struct Web3Signer {
-    public static func signTX(transaction: inout EthereumTransaction,
-                              keystore: AbstractKeystore,
-                              account: EthereumAddress,
-                              password: String,
-                              useExtraEntropy: Bool = false) throws {
+    public static func signTX(transaction: inout EthereumTransaction, keystore: AbstractKeystore, account: EthereumAddress, password: String, useExtraEntropy: Bool = false) throws {
         var privateKey = try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
         defer { Data.zero(&privateKey) }
         try transaction.sign(privateKey: privateKey, useExtraEntropy: useExtraEntropy)
     }
 
-    public static func signPersonalMessage<T: AbstractKeystore>(_ personalMessage: Data,
-                                                                keystore: T,
-                                                                account: EthereumAddress,
-                                                                password: String,
-                                                                useExtraEntropy: Bool = false) throws -> Data? {
+    public static func signPersonalMessage<T: AbstractKeystore>(_ personalMessage: Data, keystore: T, account: EthereumAddress, password: String, useExtraEntropy: Bool = false) throws -> Data? {
         var privateKey = try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
         defer { Data.zero(&privateKey) }
         guard let hash = Web3.Utils.hashPersonalMessage(personalMessage) else { return nil }
@@ -30,12 +22,7 @@ public struct Web3Signer {
         return compressedSignature
     }
 
-    public static func signEIP712(safeTx: SafeTx,
-                                  keystore: BIP32Keystore,
-                                  verifyingContract: EthereumAddress,
-                                  account: EthereumAddress,
-                                  password: String? = nil,
-                                  chainId: BigUInt? = nil) throws -> Data {
+    public static func signEIP712(safeTx: SafeTx, keystore: BIP32Keystore, verifyingContract: EthereumAddress, account: EthereumAddress, password: String? = nil, chainId: BigUInt? = nil) throws -> Data {
 
         let domainSeparator: EIP712DomainHashable = EIP712Domain(chainId: chainId, verifyingContract: verifyingContract)
 

@@ -25,6 +25,7 @@ public struct EthereumAddress: Equatable {
     }
     var _address: String
     public var type: AddressType = .normal
+
     public static func == (lhs: EthereumAddress, rhs: EthereumAddress) -> Bool {
         return lhs.addressData == rhs.addressData && lhs.type == rhs.type
     }

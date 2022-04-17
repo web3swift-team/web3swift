@@ -26,10 +26,11 @@ extension UInt32 {
 public class HDNode {
 
     private struct HDversion {
-        public static var privatePrefix: Data? = Data.fromHex("0x0488ADE4")
-        public static var publicPrefix: Data? = Data.fromHex("0x0488B21E")
+        static var privatePrefix: Data? = Data.fromHex("0x0488ADE4")
+        static var publicPrefix: Data? = Data.fromHex("0x0488B21E")
 
     }
+
     public var path: String? = "m"
     public var privateKey: Data?
     public var publicKey: Data

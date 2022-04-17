@@ -69,9 +69,7 @@ extension SECP256K1 {
             storage.append(pubkey)
         }
         for i in 0 ..< numToCombine {
-            withUnsafePointer(to: &storage[i]) { (ptr) -> Void in
-                arrayOfPointers.advanced(by: i).pointee = ptr
-            }
+            withUnsafePointer(to: &storage[i]) { arrayOfPointers.advanced(by: i).pointee = $0 }
         }
         let immutablePointer = UnsafePointer(arrayOfPointers)
         var publicKey: secp256k1_pubkey = secp256k1_pubkey()
@@ -85,7 +83,7 @@ extension SECP256K1 {
         let serializedKey = SECP256K1.serializePublicKey(publicKey: &publicKey, compressed: outputCompressed)
         return serializedKey
     }
-
+    // swiftlint:disable trailing_closure
     internal static func recoverPublicKey(hash: Data, recoverableSignature: inout secp256k1_ecdsa_recoverable_signature) -> secp256k1_pubkey? {
         guard hash.count == 32 else {return nil}
         var publicKey: secp256k1_pubkey = secp256k1_pubkey()
@@ -94,8 +92,7 @@ extension SECP256K1 {
                 let hashPointer = hashRawPointer.assumingMemoryBound(to: UInt8.self)
                 return withUnsafePointer(to: &recoverableSignature, { (signaturePointer: UnsafePointer<secp256k1_ecdsa_recoverable_signature>) -> Int32 in
                     withUnsafeMutablePointer(to: &publicKey, { (pubKeyPtr: UnsafeMutablePointer<secp256k1_pubkey>) -> Int32 in
-                        let res = secp256k1_ecdsa_recover(context!, pubKeyPtr,
-                                                          signaturePointer, hashPointer)
+                        let res = secp256k1_ecdsa_recover(context!, pubKeyPtr, signaturePointer, hashPointer)
                         return res
                     })
                 })
@@ -130,11 +127,12 @@ extension SECP256K1 {
     public static func serializePublicKey(publicKey: inout secp256k1_pubkey, compressed: Bool = false) -> Data? {
         var keyLength = compressed ? 33 : 65
         var serializedPubkey = Data(repeating: 0x00, count: keyLength)
-        let result = serializedPubkey.withUnsafeMutableBytes { (serializedPubkeyRawBuffPointer) -> Int32? in
+        let result = serializedPubkey.withUnsafeMutableBytes { serializedPubkeyRawBuffPointer -> Int32? in
             if let serializedPkRawPointer = serializedPubkeyRawBuffPointer.baseAddress, !serializedPubkeyRawBuffPointer.isEmpty {
                 let serializedPubkeyPointer = serializedPkRawPointer.assumingMemoryBound(to: UInt8.self)
                 return withUnsafeMutablePointer(to: &keyLength, { (keyPtr: UnsafeMutablePointer<Int>) -> Int32 in
                     withUnsafeMutablePointer(to: &publicKey, { (pubKeyPtr: UnsafeMutablePointer<secp256k1_pubkey>) -> Int32 in
+                        // swiftlint:disable indentation_width
                         let res = secp256k1_ec_pubkey_serialize(context!,
                                                                 serializedPubkeyPointer,
                                                                 keyPtr,
@@ -231,7 +229,7 @@ extension SECP256K1 {
         }
         return Data(serializedSignature)
     }
-
+    // swiftlint:disable trailing_closure
     internal static func recoverableSign(hash: Data, privateKey: Data, useExtraEntropy: Bool = false) -> secp256k1_ecdsa_recoverable_signature? {
         if hash.count != 32 || privateKey.count != 32 {
             return nil
@@ -241,13 +239,13 @@ extension SECP256K1 {
         }
         var recoverableSignature: secp256k1_ecdsa_recoverable_signature = secp256k1_ecdsa_recoverable_signature()
         guard let extraEntropy = SECP256K1.randomBytes(length: 32) else {return nil}
-        let result = hash.withUnsafeBytes { (hashRBPointer) -> Int32? in
+        let result = hash.withUnsafeBytes { hashRBPointer -> Int32? in
             if let hashRPointer = hashRBPointer.baseAddress, !hashRBPointer.isEmpty {
                 let hashPointer = hashRPointer.assumingMemoryBound(to: UInt8.self)
-                return privateKey.withUnsafeBytes({ (privateKeyRBPointer) -> Int32? in
+                return privateKey.withUnsafeBytes({ privateKeyRBPointer -> Int32? in
                     if let privateKeyRPointer = privateKeyRBPointer.baseAddress, !privateKeyRBPointer.isEmpty {
                         let privateKeyPointer = privateKeyRPointer.assumingMemoryBound(to: UInt8.self)
-                        return extraEntropy.withUnsafeBytes({ (extraEntropyRBPointer) -> Int32? in
+                        return extraEntropy.withUnsafeBytes({ extraEntropyRBPointer -> Int32? in
                             if let extraEntropyRPointer = extraEntropyRBPointer.baseAddress, !extraEntropyRBPointer.isEmpty {
                                 let extraEntropyPointer = extraEntropyRPointer.assumingMemoryBound(to: UInt8.self)
                                 return withUnsafeMutablePointer(to: &recoverableSignature, { (recSignaturePtr: UnsafeMutablePointer<secp256k1_ecdsa_recoverable_signature>) -> Int32 in
@@ -283,7 +281,7 @@ extension SECP256K1 {
 
     public static func verifyPrivateKey(privateKey: Data) -> Bool {
         if privateKey.count != 32 {return false}
-        let result = privateKey.withUnsafeBytes { (privateKeyRBPointer) -> Int32? in
+        let result = privateKey.withUnsafeBytes { privateKeyRBPointer -> Int32? in
             if let privateKeyRPointer = privateKeyRBPointer.baseAddress, !privateKeyRBPointer.isEmpty {
                 let privateKeyPointer = privateKeyRPointer.assumingMemoryBound(to: UInt8.self)
                 let res = secp256k1_ec_seckey_verify(context!, privateKeyPointer)
@@ -338,7 +336,7 @@ extension SECP256K1 {
     internal static func randomBytes(length: Int) -> Data? {
         for _ in 0...1024 {
             var data = Data(repeating: 0, count: length)
-            let result = data.withUnsafeMutableBytes { (mutableRBBytes) -> Int32? in
+            let result = data.withUnsafeMutableBytes { mutableRBBytes -> Int32? in
                 if let mutableRBytes = mutableRBBytes.baseAddress, !mutableRBBytes.isEmpty {
                     let mutableBytes = mutableRBytes.assumingMemoryBound(to: UInt8.self)
                     return SecRandomCopyBytes(kSecRandomDefault, length, mutableBytes)

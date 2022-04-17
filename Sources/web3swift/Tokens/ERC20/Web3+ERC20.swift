@@ -76,7 +76,8 @@ public class ERC20: IERC20, ERC20BaseProperties {
         let callResult = try await contract.read("decimals", transactionOptions: basicOptions)!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
-                throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
+            throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")
+        }
         decimals = decTyped
 
         let intDecimals = Int(decimals)
@@ -173,6 +174,7 @@ protocol ERC20BaseProperties: AnyObject {
     var _symbol: String? { get set }
     var _decimals: UInt8? { get set }
     var _hasReadProperties: Bool { get set }
+
     func readProperties() async throws
     func name() async throws -> String
     func symbol() async throws -> String

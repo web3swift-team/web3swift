@@ -41,6 +41,7 @@ public enum JSONRPCmethod: String, Encodable {
     case feeHistory = "eth_feeHistory"
 
     public var requiredNumOfParameters: Int {
+// swiftlint:disable indentation_width
         switch self {
         case .gasPrice,
                 .blockNumber,

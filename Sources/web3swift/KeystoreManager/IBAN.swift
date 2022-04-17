@@ -79,9 +79,7 @@ public struct IBAN {
                 arrayOfInts.append(code - 48)
             }
         }
-        let joinedString = arrayOfInts.map({ (intCh) -> String in
-            return String(intCh)
-        }).joined()
+        let joinedString = arrayOfInts.map { String($0) }.joined()
         return joinedString
     }
 

@@ -9,6 +9,7 @@ import Foundation
 public protocol AbstractKeystore {
     var addresses: [EthereumAddress]? { get }
     var isHDKeystore: Bool { get }
+
     func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data
 }
 

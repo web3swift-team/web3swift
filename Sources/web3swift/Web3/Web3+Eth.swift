@@ -113,7 +113,7 @@ extension Web3.Eth {
     /// Returns the Result object that indicates either success of failure.
     public func getTransactionDetails(_ txhash: Data) async throws -> TransactionDetails {
         let result = try await self.transactionDetails(txhash)
-       return result
+        return result
     }
 
     /// Returns transaction details for particular transaction hash. Details indicate position of the transaction in a particular block,
@@ -236,7 +236,7 @@ extension Web3.Eth {
         let result = try await self.blockBy(number: block, fullTransactions: fullTransactions)
         return result
     }
-
+    // swiftlint:disable indentation_width
     /**
      Convenience wrapper to send Ethereum to another address. Internally it creates a virtual contract and encodes all the options and data.
      - Parameters:
