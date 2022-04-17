@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-
+// swiftlint:disable nesting
 public extension ABI {
     // JSON Decoding
     struct Input: Decodable {

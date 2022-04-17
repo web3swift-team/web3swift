@@ -121,10 +121,8 @@ extension String {
     }
 
     var asciiValue: Int {
-        get {
-            let s = self.unicodeScalars
-            return Int(s[s.startIndex].value)
-        }
+        let s = self.unicodeScalars
+        return Int(s[s.startIndex].value)
     }
 
    /// Splits a string into groups of `every` n characters, grouping from left-to-right by default. If `backwards` is true, right-to-left.
@@ -150,9 +148,7 @@ extension String {
 
 extension Character {
     var asciiValue: Int {
-        get {
-            let s = String(self).unicodeScalars
-            return Int(s[s.startIndex].value)
-        }
+        let s = String(self).unicodeScalars
+        return Int(s[s.startIndex].value)
     }
 }

@@ -38,17 +38,13 @@ public class HDNode {
     public var parentFingerprint: Data = Data(repeating: 0, count: 4)
     public var childNumber: UInt32 = UInt32(0)
     public var isHardened: Bool {
-        get {
-            return self.childNumber >= (UInt32(1) << 31)
-        }
+        return self.childNumber >= (UInt32(1) << 31)
     }
     public var index: UInt32 {
-        get {
-            if self.isHardened {
-                return self.childNumber - (UInt32(1) << 31)
-            } else {
-                return self.childNumber
-            }
+        if self.isHardened {
+            return self.childNumber - (UInt32(1) << 31)
+        } else {
+            return self.childNumber
         }
     }
 

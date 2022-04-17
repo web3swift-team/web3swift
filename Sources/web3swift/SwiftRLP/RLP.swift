@@ -167,7 +167,7 @@ public struct RLP {
         }
         return RLPItem.init(content: .list(outputArray, 0, Data(raw)))
     }
-
+    // swiftlint:disable nesting
     public struct RLPItem {
 
         enum UnderlyingType {
@@ -217,11 +217,9 @@ public struct RLP {
         }
 
         public subscript(index: Int) -> RLPItem? {
-            get {
-                guard case .list(let list, _, _) = self.content else {return nil}
-                let item = list[index]
-                return item
-            }
+            guard case .list(let list, _, _) = self.content else {return nil}
+            let item = list[index]
+            return item
         }
 
         public var data: Data? {

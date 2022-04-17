@@ -8,79 +8,79 @@ import Foundation
 import CoreImage
 import BigInt
 
-extension Web3 {
+public struct EIP67Code {
+    public var address: EthereumAddress
+    public var gasLimit: BigUInt?
+    public var amount: BigUInt?
+    public var data: DataType?
 
-    public struct EIP67Code {
-        public var address: EthereumAddress
-        public var gasLimit: BigUInt?
-        public var amount: BigUInt?
-        public var data: DataType?
+    public enum DataType {
+        case data(Data)
+        case function(Function)
+    }
+    public struct Function {
+        public var method: String
+        public var parameters: [(ABI.Element.ParameterType, AnyObject)]
 
-        public enum DataType {
-            case data(Data)
-            case function(Function)
-        }
-        public struct Function {
-            public var method: String
-            public var parameters: [(ABI.Element.ParameterType, AnyObject)]
-
-            public func toString() -> String? {
-                let encoding = method + "(" + parameters.map({ (el) -> String in
-                    if let string = el.1 as? String {
-                        return el.0.abiRepresentation + " " + string
-                    } else if let number = el.1 as? BigUInt {
-                        return el.0.abiRepresentation + " " + String(number, radix: 10)
-                    } else if let number = el.1 as? BigInt {
-                        return el.0.abiRepresentation + " " + String(number, radix: 10)
-                    } else if let data = el.1 as? Data {
-                        return el.0.abiRepresentation + " " + data.toHexString().addHexPrefix()
-                    }
-                    return ""
-                }).joined(separator: ", ") + ")"
-                return encoding
-            }
-        }
-
-        public init (address: EthereumAddress) {
-            self.address = address
-        }
-
-        public init? (address: String) {
-            guard let addr = EthereumAddress(address) else {return nil}
-            self.address = addr
-        }
-
-        public func toString() -> String {
-            var urlComponents = URLComponents()
-            let mainPart = "ethereum:"+self.address.address.lowercased()
-            var queryItems = [URLQueryItem]()
-            if let amount = self.amount {
-                queryItems.append(URLQueryItem(name: "value", value: String(amount, radix: 10)))
-            }
-            if let gasLimit = self.gasLimit {
-                queryItems.append(URLQueryItem(name: "gas", value: String(gasLimit, radix: 10)))
-            }
-            if let data = self.data {
-                switch data {
-                case .data(let d):
-                    queryItems.append(URLQueryItem(name: "data", value: d.toHexString().addHexPrefix()))
-                case .function(let f):
-                    if let enc = f.toString() {
-                        queryItems.append(URLQueryItem(name: "function", value: enc))
-                    }
+        public func toString() -> String? {
+            let encoding = method + "(" + parameters.map({ (el) -> String in
+                if let string = el.1 as? String {
+                    return el.0.abiRepresentation + " " + string
+                } else if let number = el.1 as? BigUInt {
+                    return el.0.abiRepresentation + " " + String(number, radix: 10)
+                } else if let number = el.1 as? BigInt {
+                    return el.0.abiRepresentation + " " + String(number, radix: 10)
+                } else if let data = el.1 as? Data {
+                    return el.0.abiRepresentation + " " + data.toHexString().addHexPrefix()
                 }
-            }
-            urlComponents.queryItems = queryItems
-            if let url = urlComponents.url {
-                return mainPart + url.absoluteString
-            }
-            return mainPart
-        }
-
-        public func toImage(scale: Double = 1.0) -> CIImage {
-            return EIP67CodeGenerator.createImage(from: self, scale: scale)
+                return ""
+            }).joined(separator: ", ") + ")"
+            return encoding
         }
     }
+
+    public init (address: EthereumAddress) {
+        self.address = address
+    }
+
+    public init? (address: String) {
+        guard let addr = EthereumAddress(address) else {return nil}
+        self.address = addr
+    }
+
+    public func toString() -> String {
+        var urlComponents = URLComponents()
+        let mainPart = "ethereum:"+self.address.address.lowercased()
+        var queryItems = [URLQueryItem]()
+        if let amount = self.amount {
+            queryItems.append(URLQueryItem(name: "value", value: String(amount, radix: 10)))
+        }
+        if let gasLimit = self.gasLimit {
+            queryItems.append(URLQueryItem(name: "gas", value: String(gasLimit, radix: 10)))
+        }
+        if let data = self.data {
+            switch data {
+            case .data(let d):
+                queryItems.append(URLQueryItem(name: "data", value: d.toHexString().addHexPrefix()))
+            case .function(let f):
+                if let enc = f.toString() {
+                    queryItems.append(URLQueryItem(name: "function", value: enc))
+                }
+            }
+        }
+        urlComponents.queryItems = queryItems
+        if let url = urlComponents.url {
+            return mainPart + url.absoluteString
+        }
+        return mainPart
+    }
+
+    public func toImage(scale: Double = 1.0) -> CIImage {
+        return Web3.EIP67CodeGenerator.createImage(from: self, scale: scale)
+    }
+}
+
+extension Web3 {
 
     public struct EIP67CodeGenerator {
 

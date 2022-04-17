@@ -14,12 +14,10 @@ public class EthereumKeystoreV3: AbstractKeystore {
     public var keystoreParams: KeystoreParamsV3?
 
     public var addresses: [EthereumAddress]? {
-        get {
-            if self.address != nil {
-                return [self.address!]
-            }
-            return nil
+        if self.address != nil {
+            return [self.address!]
         }
+        return nil
     }
 
     public func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data {

@@ -145,9 +145,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     /// to the new type. migrating will invalidate any signature data
     public mutating func applyOptions(_ options: TransactionOptions) {
         if options.type != nil && self.type != options.type {
-            // swiftlint:disable force_unwrapping
             self.migrate(to: options.type!)
-            // swiftlint:enable force_unwrapping
         }
         self.envelope.applyOptions(options)
     }
@@ -263,9 +261,7 @@ extension EthereumTransaction {
     ///   - options: a TransactionOptions object containing additional options to apply to the transaction
     public init(with: AbstractEnvelope, options: TransactionOptions? = nil) {
         self.envelope = with
-        // swiftlint:disable force_unwrapping
         if options != nil { self.envelope.applyOptions(options!) }
-        // swiftlint:enable force_unwrapping
     }
 }
 

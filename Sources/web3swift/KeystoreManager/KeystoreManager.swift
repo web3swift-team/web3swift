@@ -10,36 +10,33 @@ public class KeystoreManager: AbstractKeystore {
     public var isHDKeystore: Bool = false
 
     public var addresses: [EthereumAddress]? {
-        get {
-            var toReturn = [EthereumAddress]()
-            for keystore in _keystores {
-                guard let key = keystore.addresses?.first else {
-                    continue
-                }
-                if key.isValid {
-                    toReturn.append(key)
-                }
+        var toReturn = [EthereumAddress]()
+        for keystore in _keystores {
+            guard let key = keystore.addresses?.first else {
+                continue
             }
-            for keystore in _bip32keystores {
-                guard let allAddresses = keystore.addresses else {
-                    continue
-                }
-                for addr in allAddresses {
-                    if addr.isValid {
-                        toReturn.append(addr)
-                    }
-                }
+            if key.isValid {
+                toReturn.append(key)
             }
-            for keystore in _plainKeystores {
-                guard let key = keystore.addresses?.first else {
-                    continue
-                }
-                if key.isValid {
-                    toReturn.append(key)
-                }
-            }
-            return toReturn
         }
+        for keystore in _bip32keystores {
+            guard let allAddresses = keystore.addresses else {
+                continue
+            }
+
+            let validAddr = allAddresses.compactMap { addr in addr.isValid ? addr : nil }
+            toReturn.append(contentsOf: validAddr)
+
+        }
+        for keystore in _plainKeystores {
+            guard let key = keystore.addresses?.first else {
+                continue
+            }
+            if key.isValid {
+                toReturn.append(key)
+            }
+        }
+        return toReturn
     }
 
     public func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data {
@@ -99,21 +96,15 @@ public class KeystoreManager: AbstractKeystore {
     var _plainKeystores: [PlainKeystore] = [PlainKeystore]()
 
     public var keystores: [EthereumKeystoreV3] {
-        get {
-            return self._keystores
-        }
+        return self._keystores
     }
 
     public var bip32keystores: [BIP32Keystore] {
-        get {
-            return self._bip32keystores
-        }
+        return self._bip32keystores
     }
 
     public var plainKeystores: [PlainKeystore] {
-        get {
-            return self._plainKeystores
-        }
+        return self._plainKeystores
     }
 
     public init(_ keystores: [EthereumKeystoreV3]) {

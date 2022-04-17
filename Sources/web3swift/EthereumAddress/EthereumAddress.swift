@@ -16,14 +16,11 @@ public struct EthereumAddress: Equatable {
     }
 
     public var isValid: Bool {
-        get {
-            switch self.type {
-            case .normal:
-                return (self.addressData.count == 20)
-            case .contractDeployment:
-                return true
-            }
-
+        switch self.type {
+        case .normal:
+            return (self.addressData.count == 20)
+        case .contractDeployment:
+            return true
         }
     }
     var _address: String
@@ -33,14 +30,12 @@ public struct EthereumAddress: Equatable {
     }
 
     public var addressData: Data {
-        get {
-            switch self.type {
-            case .normal:
-                guard let dataArray = Data.fromHex(_address) else {return Data()}
-                return dataArray
-            case .contractDeployment:
-                return Data()
-            }
+        switch self.type {
+        case .normal:
+            guard let dataArray = Data.fromHex(_address) else {return Data()}
+            return dataArray
+        case .contractDeployment:
+            return Data()
         }
     }
     public var address: String {

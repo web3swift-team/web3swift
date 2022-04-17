@@ -10,6 +10,7 @@ import CryptoSwift
 
 public typealias Web3Utils = Web3.Utils
 
+// swiftlint:disable nesting
 extension Web3 {
     /// Namespaced Utils functions. Are not bound to particular web3 instance, so capitalization matters.
     public struct Utils {
@@ -40,23 +41,21 @@ extension Web3.Utils {
         case Finney
 
         var decimals: Int {
-            get {
-                switch self {
-                case .eth:
-                    return 18
-                case .wei:
-                    return 0
-                case .Kwei:
-                    return 3
-                case .Mwei:
-                    return 6
-                case .Gwei:
-                    return 9
-                case .Microether:
-                    return 12
-                case .Finney:
-                    return 15
-                }
+            switch self {
+            case .eth:
+                return 18
+            case .wei:
+                return 0
+            case .Kwei:
+                return 3
+            case .Mwei:
+                return 6
+            case .Gwei:
+                return 9
+            case .Microether:
+                return 12
+            case .Finney:
+                return 15
             }
         }
     }

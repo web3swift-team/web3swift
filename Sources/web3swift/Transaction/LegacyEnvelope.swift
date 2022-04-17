@@ -116,10 +116,7 @@ extension LegacyEnvelope {
         case nil, "0x", "0x0":
             self.to = EthereumAddress.contractDeploymentAddress()
         default:
-            // the forced unwrap here is safe as we trap nil in the previous case
-            // swiftlint:disable force_unwrapping
             guard let ethAddr = EthereumAddress(toString!) else { throw Web3Error.dataError }
-            // swiftlint:enable force_unwrapping
             self.to = ethAddr
         }
         self.value = try container.decodeHexIfPresent(BigUInt.self, forKey: .value) ?? 0
@@ -150,7 +147,6 @@ extension LegacyEnvelope {
         guard RlpKey.allCases.count == rlpItem.count else { return nil }
 
         // we've validated the item count, so rlpItem[key] is guaranteed to return something not nil
-        // swiftlint:disable force_unwrapping
         guard let nonceData = rlpItem[RlpKey.nonce.rawValue]!.data else { return nil }
         guard let gasPriceData = rlpItem[RlpKey.gasPrice.rawValue]!.data else { return nil }
         guard let gasLimitData = rlpItem[RlpKey.gasLimit.rawValue]!.data else { return nil }
@@ -161,7 +157,6 @@ extension LegacyEnvelope {
         guard let sData = rlpItem[RlpKey.sig_s.rawValue]!.data else { return nil }
 
         switch rlpItem[RlpKey.destination.rawValue]!.content {
-        // swiftlint:enable force_unwrapping
         case .noItem:
             self.to = EthereumAddress.contractDeploymentAddress()
         case .data(let addressData):
@@ -222,10 +217,8 @@ extension LegacyEnvelope {
         self.nonce = options.resolveNonce(self.nonce)
         self.gasPrice = options.resolveGasPrice(self.gasPrice)
         self.gasLimit = options.resolveGasLimit(self.gasLimit)
-        // swiftlint:disable force_unwrapping
         if options.value != nil { self.value = options.value! }
         if options.to != nil { self.to = options.to! }
-        // swiftlint:enable force_unwrapping
     }
 
     public func encode(for type: EncodeType = .transaction) -> Data? {

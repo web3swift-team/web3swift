@@ -31,13 +31,11 @@ public class BIP32Keystore: AbstractKeystore {
     public var rootPrefix: String
 
     public var addresses: [EthereumAddress]? {
-        get {
-            let addresses = self.addressStorage.addresses
-            if addresses.count == 0 {
-                return nil
-            }
-            return addresses
+        let addresses = self.addressStorage.addresses
+        if addresses.count == 0 {
+            return nil
         }
+        return addresses
     }
 
     public func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data {

@@ -7,6 +7,39 @@
 import Foundation
 import BigInt
 
+public struct EIP681Code {
+    public struct EIP681Parameter {
+        public var type: ABI.Element.ParameterType
+        public var value: AnyObject
+    }
+    public var isPayRequest: Bool
+    public var targetAddress: TargetAddress
+    public var chainID: BigUInt?
+    public var functionName: String?
+    public var parameters: [EIP681Parameter] = [EIP681Parameter]()
+    public var gasLimit: BigUInt?
+    public var gasPrice: BigUInt?
+    public var amount: BigUInt?
+    public var function: ABI.Element.Function?
+
+    public enum TargetAddress {
+        case ethereumAddress(EthereumAddress)
+        case ensAddress(String)
+        public init(_ string: String) {
+            if let ethereumAddress = EthereumAddress(string) {
+                self = TargetAddress.ethereumAddress(ethereumAddress)
+            } else {
+                self = TargetAddress.ensAddress(string)
+            }
+        }
+    }
+
+    public init(_ targetAddress: TargetAddress, isPayRequest: Bool = false) {
+        self.isPayRequest = isPayRequest
+        self.targetAddress = targetAddress
+    }
+}
+
 extension Web3 {
 
 //    request                 = "ethereum" ":" [ "pay-" ]target_address [ "@" chain_id ] [ "/" function_name ] [ "?" parameters ]
@@ -19,39 +52,6 @@ extension Web3 {
 //    key                     = "value" / "gas" / "gasLimit" / "gasPrice" / TYPE
 //    value                   = number / ethereum_address / STRING
 //    number                  = [ "-" / "+" ] *DIGIT [ "." 1*DIGIT ] [ ( "e" / "E" ) [ 1*DIGIT ] [ "+" UNIT ]
-
-    public struct EIP681Code {
-        public struct EIP681Parameter {
-            public var type: ABI.Element.ParameterType
-            public var value: AnyObject
-        }
-        public var isPayRequest: Bool
-        public var targetAddress: TargetAddress
-        public var chainID: BigUInt?
-        public var functionName: String?
-        public var parameters: [EIP681Parameter] = [EIP681Parameter]()
-        public var gasLimit: BigUInt?
-        public var gasPrice: BigUInt?
-        public var amount: BigUInt?
-        public var function: ABI.Element.Function?
-
-        public enum TargetAddress {
-            case ethereumAddress(EthereumAddress)
-            case ensAddress(String)
-            public init(_ string: String) {
-                if let ethereumAddress = EthereumAddress(string) {
-                    self = TargetAddress.ethereumAddress(ethereumAddress)
-                } else {
-                    self = TargetAddress.ensAddress(string)
-                }
-            }
-        }
-
-        public init(_ targetAddress: TargetAddress, isPayRequest: Bool = false) {
-            self.isPayRequest = isPayRequest
-            self.targetAddress = targetAddress
-        }
-    }
 
     public struct EIP681CodeParser {
         //  static var addressRegex = "^(pay-)?([0-9a-zA-Z]+)(@[0-9]+)?"

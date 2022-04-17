@@ -108,10 +108,7 @@ extension EIP2930Envelope {
         case nil, "0x", "0x0":
             self.to = EthereumAddress.contractDeploymentAddress()
         default:
-            // the forced unwrap here is safe as we trap nil in the previous case
-            // swiftlint:disable force_unwrapping
             guard let ethAddr = EthereumAddress(toString!) else { throw Web3Error.dataError }
-            // swiftlint:enable force_unwrapping
             self.to = ethAddr
         }
         self.value = try container.decodeHexIfPresent(BigUInt.self, forKey: .value) ?? 0
@@ -148,8 +145,6 @@ extension EIP2930Envelope {
         guard let rlpItem = totalItem[0] else { return nil }
         guard RlpKey.allCases.count == rlpItem.count else { return nil }
 
-        // we've validated the item count, so rlpItem[keyIndex] is guaranteed to return something not nil
-        // swiftlint:disable force_unwrapping
         guard let chainData = rlpItem[RlpKey.chainId.rawValue]!.data else { return nil }
         guard let nonceData = rlpItem[RlpKey.nonce.rawValue]!.data else { return nil }
         guard let gasPriceData = rlpItem[RlpKey.gasPrice.rawValue]!.data else { return nil }
@@ -159,7 +154,6 @@ extension EIP2930Envelope {
         guard let vData = rlpItem[RlpKey.sig_v.rawValue]!.data else { return nil }
         guard let rData = rlpItem[RlpKey.sig_r.rawValue]!.data else { return nil }
         guard let sData = rlpItem[RlpKey.sig_s.rawValue]!.data else { return nil }
-        // swiftlint:enable force_unwrapping
 
         self.chainID = BigUInt(chainData)
         self.nonce = BigUInt(nonceData)
@@ -171,9 +165,7 @@ extension EIP2930Envelope {
         self.r = BigUInt(rData)
         self.s = BigUInt(sData)
 
-        // swiftlint:disable force_unwrapping
         switch rlpItem[RlpKey.destination.rawValue]!.content {
-            // swiftlint:enable force_unwrapping
         case .noItem:
             self.to = EthereumAddress.contractDeploymentAddress()
         case .data(let addressData):
@@ -187,18 +179,14 @@ extension EIP2930Envelope {
             return nil
         }
 
-        // swiftlint:disable force_unwrapping
         switch rlpItem[RlpKey.accessList.rawValue]!.content {
-            // swiftlint:enable force_unwrapping
         case .noItem:
             self.accessList = []
         case .data:
             return nil
         case .list:
             // decode the list here
-            // swiftlint:disable force_unwrapping
             let accessData = rlpItem[RlpKey.accessList.rawValue]!
-            // swiftlint:enable force_unwrapping
             let itemCount = accessData.count ?? 0
             var newList: [AccessListEntry] = []
             for index in 0...(itemCount - 1) {
@@ -249,11 +237,9 @@ extension EIP2930Envelope {
         self.nonce = options.resolveNonce(self.nonce)
         self.gasPrice = options.resolveGasPrice(self.gasPrice)
         self.gasLimit = options.resolveGasLimit(self.gasLimit)
-        // swiftlint:disable force_unwrapping
         if options.value != nil { self.value = options.value! }
         if options.to != nil { self.to = options.to! }
         if options.accessList != nil { self.accessList = options.accessList! }
-        // swiftlint:enable force_unwrapping
     }
 
     public func encode(for type: EncodeType = .transaction) -> Data? {
@@ -324,10 +310,7 @@ public struct AccessListEntry: CustomStringConvertible, Decodable {
         case nil, "0x", "0x0":
             self.address = EthereumAddress.contractDeploymentAddress()
         default:
-            // the forced unwrap here is safe as we trap nil in the previous case
-            // swiftlint:disable force_unwrapping
             guard let ethAddr = EthereumAddress(addrString!) else { throw Web3Error.dataError }
-            // swiftlint:enable force_unwrapping
             self.address = ethAddr
         }
         self.storageKeys = []
@@ -349,9 +332,7 @@ public struct AccessListEntry: CustomStringConvertible, Decodable {
     public init?(rlpItem: RLP.RLPItem) {
         if rlpItem.count != RlpKey.total.rawValue { return nil }
 
-        // swiftlint:disable force_unwrapping
         switch rlpItem[RlpKey.address.rawValue]!.content {
-            // swiftlint:enable force_unwrapping
         case .noItem, .list:
             return nil
         case .data(let addressData):
@@ -363,18 +344,14 @@ public struct AccessListEntry: CustomStringConvertible, Decodable {
             } else { return nil }
         }
 
-        // swiftlint:disable force_unwrapping
         switch rlpItem[RlpKey.storageKeys.rawValue]!.content {
-            // swiftlint:enable force_unwrapping
         case .noItem:
             self.storageKeys = []
         case .data:
             return nil
         case .list:
             // decode the list here
-            // swiftlint:disable force_unwrapping
             let keyData = rlpItem[RlpKey.storageKeys.rawValue]!
-            // swiftlint:enable force_unwrapping
             let itemCount = keyData.count ?? 0
             var newList: [BigUInt] = []
             for index in 0...(itemCount - 1) {

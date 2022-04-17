@@ -157,6 +157,7 @@ public class web3 {
         return self.eventLoopInstance!
     }
 
+    // swiftlint:disable nesting
     public class Eventloop: TransactionOptionsInheritable {
 
         public typealias EventLoopCall = (web3) async -> Void

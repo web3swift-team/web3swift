@@ -7,6 +7,7 @@
 import Foundation
 import BigInt
 
+// swiftlint:disable nesting
 public extension ENS {
     class Resolver {
         public let web3: web3

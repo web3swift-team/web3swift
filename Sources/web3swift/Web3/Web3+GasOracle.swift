@@ -66,9 +66,7 @@ extension Web3 {
         private func soft(twoDimentsion array: [[BigUInt]]) -> [BigUInt] {
             array.compactMap { percentileArray -> [BigUInt]? in
                 guard !percentileArray.isEmpty else { return nil }
-                // swiftlint:disable force_unwrapping
                 return [percentileArray.mean()!]
-                // swiftlint:enable force_unwrapping
             }
             .flatMap { $0 }
         }

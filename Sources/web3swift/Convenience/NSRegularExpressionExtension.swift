@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 extension NSRegularExpression {
     typealias GroupNamesSearchResult = (NSTextCheckingResult, NSTextCheckingResult, Int)
@@ -51,12 +52,8 @@ extension NSRegularExpression {
     }
 
     private func nameForIndex(_ index: Int, from: [String: GroupNamesSearchResult]) -> String? {
-        for (name, (_, _, n)) in from {
-            if (n + 1) == index {
-                return name
-            }
-        }
-        return nil
+        let names: [String] = from.compactMap { key, value in (value.2 + 1 == index) ? key : nil }
+        return names.first
     }
 
     func captureGroups(string: String, options: NSRegularExpression.MatchingOptions = []) -> [String: String] {
