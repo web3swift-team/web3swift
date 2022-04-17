@@ -99,7 +99,7 @@ public class BIP32Keystore: AbstractKeystore {
         guard var seed = BIP39.seedFromMmemonics(mnemonicsPhrase, password: mnemonicsPassword, language: language) else {
             throw AbstractKeystoreError.noEntropyError
         }
-        defer{
+        defer {
             Data.zero(&seed)
         }
         try self.init(seed: seed, password: password, prefixPath: prefixPath, aesMode: aesMode)
@@ -178,11 +178,9 @@ public class BIP32Keystore: AbstractKeystore {
         var pathAppendix: String?
         if path.hasPrefix(prefixPath) {
             let upperIndex = (path.range(of: prefixPath)?.upperBound)!
-            if upperIndex < path.endIndex
-            {
+            if upperIndex < path.endIndex {
                 pathAppendix = String(path[path.index(after: upperIndex)])
-            } else
-            {
+            } else {
                 throw AbstractKeystoreError.encryptionError("out of bounds")
             }
 

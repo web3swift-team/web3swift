@@ -59,7 +59,7 @@ public extension Data {
 
         let source1 = MTLCreateSystemDefaultDevice()?.makeBuffer(length: length)?.hash.description.data(using: .utf8)
 
-        let entropyData = entropy_bytes.shuffled().map{ bit in
+        let entropyData = entropy_bytes.shuffled().map { bit in
             return bit ^ (source1?.randomElement() ?? 0)
 
         }

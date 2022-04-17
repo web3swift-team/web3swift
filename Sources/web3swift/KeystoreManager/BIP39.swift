@@ -71,13 +71,13 @@ public enum BIP39Language {
 
 public class BIP39 {
 
-    static public func generateMnemonicsFromEntropy(entropy: Data, language: BIP39Language = BIP39Language.english) -> String?  {
+    static public func generateMnemonicsFromEntropy(entropy: Data, language: BIP39Language = BIP39Language.english) -> String? {
         let wordList = generateMnemonicsFrom(entropy: entropy)
         let separator = language.separator
         return wordList.joined(separator: separator)
     }
 
-    static public func generateMnemonicsFrom(entropy: Data, language: BIP39Language = BIP39Language.english) -> [String]  {
+    static public func generateMnemonicsFrom(entropy: Data, language: BIP39Language = BIP39Language.english) -> [String] {
         let entropy_bit_size = entropy.count * 8
         let checksum_length = entropy_bit_size / 32
 

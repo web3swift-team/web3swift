@@ -224,7 +224,7 @@ extension web3.web3contract {
                 res.eventLog = log
                 return res
             }
-            .filter{ res in res.eventLog != nil || (res.eventName == eventName && eventName != nil)}
+            .filter { res in res.eventLog != nil || (res.eventName == eventName && eventName != nil)}
 
             if (!joinWithReceipts) {
                 return decodedLogs as [EventParserResultProtocol]

@@ -78,7 +78,7 @@ public extension Web3 {
             let expectedBaseFeePerGas = parentBaseFee + baseFeePerGasDelta
 
             return expectedBaseFeePerGas
-        } else if parent.gasUsed < parentGasTarget  {
+        } else if parent.gasUsed < parentGasTarget {
             // Otherwise if the parent block used less gas than its target, the baseFee should decrease.
             let gasUsedDelta = parentGasTarget - parent.gasUsed
             let baseFeePerGasDelta = parentBaseFee * gasUsedDelta / parentGasTarget / Web3.BaseFeeChangeDenominator

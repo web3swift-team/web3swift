@@ -65,7 +65,7 @@ public struct JSONRPCrequestBatch: Encodable {
 }
 
 /// JSON RPC response structure for serialization and deserialization purposes.
-public struct JSONRPCresponse: Decodable{
+public struct JSONRPCresponse: Decodable {
     public var id: Int
     public var jsonrpc = "2.0"
     public var result: Any?
@@ -277,7 +277,7 @@ public struct EventFilterParameters: Codable {
 }
 
 /// Raw JSON RCP 2.0 internal flattening wrapper.
-public struct JSONRPCparams: Encodable{
+public struct JSONRPCparams: Encodable {
     // TODO: Rewrite me to generic
     public var params = [Any]()
 

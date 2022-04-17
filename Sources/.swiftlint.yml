@@ -46,16 +46,6 @@ disabled_rules:
 - nesting
 - no_fallthrough_only
 #-------------------------
-- no_space_in_method_call
-- notification_center_detachment
-- nsobject_prefer_isequal
-- opening_brace
-- orphaned_doc_comment
-- private_over_fileprivate
-- private_unit_test
-- protocol_property_accessors_order
-- reduce_boolean
-- self_in_property_initialization
 #-------------------------
 - todo
 

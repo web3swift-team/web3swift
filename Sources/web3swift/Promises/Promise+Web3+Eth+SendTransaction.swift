@@ -33,8 +33,7 @@ extension web3.Eth {
         mergedOptions = forAssemblyPipeline.1
 
         guard let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager else {
-            guard let request = EthereumTransaction.createRequest(method: .sendTransaction, transaction: assembledTransaction, transactionOptions: mergedOptions) else
-            {
+            guard let request = EthereumTransaction.createRequest(method: .sendTransaction, transaction: assembledTransaction, transactionOptions: mergedOptions) else {
                 throw Web3Error.processingError(desc: "Failed to create a request to send transaction")
             }
             let response = try await self.web3.dispatch(request)
