@@ -9,7 +9,7 @@ import BigInt
 
 extension web3.Eth {
 
-    public func sendTransactionPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions? = nil, password: String = "web3swift") async throws -> TransactionSendingResult {
+    public func send(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions? = nil, password: String = "web3swift") async throws -> TransactionSendingResult {
         //  print(transaction)
         var assembledTransaction: EthereumTransaction = transaction
 
@@ -62,7 +62,7 @@ extension web3.Eth {
         } catch {
             throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
         }
-        return try await self.web3.eth.sendRawTransactionPromise(assembledTransaction)
+        return try await self.web3.eth.send(raw: assembledTransaction)
 
     }
 }

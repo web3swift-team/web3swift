@@ -8,12 +8,12 @@ import Foundation
 import BigInt
 
 extension web3.Eth {
-    public func getTransactionDetailsPromise(_ txhash: Data) async throws -> TransactionDetails {
+    public func transactionDetails(_ txhash: Data) async throws -> TransactionDetails {
         let hashString = txhash.toHexString().addHexPrefix()
-        return try await self.getTransactionDetailsPromise(hashString)
+        return try await self.transactionDetails(hashString)
     }
 
-    public func getTransactionDetailsPromise(_ txhash: String) async throws -> TransactionDetails {
+    public func transactionDetails(_ txhash: String) async throws -> TransactionDetails {
         let request = JSONRPCRequestFabric.prepareRequest(.getTransactionByHash, parameters: [txhash])
         let response = try await web3.dispatch(request)
 

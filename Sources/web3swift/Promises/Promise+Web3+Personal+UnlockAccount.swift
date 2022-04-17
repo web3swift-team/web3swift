@@ -8,12 +8,12 @@ import Foundation
 import BigInt
 
 extension web3.Personal {
-    public func unlockAccountPromise(account: EthereumAddress, password: String = "web3swift", seconds: UInt64 = 300) async throws -> Bool {
+    public func unlock(account: EthereumAddress, password: String = "web3swift", seconds: UInt64 = 300) async throws -> Bool {
         let addr = account.address
-        return try await unlockAccountPromise(account: addr, password: password, seconds: seconds)
+        return try await unlock(account: addr, password: password, seconds: seconds)
     }
 
-    public func unlockAccountPromise(account: String, password: String = "web3swift", seconds: UInt64 = 300) async throws -> Bool {
+    public func unlock(account: String, password: String = "web3swift", seconds: UInt64 = 300) async throws -> Bool {
 
         guard self.web3.provider.attachedKeystoreManager == nil else {
             throw Web3Error.inputError(desc: "Can not unlock a local keystore")

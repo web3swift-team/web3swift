@@ -8,7 +8,7 @@ import Foundation
 
 extension web3.Eth {
 
-    public func callPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> Data {
+    public func callTransaction(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> Data {
         guard let request = EthereumTransaction.createRequest(method: .call, transaction: transaction, transactionOptions: transactionOptions) else {
             throw Web3Error.processingError(desc: "Transaction is invalid")
         }

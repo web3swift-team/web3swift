@@ -103,7 +103,7 @@ extension web3.web3contract.EventParser {
     }
 
     public func parseTransactionByHashPromise(_ hash: Data) async throws -> [EventParserResultProtocol] {
-        let receipt = try await self.web3.eth.getTransactionReceiptPromise(hash)
+        let receipt = try await self.web3.eth.transactionReceipt(hash)
 
         guard let results = parseReceiptForLogs(receipt: receipt, contract: contract, eventName: eventName, filter: filter) else {
             throw Web3Error.processingError(desc: "Failed to parse receipt for events")
@@ -118,7 +118,7 @@ extension web3.web3contract.EventParser {
             throw Web3Error.inputError(desc: "Can not mix parsing specific block and using block range filter")
         }
 
-        let res = try await self.web3.eth.getBlockByNumberPromise(blockNumber)
+        let res = try await self.web3.eth.blockBy(number: blockNumber)
 
         return try await self.parseBlockPromise(res)
     }
@@ -235,7 +235,7 @@ extension web3.web3contract {
             decodedLogs.forEach { singleEvent in
                 group.addTask {
                     var joinedEvent = singleEvent
-                    let receipt = try? await self.web3.eth.getTransactionReceiptPromise(singleEvent.eventLog!.transactionHash)
+                    let receipt = try? await self.web3.eth.transactionReceipt(singleEvent.eventLog!.transactionHash)
                     joinedEvent.transactionReceipt = receipt
                     return joinedEvent as EventParserResultProtocol
                 }

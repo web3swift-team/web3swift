@@ -9,7 +9,7 @@ import BigInt
 
 public class WriteTransaction: ReadTransaction {
 
-    public func assemblePromise(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
+    public func assembleTransaction(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
         var assembledTransaction: EthereumTransaction = self.transaction
 
         if self.method != "fallback" {
@@ -120,28 +120,24 @@ public class WriteTransaction: ReadTransaction {
 
     }
 
-    public func sendPromise(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult{
-        let transaction = try await self.assemblePromise(transactionOptions: transactionOptions)
+    public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult {
+        let transaction = try await self.assembleTransaction(transactionOptions: transactionOptions)
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
         var cleanedOptions = TransactionOptions()
         cleanedOptions.from = mergedOptions.from
         cleanedOptions.to = mergedOptions.to
-        return try await self.web3.eth.sendTransactionPromise(transaction, transactionOptions: cleanedOptions, password: password)
-    }
-
-    public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult {
-        return try await self.sendPromise(password: password, transactionOptions: transactionOptions)
+        return try await self.web3.eth.send(transaction, transactionOptions: cleanedOptions, password: password)
     }
 
     public func assemble(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
-        return try await self.assemblePromise(transactionOptions: transactionOptions)
+        return try await self.assembleTransaction(transactionOptions: transactionOptions)
     }
 
     func gasEstimate(for policy:  TransactionOptions.GasLimitPolicy
                      , assembledTransaction: EthereumTransaction, optionsForGasEstimation: TransactionOptions) async throws -> BigUInt {
         switch policy {
         case .automatic, .withMargin, .limited:
-            return try await self.web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
+            return try await self.web3.eth.estimateGas(for: assembledTransaction, transactionOptions: optionsForGasEstimation)
         case .manual(let gasLimit):
             return gasLimit
         }
@@ -150,9 +146,9 @@ public class WriteTransaction: ReadTransaction {
     func nonce(for policy:  TransactionOptions.NoncePolicy,  from: EthereumAddress) async throws -> BigUInt {
         switch policy {
         case .latest:
-            return try await self.web3.eth.getTransactionCountPromise(address: from, onBlock: "latest")
+            return try await self.web3.eth.getTransactionCount(address: from, onBlock: "latest")
         case .pending:
-            return try await self.web3.eth.getTransactionCountPromise(address: from, onBlock: "pending")
+            return try await self.web3.eth.getTransactionCount(address: from, onBlock: "pending")
         case .manual(let nonce):
             return nonce
         }
@@ -161,7 +157,7 @@ public class WriteTransaction: ReadTransaction {
     func gasPrice(for policy:  TransactionOptions.GasPricePolicy) async throws -> BigUInt {
         switch policy {
         case .automatic, .withMargin:
-            return try await self.web3.eth.getGasPricePromise()
+            return try await self.web3.eth.gasPrice()
         case .manual(let gasPrice):
             return gasPrice
         }

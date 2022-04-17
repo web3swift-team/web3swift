@@ -8,7 +8,7 @@ import Foundation
 import BigInt
 
 extension web3.Eth {
-    public func getAccountsPromise() async throws -> [EthereumAddress] {
+    public func ownedAccounts() async throws -> [EthereumAddress] {
 
         guard self.web3.provider.attachedKeystoreManager == nil else {
             return try self.web3.wallet.getAccounts()

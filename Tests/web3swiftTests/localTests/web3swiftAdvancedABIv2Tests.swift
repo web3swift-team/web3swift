@@ -24,7 +24,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let result = try await deployTx.sendPromise()
+        let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
@@ -42,7 +42,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
         let tx = contract.read("testSingle")
-        let testSingle = try await tx!.callPromise()
+        let testSingle = try await tx!.decodedData()
         print(testSingle.description)
     }
     
@@ -58,7 +58,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let result = try await deployTx.sendPromise()
+        let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
@@ -76,7 +76,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
         let tx = contract.read("testStaticArray")
-        let testStaticArray = try await tx!.callPromise()
+        let testStaticArray = try await tx!.decodedData()
         print(testStaticArray.description)
     }
     
@@ -92,7 +92,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let result = try await deployTx.sendPromise()
+        let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
@@ -110,7 +110,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
         let tx = contract.read("testDynArray")
-        let testDynArray = try await tx!.callPromise()
+        let testDynArray = try await tx!.decodedData()
         print(testDynArray.description)
     }
     
@@ -126,7 +126,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let result = try await deployTx.sendPromise()
+        let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
@@ -144,7 +144,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
         let tx = contract.read("testDynOfDyn")
-        let testDynOfDyn = try await tx!.callPromise()
+        let testDynOfDyn = try await tx!.decodedData()
         print(testDynOfDyn.description)
     }
     
@@ -160,7 +160,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let result = try await deployTx.sendPromise()
+        let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
@@ -178,7 +178,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
         let tx = contract.read("testStOfDyn")
-        let testStOfDyn = try await tx!.callPromise()
+        let testStOfDyn = try await tx!.decodedData()
         print(testStOfDyn.description)
     }
     
@@ -190,7 +190,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         XCTAssert(contract != nil)
         let tx = contract?.read("empty")
         XCTAssertNotNil(tx)
-        let _ = try await tx!.callPromise()
+        let _ = try await tx!.decodedData()
     }
     
     func testUserCase() async throws {

@@ -8,12 +8,12 @@ import Foundation
 import BigInt
 
 extension web3.Eth {
-    public func getTransactionCountPromise(address: EthereumAddress, onBlock: String = "latest") async throws -> BigUInt {
+    public func getTransactionCount(for address: EthereumAddress, onBlock: String = "latest") async throws -> BigUInt {
         let addr = address.address
-        return try await getTransactionCountPromise(address: addr, onBlock: onBlock)
+        return try await getTransactionCount(address: addr, onBlock: onBlock)
     }
 
-    public func getTransactionCountPromise(address: String, onBlock: String = "latest") async throws -> BigUInt {
+    public func getTransactionCount(address: String, onBlock: String = "latest") async throws -> BigUInt {
         let request = JSONRPCRequestFabric.prepareRequest(.getTransactionCount, parameters: [address.lowercased(), onBlock])
         let response = try await web3.dispatch(request)
 

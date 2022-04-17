@@ -274,7 +274,7 @@ let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersio
 let userAddress = EthereumAddress("<address>")!
 guard let readTX = contract?.read("balanceOf", parameters: [addressOfUser] as [AnyObject]) else {return}
 readTX.transactionOptions.from = EthereumAddress("<address>")!
-let tokenBalance = try readTX.callPromise().wait()
+let tokenBalance = try readTX.callPromise()
 guard let balance = tokenBalance["0"] as? BigUInt else {return}
 ```
 
