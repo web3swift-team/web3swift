@@ -28,7 +28,7 @@ class web3swiftBasicLocalNodeTests: XCTestCase {
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
         
-        let result = try await deployTx.sendPromise()
+        let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
@@ -61,12 +61,12 @@ class web3swiftBasicLocalNodeTests: XCTestCase {
         sendTx.transactionOptions.value = valueToSend
         sendTx.transactionOptions.from = allAddresses[0]
         
-        let balanceBeforeTo = try await web3.eth.getBalancePromise(address: sendToAddress)
-        let balanceBeforeFrom = try await web3.eth.getBalancePromise(address: allAddresses[0])
+        let balanceBeforeTo = try await web3.eth.getBalance(address: sendToAddress)
+        let balanceBeforeFrom = try await web3.eth.getBalance(address: allAddresses[0])
         print("Balance before to: " + balanceBeforeTo.description)
         print("Balance before from: " + balanceBeforeFrom.description)
         
-        let result = try await sendTx.sendPromise()
+        let result = try await sendTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
@@ -86,8 +86,8 @@ class web3swiftBasicLocalNodeTests: XCTestCase {
         print(details)
         
         
-        let balanceAfterTo = try await web3.eth.getBalancePromise(address: sendToAddress)
-        let balanceAfterFrom = try await web3.eth.getBalancePromise(address: allAddresses[0])
+        let balanceAfterTo = try await web3.eth.getBalance(address: sendToAddress)
+        let balanceAfterFrom = try await web3.eth.getBalance(address: allAddresses[0])
         print("Balance after to: " + balanceAfterTo.description)
         print("Balance after from: " + balanceAfterFrom.description)
         

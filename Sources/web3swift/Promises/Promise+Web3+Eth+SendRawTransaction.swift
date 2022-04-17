@@ -8,14 +8,14 @@ import Foundation
 
 
 extension web3.Eth {
-    public func sendRawTransactionPromise(_ transaction: Data) async throws -> TransactionSendingResult {
+    public func send(raw transaction: Data) async throws -> TransactionSendingResult {
         guard let deserializedTX = EthereumTransaction(rawValue: transaction) else {
             throw Web3Error.processingError(desc: "Serialized TX is invalid")
         }
-        return try await sendRawTransactionPromise(deserializedTX)
+        return try await send(raw: deserializedTX)
     }
 
-    public func sendRawTransactionPromise(_ transaction: EthereumTransaction) async throws -> TransactionSendingResult {
+    public func send(raw transaction: EthereumTransaction) async throws -> TransactionSendingResult {
 
         guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {
             throw Web3Error.processingError(desc: "Transaction is invalid")

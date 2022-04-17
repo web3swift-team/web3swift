@@ -50,7 +50,7 @@ public class ReadTransaction {
         return decodedData
     }
 
-    public func estimateGasPromise(transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
+    public func estimateGas(with transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
         var assembledTransaction: EthereumTransaction = self.transaction
 
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
@@ -79,7 +79,7 @@ public class ReadTransaction {
     }
 
     public func estimateGas(transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
-        return try await self.estimateGasPromise(transactionOptions: transactionOptions)
+        return try await self.estimateGas(with: transactionOptions)
     }
 
     public func call(transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {

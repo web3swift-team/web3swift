@@ -9,7 +9,7 @@ import BigInt
 
 public class WriteTransaction: ReadTransaction {
 
-    public func assemblePromise(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
+    public func assembleTransaction(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
         var assembledTransaction: EthereumTransaction = self.transaction
 
         if self.method != "fallback" {
@@ -125,8 +125,8 @@ public class WriteTransaction: ReadTransaction {
 
     }
 
-    public func sendPromise(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult{
-        let transaction = try await self.assemblePromise(transactionOptions: transactionOptions)
+    public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult {
+        let transaction = try await self.assembleTransaction(transactionOptions: transactionOptions)
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
         var cleanedOptions = TransactionOptions()
         cleanedOptions.from = mergedOptions.from
@@ -134,12 +134,8 @@ public class WriteTransaction: ReadTransaction {
         return try await self.web3.eth.send(transaction, transactionOptions: cleanedOptions, password: password)
     }
 
-    public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult {
-        return try await self.sendPromise(password: password, transactionOptions: transactionOptions)
-    }
-
     public func assemble(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
-        return try await self.assemblePromise(transactionOptions: transactionOptions)
+        return try await self.assembleTransaction(transactionOptions: transactionOptions)
     }
 
     func gasEstimate(for policy:  TransactionOptions.GasLimitPolicy

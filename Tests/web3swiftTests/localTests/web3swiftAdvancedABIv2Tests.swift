@@ -24,7 +24,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let result = try await deployTx.sendPromise()
+        let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
@@ -58,7 +58,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let result = try await deployTx.sendPromise()
+        let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
@@ -92,7 +92,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let result = try await deployTx.sendPromise()
+        let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
@@ -126,7 +126,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let result = try await deployTx.sendPromise()
+        let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
@@ -160,7 +160,7 @@ class web3swiftAdvancedABIv2Tests: XCTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let result = try await deployTx.sendPromise()
+        let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         

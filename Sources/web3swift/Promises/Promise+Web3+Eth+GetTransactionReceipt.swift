@@ -9,12 +9,12 @@ import BigInt
 
 
 extension web3.Eth {
-    public func getTransactionReceiptPromise(_ txhash: Data) async throws -> TransactionReceipt {
+    public func transactionReceipt(_ txhash: Data) async throws -> TransactionReceipt {
         let hashString = txhash.toHexString().addHexPrefix()
-        return try await self.getTransactionReceiptPromise(hashString)
+        return try await self.transactionReceipt(hashString)
     }
 
-    public func getTransactionReceiptPromise(_ txhash: String) async throws -> TransactionReceipt {
+    public func transactionReceipt(_ txhash: String) async throws -> TransactionReceipt {
         let request = JSONRPCRequestFabric.prepareRequest(.getTransactionReceipt, parameters: [txhash])
         let response = try await web3.dispatch(request)
 

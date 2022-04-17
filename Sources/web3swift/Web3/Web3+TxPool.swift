@@ -9,17 +9,17 @@ import BigInt
 
 extension web3.TxPool {
     public func getInspect() async throws -> [String: [String: [String: String]]] {
-        let result = try await self.getInspectPromise()
+        let result = try await self.txPoolInspect()
         return result
     }
 
     public func getStatus() async throws -> TxPoolStatus {
-        let result = try await self.getStatusPromise()
+        let result = try await self.txPoolStatus()
         return result
     }
 
     public func getContent() async throws -> TxPoolContent {
-        let result = try await self.getContentPromise()
+        let result = try await self.txPoolContent()
         return result
     }
 }

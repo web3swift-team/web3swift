@@ -42,7 +42,7 @@ class web3swiftPersonalSignatureTests: XCTestCase {
         let allAddresses = try await web3.eth.getAccounts()
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let deployResult = try await deployTx.sendPromise()
+        let deployResult = try await deployTx.send()
         let txHash = deployResult.hash
         print("Transaction with hash " + txHash)
         
