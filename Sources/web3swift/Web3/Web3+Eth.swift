@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 
-extension web3.Eth {
+extension Web3.Eth {
 
     /// Send an EthereumTransaction object to the network. Transaction is either signed locally if there is a KeystoreManager
     /// object bound to the web3 instance, or sent unsigned to the node. For local signing the password is required.

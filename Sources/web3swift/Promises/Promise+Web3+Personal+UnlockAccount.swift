@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 
-extension web3.Personal {
+extension Web3.Personal {
     public func unlock(account: EthereumAddress, password: String = "web3swift", seconds: UInt64 = 300) async throws -> Bool {
         let addr = account.address
         return try await unlock(account: addr, password: password, seconds: seconds)

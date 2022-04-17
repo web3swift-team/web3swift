@@ -11,10 +11,10 @@ import BigInt
 
 public extension ENS {
     class Registry {
-        public let web3: web3
+        public let web3: Web3
         public let registryContractAddress: EthereumAddress?
 
-        public init?(web3: web3) {
+        public init?(web3: Web3) {
             self.web3 = web3
             switch web3.provider.network {
             case .Mainnet?:
@@ -39,7 +39,7 @@ public extension ENS {
             return TransactionOptions.defaultOptions
         }()
 
-        lazy var registryContract: web3.web3contract = {
+        lazy var registryContract: Web3.Web3contract = {
             let contract = self.web3.contract(Web3.Utils.ensRegistryABI, at: self.registryContractAddress, abiVersion: 2)
             precondition(contract != nil)
             return contract!

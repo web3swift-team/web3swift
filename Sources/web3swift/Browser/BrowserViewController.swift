@@ -56,7 +56,7 @@ open class BrowserViewController: UIViewController {
         return config
     }()
 
-    public func registerBridges(for web3: web3) {
+    public func registerBridges(for web3: Web3) {
         self.webView.bridge.register({ (_, completion) in
             let url = web3.provider.url.absoluteString
             completion(.success(["rpcURL": url as Any]))

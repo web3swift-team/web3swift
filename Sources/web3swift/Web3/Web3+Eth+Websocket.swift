@@ -10,7 +10,7 @@ import BigInt
 
 import Starscream
 
-extension web3.Eth {
+extension Web3.Eth {
 
     public func getWebsocketProvider(forDelegate delegate: Web3SocketDelegate) throws -> InfuraWebsocketProvider {
         var infuraWSProvider: InfuraWebsocketProvider

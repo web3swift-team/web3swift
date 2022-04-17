@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 
-extension web3.Eth {
+extension Web3.Eth {
 
     public func send(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions? = nil, password: String = "web3swift") async throws -> TransactionSendingResult {
         //  print(transaction)

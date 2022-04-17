@@ -7,15 +7,15 @@
 import Foundation
 import BigInt
 
-extension web3.web3contract {
+extension Web3.Web3contract {
     /// An event parser to fetch events produced by smart-contract related transactions. Should not be constructed manually, but rather by calling the corresponding function on the web3contract object.
     public struct EventParser: EventParserProtocol {
 
         public var contract: ContractProtocol
         public var eventName: String
         public var filter: EventFilter?
-        var web3: web3
-        public init? (web3 web3Instance: web3, eventName: String, contract: ContractProtocol, filter: EventFilter? = nil) {
+        var web3: Web3
+        public init? (web3 web3Instance: Web3, eventName: String, contract: ContractProtocol, filter: EventFilter? = nil) {
             //  guard let _ = contract.allEvents.index(of: eventName) else {return nil}
             guard contract.allEvents.contains(eventName) else {return nil}
             self.eventName = eventName
@@ -94,7 +94,7 @@ extension web3.web3contract {
     }
 }
 
-extension web3.web3contract.EventParser {
+extension Web3.Web3contract.EventParser {
     public func parseTransactionPromise(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol] {
         guard let hash = transaction.hash else {
             throw Web3Error.processingError(desc: "Failed to get transaction hash")
@@ -172,7 +172,7 @@ extension web3.web3contract.EventParser {
 
 }
 
-extension web3.web3contract {
+extension Web3.Web3contract {
 
     /**
      *Fetches events by doing a lookup on "indexed" parameters of the event. Smart-contract developer can make some of event values "indexed" for such fast queries.*
@@ -194,7 +194,7 @@ extension web3.web3contract {
     }
 }
 
-extension web3.web3contract {
+extension Web3.Web3contract {
     public func getIndexedEventsPromise(eventName: String?, filter: EventFilter, joinWithReceipts: Bool = false) async throws -> [EventParserResultProtocol] {
 
             let rawContract = self.contract

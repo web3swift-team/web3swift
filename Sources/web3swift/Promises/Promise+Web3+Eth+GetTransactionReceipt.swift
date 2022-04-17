@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 
-extension web3.Eth {
+extension Web3.Eth {
     public func transactionReceipt(_ txhash: Data) async throws -> TransactionReceipt {
         let hashString = txhash.toHexString().addHexPrefix()
         return try await self.transactionReceipt(hashString)

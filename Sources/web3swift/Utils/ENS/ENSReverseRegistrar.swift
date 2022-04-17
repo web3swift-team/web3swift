@@ -11,10 +11,10 @@ import BigInt
 
 public extension ENS {
     class ReverseRegistrar {
-        public let web3: web3
+        public let web3: Web3
         public let address: EthereumAddress
 
-        lazy var contract: web3.web3contract = {
+        lazy var contract: Web3.Web3contract = {
             let contract = self.web3.contract(Web3.Utils.reverseRegistrarABI, at: self.address, abiVersion: 2)
             precondition(contract != nil)
             return contract!
@@ -24,7 +24,7 @@ public extension ENS {
             return TransactionOptions.defaultOptions
         }()
 
-        public init(web3: web3, address: EthereumAddress) {
+        public init(web3: Web3, address: EthereumAddress) {
             self.web3 = web3
             self.address = address
         }

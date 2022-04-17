@@ -9,7 +9,7 @@
 import Foundation
 import BigInt
 
-extension web3.Eth {
+extension Web3.Eth {
     func feeHistory(blockCount: BigUInt, block: String, percentiles: [Double]) async throws -> Web3.Oracle.FeeHistory {
         let request = JSONRPCRequestFabric.prepareRequest(.feeHistory, parameters: [blockCount.description.addHexPrefix(), block, percentiles])
         let response = try await web3.dispatch(request)

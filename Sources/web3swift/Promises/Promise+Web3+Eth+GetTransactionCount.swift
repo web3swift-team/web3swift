@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 
-extension web3.Eth {
+extension Web3.Eth {
     public func getTransactionCount(for address: EthereumAddress, onBlock: String = "latest") async throws -> BigUInt {
         let addr = address.address
         return try await getTransactionCount(address: addr, onBlock: onBlock)

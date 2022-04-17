@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 
-extension web3.Eth {
+extension Web3.Eth {
     public func block(for hash: Data, fullTransactions: Bool = false) async throws -> Block {
         let hashString = hash.toHexString().addHexPrefix()
         return try await block(for: hashString, fullTransactions: fullTransactions)

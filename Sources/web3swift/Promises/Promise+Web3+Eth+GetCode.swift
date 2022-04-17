@@ -9,7 +9,7 @@ import Foundation
 
 import BigInt
 
-extension web3.Eth {
+extension Web3.Eth {
     public func code(for address: EthereumAddress, onBlock: String = "latest") async throws -> String {
         let addr = address.address
         return try await code(for: addr, onBlock: onBlock)

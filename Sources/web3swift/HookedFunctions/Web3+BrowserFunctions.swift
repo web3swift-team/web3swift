@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 
-extension web3.BrowserFunctions {
+extension Web3.BrowserFunctions {
 
     public func getAccounts() async -> [String]? {
         do {

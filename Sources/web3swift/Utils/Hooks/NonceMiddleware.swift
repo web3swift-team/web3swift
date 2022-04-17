@@ -9,11 +9,11 @@ import BigInt
 
 extension Web3.Utils {
 
-    fileprivate typealias AssemblyHook = web3.AssemblyHook
-    fileprivate typealias SubmissionResultHook = web3.SubmissionResultHook
+    fileprivate typealias AssemblyHook = Web3.AssemblyHook
+    fileprivate typealias SubmissionResultHook = Web3.SubmissionResultHook
 
     public class NonceMiddleware: EventLoopRunnableProtocol {
-        var web3: web3?
+        var web3: Web3?
         var nonceLookups: [EthereumAddress: BigUInt] = [EthereumAddress: BigUInt]()
         public var name: String = "Nonce lookup middleware"
         public let queue: DispatchQueue = DispatchQueue(label: "Nonce middleware queue")
@@ -91,7 +91,7 @@ extension Web3.Utils {
             return
         }
 
-        public func attach(_ web3: web3) {
+        public func attach(_ web3: Web3) {
             self.web3 = web3
             web3.eventLoop.monitoredUserFunctions.append(self)
             let preHook = AssemblyHook(function: self.preAssemblyFunction)

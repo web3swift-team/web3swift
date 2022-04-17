@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 
-extension web3.Web3Wallet {
+extension Web3.Web3Wallet {
 
     public func getAccounts() throws -> [EthereumAddress] {
         guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {

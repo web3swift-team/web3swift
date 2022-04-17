@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 
-extension web3.Personal {
+extension Web3.Personal {
     public func createAccount(password: String = "web3swift") async throws -> EthereumAddress {
 
         guard self.web3.provider.attachedKeystoreManager == nil else {

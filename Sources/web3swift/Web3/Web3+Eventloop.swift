@@ -6,7 +6,7 @@
 
 import Foundation
 
-extension web3.Eventloop {
+extension Web3.Eventloop {
 
     // @available(iOS 10.0, *)
     public func start(_ timeInterval: TimeInterval) {

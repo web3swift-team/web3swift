@@ -6,7 +6,7 @@
 
 import Foundation
 
-extension web3.Eth {
+extension Web3.Eth {
     public func send(raw transaction: Data) async throws -> TransactionSendingResult {
         guard let deserializedTX = EthereumTransaction(rawValue: transaction) else {
             throw Web3Error.processingError(desc: "Serialized TX is invalid")

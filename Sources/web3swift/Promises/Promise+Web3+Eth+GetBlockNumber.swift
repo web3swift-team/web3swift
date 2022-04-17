@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 
-extension web3.Eth {
+extension Web3.Eth {
     public func blockNumber() async throws -> BigUInt {
         let request = JSONRPCRequestFabric.prepareRequest(.blockNumber, parameters: [])
         let response = try await web3.dispatch(request)

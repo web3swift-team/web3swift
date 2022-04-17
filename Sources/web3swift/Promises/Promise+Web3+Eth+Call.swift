@@ -6,7 +6,7 @@
 
 import Foundation
 
-extension web3.Eth {
+extension Web3.Eth {
 
     public func callTransaction(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> Data {
         guard let request = EthereumTransaction.createRequest(method: .call, transaction: transaction, transactionOptions: transactionOptions) else {

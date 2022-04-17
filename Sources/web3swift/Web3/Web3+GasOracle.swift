@@ -14,12 +14,12 @@ extension Web3 {
     final public class Oracle {
 
         /// Web3 provider by which accessing to the blockchain
-        private let web3Provider: web3
+        private let web3Provider: Web3
 
         private var feeHistory: FeeHistory?
 
         /// Ethereum scope shortcut
-        private var eth: web3.Eth { web3Provider.eth }
+        private var eth: Web3.Eth { web3Provider.eth }
 
         /// Block to start getting history backward
         var block: BlockNumber
@@ -48,7 +48,7 @@ extension Web3 {
         ///   - block: Number of block from which counts starts backward
         ///   - blockCount: Count of block to calculate statistics
         ///   - percentiles: Percentiles of fees to which result of predictions will be split in
-        public init(_ provider: web3, block: BlockNumber = .latest, blockCount: BigUInt = 20, percentiles: [Double] = [25, 50, 75]) {
+        public init(_ provider: Web3, block: BlockNumber = .latest, blockCount: BigUInt = 20, percentiles: [Double] = [25, 50, 75]) {
             self.web3Provider = provider
             self.block = block
             self.blockCount = blockCount
