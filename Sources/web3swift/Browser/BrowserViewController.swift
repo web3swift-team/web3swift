@@ -63,13 +63,17 @@ open class BrowserViewController: UIViewController {
         }, for: "getRPCurl")
 
         self.webView.bridge.register({ (parameters, completion) in
-            let allAccounts = web3.browserFunctions.getAccounts()
-            completion(.success(["accounts": allAccounts as Any]))
+            Task {
+                let allAccounts = await web3.browserFunctions.getAccounts()
+                completion(.success(["accounts": allAccounts as Any]))
+            }
         }, for: "eth_getAccounts")
 
         self.webView.bridge.register({ (parameters, completion) in
-            let coinbase = web3.browserFunctions.getCoinbase()
-            completion(.success(["coinbase": coinbase as Any]))
+            Task {
+                let coinbase = await web3.browserFunctions.getCoinbase()
+                completion(.success(["coinbase": coinbase as Any]))
+            }
         }, for: "eth_coinbase")
 
         self.webView.bridge.register({ (parameters, completion) in
@@ -97,6 +101,7 @@ open class BrowserViewController: UIViewController {
         }, for: "eth_sign")
 
         self.webView.bridge.register({ (parameters, completion) in
+            Task {
             if parameters == nil {
                 completion(.failure(Bridge.JSError(code: 0, description: "No parameters provided")))
                 return
@@ -106,12 +111,13 @@ open class BrowserViewController: UIViewController {
                 completion(.failure(Bridge.JSError(code: 0, description: "Not enough parameters provided")))
                 return
             }
-            let result = web3.browserFunctions.signTransaction(transaction!)
+                let result = await web3.browserFunctions.signTransaction(transaction!)
             if result == nil {
                 completion(.failure(Bridge.JSError(code: 0, description: "Data is invalid")))
                 return
             }
             completion(.success(["signedTransaction": result as Any]))
+            }
         }, for: "eth_signTransaction")
     }
 }
