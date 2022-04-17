@@ -26,7 +26,7 @@ public class ReadTransaction {
         }
     }
 
-    public func callPromise(transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
+    public func decodedData(with transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
         var assembledTransaction: EthereumTransaction = self.transaction
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
         var optionsForCall = TransactionOptions()
@@ -83,6 +83,6 @@ public class ReadTransaction {
     }
 
     public func call(transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
-        return try await self.callPromise(transactionOptions: transactionOptions)
+        return try await self.decodedData(with: transactionOptions)
     }
 }

@@ -155,9 +155,9 @@ public class WriteTransaction: ReadTransaction {
     func nonce(for policy:  TransactionOptions.NoncePolicy,  from: EthereumAddress) async throws -> BigUInt {
         switch policy {
         case .latest:
-            return try await self.web3.eth.getTransactionCountPromise(address: from, onBlock: "latest")
+            return try await self.web3.eth.getTransactionCount(address: from, onBlock: "latest")
         case .pending:
-            return try await self.web3.eth.getTransactionCountPromise(address: from, onBlock: "pending")
+            return try await self.web3.eth.getTransactionCount(address: from, onBlock: "pending")
         case .manual(let nonce):
             return nonce
         }

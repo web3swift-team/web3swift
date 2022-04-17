@@ -97,7 +97,7 @@ public class ERC721: IERC721 {
         transactionOptionsVAR.callOnBlock = .latest
         let transactionOptions = transactionOptionsVAR
 
-        async let tokenIdPromise = contract.read("tokenId", parameters: [AnyObject](), extraData: Data(), transactionOptions: transactionOptions)?.callPromise()
+        async let tokenIdPromise = contract.read("tokenId", parameters: [AnyObject](), extraData: Data(), transactionOptions: transactionOptions)?.decodedData()
 
         guard let tokenIdResult = try await tokenIdPromise else {return}
         guard let tokenId = tokenIdResult["0"] as? BigUInt else {return}

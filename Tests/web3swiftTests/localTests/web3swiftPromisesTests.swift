@@ -136,7 +136,7 @@ class web3swiftPromisesTests: XCTestCase {
         let token = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress, abiVersion: 2)!
         
         let userAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-        let tokenBalance = try await token.read("balanceOf", parameters: [userAddress] as [AnyObject])!.callPromise()
+        let tokenBalance = try await token.read("balanceOf", parameters: [userAddress] as [AnyObject])!.decodedData()
         guard let bal = tokenBalance["0"] as? BigUInt else {return XCTFail()}
         print(String(bal))
     }

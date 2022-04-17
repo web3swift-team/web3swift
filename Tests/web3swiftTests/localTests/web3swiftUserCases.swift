@@ -25,7 +25,7 @@ class web3swiftUserCases: XCTestCase {
         let contract = web3.contract(abiString, at: receipt.contractAddress!)!
         let readTransaction = contract.read("balanceOf", parameters:[account] as [AnyObject])!
         readTransaction.transactionOptions.from = account
-        let response = try await readTransaction.callPromise()
+        let response = try await readTransaction.decodedData()
         let balance = response["0"] as? BigUInt
         print(balance!.description)
     }

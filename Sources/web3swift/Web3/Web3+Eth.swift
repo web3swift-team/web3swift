@@ -68,7 +68,7 @@ extension web3.Eth {
     ///
     /// Returns the Result object that indicates either success of failure.
     public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest") async throws -> BigUInt {
-        let result = try await self.getTransactionCountPromise(address: address, onBlock: onBlock)
+        let result = try await self.getTransactionCount(for: address, onBlock: onBlock)
         return result
     }
 
@@ -343,7 +343,7 @@ extension web3.Eth {
         let contract = self.web3.contract(Web3.Utils.erc20ABI, at: tokenAddress, abiVersion: 2)
         var mergedOptions = self.web3.transactionOptions.merge(transactionOptions)
         mergedOptions.from = from
-        let resp = try await contract?.read("decimals", transactionOptions: mergedOptions)?.callPromise()
+        let resp = try await contract?.read("decimals", transactionOptions: mergedOptions)?.decodedData()
         var decimals = BigUInt(0)
         guard let response = resp, let dec = response["0"], let decTyped = dec as? BigUInt else {return nil}
         decimals = decTyped

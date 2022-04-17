@@ -30,7 +30,7 @@ extension Web3.Utils {
 
                 knownKeys.forEach { key in
                     group.addTask {
-                        try? await w3.eth.getTransactionCountPromise(address: key, onBlock: "latest")
+                        try? await w3.eth.getTransactionCount(address: key, onBlock: "latest")
                     }
                 }
 

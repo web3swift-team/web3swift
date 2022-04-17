@@ -117,11 +117,11 @@ class web3swiftTests: XCTestCase {
         let contract = web3.contract(jsonString, at: addr, abiVersion: 2)
         XCTAssert(contract != nil)
         let allMethods = contract!.contract.allMethods
-        let userDeviceCount = try await contract!.read("userDeviceCount", parameters: [addr as AnyObject])?.callPromise()
+        let userDeviceCount = try await contract!.read("userDeviceCount", parameters: [addr as AnyObject])?.decodedData()
         print(userDeviceCount!)
-        let totalUsers = try await contract!.read("totalUsers", parameters: [])?.callPromise()
+        let totalUsers = try await contract!.read("totalUsers", parameters: [])?.decodedData()
         print(totalUsers!)
-        let user = try await contract!.read("users", parameters: [0 as AnyObject])?.callPromise()
+        let user = try await contract!.read("users", parameters: [0 as AnyObject])?.decodedData()
         print(user!)
         print(allMethods)
     }
