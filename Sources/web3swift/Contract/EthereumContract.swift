@@ -128,7 +128,7 @@ public struct EthereumContract: ContractProtocol {
 
             return transaction
         }
-        let foundMethod = self.methods.filter { (key, value) -> Bool in
+        let foundMethod = self.methods.filter { (key, _) -> Bool in
             return key == method
         }
         guard foundMethod.count == 1 else {return nil}

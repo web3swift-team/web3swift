@@ -8,21 +8,22 @@ import Foundation
 
 internal func filterLogs(decodedLogs: [EventParserResultProtocol], eventFilter: EventFilter) -> [EventParserResultProtocol] {
     let filteredLogs = decodedLogs.filter { (result) -> Bool in
-        if eventFilter.addresses == nil {
-            return true
-        } else {
-            if eventFilter.addresses!.contains(result.contractAddress) {
+            if eventFilter.addresses == nil {
                 return true
             } else {
-                return false
+                if eventFilter.addresses!.contains(result.contractAddress) {
+                    return true
+                } else {
+                    return false
+                }
             }
         }
-        }.filter { (result) -> Bool in
+        .filter { (result) -> Bool in
             if eventFilter.parameterFilters == nil {
                 return true
             } else {
                 let keys = result.decodedResult.keys.filter({ (key) -> Bool in
-                    if let _ = UInt64(key) {
+                    if UInt64(key) != nil {
                         return true
                     }
                     return false

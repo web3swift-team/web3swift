@@ -132,7 +132,7 @@ extension web3.BrowserFunctions {
         do {
             var transaction = trans
             var options = opts
-            guard let _ = options.from else {return (nil, nil)}
+            guard options.from != nil else {return (nil, nil)}
             let gasPrice = try await self.web3.eth.getGasPrice()
             transaction.parameters.gasPrice = gasPrice
             options.gasPrice = .manual(gasPrice)

@@ -57,19 +57,19 @@ open class BrowserViewController: UIViewController {
     }()
 
     public func registerBridges(for web3: web3) {
-        self.webView.bridge.register({ (parameters, completion) in
+        self.webView.bridge.register({ (_, completion) in
             let url = web3.provider.url.absoluteString
             completion(.success(["rpcURL": url as Any]))
         }, for: "getRPCurl")
 
-        self.webView.bridge.register({ (parameters, completion) in
+        self.webView.bridge.register({ (_, completion) in
             Task {
                 let allAccounts = await web3.browserFunctions.getAccounts()
                 completion(.success(["accounts": allAccounts as Any]))
             }
         }, for: "eth_getAccounts")
 
-        self.webView.bridge.register({ (parameters, completion) in
+        self.webView.bridge.register({ (_, completion) in
             Task {
                 let coinbase = await web3.browserFunctions.getCoinbase()
                 completion(.success(["coinbase": coinbase as Any]))

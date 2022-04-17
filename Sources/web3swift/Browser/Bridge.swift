@@ -165,9 +165,7 @@ extension Bridge: WKScriptMessageHandler {
                     webView.st_dispatchBridgeEvent(Bridge.callbackEventName, parameters: ["id": callbackID], results: results, completionHandler: nil)
                 }
             } else {
-                defaultHandler(name, body[MessageKey.parameters] as? [String: Any]) { (results) in
-                    // Do Nothing
-                }
+                defaultHandler(name, body[MessageKey.parameters] as? [String: Any]) { _ in }
             }
             return
         }
@@ -182,9 +180,7 @@ extension Bridge: WKScriptMessageHandler {
                 webView.st_dispatchBridgeEvent(Bridge.callbackEventName, parameters: ["id": callbackID], results: results, completionHandler: nil)
             }
         } else {
-            handler(body[MessageKey.parameters] as? [String: Any]) { (results) in
-                // Do Nothing
-            }
+            handler(body[MessageKey.parameters] as? [String: Any]) { _ in }
         }
     }
 }

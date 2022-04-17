@@ -17,7 +17,7 @@ extension web3.web3contract {
         var web3: web3
         public init? (web3 web3Instance: web3, eventName: String, contract: ContractProtocol, filter: EventFilter? = nil) {
             //  guard let _ = contract.allEvents.index(of: eventName) else {return nil}
-            guard let _ = contract.allEvents.firstIndex(of: eventName) else {return nil}
+            guard contract.allEvents.contains(eventName) else {return nil}
             self.eventName = eventName
             self.web3 = web3Instance
             self.contract = contract
@@ -203,7 +203,7 @@ extension web3.web3contract {
             }
 
             if eventName != nil {
-                guard let _ = rawContract.events[eventName!] else {
+                guard rawContract.events[eventName!] != nil else {
                     throw Web3Error.processingError(desc: "No such event in a contract")
                 }
             }
