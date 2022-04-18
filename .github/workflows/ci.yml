@@ -18,6 +18,7 @@ on:
     branches:
       - master
       - develop
+      - unstable
 
 jobs:
   spm:
