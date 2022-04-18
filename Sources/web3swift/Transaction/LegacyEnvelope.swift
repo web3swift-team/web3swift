@@ -60,7 +60,7 @@ public struct LegacyEnvelope: AbstractEnvelope {
 
     public var parameters: EthereumParameters {
         get {
-            return EthereumParameters(
+            EthereumParameters(
                 type: type,
                 to: to,
                 nonce: nonce,

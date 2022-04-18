@@ -96,15 +96,15 @@ public class KeystoreManager: AbstractKeystore {
     var _plainKeystores: [PlainKeystore] = [PlainKeystore]()
 
     public var keystores: [EthereumKeystoreV3] {
-        return self._keystores
+        self._keystores
     }
 
     public var bip32keystores: [BIP32Keystore] {
-        return self._bip32keystores
+        self._bip32keystores
     }
 
     public var plainKeystores: [PlainKeystore] {
-        return self._plainKeystores
+        self._plainKeystores
     }
 
     public init(_ keystores: [EthereumKeystoreV3]) {

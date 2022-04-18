@@ -375,7 +375,8 @@ public struct TxPoolContent: Decodable {
         var intValue: Int?
 
         init?(intValue: Int) {
-            return nil
+            self.intValue = intValue
+            stringValue = "\(intValue)"
         }
     }
 }

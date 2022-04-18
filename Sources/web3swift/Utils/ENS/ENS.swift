@@ -74,9 +74,7 @@ public class ENS {
         self.reverseRegistrar = reverseRegistrar
     }
 
-    lazy var defaultOptions: TransactionOptions = {
-        return TransactionOptions.defaultOptions
-    }()
+    lazy var defaultOptions: TransactionOptions = .defaultOptions
 
     // MARK: - Convenience public resolver methods
     public func getAddress(forNode node: String) async throws -> EthereumAddress {

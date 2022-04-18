@@ -9,13 +9,13 @@ import Foundation
 
 extension BigUInt: EventFilterEncodable {
     public func eventFilterEncoded() -> String? {
-        return self.abiEncode(bits: 256)?.toHexString().addHexPrefix()
+        self.abiEncode(bits: 256)?.toHexString().addHexPrefix()
     }
 }
 
 extension BigInt: EventFilterEncodable {
     public func eventFilterEncoded() -> String? {
-        return self.abiEncode(bits: 256)?.toHexString().addHexPrefix()
+        self.abiEncode(bits: 256)?.toHexString().addHexPrefix()
     }
 }
 

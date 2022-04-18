@@ -33,7 +33,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
     // Class
 
     public func getAddress() -> EthereumAddress? {
-        return self.address
+        self.address
     }
 
     // --------------

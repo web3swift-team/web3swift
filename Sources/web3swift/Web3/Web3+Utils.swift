@@ -6029,7 +6029,7 @@ extension Web3.Utils {
     ///
     /// Returns nil of formatting is not possible to satisfy.
     public static func formatToEthereumUnits(_ bigNumber: BigUInt, toUnits: Web3.Utils.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
-        return formatToPrecision(bigNumber, numberDecimals: toUnits.decimals, formattingDecimals: decimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific)
+        formatToPrecision(bigNumber, numberDecimals: toUnits.decimals, formattingDecimals: decimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific)
     }
 
     /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "numberDecimals",
@@ -6188,14 +6188,14 @@ extension Web3.Utils {
     }
 
     public static func hexToData(_ string: String) -> Data? {
-        return Data.fromHex(string)
+        Data.fromHex(string)
     }
 
     public static func hexToBigUInt(_ string: String) -> BigUInt? {
-        return BigUInt(string.stripHexPrefix(), radix: 16)
+        BigUInt(string.stripHexPrefix(), radix: 16)
     }
 
     public static func randomBytes(length: Int) -> Data? {
-        return Data.randomBytes(length: length)
+        Data.randomBytes(length: length)
     }
 }

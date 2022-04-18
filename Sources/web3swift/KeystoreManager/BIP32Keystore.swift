@@ -17,7 +17,7 @@ public class BIP32Keystore: AbstractKeystore {
     @available(*, deprecated, message: "Please use addressStorage instead")
     public var paths: [String: EthereumAddress] {
         get {
-            return self.addressStorage.toPathAddressPairs().reduce(into: [String: EthereumAddress]()) {
+            self.addressStorage.toPathAddressPairs().reduce(into: [String: EthereumAddress]()) {
                 $0[$1.path] = EthereumAddress($1.address)!
             }
         }

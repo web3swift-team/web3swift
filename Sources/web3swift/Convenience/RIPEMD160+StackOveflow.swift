@@ -29,29 +29,29 @@ public struct RIPEMD160 {
         /* ROL(x, n) cyclically rotates x over n bits to the left */
         /* x must be of an unsigned 32 bits type and 0 <= n < 32. */
         func ROL(_ x: UInt32, _ n: UInt32) -> UInt32 {
-            return (x << n) | (x >> (32 - n))
+            (x << n) | (x >> (32 - n))
         }
 
         /* the five basic functions F(), G() and H() */
 
         func F(_ x: UInt32, _ y: UInt32, _ z: UInt32) -> UInt32 {
-            return x ^ y ^ z
+            x ^ y ^ z
         }
 
         func G(_ x: UInt32, _ y: UInt32, _ z: UInt32) -> UInt32 {
-            return (x & y) | (~x & z)
+            (x & y) | (~x & z)
         }
 
         func H(_ x: UInt32, _ y: UInt32, _ z: UInt32) -> UInt32 {
-            return (x | ~y) ^ z
+            (x | ~y) ^ z
         }
 
         func I(_ x: UInt32, _ y: UInt32, _ z: UInt32) -> UInt32 {
-            return (x & z) | (y & ~z)
+            (x & z) | (y & ~z)
         }
 
         func J(_ x: UInt32, _ y: UInt32, _ z: UInt32) -> UInt32 {
-            return x ^ (y | ~z)
+            x ^ (y | ~z)
         }
 
         /* the ten basic operations FF() through III() */
@@ -490,7 +490,7 @@ public extension RIPEMD160 {
     }
 
     static func hash(message: String) throws -> Data {
-        return try RIPEMD160.hash(message: message.data(using: .utf8)!)
+        try RIPEMD160.hash(message: message.data(using: .utf8)!)
         //        return try RIPEMD160.hash(message: message.data(using: .utf8)!)
     }
 }
@@ -524,12 +524,12 @@ public extension RIPEMD160 {
     }
 
     static func hmac(key: Data, message: String) throws -> Data {
-        return try RIPEMD160.hmac(key: key, message: message.data(using: .utf8)!)
+        try RIPEMD160.hmac(key: key, message: message.data(using: .utf8)!)
         //        return try RIPEMD160.hmac(key: key, message: message.data(using: .utf8)!)
     }
 
     static func hmac(key: String, message: String) throws -> Data {
-        return try RIPEMD160.hmac(key: key.data(using: .utf8)!, message: message)
+        try RIPEMD160.hmac(key: key.data(using: .utf8)!, message: message)
         //        return try RIPEMD160.hmac(key: key.data(using: .utf8)!, message: message)
     }
 }

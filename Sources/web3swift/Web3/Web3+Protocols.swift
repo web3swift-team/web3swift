@@ -86,8 +86,7 @@ public enum Networks {
 
 extension Networks: Equatable {
     public static func == (lhs: Networks, rhs: Networks) -> Bool {
-        return lhs.chainID == rhs.chainID
-            && lhs.name == rhs.name
+        lhs.chainID == rhs.chainID && lhs.name == rhs.name
     }
 }
 

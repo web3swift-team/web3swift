@@ -223,7 +223,7 @@ public struct RLP {
         }
 
         public var data: Data? {
-            return self.getData()
+            self.getData()
         }
 
         public func getData() -> Data? {
@@ -236,7 +236,7 @@ public struct RLP {
         }
 
         public static var noItem: RLPItem {
-            return RLPItem(content: .noItem)
+            RLPItem(content: .noItem)
         }
     }
     // TODO: convert return tuple to a struct
@@ -299,6 +299,6 @@ public struct RLP {
 fileprivate extension Data {
 
     var bytes: [UInt8] {
-        return Array(self)
+        Array(self)
     }
 }

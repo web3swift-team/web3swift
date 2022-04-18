@@ -50,7 +50,7 @@ public struct KeystoreParamsBIP32: AbstractKeystoreParams {
     @available(*, deprecated, message: "Please use pathAddressPairs instead")
     var pathToAddress: [String: String] {
         get {
-            return self.pathAddressPairs.reduce(into: [String: String]()) {
+            self.pathAddressPairs.reduce(into: [String: String]()) {
                 $0[$1.path] = $1.address
             }
         }

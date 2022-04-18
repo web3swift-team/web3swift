@@ -8,11 +8,11 @@ import Foundation
 
 extension String {
     var fullRange: Range<Index> {
-        return startIndex..<endIndex
+        startIndex..<endIndex
     }
 
     var fullNSRange: NSRange {
-        return NSRange(fullRange, in: self)
+        NSRange(fullRange, in: self)
     }
 
     func index(of char: Character) -> Index? {
@@ -68,7 +68,7 @@ extension String {
     }
 
     func hasHexPrefix() -> Bool {
-        return self.hasPrefix("0x")
+        self.hasPrefix("0x")
     }
 
     func stripHexPrefix() -> String {

@@ -11,12 +11,12 @@ public extension Data {
 
     init<T>(fromArray values: [T]) {
         let values = values
-        let ptrUB = values.withUnsafeBufferPointer { (ptr: UnsafeBufferPointer) in return ptr }
+        let ptrUB = values.withUnsafeBufferPointer { $0 }
         self.init(buffer: ptrUB)
     }
 
     func toArray<T>(type: T.Type) throws -> [T] {
-        return try self.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
+        try self.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
             if let bodyAddress = body.baseAddress, !body.isEmpty {
                 let pointer = bodyAddress.assumingMemoryBound(to: T.self)
                 return [T](UnsafeBufferPointer(start: pointer, count: self.count / MemoryLayout<T>.stride))
@@ -60,7 +60,7 @@ public extension Data {
         let source1 = MTLCreateSystemDefaultDevice()?.makeBuffer(length: length)?.hash.description.data(using: .utf8)
 
         let entropyData = entropy_bytes.shuffled().map { bit in
-            return bit ^ (source1?.randomElement() ?? 0)
+            bit ^ (source1?.randomElement() ?? 0)
 
         }
 

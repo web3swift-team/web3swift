@@ -25,7 +25,7 @@ extension Web3.BrowserFunctions {
     }
 
     public func personalSign(_ personalMessage: String, account: String, password: String = "web3swift") -> String? {
-        return self.sign(personalMessage, account: account, password: password)
+        self.sign(personalMessage, account: account, password: password)
     }
 
     public func sign(_ personalMessage: String, account: String, password: String = "web3swift") -> String? {

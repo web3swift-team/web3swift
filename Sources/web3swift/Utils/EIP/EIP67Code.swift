@@ -77,7 +77,7 @@ public struct EIP67Code {
     }
 
     public func toImage(scale: Double = 1.0) -> CIImage {
-        return Web3.EIP67CodeGenerator.createImage(from: self, scale: scale)
+        Web3.EIP67CodeGenerator.createImage(from: self, scale: scale)
     }
 }
 

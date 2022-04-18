@@ -207,7 +207,7 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
     }
 
     public func isConnect() -> Bool {
-        return websocketConnected
+        websocketConnected
     }
 
     public class func connectToSocket(_ endpoint: String, delegate: Web3SocketDelegate, projectId: String? = nil, keystoreManager manager: KeystoreManager? = nil, network net: Networks? = nil) -> WebsocketProvider? {

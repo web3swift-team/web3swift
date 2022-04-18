@@ -79,10 +79,10 @@ public class ReadTransaction {
     }
 
     public func estimateGas(transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
-        return try await self.estimateGas(with: transactionOptions)
+        try await self.estimateGas(with: transactionOptions)
     }
 
     public func call(transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
-        return try await self.decodedData(with: transactionOptions)
+        try await self.decodedData(with: transactionOptions)
     }
 }

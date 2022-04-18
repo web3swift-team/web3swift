@@ -68,7 +68,7 @@ public struct EIP1559Envelope: EIP2718Envelope {
 
     public var parameters: EthereumParameters {
         get {
-            return EthereumParameters(
+            EthereumParameters(
                 type: type,
                 to: to,
                 nonce: nonce,

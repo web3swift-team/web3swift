@@ -57,7 +57,7 @@ extension NSRegularExpression {
     }
 
     func captureGroups(string: String, options: NSRegularExpression.MatchingOptions = []) -> [String: String] {
-        return captureGroups(string: string, options: options, range: NSRange(location: 0, length: string.utf16.count))
+        captureGroups(string: string, options: options, range: NSRange(location: 0, length: string.utf16.count))
     }
 
     func captureGroups(string: String, options: NSRegularExpression.MatchingOptions = [], range: NSRange) -> [String: String] {

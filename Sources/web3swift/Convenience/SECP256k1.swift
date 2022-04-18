@@ -359,7 +359,7 @@ extension SECP256K1 {
     }
 
     internal static func fromByteArray<T>(_ value: [UInt8], _: T.Type) -> T {
-        return value.withUnsafeBytes {
+        value.withUnsafeBytes {
             $0.baseAddress!.load(as: T.self)
         }
     }

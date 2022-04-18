@@ -45,7 +45,7 @@ public class Web3 {
         //  weak var web3: web3?
         var web3: Web3
         public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
+            self.web3.transactionOptions
         }
 
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
@@ -70,7 +70,7 @@ public class Web3 {
         //        weak var web3: web3?
         var web3: Web3
         public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
+            self.web3.transactionOptions
         }
 
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
@@ -95,7 +95,7 @@ public class Web3 {
         //        weak var web3: web3?
         var web3: Web3
         public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
+            self.web3.transactionOptions
         }
 
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
@@ -142,7 +142,7 @@ public class Web3 {
         //        weak var web3: web3?
         var web3: Web3
         public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
+            self.web3.transactionOptions
         }
 
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
@@ -189,7 +189,7 @@ public class Web3 {
         public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
 
         public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
+            self.web3.transactionOptions
         }
 
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {

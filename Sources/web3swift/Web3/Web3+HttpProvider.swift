@@ -87,6 +87,6 @@ public class Web3HttpProvider: Web3Provider {
     }
 
     public func sendAsync(_ requests: JSONRPCrequestBatch) async throws -> JSONRPCresponseBatch {
-        return try await Self.post(requests, providerURL: self.url, session: self.session)
+        try await Self.post(requests, providerURL: self.url, session: self.session)
     }
 }

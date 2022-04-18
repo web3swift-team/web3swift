@@ -28,7 +28,7 @@ opt_in_rules:
 - explicit_init
 - explicit_self
 - fallthrough
-#- implicit_return
+- implicit_return
 - implicitly_unwrapped_optional
 - indentation_width
 - joined_default_parameter

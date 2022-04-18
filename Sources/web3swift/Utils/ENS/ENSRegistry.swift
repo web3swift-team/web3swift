@@ -35,9 +35,7 @@ public extension ENS {
             }
         }
 
-        lazy var defaultOptions: TransactionOptions = {
-            return TransactionOptions.defaultOptions
-        }()
+        lazy var defaultOptions: TransactionOptions = .defaultOptions
 
         lazy var registryContract: Web3.Web3contract = {
             let contract = self.web3.contract(Web3.Utils.ensRegistryABI, at: self.registryContractAddress, abiVersion: 2)

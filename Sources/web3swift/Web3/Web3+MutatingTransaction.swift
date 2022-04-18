@@ -130,7 +130,7 @@ public class WriteTransaction: ReadTransaction {
     }
 
     public func assemble(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
-        return try await self.assembleTransaction(transactionOptions: transactionOptions)
+        try await self.assembleTransaction(transactionOptions: transactionOptions)
     }
 
     func gasEstimate(for policy: TransactionOptions.GasLimitPolicy, assembledTransaction: EthereumTransaction, optionsForGasEstimation: TransactionOptions) async throws -> BigUInt {

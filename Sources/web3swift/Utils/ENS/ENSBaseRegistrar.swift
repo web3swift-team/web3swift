@@ -11,9 +11,7 @@ import Foundation
 
 public extension ENS {
     class BaseRegistrar: ERC721 {
-        lazy var defaultOptions: TransactionOptions = {
-            return TransactionOptions.defaultOptions
-        }()
+        lazy var defaultOptions: TransactionOptions = .defaultOptions
 
         public init(web3: Web3, address: EthereumAddress) {
             super.init(web3: web3, provider: web3.provider, address: address)

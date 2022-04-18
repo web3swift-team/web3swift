@@ -17,15 +17,15 @@ public struct IBAN {
     public var iban: String
 
     public var isDirect: Bool {
-        return self.iban.count == 34 || self.iban.count == 35
+        self.iban.count == 34 || self.iban.count == 35
     }
 
     public var isIndirect: Bool {
-        return self.iban.count == 20
+        self.iban.count == 20
     }
 
     public var checksum: String {
-        return self.iban[2..<4]
+        self.iban[2..<4]
     }
 
     public var asset: String {

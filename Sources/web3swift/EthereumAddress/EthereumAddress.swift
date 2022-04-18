@@ -27,7 +27,7 @@ public struct EthereumAddress: Equatable {
     public var type: AddressType = .normal
 
     public static func == (lhs: EthereumAddress, rhs: EthereumAddress) -> Bool {
-        return lhs.addressData == rhs.addressData && lhs.type == rhs.type
+        lhs.addressData == rhs.addressData && lhs.type == rhs.type
     }
 
     public var addressData: Data {
@@ -69,7 +69,7 @@ public struct EthereumAddress: Equatable {
     }
 
     public static func contractDeploymentAddress() -> EthereumAddress {
-        return EthereumAddress("0x", type: .contractDeployment)!
+        EthereumAddress("0x", type: .contractDeployment)!
     }
 }
 

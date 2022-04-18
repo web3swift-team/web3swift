@@ -13,11 +13,11 @@ public struct EthereumContract: ContractProtocol {
     var _abi: [ABI.Element]
 
     public var allEvents: [String] {
-        return events.keys.compactMap { $0 }
+        events.keys.compactMap { $0 }
     }
 
     public var allMethods: [String] {
-        return methods.keys.compactMap { $0 }
+        methods.keys.compactMap { $0 }
     }
 
     public struct EventFilter {

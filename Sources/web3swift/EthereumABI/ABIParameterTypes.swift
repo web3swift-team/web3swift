@@ -169,26 +169,26 @@ extension ABI.Element.ParameterType: Equatable {
 
 extension ABI.Element.Function {
     public var signature: String {
-        return "\(name ?? "")(\(inputs.map { $0.type.abiRepresentation }.joined(separator: ",")))"
+        "\(name ?? "")(\(inputs.map { $0.type.abiRepresentation }.joined(separator: ",")))"
     }
 
     public var methodString: String {
-        return String(signature.sha3(.keccak256).prefix(8))
+        String(signature.sha3(.keccak256).prefix(8))
     }
 
     public var methodEncoding: Data {
-        return signature.data(using: .ascii)!.sha3(.keccak256)[0...3]
+        signature.data(using: .ascii)!.sha3(.keccak256)[0...3]
     }
 }
 
 // MARK: - Event topic
 extension ABI.Element.Event {
     public var signature: String {
-        return "\(name)(\(inputs.map { $0.type.abiRepresentation }.joined(separator: ",")))"
+        "\(name)(\(inputs.map { $0.type.abiRepresentation }.joined(separator: ",")))"
     }
 
     public var topic: Data {
-        return signature.data(using: .ascii)!.sha3(.keccak256)
+        signature.data(using: .ascii)!.sha3(.keccak256)
     }
 }
 

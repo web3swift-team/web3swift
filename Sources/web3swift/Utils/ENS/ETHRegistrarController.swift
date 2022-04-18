@@ -20,9 +20,7 @@ public extension ENS {
             return contract!
         }()
 
-        lazy var defaultOptions: TransactionOptions = {
-            return TransactionOptions.defaultOptions
-        }()
+        lazy var defaultOptions: TransactionOptions = .defaultOptions
 
         public init(web3: Web3, address: EthereumAddress) {
             self.web3 = web3

@@ -16,50 +16,50 @@ public struct EthereumTransaction: CustomStringConvertible {
     // convenience accessors to the common envelope fields
     // everything else should come from getOpts/setOpts
     /// The type of the transacton being represented, see TransactionType enum
-    public var type: TransactionType { return envelope.type }
+    public var type: TransactionType { envelope.type }
     /// the unique nonce value for the transaction
     public var nonce: BigUInt {
-        get { return envelope.nonce }
+        get { envelope.nonce }
         set(nonce) { envelope.nonce = nonce }
     }
 
     /// The chainId of the blockchain the transaction belongs to
     public var chainID: BigUInt? {
-        get { return envelope.parameters.chainID }
+        get { envelope.parameters.chainID }
         set(newID) { envelope.parameters.chainID = newID }
     }
 
     /// the chain-native value of the transaction in Wei
     public var value: BigUInt {
-        get { return envelope.parameters.value ?? 0 }
+        get { envelope.parameters.value ?? 0 }
         set(newValue) { envelope.parameters.value = newValue }
     }
 
     /// the EthereumAddress object holding the destination address for the transaction
     public var to: EthereumAddress {
-        get { return envelope.to }
+        get { envelope.to }
         set(newValue) { envelope.to = newValue }
     }
 
     /// the payload data for the transaction
     public var data: Data {
-        get { return envelope.parameters.data ?? Data() }
+        get { envelope.parameters.data ?? Data() }
         set(newValue) { envelope.parameters.data = newValue }
     }
 
     // transaction type specific parameters should be accessed with EthereumParameters
     public var parameters: EthereumParameters {
-        get { return envelope.parameters }
+        get { envelope.parameters }
         set(val) { envelope.parameters = val }
     }
 
     // signature data is read-only
     /// signature v component (read only)
-    public var v: BigUInt { return envelope.v }
+    public var v: BigUInt { envelope.v }
     /// signature r component (read only)
-    public var r: BigUInt { return envelope.r }
+    public var r: BigUInt { envelope.r }
     /// signature s component (read only)
-    public var s: BigUInt { return envelope.s }
+    public var s: BigUInt { envelope.s }
 
     private init() { preconditionFailure("Memberwise not supported") } // disable the memberwise initializer
 
@@ -197,7 +197,7 @@ public struct EthereumTransaction: CustomStringConvertible {
 
     /// - Returns: a raw bytestream of the transaction, encoded according to the transactionType
     func encode(for type: EncodeType = .transaction) -> Data? {
-        return self.envelope.encode(for: type)
+        self.envelope.encode(for: type)
     }
 
     /// creates a Raw RPC request transaction for the given Transaction
@@ -423,7 +423,7 @@ extension EthereumTransaction {
 
     @available(*, deprecated, message: "use EthereumTransaction(rawValue:) instead")
     public static func fromRaw(_ rawData: Data) -> EthereumTransaction? {
-        return EthereumTransaction(rawValue: rawData)
+        EthereumTransaction(rawValue: rawData)
     }
 
     @available(*, deprecated, message: "use encode() instead")

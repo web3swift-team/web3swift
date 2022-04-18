@@ -11,7 +11,7 @@ extension Web3 {
 
     /// The contract instance. Initialized in runtime from ABI string (that is a JSON array). In addition an existing contract address can be supplied to provide the default "to" address in all the following requests. ABI version is 2 by default and should not be changed.
     public func contract(_ abiString: String, at: EthereumAddress? = nil, abiVersion: Int = 2) -> Web3contract? {
-        return Web3contract(web3: self, abiString: abiString, at: at, transactionOptions: self.transactionOptions, abiVersion: abiVersion)
+        Web3contract(web3: self, abiString: abiString, at: at, transactionOptions: self.transactionOptions, abiVersion: abiVersion)
     }
 
     /// Web3 instance bound contract instance.
@@ -102,13 +102,12 @@ extension Web3 {
 
         /// Parses an EventLog object by using a description from the contract's ABI.
         public func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?) {
-            return self.contract.parseEvent(eventLog)
+            self.contract.parseEvent(eventLog)
         }
 
         /// Creates an "EventParserProtocol" compliant object to use it for parsing particular block or transaction for events.
         public func createEventParser(_ eventName: String, filter: EventFilter?) -> EventParserProtocol? {
-            let parser = EventParser(web3: self.web3, eventName: eventName, contract: self.contract, filter: filter)
-            return parser
+            EventParser(web3: self.web3, eventName: eventName, contract: self.contract, filter: filter)
         }
     }
 }
