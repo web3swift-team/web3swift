@@ -21,14 +21,7 @@ extension ABIEncoder {
                 return v.magnitude
             }
         case let v as String:
-            let base10 = BigUInt(v, radix: 10)
-            if base10 != nil {
-                return base10!
-            }
-            let base16 = BigUInt(v.stripHexPrefix(), radix: 16)
-            if base16 != nil {
-                return base16!
-            }
+            return BigUInt(v, radix: 10) ?? BigUInt(v.stripHexPrefix(), radix: 16)
         case let v as UInt:
             return BigUInt(v)
         case let v as UInt8:
@@ -52,7 +45,6 @@ extension ABIEncoder {
         default:
             return nil
         }
-        return nil
     }
 
     public static func convertToBigInt(_ value: AnyObject) -> BigInt? {
@@ -426,25 +418,25 @@ public extension ABIEncoder {
         if let v = value as? Bool {
             return Data(v ? [0b1] : [0b0])
         } else if let v = value as? Int {
-            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 256)! as AnyObject)!
+            return BigInt(exactly: v)?.abiEncode(bits: 256) ?? Data()
         } else if let v = value as? Int8 {
-            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 8) as AnyObject)!
+            return BigInt(exactly: v)?.abiEncode(bits: 8) ?? Data()
         } else if let v = value as? Int16 {
-            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 16)! as AnyObject)!
+            return BigInt(exactly: v)?.abiEncode(bits: 16) ?? Data()
         } else if let v = value as? Int32 {
-            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 32)! as AnyObject)!
+            return BigInt(exactly: v)?.abiEncode(bits: 32) ?? Data()
         } else if let v = value as? Int64 {
-            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 64)! as AnyObject)!
+            return BigInt(exactly: v)?.abiEncode(bits: 64) ?? Data()
         } else if let v = value as? UInt {
-            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 256)! as AnyObject)!
+            return BigUInt(exactly: v)?.abiEncode(bits: 256) ?? Data()
         } else if let v = value as? UInt8 {
-            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 8)! as AnyObject)!
+            return BigUInt(exactly: v)?.abiEncode(bits: 8) ?? Data()
         } else if let v = value as? UInt16 {
-            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 16)! as AnyObject)!
+            return BigUInt(exactly: v)?.abiEncode(bits: 16) ?? Data()
         } else if let v = value as? UInt32 {
-            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 32)! as AnyObject)!
+            return BigUInt(exactly: v)?.abiEncode(bits: 32) ?? Data()
         } else if let v = value as? UInt64 {
-            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 64)! as AnyObject)!
+            return BigUInt(exactly: v)?.abiEncode(bits: 64) ?? Data()
         } else if let data = ABIEncoder.convertToData(value as AnyObject) {
             return data
         }

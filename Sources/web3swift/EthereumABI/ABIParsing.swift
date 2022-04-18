@@ -125,16 +125,13 @@ extension ABI.Input {
         let name = self.name ?? ""
         let parameterType = try ABITypeParser.parseTypeString(self.type)
         if case .tuple(types: _) = parameterType {
-            let components = try self.components?.compactMap { try $0.parse().type }
-            let type = ABI.Element.ParameterType.tuple(types: components!)
+            let components = try self.components?.compactMap { try $0.parse().type } ?? []
+            let type = ABI.Element.ParameterType.tuple(types: components)
             let nativeInput = ABI.Element.InOut(name: name, type: type)
             return nativeInput
         } else if case .array(type: .tuple(types: _), length: _) = parameterType {
-            let components = try self.components?.compactMap({ (inp: ABI.Input) throws -> ABI.Element.ParameterType in
-                let input = try inp.parse()
-                return input.type
-            })
-            let tupleType = ABI.Element.ParameterType.tuple(types: components!)
+            let components = try self.components?.compactMap { try $0.parse().type } ?? []
+            let tupleType = ABI.Element.ParameterType.tuple(types: components)
 
             let newType: ABI.Element.ParameterType = .array(type: tupleType, length: 0)
             let nativeInput = ABI.Element.InOut(name: name, type: newType)
@@ -161,25 +158,19 @@ extension ABI.Input {
 
 extension ABI.Output {
     func parse() throws -> ABI.Element.InOut {
-        let name = self.name != nil ? self.name! : ""
+        let name = self.name ?? ""
         let parameterType = try ABITypeParser.parseTypeString(self.type)
         switch parameterType {
         case .tuple(types: _):
-            let components = try self.components?.compactMap({ (inp: ABI.Output) throws -> ABI.Element.ParameterType in
-                let input = try inp.parse()
-                return input.type
-            })
-            let type = ABI.Element.ParameterType.tuple(types: components!)
+            let components = try self.components?.compactMap { try $0.parse().type } ?? []
+            let type = ABI.Element.ParameterType.tuple(types: components)
             let nativeInput = ABI.Element.InOut(name: name, type: type)
             return nativeInput
         case .array(type: let subtype, length: let length):
             switch subtype {
             case .tuple(types: _):
-                let components = try self.components?.compactMap({ (inp: ABI.Output) throws -> ABI.Element.ParameterType in
-                    let input = try inp.parse()
-                    return input.type
-                })
-                let nestedSubtype = ABI.Element.ParameterType.tuple(types: components!)
+                let components = try self.components?.compactMap {  try $0.parse().type } ?? []
+                let nestedSubtype = ABI.Element.ParameterType.tuple(types: components)
                 let properType = ABI.Element.ParameterType.array(type: nestedSubtype, length: length)
                 let nativeInput = ABI.Element.InOut(name: name, type: properType)
                 return nativeInput

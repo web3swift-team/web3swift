@@ -223,11 +223,11 @@ extension ABIDecoder {
                 // there are ERC20 contracts that use bytes32 intead of string. Let's be optimistic and return some data
                 if case .string = type {
                     let nextElement = pointer + type.memoryUsage
-                    let preambula = BigUInt(32).abiEncode(bits: 256)!
+                    let preambula = BigUInt(32).abiEncode(bits: 256) ?? Data()
                     return (preambula + Data(dataSlice), nextElement)
                 } else if case .dynamicBytes = type {
                     let nextElement = pointer + type.memoryUsage
-                    let preambula = BigUInt(32).abiEncode(bits: 256)!
+                    let preambula = BigUInt(32).abiEncode(bits: 256) ?? Data()
                     return (preambula + Data(dataSlice), nextElement)
                 }
                 return (nil, nil)

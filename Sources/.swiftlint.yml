@@ -15,7 +15,7 @@ disabled_rules:
 - todo
 #---------------------------
 opt_in_rules:
-#- force_unwrapping
+- force_unwrapping
 - anyobject_protocol
 - contains_over_filter_is_empty
 - contains_over_first_not_nil

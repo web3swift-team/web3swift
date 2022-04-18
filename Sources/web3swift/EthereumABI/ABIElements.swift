@@ -209,15 +209,15 @@ extension ABI.Element {
             // the response size greater than equal 100 bytes, when read function aborted by "require" statement.
             // if "require" statement has no message argument, the response is empty (0 byte).
             if data.bytes.count >= 100 {
-                let check00_31 = BigUInt("08C379A000000000000000000000000000000000000000000000000000000000", radix: 16)!
-                let check32_63 = BigUInt("0000002000000000000000000000000000000000000000000000000000000000", radix: 16)!
+                let check00_31 = BigUInt("08C379A000000000000000000000000000000000000000000000000000000000", radix: 16)
+                let check32_63 = BigUInt("0000002000000000000000000000000000000000000000000000000000000000", radix: 16)
 
                 // check data[00-31] and data[32-63]
                 if check00_31 == BigUInt(data[0...31]) && check32_63 == BigUInt(data[32...63]) {
                     // data.bytes[64-67] contains the length of require message
                     let len = (Int(data.bytes[64]) << 24) | (Int(data.bytes[65]) << 16) | (Int(data.bytes[66]) << 8) | Int(data.bytes[67])
 
-                    let message = String(bytes: data.bytes[68..<(68 + len)], encoding: .utf8)!
+                    let message = String(bytes: data.bytes[68..<(68 + len)], encoding: .utf8) ?? ""
 
                     print("read function aborted by require statement: \(message)")
 
