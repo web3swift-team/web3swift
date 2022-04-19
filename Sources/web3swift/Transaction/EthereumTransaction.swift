@@ -14,6 +14,10 @@ public struct EthereumTransaction: CustomStringConvertible {
     /// and type specific implementation
     internal var envelope: AbstractEnvelope
 
+    /// storage container for additional metadata returned by the node
+    /// when a transaction is decoded form a JSON stream
+    public var meta: EthereumMetadata?
+
     // convenience accessors to the common envelope fields
     // everything else should come from getOpts/setOpts
     /// The type of the transacton being represented, see TransactionType enum
@@ -227,6 +231,8 @@ extension EthereumTransaction: Decodable {
     public init(from decoder: Decoder) throws {
         guard let env = try EnvelopeFactory.createEnvelope(from: decoder) else { throw Web3Error.dataError }
         self.envelope = env
+        // capture any metadata that might be present
+        self.meta = try EthereumMetadata(from: decoder)
     }
 }
 
@@ -330,10 +336,7 @@ extension EthereumTransaction {
                 guard let env = self.envelope as? EIP2930Envelope else { preconditionFailure("Unable to downcast to EIP2930Envelope") }
                 return env.parameters.gasPrice ?? 0
             case .eip1559:
-                // MARK: workaround for gasPrice coming from nodes for EIP-1159 - this allows Oracle to work for now
-                guard let env = self.envelope as? EIP1559Envelope else { preconditionFailure("Unable to downcast to EIP1559Envelope") }
-                return env.parameters.gasPrice ?? 0
-                // preconditionFailure("EIP1559Envelope has no member gasPrice")
+                preconditionFailure("EIP1559Envelope has no member gasPrice")
             }
         }
         set(value) {
