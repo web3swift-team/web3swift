@@ -18,10 +18,7 @@ extension Web3.Eth {
         let response = try await web3.dispatch(request)
 
         guard let value: Block = response.getValue() else {
-            if response.error != nil {
-                throw Web3Error.nodeError(desc: response.error!.message)
-            }
-            throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
+            throw Web3Error.nodeError(desc: response.error?.message ?? "Invalid value from Ethereum node")
         }
         return value
 

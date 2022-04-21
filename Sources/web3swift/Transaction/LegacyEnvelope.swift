@@ -113,7 +113,7 @@ extension LegacyEnvelope {
 
         let toString = try? container.decode(String.self, forKey: .to)
         switch toString {
-        case nil, "0x", "0x0":
+        case .none, "0x", "0x0":
             self.to = EthereumAddress.contractDeploymentAddress()
         default:
             guard let ethAddr = EthereumAddress(toString!) else { throw Web3Error.dataError }
@@ -147,16 +147,17 @@ extension LegacyEnvelope {
         guard RlpKey.allCases.count == rlpItem.count else { return nil }
 
         // we've validated the item count, so rlpItem[key] is guaranteed to return something not nil
-        guard let nonceData = rlpItem[RlpKey.nonce.rawValue]!.data else { return nil }
-        guard let gasPriceData = rlpItem[RlpKey.gasPrice.rawValue]!.data else { return nil }
-        guard let gasLimitData = rlpItem[RlpKey.gasLimit.rawValue]!.data else { return nil }
-        guard let valueData = rlpItem[RlpKey.amount.rawValue]!.data else { return nil }
-        guard let transactionData = rlpItem[RlpKey.data.rawValue]!.data else { return nil }
-        guard let vData = rlpItem[RlpKey.sig_v.rawValue]!.data else { return nil }
-        guard let rData = rlpItem[RlpKey.sig_r.rawValue]!.data else { return nil }
-        guard let sData = rlpItem[RlpKey.sig_s.rawValue]!.data else { return nil }
+        guard let nonceData = rlpItem[RlpKey.nonce.rawValue]?.data else { return nil }
+        guard let gasPriceData = rlpItem[RlpKey.gasPrice.rawValue]?.data else { return nil }
+        guard let gasLimitData = rlpItem[RlpKey.gasLimit.rawValue]?.data else { return nil }
+        guard let valueData = rlpItem[RlpKey.amount.rawValue]?.data else { return nil }
+        guard let transactionData = rlpItem[RlpKey.data.rawValue]?.data else { return nil }
+        guard let vData = rlpItem[RlpKey.sig_v.rawValue]?.data else { return nil }
+        guard let rData = rlpItem[RlpKey.sig_r.rawValue]?.data else { return nil }
+        guard let sData = rlpItem[RlpKey.sig_s.rawValue]?.data else { return nil }
+        guard let destinationData = rlpItem[RlpKey.destination.rawValue]?.content else { return nil }
 
-        switch rlpItem[RlpKey.destination.rawValue]!.content {
+        switch destinationData {
         case .noItem:
             self.to = EthereumAddress.contractDeploymentAddress()
         case .data(let addressData):
@@ -212,8 +213,13 @@ extension LegacyEnvelope {
         self.nonce = options.resolveNonce(self.nonce)
         self.gasPrice = options.resolveGasPrice(self.gasPrice)
         self.gasLimit = options.resolveGasLimit(self.gasLimit)
-        if options.value != nil { self.value = options.value! }
-        if options.to != nil { self.to = options.to! }
+
+        if let optValue = options.value {
+            self.value = optValue
+        }
+        if let toValue = options.to {
+            self.to = toValue
+        }
     }
 
     public func encode(for type: EncodeType = .transaction) -> Data? {

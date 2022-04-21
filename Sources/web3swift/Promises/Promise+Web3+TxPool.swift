@@ -13,10 +13,7 @@ extension Web3.TxPool {
         let response = try await web3.dispatch(request)
 
         guard let value: [String: [String: [String: String]]] = response.getValue() else {
-            if response.error != nil {
-                throw Web3Error.nodeError(desc: response.error!.message)
-            }
-            throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
+            throw Web3Error.nodeError(desc: response.error?.message ?? "Invalid value from Ethereum node")
         }
         return value
 
@@ -27,10 +24,7 @@ extension Web3.TxPool {
         let response = try await web3.dispatch(request)
 
         guard let value: TxPoolStatus = response.result as? TxPoolStatus else {
-            if response.error != nil {
-                throw Web3Error.nodeError(desc: response.error!.message)
-            }
-            throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
+            throw Web3Error.nodeError(desc: response.error?.message ?? "Invalid value from Ethereum node")
         }
         return value
 
@@ -41,10 +35,7 @@ extension Web3.TxPool {
         let response = try await web3.dispatch(request)
 
         guard let value: TxPoolContent = response.getValue() else {
-            if response.error != nil {
-                throw Web3Error.nodeError(desc: response.error!.message)
-            }
-            throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
+            throw Web3Error.nodeError(desc: response.error?.message ?? "Invalid value from Ethereum node")
         }
         return value
 
