@@ -4,21 +4,21 @@ import Foundation
 
 struct EIP712Domain: EIP712DomainHashable {
     let chainId: EIP712.UInt256?
-    let verifyingContract: EIP712.Address
+    let verifyingContract: EthereumAddress
 }
 
 protocol EIP712DomainHashable: EIP712Hashable {}
 
 public struct SafeTx: EIP712Hashable {
-    let to: EIP712.Address
+    let to: EthereumAddress
     let value: EIP712.UInt256
     let data: EIP712.Bytes
     let operation: EIP712.UInt8
     let safeTxGas: EIP712.UInt256
     let baseGas: EIP712.UInt256
     let gasPrice: EIP712.UInt256
-    let gasToken: EIP712.Address
-    let refundReceiver: EIP712.Address
+    let gasToken: EthereumAddress
+    let refundReceiver: EthereumAddress
     let nonce: EIP712.UInt256
 }
 
@@ -30,15 +30,15 @@ protocol EIP712Hashable {
 }
 
 class EIP712 {
-    typealias Address = EthereumAddress
     typealias UInt256 = BigUInt
     typealias UInt8 = Swift.UInt8
     typealias Bytes = Data
 }
 
-extension EIP712.Address {
+extension EthereumAddress {
     static var zero: Self {
-        EthereumAddress(Data(count: 20))!
+        guard let addr = EthereumAddress(Data(count: 20)) else { fatalError("Base EthereumAddress corrupted or data size incorrect") }
+        return addr
     }
 }
 
@@ -79,7 +79,7 @@ extension EIP712Hashable {
                 typeName = "uint8"
             case is EIP712.UInt256:
                 typeName = "uint256"
-            case is EIP712.Address:
+            case is EthereumAddress:
                 typeName = "address"
             case is EIP712.Bytes:
                 typeName = "bytes"
@@ -118,11 +118,11 @@ extension EIP712Hashable {
             case let data as EIP712.Bytes:
                 result = keccak256(data)
             case is EIP712.UInt8:
-                result = ABIEncoder.encodeSingleType(type: .uint(bits: 8), value: field as AnyObject)!
+                result = ABIEncoder.encodeSingleType(type: .uint(bits: 8), value: field as AnyObject) ?? Data()
             case is EIP712.UInt256:
-                result = ABIEncoder.encodeSingleType(type: .uint(bits: 256), value: field as AnyObject)!
-            case is EIP712.Address:
-                result = ABIEncoder.encodeSingleType(type: .address, value: field as AnyObject)!
+                result = ABIEncoder.encodeSingleType(type: .uint(bits: 256), value: field as AnyObject) ?? Data()
+            case is EthereumAddress:
+                result = ABIEncoder.encodeSingleType(type: .address, value: field as AnyObject) ?? Data()
             case let hashable as EIP712Hashable:
                 result = try hashable.hash()
             default:

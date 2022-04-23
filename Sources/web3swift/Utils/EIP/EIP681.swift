@@ -81,21 +81,21 @@ extension Web3 {
             //      print(payModifierString)
             //  }
             if  let addressRange = Range(match[0].range(at: 2), in: encoding) {
-                addressString = String(encoding[addressRange])
+                addressString = "\(encoding[addressRange])"
             }
             if  let chainIDRange = Range(match[0].range(at: 3), in: encoding) {
-                chainIDString = String(encoding[chainIDRange])
+                chainIDString = "\(encoding[chainIDRange])"
             }
             if  let tailRange = Range(match[0].range(at: 4), in: encoding) {
-                tail = String(encoding[tailRange])
+                tail = "\(encoding[tailRange])"
             }
             guard let address = addressString else {return nil}
             let targetAddress = EIP681Code.TargetAddress(address)
 
             var code = EIP681Code(targetAddress)
-            if chainIDString != nil {
-                chainIDString!.remove(at: chainIDString!.startIndex)
-                code.chainID = BigUInt(chainIDString!)
+            if var chainIDString = chainIDString {
+                chainIDString.remove(at: chainIDString.startIndex)
+                code.chainID = BigUInt(chainIDString)
             }
             if tail == nil {
                 return code
@@ -123,7 +123,11 @@ extension Web3 {
                         //      return nil
                         case .ensAddress(let ens):
                             do {
-                                let web = await Web3(provider: InfuraProvider(Networks.fromInt(Int(code.chainID ?? 1)) ?? Networks.Mainnet)!)
+                                guard let infuraProvider = await InfuraProvider(Networks.fromInt(Int(code.chainID ?? 1)) ?? Networks.Mainnet) else {
+                                    return nil
+                                }
+
+                                let web = Web3(provider: infuraProvider)
                                 let ensModel = ENS(web3: web)
                                 try await ensModel?.setENSResolver(withDomain: ens)
                                 let address = try await ensModel?.getAddress(forNode: ens)
@@ -170,13 +174,12 @@ extension Web3 {
                     default:
                         continue
                     }
-                    if nativeValue != nil {
-                        inputs.append(ABI.Element.InOut(name: String(inputNumber), type: inputType))
-                        code.parameters.append(EIP681Code.EIP681Parameter(type: inputType, value: nativeValue!))
-                        inputNumber += 1
-                    } else {
+                    guard let nativeValue = nativeValue else {
                         return nil
                     }
+                    inputs.append(ABI.Element.InOut(name: String(inputNumber), type: inputType))
+                    code.parameters.append(EIP681Code.EIP681Parameter(type: inputType, value: nativeValue))
+                    inputNumber += 1
                 } else {
                     switch comp.name {
                     case "value":
@@ -219,8 +222,8 @@ extension Web3 {
                 }
             }
 
-            if code.functionName != nil {
-                let functionEncoding = ABI.Element.Function(name: code.functionName!, inputs: inputs, outputs: [ABI.Element.InOut](), constant: false, payable: code.amount != nil)
+            if let codeFunctionName = code.functionName {
+                let functionEncoding = ABI.Element.Function(name: codeFunctionName, inputs: inputs, outputs: [ABI.Element.InOut](), constant: false, payable: code.amount != nil)
                 code.function = functionEncoding
             }
 

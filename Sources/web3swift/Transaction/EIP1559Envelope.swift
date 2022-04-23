@@ -135,14 +135,14 @@ extension EIP1559Envelope {
         let list = try? container.decode([AccessListEntry].self, forKey: .accessList)
         self.accessList = list ?? []
 
-        let toString = try? container.decode(String.self, forKey: .to)
-        switch toString {
-        case nil, "0x", "0x0":
-            self.to = EthereumAddress.contractDeploymentAddress()
-        default:
-            guard let ethAddr = EthereumAddress(toString!) else { throw Web3Error.dataError }
-            self.to = ethAddr
+        let ethAddr: EthereumAddress
+        if let toString = try? container.decode(String.self, forKey: .to), toString != "0x" && toString != "0x0"{
+            guard let eAddr = EthereumAddress(toString) else { throw Web3Error.dataError }
+            ethAddr = eAddr
+        } else {
+            ethAddr = EthereumAddress.contractDeploymentAddress()
         }
+        self.to = ethAddr
 
         // MARK: workaround for gasPrice coming from nodes for EIP-1159 - this allows Oracle to work for now
         self.gasPrice = try container.decodeHexIfPresent(BigUInt.self, forKey: .gasPrice) ?? 5000000000
@@ -182,16 +182,16 @@ extension EIP1559Envelope {
         guard let rlpItem = totalItem[0] else { return nil }
         guard RlpKey.allCases.count == rlpItem.count else { return nil }
 
-        guard let chainData = rlpItem[RlpKey.chainId.rawValue]!.data else { return nil }
-        guard let nonceData = rlpItem[RlpKey.nonce.rawValue]!.data else { return nil }
-        guard let maxPriorityData = rlpItem[RlpKey.maxPriorityFeePerGas.rawValue]!.data else { return nil }
-        guard let maxFeeData = rlpItem[RlpKey.maxFeePerGas.rawValue]!.data else { return nil }
-        guard let gasLimitData = rlpItem[RlpKey.gasLimit.rawValue]!.data else { return nil }
-        guard let valueData = rlpItem[RlpKey.amount.rawValue]!.data else { return nil }
-        guard let transactionData = rlpItem[RlpKey.data.rawValue]!.data else { return nil }
-        guard let vData = rlpItem[RlpKey.sig_v.rawValue]!.data else { return nil }
-        guard let rData = rlpItem[RlpKey.sig_r.rawValue]!.data else { return nil }
-        guard let sData = rlpItem[RlpKey.sig_s.rawValue]!.data else { return nil }
+        guard let chainData = rlpItem[RlpKey.chainId.rawValue]?.data else { return nil }
+        guard let nonceData = rlpItem[RlpKey.nonce.rawValue]?.data else { return nil }
+        guard let maxPriorityData = rlpItem[RlpKey.maxPriorityFeePerGas.rawValue]?.data else { return nil }
+        guard let maxFeeData = rlpItem[RlpKey.maxFeePerGas.rawValue]?.data else { return nil }
+        guard let gasLimitData = rlpItem[RlpKey.gasLimit.rawValue]?.data else { return nil }
+        guard let valueData = rlpItem[RlpKey.amount.rawValue]?.data else { return nil }
+        guard let transactionData = rlpItem[RlpKey.data.rawValue]?.data else { return nil }
+        guard let vData = rlpItem[RlpKey.sig_v.rawValue]?.data else { return nil }
+        guard let rData = rlpItem[RlpKey.sig_r.rawValue]?.data else { return nil }
+        guard let sData = rlpItem[RlpKey.sig_s.rawValue]?.data else { return nil }
 
         self.chainID = BigUInt(chainData)
         self.nonce = BigUInt(nonceData)
@@ -204,7 +204,7 @@ extension EIP1559Envelope {
         self.r = BigUInt(rData)
         self.s = BigUInt(sData)
 
-        switch rlpItem[RlpKey.destination.rawValue]!.content {
+        switch rlpItem[RlpKey.destination.rawValue]?.content {
         case .noItem:
             self.to = EthereumAddress.contractDeploymentAddress()
         case .data(let addressData):
@@ -214,17 +214,18 @@ extension EIP1559Envelope {
                 guard let addr = EthereumAddress(addressData) else { return nil }
                 self.to = addr
             } else { return nil }
-        case .list:
+        case .list, .none:
             return nil
         }
 
-        switch rlpItem[RlpKey.accessList.rawValue]!.content {
+        guard let keyAccessList = rlpItem[RlpKey.accessList.rawValue] else { return nil }
+        switch keyAccessList.content {
         case .noItem:
             self.accessList = []
         case .data:
             return nil
         case .list:
-            let accessData = rlpItem[RlpKey.accessList.rawValue]!
+            let accessData = keyAccessList
             let itemCount = accessData.count ?? 0
             var newList: [AccessListEntry] = []
             for index in 0...(itemCount - 1) {
