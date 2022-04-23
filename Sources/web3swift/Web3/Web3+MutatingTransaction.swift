@@ -13,11 +13,10 @@ public class WriteTransaction: ReadTransaction {
         var assembledTransaction: EthereumTransaction = self.transaction
 
         if self.method != "fallback" {
-            let m = self.contract.methods[self.method]
-            if m == nil {
+            guard let m = self.contract.methods[self.method] else {
                 throw Web3Error.inputError(desc: "Contract's ABI does not have such method")
             }
-            switch m! {
+            switch m {
             case .function(let function):
                 if function.constant {
                     throw Web3Error.inputError(desc: "Trying to transact to the constant function")
@@ -30,8 +29,8 @@ public class WriteTransaction: ReadTransaction {
         }
 
         var mergedOptions = self.transactionOptions.merge(transactionOptions)
-        if mergedOptions.value != nil {
-            assembledTransaction.value = mergedOptions.value!
+        if let mergeOpt = mergedOptions.value {
+            assembledTransaction.value = mergeOpt
         }
         var forAssemblyPipeline: (EthereumTransaction, EthereumContract, TransactionOptions) = (assembledTransaction, self.contract, mergedOptions)
 

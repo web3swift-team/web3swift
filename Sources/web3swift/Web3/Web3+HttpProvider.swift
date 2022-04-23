@@ -39,9 +39,6 @@ public class Web3HttpProvider: Web3Provider {
                 let request = JSONRPCRequestFabric.prepareRequest(.getNetwork, parameters: [])
                 let response: JSONRPCresponse = try await Self.post(request, providerURL: httpProviderURL, session: session)
                 if response.error != nil {
-                    if response.message != nil {
-                        print(response.message!)
-                    }
                     return nil
                 }
                 guard let result: String = response.getValue(), let intNetworkNumber = Int(result) else {return nil}
@@ -71,8 +68,8 @@ public class Web3HttpProvider: Web3Provider {
 
         let parsedResponse = try JSONDecoder().decode(T.self, from: data)
 
-        if let response = parsedResponse as? JSONRPCresponse, response.error != nil {
-            throw Web3Error.nodeError(desc: "Received an error message from node\n" + String(describing: response.error!))
+        if let response = parsedResponse as? JSONRPCresponse, let resError = response.error {
+            throw Web3Error.nodeError(desc: "Received an error message from node\n" + String(describing: resError))
         }
         return parsedResponse
 

@@ -41,9 +41,7 @@ public class ST20: IST20, ERC20BaseProperties {
     public var abi: String
 
     lazy var contract: Web3.Web3contract? = {
-        let contract = self.web3.contract(self.abi, at: self.address, abiVersion: 2)
-        precondition(contract != nil)
-        return contract!
+        web3.contract(abi, at: address)
     }()
 
     public init(web3: Web3, provider: Web3Provider, address: EthereumAddress, abi: String = Web3.Utils.st20ABI) {
@@ -59,17 +57,14 @@ public class ST20: IST20, ERC20BaseProperties {
     // Must be 18!
     public func decimals() async throws -> UInt8 {
         try await self.readProperties()
-        if self._decimals != nil {
-            return self._decimals!
-        }
-        return 18
+        return self._decimals ?? 18
     }
 
     func tokenDetails() async throws -> [UInt32] {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try await contract?.read("tokenDetails", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract?.read("tokenDetails", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)?.call(transactionOptions: transactionOptions)
         guard let res = result?["0"] as? [UInt32] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -82,7 +77,7 @@ public class ST20: IST20, ERC20BaseProperties {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)?.call()
         var decimals = BigUInt(0)
         guard let dec = callResult?["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -107,7 +102,7 @@ public class ST20: IST20, ERC20BaseProperties {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)?.call()
         var decimals = BigUInt(0)
         guard let dec = callResult?["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -132,7 +127,7 @@ public class ST20: IST20, ERC20BaseProperties {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)?.call()
         var decimals = BigUInt(0)
         guard let dec = callResult?["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -152,7 +147,7 @@ public class ST20: IST20, ERC20BaseProperties {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try await contract?.read("balanceOf", parameters: [account] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract?.read("balanceOf", parameters: [account] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)?.call(transactionOptions: transactionOptions)
         guard let res = result?["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -161,7 +156,7 @@ public class ST20: IST20, ERC20BaseProperties {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try await contract?.read("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract?.read("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)?.call(transactionOptions: transactionOptions)
         guard let res = result?["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -174,7 +169,7 @@ public class ST20: IST20, ERC20BaseProperties {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)?.call()
         var decimals = BigUInt(0)
         guard let dec = callResult?["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -198,7 +193,7 @@ public class ST20: IST20, ERC20BaseProperties {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)?.call()
         var decimals = BigUInt(0)
         guard let dec = callResult?["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -223,7 +218,7 @@ public class ST20: IST20, ERC20BaseProperties {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)?.call()
         var decimals = BigUInt(0)
         guard let dec = callResult?["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -248,7 +243,7 @@ public class ST20: IST20, ERC20BaseProperties {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)!.call()
+        let callResult = try await contract?.read("decimals", transactionOptions: basicOptions)?.call()
         var decimals = BigUInt(0)
         guard let dec = callResult?["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -269,7 +264,7 @@ public class ST20: IST20, ERC20BaseProperties {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try await contract?.read("totalSupply", parameters: [AnyObject](), extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
+        let result = try await contract?.read("totalSupply", parameters: [AnyObject](), extraData: Data(), transactionOptions: self.transactionOptions)?.call(transactionOptions: transactionOptions)
         guard let res = result?["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }

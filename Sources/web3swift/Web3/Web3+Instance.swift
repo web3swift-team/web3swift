@@ -33,11 +33,12 @@ public class Web3 {
 
     /// Public web3.eth.* namespace.
     public var eth: Web3.Eth {
-        if self.ethInstance != nil {
-            return self.ethInstance!
+        if let eInstance = self.ethInstance {
+            return eInstance
         }
-        self.ethInstance = Web3.Eth(provider: self.provider, web3: self)
-        return self.ethInstance!
+        let eInstance = Web3.Eth(provider: self.provider, web3: self)
+        self.ethInstance = eInstance
+        return eInstance
     }
 
     public class Eth: TransactionOptionsInheritable {
@@ -58,11 +59,12 @@ public class Web3 {
 
     /// Public web3.personal.* namespace.
     public var personal: Web3.Personal {
-        if self.personalInstance != nil {
-            return self.personalInstance!
+        if let personalInstance = personalInstance {
+            return personalInstance
         }
-        self.personalInstance = Web3.Personal(provider: self.provider, web3: self)
-        return self.personalInstance!
+        let pInstance = Web3.Personal(provider: self.provider, web3: self)
+        self.personalInstance = pInstance
+        return pInstance
     }
 
     public class Personal: TransactionOptionsInheritable {
@@ -83,11 +85,12 @@ public class Web3 {
 
     /// Public web3.personal.* namespace.
     public var txPool: Web3.TxPool {
-        if self.txPoolInstance != nil {
-            return self.txPoolInstance!
+        if let txInstance = self.txPoolInstance {
+            return txInstance
         }
-        self.txPoolInstance = Web3.TxPool(provider: self.provider, web3: self)
-        return self.txPoolInstance!
+        let txInstance = Web3.TxPool(provider: self.provider, web3: self)
+        self.txPoolInstance = txInstance
+        return txInstance
     }
 
     public class TxPool: TransactionOptionsInheritable {
@@ -108,11 +111,12 @@ public class Web3 {
 
     /// Public web3.wallet.* namespace.
     public var wallet: Web3.Web3Wallet {
-        if self.walletInstance != nil {
-            return self.walletInstance!
+        if let wInstance = self.walletInstance {
+            return wInstance
         }
-        self.walletInstance = Web3.Web3Wallet(provider: self.provider, web3: self)
-        return self.walletInstance!
+        let wInstance = Web3.Web3Wallet(provider: self.provider, web3: self)
+        self.walletInstance = wInstance
+        return wInstance
     }
 
     public class Web3Wallet {
@@ -130,11 +134,12 @@ public class Web3 {
 
     /// Public web3.browserFunctions.* namespace.
     public var browserFunctions: Web3.BrowserFunctions {
-        if self.browserFunctionsInstance != nil {
-            return self.browserFunctionsInstance!
+        if let browsInstance = self.browserFunctionsInstance {
+            return browsInstance
         }
-        self.browserFunctionsInstance = Web3.BrowserFunctions(provider: self.provider, web3: self)
-        return self.browserFunctionsInstance!
+        let browsInstance = Web3.BrowserFunctions(provider: self.provider, web3: self)
+        self.browserFunctionsInstance = browsInstance
+        return browsInstance
     }
 
     public class BrowserFunctions: TransactionOptionsInheritable {
@@ -155,11 +160,12 @@ public class Web3 {
 
     /// Public web3.browserFunctions.* namespace.
     public var eventLoop: Web3.Eventloop {
-        if self.eventLoopInstance != nil {
-            return self.eventLoopInstance!
+        if let evInstance = self.eventLoopInstance {
+            return evInstance
         }
-        self.eventLoopInstance = Web3.Eventloop(provider: self.provider, web3: self)
-        return self.eventLoopInstance!
+        let evInstance = Web3.Eventloop(provider: self.provider, web3: self)
+        self.eventLoopInstance = evInstance
+        return evInstance
     }
 
     // swiftlint:disable nesting

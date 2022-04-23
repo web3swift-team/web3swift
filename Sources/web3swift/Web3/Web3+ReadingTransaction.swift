@@ -70,8 +70,8 @@ public class ReadTransaction {
         }
 
         optionsForGasEstimation.callOnBlock = mergedOptions.callOnBlock
-        if mergedOptions.value != nil {
-            assembledTransaction.value = mergedOptions.value!
+        if let mergedOptVal = mergedOptions.value {
+            assembledTransaction.value = mergedOptVal
         }
 
         return try await self.web3.eth.estimateGas(for: assembledTransaction, transactionOptions: optionsForGasEstimation)

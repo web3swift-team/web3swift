@@ -146,10 +146,11 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
                 endpointString += projectId ?? Constants.infuraToken
             }
         }
-        url = URL(string: endpointString)!
+        guard let endpointUrl = URL(string: endpointString) else { return nil }
+        url = endpointUrl
         delegate = wsdelegate
         attachedKeystoreManager = manager
-        let request = URLRequest(url: url)
+        let request = URLRequest(url: endpointUrl)
         socket = WebSocket(request: request)
         socket.delegate = self
     }
@@ -184,10 +185,11 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
                 finalEndpoint += projectId ?? Constants.infuraToken
             }
         }
-        url = URL(string: finalEndpoint)!
+        guard let finalURL = URL(string: finalEndpoint) else { return nil }
+        url = finalURL
         delegate = wsdelegate
         attachedKeystoreManager = manager
-        let request = URLRequest(url: url)
+        let request = URLRequest(url: finalURL)
         socket = WebSocket(request: request)
         socket.delegate = self
     }
@@ -245,10 +247,10 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
         } else if message.self is Data {
             dMessage = message as? Data
         }
-        if sMessage != nil {
-            self.messagesStringToWrite.append(sMessage!)
-        } else if dMessage != nil {
-            self.messagesDataToWrite.append(dMessage!)
+        if let mess = sMessage {
+            self.messagesStringToWrite.append(mess)
+        } else if let mess = dMessage {
+            self.messagesDataToWrite.append(mess)
         }
         writeTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(performWriteOperations), userInfo: nil, repeats: true)
     }
@@ -291,7 +293,10 @@ public class WebsocketProvider: Web3Provider, IWebsocketProvider, WebSocketDeleg
             delegate.gotError(error: Web3Error.nodeError(desc: "socket cancelled"))
         case .error(let error):
             websocketConnected = false
-            delegate.gotError(error: error!)
+            if let error = error {
+                delegate.gotError(error: error)
+            }
+
         }
     }
 }

@@ -225,14 +225,15 @@ extension TransactionOptions: Decodable {
 
         self.chainID = try container.decodeHexIfPresent(BigUInt.self, forKey: .chainId)
 
-        let toString = try? container.decode(String.self, forKey: .to)
-        switch toString {
-        case nil, "0x", "0x0":
-            self.to = EthereumAddress.contractDeploymentAddress()
-        default:
-            guard let ethAddr = EthereumAddress(toString!) else { throw Web3Error.dataError }
-            self.to = ethAddr
+        let ethAddr: EthereumAddress
+        if let toString = try? container.decode(String.self, forKey: .to), toString != "0x" && toString != "0x0" {
+            guard let eAddr = EthereumAddress(toString) else { throw Web3Error.dataError }
+            ethAddr = eAddr
+        } else {
+            ethAddr = EthereumAddress.contractDeploymentAddress()
         }
+
+        self.to = ethAddr
 
         self.from = try container.decodeIfPresent(EthereumAddress.self, forKey: .to)
 

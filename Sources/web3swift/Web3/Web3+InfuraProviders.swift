@@ -32,8 +32,10 @@ public final class InfuraProvider: Web3HttpProvider {
     public init?(_ net: Networks, accessToken token: String? = nil, keystoreManager manager: KeystoreManager? = nil) async {
         var requestURLstring = "https://" + net.name + Constants.infuraHttpScheme
         requestURLstring += token ?? Constants.infuraToken
-        let providerURL = URL(string: requestURLstring)
-        await super.init(providerURL!, network: net, keystoreManager: manager)
+        guard let providerURL = URL(string: requestURLstring) else {
+            return nil
+        }
+        await super.init(providerURL, network: net, keystoreManager: manager)
     }
 }
 
@@ -109,7 +111,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         let params = params ?? []
         let paramsCount = params.count
         guard method.requiredNumOfParameters == paramsCount || method.requiredNumOfParameters == nil else {
-            throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters!), got - \(paramsCount)")
+            throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters ?? 0), got - \(paramsCount)")
         }
         try writeMessage(method: method, params: params)
         filterTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(getFilterChanges), userInfo: nil, repeats: true)
@@ -126,7 +128,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         let params = params ?? []
         let paramsCount = params.count
         guard method.requiredNumOfParameters == paramsCount || method.requiredNumOfParameters == nil else {
-            throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters!), got - \(paramsCount)")
+            throw Web3Error.inputError(desc: "Wrong number of params: need - \(method.requiredNumOfParameters ?? 0), got - \(paramsCount)")
         }
         try writeMessage(method: method, params: params)
         filterTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(getFilterLogs), userInfo: nil, repeats: true)
@@ -196,7 +198,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
                 stringAddresses.append(addr.address)
             }
         }
-//        let ts = topics == nil ? nil: [topics!]
+
         let filterParams = EventFilterParameters(fromBlock: nil, toBlock: nil, topics: [topics], address: stringAddresses)
         try writeMessage(method: method, params: ["logs", filterParams])
     }
@@ -248,7 +250,9 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         case .error(let error):
             debugMode ? print("error: \(String(describing: error))") : nil
             websocketConnected = false
-            delegate.gotError(error: error!)
+            if let error = error {
+                delegate.gotError(error: error)
+            }
         }
     }
 

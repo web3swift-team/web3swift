@@ -114,8 +114,9 @@ extension Web3 {
         }
 
         private func suggestBaseFee() async throws -> [BigUInt] {
-            self.feeHistory = try await suggestGasValues()
-            return calculatePercentiles(for: feeHistory!.baseFeePerGas)
+            let feeValue = try await suggestGasValues()
+            self.feeHistory = feeValue
+            return calculatePercentiles(for: feeValue.baseFeePerGas)
         }
 
         private func suggestGasFeeLegacy() async throws -> [BigUInt] {

@@ -203,8 +203,8 @@ extension Web3.Web3contract {
             throw Web3Error.processingError(desc: "Failed to encode topic for request")
         }
 
-        if eventName != nil {
-            guard rawContract.events[eventName!] != nil else {
+        if let eventName = eventName {
+            guard rawContract.events[eventName] != nil else {
                 throw Web3Error.processingError(desc: "No such event in a contract")
             }
         }
@@ -212,10 +212,7 @@ extension Web3.Web3contract {
         let response = try await self.web3.dispatch(request)
 
         guard let allLogs: [EventLog] = response.getValue() else {
-            if response.error != nil {
-                throw Web3Error.nodeError(desc: response.error!.message)
-            }
-            throw Web3Error.nodeError(desc: "Empty or malformed response")
+            throw Web3Error.nodeError(desc: response.error?.message ?? "Empty or malformed response")
         }
 
         let decodedLogs = allLogs.compactMap { log -> EventParserResult? in
@@ -236,8 +233,10 @@ extension Web3.Web3contract {
             decodedLogs.forEach { singleEvent in
                 group.addTask {
                     var joinedEvent = singleEvent
-                    let receipt = try? await self.web3.eth.transactionReceipt(singleEvent.eventLog!.transactionHash)
-                    joinedEvent.transactionReceipt = receipt
+                    if let singleEventLog = singleEvent.eventLog {
+                        let receipt = try? await self.web3.eth.transactionReceipt(singleEventLog.transactionHash)
+                        joinedEvent.transactionReceipt = receipt
+                    }
                     return joinedEvent as EventParserResultProtocol
                 }
             }
