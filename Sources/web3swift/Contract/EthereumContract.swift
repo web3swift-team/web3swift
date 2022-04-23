@@ -75,8 +75,10 @@ public struct EthereumContract: ContractProtocol {
 
     public init?(_ abiString: String, at: EthereumAddress? = nil) {
         do {
-            let jsonData = abiString.data(using: .utf8)
-            let abi = try JSONDecoder().decode([ABI.Record].self, from: jsonData!)
+            guard let jsonData = abiString.data(using: .utf8) else {
+                return nil
+            }
+            let abi = try JSONDecoder().decode([ABI.Record].self, from: jsonData)
             let abiNative = try abi.map { try $0.parse() }
             _abi = abiNative
             if at != nil {

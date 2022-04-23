@@ -26,16 +26,14 @@ extension Web3 {
         public init?(web3 web3Instance: Web3, abiString: String, at: EthereumAddress? = nil, transactionOptions: TransactionOptions? = nil, abiVersion: Int = 2) {
             self.web3 = web3Instance
             self.transactionOptions = web3.transactionOptions
-            switch abiVersion {
-            case 1:
-                print("ABIv1 bound contract is now deprecated")
-                return nil
-            case 2:
-                guard let c = EthereumContract(abiString, at: at) else {return nil}
-                contract = c
-            default:
+            guard abiVersion == 2 else {
+                fatalError("ABI version: \(abiVersion) not supported")
+            }
+
+            guard let c = EthereumContract(abiString, at: at) else {
                 return nil
             }
+            contract = c
             var mergedOptions = self.transactionOptions?.merge(transactionOptions)
             if at != nil {
                 contract.address = at
