@@ -139,7 +139,7 @@ extension Web3 {
                         return transaction
                     }
                 }
-                .map { $0.gasPrice }
+                .map { $0.meta?.gasPrice ?? 0 }
 
             return calculatePercentiles(for: lastNthBlockGasPrice)
         }
