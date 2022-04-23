@@ -39,10 +39,8 @@ public class ERC1155: IERC1155 {
     public var address: EthereumAddress
     public var abi: String
 
-    lazy var contract: Web3.Web3contract = {
-        let contract = self.web3.contract(self.abi, at: self.address, abiVersion: 2)
-        precondition(contract != nil)
-        return contract!
+    lazy var contract: Web3.Web3contract? = {
+        web3.contract(abi, at: address)
     }()
 
     public init(web3: Web3, provider: Web3Provider, address: EthereumAddress, abi: String = Web3.Utils.erc1155ABI) {
@@ -57,10 +55,7 @@ public class ERC1155: IERC1155 {
 
     public func tokenId() async throws -> BigUInt {
         try await self.readProperties()
-        if self._tokenId != nil {
-            return self._tokenId!
-        }
-        return 0
+        return self._tokenId ?? 0
     }
 
     public func readProperties() async throws {
@@ -68,11 +63,11 @@ public class ERC1155: IERC1155 {
             return
         }
         let contract = self.contract
-        guard contract.contract.address != nil else {return}
+        guard contract?.contract.address != nil else {return}
         var transactionOptions = TransactionOptions.defaultOptions
         transactionOptions.callOnBlock = .latest
 
-        guard let tokenIdPromise = try await contract.read("id", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.decodedData() else {return}
+        guard let tokenIdPromise = try await contract?.read("id", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.decodedData() else {return}
 
         guard let tokenId = tokenIdPromise["0"] as? BigUInt else {return}
         self._tokenId = tokenId
@@ -86,7 +81,9 @@ public class ERC1155: IERC1155 {
         basicOptions.from = from
         basicOptions.to = self.address
 
-        let tx = contract.write("safeTransferFrom", parameters: [originalOwner, to, id, value, data] as [AnyObject], transactionOptions: basicOptions)!
+        guard let tx = contract?.write("safeTransferFrom", parameters: [originalOwner, to, id, value, data] as [AnyObject], transactionOptions: basicOptions) else {
+            throw Web3Error.processingError(desc: "Failed to write contract")
+        }
         return tx
     }
 
@@ -96,7 +93,9 @@ public class ERC1155: IERC1155 {
         basicOptions.from = from
         basicOptions.to = self.address
 
-        let tx = contract.write("safeBatchTransferFrom", parameters: [originalOwner, to, ids, values, data] as [AnyObject], transactionOptions: basicOptions)!
+        guard let tx = contract?.write("safeBatchTransferFrom", parameters: [originalOwner, to, ids, values, data] as [AnyObject], transactionOptions: basicOptions) else {
+            throw Web3Error.processingError(desc: "Failed to write contract")
+        }
         return tx
     }
 
@@ -104,8 +103,8 @@ public class ERC1155: IERC1155 {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        let result = try await contract.read("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
-        guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
+        let result = try await contract?.read("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)?.call(transactionOptions: transactionOptions)
+        guard let res = result?["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
@@ -115,7 +114,9 @@ public class ERC1155: IERC1155 {
         basicOptions.from = from
         basicOptions.to = self.address
 
-        let tx = contract.write("setApprovalForAll", parameters: [user, approved, scope] as [AnyObject], transactionOptions: basicOptions)!
+        guard let tx = contract?.write("setApprovalForAll", parameters: [user, approved, scope] as [AnyObject], transactionOptions: basicOptions) else {
+            throw Web3Error.processingError(desc: "Failed to write contract")
+        }
         return tx
     }
 
@@ -123,8 +124,8 @@ public class ERC1155: IERC1155 {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.callOnBlock = .latest
-        let result = try await contract.read("isApprovedForAll", parameters: [owner, user, scope] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
-        guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
+        let result = try await contract?.read("isApprovedForAll", parameters: [owner, user, scope] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)?.call(transactionOptions: transactionOptions)
+        guard let res = result?["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
@@ -133,8 +134,8 @@ public class ERC1155: IERC1155 {
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
         transactionOptions.gasLimit = .manual(30000)
-        let result = try await contract.read("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.call(transactionOptions: transactionOptions)
-        guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
+        let result = try await contract?.read("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)?.call(transactionOptions: transactionOptions)
+        guard let res = result?["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 }
