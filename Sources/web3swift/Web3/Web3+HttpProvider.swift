@@ -57,6 +57,17 @@ public class Web3HttpProvider: Web3Provider {
         attachedKeystoreManager = manager
     }
 
+    fileprivate static func dataFrom(session: URLSession, request urlRequest: URLRequest) async throws -> Data{
+        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *) {
+            let (data, _) = try await session.data(for: urlRequest)
+            return data
+        } else {
+            let (data, _) = try await session.data(forRequest: urlRequest)
+            // Fallback on earlier versions
+            return data
+        }
+    }
+
     static func post<T: Decodable, U: Encodable>(_ request: U, providerURL: URL, session: URLSession) async throws -> T {
 
         let requestData = try JSONEncoder().encode(request)
@@ -66,7 +77,7 @@ public class Web3HttpProvider: Web3Provider {
         urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         urlRequest.httpBody = requestData
 
-        let (data, _) = try await session.data(for: urlRequest)
+        let data = try await dataFrom(session: session, request: urlRequest)
 
         let parsedResponse = try JSONDecoder().decode(T.self, from: data)
 
@@ -87,5 +98,40 @@ public class Web3HttpProvider: Web3Provider {
 
     public func sendAsync(_ requests: JSONRPCrequestBatch) async throws -> JSONRPCresponseBatch {
         return try await Web3HttpProvider.post(requests, providerURL: self.url, session: self.session)
+    }
+}
+
+@available(iOS, deprecated: 15.0, message: "Use the built-in API instead")
+extension URLSession {
+    func data(fromUrl url: URL) async throws -> (Data, URLResponse) {
+        try await withCheckedThrowingContinuation { continuation in
+            let task = self.dataTask(with: url) { data, response, error in
+                guard let data = data, let response = response else {
+                    let error = error ?? URLError(.badServerResponse)
+                    return continuation.resume(throwing: error)
+                }
+
+                continuation.resume(returning: (data, response))
+            }
+
+            task.resume()
+        }
+    }
+
+    func data(forRequest request: URLRequest) async throws -> (Data, URLResponse) {
+        var dataTask: URLSessionDataTask?
+
+        return try await withCheckedThrowingContinuation { continuation in
+            dataTask = self.dataTask(with: request) { data, response, error in
+                guard let data = data, let response = response else {
+                    let error = error ?? URLError(.badServerResponse)
+                    return continuation.resume(throwing: error)
+                }
+
+                continuation.resume(returning: (data, response))
+            }
+
+            dataTask?.resume()
+        }
     }
 }
