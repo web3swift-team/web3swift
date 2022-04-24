@@ -80,18 +80,19 @@ open class BrowserViewController: UIViewController {
                 completion(.failure(Bridge.JSError(code: 0, description: "No parameters provided")))
                 return
             }
-            let payload = parameters!["payload"] as? [String: Any]
-            if payload == nil {
+            guard let payload = parameters?["payload"] as? [String: Any] else {
                 completion(.failure(Bridge.JSError(code: 0, description: "No parameters provided")))
                 return
             }
-            let personalMessage = payload!["data"] as? String
-            let account = payload!["from"] as? String
-            if personalMessage == nil || account == nil {
+            guard let personalMessage = payload["data"] as? String else {
                 completion(.failure(Bridge.JSError(code: 0, description: "Not enough parameters provided")))
                 return
             }
-            let result = web3.browserFunctions.personalSign(personalMessage!, account: account!)
+            guard let account = payload["from"] as? String else {
+                completion(.failure(Bridge.JSError(code: 0, description: "Not enough parameters provided")))
+                return
+            }
+            let result = web3.browserFunctions.personalSign(personalMessage, account: account)
             if result == nil {
                 completion(.failure(Bridge.JSError(code: 0, description: "Account or data is invalid")))
                 return
@@ -101,21 +102,21 @@ open class BrowserViewController: UIViewController {
 
         self.webView.bridge.register({ parameters, completion in
             Task {
-            if parameters == nil {
-                completion(.failure(Bridge.JSError(code: 0, description: "No parameters provided")))
-                return
-            }
-            let transaction = parameters!["transaction"] as? [String: Any]
-            if transaction == nil {
-                completion(.failure(Bridge.JSError(code: 0, description: "Not enough parameters provided")))
-                return
-            }
-                let result = await web3.browserFunctions.signTransaction(transaction!)
-            if result == nil {
-                completion(.failure(Bridge.JSError(code: 0, description: "Data is invalid")))
-                return
-            }
-            completion(.success(["signedTransaction": result as Any]))
+                if parameters == nil {
+                    completion(.failure(Bridge.JSError(code: 0, description: "No parameters provided")))
+                    return
+                }
+
+                guard let transaction = parameters?["transaction"] as? [String: Any] else {
+                    completion(.failure(Bridge.JSError(code: 0, description: "Not enough parameters provided")))
+                    return
+                }
+
+                guard let result = await web3.browserFunctions.signTransaction(transaction) else {
+                    completion(.failure(Bridge.JSError(code: 0, description: "Data is invalid")))
+                    return
+                }
+                completion(.success(["signedTransaction": result as Any]))
             }
         }, for: "eth_signTransaction")
     }

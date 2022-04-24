@@ -490,7 +490,8 @@ public extension RIPEMD160 {
     }
 
     static func hash(message: String) throws -> Data {
-        try RIPEMD160.hash(message: message.data(using: .utf8)!)
+        guard let messageData = message.data(using: .utf8) else { throw Web3Error.dataError }
+        return try RIPEMD160.hash(message: messageData)
         //        return try RIPEMD160.hash(message: message.data(using: .utf8)!)
     }
 }
@@ -524,12 +525,12 @@ public extension RIPEMD160 {
     }
 
     static func hmac(key: Data, message: String) throws -> Data {
-        try RIPEMD160.hmac(key: key, message: message.data(using: .utf8)!)
-        //        return try RIPEMD160.hmac(key: key, message: message.data(using: .utf8)!)
+        guard let messageData = message.data(using: .utf8) else { throw Web3Error.dataError }
+        return try RIPEMD160.hmac(key: key, message: messageData)
     }
 
     static func hmac(key: String, message: String) throws -> Data {
-        try RIPEMD160.hmac(key: key.data(using: .utf8)!, message: message)
-        //        return try RIPEMD160.hmac(key: key.data(using: .utf8)!, message: message)
+        guard let keyData = key.data(using: .utf8) else { throw Web3Error.dataError }
+        return try RIPEMD160.hmac(key: keyData, message: message)
     }
 }

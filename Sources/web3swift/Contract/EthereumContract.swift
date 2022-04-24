@@ -139,17 +139,15 @@ public struct EthereumContract: ContractProtocol {
                 } else {
                     let logTopics = eventLog.topics
                     let logData = eventLog.data
-                    let parsed = ev.decodeReturnedLogs(eventLogTopics: logTopics, eventLogData: logData)
-                    if parsed != nil {
-                        return (eName, parsed!)
+                    if let parsed = ev.decodeReturnedLogs(eventLogTopics: logTopics, eventLogData: logData) {
+                        return (eName, parsed)
                     }
                 }
             } else {
                 let logTopics = eventLog.topics
                 let logData = eventLog.data
-                let parsed = ev.decodeReturnedLogs(eventLogTopics: logTopics, eventLogData: logData)
-                if parsed != nil {
-                    return (eName, parsed!)
+                if let parsed = ev.decodeReturnedLogs(eventLogTopics: logTopics, eventLogData: logData) {
+                    return (eName, parsed)
                 }
             }
         }

@@ -42,7 +42,7 @@ public struct EthereumAddress: Equatable {
     public var address: String {
         switch self.type {
         case .normal:
-            return Self.toChecksumAddress(_address)!
+            return Self.toChecksumAddress(_address) ?? "0x0"
         case .contractDeployment:
             return "0x"
         }
@@ -69,7 +69,8 @@ public struct EthereumAddress: Equatable {
     }
 
     public static func contractDeploymentAddress() -> EthereumAddress {
-        EthereumAddress("0x", type: .contractDeployment)!
+        guard let addr = EthereumAddress("0x", type: .contractDeployment) else { fatalError("Base EthereumAddress creation needs attention") }
+        return addr
     }
 }
 

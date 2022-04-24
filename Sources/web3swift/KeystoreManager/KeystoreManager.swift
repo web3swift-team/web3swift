@@ -141,8 +141,8 @@ public class KeystoreManager: AbstractKeystore {
             return nil
         }
         let allFiles = try fileManager.contentsOfDirectory(atPath: path)
-        if suffix != nil {
-            for file in allFiles where file.hasSuffix(suffix!) {
+        if let suffix = suffix {
+            for file in allFiles where file.hasSuffix(suffix) {
                 var filePath = path
                 if !path.hasSuffix("/") {
                     filePath = path + "/"

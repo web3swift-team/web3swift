@@ -64,7 +64,10 @@ extension KeyedEncodingContainer {
 private extension KeyedEncodingContainer where K == AnyCodingKey {
     mutating func encode(_ value: [String: Any]) throws {
         for (k, v) in value {
-            let key = AnyCodingKey(stringValue: k)!
+            guard let key = AnyCodingKey(stringValue: k) else {
+                debugPrint("⚠️ Unsuported key!", k)
+                continue
+            }
             switch v {
             case is NSNull:
                 try encodeNil(forKey: key)

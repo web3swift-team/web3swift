@@ -111,14 +111,16 @@ extension LegacyEnvelope {
         self.explicitChainID = try container.decodeHexIfPresent(BigUInt.self, forKey: .chainId)
         self.nonce = try container.decodeHex(BigUInt.self, forKey: .nonce)
 
-        let toString = try? container.decode(String.self, forKey: .to)
-        switch toString {
-        case .none, "0x", "0x0":
-            self.to = EthereumAddress.contractDeploymentAddress()
-        default:
-            guard let ethAddr = EthereumAddress(toString!) else { throw Web3Error.dataError }
-            self.to = ethAddr
+        let ethAddr: EthereumAddress
+        if let toString = try? container.decode(String.self, forKey: .to), toString != "0x" && toString != "0x0" {
+            guard let eAddr = EthereumAddress(toString) else { throw Web3Error.dataError }
+            ethAddr = eAddr
+        } else {
+            ethAddr = EthereumAddress.contractDeploymentAddress()
         }
+
+        self.to = ethAddr
+
         self.value = try container.decodeHexIfPresent(BigUInt.self, forKey: .value) ?? 0
         self.gasPrice = try container.decodeHexIfPresent(BigUInt.self, forKey: .gasPrice) ?? 0
         self.gasLimit = try container.decodeHexIfPresent(BigUInt.self, forKey: .gas) ?? container.decodeHexIfPresent(BigUInt.self, forKey: .gasLimit) ?? 0

@@ -22,7 +22,7 @@ public struct SECP256K1 {
         }
     }
 }
-
+// swiftlint:disable force_unwrapping
 extension SECP256K1 {
     static let context = secp256k1_context_create(UInt32(SECP256K1_CONTEXT_SIGN | SECP256K1_CONTEXT_VERIFY))
 

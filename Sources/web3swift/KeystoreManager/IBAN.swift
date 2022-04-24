@@ -87,7 +87,7 @@ public struct IBAN {
         var m = 0
         for digit in preparedString.split(intoChunksOf: 1) {
             m *= 10
-            m += Int(digit)!
+            m += Int(digit) ?? 0
             m = m % 97
         }
         return m

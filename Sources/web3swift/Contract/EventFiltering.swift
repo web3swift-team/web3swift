@@ -7,105 +7,91 @@
 import Foundation
 
 internal func filterLogs(decodedLogs: [EventParserResultProtocol], eventFilter: EventFilter) -> [EventParserResultProtocol] {
-    // swiftlint:disable indentation_width
-    let filteredLogs = decodedLogs.filter { result -> Bool in
-            if eventFilter.addresses == nil {
-                return true
-            } else {
-                if eventFilter.addresses!.contains(result.contractAddress) {
-                    return true
-                } else {
-                    return false
-                }
-            }
-        }
+
+    let filteredLogs = decodedLogs
+        .filter { eventFilter.addresses?.contains($0.contractAddress) ?? true }
         .filter { result -> Bool in
-            if eventFilter.parameterFilters == nil {
-                return true
-            } else {
-                let keys = result.decodedResult.keys.filter { key -> Bool in
-                    if UInt64(key) != nil {
-                        return true
-                    }
-                    return false
-                }
-                if keys.count < eventFilter.parameterFilters!.count {
-                    return false
-                }
-                for i in 0 ..< eventFilter.parameterFilters!.count {
-                    let allowedValues = eventFilter.parameterFilters![i]
-                    let actualValue = result.decodedResult["\(i)"]
-                    if actualValue == nil {
-                        return false
-                    }
-                    if allowedValues == nil {
-                        continue
-                    }
-                    var inAllowed = false
-                    for value in allowedValues! {
-                        if value.isEqualTo(actualValue! as AnyObject) {
-                            inAllowed = true
-                            break
-                        }
-                    }
-                    if !inAllowed {
-                        return false
-                    }
-                }
+            guard let eventParamFilters = eventFilter.parameterFilters else {
                 return true
             }
-    }
+
+            let keys = result.decodedResult.keys.compactMap {$0}
+
+            if keys.count < eventParamFilters.count {
+                return false
+            }
+            for i in 0 ..< eventParamFilters.count {
+                guard let actualValue = result.decodedResult["\(i)"] else {
+                    return false
+                }
+                guard let allowedValues = eventParamFilters[i] else {
+                    continue
+                }
+                var inAllowed = false
+                for value in allowedValues {
+                    if value.isEqualTo(actualValue as AnyObject) {
+                        inAllowed = true
+                        break
+                    }
+                }
+                if !inAllowed {
+                    return false
+                }
+            }
+            return true
+        }
     return filteredLogs
 }
 
 internal func encodeTopicToGetLogs(contract: EthereumContract, eventName: String?, filter: EventFilter) -> EventFilterParameters? {
-    var eventTopic: Data?
+
     var event: ABI.Element.Event?
-    if eventName != nil {
-        guard let ev = contract.events[eventName!] else {return nil}
+    var topics: [[String?]?]
+
+    if let evName = eventName {
+        guard let ev = contract.events[evName] else {return nil}
+        let evTopic = ev.topic.toHexString().addHexPrefix()
         event = ev
-        eventTopic = ev.topic
-    }
-    var topics = [[String?]?]()
-    if eventTopic != nil {
-        topics.append([eventTopic!.toHexString().addHexPrefix()])
+        topics = [[evTopic]]
     } else {
-        topics.append(nil as [String?]?)
+        topics = [nil]
     }
-    if filter.parameterFilters != nil {
-        if event == nil {return nil}
+
+    if let filterParamFilters = filter.parameterFilters {
+        guard let event = event else {
+            return nil
+        }
         var lastNonemptyFilter = -1
-        for i in 0 ..< filter.parameterFilters!.count {
-            let filterValue = filter.parameterFilters![i]
+        for i in 0 ..< filterParamFilters.count {
+            let filterValue = filterParamFilters[i]
             if filterValue != nil {
                 lastNonemptyFilter = i
             }
         }
         if lastNonemptyFilter >= 0 {
-            guard lastNonemptyFilter <= event!.inputs.count else {return nil}
+            guard lastNonemptyFilter <= event.inputs.count else {return nil}
             for i in 0 ... lastNonemptyFilter {
-                let filterValues = filter.parameterFilters![i]
-                if filterValues != nil {
-                    var isFound = false
-                    var targetIndexedPosition = i
-                    for j in 0 ..< event!.inputs.count {
-                        if event!.inputs[j].indexed {
-                            if targetIndexedPosition == 0 {
-                                isFound = true
-                                break
-                            }
-                            targetIndexedPosition -= 1
-                        }
-                    }
-
-                    if !isFound {return nil}
-                }
-                if filterValues == nil {
+                guard let filterValues = filterParamFilters[i] else {
                     topics.append(nil as [String?]?)
                     continue
                 }
+
+                var isFound = false
+                var targetIndexedPosition = i
+                for j in 0 ..< event.inputs.count {
+                    if event.inputs[j].indexed {
+                        if targetIndexedPosition == 0 {
+                            isFound = true
+                            break
+                        }
+                        targetIndexedPosition -= 1
+                    }
+                }
+
+                if !isFound {return nil}
+
                 var encodings = [String]()
-                for val in filterValues! {
+                for val in filterValues {
                     guard let enc = val.eventFilterEncoded() else {return nil}
                     encodings.append(enc)
                 }
@@ -120,12 +106,10 @@ internal func encodeTopicToGetLogs(contract: EthereumContract, eventName: String
 
 internal func parseReceiptForLogs(receipt: TransactionReceipt, contract: ContractProtocol, eventName: String, filter: EventFilter?) -> [EventParserResultProtocol]? {
     guard let bloom = receipt.logsBloom else {return nil}
-    if contract.address != nil {
-        let addressPresent = bloom.test(topic: contract.address!.addressData)
-        if addressPresent != true {
-            return [EventParserResultProtocol]()
-        }
+    if let contAddr = contract.address, bloom.test(topic: contAddr.addressData) != true {
+        return [EventParserResultProtocol]()
     }
+
     if filter != nil, let filterAddresses = filter?.addresses {
         var oneIsPresent = false
         for addr in filterAddresses {
@@ -156,11 +140,9 @@ internal func parseReceiptForLogs(receipt: TransactionReceipt, contract: Contrac
     }
     .filter { $0.eventName == eventName }
 
-    var allResults = [EventParserResultProtocol]()
-    if filter != nil {
-        let eventFilter = filter!
-        let filteredLogs = filterLogs(decodedLogs: decodedLogs, eventFilter: eventFilter)
-        allResults = filteredLogs
+    let allResults: [EventParserResultProtocol]
+    if let eventFilter = filter {
+        allResults = filterLogs(decodedLogs: decodedLogs, eventFilter: eventFilter)
     } else {
         allResults = decodedLogs
     }

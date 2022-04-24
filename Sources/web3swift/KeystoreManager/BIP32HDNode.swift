@@ -72,8 +72,9 @@ public class HDNode {
         childNumber = data[9..<13].bytes.withUnsafeBytes { $0.load(as: UInt32.self) }
         chaincode = data[13..<45]
         if serializePrivate {
-            privateKey = data[46..<78]
-            guard let pubKey = Web3.Utils.privateToPublic(privateKey!, compressed: true) else {return nil}
+            let keyData = data[46..<78]
+            privateKey = keyData
+            guard let pubKey = Web3.Utils.privateToPublic(keyData, compressed: true) else {return nil}
             if pubKey[0] != 0x02 && pubKey[0] != 0x03 {return nil}
             publicKey = pubKey
         } else {
@@ -279,9 +280,9 @@ extension HDNode {
         }
 
         if serializePublic {
-            data.append(HDversion.publicPrefix!)
+            data.append(HDversion.publicPrefix ?? Data())
         } else {
-            data.append(HDversion.privatePrefix!)
+            data.append(HDversion.privatePrefix ?? Data())
         }
         data.append(contentsOf: [self.depth])
         data.append(self.parentFingerprint)
@@ -291,7 +292,11 @@ extension HDNode {
             data.append(self.publicKey)
         } else {
             data.append(contentsOf: [0x00])
-            data.append(self.privateKey!)
+            if let privKey = self.privateKey {
+                data.append(privKey)
+            } else {
+                return nil
+            }
         }
         let hashedData = data.sha256().sha256()
         let checksum = hashedData[0..<4]

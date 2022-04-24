@@ -143,8 +143,8 @@ public struct EthereumTransaction: CustomStringConvertible {
     /// if options specifies a type, and it is different from the current type the transaction will be migrated
     /// to the new type. migrating will invalidate any signature data
     public mutating func applyOptions(_ options: TransactionOptions) {
-        if options.type != nil && self.type != options.type {
-            self.migrate(to: options.type!)
+        if let optType = options.type, self.type != optType {
+            self.migrate(to: optType)
         }
         self.envelope.applyOptions(options)
     }
@@ -257,7 +257,9 @@ extension EthereumTransaction {
     ///   - options: a TransactionOptions object containing additional options to apply to the transaction
     public init(with: AbstractEnvelope, options: TransactionOptions? = nil) {
         self.envelope = with
-        if options != nil { self.envelope.applyOptions(options!) }
+        if let opt = options {
+            self.envelope.applyOptions(opt)
+        }
     }
 }
 

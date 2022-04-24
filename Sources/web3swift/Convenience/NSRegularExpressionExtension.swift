@@ -23,11 +23,11 @@ extension NSRegularExpression {
         }
         let m = reg.matches(in: self.pattern, options: NSRegularExpression.MatchingOptions.withTransparentBounds, range: NSRange(location: 0, length: self.pattern.utf16.count))
         for (n, g) in m.enumerated() {
-            let r = self.pattern.range(from: g.range(at: 0))
-            let gstring = String(self.pattern[r!])
+            guard let r = self.pattern.range(from: g.range(at: 0)) else { continue }
+            let gstring = String(self.pattern[r])
             let gmatch = greg.matches(in: gstring, options: NSRegularExpression.MatchingOptions.anchored, range: NSRange(location: 0, length: gstring.utf16.count))
             if !gmatch.isEmpty {
-                let r2 = gstring.range(from: gmatch[0].range(at: 1))!
+                guard let r2 = gstring.range(from: gmatch[0].range(at: 1)) else { continue }
                 groupnames[String(gstring[r2])] = (g, gmatch[0], n)
             }
 

@@ -75,22 +75,14 @@ public struct EventFilter {
 
     public func rpcPreEncode() -> EventFilterParameters {
         var encoding = EventFilterParameters()
-        if self.fromBlock != nil {
-            encoding.fromBlock = self.fromBlock!.encoded
+        if let encodedVal = self.fromBlock?.encoded {
+            encoding.fromBlock = encodedVal
         }
-        if self.toBlock != nil {
-            encoding.toBlock = self.toBlock!.encoded
+        if let encodedVal = self.toBlock?.encoded {
+            encoding.toBlock = encodedVal
         }
-        if self.addresses != nil {
-            if self.addresses!.count == 1 {
-                encoding.address = [self.addresses![0].address]
-            } else {
-                var encodedAddresses = [String?]()
-                for addr in self.addresses! {
-                    encodedAddresses.append(addr.address)
-                }
-                encoding.address = encodedAddresses
-            }
+        if let ethAddr = addresses {
+            encoding.address = ethAddr.map { $0.address }
         }
         return encoding
     }

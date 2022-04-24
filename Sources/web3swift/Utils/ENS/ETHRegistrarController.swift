@@ -14,10 +14,8 @@ public extension ENS {
         public let web3: Web3
         public let address: EthereumAddress
 
-        lazy var contract: Web3.Web3contract = {
-            let contract = self.web3.contract(Web3.Utils.ethRegistrarControllerABI, at: self.address, abiVersion: 2)
-            precondition(contract != nil)
-            return contract!
+        lazy var contract: Web3.Web3contract? = {
+            web3.contract(Web3.Utils.ethRegistrarControllerABI, at: address)
         }()
 
         lazy var defaultOptions: TransactionOptions = .defaultOptions
@@ -28,28 +26,28 @@ public extension ENS {
         }
 
         public func getRentPrice(name: String, duration: UInt) async throws -> BigUInt {
-            guard let transaction = self.contract.read("rentPrice", parameters: [name, duration] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract?.read("rentPrice", parameters: [name, duration] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let price = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Can't get answer")}
             return price
         }
 
         public func checkNameValidity(name: String) async throws -> Bool {
-            guard let transaction = self.contract.read("valid", parameters: [name] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract?.read("valid", parameters: [name] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let valid = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Can't get answer")}
             return valid
         }
 
         public func isNameAvailable(name: String) async throws -> Bool {
-            guard let transaction = self.contract.read("available", parameters: [name as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract?.read("available", parameters: [name as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let available = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Can't get answer")}
             return available
         }
 
         public func calculateCommitmentHash(name: String, owner: EthereumAddress, secret: String) async throws -> Data {
-            guard let transaction = self.contract.read("makeCommitment", parameters: [name, owner.address, secret] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract?.read("makeCommitment", parameters: [name, owner.address, secret] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let hash = result["0"] as? Data else {throw Web3Error.processingError(desc: "Can't get answer")}
             return hash
@@ -58,7 +56,7 @@ public extension ENS {
         public func sumbitCommitment(from: EthereumAddress, commitment: Data) throws -> WriteTransaction {
             defaultOptions.from = from
             defaultOptions.to = self.address
-            guard let transaction = self.contract.write("commit", parameters: [commitment as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract?.write("commit", parameters: [commitment as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
@@ -67,7 +65,7 @@ public extension ENS {
             defaultOptions.value = amount
             defaultOptions.from = from
             defaultOptions.to = self.address
-            guard let transaction = self.contract.write("register", parameters: [name, owner.address, duration, secret] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract?.write("register", parameters: [name, owner.address, duration, secret] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
@@ -76,7 +74,7 @@ public extension ENS {
             defaultOptions.value = amount
             defaultOptions.from = from
             defaultOptions.to = self.address
-            guard let transaction = self.contract.write("renew", parameters: [name, duration] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract?.write("renew", parameters: [name, duration] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
@@ -84,7 +82,7 @@ public extension ENS {
         public func withdraw(from: EthereumAddress) throws -> WriteTransaction {
             defaultOptions.from = from
             defaultOptions.to = self.address
-            guard let transaction = self.contract.write("withdraw", parameters: [AnyObject](), extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract?.write("withdraw", parameters: [AnyObject](), extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
     }
