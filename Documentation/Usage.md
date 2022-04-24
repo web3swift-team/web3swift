@@ -32,6 +32,7 @@
       - [Send ERC-20 Token](#send-erc-20-token)
       - [Write Transaction and call smart contract method](#write-transaction-and-call-smart-contract-method)
       - [Read Transaction to call smart contract method](#read-transaction-to-call-smart-contract-method)
+      - [Other Transaction Types (EIP-1559)](#other-transaction-types)
     - [Send Transaction](#send-transaction)
       - [Write](#write)
       - [Read](#read)
@@ -354,6 +355,40 @@ let result = try! transaction.send(password: password)
 ```swift
 let result = try! transaction.call()
 ```
+
+##### Other Transaction Types
+
+By default a `legacy` transaction will be created which is compatible across all chains, regardless of which fork.
+To create one of the new transaction types introduced with the `london` fork you will need to set some additonal parameters 
+in the `TransactionOptions` object. Note you should only try to send one of tehse new types of transactions if you are on a chain 
+that supports them.
+
+To send an EIP-2930 style transacton with an access list you need to set the transaction type, and the access list, 
+in addition what is shown in the examples above.
+```swift
+let accessList: [AccessListEntry] = [
+    AccessListEntry(
+        address: EthereumAddress("0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae"),
+        storageKeys: [BigUInt(3), BigUInt(7)]
+    ),
+    AccessListEntry(
+        address: EthereumAddress("0xbb9bc244d798123fde783fcc1c72d3bb8c189413"),
+        storageKeys: []
+    )
+]
+
+options.type = .eip2930
+options.accessList = accessList
+```
+
+To send an EIP-1559 style transaction you set the transaction type, and the new gas parameters `maxFeePerGas` and `maxPriorityFeePerGas`
+(you may also send an AccessList with an EIP-1559 transaction) When sending an EIP-1559 transaction, the older `gasPrice` parameter is ignored.
+```swift
+options.type = .eip1559
+options.maxFeePerGas = .manual(...) // the maximum price per unit of gas, inclusive of baseFee and tip
+options.maxPriorityFeePerGas = .manual(...) // the tip to be paid to the miner, per unit of gas
+```
+Note there is a new `Oracle` object available that can be used to assist with estimating the new gas fees
 
 ### Chain state
 
