@@ -16,6 +16,12 @@ import BigInt
 
 class web3swiftTransactionsTests: XCTestCase {
 
+    // this is needed for any test suites that depend on the block-chain state from Ganache
+    override class func setUp() {
+        super.setUp()
+        preloadGanache()
+    }
+
     enum TestCase: Int {
         case legacyFallback = 0
         case legacyEip155

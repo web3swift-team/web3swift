@@ -15,7 +15,12 @@ import BigInt
 
 class web3swiftPromisesTests: XCTestCase {
     var urlSession : URLSession?
-    
+    // this is needed for any test suites that depend on the block-chain state from Ganache
+    override class func setUp() {
+        super.setUp()
+        preloadGanache()
+    }
+
     func testGetBalancePromise() throws {
         let web3 = try Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
         let balance = try web3.eth.getBalancePromise(address: "0xe22b8979739D724343bd002F9f432F5990879901").wait()

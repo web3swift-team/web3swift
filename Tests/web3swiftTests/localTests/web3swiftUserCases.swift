@@ -11,7 +11,12 @@ import BigInt
 @testable import web3swift
 
 class web3swiftUserCases: XCTestCase {
-    
+    // this is needed for any test suites that depend on the block-chain state from Ganache
+    override class func setUp() {
+        super.setUp()
+        preloadGanache()
+    }
+
     func getKeystoreData() -> Data? {
         let bundle = Bundle(for: type(of: self))
         guard let path = bundle.path(forResource: "key", ofType: "json") else {return nil}

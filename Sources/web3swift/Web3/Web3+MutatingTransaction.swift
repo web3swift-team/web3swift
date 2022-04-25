@@ -76,7 +76,6 @@ public class WriteTransaction: ReadTransaction {
             optionsForGasEstimation.type = mergedOptions.type
             optionsForGasEstimation.accessList = mergedOptions.accessList
 
-
             // assemble promise for gasLimit
             var gasEstimatePromise: Promise<BigUInt>? = nil
             guard let gasLimitPolicy = mergedOptions.gasLimit else {

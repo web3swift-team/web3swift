@@ -14,6 +14,12 @@ import BigInt
 
 class web3swiftBasicLocalNodeTests: XCTestCase {
 
+    // this is needed for any test suites that depend on the block-chain state from Ganache
+    override class func setUp() {
+        super.setUp()
+        preloadGanache()
+    }
+
     func testDeployWithRemoteSigning() throws {
         let web3 = try Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
         let allAddresses = try web3.eth.getAccounts()

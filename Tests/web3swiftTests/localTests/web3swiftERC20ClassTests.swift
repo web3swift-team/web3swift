@@ -10,7 +10,12 @@ import BigInt
 @testable import web3swift
 
 class web3swiftERC20ClassTests: XCTestCase {
-    
+    // this is needed for any test suites that depend on the block-chain state from Ganache
+    override class func setUp() {
+        super.setUp()
+        preloadGanache()
+    }
+
     func testERC20TokenCreation() throws {
         let (web3, _, receipt, _) = try web3swiftHelpers.localDeployERC20()
         let erc20token = ERC20.init(web3: web3, provider: web3.provider, address: receipt.contractAddress!)

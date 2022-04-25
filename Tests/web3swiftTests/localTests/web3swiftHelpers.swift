@@ -48,3 +48,32 @@ class web3swiftHelpers {
         return (web3, result, receipt, abiString)
     }
 }
+
+
+public func preloadGanache() {
+    let web3 = try! Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
+
+    let block = try! web3.eth.getBlockNumber()
+    if block >= 25 { return }
+
+    print("\n ****** Preloading Ganache (\(25-block) blocks) *****\n")
+
+    let allAddresses = try! web3.eth.getAccounts()
+    let sendToAddress = allAddresses[0]
+    let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
+    let value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
+
+
+    let from = allAddresses[0]
+    let writeTX = contract!.write("fallback")!
+    writeTX.transactionOptions.from = from
+    writeTX.transactionOptions.value = value
+    writeTX.transactionOptions.gasLimit = .manual(78423)
+    writeTX.transactionOptions.gasPrice = .manual(20000000000)
+
+    for _ in block..<25 {
+        let result = try! writeTX.sendPromise(password: "").wait()
+    }
+
+
+}

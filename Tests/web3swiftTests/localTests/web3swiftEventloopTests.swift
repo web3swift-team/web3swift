@@ -9,6 +9,11 @@ import XCTest
 @testable import web3swift
 
 class web3swiftEventloopTests: XCTestCase {
+    // this is needed for any test suites that depend on the block-chain state from Ganache
+    override class func setUp() {
+        super.setUp()
+        preloadGanache()
+    }
 
     func testBasicEventLoop() throws {
         var ticksToWait = 5
