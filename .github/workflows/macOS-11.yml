@@ -1,25 +1,12 @@
 name: "macOS 11"
 
 on:
-  push:
-    branches:
-      - master
-      - develop
-      - hotfix
-      - feature/github-actions-2.0
-    paths:
-      - Packag*.swift
-      - web3swift.podspec
-      - Cartfile
-      - Sources/**
-      - 'Tests/**'
-      - 'web3swift*/**'
-      - '.github/workflows/**'
   pull_request:
     branches:
       - master
-      - develop
-      - unstable
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
 
 jobs:
   spm:
@@ -28,8 +15,6 @@ jobs:
     concurrency: 
       group: spm-${{ github.run_id }}
       cancel-in-progress: false
-    env:
-      DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
     steps:
       - uses: actions/checkout@v2
       - name: Resolve dependencies
@@ -46,14 +31,13 @@ jobs:
         run: swift test --skip-build -c debug --filter localTests
       - name: Run remote tests
         run: swift test --skip-build -c debug --filter remoteTests
+
   carthage-iOS:
     name: Carthage
     runs-on: macOS-11
     concurrency: 
       group: carthage-${{ github.run_id }}
       cancel-in-progress: false
-    env:
-      DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
     strategy:
       fail-fast: false
       max-parallel: 2
