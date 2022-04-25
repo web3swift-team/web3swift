@@ -1,4 +1,4 @@
-name: "Web3swift CI"
+name: "macOS 12"
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - master
       - develop
       - hotfix
+      - feature/github-actions-2.0
     paths:
       - Packag*.swift
       - web3swift.podspec
@@ -22,13 +23,13 @@ on:
 
 jobs:
   spm:
-    name: Swift Package Manager 5.4
-    runs-on: macOS-11
+    name: Swift Package Manager 5.5
+    runs-on: macOS-12
     concurrency: 
       group: spm-${{ github.run_id }}
       cancel-in-progress: false
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_13.3.1.app/Contents/Developer
     steps:
       - uses: actions/checkout@v2
       - name: Resolve dependencies
@@ -45,19 +46,19 @@ jobs:
         run: swift test --skip-build -c debug --filter localTests
       - name: Run remote tests
         run: swift test --skip-build -c debug --filter remoteTests
-  carthage:
+  carthage-iOS:
     name: Carthage
-    runs-on: macOS-11
+    runs-on: macOS-12
     concurrency: 
       group: carthage-${{ github.run_id }}
       cancel-in-progress: false
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_13.3.1.app/Contents/Developer
     strategy:
       fail-fast: false
       max-parallel: 2
       matrix:
-        destination: ['OS=14.5,name=iPhone 12']
+        destination: ['OS=15.4,name=iPhone 13']
     steps:
       - uses: actions/checkout@v2
       - name: Resolving dependencies

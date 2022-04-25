@@ -1,0 +1,79 @@
+name: "macOS 11"
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - hotfix
+      - feature/github-actions-2.0
+    paths:
+      - Packag*.swift
+      - web3swift.podspec
+      - Cartfile
+      - Sources/**
+      - 'Tests/**'
+      - 'web3swift*/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches:
+      - master
+      - develop
+      - unstable
+
+jobs:
+  spm:
+    name: Swift Package Manager 5.5
+    runs-on: macOS-11
+    concurrency: 
+      group: spm-${{ github.run_id }}
+      cancel-in-progress: false
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v2
+      - name: Resolve dependencies
+        run: swift package resolve
+      - name: Build
+        run: swift build --build-tests
+      - name: Install ganache
+        run: npm install ganache --global
+      - name: Start ganache in background
+        run: ganache &
+      - name: Wait till ganache starts
+        run: sleep 1
+      - name: Run local tests
+        run: swift test --skip-build -c debug --filter localTests
+      - name: Run remote tests
+        run: swift test --skip-build -c debug --filter remoteTests
+  carthage-iOS:
+    name: Carthage
+    runs-on: macOS-11
+    concurrency: 
+      group: carthage-${{ github.run_id }}
+      cancel-in-progress: false
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        destination: ['OS=15.2,name=iPhone 13']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Resolving dependencies
+        run: carthage checkout
+      - name: Building dependencies
+        run: carthage build --no-use-binaries --platform iOS Simulator --use-xcframeworks
+      - name: Building framework
+        run: xcodebuild build-for-testing -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}"
+      - name: Install ganache
+        run: npm install ganache --global
+      - name: Start ganache in background
+        run: ganache &
+      - name: Wait till ganache starts
+        run: sleep 1
+      - name: Run local tests
+        run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan LocalTests
+      - name: Run remote tests
+        run: xcodebuild test-without-building -project "web3swift.xcodeproj" -scheme "web3swift" -destination "${{matrix.destination}}" -testPlan RemoteTests
