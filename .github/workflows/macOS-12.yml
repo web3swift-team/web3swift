@@ -6,7 +6,6 @@ on:
       - master
       - develop
       - hotfix
-      - feature/github-actions-2.0
     paths:
       - Packag*.swift
       - web3swift.podspec
