@@ -1,7 +1,7 @@
 {
   "configurations" : [
     {
-      "id" : "66042A4A-495F-4753-9DC9-F717EBB059FD",
+      "id" : "3A792090-A626-4D9B-8232-FFB4E29082A7",
       "name" : "Configuration 1",
       "options" : {
 
@@ -9,7 +9,7 @@
     }
   ],
   "defaultOptions" : {
-
+    "testTimeoutsEnabled" : true
   },
   "testTargets" : [
     {
@@ -17,10 +17,13 @@
         "ABIEncoderSoliditySha3Test",
         "DataConversionTests",
         "EIP1559BlockTests",
-        "EIP1559Tests",
         "EIP712Tests",
-        "GanacheGenerator",
-        "SoliditySha3Test",
+        "ENSTests",
+        "InfuraTests",
+        "OracleTests",
+        "RemoteParsingTests",
+        "ST20AndSecurityTokenTests",
+        "WebsocketTests",
         "web3swiftAdvancedABIv2Tests",
         "web3swiftBasicLocalNodeTests",
         "web3swiftDecodeSolidityErrorType",
@@ -36,21 +39,7 @@
         "web3swiftRLPTests",
         "web3swiftTests",
         "web3swiftTransactionsTests",
-        "web3swiftUserCases",
-        "web3swift_AdvancedABIv2_Tests",
-        "web3swift_EIP67_Tests",
-        "web3swift_EIP681_Tests",
-        "web3swift_ENS_Tests",
-        "web3swift_ERC20_Class_Tests",
-        "web3swift_Eventloop_Tests",
-        "web3swift_RLP_Tests",
-        "web3swift_Tests",
-        "web3swift_User_cases",
-        "web3swift_basic_local_node_Tests",
-        "web3swift_numberFormattingUtil_Tests",
-        "web3swift_personalSignature_Tests",
-        "web3swift_promises_Tests",
-        "web3swift_transactions_Tests"
+        "web3swiftUserCases"
       ],
       "target" : {
         "containerPath" : "container:web3swift.xcodeproj",

@@ -47,6 +47,9 @@
          <TestPlanReference
             reference = "container:Tests/web3swiftTests/remoteTests/RemoteTests.xctestplan">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:ganacheGenerator.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference

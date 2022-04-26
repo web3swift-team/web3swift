@@ -15,6 +15,7 @@
     {
       "skippedTests" : [
         "ENSTests",
+        "GanacheGenerator",
         "GasOracleTests",
         "InfuraTests",
         "OracleTests",
