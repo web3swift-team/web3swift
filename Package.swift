@@ -59,6 +59,11 @@ let package = Package(
                 .copy("../../../TestToken/Helpers/TokenBasics/IERC20.sol"),
                 .copy("../../../TestToken/Token/Web3SwiftToken.sol")
             ]
-        )
+        ),
+        .testTarget(
+            name: "ganacheGenerator",
+            dependencies: ["web3swift"],
+            path: "Tests/ganacheGenerator"
+        ),
     ]
 )
