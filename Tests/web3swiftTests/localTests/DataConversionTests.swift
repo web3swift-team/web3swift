@@ -16,7 +16,7 @@ import XCTest
 
 // Some base58 test vectors pulled from: https://tools.ietf.org/id/draft-msporny-base58-01.html
 // note that one of the return values is incorrect in the reference above, it is corrected here
-class DataConversionTests: LocalTestCase {
+class DataConversionTests: XCTestCase {
     // test an empty input for the base58 decoder & decoder
     func testBase58() throws {
         let vector = ""

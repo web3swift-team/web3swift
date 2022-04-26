@@ -49,8 +49,7 @@
         "web3swift_numberFormattingUtil_Tests",
         "web3swift_personalSignature_Tests",
         "web3swift_promises_Tests",
-        "web3swift_transactions_Tests",
-        "LocalTestCase"
+        "web3swift_transactions_Tests"
       ],
       "target" : {
         "containerPath" : "container:web3swift.xcodeproj",

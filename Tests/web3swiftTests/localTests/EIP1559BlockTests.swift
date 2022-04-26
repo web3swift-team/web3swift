@@ -4,7 +4,7 @@ import BigInt
 @testable
 import web3swift
 
-class EIP1559BlockTests: LocalTestCase {
+class EIP1559BlockTests: XCTestCase {
     let uselessBlockPart = (
         number: BigUInt(12_965_000),
         hash: Data(fromHex: "0xef95f2f1ed3ca60b048b4bf67cde2195961e0bba6f70bcbea9a2c4e133e34b46")!, // "hash":
