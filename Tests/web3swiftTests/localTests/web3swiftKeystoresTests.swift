@@ -9,7 +9,7 @@ import CryptoSwift
 
 @testable import web3swift
 
-class web3swiftKeystoresTests: LocalTestCase {z
+class web3swiftKeystoresTests: LocalTestCase {
 
     let mnemonic = "fruit wave dwarf banana earth journey tattoo true farm silk olive fence"
 
