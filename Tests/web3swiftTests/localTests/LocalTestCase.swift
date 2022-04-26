@@ -16,7 +16,7 @@ class LocalTestCase: XCTestCase {
 
         // check to see if we need to run the one-time setup
         if isSetUp { return }
-        isSetUp = true;
+        isSetUp = true
 
         let web3 = try! Web3.new(LocalTestCase.url)
 
