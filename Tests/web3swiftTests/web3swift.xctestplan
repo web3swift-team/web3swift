@@ -19,6 +19,9 @@
   "testTargets" : [
     {
       "parallelizable" : true,
+      "skippedTests" : [
+        "LocalTestCase"
+      ],
       "target" : {
         "containerPath" : "container:web3swift.xcodeproj",
         "identifier" : "139751B6219AF76D0044D2B0",
