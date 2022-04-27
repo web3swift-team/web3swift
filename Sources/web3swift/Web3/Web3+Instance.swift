@@ -6,28 +6,22 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+
 
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
     public var provider: Web3Provider
     public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
     public var defaultBlock = "latest"
-    public var requestDispatcher: JSONRPCrequestDispatcher
 
     /// Add a provider request to the dispatch queue.
-    public func dispatch(_ request: JSONRPCrequest) -> Promise<JSONRPCresponse> {
-        return self.requestDispatcher.addToQueue(request: request)
+    public func dispatch(_ request: JSONRPCrequest) async throws -> JSONRPCresponse {
+         try await provider.sendAsync(request)
     }
 
     /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
-    public init(provider prov: Web3Provider, queue: OperationQueue? = nil, requestDispatcher: JSONRPCrequestDispatcher? = nil) {
+    public init(provider prov: Web3Provider) {
         provider = prov
-        if requestDispatcher == nil {
-            self.requestDispatcher = JSONRPCrequestDispatcher(provider: provider, queue: DispatchQueue.global(qos: .userInteractive), policy: .Batch(32))
-        } else {
-            self.requestDispatcher = requestDispatcher!
-        }
     }
 
     /// Keystore manager can be bound to Web3 instance. If some manager is bound all further account related functions, such
@@ -166,12 +160,11 @@ public class web3 {
 
     public class Eventloop: TransactionOptionsInheritable {
 
-        public typealias EventLoopCall = (web3) -> Void
+        public typealias EventLoopCall = (web3) async -> Void
         public typealias EventLoopContractCall = (web3contract) -> Void
 
         public struct MonitoredProperty {
             public var name: String
-            public var queue: DispatchQueue
             public var calledFunction: EventLoopCall
         }
 
@@ -206,17 +199,14 @@ public class web3 {
     public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> ()
 
     public struct AssemblyHook {
-        public var queue: DispatchQueue
         public var function: AssemblyHookFunction
     }
 
     public struct SubmissionHook {
-        public var queue: DispatchQueue
         public var function: SubmissionHookFunction
     }
 
     public struct SubmissionResultHook {
-        public var queue: DispatchQueue
         public var function: SubmissionResultHookFunction
     }
 

@@ -55,17 +55,17 @@ public extension ENS {
             return transaction
         }
 
-        public func getNameExpirity(name: BigUInt) throws -> BigUInt {
+        public func getNameExpirity(name: BigUInt) async throws -> BigUInt {
             guard let transaction = self.contract.read("nameExpires", parameters: [name as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
-            guard let result = try? transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
+            guard let result = try? await transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let expirity = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Can't get answer")}
             return expirity
         }
 
         @available(*, message: "This function should not be used to check if a name can be registered by a user. To check if a name can be registered by a user, check name availablility via the controller")
-        public func isNameAvailable(name: BigUInt) throws -> Bool {
+        public func isNameAvailable(name: BigUInt) async throws -> Bool {
             guard let transaction = self.contract.read("available", parameters: [name as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
-            guard let result = try? transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
+            guard let result = try? await transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let available = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Can't get answer")}
             return available
         }

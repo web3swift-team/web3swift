@@ -11,11 +11,11 @@ import XCTest
 // MARK: Works only with network connection
 class InfuraTests: XCTestCase {
     
-    func testGetBalance() throws {
+    func testGetBalance() async throws {
         do {
-            let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+            let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
             let address = EthereumAddress("0xd61b5ca425F8C8775882d4defefC68A6979DBbce")!
-            let balance = try web3.eth.getBalance(address: address)
+            let balance = try await web3.eth.getBalance(address: address)
             let balString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .eth, decimals: 3)
             print(balString!)
         } catch {
@@ -23,22 +23,22 @@ class InfuraTests: XCTestCase {
         }
     }
     
-    func testGetBlockByHash() throws {
-        let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let result = try web3.eth.getBlockByHash("0x6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695", fullTransactions: false)
+    func testGetBlockByHash() async throws {
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let result = try await web3.eth.getBlockByHash("0x6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695", fullTransactions: false)
 
         print(result)
     }
     
-    func testGetBlockByNumber1() throws {
-        let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let result = try web3.eth.getBlockByNumber("latest", fullTransactions: false)
+    func testGetBlockByNumber1() async throws {
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let result = try await web3.eth.getBlockByNumber("latest", fullTransactions: false)
         print(result)
     }
     
-    func testGetBlockByNumber2() throws {
-        let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let result = try web3.eth.getBlockByNumber(UInt64(5184323), fullTransactions: true)
+    func testGetBlockByNumber2() async throws {
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let result = try await web3.eth.getBlockByNumber(UInt64(5184323), fullTransactions: true)
         print(result)
         let transactions = result.transactions
         for transaction in transactions {
@@ -51,32 +51,32 @@ class InfuraTests: XCTestCase {
         }
     }
     
-    func testGetBlockByNumber3() throws {
+    func testGetBlockByNumber3() async throws {
         do {
-            let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-            let _ = try web3.eth.getBlockByNumber(UInt64(1000000000), fullTransactions: true)
+            let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+            let _ = try await web3.eth.getBlockByNumber(UInt64(1000000000), fullTransactions: true)
             XCTFail()
         } catch {
             
         }
     }
     
-    func testGasPrice() throws {
-        let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let response = try web3.eth.getGasPrice()
+    func testGasPrice() async throws {
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let response = try await web3.eth.getGasPrice()
         print(response)
     }
     
-    func testGetIndexedEventsPromise() throws {
+    func testGetIndexedEventsPromise() async throws {
         let jsonString = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"balance\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_extraData\",\"type\":\"bytes\"}],\"name\":\"approveAndCall\",\"outputs\":[{\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"remaining\",\"type\":\"uint256\"}],\"payable\":false,\"type\":\"function\"},{\"inputs\":[{\"name\":\"_initialAmount\",\"type\":\"uint256\"},{\"name\":\"_tokenName\",\"type\":\"string\"},{\"name\":\"_decimalUnits\",\"type\":\"uint8\"},{\"name\":\"_tokenSymbol\",\"type\":\"string\"}],\"type\":\"constructor\"},{\"payable\":false,\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"_spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},]"
-        let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let contract = web3.contract(jsonString, at: nil, abiVersion: 2)
         var filter = EventFilter()
         filter.fromBlock = .blockNumber(UInt64(5200120))
         filter.toBlock = .blockNumber(UInt64(5200120))
         filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
         filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), (nil as [EventFilterable]?)]
-        let eventParserResult = try contract!.getIndexedEventsPromise(eventName: "Transfer", filter: filter, joinWithReceipts: true).wait()
+        let eventParserResult = try await contract!.getIndexedEventsPromise(eventName: "Transfer", filter: filter, joinWithReceipts: true)
         print(eventParserResult)
         XCTAssert(eventParserResult.count == 2)
         XCTAssert(eventParserResult.first?.transactionReceipt != nil)

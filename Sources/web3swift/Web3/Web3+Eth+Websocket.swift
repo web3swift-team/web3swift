@@ -7,7 +7,7 @@
 //
 import Foundation
 import BigInt
-import PromiseKit
+
 import Starscream
 
 extension web3.Eth {

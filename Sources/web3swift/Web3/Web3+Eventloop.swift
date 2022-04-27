@@ -14,12 +14,11 @@ extension web3.Eventloop {
             self.timer!.suspend()
             self.timer = nil
         }
-        let queue = self.web3.requestDispatcher.queue
-        queue.async {
-            self.timer = RepeatingTimer(timeInterval: timeInterval)
-            self.timer?.eventHandler = self.runnable
-            self.timer?.resume()
-        }
+        
+        self.timer = RepeatingTimer(timeInterval: timeInterval)
+        self.timer?.eventHandler = self.runnable
+        self.timer?.resume()
+
     }
 
     public func stop() {
@@ -31,17 +30,16 @@ extension web3.Eventloop {
 
     func runnable() {
         for prop in self.monitoredProperties {
-            let queue = prop.queue
+
             let function = prop.calledFunction
-            queue.async {
-                function(self.web3)
+            Task {
+                await function(self.web3)
             }
         }
 
         for prop in self.monitoredUserFunctions {
-            let queue = prop.queue
-            queue.async {
-                prop.functionToRun()
+            Task {
+                await prop.functionToRun()
             }
         }
     }

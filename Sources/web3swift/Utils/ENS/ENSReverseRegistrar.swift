@@ -50,16 +50,16 @@ public extension ENS {
             return transaction
         }
 
-        public func getReverseRecordName(address: EthereumAddress) throws -> Data {
+        public func getReverseRecordName(address: EthereumAddress) async throws -> Data {
             guard let transaction = self.contract.read("node", parameters: [address] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
-            guard let result = try? transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
+            guard let result = try? await transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let name = result["0"] as? Data else {throw Web3Error.processingError(desc: "Can't get answer")}
             return name
         }
 
-        public func getDefaultResolver() throws -> EthereumAddress {
+        public func getDefaultResolver() async throws -> EthereumAddress {
             guard let transaction = self.contract.read("defaultResolver", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
-            guard let result = try? transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
+            guard let result = try? await transaction.call(transactionOptions: defaultOptions) else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let address = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Can't get answer")}
             return address
         }
