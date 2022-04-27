@@ -128,7 +128,10 @@ extension Web3 {
             case let .exact(number): latestBlockNumber = number
             }
 
-            guard latestBlockNumber != 0 else { return [] }
+            /// checking if latest block number is greather than number of blocks to take in account
+            /// we're ignoring case when `latestBlockNumber` == `blockCount` since it's unlikely case
+            /// which we could neglect
+            guard latestBlockNumber > blockCount else { return [] }
 
             // TODO: Make me work with cache
             let lastNthBlockGasPrice = try (latestBlockNumber - blockCount ... latestBlockNumber)
