@@ -13,11 +13,7 @@ import BigInt
 // MARK: Works only with network connection
 class OracleTests: XCTestCase {
 
-
-
     let blockNumber: BigUInt = 14571792
-
-
 
     func testPretictBaseFee() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
