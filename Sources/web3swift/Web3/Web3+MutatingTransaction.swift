@@ -62,48 +62,107 @@ public class WriteTransaction: ReadTransaction {
         optionsForGasEstimation.gasLimit = mergedOptions.gasLimit
         optionsForGasEstimation.callOnBlock = mergedOptions.callOnBlock
 
-            // assemble promise for gasLimit
-
+        // assemble gasLimit async call
+        let assembledTransactionPostHood = assembledTransaction
+        let optionsForGasEstimationPostHood = optionsForGasEstimation
         guard let gasLimitPolicy = mergedOptions.gasLimit else {
             throw Web3Error.inputError(desc: "No gasLimit policy provided")
         }
+        async let gasEstimateAsync = gasEstimate(for: gasLimitPolicy, assembledTransaction: assembledTransactionPostHood, optionsForGasEstimation: optionsForGasEstimationPostHood)
 
-        guard let gasPricePolicy = mergedOptions.gasPrice else {
-            throw Web3Error.inputError(desc: "No gasPrice policy provided")
-        }
-
+        // assemble nonce async call
         guard let noncePolicy = mergedOptions.nonce else {
             throw Web3Error.inputError(desc: "No nonce policy provided")
         }
+        async let getNonceAsync = nonce(for: noncePolicy, from: from)
 
+        // determine gas costing, taking transaction type into account
+        let oracle = Web3.Oracle(self.web3, percentiles: [75])
+        let finalGasPrice: BigUInt? // legacy gas model
+        let finalGasFee: BigUInt? // EIP-1559 gas model
+        let finalTipFee: BigUInt? // EIP-1559 gas model
 
-        let assembledTransactionPostHood = assembledTransaction
-        let optionsForGasEstimationPostHood = optionsForGasEstimation
+            if mergedOptions.type == nil || mergedOptions.type != .eip1559 { // legacy Gas
+                // set unused gas parameters to nil
+                finalGasFee = nil
+                finalTipFee = nil
 
-        async let gasEstimatePromise = gasEstimate(for: gasLimitPolicy, assembledTransaction: assembledTransactionPostHood, optionsForGasEstimation: optionsForGasEstimationPostHood)
+                // determine the (legacy) gas price
+                guard let gasPricePolicy = mergedOptions.gasPrice else {
+                    throw Web3Error.inputError(desc: "No gasPrice policy provided")
+                }
+                switch gasPricePolicy {
+                case .automatic, .withMargin:
+                    let percentiles = await oracle.gasPriceLegacyPercentiles()
+                    guard !percentiles.isEmpty else {
+                        throw Web3Error.processingError(desc: "Failed to fetch gas price")
+                    }
+                    finalGasPrice = percentiles[0]
+                case .manual(let gasPrice):
+                    finalGasPrice = gasPrice
+                }
+            } else { // else new gas fees (EIP-1559)
+                // set unused gas parametes to nil
+                finalGasPrice = nil
 
-        // assemble promise for nonce
-        async let getNoncePromise = nonce(for: noncePolicy, from: from)
+                // determine the tip
+                guard let maxPriorityFeePerGasPolicy = mergedOptions.maxPriorityFeePerGas else {
+                    throw Web3Error.inputError(desc: "No maxPriorityFeePerGas policy provided")
+                }
+                switch maxPriorityFeePerGasPolicy {
+                case .automatic:
+                    let percentiles = await oracle.tipFeePercentiles()
+                    guard !percentiles.isEmpty else {
+                        throw Web3Error.processingError(desc: "Failed to fetch maxPriorityFeePerGas data")
+                    }
+                    finalTipFee = percentiles[0]
+                case .manual(let maxPriorityFeePerGas):
+                    finalTipFee = maxPriorityFeePerGas
+                }
 
+                // determine the baseFee, and calculate the maxFeePerGas
+                guard let maxFeePerGasPolicy = mergedOptions.maxFeePerGas else {
+                    throw Web3Error.inputError(desc: "No maxFeePerGas policy provided")
+                }
+                switch maxFeePerGasPolicy {
+                case .automatic:
+                    let percentiles = await oracle.baseFeePercentiles()
+                    guard !percentiles.isEmpty else {
+                        throw Web3Error.processingError(desc: "Failed to fetch baseFee data")
+                    }
+                    guard let tipFee = finalTipFee else {
+                        throw Web3Error.processingError(desc: "Missing tip value")
+                    }
+                    finalGasFee = percentiles[0] + tipFee
+                case .manual(let maxFeePerGas):
+                    finalGasFee = maxFeePerGas
+                }
+            }
 
-        // assemble promise for gasPrice
-        async let gasPricePromise = gasPrice(for: gasPricePolicy)
-
-
-        let results = try await [getNoncePromise, gasPricePromise, gasEstimatePromise]
+        // wait for async calls to complete
+        let results = try await [getNonceAsync, gasEstimateAsync]
 
         let nonce = results[0]
         let gasEstimate = results[1]
-        let gasPrice = results[2]
-
-
-        let estimate = mergedOptions.resolveGasLimit(gasEstimate)
-        let finalGasPrice = mergedOptions.resolveGasPrice(gasPrice)
 
         var finalOptions = TransactionOptions()
+        finalOptions.type = mergedOptions.type
         finalOptions.nonce = .manual(nonce)
-        finalOptions.gasLimit = .manual(estimate)
-        finalOptions.gasPrice = .manual(finalGasPrice)
+        finalOptions.gasLimit = .manual(mergedOptions.resolveGasLimit(gasEstimate))
+        finalOptions.accessList = mergedOptions.accessList
+
+        // set the finalized gas parameters
+        if let gasPrice = finalGasPrice {
+            finalOptions.gasPrice = .manual(mergedOptions.resolveGasPrice(gasPrice))
+        }
+
+        if let tipFee = finalTipFee {
+            finalOptions.maxPriorityFeePerGas = .manual(mergedOptions.resolveMaxPriorityFeePerGas(tipFee))
+        }
+
+        if let gasFee = finalGasFee {
+            finalOptions.maxFeePerGas = .manual(mergedOptions.resolveMaxFeePerGas(gasFee))
+        }
 
         assembledTransaction.applyOptions(finalOptions)
 
@@ -119,7 +178,6 @@ public class WriteTransaction: ReadTransaction {
                 throw Web3Error.processingError(desc: "Transaction is canceled by middleware")
             }
         }
-
 
         return assembledTransaction
 
@@ -138,8 +196,9 @@ public class WriteTransaction: ReadTransaction {
         return try await self.assembleTransaction(transactionOptions: transactionOptions)
     }
 
-    func gasEstimate(for policy:  TransactionOptions.GasLimitPolicy
-                     , assembledTransaction: EthereumTransaction, optionsForGasEstimation: TransactionOptions) async throws -> BigUInt {
+    func gasEstimate(for policy: TransactionOptions.GasLimitPolicy,
+                     assembledTransaction: EthereumTransaction,
+                     optionsForGasEstimation: TransactionOptions) async throws -> BigUInt {
         switch policy {
         case .automatic, .withMargin, .limited:
             return try await self.web3.eth.estimateGas(for: assembledTransaction, transactionOptions: optionsForGasEstimation)
@@ -148,7 +207,7 @@ public class WriteTransaction: ReadTransaction {
         }
     }
 
-    func nonce(for policy:  TransactionOptions.NoncePolicy,  from: EthereumAddress) async throws -> BigUInt {
+    func nonce(for policy: TransactionOptions.NoncePolicy, from: EthereumAddress) async throws -> BigUInt {
         switch policy {
         case .latest:
             return try await self.web3.eth.getTransactionCount(address: from, onBlock: "latest")
@@ -156,15 +215,6 @@ public class WriteTransaction: ReadTransaction {
             return try await self.web3.eth.getTransactionCount(address: from, onBlock: "pending")
         case .manual(let nonce):
             return nonce
-        }
-    }
-
-    func gasPrice(for policy:  TransactionOptions.GasPricePolicy) async throws -> BigUInt {
-        switch policy {
-        case .automatic, .withMargin:
-            return try await self.web3.eth.gasPrice()
-        case .manual(let gasPrice):
-            return gasPrice
         }
     }
 }
