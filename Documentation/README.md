@@ -74,11 +74,13 @@ Here are quick references for essential features:
     
     - [x] [EIP-155](https://github.com/ethereum/EIPs/blob/develop/EIPS/eip-155.md) (Replay attacks protection) *enforced!*
     
+    - [x] [EIP-165](https://github.com/ethereum/EIPs/blob/develop/EIPS/eip-165.md) (Standard Interface Detection, also known as ERC-165)
+    
     - [x] [EIP-681](https://github.com/ethereum/EIPs/blob/develop/EIPS/eip-681.md) (A standard way of representing various transactions, especially payment requests in Ethers and ERC-20 tokens as URLs)
     
     - [x] [EIP-721](https://github.com/ethereum/EIPs/blob/develop/EIPS/eip-721.md) (A standard interface for non-fungible tokens, also known as deeds - ERC-721)
     
-    - [x] [EIP-165](https://github.com/ethereum/EIPs/blob/develop/EIPS/eip-165.md) (Standard Interface Detection, also known as ERC-165)
+    - [x] [EIP-721x](https://github.com/loomnetwork/erc721x) (An extension of ERC721 that adds support for multi-fungible tokens and batch transfers, while being fully backward-compatible, also known as ERC-721x)
     
     - [x] [EIP-777](https://github.com/ethereum/EIPs/blob/develop/EIPS/eip-777.md) (New Advanced Token Standard, also known as ERC-777)
     
@@ -86,23 +88,27 @@ Here are quick references for essential features:
     
     - [x] [EIP-888](https://github.com/ethereum/EIPs/issues/888) (MultiDimensional Token Standard, also known as ERC-888)
     
+    - [x] [EIP-1155](https://github.com/ethereum/EIPs/blob/develop/EIPS/eip-1155.md) (Multi Token Standard, also known as ERC-1155)
+    
+    - [x] [EIP-1376](https://github.com/ethereum/EIPs/issues/1376) (Service-Friendly Token, also known as ERC-1376)
+    
     - [x] [EIP-1400](https://github.com/ethereum/EIPs/issues/1411) (Security Token Standard, also known as ERC-1400)
     
     - [x] [EIP-1410](https://github.com/ethereum/EIPs/issues/1410) (Partially Fungible Token Standard, also known as ERC-1410)
     
+    - [x] [EIP-1559](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md) (Fee market change for ETH 1.0 chain)
+    
     - [x] [EIP-1594](https://github.com/ethereum/EIPs/issues/1594) (Core Security Token Standard, also known as ERC-1594)
+    
+    - [x] [EIP-1633](https://github.com/ethereum/EIPs/issues/1634) (Re-Fungible Token, also known as ERC-1633)
     
     - [x] [EIP-1643](https://github.com/ethereum/EIPs/issues/1643) (Document Management Standard, also known as ERC-1643)
     
     - [x] [EIP-1644](https://github.com/ethereum/EIPs/issues/1644) (Controller Token Operation Standard, also known as ERC-1644)
     
-    - [x] [EIP-1633](https://github.com/ethereum/EIPs/issues/1634) (Re-Fungible Token, also known as ERC-1633)
+    - [x] [EIP-2718](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2718.md) (Typed Transaction Envelope)
     
-    - [x] [EIP-721x](https://github.com/loomnetwork/erc721x) (An extension of ERC721 that adds support for multi-fungible tokens and batch transfers, while being fully backward-compatible, also known as ERC-721x)
-    
-    - [x] [EIP-1155](https://github.com/ethereum/EIPs/blob/develop/EIPS/eip-1155.md) (Multi Token Standard, also known as ERC-1155)
-    
-    - [x] [EIP-1376](https://github.com/ethereum/EIPs/issues/1376) (Service-Friendly Token, also known as ERC-1376)
+    - [x] [EIP-2930](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2930.md) (Optional access lists)
     
     - [x] [ST-20](https://github.com/PolymathNetwork/polymath-core) - ST-20 token is an Ethereum-based token implemented on top of the ERC-20 protocol that adds the ability for tokens to control transfers based on specific rules
     

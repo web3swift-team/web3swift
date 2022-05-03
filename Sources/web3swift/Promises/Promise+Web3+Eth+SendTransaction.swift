@@ -9,18 +9,18 @@ import BigInt
 import PromiseKit
 
 extension web3.Eth {
-    
-    public func sendTransactionPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions? = nil, password:String = "web3swift") -> Promise<TransactionSendingResult> {
-//        print(transaction)
-        var assembledTransaction : EthereumTransaction = transaction // .mergedWithOptions(transactionOptions)
+
+    public func sendTransactionPromise(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions? = nil, password: String = "web3swift") -> Promise<TransactionSendingResult> {
+        //  print(transaction)
+        var assembledTransaction: EthereumTransaction = transaction
         let queue = web3.requestDispatcher.queue
         do {
             var mergedOptions = self.web3.transactionOptions.merge(transactionOptions)
-            
-            var forAssemblyPipeline : (EthereumTransaction, TransactionOptions) = (assembledTransaction, mergedOptions)
-            
+
+            var forAssemblyPipeline: (EthereumTransaction, TransactionOptions) = (assembledTransaction, mergedOptions)
+
             for hook in self.web3.preSubmissionHooks {
-                let prom : Promise<Bool> = Promise<Bool> {seal in
+                let prom: Promise<Bool> = Promise<Bool> {seal in
                     hook.queue.async {
                         let hookResult = hook.function(forAssemblyPipeline)
                         if hookResult.2 {
@@ -34,10 +34,10 @@ extension web3.Eth {
                     throw Web3Error.processingError(desc: "Transaction is canceled by middleware")
                 }
             }
-            
+
             assembledTransaction = forAssemblyPipeline.0
             mergedOptions = forAssemblyPipeline.1
-            
+
             if self.web3.keystoreManager == nil {
                 guard let request = EthereumTransaction.createRequest(method: .sendTransaction, transaction: assembledTransaction, transactionOptions: mergedOptions) else
                 {

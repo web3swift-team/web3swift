@@ -8,34 +8,33 @@
 
 import Foundation
 import BigInt
-//import EthereumAddress
 import PromiseKit
 
-//MultiDimensional Token Standard
+// MultiDimensional Token Standard
 protocol IERC888 {
     func getBalance(account: EthereumAddress) throws -> BigUInt
     func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) throws -> WriteTransaction
 }
 
 public class ERC888: IERC888 {
-    
+
     private var _name: String? = nil
     private var _symbol: String? = nil
     private var _decimals: UInt8? = nil
     private var _hasReadProperties: Bool = false
-    
+
     public var transactionOptions: TransactionOptions
     public var web3: web3
     public var provider: Web3Provider
     public var address: EthereumAddress
     public var abi: String
-    
+
     lazy var contract: web3.web3contract = {
         let contract = self.web3.contract(self.abi, at: self.address, abiVersion: 2)
         precondition(contract != nil)
         return contract!
     }()
-    
+
     public init(web3: web3, provider: Web3Provider, address: EthereumAddress, abi: String = Web3.Utils.erc888ABI) {
         self.web3 = web3
         self.provider = provider
@@ -45,7 +44,7 @@ public class ERC888: IERC888 {
         self.abi = abi
         self.transactionOptions = mergedOptions
     }
-    
+
     public var name: String {
         self.readProperties()
         if self._name != nil {
@@ -53,7 +52,7 @@ public class ERC888: IERC888 {
         }
         return ""
     }
-    
+
     public var symbol: String {
         self.readProperties()
         if self._symbol != nil {
@@ -61,7 +60,7 @@ public class ERC888: IERC888 {
         }
         return ""
     }
-    
+
     public var decimals: UInt8 {
         self.readProperties()
         if self._decimals != nil {
@@ -69,7 +68,7 @@ public class ERC888: IERC888 {
         }
         return 255
     }
-    
+
     public func readProperties() {
         if self._hasReadProperties {
             return
@@ -79,30 +78,30 @@ public class ERC888: IERC888 {
         var transactionOptions = TransactionOptions.defaultOptions
         transactionOptions.callOnBlock = .latest
         guard let namePromise = contract.read("name", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
-        
+
         guard let symbolPromise = contract.read("symbol", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
-        
+
         guard let decimalPromise = contract.read("decimals", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.callPromise() else {return}
-        
+
         let allPromises = [namePromise, symbolPromise, decimalPromise]
         let queue = self.web3.requestDispatcher.queue
         when(resolved: allPromises).map(on: queue) { (resolvedPromises) -> Void in
             guard case .fulfilled(let nameResult) = resolvedPromises[0] else {return}
             guard let name = nameResult["0"] as? String else {return}
             self._name = name
-            
+
             guard case .fulfilled(let symbolResult) = resolvedPromises[1] else {return}
             guard let symbol = symbolResult["0"] as? String else {return}
             self._symbol = symbol
-            
+
             guard case .fulfilled(let decimalsResult) = resolvedPromises[2] else {return}
             guard let decimals = decimalsResult["0"] as? BigUInt else {return}
             self._decimals = UInt8(decimals)
-            
+
             self._hasReadProperties = true
             }.wait()
     }
-    
+
     public func getBalance(account: EthereumAddress) throws -> BigUInt {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
@@ -111,21 +110,21 @@ public class ERC888: IERC888 {
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
-    
+
     public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) throws -> WriteTransaction {
         let contract = self.contract
         var basicOptions = TransactionOptions()
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
-        
+
         // get the decimals manually
         let callResult = try contract.read("decimals", transactionOptions: basicOptions)!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
         decimals = decTyped
-        
+
         let intDecimals = Int(decimals)
         guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
@@ -133,6 +132,5 @@ public class ERC888: IERC888 {
         let tx = contract.write("transfer", parameters: [to, value] as [AnyObject], transactionOptions: basicOptions)!
         return tx
     }
-    
-}
 
+}
