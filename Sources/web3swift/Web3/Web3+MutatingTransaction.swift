@@ -180,7 +180,6 @@ public class WriteTransaction: ReadTransaction {
         }
 
         return assembledTransaction
-
     }
 
     public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult {
