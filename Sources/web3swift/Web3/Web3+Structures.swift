@@ -403,6 +403,7 @@ public enum FilterChanges: Decodable {
 }
 
 public struct BlockHeader: Decodable {
+    public let hash: String
     public let difficulty: String
     public let extraData: String
     public let gasLimit: String

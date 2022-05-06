@@ -2,6 +2,8 @@ import BigInt
 import CryptoSwift
 import Foundation
 
+// TODO: Refactor me
+
 struct EIP712Domain: EIP712DomainHashable {
     let chainId:            EIP712.UInt256?
     let verifyingContract:  EIP712.Address
@@ -20,28 +22,42 @@ public struct SafeTx: EIP712Hashable {
     let gasToken:       EIP712.Address
     let refundReceiver: EIP712.Address
     let nonce:          EIP712.UInt256
+
+    public init(to: EIP712.Address, value: EIP712.UInt256, data: EIP712.Bytes, operation: EIP712.UInt8, safeTxGas: EIP712.UInt256, baseGas: EIP712.UInt256, gasPrice: EIP712.UInt256, gasToken: EIP712.Address, refundReceiver: EIP712.Address, nonce: EIP712.UInt256) {
+        self.to = to
+        self.value = value
+        self.data = data
+        self.operation = operation
+        self.safeTxGas = safeTxGas
+        self.baseGas = baseGas
+        self.gasPrice = gasPrice
+        self.gasToken = gasToken
+        self.refundReceiver = refundReceiver
+        self.nonce = nonce
+    }
+
 }
 
 /// Protocol defines EIP712 struct encoding
-protocol EIP712Hashable {
+public protocol EIP712Hashable {
     var typehash: Data { get }
     func hash() throws -> Data
 }
 
-class EIP712 {
-    typealias Address = EthereumAddress
-    typealias UInt256 = BigUInt
-    typealias UInt8 = Swift.UInt8
-    typealias Bytes = Data
+public class EIP712 {
+    public typealias Address = EthereumAddress
+    public typealias UInt256 = BigUInt
+    public typealias UInt8 = Swift.UInt8
+    public typealias Bytes = Data
 }
 
-extension EIP712.Address {
+public extension EIP712.Address {
     static var zero: Self {
         EthereumAddress(Data(count: 20))!
     }
 }
 
-extension EIP712Hashable {
+public extension EIP712Hashable {
     private var name: String {
         let fullName = "\(Self.self)"
         let name = fullName.components(separatedBy: ".").last ?? fullName
