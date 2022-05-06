@@ -21,7 +21,8 @@
         "RemoteParsingTests",
         "RemoteTests",
         "ST20AndSecurityTokenTests",
-        "WebsocketTests"
+        "WebsocketTests",
+        "LocalTestCase"
       ],
       "target" : {
         "containerPath" : "container:web3swift.xcodeproj",

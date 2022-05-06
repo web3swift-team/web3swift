@@ -359,8 +359,8 @@ let result = try! transaction.call()
 ##### Other Transaction Types
 
 By default a `legacy` transaction will be created which is compatible across all chains, regardless of which fork.
-To create one of the new transaction types introduced with the `london` fork you will need to set some additonal parameters 
-in the `TransactionOptions` object. Note you should only try to send one of tehse new types of transactions if you are on a chain 
+To create one of the new transaction types introduced with the `london` fork you will need to set some additional parameters 
+in the `TransactionOptions` object. Note you should only try to send one of these new types of transactions if you are on a chain 
 that supports them.
 
 To send an EIP-2930 style transacton with an access list you need to set the transaction type, and the access list, 
@@ -385,10 +385,10 @@ To send an EIP-1559 style transaction you set the transaction type, and the new 
 (you may also send an AccessList with an EIP-1559 transaction) When sending an EIP-1559 transaction, the older `gasPrice` parameter is ignored.
 ```swift
 options.type = .eip1559
-options.maxFeePerGas = .manual(...) // the maximum price per unit of gas, inclusive of baseFee and tip
-options.maxPriorityFeePerGas = .manual(...) // the tip to be paid to the miner, per unit of gas
+options.maxFeePerGas = .automatic // the maximum price per unit of gas, inclusive of baseFee and tip
+options.maxPriorityFeePerGas = .automatic // the 'tip' to be paid to the miner, per unit of gas
 ```
-Note there is a new `Oracle` object available that can be used to assist with estimating the new gas fees
+Note: There is a new `Oracle` object available that can be used to assist with estimating the new gas fees if you wish to set them manually.
 
 ### Chain state
 
