@@ -11,7 +11,7 @@ import BigInt
 import Foundation
 
 public protocol Web3SocketDelegate {
-    func socketConnected(_ headers: [String:String])
+    func socketConnected(_ headers: [String: String])
     func gotError(error: Error)
 }
 
@@ -19,7 +19,7 @@ public struct DefaultWeb3SocketDelegate: Web3SocketDelegate {
     public func socketConnected(_ headers: [String : String]) {
         print("DefaultWeb3SocketDelegate.socketConnected: \(headers)")
     }
-    
+
     public func gotError(error: Error) {
         print("DefaultWeb3SocketDelegate.gotError: \(String(describing: error))")
     }
@@ -28,11 +28,11 @@ public struct DefaultWeb3SocketDelegate: Web3SocketDelegate {
 public class WebsocketSubscription: Subscription {
     public var id: String? = nil
     private let unsubscribeCallback: (WebsocketSubscription) -> Void
-    
+
     public init(unsubscribeCallback: @escaping (WebsocketSubscription) -> Void) {
         self.unsubscribeCallback = unsubscribeCallback
     }
-    
+
     public func unsubscribe() {
         unsubscribeCallback(self)
     }
@@ -43,7 +43,7 @@ public struct JSONRPCSubscriptionEvent<R: Decodable>: Decodable {
         public let result: R
         public let subscription: String
     }
-    
+
     public let method: String
     public let params: Params
 }
@@ -85,29 +85,29 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
             }
         }
     }
-    
+
     public func sendAsync(_ requests: JSONRPCrequestBatch, queue: DispatchQueue) -> Promise<JSONRPCresponseBatch> {
         when(fulfilled: requests.requests.map { sendAsync($0, queue: queue) }).map { responses in
             JSONRPCresponseBatch(responses: responses)
         }
     }
-    
+
     public var network: Networks?
     public var url: URL
-    
+
     public var socket: WebSocket
     public var delegate: Web3SocketDelegate
     /// A flag that is true if socket connected or false if socket doesn't connected.
     public var websocketConnected: Bool = false
-    
+
     /// if set debugMode True then show websocket events logs in the console
     public var debugMode: Bool = false
-    
+
     private var subscriptions = [String: (sub: WebsocketSubscription, cb: (Swift.Result<Data, Error>) -> Void)]()
     private var requests = [UInt64: (Swift.Result<JSONRPCresponse, Error>) -> Void]()
     private var pendingRequests = [() -> Void]()
     private var internalQueue: DispatchQueue
-    
+
     public init?(_ endpoint: URL,
                  delegate wsdelegate: Web3SocketDelegate? = nil,
                  network: Networks) {
@@ -122,14 +122,14 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
         socket = WebSocket(request: request)
         socket.delegate = self
     }
-    
+
     public convenience init?(_ endpoint: String,
                  delegate wsdelegate: Web3SocketDelegate? = nil,
                  network: Networks) {
         guard let url = URL(string: endpoint) else {return nil}
         self.init(url, delegate: wsdelegate, network: network)
     }
-    
+
     public func subscribe<R>(filter: SubscribeEventFilter,
                              queue: DispatchQueue,
                              listener: @escaping Web3SubscriptionListener<R>) -> Subscription {
@@ -179,19 +179,19 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
             return subscription
         }
     }
-    
+
     public func connectSocket() {
         socket.connect()
     }
-    
+
     public func disconnectSocket() {
         socket.disconnect()
     }
-    
+
     public func isConnect() -> Bool {
         return websocketConnected
     }
-    
+
     public class func connectToSocket(_ endpoint: String,
                                       delegate: Web3SocketDelegate? = nil,
                                       network net: Networks) -> WebsocketProvider? {
@@ -203,7 +203,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
         socketProvider.connectSocket()
         return socketProvider
     }
-    
+
     public class func connectToSocket(_ endpoint: URL,
                                       delegate: Web3SocketDelegate? = nil,
                                       network net: Networks) -> WebsocketProvider? {
@@ -215,7 +215,7 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
         socketProvider.connectSocket()
         return socketProvider
     }
-    
+
     public func didReceive(event: WebSocketEvent, client: WebSocket) {
         switch event {
         case .connected(let headers):
@@ -256,14 +256,14 @@ public class WebsocketProvider: Web3SubscriptionProvider, WebSocketDelegate {
             delegate.gotError(error: error!)
         }
     }
-    
+
     private func connected() {
         internalQueue.sync {
             pendingRequests.forEach { $0() }
             pendingRequests.removeAll()
         }
     }
-    
+
     private func websocketDidReceiveMessage(text: String) {
         if let data = text.data(using: String.Encoding.utf8),
            let dictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {

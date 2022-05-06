@@ -1,12 +1,11 @@
-// swift-tools-version:5.4
+// swift-tools-version: 5.4
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
-
 #if os(macOS)
 let excludeFiles = [
-    "./Browser/BrowserViewController.swift", // Because of inheriting iOS only class failed to build on macOS.
+    "./Browser/BrowserViewController.swift" // Because of inheriting iOS only class failed to build on macOS.
 ]
 #elseif os(iOS)
 let excludeFiles: String = []
@@ -20,7 +19,7 @@ let package = Package(
     products: [
         .library(name: "web3swift", targets: ["web3swift"])
     ],
-    
+
     dependencies: [
         .package(url: "https://github.com/attaswift/BigInt.git", from: "5.3.0"),
         .package(url: "https://github.com/mxcl/PromiseKit.git", from: "6.16.2"),
@@ -42,7 +41,7 @@ let package = Package(
         .testTarget(
             name: "localTests",
             dependencies: ["web3swift"],
-            path: "Tests/web3swiftTests/local_tests",
+            path: "Tests/web3swiftTests/localTests",
             resources: [
                 .copy("../../../TestToken/Helpers/SafeMath/SafeMath.sol"),
                 .copy("../../../TestToken/Helpers/TokenBasics/ERC20.sol"),
@@ -53,13 +52,13 @@ let package = Package(
         .testTarget(
             name: "remoteTests",
             dependencies: ["web3swift"],
-            path: "Tests/web3swiftTests/infura_tests",
+            path: "Tests/web3swiftTests/remoteTests",
             resources: [
                 .copy("../../../TestToken/Helpers/SafeMath/SafeMath.sol"),
                 .copy("../../../TestToken/Helpers/TokenBasics/ERC20.sol"),
                 .copy("../../../TestToken/Helpers/TokenBasics/IERC20.sol"),
                 .copy("../../../TestToken/Token/Web3SwiftToken.sol")
             ]
-        ),
+        )
     ]
 )

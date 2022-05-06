@@ -16,7 +16,6 @@ public protocol Web3Provider {
     var url: URL {get}
 }
 
-
 /// The default http provider.
 public class Web3HttpProvider: Web3Provider {
     public var url: URL
@@ -50,4 +49,3 @@ public class Web3HttpProvider: Web3Provider {
         }
     }
 }
-

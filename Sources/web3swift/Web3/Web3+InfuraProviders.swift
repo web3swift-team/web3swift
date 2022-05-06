@@ -8,9 +8,9 @@ import Starscream
 
 /// Custom Web3 HTTP provider of Infura nodes.
 public final class InfuraProvider: Web3HttpProvider {
-    public init?(_ net:Networks, accessToken token: String? = nil) {
+    public init?(_ net: Networks, accessToken token: String? = nil) {
         var requestURLstring = "https://" + net.name + Constants.infuraHttpScheme
-        requestURLstring += token != nil ? token! : Constants.infuraToken
+        requestURLstring += token ?? Constants.infuraToken
         let providerURL = URL(string: requestURLstring)
         super.init(providerURL!, network: net)
     }
@@ -31,7 +31,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         guard let url = URL(string: urlString) else {return nil}
         super.init(url, delegate: delegate, network: network)
     }
-    
+
     public init?(_ endpoint: String,
                  delegate: Web3SocketDelegate? = nil,
                  projectId: String? = nil) {
@@ -63,35 +63,35 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         guard let url = URL(string: endpoint) else {return nil}
         super.init(url, delegate: delegate, network: network)
     }
-    
+
     public convenience init?(_ endpoint: URL,
-                 delegate: Web3SocketDelegate? = nil,
-                 projectId: String? = nil) {
+                             delegate: Web3SocketDelegate? = nil,
+                             projectId: String? = nil) {
         self.init(endpoint.absoluteString, delegate: delegate, projectId: projectId)
     }
-    
+
     public class func connectToSocket(_ endpoint: String,
-                                               delegate: Web3SocketDelegate? = nil,
-                                               projectId: String? = nil,
-                                               network net: Networks? = nil) -> WebsocketProvider? {
+                                      delegate: Web3SocketDelegate? = nil,
+                                      projectId: String? = nil,
+                                      network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(endpoint,
                                                            delegate: delegate,
                                                            projectId: projectId) else {return nil}
         socketProvider.connectSocket()
         return socketProvider
     }
-    
+
     public class func connectToSocket(_ endpoint: URL,
-                                               delegate: Web3SocketDelegate? = nil,
-                                               projectId: String? = nil,
-                                               network net: Networks? = nil) -> WebsocketProvider? {
+                                      delegate: Web3SocketDelegate? = nil,
+                                      projectId: String? = nil,
+                                      network net: Networks? = nil) -> WebsocketProvider? {
         guard let socketProvider = InfuraWebsocketProvider(endpoint,
                                                            delegate: delegate,
                                                            projectId: projectId) else {return nil}
         socketProvider.connectSocket()
         return socketProvider
     }
-    
+
     public static func connectToInfuraSocket(_ network: Networks,
                                              delegate: Web3SocketDelegate,
                                              projectId: String? = nil) -> InfuraWebsocketProvider? {

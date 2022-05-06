@@ -4,7 +4,6 @@
 
 import Foundation
 
-
 public struct KdfParamsV3: Decodable, Encodable {
     var salt: String
     var dklen: Int
@@ -28,7 +27,6 @@ public struct CryptoParamsV3: Decodable, Encodable {
     var mac: String
     var version: String?
 }
-
 
 public protocol AbstractKeystoreParams: Codable {
     var crypto: CryptoParamsV3 { get }
@@ -62,7 +60,7 @@ public struct KeystoreParamsBIP32: AbstractKeystoreParams {
             }
         }
     }
-    
+
     var pathAddressPairs: [PathAddressPair]
     var rootPath: String?
 
@@ -76,7 +74,6 @@ public struct KeystoreParamsBIP32: AbstractKeystoreParams {
     }
 
 }
-
 
 public struct KeystoreParamsV3: AbstractKeystoreParams {
     public var crypto: CryptoParamsV3

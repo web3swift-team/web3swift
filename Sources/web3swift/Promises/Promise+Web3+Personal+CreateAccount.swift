@@ -7,10 +7,9 @@
 import Foundation
 import BigInt
 import PromiseKit
-//import EthereumAddress
 
 extension web3.Personal {
-    public func createAccountPromise(password:String = "web3swift") -> Promise<EthereumAddress> {
+    public func createAccountPromise(password: String = "web3swift") -> Promise<EthereumAddress> {
         let queue = web3.requestDispatcher.queue
         do {
             if self.web3.signer == nil {

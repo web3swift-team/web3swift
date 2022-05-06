@@ -6,10 +6,9 @@
 
 import Foundation
 import BigInt
-//import EthereumAddress
 
 extension web3.Eth {
-    
+
     /// Send an EthereumTransaction object to the network. Transaction is either signed locally if there is a KeystoreManager
     /// object bound to the web3 instance, or sent unsigned to the node. For local signing the password is required.
     ///
@@ -19,11 +18,11 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func sendTransaction(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions, password:String = "web3swift") throws -> TransactionSendingResult {
+    public func sendTransaction(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") throws -> TransactionSendingResult {
         let result = try self.sendTransactionPromise(transaction, transactionOptions: transactionOptions, password: password).wait()
         return result
     }
-    
+
     /// Performs a non-mutating "call" to some smart-contract. EthereumTransaction bears all function parameters required for the call.
     /// Does NOT decode the data returned from the smart-contract.
     /// "options" object can override the "to", "gasPrice", "gasLimit" and "value" parameters is pre-formed transaction.
@@ -39,7 +38,7 @@ extension web3.Eth {
         let result = try self.callPromise(transaction, transactionOptions: transactionOptions).wait()
         return result
     }
-    
+
     /// Send raw Ethereum transaction data to the network.
     ///
     /// This function is synchronous!
@@ -49,7 +48,7 @@ extension web3.Eth {
         let result = try self.sendRawTransactionPromise(transaction).wait()
         return result
     }
-    
+
     /// Send raw Ethereum transaction data to the network by first serializing the EthereumTransaction object.
     ///
     /// This function is synchronous!
@@ -59,7 +58,7 @@ extension web3.Eth {
         let result = try self.sendRawTransactionPromise(transaction).wait()
         return result
     }
-    
+
     /// Returns a total number of transactions sent by the particular Ethereum address.
     ///
     /// "onBlock" field determines if value is returned based on the state of a blockchain on the latest mined block ("latest")
@@ -72,7 +71,7 @@ extension web3.Eth {
         let result = try self.getTransactionCountPromise(address: address, onBlock: onBlock).wait()
         return result
     }
-    
+
     /// Returns a balance of particular Ethereum address in Wei units (1 ETH = 10^18 Wei).
     ///
     /// "onString" field determines if value is returned based on the state of a blockchain on the latest mined block ("latest")
@@ -85,7 +84,7 @@ extension web3.Eth {
         let result = try self.getBalancePromise(address: address, onBlock: onBlock).wait()
         return result
     }
-    
+
     /// Returns a block number of the last mined block that Ethereum node knows about.
     ///
     /// This function is synchronous!
@@ -95,7 +94,7 @@ extension web3.Eth {
         let result = try self.getBlockNumberPromise().wait()
         return result
     }
-    
+
     /// Returns a current gas price in the units of Wei. The node has internal algorithms for averaging over the last few blocks.
     ///
     /// This function is synchronous!
@@ -105,7 +104,7 @@ extension web3.Eth {
         let result = try self.getGasPricePromise().wait()
         return result
     }
-    
+
     /// Returns transaction details for particular transaction hash. Details indicate position of the transaction in a particular block,
     /// as well as original transaction details such as value, gas limit, gas price, etc.
     ///
@@ -116,7 +115,7 @@ extension web3.Eth {
         let result = try self.getTransactionDetailsPromise(txhash).wait()
        return result
     }
-    
+
     /// Returns transaction details for particular transaction hash. Details indicate position of the transaction in a particular block,
     /// as well as original transaction details such as value, gas limit, gas price, etc.
     ///
@@ -127,7 +126,7 @@ extension web3.Eth {
         let result = try self.getTransactionDetailsPromise(txhash).wait()
         return result
     }
-    
+
     /// Returns transaction receipt for particular transaction hash. Receipt indicate what has happened when the transaction
     /// was included in block, so it contains logs and status, such as succesful or failed transaction.
     ///
@@ -138,7 +137,7 @@ extension web3.Eth {
         let result = try self.getTransactionReceiptPromise(txhash).wait()
         return result
     }
-    
+
     /// Returns transaction receipt for particular transaction hash. Receipt indicate what has happened when the transaction
     /// was included in block, so it contains logs and status, such as succesful or failed transaction.
     ///
@@ -149,7 +148,7 @@ extension web3.Eth {
         let result = try self.getTransactionReceiptPromise(txhash).wait()
         return result
     }
-    
+
     /// Estimates a minimal amount of gas required to run a transaction. To do it the Ethereum node tries to run it and counts
     /// how much gas it consumes for computations. Setting the transaction gas limit lower than the estimate will most likely
     /// result in a failing transaction.
@@ -166,7 +165,7 @@ extension web3.Eth {
         let result = try self.estimateGasPromise(transaction, transactionOptions: transactionOptions).wait()
         return result
     }
-    
+
     /// Get a list of Ethereum accounts that a node knows about.
     /// If one has attached a Keystore Manager to the web3 object it returns accounts known to the keystore.
     ///
@@ -177,8 +176,7 @@ extension web3.Eth {
         let result = try self.getAccountsPromise().wait()
         return result
     }
-    
-    
+
     /// Get information about the particular block in Ethereum network. If "fullTransactions" parameter is set to "true"
     /// this call fill do a virtual join and fetch not just transaction hashes from this block,
     /// but full decoded EthereumTransaction objects.
@@ -190,7 +188,7 @@ extension web3.Eth {
         let result = try self.getBlockByHashPromise(hash, fullTransactions: fullTransactions).wait()
         return result
     }
-    
+
     /// Get information about the particular block in Ethereum network. If "fullTransactions" parameter is set to "true"
     /// this call fill do a virtual join and fetch not just transaction hashes from this block,
     /// but full decoded EthereumTransaction objects.
@@ -202,7 +200,7 @@ extension web3.Eth {
         let result = try self.getBlockByHashPromise(hash, fullTransactions: fullTransactions).wait()
         return result
     }
-    
+
     /// Get information about the particular block in Ethereum network. If "fullTransactions" parameter is set to "true"
     /// this call fill do a virtual join and fetch not just transaction hashes from this block,
     /// but full decoded EthereumTransaction objects.
@@ -214,7 +212,7 @@ extension web3.Eth {
         let result = try self.getBlockByNumberPromise(number, fullTransactions: fullTransactions).wait()
         return result
     }
-    
+
     /// Get information about the particular block in Ethereum network. If "fullTransactions" parameter is set to "true"
     /// this call fill do a virtual join and fetch not just transaction hashes from this block,
     /// but full decoded EthereumTransaction objects.
@@ -226,7 +224,7 @@ extension web3.Eth {
         let result = try self.getBlockByNumberPromise(number, fullTransactions: fullTransactions).wait()
         return result
     }
-    
+
     /// Get information about the particular block in Ethereum network. If "fullTransactions" parameter is set to "true"
     /// this call fill do a virtual join and fetch not just transaction hashes from this block,
     /// but full decoded EthereumTransaction objects.
@@ -234,12 +232,11 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     ///
-    public func getBlockByNumber(_ block:String, fullTransactions: Bool = false) throws -> Block {
+    public func getBlockByNumber(_ block: String, fullTransactions: Bool = false) throws -> Block {
         let result = try self.getBlockByNumberPromise(block, fullTransactions: fullTransactions).wait()
         return result
     }
-    
-    
+
     /**
      Convenience wrapper to send Ethereum to another address. Internally it creates a virtual contract and encodes all the options and data.
      - Parameters:
