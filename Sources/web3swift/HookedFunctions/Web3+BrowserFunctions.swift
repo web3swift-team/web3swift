@@ -163,7 +163,7 @@ extension web3.BrowserFunctions {
                 transactionOptions.nonce = .pending
             }
             return self.signTransaction(transaction, transactionOptions: transactionOptions, password: password)
-        } catch { Promise.value(nil) }
+        } catch { return Promise.value(nil) }
     }
 
     public func signTransaction(_ trans: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") -> Promise<String?> {
