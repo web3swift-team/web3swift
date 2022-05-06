@@ -21,10 +21,10 @@ let package = Package(
     ],
 
     dependencies: [
-        .package(url: "https://github.com/attaswift/BigInt.git", from: "5.3.0"),
-        .package(url: "https://github.com/mxcl/PromiseKit.git", from: "6.16.2"),
-        .package(url: "https://github.com/daltoniam/Starscream.git", from: "4.0.4"),
-        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .exact("1.4.3"))
+        .package(url: "https://github.com/attaswift/BigInt.git", .upToNextMinor(from: "5.3.0")),
+        .package(url: "https://github.com/mxcl/PromiseKit.git", .upToNextMinor(from: "6.16.2")),
+        .package(url: "https://github.com/daltoniam/Starscream.git", .upToNextMinor(from: "4.0.4")),
+        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.5.1"))
     ],
     targets: [
         .target(name: "secp256k1"),
