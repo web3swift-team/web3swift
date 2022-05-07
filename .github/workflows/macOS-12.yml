@@ -6,6 +6,7 @@ on:
       - master
       - develop
       - hotfix
+      - unstable
     paths:
       - Packag*.swift
       - web3swift.podspec
