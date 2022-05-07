@@ -206,6 +206,10 @@
 		60C1786E2809BA0C0083F064 /* EthereumMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C1786D2809BA0C0083F064 /* EthereumMetadata.swift */; };
 		BAA6DA082825FAD5002B3A27 /* Web3+SubscriptionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA6DA072825FAD5002B3A27 /* Web3+SubscriptionProvider.swift */; };
 		BAA6DA0A2825FAF2002B3A27 /* Promise+Web3+Eth+Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA6DA092825FAF2002B3A27 /* Promise+Web3+Eth+Filters.swift */; };
+		BAA6DA182825FF62002B3A27 /* KeystoreSignatureProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA6DA172825FF62002B3A27 /* KeystoreSignatureProvider.swift */; };
+		BAA6DA1B2825FF88002B3A27 /* Promise+Web3+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA6DA192825FF88002B3A27 /* Promise+Web3+Wallet.swift */; };
+		BAA6DA1C2825FF88002B3A27 /* Promise+SignatureProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA6DA1A2825FF88002B3A27 /* Promise+SignatureProvider.swift */; };
+		BAA6DA1E2825FF95002B3A27 /* SignatureProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA6DA1D2825FF95002B3A27 /* SignatureProvider.swift */; };
 		CB50A52827060BD600D7E39B /* EIP712Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50A52727060BD600D7E39B /* EIP712Tests.swift */; };
 		D606A56B279F5D59003643ED /* web3swiftDecodeSolidityErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D606A56A279F5D59003643ED /* web3swiftDecodeSolidityErrorType.swift */; };
 		D6A3D9B827F1E785009E3BCF /* ABIEncoderSoliditySha3Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3D9B727F1E785009E3BCF /* ABIEncoderSoliditySha3Test.swift */; };
@@ -440,6 +444,10 @@
 		60C1786D2809BA0C0083F064 /* EthereumMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumMetadata.swift; sourceTree = "<group>"; };
 		BAA6DA072825FAD5002B3A27 /* Web3+SubscriptionProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Web3+SubscriptionProvider.swift"; sourceTree = "<group>"; };
 		BAA6DA092825FAF2002B3A27 /* Promise+Web3+Eth+Filters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Eth+Filters.swift"; sourceTree = "<group>"; };
+		BAA6DA172825FF62002B3A27 /* KeystoreSignatureProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeystoreSignatureProvider.swift; sourceTree = "<group>"; };
+		BAA6DA192825FF88002B3A27 /* Promise+Web3+Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Web3+Wallet.swift"; sourceTree = "<group>"; };
+		BAA6DA1A2825FF88002B3A27 /* Promise+SignatureProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+SignatureProvider.swift"; sourceTree = "<group>"; };
+		BAA6DA1D2825FF95002B3A27 /* SignatureProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignatureProvider.swift; sourceTree = "<group>"; };
 		CB50A52727060BD600D7E39B /* EIP712Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP712Tests.swift; sourceTree = "<group>"; };
 		CB50A52927060C5300D7E39B /* EIP712.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP712.swift; sourceTree = "<group>"; };
 		D606A56A279F5D59003643ED /* web3swiftDecodeSolidityErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = web3swiftDecodeSolidityErrorType.swift; sourceTree = "<group>"; };
@@ -699,6 +707,7 @@
 		3AA815302276E44100F5DB52 /* KeystoreManager */ = {
 			isa = PBXGroup;
 			children = (
+				BAA6DA172825FF62002B3A27 /* KeystoreSignatureProvider.swift */,
 				4E2DFEF325485B53001AF561 /* KeystoreParams.swift */,
 				2AC22E352525C2000072F037 /* PathAddressStorage.swift */,
 				3AA815312276E44100F5DB52 /* KeystoreManager.swift */,
@@ -717,6 +726,7 @@
 		3AA8153C2276E44100F5DB52 /* Transaction */ = {
 			isa = PBXGroup;
 			children = (
+				BAA6DA1D2825FF95002B3A27 /* SignatureProvider.swift */,
 				6049F409280616FC00DFE624 /* AbstractEnvelope.swift */,
 				6049F40A280616FC00DFE624 /* EIP1559Envelope.swift */,
 				6049F40B280616FC00DFE624 /* EIP2718Envelope.swift */,
@@ -826,6 +836,8 @@
 		3AA815702276E44100F5DB52 /* Promises */ = {
 			isa = PBXGroup;
 			children = (
+				BAA6DA1A2825FF88002B3A27 /* Promise+SignatureProvider.swift */,
+				BAA6DA192825FF88002B3A27 /* Promise+Web3+Wallet.swift */,
 				BAA6DA092825FAF2002B3A27 /* Promise+Web3+Eth+Filters.swift */,
 				3AA815712276E44100F5DB52 /* Promise+Web3+Eth+GetBlockNumber.swift */,
 				3AA815722276E44100F5DB52 /* Promise+Web3+Personal+Sign.swift */,
@@ -1359,11 +1371,13 @@
 				5C26D89E27F3724600431EB0 /* Web3+EIP1559.swift in Sources */,
 				5CC033442804432F006AD710 /* Promise+Web3+Eth+FeeHistory.swift in Sources */,
 				3AA815C12276E44100F5DB52 /* Web3+BrowserFunctions.swift in Sources */,
+				BAA6DA1B2825FF88002B3A27 /* Promise+Web3+Wallet.swift in Sources */,
 				3AA815E82276E44100F5DB52 /* Extensions.swift in Sources */,
 				3AA815FE2276E44100F5DB52 /* Web3+ERC820.swift in Sources */,
 				60C1786E2809BA0C0083F064 /* EthereumMetadata.swift in Sources */,
 				3AA815DB2276E44100F5DB52 /* Web3+TxPool.swift in Sources */,
 				3AA8160A2276E44100F5DB52 /* Web3+ERC1594.swift in Sources */,
+				BAA6DA1E2825FF95002B3A27 /* SignatureProvider.swift in Sources */,
 				3AA815FB2276E44100F5DB52 /* Promise+Web3+Personal+UnlockAccount.swift in Sources */,
 				3AA815AD2276E44100F5DB52 /* ENSRegistry.swift in Sources */,
 				3AA815CD2276E44100F5DB52 /* Web3+Personal.swift in Sources */,
@@ -1413,10 +1427,12 @@
 				3AA815C42276E44100F5DB52 /* ABITypeParser.swift in Sources */,
 				3AA815BA2276E44100F5DB52 /* PlainKeystore.swift in Sources */,
 				6049F416280616FC00DFE624 /* LegacyEnvelope.swift in Sources */,
+				BAA6DA1C2825FF88002B3A27 /* Promise+SignatureProvider.swift in Sources */,
 				3AA815C92276E44100F5DB52 /* RLP.swift in Sources */,
 				3AA816012276E44100F5DB52 /* Web3+ERC1376.swift in Sources */,
 				3AA815A72276E44100F5DB52 /* ENS.swift in Sources */,
 				3AA815F32276E44100F5DB52 /* Promise+Web3+Eth+GetTransactionReceipt.swift in Sources */,
+				BAA6DA182825FF62002B3A27 /* KeystoreSignatureProvider.swift in Sources */,
 				3AA815B32276E44100F5DB52 /* IBAN.swift in Sources */,
 				E2EDC5EE241EE1E600410EA6 /* Bridge.swift in Sources */,
 				3AA815F92276E44100F5DB52 /* Promise+Web3+TxPool.swift in Sources */,
