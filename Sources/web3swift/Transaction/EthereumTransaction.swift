@@ -445,4 +445,14 @@ extension EthereumTransaction {
         return self.envelope.encode(for: .transaction)
     }
 
+    @available(*, deprecated, message: "use Decodable instead")
+    public static func fromJSON(_ json: [String: Any]) -> EthereumTransaction? {
+        do {
+            let jsonData: Data = try JSONSerialization.data(withJSONObject: json, options: [])
+            return try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+        } catch {
+            return nil
+        }
+    }
+
 }
