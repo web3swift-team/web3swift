@@ -37,13 +37,13 @@ jobs:
         run: swift package resolve
       - name: Build
         run: swift build --build-tests
-      # - name: Install ganache
-      #   run: npm install ganache --global
-      # - name: Start ganache in background
-      #   run: ganache &
-      # - name: Wait till ganache starts
-      #   run: sleep 1
-      # - name: Run local tests
-      #   run: swift test --skip-build -c debug --filter localTests
-      # - name: Run remote tests
-      #   run: swift test --skip-build -c debug --filter remoteTests
+      - name: Install ganache
+        run: npm install ganache --global
+      - name: Start ganache in background
+        run: ganache &
+      - name: Wait till ganache starts
+        run: sleep 1
+      - name: Run local tests
+        run: swift test --skip-build -c debug --filter localTests
+      - name: Run remote tests
+        run: swift test --skip-build -c debug --filter remoteTests
