@@ -101,7 +101,7 @@ public class Web3HttpProvider: Web3Provider {
     }
 }
 
-@available(iOS, deprecated: 15.0, message: "Use the built-in API instead")
+@available(iOS, obsoleted: 15.0, message: "Use the built-in API instead")
 extension URLSession {
     func data(fromUrl url: URL) async throws -> (Data, URLResponse) {
         try await withCheckedThrowingContinuation { continuation in
