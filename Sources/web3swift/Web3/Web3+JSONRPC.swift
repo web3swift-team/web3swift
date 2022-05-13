@@ -122,7 +122,15 @@ public struct JSONRPCresponse: Decodable{
             self.init(id: id, jsonrpc: jsonrpc, result: nil, error: errorMessage)
             return
         }
-        // TODO: refactor me
+        // TODO: make me generic (DecodableFromHex or Decodable)
+        /// This is all available types of `result` to init
+        /// Now its type is `Any?`, since you're typecasting this any to exact each response,
+        /// coz you're knowing response to what request it would be,
+        /// and you're could be sure about API Response structure.
+        ///
+        /// So since we're typecasting this explicitly each tyme, `result` property could be set
+        /// to protocol type like `Decodable` or `DevodableFromHex` or something,
+        /// and this code could be reduced so hard.
         var result: Any? = nil
         if let rawValue = try? container.decodeIfPresent(String.self, forKey: .result) {
             result = rawValue
@@ -171,6 +179,7 @@ public struct JSONRPCresponse: Decodable{
     }
 
     // FIXME: Make me a real generic
+    // MARK: - This fits for DecodableFromHex
     /// Get the JSON RCP reponse value by deserializing it into some native <T> class.
     ///
     /// Returns nil if serialization fails
@@ -281,6 +290,7 @@ public struct JSONRPCparams: Encodable{
     // TODO: Rewrite me to generic
     public var params = [Any]()
 
+    // FIXME: Make me generic with encodableToHex (watch out bool)
     public func encode(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
         for par in params {
