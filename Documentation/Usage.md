@@ -31,27 +31,32 @@
       - [Send Ether](#send-ether)
       - [Send ERC-20 Token](#send-erc-20-token)
       - [Write Transaction and call smart contract method](#write-transaction-and-call-smart-contract-method)
-      - [Read Transaction to call smart contract method](#read-transaction-to-call-smart-contract-method)
-      - [Other Transaction Types (EIP-1559)](#other-transaction-types)
+      - [Read Transaction from call smart contract method](#read-transaction-from-call-smart-contract-method)
     - [Send Transaction](#send-transaction)
       - [Write](#write)
       - [Read](#read)
+      - [Other Transaction Types](#other-transaction-types)
   - [Chain state](#chain-state)
     - [Get Block number](#get-block-number)
 - [Websockets](#websockets)
   - [Web3socketDelegate](#web3socketdelegate)
   - [Custom Websocket Provider](#custom-websocket-provider)
     - [Connect to custom endpoint](#connect-to-custom-endpoint)
-    - [Send message](#send-message)
+    - [Send request](#send-request)
   - [Infura Websocket interactions](#infura-websocket-interactions)
     - [Connect to Infura endpoint](#connect-to-infura-endpoint)
     - [Connect to custom Infura-like endpoint](#connect-to-custom-infura-like-endpoint)
     - [Set a filter in the node to notify when something happened](#set-a-filter-in-the-node-to-notify-when-something-happened)
-    - [Get new pending transactions](#get-new-pending-transactions)
+      - [New filter](#new-filter)
+      - [Get filter changes](#get-filter-changes)
+      - [Get filter logs](#get-filter-logs)
+      - [Uninstall filter](#uninstall-filter)
     - [Create a new subscription over particular events](#create-a-new-subscription-over-particular-events)
-    - [Subscribe on new pending transactions](#subscribe-on-new-pending-transactions)
-		- [Subscribe on logs](https://github.com/matter-labs/web3swift/blob/develop/Documentation/Usage.md#subscribe-on-logs)
-		- [Subscribe on new heads](https://github.com/matter-labs/web3swift/blob/develop/Documentation/Usage.md#subscribe-on-new-heads)
+      - [Subscribe on new pending transactions](#subscribe-on-new-pending-transactions)
+      - [Subscribe on logs](#subscribe-on-logs)
+      - [Subscribe on new heads](#subscribe-on-new-heads)
+      - [Subscribe on syncing](#subscribe-on-syncing)
+      - [Unsubscribe](#unsubscribe)
 - [ENS](#ens)
   - [Registry](#registry)
   - [Resolver](#resolver)
@@ -402,17 +407,17 @@ let blockNumber = try! web3.eth.getBlockNumber()
 
 ### Web3socketDelegate
 
-To receive messages from endpoint you need to create a class that adopts to Web3SocketDelegate protocol.
+You can create a class that adopts to Web3SocketDelegate protocol in order to receive notifications about connection state or errors.
 Later, to open a connection to WebSocket server, you will use socket provider (`WebsocketProvider` or `InfuraWebsocketProvider`). And we recommend you to make it a property, so it doesn't get deallocated right after being setup.
 ```swift
-class DelegateClass: Web3SocketDelegate {
-    var socketProvider: WebsocketProvider? = nil // WebSocket Provider
-    var socketProvider: InfuraWebsocketProvider? = nil // Infura WebSocket Provider
-
-    // Protocol method, here will be messages, received from WebSocket server
-    func received(message: Any) {
-            // Make something with message
-        }
+public class DelegateClass: Web3SocketDelegate {
+    public func socketConnected(_ headers: [String : String]) {
+        // Do something when socket connected
+    }
+    
+    public func gotError(error: Error) {
+        // Do something when got an error from socket connection
+    }
 }
 ```
 
@@ -422,7 +427,7 @@ class DelegateClass: Web3SocketDelegate {
 
 You can create WebsocketProvider and connect/disconnect it.
 ```swift
-socketProvider = WebsocketProvider("ws://your.endpoint", delegate: delegate)
+let socketProvider = WebsocketProvider("ws://your.endpoint", delegate: delegate, network: .Mainnet)
 socketProvider.connectSocket()
 /// Some code
 /// ...
@@ -431,16 +436,21 @@ socketProvider.disconnectSocket()
 
 Or you can create already connected WebsocketProvider
 ```swift
-socketProvider = WebsocketProvider.connectToSocket("ws://your.endpoint", delegate: delegate)
+let socketProvider = WebsocketProvider.connectToSocket("ws://your.endpoint", delegate: delegate, network: .Mainnet)
 ```
 
-#### Send message
+#### Send request
 
 ```swift
-// String message
-socketProvider.writeMessage(String())
-// Data message
-socketProvider.writeMessage(Data())
+// One request
+socketProvider.sendAsync(<JSONRPCrequest>, queue: <DispatchQueue>).map { response in
+    // Use response
+}
+
+// A batch of requests
+socketProvider.sendAsync(<JSONRPCrequestBatch>, queue: <DispatchQueue>).map { responses in
+    // Use responses
+}
 ```
 
 ### Infura Websocket interactions
@@ -448,63 +458,118 @@ socketProvider.writeMessage(Data())
 #### Connect to Infura endpoint
 
 ```swift
-socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: delegate)
+let socketProvider = InfuraWebsocketProvider.connectToInfuraSocket(.Mainnet, delegate: delegate)
 ```
 
 #### Connect to custom Infura-like endpoint
 
 ```swift
-socketProvider = InfuraWebsocketProvider.connectToSocket("ws://your.endpoint", delegate: delegate)
+let socketProvider = InfuraWebsocketProvider.connectToSocket("ws://your.endpoint", delegate: delegate, network: .Mainnet)
 ```
 
 #### Set a filter in the node to notify when something happened
 
-To study possible filters read [Infura WSS filters documentation](https://infura.io/docs/ethereum/wss/introduction)
+To study possible filters read [Infura WSS filters documentation](https://docs.infura.io/infura/networks/ethereum/json-rpc-methods/filter-methods)
 
 ```swift
-// Getting logs
-try! socketProvider.setFilterAndGetLogs(method: <InfuraWebsocketMethod>, params: <[Encodable]?>)
-// Getting changes
-try! socketProvider.setFilterAndGetChanges(method: <InfuraWebsocketMethod>, params: <[Encodable]?>)
-```
-Or you can provide parameters in more convenient way:
-```swift
-// Getting logs
-try! socketProvider.setFilterAndGetLogs(method: <InfuraWebsocketMethod>, address: <EthereumAddress?>, fromBlock: <BlockNumber?>, toBlock: <BlockNumber?>, topics: <[String]?>)
-// Getting changes
-try! socketProvider.setFilterAndGetChanges(method: <InfuraWebsocketMethod>, address: <EthereumAddress?>, fromBlock: <BlockNumber?>, toBlock: <BlockNumber?>, topics: <[String]?>)
+// Use websocket provider
+let eth = web3(provider: socketProvider).eth
 ```
 
-####  Get new pending transactions
+##### New filter
 
 ```swift
-try! socketProvider.setFilterAndGetLogs(method: .newPendingTransactionFilter)
+// New filter
+let filterPromise = eth.newFilterPromise(addresses: <[EthereumAddress]>, topics: <[String]>)
+// or
+let filterPromise = eth.newFilterPromise(addresses: <[EthereumAddress]>, fromBlock: <BlockNumber?>, toBlock: <BlockNumber?>, topics: <[String]>)
+
+// New block filter
+let filterPromise = eth.newBlockFilterPromise()
+
+// New pending transactions filter
+let filterPromise = eth.newPendingTransactionFilterPromise()
+```
+
+##### Get filter changes
+
+```swift
+filterPromise.map { filterID in
+    eth.getFilterChangesPromise(filterID: filterID).map { filterChanges in
+        // Use filterChanges
+    }
+}
+```
+
+##### Get filter logs
+
+```swift
+filterPromise.map { filterID in
+    eth.getFilterLogsPromise(filterID: filterID).map { filterLogs in
+        // Use filterLogs
+    }
+}
+```
+
+##### Uninstall filter
+
+```swift
+filterPromise.map { filterID in
+    eth.uninstallFilterPromise(filterID: filterID).map { isUninstalled in
+        // Use isUninstalled
+    }
+}
 ```
 
 #### Create a new subscription over particular events
 
-To study possible subscriptions read [Infura WSS subscriptions documentation](https://infura.io/docs/ethereum/wss/eth_subscribe)
+To study possible subscriptions read [Infura WSS subscriptions documentation](https://docs.infura.io/infura/networks/ethereum/json-rpc-methods/subscription-methods)
 
 ```swift
-try! socketProvider.subscribe(params: <[Encodable]>)
+// Use websocket provider
+let eth = web3(provider: socketProvider).eth
 ```
 
-#### Subscribe on new pending transactions
+##### Subscribe on new pending transactions
 
 ```swift
-try! socketProvider.subscribeOnNewPendingTransactions()
+let subscription = try eth.subscribeOnNewPendingTransactions { result in
+    let transactionHash = try! result.get()
+    // Use transactionHash
+}
 ```
 
-#### Subscribe on logs
+##### Subscribe on logs
 
 ```swift
-try! socketProvider.subscribeOnLogs(addresses: <[EthereumAddress]?>, topics: <[String]?>)
+let subscription = try eth.subscribeOnLogs { result in
+    let logItem = try! result.get()
+    // Use logItem
+}
 ```
 
-#### Subscribe on new heads
+##### Subscribe on new heads
 
 ```swift
-try! socketProvider.subscribeOnNewHeads()
+let subscription = try eth.subscribeOnNewHeads { result in
+    let blockHeader = try! result.get()
+    // Use blockHeader
+}
+```
+
+##### Subscribe on syncing
+
+```swift
+let subscription = try eth.subscribeOnSyncing { result in
+    let syncingInfo = try! result.get()
+    // Use syncingInfo
+}
+```
+
+##### Unsubscribe
+
+```swift
+subscription.unsubscribe()
 ```
 
 ## ENS
