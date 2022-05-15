@@ -193,12 +193,11 @@ public struct EthereumTransaction: CustomStringConvertible {
         if method == .estimateGas || transactionOptions?.gasLimit == nil {
             txParams.gas = nil
         }
-        var params = [txParams] as [Encodable]
-        if method.requiredNumOfParameters == 2 && onBlock != nil {
-            params.append(onBlock as Encodable)
+        var params: [JSONRPCParameter] = [.transaction(txParams)]
+        if let onBlock = onBlock, method.requiredNumOfParameters == 2 {
+            params.append(.string(onBlock))
         }
-        let pars = JSONRPCparams(params: params)
-        request.params = pars
+        request.params = params
         if !request.isValid { return nil }
         return request
     }
@@ -217,9 +216,8 @@ public struct EthereumTransaction: CustomStringConvertible {
         let hex = encodedData.toHexString().addHexPrefix().lowercased()
         var request = JSONRPCrequest()
         request.method = JSONRPCmethod.sendRawTransaction
-        let params = [hex] as [Encodable]
-        let pars = JSONRPCparams(params: params)
-        request.params = pars
+        let params: [JSONRPCParameter] = [.string(hex)]
+        request.params = params
         if !request.isValid { return nil }
         return request
     }

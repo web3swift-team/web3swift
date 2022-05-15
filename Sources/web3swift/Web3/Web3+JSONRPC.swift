@@ -26,7 +26,7 @@ public struct Counter {
 public struct JSONRPCrequest: Encodable {
     public var jsonrpc: String = "2.0"
     public var method: JSONRPCmethod?
-    public var params: JSONRPCparams?
+    public var params: [JSONRPCParameter] = []
     public var id: UInt64 = Counter.increment()
 
     enum CodingKeys: String, CodingKey {
@@ -50,7 +50,7 @@ public struct JSONRPCrequest: Encodable {
                 return false
             }
             guard let method = self.method else {return false}
-            return method.requiredNumOfParameters == self.params?.params.count
+            return method.requiredNumOfParameters == self.params.count
         }
     }
 }
@@ -286,32 +286,6 @@ public struct EventFilterParameters: Codable {
     public var address: [String?]?
 }
 
-/// Raw JSON RCP 2.0 internal flattening wrapper.
-public struct JSONRPCparams: Encodable{
-    // TODO: Rewrite me to generic
-    public var params = [Any]()
-
-    // FIXME: Make me generic with encodableToHex (watch out bool)
-    /// This method is encoding all possible params of a Ethereum JSON RPC request.
-    /// So type of this struct
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.unkeyedContainer()
-        for par in params {
-            if let p = par as? TransactionParameters {
-                try container.encode(p)
-            } else if let p = par as? String {
-                try container.encode(p)
-            } else if let p = par as? Bool {
-                try container.encode(p)
-            } else if let p = par as? EventFilterParameters {
-                try container.encode(p)
-            } else if let p = par as? [Double] {
-                try container.encode(p)
-            }
-        }
-    }
-}
-
 /**
  Enum to compose request to the node params.
 
@@ -325,11 +299,11 @@ public struct JSONRPCparams: Encodable{
 
  So in our case we're using such to implement custom `encode` method to any used in node request params types.
 
- Latter is required to encode array of `JSONRPCParam` to not to `[JSONRPCParam.int(1)]`, but to `[1]`.
+ Latter is required to encode array of `JSONRPCParameter` to not to `[JSONRPCParameter.int(1)]`, but to `[1]`.
 
  Here's an example of using this enum in field.
  ```swift
- let jsonRPCParams: [JSONRPCParam] = [
+ let jsonRPCParams: [JSONRPCParameter] = [
     .init(rawValue: 12)!,
     .init(rawValue: "this")!,
     .init(rawValue: 12.2)!,
@@ -340,7 +314,7 @@ public struct JSONRPCparams: Encodable{
  //> [12,\"this\",12.2,[12.2,12.4]]`
  ```
  */
-public enum JSONRPCParam {
+public enum JSONRPCParameter {
     case int(Int)
     case intArray([Int])
 
@@ -355,14 +329,15 @@ public enum JSONRPCParam {
     case eventFilter(EventFilterParameters)
 }
 
-extension JSONRPCParam: RawRepresentable {
+
+extension JSONRPCParameter: RawRepresentable {
     /**
-     This init required by `RawRepresentable` protocol, which is requred bo encode mixed type values array in JSON.
+     This init required by `RawRepresentable` protocol, which is requred to encode mixed type values array in JSON.
 
      This protocol used to implement custom `encode` method for that enum,
      which is encodes array of self into array of self assotiated values.
 
-     You're totally free to use explicit and more convenience member init as `JSONRPCParam.int(12)` in your code.
+     You're totally free to use explicit and more convenience member init as `JSONRPCParameter.int(12)` in your code.
      */
     public init?(rawValue: Encodable) {
         /// force casting in this switch is safe because
@@ -406,14 +381,14 @@ extension JSONRPCParam: RawRepresentable {
     }
 }
 
-extension JSONRPCParam: Encodable {
+extension JSONRPCParameter: Encodable {
     /**
-     This encoder encodes `JSONRPCParam` assotiated value ignoring self value
+     This encoder encodes `JSONRPCParameter` assotiated value ignoring self value
 
      This is required to encode mixed types array, like
 
      ```swift
-     let someArray: [JSONRPCParam] = [
+     let someArray: [JSONRPCParameter] = [
         .init(rawValue: 12)!,
         .init(rawValue: "this")!,
         .init(rawValue: 12.2)!,
@@ -427,7 +402,7 @@ extension JSONRPCParam: Encodable {
     public func encode(to encoder: Encoder) throws {
         var enumContainer = encoder.singleValueContainer()
         /// force casting in this switch is safe because
-        /// each `rawValue` forced to casts only in exact case which is runs based on `rawValues` type
+        /// each `rawValue` forced to casts only in exact case which is runs based on `rawValue` type
         // swiftlint:disable force_cast
         switch type(of: self.rawValue) {
         case is Int.Type: try enumContainer.encode(rawValue as! Int)

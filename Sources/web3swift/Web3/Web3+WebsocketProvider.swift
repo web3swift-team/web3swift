@@ -56,7 +56,7 @@ public enum InfuraWebsocketMethod: String, Encodable {
 public struct InfuraWebsocketRequest: Encodable {
     public var jsonrpc: String = "2.0"
     public var method: InfuraWebsocketMethod?
-    public var params: JSONRPCparams?
+    public var params: [JSONRPCParameter] = []
     public var id: UInt64 = Counter.increment()
 
     enum CodingKeys: String, CodingKey {
@@ -80,7 +80,7 @@ public struct InfuraWebsocketRequest: Encodable {
                 return false
             }
             guard let method = self.method else {return false}
-            return method.requiredNumOfParameters == self.params?.params.count
+            return method.requiredNumOfParameters == self.params.count
         }
     }
 }
