@@ -204,7 +204,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     }
 
     /// - Returns: a raw bytestream of the transaction, encoded according to the transactionType
-    func encode(for type: EncodeType = .transaction) -> Data? {
+    public func encode(for type: EncodeType = .transaction) -> Data? {
         return self.envelope.encode(for: type)
     }
 
