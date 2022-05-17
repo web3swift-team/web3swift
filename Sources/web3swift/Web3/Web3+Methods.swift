@@ -75,17 +75,17 @@ public enum JSONRPCmethod: String, Encodable {
 }
 
 public struct JSONRPCRequestFabric {
-    public static func prepareRequest(_ method: JSONRPCmethod, parameters: [Encodable]) -> JSONRPCrequest {
+    public static func prepareRequest(_ method: JSONRPCmethod, parameters: [JSONRPCParameter]) -> JSONRPCrequest {
         var request = JSONRPCrequest()
         request.method = method
-        request.params = parameters.compactMap { JSONRPCParameter.init(rawValue: $0) }
+        request.params = parameters.compactMap { RPCParameter.init(rawValue: $0) }
         return request
     }
 
-    public static func prepareRequest(_ method: InfuraWebsocketMethod, parameters: [Encodable]) -> InfuraWebsocketRequest {
+    public static func prepareRequest(_ method: InfuraWebsocketMethod, parameters: [JSONRPCParameter]) -> InfuraWebsocketRequest {
         var request = InfuraWebsocketRequest()
         request.method = method
-        request.params = parameters.compactMap { JSONRPCParameter.init(rawValue: $0) }
+        request.params = parameters.compactMap { RPCParameter.init(rawValue: $0) }
         return request
     }
 }
