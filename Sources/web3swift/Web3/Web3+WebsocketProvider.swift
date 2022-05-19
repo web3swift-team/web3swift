@@ -57,7 +57,7 @@ public struct InfuraWebsocketRequest: Encodable {
     public var jsonrpc: String = "2.0"
     public var method: InfuraWebsocketMethod?
     public var params: [RPCParameter] = []
-    public var id: UInt64 = Counter.increment()
+    public var id = Counter.increment()
 
     enum CodingKeys: String, CodingKey {
         case jsonrpc

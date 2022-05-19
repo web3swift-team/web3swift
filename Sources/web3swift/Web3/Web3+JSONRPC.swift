@@ -3,16 +3,18 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 //  Additions to support new transaction types by Mark Loit March 2022
+//
+//  Made most structs generics by Yaroslav Yashin 2022
 
 import Foundation
 import BigInt
 
 /// Global counter object to enumerate JSON RPC requests.
 public struct Counter {
-    public static var counter = UInt64(1)
+    public static var counter = UInt(1)
     public static var lockQueue = DispatchQueue(label: "counterQueue")
-    public static func increment() -> UInt64 {
-        var c: UInt64 = 0
+    public static func increment() -> UInt {
+        var c: UInt = 0
         lockQueue.sync {
             c = Counter.counter
             Counter.counter = Counter.counter + 1
@@ -27,7 +29,7 @@ public struct JSONRPCrequest: Encodable {
     public var jsonrpc: String = "2.0"
     public var method: JSONRPCmethod?
     public var params: [RPCParameter] = []
-    public var id: UInt64 = Counter.increment()
+    public var id: UInt = Counter.increment()
 
     enum CodingKeys: String, CodingKey {
         case jsonrpc
