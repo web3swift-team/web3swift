@@ -9,10 +9,14 @@ import Starscream
 
 public enum BlockNumber {
     case pending
+    /// Latest block of a chain
     case latest
+    /// Earliest block of a chain
     case earliest
+    /// Exact block number
     case exact(BigUInt)
 
+    /// Block number as a hex string
     public var stringValue: String {
         switch self {
         case .pending:

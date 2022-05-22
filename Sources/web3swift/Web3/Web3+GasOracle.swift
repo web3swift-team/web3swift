@@ -89,7 +89,7 @@ extension Web3 {
             // TODO: Disabled until 3.0 version, coz `distance` available from iOS 13.
 //            guard feeHistory == nil, forceDropCache, feeHistory!.timestamp.distance(to: Date()) > cacheTimeout else { return feeHistory! }
 
-            return try await eth.feeHistory(blockCount: blockCount, block: block.hexValue, percentiles: percentiles)
+            return try await eth.feeHistory(blockCount: blockCount, block: block.stringValue, percentiles: percentiles)
         }
 
         /// Suggesting tip values
@@ -126,6 +126,9 @@ extension Web3 {
             switch block {
             case .latest: latestBlockNumber = try await eth.getBlockNumber()
             case let .exact(number): latestBlockNumber = number
+            // FIXME: Make real error here
+                // Error throws since pending and erliest are unable to be used in this method.
+            default: throw Web3Error.unknownError
             }
 
             /// checking if latest block number is greather than number of blocks to take in account
@@ -240,26 +243,5 @@ extension Web3.Oracle.FeeHistory: Decodable {
         self.gasUsedRatio = try values.decode([Double].self, forKey: .gasUsedRatio)
         self.oldestBlock = try values.decodeHex(BigUInt.self, forKey: .oldestBlock)
         self.reward = try values.decodeHex([[BigUInt]].self, forKey: .reward)
-    }
-}
-
-
-public extension Web3 {
-    /// Enum for convenient type safe work with block number
-    enum BlockNumber {
-        /// Latest block of a chain
-        case latest
-        /// Exact block number
-        case exact(BigUInt)
-
-        /// Block number as a string
-        ///
-        /// Could be `hexString` either `latest`
-        internal var hexValue: String {
-            switch self {
-            case .latest: return "latest"
-            case let .exact(number): return String(number, radix: 16).addHexPrefix()
-            }
-        }
     }
 }
