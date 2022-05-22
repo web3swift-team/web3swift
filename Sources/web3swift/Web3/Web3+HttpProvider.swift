@@ -58,18 +58,11 @@ public class Web3HttpProvider: Web3Provider {
     }
 
     fileprivate static func dataFrom(session: URLSession, request urlRequest: URLRequest) async throws -> Data{
-        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *) {
-            let (data, _) = try await session.data(for: urlRequest)
-            return data
-        } else {
-            let (data, _) = try await session.data(forRequest: urlRequest)
-            // Fallback on earlier versions
-            return data
-        }
+        let (data, _) = try await session.data(for: urlRequest)
+        return data
     }
 
     static func post<T: Decodable, U: Encodable>(_ request: U, providerURL: URL, session: URLSession) async throws -> T {
-
         let requestData = try JSONEncoder().encode(request)
         var urlRequest = URLRequest(url: providerURL, cachePolicy: .reloadIgnoringCacheData)
         urlRequest.httpMethod = "POST"
@@ -96,12 +89,14 @@ public class Web3HttpProvider: Web3Provider {
         return try await Web3HttpProvider.post(request, providerURL: self.url, session: self.session)
     }
 
-    public func sendAsync(_ requests: JSONRPCrequestBatch) async throws -> JSONRPCresponseBatch {
-        return try await Web3HttpProvider.post(requests, providerURL: self.url, session: self.session)
-    }
+//    public func sendAsync(_ requests: JSONRPCrequestBatch) async throws -> JSONRPCresponseBatch {
+//        return try await Web3HttpProvider.post(requests, providerURL: self.url, session: self.session)
+//    }
 }
 
+
 @available(iOS, obsoleted: 15.0, message: "Use the built-in API instead")
+@available(macOS, obsoleted: 12.0, message: "Use the built-in API instead")
 extension URLSession {
     func data(fromUrl url: URL) async throws -> (Data, URLResponse) {
         try await withCheckedThrowingContinuation { continuation in
@@ -110,15 +105,13 @@ extension URLSession {
                     let error = error ?? URLError(.badServerResponse)
                     return continuation.resume(throwing: error)
                 }
-
                 continuation.resume(returning: (data, response))
             }
-
             task.resume()
         }
     }
 
-    func data(forRequest request: URLRequest) async throws -> (Data, URLResponse) {
+    func data(for request: URLRequest) async throws -> (Data, URLResponse) {
         var dataTask: URLSessionDataTask?
 
         return try await withCheckedThrowingContinuation { continuation in
@@ -127,10 +120,8 @@ extension URLSession {
                     let error = error ?? URLError(.badServerResponse)
                     return continuation.resume(throwing: error)
                 }
-
                 continuation.resume(returning: (data, response))
             }
-
             dataTask?.resume()
         }
     }
