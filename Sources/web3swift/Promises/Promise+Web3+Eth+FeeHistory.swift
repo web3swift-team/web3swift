@@ -11,7 +11,6 @@ import BigInt
 
 extension web3.Eth {
     func feeHistory(blockCount: BigUInt, block: String, percentiles:[Double]) async throws -> Web3.Oracle.FeeHistory {
-
         let parameters: [JSONRPCParameter] = [blockCount.description.addHexPrefix(), block, percentiles]
 
         let request = JSONRPCRequestFabric.prepareRequest(.feeHistory, parameters: parameters)

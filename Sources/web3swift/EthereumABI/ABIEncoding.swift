@@ -256,7 +256,6 @@ extension ABIEncoder {
                         toReturn.append(encoding)
                     }
                     let total = lengthEncoding + toReturn
-                    //                    print("Dynamic array of static types encoding :\n" + String(total.toHexString()))
                     return total
                 } else {
                     // create new context
