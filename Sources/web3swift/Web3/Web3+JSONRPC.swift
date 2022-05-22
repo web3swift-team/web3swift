@@ -14,12 +14,12 @@ public struct Counter {
     public static var counter: UInt = 1
     public static var lockQueue = DispatchQueue(label: "counterQueue")
     public static func increment() -> UInt {
-        var c: UInt = 0
-        lockQueue.sync {
-            c = Counter.counter
-            Counter.counter = Counter.counter + 1
+        defer {
+            lockQueue.sync {
+                Counter.counter += 1
+            }
         }
-        return c
+        return counter
     }
 }
 
