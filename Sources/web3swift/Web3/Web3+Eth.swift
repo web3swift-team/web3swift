@@ -208,7 +208,7 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getBlockByNumber(_ number: UInt64, fullTransactions: Bool = false) async throws -> Block {
+    public func getBlockByNumber(_ number: UInt, fullTransactions: Bool = false) async throws -> Block {
         let result = try await self.blockBy(number: number, fullTransactions: fullTransactions)
         return result
     }

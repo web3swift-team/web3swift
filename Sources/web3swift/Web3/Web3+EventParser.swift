@@ -36,7 +36,7 @@ extension web3.web3contract {
          - important: This call is synchronous
 
          */
-        public func parseBlockByNumber(_ blockNumber: UInt64) async throws -> [EventParserResultProtocol] {
+        public func parseBlockByNumber(_ blockNumber: UInt) async throws -> [EventParserResultProtocol] {
             let result = try await self.parseBlockByNumberPromise(blockNumber)
             return result
         }
@@ -112,7 +112,7 @@ extension web3.web3contract.EventParser {
 
     }
 
-    public func parseBlockByNumberPromise(_ blockNumber: UInt64) async throws -> [EventParserResultProtocol] {
+    public func parseBlockByNumberPromise(_ blockNumber: UInt) async throws -> [EventParserResultProtocol] {
 
         guard filter == nil || filter?.fromBlock == nil && filter?.toBlock == nil else {
             throw Web3Error.inputError(desc: "Can not mix parsing specific block and using block range filter")

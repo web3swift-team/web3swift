@@ -42,7 +42,7 @@ extension web3.Personal {
      - important: This call is synchronous. Does nothing if private keys are stored locally.
 
      */
-    public func unlockAccount(account: EthereumAddress, password: String = "web3swift", seconds: UInt64 = 300) async throws -> Bool {
+    public func unlockAccount(account: EthereumAddress, password: String = "web3swift", seconds: UInt = 300) async throws -> Bool {
         let result = try await self.unlock(account: account)
         return result
     }

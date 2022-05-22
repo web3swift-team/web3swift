@@ -20,9 +20,6 @@ extension Int: JSONRPCParameter { }
 
 extension UInt: JSONRPCParameter { }
 
-// FIXME: Drop all non default types support
-extension UInt64: JSONRPCParameter { }
-
 extension Double: JSONRPCParameter { }
 
 extension String: JSONRPCParameter { }
@@ -35,14 +32,15 @@ extension TransactionParameters: JSONRPCParameter { }
 
 extension EventFilterParameters: JSONRPCParameter { }
 
-extension Double: JSONParameterElement { }
-
 extension Int: JSONParameterElement { }
 
-// FIXME: Drop all non default types support
-extension UInt64: JSONParameterElement { }
+extension UInt: JSONParameterElement { }
+
+extension Double: JSONParameterElement { }
 
 extension String: JSONParameterElement { }
+
+extension Bool: JSONParameterElement { }
 
 /**
  Enum to compose request to the node params.
@@ -76,8 +74,8 @@ public enum RPCParameter {
     case int(Int)
     case intArray([Int])
 
-    case uint(UInt64)
-    case uintArray([UInt64])
+    case uint(UInt)
+    case uintArray([UInt])
 
     case double(Double)
     case doubleArray([Double])
@@ -86,6 +84,8 @@ public enum RPCParameter {
     case stringArray([String])
 
     case bool(Bool)
+    case boolArray([Bool])
+
     case transaction(TransactionParameters)
     case eventFilter(EventFilterParameters)
 }
@@ -108,8 +108,8 @@ extension RPCParameter: RawRepresentable {
         case is Int.Type: self = .int(rawValue as! Int)
         case is [Int].Type: self = .intArray(rawValue as! [Int])
 
-        case is UInt64.Type: self = .uint(rawValue as! UInt64)
-        case is [UInt64].Type: self = .uintArray(rawValue as! [UInt64])
+        case is UInt.Type: self = .uint(rawValue as! UInt)
+        case is [UInt].Type: self = .uintArray(rawValue as! [UInt])
 
         case is String.Type: self = .string(rawValue as! String)
         case is [String].Type: self = .stringArray(rawValue as! [String])
@@ -118,6 +118,8 @@ extension RPCParameter: RawRepresentable {
         case is [Double].Type: self = .doubleArray(rawValue as! [Double])
 
         case is Bool.Type: self = .bool(rawValue as! Bool)
+        case is [Bool].Type: self = .boolArray(rawValue as! [Bool])
+
         case is TransactionParameters.Type: self = .transaction(rawValue as! TransactionParameters)
         case is EventFilterParameters.Type: self = .eventFilter(rawValue as! EventFilterParameters)
         default: return nil
@@ -142,6 +144,8 @@ extension RPCParameter: RawRepresentable {
         case let .doubleArray(value): return value
 
         case let .bool(value): return value
+        case let .boolArray(value): return value
+
         case let .transaction(value): return value
         case let .eventFilter(value): return value
         }
@@ -175,8 +179,8 @@ extension RPCParameter: Encodable {
         case is Int.Type: try enumContainer.encode(rawValue as! Int)
         case is [Int].Type: try enumContainer.encode(rawValue as! [Int])
 
-        case is UInt64.Type: try enumContainer.encode(rawValue as! UInt64)
-        case is [UInt64].Type: try enumContainer.encode(rawValue as! [UInt64])
+        case is UInt.Type: try enumContainer.encode(rawValue as! UInt)
+        case is [UInt].Type: try enumContainer.encode(rawValue as! [UInt])
 
         case is String.Type: try enumContainer.encode(rawValue as! String)
         case is [String].Type: try enumContainer.encode(rawValue as! [String])
@@ -185,6 +189,8 @@ extension RPCParameter: Encodable {
         case is [Double].Type: try enumContainer.encode(rawValue as! [Double])
 
         case is Bool.Type: try enumContainer.encode(rawValue as! Bool)
+        case is [Bool].Type: try enumContainer.encode(rawValue as! [Bool])
+
         case is TransactionParameters.Type: try enumContainer.encode(rawValue as! TransactionParameters)
         case is EventFilterParameters.Type: try enumContainer.encode(rawValue as! EventFilterParameters)
         default: break /// can't be executed, coz possible `self.rawValue` types are strictly defined in it's inplementation.`

@@ -11,7 +11,7 @@ import BigInt
 
 /// Global counter object to enumerate JSON RPC requests.
 public struct Counter {
-    public static var counter = UInt(1)
+    public static var counter: UInt = 1
     public static var lockQueue = DispatchQueue(label: "counterQueue")
     public static func increment() -> UInt {
         var c: UInt = 0

@@ -146,7 +146,7 @@ extension Date: DecodableFromHex {
     public init?(fromHex hexString: String) {
         self.init()
         let stripedHexString = hexString.stripHexPrefix()
-        guard let timestampInt = UInt64(stripedHexString, radix: 16) else { return nil }
+        guard let timestampInt = UInt(stripedHexString, radix: 16) else { return nil }
         self = Date(timeIntervalSince1970: TimeInterval(timestampInt))
     }
 }

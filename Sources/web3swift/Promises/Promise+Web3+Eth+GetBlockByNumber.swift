@@ -9,7 +9,7 @@ import BigInt
 
 
 extension web3.Eth {
-    public func blockBy(number: UInt64, fullTransactions: Bool = false) async throws -> Block {
+    public func blockBy(number: UInt, fullTransactions: Bool = false) async throws -> Block {
         let block = String(number, radix: 16).addHexPrefix()
         return try await blockBy(number: block, fullTransactions: fullTransactions)
     }
