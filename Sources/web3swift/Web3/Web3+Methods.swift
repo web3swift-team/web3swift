@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import BigInt
 
 public typealias Hash = String // 32 bytes hash of block
 public typealias Receipt = Hash
@@ -27,7 +28,7 @@ public enum EthJSONRPC {
     case getTransactionReceipt(Receipt)
     case getLogs(EventFilterParameters)
     case personalSign(Address, Data)
-    case call(EthereumTransaction)
+    case call(TransactionParameters)
     case getTransactionCount(Address, BlockNumber)
     case getBalance(Address, BlockNumber)
 
@@ -118,7 +119,7 @@ extension EthJSONRPC {
 }
 
 extension EthJSONRPC {
-    var responseType: JRONRPCResponstType.Type {
+    var responseType: EthResponseType.Type {
         switch self {
         default: return String.self
         }
@@ -134,44 +135,90 @@ extension EthJSONRPC {
 }
 
 extension EthJSONRPC {
-    static func sendRequest(with call: EthJSONRPC) async throws -> some JRONRPCResponstType {
-        switch call {
-        case .gasPrice: return "eth_gasPrice"
-        case .blockNumber: return "eth_blockNumber"
-        case .getNetwork: return "net_version"
-        case .getAccounts: return "eth_accounts"
-        case .sendRawTransaction: return "eth_sendRawTransaction"
-        case .sendTransaction: return "eth_sendTransaction"
-        case .getTransactionByHash: return "eth_getTransactionByHash"
-        case .getTransactionReceipt: return "eth_getTransactionReceipt"
-        case .personalSign: return "eth_sign"
-        case .getLogs: return "eth_getLogs"
-        case .call: return "eth_call"
-        case .estimateGas: return "eth_estimateGas"
-        case .getTransactionCount: return "eth_getTransactionCount"
-        case .getBalance: return "eth_getBalance"
-        case .getStorageAt: return "eth_getStorageAt"
-        case .getCode: return "eth_getCode"
-        case .getBlockByHash: return "eth_getBlockByHash"
-        case .getBlockByNumber: return "eth_getBlockByNumber"
-        case .feeHistory: return "eth_feeHistory"
-
-        case .unlockAccount: return "personal_unlockAccount"
-        case .createAccount: return "personal_createAccount"
-        case .getTxPoolStatus: return "txpool_status"
-        case .getTxPoolContent: return "txpool_content"
-        case .getTxPoolInspect: return "txpool_inspect"
+    var parameters: [RPCParameter] {
+        switch self {
+        case .gasPrice, .blockNumber, .getNetwork, .getAccounts, .estimateGas:
+            return [RPCParameter]()
+        case let .sendRawTransaction(hash):
+            return [RPCParameter.string(hash)]
+        case .sendTransaction(let transactionParameters):
+            return [RPCParameter.transaction(transactionParameters)]
+        case .getTransactionByHash(let hash):
+            return [RPCParameter.string(hash)]
+        case .getTransactionReceipt(let receipt):
+            return [RPCParameter.string(receipt)]
+        case .getLogs(let eventFilterParameters):
+            return [RPCParameter.eventFilter(eventFilterParameters)]
+        case .personalSign(let address, let data):
+            // FIXME: Add second parameter
+            return [RPCParameter.string(address)]
+        case .call(let transactionParameters):
+            return [RPCParameter.transaction(transactionParameters)]
+        case .getTransactionCount(let address, let blockNumber):
+            return [RPCParameter.string(address), RPCParameter.string(blockNumber.stringValue)]
+        case .getBalance(let address, let blockNumber):
+            return [RPCParameter.string(address), RPCParameter.string(blockNumber.stringValue)]
+        case .getStorageAt(let address, let hash, let blockNumber):
+            return [RPCParameter.string(address), RPCParameter.string(hash), RPCParameter.string(blockNumber.stringValue)]
+        case .getCode(let address, let blockNumber):
+            return [RPCParameter.string(address), RPCParameter.string(blockNumber.stringValue)]
+        case .getBlockByHash(let hash, let bool):
+            return [RPCParameter.string(hash), RPCParameter.bool(bool)]
+        case .getBlockByNumber(let hash, let bool):
+            return [RPCParameter.string(hash), RPCParameter.bool(bool)]
+        case .feeHistory(let uInt, let blockNumber, let array):
+            return [RPCParameter.uint(uInt), RPCParameter.string(blockNumber.stringValue), RPCParameter.doubleArray(array)]
+        case .createAccount(let string):
+            return [RPCParameter]()
+        case .unlockAccount(let address, let string, let optional):
+            return [RPCParameter]()
+        case .getTxPoolStatus:
+            return [RPCParameter]()
+        case .getTxPoolContent:
+            return [RPCParameter]()
+        case .getTxPoolInspect:
+            return [RPCParameter]()
         }
+    }
+}
+
+extension EthJSONRPC {
+    var encodedBody: Data {
+        let request = EthRequestBody(method: self.call, parameters: self.parameters)
+        // this is safe to force try this here
+        // Because request must failed to compile would not conformable with `Encodable` protocol
+        return try! JSONEncoder().encode(request)
+    }
+}
+
+extension EthJSONRPC {
+    static func sendRequest<U>(with call: EthJSONRPC) async throws -> EthResponse<U> {
+        let request = setupRequest(for: call)
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        // FIXME: Add appropriate error thrown
+        guard let httpResponse = response as? HTTPURLResponse,
+               200 ..< 400 ~= httpResponse.statusCode else { throw Web3Error.connectionError }
+
+        // FIXME: Add appropriate error thrown
+        guard U.self == call.responseType else { throw Web3Error.unknownError }
+
+        // FIXME: What to do when `result` is just an hexString?
+        // All works here must be end at leving it string.
+        // Another way is to made type HexString with its own init and decode method
+        return try JSONDecoder().decode(EthResponse<U>.self, from: data)
     }
 }
 
 private extension EthJSONRPC {
     static func setupRequest(for call: EthJSONRPC) -> URLRequest {
+        // FIXME: Make custom url
         let url = URL(string: "https://mainnet.infura.io/v3/4406c3acf862426c83991f1752c46dd8")!
         var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData)
-        urlRequest.httpMethod = call.method.rawValue
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
+        urlRequest.httpMethod = call.method.rawValue
+        urlRequest.httpBody = call.encodedBody
         return urlRequest
     }
 }
@@ -181,10 +228,26 @@ public enum REST: String {
     case GET
 }
 
-protocol JRONRPCResponstType: Decodable { }
+public struct EthRequestBody: Encodable {
+    var jsonrpc = "2.0"
+    var id = Counter.increment()
 
-extension String: JRONRPCResponstType { }
+    var method: String
+    var parameters: [RPCParameter]
+}
 
+/// JSON RPC response structure for serialization and deserialization purposes.
+public struct EthResponse<T>: Decodable where T: EthResponseType {
+    public var id: Int
+    public var jsonrpc = "2.0"
+    public var result: T
+}
+
+public protocol EthResponseType: Decodable { }
+
+extension BigUInt: EthResponseType { }
+
+extension String: EthResponseType { }
 
 public enum JSONRPCmethod: String, Encodable {
     // 0 parameter in call
