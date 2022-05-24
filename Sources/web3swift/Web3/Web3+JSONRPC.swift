@@ -28,7 +28,7 @@ public struct Counter {
 public struct JSONRPCrequest: Encodable {
     public var jsonrpc: String = "2.0"
     public var method: JSONRPCmethod?
-    public var params: [RPCParameter] = []
+    public var params: [RequestParameter] = []
     public var id: UInt = Counter.increment()
 
     enum CodingKeys: String, CodingKey {

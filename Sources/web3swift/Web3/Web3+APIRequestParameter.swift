@@ -1,6 +1,11 @@
-//  Package: web3swift
-//  Created by Alex Vlasov.
-//  Copyright © 2022 Yaroslav Yashin. All rights reserved.
+//
+//  Web3+APIRequestParameter.swift
+//  Web3swift
+//
+//  Created by Yaroslav on 24.05.2022.
+//
+
+import Foundation
 
 /// Protocol to restrict supported types which can be passed into `JSONRPCRequest` to a node.
 ///
@@ -12,35 +17,35 @@
 /// Conformance of that protocol by a custom type will be silently failed to encode (e.g. there won't be in request).
 ///
 /// Please see `RPCParameter` documentation for more details.
-public protocol JSONRPCParameter: Encodable { }
+public protocol APIRequestParameterType: Encodable { }
 
-protocol JSONParameterElement: Encodable { }
+protocol APIRequestParameterElementType: Encodable { }
 
-extension Int: JSONRPCParameter { }
+extension Int: APIRequestParameterType { }
 
-extension UInt: JSONRPCParameter { }
+extension UInt: APIRequestParameterType { }
 
-extension Double: JSONRPCParameter { }
+extension Double: APIRequestParameterType { }
 
-extension String: JSONRPCParameter { }
+extension String: APIRequestParameterType { }
 
-extension Bool: JSONRPCParameter { }
+extension Bool: APIRequestParameterType { }
 
-extension Array: JSONRPCParameter where Element: JSONParameterElement { }
+extension Array: APIRequestParameterType where Element: APIRequestParameterElementType { }
 
-extension TransactionParameters: JSONRPCParameter { }
+extension TransactionParameters: APIRequestParameterType { }
 
-extension EventFilterParameters: JSONRPCParameter { }
+extension EventFilterParameters: APIRequestParameterType { }
 
-extension Int: JSONParameterElement { }
+extension Int: APIRequestParameterElementType { }
 
-extension UInt: JSONParameterElement { }
+extension UInt: APIRequestParameterElementType { }
 
-extension Double: JSONParameterElement { }
+extension Double: APIRequestParameterElementType { }
 
-extension String: JSONParameterElement { }
+extension String: APIRequestParameterElementType { }
 
-extension Bool: JSONParameterElement { }
+extension Bool: APIRequestParameterElementType { }
 
 /**
  Enum to compose request to the node params.
@@ -55,11 +60,11 @@ extension Bool: JSONParameterElement { }
 
  So in our case we're using such to implement custom `encode` method to any used in node request params types.
 
- Latter is required to encode array of `RPCParameter` to not to `[RPCParameter.int(1)]`, but to `[1]`.
+ Latter is required to encode array of `RequestParameter` to not to `[RequestParameter.int(1)]`, but to `[1]`.
 
  Here's an example of using this enum in field.
  ```swift
- let jsonRPCParams: [JSONRPCParameter] = [
+ let jsonRPCParams: [APIRequestParameterType] = [
     .init(rawValue: 12)!,
     .init(rawValue: "this")!,
     .init(rawValue: 12.2)!,
@@ -70,7 +75,7 @@ extension Bool: JSONParameterElement { }
  //> [12,\"this\",12.2,[12.2,12.4]]`
  ```
  */
-public enum RPCParameter {
+public enum RequestParameter {
     case int(Int)
     case intArray([Int])
 
@@ -85,22 +90,22 @@ public enum RPCParameter {
 
     case bool(Bool)
     case boolArray([Bool])
-
+    
     case transaction(TransactionParameters)
     case eventFilter(EventFilterParameters)
 }
 
 
-extension RPCParameter: RawRepresentable {
+extension RequestParameter: RawRepresentable {
     /**
      This init required by `RawRepresentable` protocol, which is requred to encode mixed type values array in JSON.
 
      This protocol used to implement custom `encode` method for that enum,
      which is encodes array of self into array of self assotiated values.
 
-     You're totally free to use explicit and more convenience member init as `RPCParameter.int(12)` in your code.
+     You're totally free to use explicit and more convenience member init as `RequestParameter.int(12)` in your code.
      */
-    public init?(rawValue: JSONRPCParameter) {
+    public init?(rawValue: APIRequestParameterType) {
         /// force casting in this switch is safe because
         /// each `rawValue` forced to casts only in exact case which is runs based on `rawValues` type
         // swiftlint:disable force_cast
@@ -128,7 +133,7 @@ extension RPCParameter: RawRepresentable {
     }
 
     /// Returning associated value of the enum case.
-    public var rawValue: JSONRPCParameter {
+    public var rawValue: APIRequestParameterType {
         // cases can't be merged, coz it cause compiler error since it couldn't predict what exact type on exact case will be returned.
         switch self {
         case let .int(value): return value
@@ -152,14 +157,14 @@ extension RPCParameter: RawRepresentable {
     }
 }
 
-extension RPCParameter: Encodable {
+extension RequestParameter: Encodable {
     /**
-     This encoder encodes `RPCParameter` assotiated value ignoring self value
+     This encoder encodes `RequestParameter` assotiated value ignoring self value
 
      This is required to encode mixed types array, like
 
      ```swift
-     let someArray: [RPCParameter] = [
+     let someArray: [RequestParameter] = [
         .init(rawValue: 12)!,
         .init(rawValue: "this")!,
         .init(rawValue: 12.2)!,

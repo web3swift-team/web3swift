@@ -20,7 +20,7 @@ extension web3.Personal {
             throw Web3Error.inputError(desc: "Can not unlock a local keystore")
         }
 
-        let parameters: [JSONRPCParameter] = [account.lowercased(), password, seconds]
+        let parameters: [APIRequestParameterType] = [account.lowercased(), password, seconds]
 
         let request = JSONRPCRequestFabric.prepareRequest(.unlockAccount, parameters: parameters)
 

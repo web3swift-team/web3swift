@@ -7,12 +7,13 @@
 import Foundation
 import BigInt
 
-public typealias Hash = String // 32 bytes hash of block
+public typealias Hash = String // 32 bytes hash of block (64 chars length without 0x)
 public typealias Receipt = Hash
-public typealias Address = Hash // 20 bytes
+public typealias Address = Hash // 20 bytes (40 chars length without 0x)
+public typealias TransactionHash = Hash // 64 chars length without 0x
 
 /// Ethereum JSON RPC API Calls
-public enum EthJSONRPC {
+public enum APIRequest {
     // MARK: - Official API
     // 0 parameter in call
     case gasPrice
@@ -86,7 +87,7 @@ public enum EthJSONRPC {
     case getTxPoolInspect // No in Eth API
 }
 
-extension EthJSONRPC {
+extension APIRequest {
     var call: String {
         switch self {
         case .gasPrice: return "eth_gasPrice"
@@ -118,81 +119,81 @@ extension EthJSONRPC {
     }
 }
 
-extension EthJSONRPC {
-    var responseType: EthResponseType.Type {
+extension APIRequest {
+    public var responseType: APIResponseType.Type {
         switch self {
         default: return String.self
         }
     }
 }
 
-extension EthJSONRPC {
-    var method: REST {
+extension APIRequest {
+    public var method: REST {
         switch self {
         default: return .POST
         }
     }
 }
 
-extension EthJSONRPC {
-    var parameters: [RPCParameter] {
+extension APIRequest {
+    var parameters: [RequestParameter] {
         switch self {
         case .gasPrice, .blockNumber, .getNetwork, .getAccounts, .estimateGas:
-            return [RPCParameter]()
+            return [RequestParameter]()
         case let .sendRawTransaction(hash):
-            return [RPCParameter.string(hash)]
+            return [RequestParameter.string(hash)]
         case .sendTransaction(let transactionParameters):
-            return [RPCParameter.transaction(transactionParameters)]
+            return [RequestParameter.transaction(transactionParameters)]
         case .getTransactionByHash(let hash):
-            return [RPCParameter.string(hash)]
+            return [RequestParameter.string(hash)]
         case .getTransactionReceipt(let receipt):
-            return [RPCParameter.string(receipt)]
+            return [RequestParameter.string(receipt)]
         case .getLogs(let eventFilterParameters):
-            return [RPCParameter.eventFilter(eventFilterParameters)]
+            return [RequestParameter.eventFilter(eventFilterParameters)]
         case .personalSign(let address, let data):
             // FIXME: Add second parameter
-            return [RPCParameter.string(address)]
+            return [RequestParameter.string(address)]
         case .call(let transactionParameters):
-            return [RPCParameter.transaction(transactionParameters)]
+            return [RequestParameter.transaction(transactionParameters)]
         case .getTransactionCount(let address, let blockNumber):
-            return [RPCParameter.string(address), RPCParameter.string(blockNumber.stringValue)]
+            return [RequestParameter.string(address), RequestParameter.string(blockNumber.stringValue)]
         case .getBalance(let address, let blockNumber):
-            return [RPCParameter.string(address), RPCParameter.string(blockNumber.stringValue)]
+            return [RequestParameter.string(address), RequestParameter.string(blockNumber.stringValue)]
         case .getStorageAt(let address, let hash, let blockNumber):
-            return [RPCParameter.string(address), RPCParameter.string(hash), RPCParameter.string(blockNumber.stringValue)]
+            return [RequestParameter.string(address), RequestParameter.string(hash), RequestParameter.string(blockNumber.stringValue)]
         case .getCode(let address, let blockNumber):
-            return [RPCParameter.string(address), RPCParameter.string(blockNumber.stringValue)]
+            return [RequestParameter.string(address), RequestParameter.string(blockNumber.stringValue)]
         case .getBlockByHash(let hash, let bool):
-            return [RPCParameter.string(hash), RPCParameter.bool(bool)]
+            return [RequestParameter.string(hash), RequestParameter.bool(bool)]
         case .getBlockByNumber(let hash, let bool):
-            return [RPCParameter.string(hash), RPCParameter.bool(bool)]
+            return [RequestParameter.string(hash), RequestParameter.bool(bool)]
         case .feeHistory(let uInt, let blockNumber, let array):
-            return [RPCParameter.uint(uInt), RPCParameter.string(blockNumber.stringValue), RPCParameter.doubleArray(array)]
+            return [RequestParameter.uint(uInt), RequestParameter.string(blockNumber.stringValue), RequestParameter.doubleArray(array)]
         case .createAccount(let string):
-            return [RPCParameter]()
+            return [RequestParameter]()
         case .unlockAccount(let address, let string, let optional):
-            return [RPCParameter]()
+            return [RequestParameter]()
         case .getTxPoolStatus:
-            return [RPCParameter]()
+            return [RequestParameter]()
         case .getTxPoolContent:
-            return [RPCParameter]()
+            return [RequestParameter]()
         case .getTxPoolInspect:
-            return [RPCParameter]()
+            return [RequestParameter]()
         }
     }
 }
 
-extension EthJSONRPC {
+extension APIRequest {
     var encodedBody: Data {
-        let request = EthRequestBody(method: self.call, parameters: self.parameters)
+        let request = RequestBody(method: self.call, parameters: self.parameters)
         // this is safe to force try this here
         // Because request must failed to compile would not conformable with `Encodable` protocol
         return try! JSONEncoder().encode(request)
     }
 }
 
-extension EthJSONRPC {
-    static func sendRequest<U>(with call: EthJSONRPC) async throws -> EthResponse<U> {
+extension APIRequest {
+    public static func sendRequest<U>(with call: APIRequest) async throws -> APIResponse<U> {
         let request = setupRequest(for: call)
         let (data, response) = try await URLSession.shared.data(for: request)
 
@@ -206,12 +207,12 @@ extension EthJSONRPC {
         // FIXME: What to do when `result` is just an hexString?
         // All works here must be end at leving it string.
         // Another way is to made type HexString with its own init and decode method
-        return try JSONDecoder().decode(EthResponse<U>.self, from: data)
+        return try JSONDecoder().decode(APIResponse<U>.self, from: data)
     }
 }
 
-private extension EthJSONRPC {
-    static func setupRequest(for call: EthJSONRPC) -> URLRequest {
+private extension APIRequest {
+    static func setupRequest(for call: APIRequest) -> URLRequest {
         // FIXME: Make custom url
         let url = URL(string: "https://mainnet.infura.io/v3/4406c3acf862426c83991f1752c46dd8")!
         var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData)
@@ -228,26 +229,26 @@ public enum REST: String {
     case GET
 }
 
-public struct EthRequestBody: Encodable {
+public struct RequestBody: Encodable {
     var jsonrpc = "2.0"
     var id = Counter.increment()
 
     var method: String
-    var parameters: [RPCParameter]
+    var parameters: [RequestParameter]
 }
 
 /// JSON RPC response structure for serialization and deserialization purposes.
-public struct EthResponse<T>: Decodable where T: EthResponseType {
+public struct APIResponse<T>: Decodable where T: APIResponseType {
     public var id: Int
     public var jsonrpc = "2.0"
     public var result: T
 }
 
-public protocol EthResponseType: Decodable { }
+public protocol APIResponseType: Decodable { }
 
-extension BigUInt: EthResponseType { }
+extension BigUInt: APIResponseType { }
 
-extension String: EthResponseType { }
+extension String: APIResponseType { }
 
 public enum JSONRPCmethod: String, Encodable {
     // 0 parameter in call
@@ -317,17 +318,17 @@ public enum JSONRPCmethod: String, Encodable {
 }
 
 public struct JSONRPCRequestFabric {
-    public static func prepareRequest(_ method: JSONRPCmethod, parameters: [JSONRPCParameter]) -> JSONRPCrequest {
+    public static func prepareRequest(_ method: JSONRPCmethod, parameters: [APIRequestParameterType]) -> JSONRPCrequest {
         var request = JSONRPCrequest()
         request.method = method
-        request.params = parameters.compactMap { RPCParameter.init(rawValue: $0) }
+        request.params = parameters.compactMap { RequestParameter.init(rawValue: $0) }
         return request
     }
 
-    public static func prepareRequest(_ method: InfuraWebsocketMethod, parameters: [JSONRPCParameter]) -> InfuraWebsocketRequest {
+    public static func prepareRequest(_ method: InfuraWebsocketMethod, parameters: [APIRequestParameterType]) -> InfuraWebsocketRequest {
         var request = InfuraWebsocketRequest()
         request.method = method
-        request.params = parameters.compactMap { RPCParameter.init(rawValue: $0) }
+        request.params = parameters.compactMap { RequestParameter.init(rawValue: $0) }
         return request
     }
 }
