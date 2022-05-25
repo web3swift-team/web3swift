@@ -7,17 +7,15 @@
 
 import Foundation
 
-/// Protocol to restrict supported types which can be passed into `JSONRPCRequest` to a node.
-///
-/// You **must not** conform any type to that protocol.
+/// Protocol to restrict supported types which can be passed into `RequestParameter` to a node.
 ///
 /// Due to internal logic and swift itself restrictions, there's lack of encoding generic types
-/// so current implementation of `JSONRPCParameter`s belongs on hardcoded supported types.
+/// so current implementation of `RequestParameter`s belongs on hardcoded supported types.
 ///
 /// Conformance of that protocol by a custom type will be silently failed to encode (e.g. there won't be in request).
 ///
-/// Please see `RPCParameter` documentation for more details.
-public protocol APIRequestParameterType: Encodable { }
+/// Please see `RequestParameter` documentation for more details.
+protocol APIRequestParameterType: Encodable { }
 
 protocol APIRequestParameterElementType: Encodable { }
 
@@ -75,7 +73,7 @@ extension Bool: APIRequestParameterElementType { }
  //> [12,\"this\",12.2,[12.2,12.4]]`
  ```
  */
-public enum RequestParameter {
+enum RequestParameter {
     case int(Int)
     case intArray([Int])
 
@@ -105,7 +103,7 @@ extension RequestParameter: RawRepresentable {
 
      You're totally free to use explicit and more convenience member init as `RequestParameter.int(12)` in your code.
      */
-    public init?(rawValue: APIRequestParameterType) {
+    init?(rawValue: APIRequestParameterType) {
         /// force casting in this switch is safe because
         /// each `rawValue` forced to casts only in exact case which is runs based on `rawValues` type
         // swiftlint:disable force_cast
@@ -133,7 +131,7 @@ extension RequestParameter: RawRepresentable {
     }
 
     /// Returning associated value of the enum case.
-    public var rawValue: APIRequestParameterType {
+    var rawValue: APIRequestParameterType {
         // cases can't be merged, coz it cause compiler error since it couldn't predict what exact type on exact case will be returned.
         switch self {
         case let .int(value): return value
@@ -175,7 +173,7 @@ extension RequestParameter: Encodable {
      //> [12,\"this\",12.2,[12.2,12.4]]`
      ```
      */
-    public func encode(to encoder: Encoder) throws {
+    func encode(to encoder: Encoder) throws {
         var enumContainer = encoder.singleValueContainer()
         /// force casting in this switch is safe because
         /// each `rawValue` forced to casts only in exact case which is runs based on `rawValue` type
