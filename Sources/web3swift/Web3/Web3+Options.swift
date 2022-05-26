@@ -235,7 +235,7 @@ extension TransactionOptions: Decodable {
             self.to = ethAddr
         }
 
-        self.from = try container.decodeIfPresent(EthereumAddress.self, forKey: .to)
+        self.from = try container.decodeIfPresent(EthereumAddress.self, forKey: .from)
 
         if let gasPrice = try? container.decodeHex(BigUInt.self, forKey: .gasPrice) {
             self.gasPrice = .manual(gasPrice)
