@@ -6,8 +6,7 @@
 //
 
 import Foundation
-
-public protocol APIResponseType: Decodable { }
+import BigInt
 
 public typealias Hash = String // 32 bytes hash of block (64 chars length without 0x)
 public typealias Receipt = Hash
@@ -96,15 +95,17 @@ extension APIRequest {
         }
     }
 
-    public var responseType: APIResponseType.Type {
+    public var responseType: APIResultType.Type {
         switch self {
         case .blockNumber: return UInt.self
+        case .getAccounts: return [EthereumAddress].self
+        case .feeHistory: return Web3.Oracle.FeeHistory.self
         default: return String.self
         }
     }
 
     var encodedBody: Data {
-        let request = RequestBody(method: self.call, parameters: self.parameters)
+        let request = RequestBody(method: self.call, params: self.parameters)
         // this is safe to force try this here
         // Because request must failed to compile if it not conformable with `Encodable` protocol
         return try! JSONEncoder().encode(request)
@@ -142,7 +143,7 @@ extension APIRequest {
         case .getBlockByNumber(let hash, let bool):
             return [RequestParameter.string(hash), RequestParameter.bool(bool)]
         case .feeHistory(let uInt, let blockNumber, let array):
-            return [RequestParameter.uint(uInt), RequestParameter.string(blockNumber.stringValue), RequestParameter.doubleArray(array)]
+            return [RequestParameter.string(uInt.hexString), RequestParameter.string(blockNumber.stringValue), RequestParameter.doubleArray(array)]
         case .createAccount(let string):
             return [RequestParameter]()
         case .unlockAccount(let address, let string, let optional):
@@ -188,31 +189,35 @@ extension APIRequest {
 }
 
 extension APIRequest {
-    public static func sendRequest<U>(with call: APIRequest) async throws -> APIResponse<U> {
-        /// Don't even try to make network request if the U type dosen't equal to supposed by API
+    public static func sendRequest<Result>(with provider: Web3Provider, for call: APIRequest) async throws -> APIResponse<Result> {
+        /// Don't even try to make network request if the `Result` type dosen't equal to supposed by API
         // FIXME: Add appropriate error thrown
-        guard U.self == call.responseType else { throw Web3Error.unknownError }
+        guard Result.self == call.responseType else { throw Web3Error.unknownError }
 
-        let request = setupRequest(for: call)
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let request = setupRequest(for: call, with: provider)
+        let (data, response) = try await provider.session.data(for: request)
 
         // FIXME: Add appropriate error thrown
         guard let httpResponse = response as? HTTPURLResponse,
                200 ..< 400 ~= httpResponse.statusCode else { throw Web3Error.connectionError }
 
-        if U.self == UInt.self || U.self == Int.self || U.self == BigInt.self || U.self == BigUInt.self {
-            let some = try! JSONDecoder().decode(APIResponse<String>.self, from: data)
+        if Result.self == UInt.self || Result.self == Int.self || Result.self == BigInt.self || Result.self == BigUInt.self {
+            /// This types for sure conformed with `LiteralInitiableFromString`
+            // FIXME: Make appropriate error
+            guard let U = Result.self as? LiteralInitiableFromString.Type else { throw Web3Error.unknownError}
+            let responseAsString = try! JSONDecoder().decode(APIResponse<String>.self, from: data)
             // FIXME: Add appropriate error thrown.
-            guard let tmpAnother = U(from: some.result) else { throw Web3Error.unknownError }
-            return APIResponse(id: some.id, jsonrpc: some.jsonrpc, result: tmpAnother)
+            guard let literalValue = U.init(from: responseAsString.result) else { throw Web3Error.unknownError }
+            /// `U` is a APIResponseType type, which `LiteralInitiableFromString` conforms to, so it is safe to cast that.
+            // FIXME: Make appropriate error
+            guard let asT = literalValue as? Result else { throw Web3Error.unknownError }
+            return APIResponse(id: responseAsString.id, jsonrpc: responseAsString.jsonrpc, result: asT)
         }
-        return try JSONDecoder().decode(APIResponse<U>.self, from: data)
+        return try JSONDecoder().decode(APIResponse<Result>.self, from: data)
     }
 
-    static func setupRequest(for call: APIRequest) -> URLRequest {
-        // FIXME: Make custom url
-        let url = URL(string: "https://mainnet.infura.io/v3/4406c3acf862426c83991f1752c46dd8")!
-        var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData)
+    static func setupRequest(for call: APIRequest, with provider: Web3Provider) -> URLRequest {
+        var urlRequest = URLRequest(url: provider.url, cachePolicy: .reloadIgnoringCacheData)
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         urlRequest.httpMethod = call.method.rawValue
@@ -226,17 +231,17 @@ public enum REST: String {
     case GET
 }
 
-public struct RequestBody: Encodable {
+struct RequestBody: Encodable {
     var jsonrpc = "2.0"
     var id = Counter.increment()
 
     var method: String
-    var parameters: [RequestParameter]
+    var params: [RequestParameter]
 }
 
 /// JSON RPC response structure for serialization and deserialization purposes.
-public struct APIResponse<T>: Decodable where T: LiteralInitableFromString {
+public struct APIResponse<Result>: Decodable where Result: APIResultType {
     public var id: Int
     public var jsonrpc = "2.0"
-    public var result: T
+    public var result: Result
 }

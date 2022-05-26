@@ -12,8 +12,6 @@ import Foundation
 /// Due to internal logic and swift itself restrictions, there's lack of encoding generic types
 /// so current implementation of `RequestParameter`s belongs on hardcoded supported types.
 ///
-/// Conformance of that protocol by a custom type will be silently failed to encode (e.g. there won't be in request).
-///
 /// Please see `RequestParameter` documentation for more details.
 protocol APIRequestParameterType: Encodable { }
 
