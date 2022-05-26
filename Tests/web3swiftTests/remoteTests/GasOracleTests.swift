@@ -13,7 +13,7 @@ import BigInt
 // MARK: Works only with network connection
 class OracleTests: XCTestCase {
 
-    let blockNumber: BigUInt = 14571792
+    let blockNumber: UInt = 14571792
 
     func testPretictBaseFee() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
@@ -66,30 +66,44 @@ class OracleTests: XCTestCase {
         XCTAssertEqual(bothFeesPercentiles?.tip, etalonPercentiles.1, "Arrays should be equal")
     }
 
-    func testPredictLegacyGasPrice() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
-        let etalonPercentiles: [BigUInt] = [
-            93253857566,     // 10 percentile
-            106634912620,    // 40 percentile
-            111000000000,    // 60 percentile
-            127210686305     // 90 percentile
-        ]
-        
-        let gasPriceLegacyPercentiles = await oracle.gasPriceLegacyPercentiles()
-        XCTAssertEqual(gasPriceLegacyPercentiles, etalonPercentiles, "Arrays should be equal")
-    }
+//    func testPredictLegacyGasPrice() async throws {
+//        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+//        lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
+//        let etalonPercentiles: [BigUInt] = [
+//            93253857566,     // 10 percentile
+//            106634912620,    // 40 percentile
+//            111000000000,    // 60 percentile
+//            127210686305     // 90 percentile
+//        ]
+//        
+//        let gasPriceLegacyPercentiles = await oracle.gasPriceLegacyPercentiles()
+//        XCTAssertEqual(gasPriceLegacyPercentiles, etalonPercentiles, "Arrays should be equal")
+//    }
+//
+//    func testAllTransactionInBlockDecodesWell() async throws {
+//        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+//        lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
+//        let blockWithTransaction = try await web3.eth.getBlockByNumber(blockNumber, fullTransactions: true)
+//
+//        let nullTransactions = blockWithTransaction.transactions.filter {
+//            guard case .null = $0 else { return false }
+//            return true
+//        }
+//
+//        XCTAssert(nullTransactions.isEmpty, "This amount transaction fails to decode: \(nullTransactions.count)")
+//    }
 
-    func testAllTransactionInBlockDecodesWell() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
-        let blockWithTransaction = try await web3.eth.getBlockByNumber(blockNumber, fullTransactions: true)
 
-        let nullTransactions = blockWithTransaction.transactions.filter {
-            guard case .null = $0 else { return false }
-            return true
-        }
-
-        XCTAssert(nullTransactions.isEmpty, "This amount transaction fails to decode: \(nullTransactions.count)")
-    }
+    // FIXME: Move it to external test suit.
+//    func testBlockNumber() async throws {
+//        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+//        let latestBlockNumber = try await web3.eth.getBlockNumber()
+//        print(latestBlockNumber)
+//    }
+//
+//    func testgetAccounts() async throws {
+//        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+//        let accounts = try await web3.eth.getAccounts()
+//        print(accounts)
+//    }
 }

@@ -25,7 +25,7 @@ extension Web3 {
         var block: BlockNumber
 
         /// Count of blocks to include in dataset
-        var blockCount: BigUInt
+        var blockCount: UInt
 
         /// Percentiles
         ///
@@ -48,7 +48,7 @@ extension Web3 {
         ///   - block: Number of block from which counts starts backward
         ///   - blockCount: Count of block to calculate statistics
         ///   - percentiles: Percentiles of fees to which result of predictions will be split in
-        public init(_ provider: web3, block: BlockNumber = .latest, blockCount: BigUInt = 20, percentiles: [Double] = [25, 50, 75]) {
+        public init(_ provider: web3, block: BlockNumber = .latest, blockCount: UInt = 20, percentiles: [Double] = [25, 50, 75]) {
             self.web3Provider = provider
             self.block = block
             self.blockCount = blockCount
@@ -89,7 +89,7 @@ extension Web3 {
             // TODO: Disabled until 3.0 version, coz `distance` available from iOS 13.
 //            guard feeHistory == nil, forceDropCache, feeHistory!.timestamp.distance(to: Date()) > cacheTimeout else { return feeHistory! }
 
-            return try await eth.feeHistory(blockCount: blockCount, block: block.stringValue, percentiles: percentiles)
+            return try await eth.feeHistory(blockCount: blockCount, block: block, percentiles: percentiles)
         }
 
         /// Suggesting tip values
@@ -122,7 +122,7 @@ extension Web3 {
         }
 
         private func suggestGasFeeLegacy() async throws -> [BigUInt] {
-            var latestBlockNumber: BigUInt = 0
+            var latestBlockNumber: UInt = 0
             switch block {
             case .latest: latestBlockNumber = try await eth.getBlockNumber()
             case let .exact(number): latestBlockNumber = number

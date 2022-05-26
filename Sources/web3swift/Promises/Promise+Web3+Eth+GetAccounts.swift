@@ -7,25 +7,16 @@
 import Foundation
 import BigInt
 
-
 extension web3.Eth {
     public func ownedAccounts() async throws -> [EthereumAddress] {
-
         guard self.web3.provider.attachedKeystoreManager == nil else {
             return try self.web3.wallet.getAccounts()
         }
 
+        let requestCall: APIRequest = .getAccounts
 
-        let request = JSONRPCRequestFabric.prepareRequest(.getAccounts, parameters: [])
-        let response = try await web3.dispatch(request)
+        let response: APIResponse<[EthereumAddress]> = try await APIRequest.sendRequest(with: web3.provider, for: requestCall)
 
-        guard let value: [EthereumAddress] = response.getValue() else {
-            if response.error != nil {
-                throw Web3Error.nodeError(desc: response.error!.message)
-            }
-            throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
-        }
-        return value
-
+        return response.result
     }
 }

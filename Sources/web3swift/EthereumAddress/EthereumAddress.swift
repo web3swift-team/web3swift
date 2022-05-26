@@ -125,3 +125,5 @@ extension EthereumAddress {
 }
 
 extension EthereumAddress: Hashable { }
+
+extension EthereumAddress: APIResultType { }

@@ -14,7 +14,7 @@ public enum BlockNumber {
     /// Earliest block of a chain
     case earliest
     /// Exact block number
-    case exact(BigUInt)
+    case exact(UInt)
 
     /// Block number as a hex string
     public var stringValue: String {

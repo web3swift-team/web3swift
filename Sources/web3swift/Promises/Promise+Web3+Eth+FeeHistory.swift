@@ -9,19 +9,14 @@
 import Foundation
 import BigInt
 
+extension Web3.Oracle.FeeHistory: APIResultType { }
+
 extension web3.Eth {
-    func feeHistory(blockCount: BigUInt, block: String, percentiles:[Double]) async throws -> Web3.Oracle.FeeHistory {
-        let parameters: [APIRequestParameterType] = [blockCount.hexString, block, percentiles]
+    func feeHistory(blockCount: UInt, block: BlockNumber, percentiles:[Double]) async throws -> Web3.Oracle.FeeHistory {
+        let requestCall: APIRequest = .feeHistory(blockCount, block, percentiles)
 
-        let request = JSONRPCRequestFabric.prepareRequest(.feeHistory, parameters: parameters)
-        let response = try await web3.dispatch(request)
+        let response: APIResponse<Web3.Oracle.FeeHistory> = try await APIRequest.sendRequest(with: web3.provider, for: requestCall)
 
-        guard let value: Web3.Oracle.FeeHistory = response.getValue() else {
-            if response.error != nil {
-                throw Web3Error.nodeError(desc: response.error!.message)
-            }
-            throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
-        }
-        return value
+        return response.result
     }
 }
