@@ -10,8 +10,7 @@ import BigInt
 
 extension web3.Eth {
     public func block(by hash: Data, fullTransactions: Bool = false) async throws -> Block {
-        let hashString = hash.toHexString().addHexPrefix()
-        return try await block(by: hashString, fullTransactions: fullTransactions)
+        try await block(by: hashString.toHexString().addHexPrefix(), fullTransactions: fullTransactions)
     }
 
     public func block(by hash: String, fullTransactions: Bool = false) async throws -> Block {

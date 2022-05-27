@@ -177,6 +177,8 @@ public struct EthereumTransaction: CustomStringConvertible {
     /// - Returns: a TransactionParameters object suitable for passing to Web3+JSONRPC provider
     public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? { self.envelope.encodeAsDictionary(from: from) }
 
+
+    // FIXME: Move this logic into place where it supposed to be.
     /// create a JSON RPC Request object for the given transacton
     /// - Parameters:
     ///   - method: RPC request method
@@ -207,6 +209,7 @@ public struct EthereumTransaction: CustomStringConvertible {
         return self.envelope.encode(for: type)
     }
 
+    // FIXME: Move this logic into place where it supposed to be.
     /// creates a Raw RPC request transaction for the given Transaction
     /// - Parameter transaction: EthereumTransaction to encode
     /// - Returns: a JSONRPCrequest object

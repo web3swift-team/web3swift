@@ -10,10 +10,7 @@ import BigInt
 
 extension web3.Eth {
     public func blockNumber() async throws -> UInt {
-        let requestCall: APIRequest = .blockNumber
-
-        let response: APIResponse<UInt> = try await APIRequest.sendRequest(with: web3.provider, for: requestCall)
-
+        let response: APIResponse<UInt> = try await APIRequest.sendRequest(with: web3.provider, for: .blockNumber)
         return response.result
     }
 }
