@@ -138,14 +138,12 @@ extension Web3 {
 
             // TODO: Make me work with cache
             let blocks = try await withThrowingTaskGroup(of: Block.self, returning: [Block].self) { group in
-
                 (latestBlockNumber - blockCount ... latestBlockNumber)
-                    .forEach { transaction in
+                    .forEach { block in
                         group.addTask {
-                            try await self.eth.getBlockByNumber(transaction, fullTransactions: true)
+                            try await self.eth.block(by: .exact(block), fullTransactions: true)
                         }
                     }
-
 
                 var collected = [Block]()
 

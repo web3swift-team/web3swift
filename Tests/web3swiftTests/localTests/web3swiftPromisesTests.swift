@@ -18,7 +18,7 @@ class web3swiftPromisesTests: XCTestCase {
     
     func testGetBalancePromise() async throws {
         let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
-        let balance = try await web3.eth.getBalance(address: "0xe22b8979739D724343bd002F9f432F5990879901")
+        let balance = try await web3.eth.getBalance(for: "0xe22b8979739D724343bd002F9f432F5990879901")
         print(balance)
     }
     

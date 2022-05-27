@@ -291,6 +291,8 @@ extension Block {
     }
 }
 
+extension Block: APIResultType { }
+
 public struct EventParserResult: EventParserResultProtocol {
     public var eventName: String
     public var transactionReceipt: TransactionReceipt?

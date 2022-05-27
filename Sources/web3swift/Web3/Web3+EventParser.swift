@@ -118,7 +118,7 @@ extension web3.web3contract.EventParser {
             throw Web3Error.inputError(desc: "Can not mix parsing specific block and using block range filter")
         }
 
-        let res = try await self.web3.eth.blockBy(number: blockNumber)
+        let res = try await self.web3.eth.block(by: blockNumber)
 
         return try await self.parseBlockPromise(res)
     }

@@ -106,7 +106,7 @@ class web3swiftUserCases: XCTestCase {
     func testNonBatchedRequest() async throws {
         let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
         let address = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-        let balanceResult = try await web3.eth.getBalance(address: address)
+        let balanceResult = try await web3.eth.getBalance(for: address)
         print(balanceResult)
     }
 }

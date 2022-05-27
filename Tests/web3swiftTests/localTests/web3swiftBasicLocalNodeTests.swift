@@ -61,8 +61,8 @@ class web3swiftBasicLocalNodeTests: XCTestCase {
         sendTx.transactionOptions.value = valueToSend
         sendTx.transactionOptions.from = allAddresses[0]
         
-        let balanceBeforeTo = try await web3.eth.getBalance(address: sendToAddress)
-        let balanceBeforeFrom = try await web3.eth.getBalance(address: allAddresses[0])
+        let balanceBeforeTo = try await web3.eth.getBalance(for: sendToAddress)
+        let balanceBeforeFrom = try await web3.eth.getBalance(for: allAddresses[0])
         print("Balance before to: " + balanceBeforeTo.description)
         print("Balance before from: " + balanceBeforeFrom.description)
         
@@ -86,8 +86,8 @@ class web3swiftBasicLocalNodeTests: XCTestCase {
         print(details)
         
         
-        let balanceAfterTo = try await web3.eth.getBalance(address: sendToAddress)
-        let balanceAfterFrom = try await web3.eth.getBalance(address: allAddresses[0])
+        let balanceAfterTo = try await web3.eth.getBalance(for: sendToAddress)
+        let balanceAfterFrom = try await web3.eth.getBalance(for: allAddresses[0])
         print("Balance after to: " + balanceAfterTo.description)
         print("Balance after from: " + balanceAfterFrom.description)
         

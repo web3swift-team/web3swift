@@ -15,7 +15,7 @@ class InfuraTests: XCTestCase {
         do {
             let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
             let address = EthereumAddress("0xd61b5ca425F8C8775882d4defefC68A6979DBbce")!
-            let balance = try await web3.eth.getBalance(address: address)
+            let balance = try await web3.eth.getBalance(for: address)
             let balString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .eth, decimals: 3)
             print(balString!)
         } catch {
@@ -32,13 +32,13 @@ class InfuraTests: XCTestCase {
     
     func testGetBlockByNumber1() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let result = try await web3.eth.getBlockByNumber("latest", fullTransactions: false)
+        let result = try await web3.eth.getBlockByNumber(.latest, fullTransactions: false)
         print(result)
     }
     
     func testGetBlockByNumber2() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let result = try await web3.eth.getBlockByNumber(UInt(5184323), fullTransactions: true)
+        let result = try await web3.eth.getBlockByNumber(.exact(5184323), fullTransactions: true)
         print(result)
         let transactions = result.transactions
         for transaction in transactions {
@@ -54,7 +54,7 @@ class InfuraTests: XCTestCase {
     func testGetBlockByNumber3() async throws {
         do {
             let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-            let _ = try await web3.eth.getBlockByNumber(UInt(1000000000), fullTransactions: true)
+            let _ = try await web3.eth.getBlockByNumber(.exact(1000000000), fullTransactions: true)
             XCTFail()
         } catch {
             
