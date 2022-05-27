@@ -9,7 +9,7 @@ import BigInt
 
 
 extension web3.Eth {
-    public func block(by number: UInt, fullTransactions: Bool = false) async throws -> Block {
+    public func block(by number: BigUInt, fullTransactions: Bool = false) async throws -> Block {
         try await block(by: BlockNumber.exact(number), fullTransactions: fullTransactions)
     }
 

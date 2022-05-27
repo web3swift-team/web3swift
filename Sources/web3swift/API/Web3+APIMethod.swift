@@ -58,7 +58,7 @@ public enum APIRequest {
     ///   - [Double]: A monotonically increasing list of percentile values.
     ///     For each block in the requested range, the transactions will be sorted in ascending order
     ///     by effective tip per gas and the coresponding effective tip for the percentile will be determined, accounting for gas consumed."
-    case feeHistory(UInt, BlockNumber, [Double])
+    case feeHistory(BigUInt, BlockNumber, [Double])
 
     // MARK: - Additional API
     /// Creates new account.
@@ -97,14 +97,14 @@ extension APIRequest {
 
     public var responseType: APIResultType.Type {
         switch self {
-        case .blockNumber: return UInt.self
+        case .blockNumber: return BigUInt.self
         case .getAccounts: return [EthereumAddress].self
         case .getBalance: return BigUInt.self
         case .getBlockByHash: return Block.self
         case .getBlockByNumber: return Block.self
         case .gasPrice: return BigUInt.self
         case .feeHistory: return Web3.Oracle.FeeHistory.self
-        case .getTransactionCount: return UInt.self
+        case .getTransactionCount: return BigUInt.self
         case .getCode: return Hash.self
         case .getTransactionReceipt: return TransactionReceipt.self
         case .createAccount: return EthereumAddress.self

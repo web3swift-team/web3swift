@@ -5,16 +5,17 @@
 //
 
 import Foundation
+import BigInt
 
 
 extension web3.Eth {
-    public func getTransactionCount(for address: EthereumAddress, onBlock: BlockNumber) async throws -> UInt {
+    public func getTransactionCount(for address: EthereumAddress, onBlock: BlockNumber) async throws -> BigUInt {
         try await getTransactionCount(address: address.address, onBlock: onBlock)
     }
 
-    public func getTransactionCount(address: Address, onBlock: BlockNumber) async throws -> UInt {
+    public func getTransactionCount(address: Address, onBlock: BlockNumber) async throws -> BigUInt {
         let requestCall: APIRequest = .getTransactionCount(address, onBlock)
-        let response: APIResponse<UInt> = try await APIRequest.sendRequest(with: self.provider, for: requestCall)
+        let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: self.provider, for: requestCall)
         return response.result
     }
 }

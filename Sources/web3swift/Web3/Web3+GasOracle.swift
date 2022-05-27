@@ -25,7 +25,7 @@ extension Web3 {
         var block: BlockNumber
 
         /// Count of blocks to include in dataset
-        var blockCount: UInt
+        var blockCount: BigUInt
 
         /// Percentiles
         ///
@@ -48,7 +48,7 @@ extension Web3 {
         ///   - block: Number of block from which counts starts backward
         ///   - blockCount: Count of block to calculate statistics
         ///   - percentiles: Percentiles of fees to which result of predictions will be split in
-        public init(_ provider: web3, block: BlockNumber = .latest, blockCount: UInt = 20, percentiles: [Double] = [25, 50, 75]) {
+        public init(_ provider: web3, block: BlockNumber = .latest, blockCount: BigUInt = 20, percentiles: [Double] = [25, 50, 75]) {
             self.web3Provider = provider
             self.block = block
             self.blockCount = blockCount
@@ -122,7 +122,7 @@ extension Web3 {
         }
 
         private func suggestGasFeeLegacy() async throws -> [BigUInt] {
-            var latestBlockNumber: UInt = 0
+            var latestBlockNumber: BigUInt = 0
             switch block {
             case .latest: latestBlockNumber = try await eth.getBlockNumber()
             case let .exact(number): latestBlockNumber = number
