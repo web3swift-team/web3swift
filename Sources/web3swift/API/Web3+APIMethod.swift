@@ -27,7 +27,7 @@ public enum APIRequest {
     case sendRawTransaction(Hash)
     case sendTransaction(TransactionParameters)
     case getTransactionByHash(Hash)
-    case getTransactionReceipt(Receipt)
+    case getTransactionReceipt(Hash)
     case getLogs(EventFilterParameters)
     case personalSign(Address, Data)
     case call(TransactionParameters)
@@ -105,6 +105,10 @@ extension APIRequest {
         case .gasPrice: return BigUInt.self
         case .feeHistory: return Web3.Oracle.FeeHistory.self
         case .getTransactionCount: return UInt.self
+        case .getCode: return Hash.self
+        case .getTransactionReceipt: return TransactionReceipt.self
+        case .createAccount: return EthereumAddress.self
+        case .unlockAccount: return Bool.self
         default: return String.self
         }
     }
@@ -225,6 +229,8 @@ extension APIRequest {
         guard let httpResponse = response as? HTTPURLResponse,
                200 ..< 400 ~= httpResponse.statusCode else { throw Web3Error.connectionError }
 
+        /// This bit of code is purposed to work with literal types that comes in Response in hexString type.
+        /// Currently it's just any kind of Integers like `(U)Int`, `Big(U)Int`.
         if Result.self == UInt.self || Result.self == Int.self || Result.self == BigInt.self || Result.self == BigUInt.self {
             /// This types for sure conformed with `LiteralInitiableFromString`
             // FIXME: Make appropriate error

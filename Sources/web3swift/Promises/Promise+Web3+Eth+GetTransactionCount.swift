@@ -14,7 +14,7 @@ extension web3.Eth {
 
     public func getTransactionCount(address: Address, onBlock: BlockNumber) async throws -> UInt {
         let requestCall: APIRequest = .getTransactionCount(address, onBlock)
-        let response: APIResponse<UInt> = APIRequest.sendRequest(with: self.provider, for: requestCall)
+        let response: APIResponse<UInt> = try await APIRequest.sendRequest(with: self.provider, for: requestCall)
         return response.result
     }
 }
