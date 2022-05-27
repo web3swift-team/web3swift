@@ -9,27 +9,14 @@ import BigInt
 
 
 extension web3.Eth {
-    public func blockBy(number: UInt, fullTransactions: Bool = false) async throws -> Block {
-        let block = String(number, radix: 16).addHexPrefix()
-        return try await blockBy(number: block, fullTransactions: fullTransactions)
+    public func block(by number: UInt, fullTransactions: Bool = false) async throws -> Block {
+        let blockNumber = BlockNumber.exact(number)
+        return try await block(by: blockNumber, fullTransactions: fullTransactions)
     }
 
-    public func blockBy(number: BigUInt, fullTransactions: Bool = false) async throws -> Block {
-        let block = String(number, radix: 16).addHexPrefix()
-        return try await blockBy(number: block, fullTransactions: fullTransactions)
-    }
-
-    public func blockBy(number: String, fullTransactions: Bool = false) async throws -> Block {
-        let request = JSONRPCRequestFabric.prepareRequest(.getBlockByNumber, parameters: [number, fullTransactions])
-        let response = try await web3.dispatch(request)
-
-        guard let value: Block = response.getValue() else {
-            if response.error != nil {
-                throw Web3Error.nodeError(desc: response.error!.message)
-            }
-            throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
-        }
-        return value
-
+    public func block(by number: BlockNumber, fullTransactions: Bool = false) async throws -> Block {
+        let requestCall: APIRequest = .getBlockByNumber(number, fullTransactions)
+        let response: APIResponse<Block> = try await APIRequest.sendRequest(with: self.provider, for: requestCall)
+        return response.result
     }
 }

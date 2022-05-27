@@ -44,7 +44,7 @@ public enum APIRequest {
 
     case getCode(Address, BlockNumber)
     case getBlockByHash(Hash, Bool)
-    case getBlockByNumber(Hash, Bool)
+    case getBlockByNumber(BlockNumber, Bool)
 
     /// Returns fee history with a respect to given setup
     ///
@@ -99,6 +99,9 @@ extension APIRequest {
         switch self {
         case .blockNumber: return UInt.self
         case .getAccounts: return [EthereumAddress].self
+        case .getBalance: return BigUInt.self
+        case .getBlockByHash: return Block.self
+        case .getBlockByNumber: return Block.self
         case .feeHistory: return Web3.Oracle.FeeHistory.self
         default: return String.self
         }
@@ -115,43 +118,62 @@ extension APIRequest {
         switch self {
         case .gasPrice, .blockNumber, .getNetwork, .getAccounts, .estimateGas:
             return [RequestParameter]()
+
         case let .sendRawTransaction(hash):
             return [RequestParameter.string(hash)]
+
         case .sendTransaction(let transactionParameters):
             return [RequestParameter.transaction(transactionParameters)]
+
         case .getTransactionByHash(let hash):
             return [RequestParameter.string(hash)]
+
         case .getTransactionReceipt(let receipt):
             return [RequestParameter.string(receipt)]
+
         case .getLogs(let eventFilterParameters):
             return [RequestParameter.eventFilter(eventFilterParameters)]
+
         case .personalSign(let address, let data):
             // FIXME: Add second parameter
             return [RequestParameter.string(address)]
+
         case .call(let transactionParameters):
             return [RequestParameter.transaction(transactionParameters)]
+
         case .getTransactionCount(let address, let blockNumber):
             return [RequestParameter.string(address), RequestParameter.string(blockNumber.stringValue)]
+
         case .getBalance(let address, let blockNumber):
             return [RequestParameter.string(address), RequestParameter.string(blockNumber.stringValue)]
+
         case .getStorageAt(let address, let hash, let blockNumber):
             return [RequestParameter.string(address), RequestParameter.string(hash), RequestParameter.string(blockNumber.stringValue)]
+
         case .getCode(let address, let blockNumber):
             return [RequestParameter.string(address), RequestParameter.string(blockNumber.stringValue)]
+
         case .getBlockByHash(let hash, let bool):
             return [RequestParameter.string(hash), RequestParameter.bool(bool)]
-        case .getBlockByNumber(let hash, let bool):
-            return [RequestParameter.string(hash), RequestParameter.bool(bool)]
+
+        case .getBlockByNumber(let block, let bool):
+            return [RequestParameter.string(block.stringValue), RequestParameter.bool(bool)]
+
         case .feeHistory(let uInt, let blockNumber, let array):
             return [RequestParameter.string(uInt.hexString), RequestParameter.string(blockNumber.stringValue), RequestParameter.doubleArray(array)]
+
         case .createAccount(let string):
             return [RequestParameter]()
+
         case .unlockAccount(let address, let string, let optional):
             return [RequestParameter]()
+
         case .getTxPoolStatus:
             return [RequestParameter]()
+
         case .getTxPoolContent:
             return [RequestParameter]()
+
         case .getTxPoolInspect:
             return [RequestParameter]()
         }

@@ -12,11 +12,7 @@ extension web3.Eth {
         guard self.web3.provider.attachedKeystoreManager == nil else {
             return try self.web3.wallet.getAccounts()
         }
-
-        let requestCall: APIRequest = .getAccounts
-
-        let response: APIResponse<[EthereumAddress]> = try await APIRequest.sendRequest(with: web3.provider, for: requestCall)
-
+        let response: APIResponse<[EthereumAddress]> = try await APIRequest.sendRequest(with: web3.provider, for: .getAccounts)
         return response.result
     }
 }
