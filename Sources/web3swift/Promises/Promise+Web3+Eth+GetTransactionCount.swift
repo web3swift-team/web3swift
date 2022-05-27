@@ -5,25 +5,16 @@
 //
 
 import Foundation
-import BigInt
 
 
 extension web3.Eth {
-    public func getTransactionCount(for address: EthereumAddress, onBlock: String = "latest") async throws -> BigUInt {
-        let addr = address.address
-        return try await getTransactionCount(address: addr, onBlock: onBlock)
+    public func getTransactionCount(for address: EthereumAddress, onBlock: BlockNumber) async throws -> UInt {
+        try await getTransactionCount(address: address.address, onBlock: onBlock)
     }
 
-    public func getTransactionCount(address: String, onBlock: String = "latest") async throws -> BigUInt {
-        let request = JSONRPCRequestFabric.prepareRequest(.getTransactionCount, parameters: [address.lowercased(), onBlock])
-        let response = try await web3.dispatch(request)
-
-        guard let value: BigUInt = response.getValue() else {
-            if response.error != nil {
-                throw Web3Error.nodeError(desc: response.error!.message)
-            }
-            throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
-        }
-        return value
+    public func getTransactionCount(address: Address, onBlock: BlockNumber) async throws -> UInt {
+        let requestCall: APIRequest = .getTransactionCount(address, onBlock)
+        let response: APIResponse<UInt> = APIRequest.sendRequest(with: self.provider, for: requestCall)
+        return response.result
     }
 }

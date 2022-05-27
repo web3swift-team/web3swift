@@ -102,7 +102,9 @@ extension APIRequest {
         case .getBalance: return BigUInt.self
         case .getBlockByHash: return Block.self
         case .getBlockByNumber: return Block.self
+        case .gasPrice: return BigUInt.self
         case .feeHistory: return Web3.Oracle.FeeHistory.self
+        case .getTransactionCount: return UInt.self
         default: return String.self
         }
     }
