@@ -174,6 +174,8 @@ public struct EventLog: Decodable {
     }
 }
 
+extension EventLog: APIResultType { }
+
 public enum TransactionInBlock: Decodable {
     case hash(Data)
     case transaction(EthereumTransaction)
@@ -316,6 +318,8 @@ public struct TxPoolStatus: Decodable {
     }
 }
 
+extension TxPoolStatus: APIResultType { }
+
 public extension TxPoolStatus {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -376,6 +380,8 @@ public struct TxPoolContent: Decodable {
         }
     }
 }
+
+extension TxPoolContent: APIResultType { }
 
 extension TxPoolContent {
     public init(from decoder: Decoder) throws {

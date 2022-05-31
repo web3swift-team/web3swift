@@ -117,14 +117,14 @@ extension APIRequest {
         case .estimateGas: return BigUInt.self
         case .call: return Data.self
         // FIXME: Not checked
-        case .getNetwork: return UInt.self
+        case .getNetwork: return Int.self
         case .personalSign: return Data.self
+        case .getTxPoolStatus: return TxPoolStatus.self
+        case .getTxPoolContent: return TxPoolContent.self
 
         // FIXME: Not implemented
         case .getLogs: return String.self
         case .getStorageAt: return String.self
-        case .getTxPoolStatus: return String.self
-        case .getTxPoolContent: return String.self
         case .getTxPoolInspect: return String.self
         }
     }
@@ -138,7 +138,7 @@ extension APIRequest {
 
     var parameters: [RequestParameter] {
         switch self {
-        case .gasPrice, .blockNumber, .getNetwork, .getAccounts:
+        case .gasPrice, .blockNumber, .getNetwork, .getAccounts, .getTxPoolStatus, .getTxPoolContent, .getTxPoolInspect:
             return [RequestParameter]()
 
         case .estimateGas(let transactionParameters, let blockNumber):
@@ -192,15 +192,6 @@ extension APIRequest {
 
         case .unlockAccount(let address, let string, let uInt):
             return [RequestParameter.string(address), RequestParameter.string(string), RequestParameter.uint(uInt ?? 0)]
-
-        case .getTxPoolStatus:
-            return [RequestParameter]()
-
-        case .getTxPoolContent:
-            return [RequestParameter]()
-
-        case .getTxPoolInspect:
-            return [RequestParameter]()
         }
     }
 
