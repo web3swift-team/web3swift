@@ -103,12 +103,12 @@ class web3swiftTests: XCTestCase {
         XCTAssert(ibn == "XE83FUTTUNPK7WZJSGGCWVEBARQWQ8YML4")
     }
     
-    func testGenericRPCresponse() throws {
-        let hex = "0x1"
-        let rpcResponse = JSONRPCresponse(id: 1, jsonrpc: "2.0", result: hex, error: nil)
-        let value: BigUInt? = rpcResponse.getValue()
-        XCTAssert(value == 1)
-    }
+//    func testGenericRPCresponse() throws {
+//        let hex = "0x1"
+//        let rpcResponse = JSONRPCresponse(id: 1, jsonrpc: "2.0", result: hex, error: nil)
+//        let value: BigUInt? = rpcResponse.getValue()
+//        XCTAssert(value == 1)
+//    }
     
     func testPublicMappingsAccess() async throws {
         let jsonString = "[{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"users\",\"outputs\":[{\"name\":\"name\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"address\"}],\"name\":\"userDeviceCount\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalUsers\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}]"

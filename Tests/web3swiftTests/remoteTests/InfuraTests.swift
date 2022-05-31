@@ -76,7 +76,7 @@ class InfuraTests: XCTestCase {
         filter.toBlock = .blockNumber(UInt(5200120))
         filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
         filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), (nil as [EventFilterable]?)]
-        let eventParserResult = try await contract!.getIndexedEventsPromise(eventName: "Transfer", filter: filter, joinWithReceipts: true)
+        let eventParserResult = try await contract!.getIndexedEvents(eventName: "Transfer", filter: filter, joinWithReceipts: true)
         print(eventParserResult)
         XCTAssert(eventParserResult.count == 2)
         XCTAssert(eventParserResult.first?.transactionReceipt != nil)
