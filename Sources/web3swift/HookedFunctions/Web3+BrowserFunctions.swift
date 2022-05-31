@@ -195,7 +195,7 @@ extension web3.BrowserFunctions {
             case .manual(let nonce):
                 transaction.nonce = nonce
             default:
-                let nonce = try await self.web3.eth.getTransactionCount(address: from, onBlock: "pending")
+                let nonce = try await self.web3.eth.getTransactionCount(for: from, onBlock: .pending)
                 transaction.nonce = nonce
             }
 
