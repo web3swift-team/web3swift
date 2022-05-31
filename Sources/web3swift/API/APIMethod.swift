@@ -13,6 +13,7 @@ public typealias Receipt = Hash
 public typealias Address = Hash // 20 bytes (40 chars length without 0x)
 public typealias TransactionHash = Hash // 64 chars length without 0x
 
+// FIXME: Add documentation to each method.
 /// Ethereum JSON RPC API Calls
 public enum APIRequest {
     // MARK: - Official API
@@ -91,7 +92,7 @@ public enum APIRequest {
 extension Data: APIResultType { }
 
 extension APIRequest {
-    public var method: REST {
+    var method: REST {
         switch self {
         default: return .POST
         }
@@ -266,7 +267,7 @@ extension APIRequest {
     }
 }
 
-public enum REST: String {
+enum REST: String {
     case POST
     case GET
 }

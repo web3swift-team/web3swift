@@ -25,20 +25,20 @@ class InfuraTests: XCTestCase {
     
     func testGetBlockByHash() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let result = try await web3.eth.getBlockByHash("0x6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695", fullTransactions: false)
+        let result = try await web3.eth.block(by: "0x6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695", fullTransactions: false)
 
         print(result)
     }
     
     func testGetBlockByNumber1() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let result = try await web3.eth.getBlockByNumber(.latest, fullTransactions: false)
+        let result = try await web3.eth.block(by: .latest, fullTransactions: false)
         print(result)
     }
     
     func testGetBlockByNumber2() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let result = try await web3.eth.getBlockByNumber(.exact(5184323), fullTransactions: true)
+        let result = try await web3.eth.block(by: .exact(5184323), fullTransactions: true)
         print(result)
         let transactions = result.transactions
         for transaction in transactions {
@@ -54,7 +54,7 @@ class InfuraTests: XCTestCase {
     func testGetBlockByNumber3() async throws {
         do {
             let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-            let _ = try await web3.eth.getBlockByNumber(.exact(1000000000), fullTransactions: true)
+            let _ = try await web3.eth.block(by: .exact(1000000000), fullTransactions: true)
             XCTFail()
         } catch {
             
@@ -63,7 +63,7 @@ class InfuraTests: XCTestCase {
     
     func testGasPrice() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let response = try await web3.eth.getGasPrice()
+        let response = try await web3.eth.gasPrice()
         print(response)
     }
     

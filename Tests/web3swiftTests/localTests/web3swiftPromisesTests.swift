@@ -21,21 +21,21 @@ class web3swiftPromisesTests: XCTestCase {
         let balance = try await web3.eth.getBalance(for: "0xe22b8979739D724343bd002F9f432F5990879901")
         print(balance)
     }
-    
-    func testGetTransactionDetailsPromise() async throws {
-        let gasLimit = BigUInt(78423)
-        let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
-        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-        let allAddresses = try await web3.eth.getAccounts()
-        guard let writeTX = web3.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
-        writeTX.transactionOptions.from = allAddresses[0]
-        writeTX.transactionOptions.gasLimit = .manual(gasLimit)
-        let writeResult = try await writeTX.send()
-        let txHash = writeResult.hash
-        let result = try await web3.eth.transactionDetails(txHash)
-        print(result)
-        XCTAssert(result.transaction.parameters.gasLimit == BigUInt(gasLimit))
-    }
+    // FIXME: Temporary deleted method `sendETH` should be restored.
+//    func testGetTransactionDetailsPromise() async throws {
+//        let gasLimit = BigUInt(78423)
+//        let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
+//        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
+//        let allAddresses = try await web3.eth.ownedAccounts()
+//        guard let writeTX = web3.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
+//        writeTX.transactionOptions.from = allAddresses[0]
+//        writeTX.transactionOptions.gasLimit = .manual(gasLimit)
+//        let writeResult = try await writeTX.send()
+//        let txHash = writeResult.hash
+//        let result = try await web3.eth.transactionDetails(txHash)
+//        print(result)
+//        XCTAssert(result.transaction.parameters.gasLimit == BigUInt(gasLimit))
+//    }
     
     func testEstimateGasPromise() async throws {
         let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
@@ -57,7 +57,7 @@ class web3swiftPromisesTests: XCTestCase {
         let bytecode = Data.fromHex("0x608060405234801561001057600080fd5b50610100806100206000396000f30060806040526004361060525763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630dbe671f8114605757806329e99f0714607b5780634df7e3d0146092575b600080fd5b348015606257600080fd5b50606960a4565b60408051918252519081900360200190f35b348015608657600080fd5b50609060043560aa565b005b348015609d57600080fd5b50606960ce565b60005481565b803a111560ba57600160005560cb565b803a101560cb576001600081905580555b50565b600154815600a165627a7a723058200327a504a24f70cf740239fad2ad203f21caf0ef05f7870bd88482f6fa3cf1080029")!
         
         let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
-        let allAddresses = try await web3.eth.getAccounts()
+        let allAddresses = try await web3.eth.ownedAccounts()
         let contract = web3.contract(Web3.Utils.estimateGasTestABI, at: nil, abiVersion: 2)!
         
         let parameters = [] as [AnyObject]
@@ -70,7 +70,7 @@ class web3swiftPromisesTests: XCTestCase {
         
         Thread.sleep(forTimeInterval: 1.0)
         
-        let receipt = try await web3.eth.getTransactionReceipt(txHash)
+        let receipt = try await web3.eth.transactionReceipt(txHash)
         print(receipt)
         
         switch receipt.status {
@@ -117,19 +117,19 @@ class web3swiftPromisesTests: XCTestCase {
         print(estimate2)
         XCTAssert(estimate2 - estimate1 <= 22000)
     }
-    
-    func testSendETHPromise() async throws {
-        let web3 = try await Web3.new(URL(string: "http://127.0.0.1:8545")!)
-        let allAddresses = try await web3.eth.getAccounts()
-        let gasPrice = try await web3.eth.getGasPrice()
-        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-        guard let writeTX = web3.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
-        writeTX.transactionOptions.from = allAddresses[0]
-        writeTX.transactionOptions.gasPrice = .manual(gasPrice)
-        let result = try await writeTX.send()
-        print(result)
-    }
-    
+    // FIXME: Temporary deleted method `sendETH` should be restored.
+//    func testSendETHPromise() async throws {
+//        let web3 = try await Web3.new(URL(string: "http://127.0.0.1:8545")!)
+//        let allAddresses = try await web3.eth.ownedAccounts()
+//        let gasPrice = try await web3.eth.gasPrice()
+//        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
+//        guard let writeTX = web3.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
+//        writeTX.transactionOptions.from = allAddresses[0]
+//        writeTX.transactionOptions.gasPrice = .manual(gasPrice)
+//        let result = try await writeTX.send()
+//        print(result)
+//    }
+//
     func testERC20tokenBalancePromise() async throws {
         let (web3, _, receipt, _) = try await web3swiftHelpers.localDeployERC20()
         

@@ -15,7 +15,6 @@ import Foundation
 /// Please see `RequestParameter` documentation for more details.
 protocol APIRequestParameterType: Encodable { }
 
-protocol APIRequestParameterElementType: Encodable { }
 
 extension Int: APIRequestParameterType { }
 
@@ -28,6 +27,9 @@ extension String: APIRequestParameterType { }
 extension Bool: APIRequestParameterType { }
 
 extension Array: APIRequestParameterType where Element: APIRequestParameterElementType { }
+
+
+protocol APIRequestParameterElementType: Encodable { }
 
 extension TransactionParameters: APIRequestParameterType { }
 

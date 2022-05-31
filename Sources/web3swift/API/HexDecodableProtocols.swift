@@ -46,12 +46,6 @@ extension BigInt: LiteralInitiableFromString { }
 
 extension BigUInt: LiteralInitiableFromString { }
 
-// This don't work without each other.
-//extension LiteralInitiableFromString {
-//    public init?(from hexString: String) { return nil }
-//}
-//extension Array: LiteralInitiableFromString where Element: LiteralInitiableFromString { }
-
 public protocol IntegerInitableWithRadix {
     init?<S: StringProtocol>(_ text: S, radix: Int)
 }

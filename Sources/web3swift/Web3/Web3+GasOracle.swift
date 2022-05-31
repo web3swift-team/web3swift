@@ -124,7 +124,7 @@ extension Web3 {
         private func suggestGasFeeLegacy() async throws -> [BigUInt] {
             var latestBlockNumber: BigUInt = 0
             switch block {
-            case .latest: latestBlockNumber = try await eth.getBlockNumber()
+            case .latest: latestBlockNumber = try await eth.blockNumber()
             case let .exact(number): latestBlockNumber = number
             // FIXME: Make real error here
                 // Error throws since pending and erliest are unable to be used in this method.
