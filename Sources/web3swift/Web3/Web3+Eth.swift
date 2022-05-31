@@ -7,8 +7,8 @@
 import Foundation
 import BigInt
 
+// FIXME: None of the follow methods are syncronious.
 extension web3.Eth {
-
     /// Send an EthereumTransaction object to the network. Transaction is either signed locally if there is a KeystoreManager
     /// object bound to the web3 instance, or sent unsigned to the node. For local signing the password is required.
     ///
@@ -34,10 +34,10 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    func call(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions) async throws -> Data {
-        let result = try await self.callTransaction(transaction, transactionOptions: transactionOptions)
-        return result
-    }
+//    func call(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions) async throws -> Data {
+//        let result = try await self.callTransaction(transaction, transactionOptions: transactionOptions)
+//        return result
+//    }
 
     /// Send raw Ethereum transaction data to the network.
     ///
@@ -59,18 +59,18 @@ extension web3.Eth {
         return result
     }
 
-    /// Returns a total number of transactions sent by the particular Ethereum address.
-    ///
-    /// "onBlock" field determines if value is returned based on the state of a blockchain on the latest mined block ("latest")
-    /// or the expected state after all the transactions in memory pool are applied ("pending").
-    ///
-    /// This function is synchronous!
-    ///
-    /// Returns the Result object that indicates either success of failure.
-    public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest") async throws -> BigUInt {
-        let result = try await self.getTransactionCount(for: address, onBlock: onBlock)
-        return result
-    }
+//    /// Returns a total number of transactions sent by the particular Ethereum address.
+//    ///
+//    /// "onBlock" field determines if value is returned based on the state of a blockchain on the latest mined block ("latest")
+//    /// or the expected state after all the transactions in memory pool are applied ("pending").
+//    ///
+//    /// This function is synchronous!
+//    ///
+//    /// Returns the Result object that indicates either success of failure.
+//    public func getTransactionCount(address: EthereumAddress, onBlock: String = "latest") async throws -> BigUInt {
+//        let result = try await self.getTransactionCount(for: address, onBlock: onBlock)
+//        return result
+//    }
 
     /// Returns a balance of particular Ethereum address in Wei units (1 ETH = 10^18 Wei).
     ///
@@ -80,7 +80,7 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getBalance(address: EthereumAddress, onBlock: String = "latest") async throws -> BigUInt {
+    public func getBalance(address: EthereumAddress, onBlock: BlockNumber) async throws -> BigUInt {
         let result = try await self.getBalance(for: address, onBlock: onBlock)
         return result
     }
@@ -185,7 +185,7 @@ extension web3.Eth {
     ///
     /// Returns the Result object that indicates either success of failure.
     public func getBlockByHash(_ hash: String, fullTransactions: Bool = false) async throws -> Block {
-        let result = try await self.block(for: hash, fullTransactions: fullTransactions)
+        let result = try await self.block(by: hash, fullTransactions: fullTransactions)
         return result
     }
 
@@ -197,7 +197,7 @@ extension web3.Eth {
     ///
     /// Returns the Result object that indicates either success of failure.
     public func getBlockByHash(_ hash: Data, fullTransactions: Bool = false) async throws -> Block {
-        let result = try await self.block(for: hash, fullTransactions: fullTransactions)
+        let result = try await self.block(by: hash, fullTransactions: fullTransactions)
         return result
     }
 
@@ -208,34 +208,11 @@ extension web3.Eth {
     /// This function is synchronous!
     ///
     /// Returns the Result object that indicates either success of failure.
-    public func getBlockByNumber(_ number: UInt, fullTransactions: Bool = false) async throws -> Block {
-        let result = try await self.blockBy(number: number, fullTransactions: fullTransactions)
+    public func getBlockByNumber(_ number: BlockNumber, fullTransactions: Bool = false) async throws -> Block {
+        let result = try await self.block(by: number, fullTransactions: fullTransactions)
         return result
     }
 
-    /// Get information about the particular block in Ethereum network. If "fullTransactions" parameter is set to "true"
-    /// this call fill do a virtual join and fetch not just transaction hashes from this block,
-    /// but full decoded EthereumTransaction objects.
-    ///
-    /// This function is synchronous!
-    ///
-    /// Returns the Result object that indicates either success of failure.
-    public func getBlockByNumber(_ number: BigUInt, fullTransactions: Bool = false) async throws -> Block {
-        let result = try await self.blockBy(number: number, fullTransactions: fullTransactions)
-        return result
-    }
-
-    /// Get information about the particular block in Ethereum network. If "fullTransactions" parameter is set to "true"
-    /// this call fill do a virtual join and fetch not just transaction hashes from this block,
-    /// but full decoded EthereumTransaction objects.
-    ///
-    /// This function is synchronous!
-    ///
-    ///
-    public func getBlockByNumber(_ block: String, fullTransactions: Bool = false) async throws -> Block {
-        let result = try await self.blockBy(number: block, fullTransactions: fullTransactions)
-        return result
-    }
 
     /**
      Convenience wrapper to send Ethereum to another address. Internally it creates a virtual contract and encodes all the options and data.
