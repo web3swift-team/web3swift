@@ -14,7 +14,7 @@ public enum BlockNumber {
     /// Earliest block of a chain
     case earliest
     /// Exact block number
-    case exact(UInt)
+    case exact(BigUInt)
 
     /// Block number as a hex string
     public var stringValue: String {
@@ -128,7 +128,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         return socketProvider
     }
 
-    public func writeMessage(method: InfuraWebsocketMethod, params: [APIRequestParameterType]) throws {
+    public func writeMessage(method: InfuraWebsocketMethod, params: [Encodable]) throws {
         let request = JSONRPCRequestFabric.prepareRequest(method, parameters: params)
         let encoder = JSONEncoder()
         let requestData = try encoder.encode(request)
@@ -136,7 +136,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         writeMessage(requestData)
     }
 
-    public func setFilterAndGetChanges(method: InfuraWebsocketMethod, params: [APIRequestParameterType]? = nil) throws {
+    public func setFilterAndGetChanges(method: InfuraWebsocketMethod, params: [Encodable]? = nil) throws {
         filterTimer?.invalidate()
         filterID = nil
         let params = params ?? []
@@ -153,7 +153,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         try setFilterAndGetChanges(method: method, params: [filterParams])
     }
 
-    public func setFilterAndGetLogs(method: InfuraWebsocketMethod, params: [APIRequestParameterType]? = nil) throws {
+    public func setFilterAndGetLogs(method: InfuraWebsocketMethod, params: [Encodable]? = nil) throws {
         filterTimer?.invalidate()
         filterID = nil
         let params = params ?? []
@@ -204,7 +204,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
         }
     }
 
-    public func subscribe(params: [APIRequestParameterType]) throws {
+    public func subscribe(params: [Encodable]) throws {
         let method = InfuraWebsocketMethod.subscribe
         try writeMessage(method: method, params: params)
     }

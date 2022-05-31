@@ -22,15 +22,14 @@ public enum APIRequest {
     case getNetwork
     case getAccounts
     // ??
-    case estimateGas
-
+    case estimateGas(TransactionParameters, BlockNumber)
     case sendRawTransaction(Hash)
-    case sendTransaction(TransactionParameters)
+    case sendTransaction(TransactionParameters, BlockNumber)
     case getTransactionByHash(Hash)
     case getTransactionReceipt(Hash)
     case getLogs(EventFilterParameters)
-    case personalSign(Address, Data)
-    case call(TransactionParameters)
+    case personalSign(Address, String)
+    case call(TransactionParameters, BlockNumber)
     case getTransactionCount(Address, BlockNumber)
     case getBalance(Address, BlockNumber)
 
@@ -88,6 +87,9 @@ public enum APIRequest {
     case getTxPoolInspect // No in Eth API
 }
 
+// FIXME: This conformance should be changed to `LiteralInitiableFromString`
+extension Data: APIResultType { }
+
 extension APIRequest {
     public var method: REST {
         switch self {
@@ -109,7 +111,21 @@ extension APIRequest {
         case .getTransactionReceipt: return TransactionReceipt.self
         case .createAccount: return EthereumAddress.self
         case .unlockAccount: return Bool.self
-        default: return String.self
+        case .getTransactionByHash: return TransactionDetails.self
+        case .sendTransaction: return Hash.self
+        case .sendRawTransaction: return Hash.self
+        case .estimateGas: return BigUInt.self
+        case .call: return Data.self
+        // FIXME: Not checked
+        case .getNetwork: return UInt.self
+        case .personalSign: return Data.self
+
+        // FIXME: Not implemented
+        case .getLogs: return String.self
+        case .getStorageAt: return String.self
+        case .getTxPoolStatus: return String.self
+        case .getTxPoolContent: return String.self
+        case .getTxPoolInspect: return String.self
         }
     }
 
@@ -122,14 +138,17 @@ extension APIRequest {
 
     var parameters: [RequestParameter] {
         switch self {
-        case .gasPrice, .blockNumber, .getNetwork, .getAccounts, .estimateGas:
+        case .gasPrice, .blockNumber, .getNetwork, .getAccounts:
             return [RequestParameter]()
+
+        case .estimateGas(let transactionParameters, let blockNumber):
+            return [RequestParameter.transaction(transactionParameters), RequestParameter.string(blockNumber.stringValue)]
 
         case let .sendRawTransaction(hash):
             return [RequestParameter.string(hash)]
 
-        case .sendTransaction(let transactionParameters):
-            return [RequestParameter.transaction(transactionParameters)]
+        case .sendTransaction(let transactionParameters, let blockNumber):
+            return [RequestParameter.transaction(transactionParameters), RequestParameter.string(blockNumber.stringValue)]
 
         case .getTransactionByHash(let hash):
             return [RequestParameter.string(hash)]
@@ -140,12 +159,12 @@ extension APIRequest {
         case .getLogs(let eventFilterParameters):
             return [RequestParameter.eventFilter(eventFilterParameters)]
 
-        case .personalSign(let address, let data):
+        case .personalSign(let address, let string):
             // FIXME: Add second parameter
-            return [RequestParameter.string(address)]
+            return [RequestParameter.string(address), RequestParameter.string(string)]
 
-        case .call(let transactionParameters):
-            return [RequestParameter.transaction(transactionParameters)]
+        case .call(let transactionParameters, let blockNumber):
+            return [RequestParameter.transaction(transactionParameters), RequestParameter.string(blockNumber.stringValue)]
 
         case .getTransactionCount(let address, let blockNumber):
             return [RequestParameter.string(address), RequestParameter.string(blockNumber.stringValue)]
@@ -169,10 +188,10 @@ extension APIRequest {
             return [RequestParameter.string(uInt.hexString), RequestParameter.string(blockNumber.stringValue), RequestParameter.doubleArray(array)]
 
         case .createAccount(let string):
-            return [RequestParameter]()
+            return [RequestParameter.string(string)]
 
-        case .unlockAccount(let address, let string, let optional):
-            return [RequestParameter]()
+        case .unlockAccount(let address, let string, let uInt):
+            return [RequestParameter.string(address), RequestParameter.string(string), RequestParameter.uint(uInt ?? 0)]
 
         case .getTxPoolStatus:
             return [RequestParameter]()
