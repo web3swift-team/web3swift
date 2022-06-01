@@ -245,7 +245,7 @@ extension APIRequest {
         if Result.self == UInt.self || Result.self == Int.self || Result.self == BigInt.self || Result.self == BigUInt.self {
             /// This types for sure conformed with `LiteralInitiableFromString`
             // FIXME: Make appropriate error
-            guard let U = Result.self as? LiteralInitiableFromString.Type else { throw Web3Error.unknownError}
+            guard let U = Result.self as? LiteralInitiableFromString.Type else { throw Web3Error.unknownError }
             let responseAsString = try! JSONDecoder().decode(APIResponse<String>.self, from: data)
             // FIXME: Add appropriate error thrown.
             guard let literalValue = U.init(from: responseAsString.result) else { throw Web3Error.unknownError }
