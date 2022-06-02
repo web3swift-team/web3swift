@@ -33,7 +33,7 @@ extension KeyedDecodingContainer {
     /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `DecodableFromHex`.
     public func decodeHex<T: DecodableFromHex>(_ type: T.Type, forKey: KeyedDecodingContainer<K>.Key) throws -> T {
         let hexString = try self.decode(String.self, forKey: forKey)
-        guard let value = T(fromHex: hexString) else { throw Web3Error.dataError }
+        guard let value = T(from: hexString) else { throw Web3Error.dataError }
         return value
     }
 
@@ -92,7 +92,7 @@ public extension UnkeyedDecodingContainer {
         var array: [T] = []
         while !isAtEnd {
             let hexString = try decode(String.self)
-            guard let item = T(fromHex: hexString) else { continue }
+            guard let item = T(from: hexString) else { continue }
             array.append(item)
         }
         return array
@@ -119,11 +119,11 @@ public extension UnkeyedDecodingContainer {
 }
 
 public protocol DecodableFromHex: Decodable {
-    init?(fromHex hexString: String)
+    init?(from hexString: String)
 }
 
 extension Data: DecodableFromHex {
-    public init?(fromHex hexString: String) {
+    public init?(from hexString: String) {
         self.init()
         guard let tmp = Self.fromHex(hexString) else { return nil }
         self = tmp
@@ -131,19 +131,19 @@ extension Data: DecodableFromHex {
 }
 
 extension UInt: DecodableFromHex {
-    public init?(fromHex hexString: String) {
+    public init?(from hexString: String) {
         self.init(hexString.stripHexPrefix(), radix: 16)
     }
 }
 
 extension BigUInt: DecodableFromHex {
-    public init?(fromHex hexString: String) {
+    public init?(from hexString: String) {
         self.init(hexString.stripHexPrefix(), radix: 16)
     }
 }
 
 extension Date: DecodableFromHex {
-    public init?(fromHex hexString: String) {
+    public init?(from hexString: String) {
         self.init()
         let stripedHexString = hexString.stripHexPrefix()
         guard let timestampInt = UInt(stripedHexString, radix: 16) else { return nil }
@@ -152,7 +152,7 @@ extension Date: DecodableFromHex {
 }
 
 extension EthereumAddress: DecodableFromHex {
-    public init?(fromHex hexString: String) {
+    public init?(from hexString: String) {
         self.init(hexString, ignoreChecksum: true)
     }
 }

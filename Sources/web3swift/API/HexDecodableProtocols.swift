@@ -6,6 +6,7 @@
 //
 
 import BigInt
+import Foundation
 
 public protocol APIResultType: Decodable { }
 
@@ -37,7 +38,6 @@ extension LiteralInitiableFromString where Self: IntegerInitableWithRadix {
     }
 }
 
-
 extension Int: LiteralInitiableFromString { }
 
 extension UInt: LiteralInitiableFromString { }
@@ -45,6 +45,8 @@ extension UInt: LiteralInitiableFromString { }
 extension BigInt: LiteralInitiableFromString { }
 
 extension BigUInt: LiteralInitiableFromString { }
+
+extension Data: LiteralInitiableFromString { }
 
 public protocol IntegerInitableWithRadix {
     init?<S: StringProtocol>(_ text: S, radix: Int)

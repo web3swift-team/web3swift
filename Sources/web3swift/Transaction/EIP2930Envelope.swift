@@ -333,7 +333,7 @@ public struct AccessListEntry: CustomStringConvertible, Decodable {
         self.storageKeys = []
         if let keyStrings = try? container.decode([String].self, forKey: .storageKeys) {
             for keyString in keyStrings {
-                guard let number = BigUInt(fromHex: keyString) else { throw Web3Error.dataError }
+                guard let number = BigUInt(from: keyString) else { throw Web3Error.dataError }
                 self.storageKeys.append(number)
             }
         }
