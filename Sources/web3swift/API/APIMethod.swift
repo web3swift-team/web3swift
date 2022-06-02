@@ -25,7 +25,7 @@ public enum APIRequest {
     // ??
     case estimateGas(TransactionParameters, BlockNumber)
     case sendRawTransaction(Hash)
-    case sendTransaction(TransactionParameters, BlockNumber)
+    case sendTransaction(TransactionParameters)
     case getTransactionByHash(Hash)
     case getTransactionReceipt(Hash)
     case getLogs(EventFilterParameters)
@@ -148,8 +148,8 @@ extension APIRequest {
         case let .sendRawTransaction(hash):
             return [RequestParameter.string(hash)]
 
-        case .sendTransaction(let transactionParameters, let blockNumber):
-            return [RequestParameter.transaction(transactionParameters), RequestParameter.string(blockNumber.stringValue)]
+        case let .sendTransaction(transactionParameters):
+            return [RequestParameter.transaction(transactionParameters)]
 
         case .getTransactionByHash(let hash):
             return [RequestParameter.string(hash)]
@@ -240,6 +240,7 @@ extension APIRequest {
         guard let httpResponse = response as? HTTPURLResponse,
                200 ..< 400 ~= httpResponse.statusCode else { throw Web3Error.connectionError }
 
+        // FIXME: Add throwing an error from is server fails.
         /// This bit of code is purposed to work with literal types that comes in Response in hexString type.
         /// Currently it's just any kind of Integers like `(U)Int`, `Big(U)Int`.
         if Result.self == UInt.self || Result.self == Int.self || Result.self == BigInt.self || Result.self == BigUInt.self {

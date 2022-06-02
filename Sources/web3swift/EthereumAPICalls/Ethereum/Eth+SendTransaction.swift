@@ -49,7 +49,7 @@ extension web3.Eth {
         // FIXME: Add appropriate error
         guard let transactionParameters = transaction.encodeAsDictionary(from: transactionOptions?.from) else { throw Web3Error.unknownError }
 
-        let request: APIRequest = .sendTransaction(transactionParameters, transactionOptions?.callOnBlock ?? .latest)
+        let request: APIRequest = .sendTransaction(transactionParameters)
         let response: APIResponse<Hash> = try await APIRequest.sendRequest(with: self.provider, for: request)
 
         let result = TransactionSendingResult(transaction: assembledTransaction, hash: response.result)
