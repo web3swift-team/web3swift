@@ -288,9 +288,9 @@ extension EIP2930Envelope {
             accessEncoding.append(encoded)
         }
         params.accessList = accessEncoding
-        let gasEncoding = self.gasLimit.abiEncode(bits: 256)
+        let gasEncoding = gasLimit > 21100 ? self.gasLimit.abiEncode(bits: 256) : nil
         params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let gasPriceEncoding = self.gasPrice.abiEncode(bits: 256)
+        let gasPriceEncoding = gasPrice > 10000000 ? self.gasPrice.abiEncode(bits: 256) : nil
         params.gasPrice = gasPriceEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
         let valueEncoding = self.value.abiEncode(bits: 256)
         params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
