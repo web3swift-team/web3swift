@@ -122,9 +122,9 @@ extension APIRequest {
         case .personalSign: return Data.self
         case .getTxPoolStatus: return TxPoolStatus.self
         case .getTxPoolContent: return TxPoolContent.self
+        case .getLogs: return [EventLog].self
 
         // FIXME: Not implemented
-        case .getLogs: return String.self
         case .getStorageAt: return String.self
         case .getTxPoolInspect: return String.self
         }
