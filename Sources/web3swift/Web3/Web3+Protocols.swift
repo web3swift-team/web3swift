@@ -58,7 +58,7 @@ public enum Networks {
 
     static let allValues = [Mainnet, Ropsten, Kovan, Rinkeby]
 
-    static func fromInt(_ networkID: Int) -> Networks? {
+    static func fromInt(_ networkID: UInt) -> Networks? {
         switch networkID {
         case 1:
             return Networks.Mainnet

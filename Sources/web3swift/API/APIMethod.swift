@@ -232,9 +232,21 @@ extension APIRequest {
         /// Don't even try to make network request if the `Result` type dosen't equal to supposed by API
         // FIXME: Add appropriate error thrown
         guard Result.self == call.responseType else { throw Web3Error.unknownError }
-
         let request = setupRequest(for: call, with: provider)
-        let (data, response) = try await provider.session.data(for: request)
+        return try await APIRequest.send(uRLRequest: request, with: provider.session)
+    }
+
+    static func setupRequest(for call: APIRequest, with provider: Web3Provider) -> URLRequest {
+        var urlRequest = URLRequest(url: provider.url, cachePolicy: .reloadIgnoringCacheData)
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
+        urlRequest.httpMethod = call.method.rawValue
+        urlRequest.httpBody = call.encodedBody
+        return urlRequest
+    }
+    
+    static func send<Result>(uRLRequest: URLRequest, with session: URLSession) async throws -> APIResponse<Result> {
+        let (data, response) = try await session.data(for: uRLRequest)
 
         // FIXME: Add appropriate error thrown
         guard let httpResponse = response as? HTTPURLResponse,
@@ -243,7 +255,7 @@ extension APIRequest {
         // FIXME: Add throwing an error from is server fails.
         /// This bit of code is purposed to work with literal types that comes in Response in hexString type.
         /// Currently it's just any kind of Integers like `(U)Int`, `Big(U)Int`.
-        if Result.self == UInt.self || Result.self == Int.self || Result.self == BigInt.self || Result.self == BigUInt.self {
+        if Result.self == Data.self || Result.self == UInt.self || Result.self == Int.self || Result.self == BigInt.self || Result.self == BigUInt.self {
             /// This types for sure conformed with `LiteralInitiableFromString`
             // FIXME: Make appropriate error
             guard let U = Result.self as? LiteralInitiableFromString.Type else { throw Web3Error.unknownError }
@@ -256,15 +268,6 @@ extension APIRequest {
             return APIResponse(id: responseAsString.id, jsonrpc: responseAsString.jsonrpc, result: asT)
         }
         return try JSONDecoder().decode(APIResponse<Result>.self, from: data)
-    }
-
-    static func setupRequest(for call: APIRequest, with provider: Web3Provider) -> URLRequest {
-        var urlRequest = URLRequest(url: provider.url, cachePolicy: .reloadIgnoringCacheData)
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
-        urlRequest.httpMethod = call.method.rawValue
-        urlRequest.httpBody = call.encodedBody
-        return urlRequest
     }
 }
 
