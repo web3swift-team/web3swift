@@ -1,12 +1,70 @@
 # Changelog
 
-## [Unreleased](https://github.com/skywinder/web3swift/tree/HEAD)
+## [2.6.5](https://github.com/skywinder/web3swift/tree/2.6.5) (2022-05-26)
 
-[Full Changelog](https://github.com/skywinder/web3swift/compare/2.5.0...HEAD)
+- correct the decoding key for from in transactionOptions by @mloit in #570
 
-**Merged pull requests:**
+## [2.6.4](https://github.com/skywinder/web3swift/tree/2.6.4) (2022-05-06)
 
-- Syncing with master [\#428](https://github.com/skywinder/web3swift/pull/428) ([yaroslavyaroslav](https://github.com/yaroslavyaroslav))
+- Fix ERC-1155 ABI by @mloit in #557
+- Fix access level for EIP-712 related objects by @mloit in #555
+- Restore public API fromJSON() functions by @mloit in #558
+
+## [2.6.3](https://github.com/skywinder/web3swift/tree/2.6.3) (2022-04-27)
+
+- Feature/automatic gas 1559 by @mloit in #547
+- Oracle.suggestGasFeeLegacy method fixup by @yaroslavyaroslav in #551
+
+## [2.6.2](https://github.com/skywinder/web3swift/tree/2.6.2) (2022-04-25)
+
+- Fix #540 by freezing CryptoSwift dependency to last working version (1.4.3) by @yaroslavyaroslav
+
+## [2.6.1](https://github.com/skywinder/web3swift/tree/2.6.1) (2022-04-19)
+
+- Update documentation for EIP-1559 support by @mloit in #530
+- Feature/transaction metadata by @mloit in #523
+
+## [2.6.0](https://github.com/skywinder/web3swift/tree/2.6.0) (2022-04-15)
+
+### Features
+
+- Add full EIP-1559 transaction support see
+- Add gas prediction support see
+
+### What's Changed
+
+- Remove BrowserViewController if building for anything other than iOS by @mloit in #503
+- Feature/pre swiftlint cleanup by @mloit in #495
+- Feature/late lint fixups by @mloit in #508
+- Fix Base58 Decoding by @mloit in #504
+- Swiftlint by @mloit in #499
+- ERC1155: Change access control for Interfece-based methods. by @mrklos in #494
+- feat: solidity sha3 implementation added by @JeneaVranceanu in #506
+- add indentation check [default is 4 spaces per tab-stop] by @mloit in #512
+- EIP-1559 support release by @yaroslavyaroslav in #510
+- EIP-1559 Gas prediction implementation by @yaroslavyaroslav in #513
+- feat: decoding ABI with solidity error types by @JeneaVranceanu in #455
+- Gas prediction implementation by @yaroslavyaroslav in #514
+- Bug fix/transaction index by @mloit in #521
+- EIP-1559 transaction support by @mloit in #509
+- Full Changelog: 2.5.1...2.6.0
+
+## [2.5.1](https://github.com/skywinder/web3swift/tree/2.5.1) (2022-03-23)
+
+- Drop Carthage cache files by yaroslavyaroslav
+- Drop examples cocoapods cache files by yaroslavyaroslav
+- Improve ci/cd pipeline by adding localTests job by yaroslavyaroslav
+- Rename tests in swift style name convention (CamelCase) by yaroslavyaroslav
+- Enable run ganache util in ci/cd pipeline (required for local tests) by yaroslavyaroslav
+- Clear lib warnings on build #437 by Valter4578 & mliot
+- Change UINT64_MAX to UInt64.max by mloit
+- Update CHANGELOG.md by ZeroCode999
+- Fix tokenURI method name for ERC721 and ERC721x tokens #419 by Sarquella
+- Provide basic tolerance to EIP-1559 data by mloit
+- Fix for buffer overflow in [Data|SECP256K1].randomBytes() #470 by mloit
+- Arbitrary clean project code by mloit
+- Fix github actions config issue that occasionally cancels running jobs by yaroslavyaroslav
+- mini-rollup of several issues by mloit
 
 ## [2.5.0](https://github.com/skywinder/web3swift/tree/2.5.0) (2021-12-23)
 
