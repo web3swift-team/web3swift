@@ -35,7 +35,7 @@ class ENSTests: XCTestCase {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
-        let address = try ens?.getAddress(forNode: domain)
+        let address = try await ens?.getAddress(forNode: domain)
         XCTAssertEqual(address?.address.lowercased(), "0xc1ccfb5fc589b83b9e849c6f9b26efc71419898d")
     }
 
@@ -73,7 +73,7 @@ class ENSTests: XCTestCase {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
-        let owner = try ens?.registry.getOwner(node: domain)
+        let owner = try await ens?.registry.getOwner(node: domain)
         XCTAssertEqual("0xc1ccfb5fc589b83b9e849c6f9b26efc71419898d", owner?.address.lowercased())
     }
 
@@ -89,8 +89,8 @@ class ENSTests: XCTestCase {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
-        let resolver = try ens?.registry.getResolver(forDomain: domain)
-        let address = try resolver?.getAddress(forNode: domain)
+        let resolver = try await ens?.registry.getResolver(forDomain: domain)
+        let address = try await resolver?.getAddress(forNode: domain)
         XCTAssertEqual(address?.address.lowercased(), "0xc1ccfb5fc589b83b9e849c6f9b26efc71419898d")
     }
 
