@@ -28,7 +28,7 @@ class ENSTests: XCTestCase {
         let domain = "somename.eth"
         let address = try ens?.registry.getResolver(forDomain: domain).resolverContractAddress
         print(address as Any)
-        XCTAssertEqual(address?.address.lowercased(), "0x5ffc014343cd971b7eb70732021e26c35b744cc4")
+        XCTAssertEqual(address?.address.lowercased(), "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41")
     }
     
     func testResolver() throws {
@@ -36,7 +36,7 @@ class ENSTests: XCTestCase {
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let address = try ens?.getAddress(forNode: domain)
-        XCTAssertEqual(address?.address.lowercased(), "0x3487acfb1479ad1df6c0eb56ae743d34897798ac")
+        XCTAssertEqual(address?.address.lowercased(), "0xc1ccfb5fc589b83b9e849c6f9b26efc71419898d")
     }
     
     func testSupportsInterface() throws {
@@ -74,7 +74,7 @@ class ENSTests: XCTestCase {
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let owner = try ens?.registry.getOwner(node: domain)
-        XCTAssertEqual("0xc67247454e720328714c4e17bec7640572657bee", owner?.address.lowercased())
+        XCTAssertEqual("0xc1ccfb5fc589b83b9e849c6f9b26efc71419898d", owner?.address.lowercased())
     }
     
     func testTTL() throws {
@@ -91,7 +91,7 @@ class ENSTests: XCTestCase {
         let domain = "somename.eth"
         let resolver = try ens?.registry.getResolver(forDomain: domain)
         let address = try resolver?.getAddress(forNode: domain)
-        XCTAssertEqual(address?.address.lowercased(), "0x3487acfb1479ad1df6c0eb56ae743d34897798ac")
+        XCTAssertEqual(address?.address.lowercased(), "0xc1ccfb5fc589b83b9e849c6f9b26efc71419898d")
     }
     
     func testGetPubkey() throws {
