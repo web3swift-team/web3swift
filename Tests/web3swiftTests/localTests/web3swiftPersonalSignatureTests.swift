@@ -39,7 +39,7 @@ class web3swiftPersonalSignatureTests: XCTestCase {
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
         let parameters = [] as [AnyObject]
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
-        let allAddresses = try await web3.eth.getAccounts()
+        let allAddresses = try await web3.eth.ownedAccounts()
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
         let deployResult = try await deployTx.send()
@@ -48,7 +48,7 @@ class web3swiftPersonalSignatureTests: XCTestCase {
         
         Thread.sleep(forTimeInterval: 1.0)
         
-        let receipt = try await web3.eth.getTransactionReceipt(txHash)
+        let receipt = try await web3.eth.transactionReceipt(txHash)
         print(receipt)
         
         switch receipt.status {

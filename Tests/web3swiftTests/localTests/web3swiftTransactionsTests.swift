@@ -627,7 +627,7 @@ class web3swiftTransactionsTests: XCTestCase {
         do {
             let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
             let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-            let allAddresses = try await web3.eth.getAccounts()
+            let allAddresses = try await web3.eth.ownedAccounts()
             let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
             let value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
             let from = allAddresses[0]
@@ -641,7 +641,7 @@ class web3swiftTransactionsTests: XCTestCase {
 
             Thread.sleep(forTimeInterval: 1.0)
 
-            let receipt = try await web3.eth.getTransactionReceipt(txHash)
+            let receipt = try await web3.eth.transactionReceipt(txHash)
             print(receipt)
             XCTAssert(receipt.status == .ok)
 
@@ -652,7 +652,7 @@ class web3swiftTransactionsTests: XCTestCase {
                 break
             }
 
-            let details = try await web3.eth.getTransactionDetails(txHash)
+            let details = try await web3.eth.transactionDetails(txHash)
             print(details)
             let txnGasLimit = details.transaction.parameters.gasLimit
             XCTAssert(txnGasLimit == BigUInt(78423))

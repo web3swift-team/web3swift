@@ -15,7 +15,7 @@ class web3swiftEventloopTests: XCTestCase {
         let expectation = self.expectation(description: "Waiting")
         func getBlockNumber(_ web3: web3) async {
             do {
-                let blockNumber = try await web3.eth.getBlockNumber()
+                let blockNumber = try await web3.eth.blockNumber()
                 print("Block number = " + String(blockNumber))
                 ticksToWait = ticksToWait - 1
                 if ticksToWait == 0 {

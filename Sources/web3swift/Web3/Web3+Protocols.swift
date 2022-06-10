@@ -21,10 +21,10 @@ public protocol EventParserProtocol {
     func parseTransaction(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol]
     func parseTransactionByHash(_ hash: Data) async throws -> [EventParserResultProtocol]
     func parseBlock(_ block: Block) async throws -> [EventParserResultProtocol]
-    func parseBlockByNumber(_ blockNumber: UInt64) async throws -> [EventParserResultProtocol]
+    func parseBlockByNumber(_ blockNumber: BigUInt) async throws -> [EventParserResultProtocol]
     func parseTransactionPromise(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol]
     func parseTransactionByHashPromise(_ hash: Data) async throws -> [EventParserResultProtocol]
-    func parseBlockByNumberPromise(_ blockNumber: UInt64) async throws -> [EventParserResultProtocol]
+    func parseBlockByNumberPromise(_ blockNumber: BigUInt) async throws -> [EventParserResultProtocol]
     func parseBlockPromise(_ block: Block) async throws -> [EventParserResultProtocol]
 }
 
@@ -58,7 +58,7 @@ public enum Networks {
 
     static let allValues = [Mainnet, Ropsten, Kovan, Rinkeby]
 
-    static func fromInt(_ networkID: Int) -> Networks? {
+    static func fromInt(_ networkID: UInt) -> Networks? {
         switch networkID {
         case 1:
             return Networks.Mainnet

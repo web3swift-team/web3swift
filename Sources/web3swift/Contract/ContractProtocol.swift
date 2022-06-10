@@ -44,7 +44,7 @@ public struct EventFilter {
     public enum Block {
         case latest
         case pending
-        case blockNumber(UInt64)
+        case blockNumber(UInt)
 
         var encoded: String {
             switch self {

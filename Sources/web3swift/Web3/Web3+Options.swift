@@ -67,24 +67,7 @@ public struct TransactionOptions {
 
     public var nonce: NoncePolicy?
 
-    public enum CallingBlockPolicy {
-        case pending
-        case latest
-        case exactBlockNumber(BigUInt)
-
-        var stringValue: String {
-            switch self {
-            case .pending:
-                return "pending"
-            case .latest:
-                return "latest"
-            case .exactBlockNumber(let number):
-                return String(number, radix: 16).addHexPrefix()
-            }
-        }
-    }
-
-    public var callOnBlock: CallingBlockPolicy?
+    public var callOnBlock: BlockNumber?
 
     public var accessList: [AccessListEntry]?
 
@@ -274,7 +257,7 @@ extension TransactionOptions: Decodable {
         }
 
         if let callOnBlock = try? container.decodeHex(BigUInt.self, forKey: .callOnBlock) {
-            self.callOnBlock = .exactBlockNumber(callOnBlock)
+            self.callOnBlock = .exact(callOnBlock)
         } else {
             self.callOnBlock = defaultOptions.callOnBlock
         }

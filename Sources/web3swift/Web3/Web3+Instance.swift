@@ -12,12 +12,6 @@ import BigInt
 public class web3 {
     public var provider: Web3Provider
     public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
-    public var defaultBlock = "latest"
-
-    /// Add a provider request to the dispatch queue.
-    public func dispatch(_ request: JSONRPCrequest) async throws -> JSONRPCresponse {
-         try await provider.sendAsync(request)
-    }
 
     /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
     public init(provider prov: Web3Provider) {

@@ -52,7 +52,8 @@ public struct Web3 {
     /// Initialized provider-bound Web3 instance using a provider's URL. Under the hood it performs a synchronous call to get
     /// the Network ID for EIP155 purposes
     public static func new(_ providerURL: URL) async throws -> web3 {
-        guard let provider = await Web3HttpProvider(providerURL) else {
+        // FIXME: Change this hardcoded value to dynamicly fethed from a Node
+        guard let provider = await Web3HttpProvider(providerURL, network: .Mainnet) else {
             throw Web3Error.inputError(desc: "Wrong provider - should be Web3HttpProvider with endpoint scheme http or https")
         }
         return web3(provider: provider)

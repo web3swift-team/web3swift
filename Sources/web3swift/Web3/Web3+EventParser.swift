@@ -28,15 +28,15 @@ extension web3.web3contract {
          *Parses the block for events matching the EventParser settings.*
 
          - parameters:
-            - blockNumber: Ethereum network block number
+         - blockNumber: Ethereum network block number
 
          - returns:
-            - Result object
+         - Result object
 
          - important: This call is synchronous
 
          */
-        public func parseBlockByNumber(_ blockNumber: UInt64) async throws -> [EventParserResultProtocol] {
+        public func parseBlockByNumber(_ blockNumber: BigUInt) async throws -> [EventParserResultProtocol] {
             let result = try await self.parseBlockByNumberPromise(blockNumber)
             return result
         }
@@ -45,10 +45,10 @@ extension web3.web3contract {
          *Parses the block for events matching the EventParser settings.*
 
          - parameters:
-            - block: Native web3swift block object
+         - block: Native web3swift block object
 
          - returns:
-            - Result object
+         - Result object
 
          - important: This call is synchronous
 
@@ -62,10 +62,10 @@ extension web3.web3contract {
          *Parses the transaction for events matching the EventParser settings.*
 
          - parameters:
-            - hash: Transaction hash
+         - hash: Transaction hash
 
          - returns:
-            - Result object
+         - Result object
 
          - important: This call is synchronous
 
@@ -79,10 +79,10 @@ extension web3.web3contract {
          *Parses the transaction for events matching the EventParser settings.*
 
          - parameters:
-            - transaction: web3swift native EthereumTransaction object
+         - transaction: web3swift native EthereumTransaction object
 
          - returns:
-            - Result object
+         - Result object
 
          - important: This call is synchronous
 
@@ -112,13 +112,13 @@ extension web3.web3contract.EventParser {
 
     }
 
-    public func parseBlockByNumberPromise(_ blockNumber: UInt64) async throws -> [EventParserResultProtocol] {
+    public func parseBlockByNumberPromise(_ blockNumber: BigUInt) async throws -> [EventParserResultProtocol] {
 
         guard filter == nil || filter?.fromBlock == nil && filter?.toBlock == nil else {
             throw Web3Error.inputError(desc: "Can not mix parsing specific block and using block range filter")
         }
 
-        let res = try await self.web3.eth.blockBy(number: blockNumber)
+        let res = try await self.web3.eth.block(by: blockNumber)
 
         return try await self.parseBlockPromise(res)
     }
@@ -174,65 +174,49 @@ extension web3.web3contract.EventParser {
 }
 
 extension web3.web3contract {
-
     /**
      *Fetches events by doing a lookup on "indexed" parameters of the event. Smart-contract developer can make some of event values "indexed" for such fast queries.*
 
      - parameters:
-         - eventName: Event name, should be present in ABI interface of the contract
-         - filter: EventFilter object setting the block limits for query
-         - joinWithReceipts: Bool indicating whether TransactionReceipt should be fetched separately for every matched transaction
+     - eventName: Event name, should be present in ABI interface of the contract
+     - filter: EventFilter object setting the block limits for query
+     - joinWithReceipts: Bool indicating whether TransactionReceipt should be fetched separately for every matched transaction
 
      - returns:
-        - Result object
+     - Result object
 
      - important: This call is synchronous
 
      */
     public func getIndexedEvents(eventName: String?, filter: EventFilter, joinWithReceipts: Bool = false) async throws -> [EventParserResultProtocol] {
-        let result = try await self.getIndexedEventsPromise(eventName: eventName, filter: filter, joinWithReceipts: joinWithReceipts)
-        return result
-    }
-}
+        let rawContract = self.contract
+        guard let preEncoding = encodeTopicToGetLogs(contract: rawContract, eventName: eventName, filter: filter) else {
+            throw Web3Error.processingError(desc: "Failed to encode topic for request")
+        }
 
-extension web3.web3contract {
-    public func getIndexedEventsPromise(eventName: String?, filter: EventFilter, joinWithReceipts: Bool = false) async throws -> [EventParserResultProtocol] {
-
-            let rawContract = self.contract
-            guard let preEncoding = encodeTopicToGetLogs(contract: rawContract, eventName: eventName, filter: filter) else {
-                throw Web3Error.processingError(desc: "Failed to encode topic for request")
+        if eventName != nil {
+            guard let _ = rawContract.events[eventName!] else {
+                throw Web3Error.processingError(desc: "No such event in a contract")
             }
+        }
 
-            if eventName != nil {
-                guard let _ = rawContract.events[eventName!] else {
-                    throw Web3Error.processingError(desc: "No such event in a contract")
-                }
-            }
-            let request = JSONRPCRequestFabric.prepareRequest(.getLogs, parameters: [preEncoding])
-            let response = try await self.web3.dispatch(request)
+        // FIXME: This could not worked at all.
+        let request: APIRequest = .getLogs(preEncoding)
+        let response: APIResponse<[EventLog]> = try await APIRequest.sendRequest(with: self.web3.provider, for: request)
 
-            guard let allLogs: [EventLog] = response.getValue() else {
-                if response.error != nil {
-                    throw Web3Error.nodeError(desc: response.error!.message)
-                }
-                throw Web3Error.nodeError(desc: "Empty or malformed response")
-            }
-
-
-            let decodedLogs = allLogs.compactMap { (log) -> EventParserResult? in
-                let (n, d) = self.contract.parseEvent(log)
-                guard let evName = n, let evData = d else {return nil}
-                var res = EventParserResult(eventName: evName, transactionReceipt: nil, contractAddress: log.address, decodedResult: evData)
-                res.eventLog = log
-                return res
-            }
+        let decodedLogs = response.result.compactMap { (log) -> EventParserResult? in
+            let (n, d) = self.contract.parseEvent(log)
+            guard let evName = n, let evData = d else {return nil}
+            var res = EventParserResult(eventName: evName, transactionReceipt: nil, contractAddress: log.address, decodedResult: evData)
+            res.eventLog = log
+            return res
+        }
             .filter{ res in res.eventLog != nil || (res.eventName == eventName && eventName != nil)}
 
 
-            if (!joinWithReceipts) {
-                return decodedLogs as [EventParserResultProtocol]
-            }
-
+        if (!joinWithReceipts) {
+            return decodedLogs as [EventParserResultProtocol]
+        }
 
         return await withTaskGroup(of: EventParserResultProtocol.self, returning: [EventParserResultProtocol].self) { group -> [EventParserResultProtocol] in
 
@@ -252,7 +236,6 @@ extension web3.web3contract {
             }
 
             return collected
-
         }
     }
 }

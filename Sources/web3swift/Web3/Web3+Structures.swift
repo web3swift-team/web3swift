@@ -174,6 +174,8 @@ public struct EventLog: Decodable {
     }
 }
 
+extension EventLog: APIResultType { }
+
 public enum TransactionInBlock: Decodable {
     case hash(Data)
     case transaction(EthereumTransaction)
@@ -291,6 +293,8 @@ extension Block {
     }
 }
 
+extension Block: APIResultType { }
+
 public struct EventParserResult: EventParserResultProtocol {
     public var eventName: String
     public var transactionReceipt: TransactionReceipt?
@@ -313,6 +317,8 @@ public struct TxPoolStatus: Decodable {
         case queued
     }
 }
+
+extension TxPoolStatus: APIResultType { }
 
 public extension TxPoolStatus {
     init(from decoder: Decoder) throws {
@@ -374,6 +380,8 @@ public struct TxPoolContent: Decodable {
         }
     }
 }
+
+extension TxPoolContent: APIResultType { }
 
 extension TxPoolContent {
     public init(from decoder: Decoder) throws {

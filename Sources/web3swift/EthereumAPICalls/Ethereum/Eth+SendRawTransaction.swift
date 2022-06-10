@@ -16,25 +16,15 @@ extension web3.Eth {
     }
 
     public func send(raw transaction: EthereumTransaction) async throws -> TransactionSendingResult {
+        // FIXME: Add appropriate error
+        guard let transactionHexData = transaction.encode()?.toHexString().addHexPrefix() else { throw Web3Error.unknownError }
+        let request: APIRequest = .sendRawTransaction(transactionHexData)
+        let response: APIResponse<Hash> = try await APIRequest.sendRequest(with: self.provider, for: request)
 
-        guard let request = EthereumTransaction.createRawTransaction(transaction: transaction) else {
-            throw Web3Error.processingError(desc: "Transaction is invalid")
-        }
-        let response = try await web3.dispatch(request)
-
-
-        guard let value: String = response.getValue() else {
-            if response.error != nil {
-                throw Web3Error.nodeError(desc: response.error!.message)
-            }
-            throw Web3Error.nodeError(desc: "Invalid value from Ethereum node")
-        }
-        let result = TransactionSendingResult(transaction: transaction, hash: value)
+        let result = TransactionSendingResult(transaction: transaction, hash: response.result)
         for hook in self.web3.postSubmissionHooks {
             hook.function(result)
         }
         return result
-
-
     }
 }

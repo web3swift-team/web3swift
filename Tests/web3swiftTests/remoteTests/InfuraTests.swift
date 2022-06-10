@@ -15,7 +15,7 @@ class InfuraTests: XCTestCase {
         do {
             let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
             let address = EthereumAddress("0xd61b5ca425F8C8775882d4defefC68A6979DBbce")!
-            let balance = try await web3.eth.getBalance(address: address)
+            let balance = try await web3.eth.getBalance(for: address)
             let balString = Web3.Utils.formatToEthereumUnits(balance, toUnits: .eth, decimals: 3)
             print(balString!)
         } catch {
@@ -25,20 +25,20 @@ class InfuraTests: XCTestCase {
     
     func testGetBlockByHash() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let result = try await web3.eth.getBlockByHash("0x6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695", fullTransactions: false)
+        let result = try await web3.eth.block(by: "0x6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695", fullTransactions: false)
 
         print(result)
     }
     
     func testGetBlockByNumber1() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let result = try await web3.eth.getBlockByNumber("latest", fullTransactions: false)
+        let result = try await web3.eth.block(by: .latest, fullTransactions: false)
         print(result)
     }
     
     func testGetBlockByNumber2() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let result = try await web3.eth.getBlockByNumber(UInt64(5184323), fullTransactions: true)
+        let result = try await web3.eth.block(by: .exact(5184323), fullTransactions: true)
         print(result)
         let transactions = result.transactions
         for transaction in transactions {
@@ -54,7 +54,7 @@ class InfuraTests: XCTestCase {
     func testGetBlockByNumber3() async throws {
         do {
             let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-            let _ = try await web3.eth.getBlockByNumber(UInt64(1000000000), fullTransactions: true)
+            let _ = try await web3.eth.block(by: .exact(1000000000), fullTransactions: true)
             XCTFail()
         } catch {
             
@@ -63,7 +63,7 @@ class InfuraTests: XCTestCase {
     
     func testGasPrice() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let response = try await web3.eth.getGasPrice()
+        let response = try await web3.eth.gasPrice()
         print(response)
     }
     
@@ -72,11 +72,11 @@ class InfuraTests: XCTestCase {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let contract = web3.contract(jsonString, at: nil, abiVersion: 2)
         var filter = EventFilter()
-        filter.fromBlock = .blockNumber(UInt64(5200120))
-        filter.toBlock = .blockNumber(UInt64(5200120))
+        filter.fromBlock = .blockNumber(UInt(5200120))
+        filter.toBlock = .blockNumber(UInt(5200120))
         filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
         filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), (nil as [EventFilterable]?)]
-        let eventParserResult = try await contract!.getIndexedEventsPromise(eventName: "Transfer", filter: filter, joinWithReceipts: true)
+        let eventParserResult = try await contract!.getIndexedEvents(eventName: "Transfer", filter: filter, joinWithReceipts: true)
         print(eventParserResult)
         XCTAssert(eventParserResult.count == 2)
         XCTAssert(eventParserResult.first?.transactionReceipt != nil)

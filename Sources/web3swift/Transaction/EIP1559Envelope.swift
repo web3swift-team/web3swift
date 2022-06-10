@@ -313,7 +313,7 @@ extension EIP1559Envelope {
             accessEncoding.append(encoded)
         }
         params.accessList = accessEncoding
-        let gasEncoding = self.gasLimit.abiEncode(bits: 256)
+        let gasEncoding = gasLimit > 21100 ? self.gasLimit.abiEncode(bits: 256) : nil
         params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
         let maxFeeEncoding = self.maxFeePerGas.abiEncode(bits: 256)
         params.maxFeePerGas = maxFeeEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
