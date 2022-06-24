@@ -228,38 +228,6 @@ extension APIRequest {
         }
     }
 
-    public var responseType: APIResultType.Type {
-        switch self {
-        case .blockNumber: return BigUInt.self
-        case .getAccounts: return [EthereumAddress].self
-        case .getBalance: return BigUInt.self
-        case .getBlockByHash: return Block.self
-        case .getBlockByNumber: return Block.self
-        case .gasPrice: return BigUInt.self
-        case .feeHistory: return Web3.Oracle.FeeHistory.self
-        case .getTransactionCount: return BigUInt.self
-        case .getCode: return Hash.self
-        case .getTransactionReceipt: return TransactionReceipt.self
-        case .createAccount: return EthereumAddress.self
-        case .unlockAccount: return Bool.self
-        case .getTransactionByHash: return TransactionDetails.self
-        case .sendTransaction: return Hash.self
-        case .sendRawTransaction: return Hash.self
-        case .estimateGas: return BigUInt.self
-        case .call: return Data.self
-        // FIXME: Not checked
-        case .getNetwork: return Int.self
-        case .personalSign: return Data.self
-        case .getTxPoolStatus: return TxPoolStatus.self
-        case .getTxPoolContent: return TxPoolContent.self
-        case .getLogs: return [EventLog].self
-
-        // FIXME: Not implemented
-        case .getStorageAt: return String.self
-        case .getTxPoolInspect: return String.self
-        }
-    }
-
     var encodedBody: Data {
         let request = RequestBody(method: self.call, params: self.parameters)
         // this is safe to force try this here
@@ -291,7 +259,6 @@ extension APIRequest {
             return [RequestParameter.eventFilter(eventFilterParameters)]
 
         case .personalSign(let address, let string):
-            // FIXME: Add second parameter
             return [RequestParameter.string(address), RequestParameter.string(string)]
 
         case .call(let transactionParameters, let blockNumber):
@@ -359,9 +326,6 @@ extension APIRequest {
 
 extension APIRequest {
     public static func sendRequest<Result>(with provider: Web3Provider, for call: APIRequest) async throws -> APIResponse<Result> {
-        /// Don't even try to make network request if the `Result` type dosen't equal to supposed by API
-        // FIXME: Add appropriate error thrown
-        guard Result.self == call.responseType else { throw Web3Error.unknownError }
         let request = setupRequest(for: call, with: provider)
         return try await APIRequest.send(uRLRequest: request, with: provider.session)
     }
