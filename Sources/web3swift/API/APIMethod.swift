@@ -75,34 +75,104 @@ public typealias TransactionHash = Hash // 64 chars length without 0x
 /// - `protocol APIRequestParameterElementType: Encodable` — this type purpose is the same as ``APIRequestParameterType` one except this one is made for `Element`s of an `Array` s when the latter is an associated type of a given `RequestParameter` case.
 public enum APIRequest {
     // MARK: - Official API
-    // 0 parameter in call
+    
     /// Gas price request
     case gasPrice
+   
+    /// Get last block number
     case blockNumber
+    
+    /// Get current network
     case getNetwork
+    
+    /// Get accounts
     case getAccounts
-    // ??
+    
+    /// Estimate required gas amount for transaction
+    /// - Parameters:
+    ///     - TransactionParameters: parameters of planned transaction
+    ///     - BlockNumber: block where it should be evalueated
     case estimateGas(TransactionParameters, BlockNumber)
+    
+    /// Send raw transaction
+    /// - Parameters:
+    ///     - Hash: String representation of a transaction data
     case sendRawTransaction(Hash)
+   
+    /// Send transaction object
+    /// - Parameters:
+    ///     - TransactionParameters: transaction to be sent into chain
     case sendTransaction(TransactionParameters)
+   
+    /// Get transaction by hash
+    /// - Parameters:
+    ///     - Hash: transaction hash ID
     case getTransactionByHash(Hash)
+   
+    /// Get transaction receipt
+    /// - Paramters:
+    ///     - Hash: transaction hash ID
     case getTransactionReceipt(Hash)
+   
+    /// Get logs
+    /// - Parameters:
+    ///     - EventFilterParameters: event filter parameters for interaction with node
     case getLogs(EventFilterParameters)
+    
+    /// Sign given string by users private key
+    /// - Parameters:
+    ///     - Address: address where to sign
+    ///     - String: custom string to be signed
     case personalSign(Address, String)
+   
+    /// Call a given contract
+    ///
+    /// Mostly could be used for intreacting with a contracts, but also could be used for simple transaction sending
+    /// - Parameters:
+    ///     - TransactionParameters: transaction to be sent into chain
+    ///     - BlockNumber: block where it should be evalueated
     case call(TransactionParameters, BlockNumber)
+    
+    /// Get a transaction counts on a given block
+    ///
+    /// Consider that there's no out of the box way to get counts of all transactions sent by the address
+    /// except calling this method on each and every block in the chain by rather self or any third party service.
+    ///
+    /// - Parameters:
+    ///     - Address: address which is engaged in transaction
+    ///     - BlockNumber: block to check
     case getTransactionCount(Address, BlockNumber)
+    
+    /// Get a balance of a given address
+    /// - Parameters:
+    ///     - Address: address which balance would be recieved
+    ///     - BlockNumber: block to check
     case getBalance(Address, BlockNumber)
 
     /// Returns the value from a storage position at a given address.
     ///
     /// - Parameters:
-    ///   - Address: Address
-    ///   - Storage: slot
-    ///   - BlockNumber: sd
-    case getStorageAt(Address, Hash, BlockNumber)
+    ///     - Address: Address
+    ///     - Position: Integer of the position in the storage.
+    ///     - BlockNumber: block to check
+    case getStorageAt(Address, BigUInt, BlockNumber)
 
+    /// Returns code of a given address
+    /// - Parameters:
+    ///     - Address: address what code to get
+    ///     - BlockNumber: block to check
     case getCode(Address, BlockNumber)
+    
+    /// Get block object by hash
+    /// - Parameters:
+    ///     - Hash: Hash of the block to reach
+    ///     - Bool: Transaction included in block could be received as just array of their hashes or as Transaction objects, set true for latter.
     case getBlockByHash(Hash, Bool)
+    
+    /// Get block object by its number
+    /// - Parameters:
+    ///     - Hash: Number of the block to reach
+    ///     - Bool: Transaction included in block could be received as just array of their hashes or as Transaction objects, set true for latter.
     case getBlockByNumber(BlockNumber, Bool)
 
     /// Returns fee history with a respect to given setup
@@ -112,14 +182,15 @@ public enum APIRequest {
     /// than the amount of gas actually used by the transaction, for a variety of reasons including EVM mechanics and node performance.
     ///
     /// - Parameters:
-    ///   - UInt: Requested range of blocks. Clients will return less than the requested range if not all blocks are available.
-    ///   - BlockNumber: Highest block of the requested range.
-    ///   - [Double]: A monotonically increasing list of percentile values.
-    ///     For each block in the requested range, the transactions will be sorted in ascending order
-    ///     by effective tip per gas and the coresponding effective tip for the percentile will be determined, accounting for gas consumed."
+    ///     - UInt: Requested range of blocks. Clients will return less than the requested range if not all blocks are available.
+    ///     - BlockNumber: Highest block of the requested range.
+    ///     - [Double]: A monotonically increasing list of percentile values.
+    ///         For each block in the requested range, the transactions will be sorted in ascending order
+    ///         by effective tip per gas and the coresponding effective tip for the percentile will be determined, accounting for gas consumed."
     case feeHistory(BigUInt, BlockNumber, [Double])
 
     // MARK: - Additional API
+    
     /// Creates new account.
     ///
     /// Note: it becomes the new current unlocked account. There can only be one unlocked account at a time.
@@ -232,8 +303,8 @@ extension APIRequest {
         case .getBalance(let address, let blockNumber):
             return [RequestParameter.string(address), RequestParameter.string(blockNumber.stringValue)]
 
-        case .getStorageAt(let address, let hash, let blockNumber):
-            return [RequestParameter.string(address), RequestParameter.string(hash), RequestParameter.string(blockNumber.stringValue)]
+        case .getStorageAt(let address, let bigUInt, let blockNumber):
+            return [RequestParameter.string(address), RequestParameter.string(bigUInt.hexString), RequestParameter.string(blockNumber.stringValue)]
 
         case .getCode(let address, let blockNumber):
             return [RequestParameter.string(address), RequestParameter.string(blockNumber.stringValue)]
