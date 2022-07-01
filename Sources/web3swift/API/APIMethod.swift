@@ -218,9 +218,6 @@ public enum APIRequest {
     case getTxPoolInspect // No in Eth API
 }
 
-// FIXME: This conformance should be changed to `LiteralInitiableFromString`
-extension Data: APIResultType { }
-
 extension APIRequest {
     var method: REST {
         switch self {
