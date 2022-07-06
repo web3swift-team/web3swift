@@ -200,7 +200,6 @@ extension web3.web3contract {
             }
         }
 
-        // FIXME: This could not worked at all.
         let request: APIRequest = .getLogs(preEncoding)
         let response: APIResponse<[EventLog]> = try await APIRequest.sendRequest(with: self.web3.provider, for: request)
 

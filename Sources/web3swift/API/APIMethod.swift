@@ -13,7 +13,6 @@ public typealias Receipt = Hash
 public typealias Address = Hash // 20 bytes (40 chars length without 0x)
 public typealias TransactionHash = Hash // 64 chars length without 0x
 
-// FIXME: Add documentation to each method.
 /// Ethereum JSON RPC API Calls
 ///
 /// ## How to
@@ -74,7 +73,7 @@ public typealias TransactionHash = Hash // 64 chars length without 0x
 /// - `protocol APIRequestParameterType: Encodable` — this type is part of the ``RequestParameter`` enum mechanism which purpose is to restrict types that can be passed as associated types within `RequestParameter` cases.
 /// - `protocol APIRequestParameterElementType: Encodable` — this type purpose is the same as ``APIRequestParameterType` one except this one is made for `Element`s of an `Array` s when the latter is an associated type of a given `RequestParameter` case.
 public enum APIRequest {
-    // MARK: - Official API
+    // MARK: - Official Ethereum API
     
     /// Gas price request
     case gasPrice
@@ -189,7 +188,7 @@ public enum APIRequest {
     ///         by effective tip per gas and the coresponding effective tip for the percentile will be determined, accounting for gas consumed."
     case feeHistory(BigUInt, BlockNumber, [Double])
 
-    // MARK: - Additional API
+    // MARK: - Additional Ethereum API
     
     /// Creates new account.
     ///
@@ -339,23 +338,16 @@ extension APIRequest {
     static func send<Result>(uRLRequest: URLRequest, with session: URLSession) async throws -> APIResponse<Result> {
         let (data, response) = try await session.data(for: uRLRequest)
 
-        // FIXME: Add appropriate error thrown
-        guard let httpResponse = response as? HTTPURLResponse,
-               200 ..< 400 ~= httpResponse.statusCode else { throw Web3Error.connectionError }
+        guard 200 ..< 400 ~= response.statusCode else { throw Web3Error.serverError(code: response.statusCode) }
 
-        // FIXME: Add throwing an error from is server fails.
         /// This bit of code is purposed to work with literal types that comes in Response in hexString type.
         /// Currently it's just `Data` and any kind of Integers `(U)Int`, `Big(U)Int`.
         if Result.self == Data.self || Result.self == UInt.self || Result.self == Int.self || Result.self == BigInt.self || Result.self == BigUInt.self {
-            // FIXME: Make appropriate error
-            guard let Literal = Result.self as? LiteralInitiableFromString.Type else { throw Web3Error.unknownError }
-            // FIXME: Add appropriate error thrown.
-            guard let responseAsString = try? JSONDecoder().decode(APIResponse<String>.self, from: data) else { throw Web3Error.unknownError }
-            // FIXME: Add appropriate error thrown.
-            guard let literalValue = Literal.init(from: responseAsString.result) else { throw Web3Error.unknownError }
+            guard let Literal = Result.self as? LiteralInitiableFromString.Type else { throw Web3Error.typeError }
+            guard let responseAsString = try? JSONDecoder().decode(APIResponse<String>.self, from: data) else { throw Web3Error.dataError }
+            guard let literalValue = Literal.init(from: responseAsString.result) else { throw Web3Error.dataError }
             /// `Literal` conforming `LiteralInitiableFromString`, that conforming to an `APIResponseType` type, so it's never fails.
-            // FIXME: Make appropriate error
-            guard let result = literalValue as? Result else { throw Web3Error.unknownError }
+            guard let result = literalValue as? Result else { throw Web3Error.typeError }
             return APIResponse(id: responseAsString.id, jsonrpc: responseAsString.jsonrpc, result: result)
         }
         return try JSONDecoder().decode(APIResponse<Result>.self, from: data)

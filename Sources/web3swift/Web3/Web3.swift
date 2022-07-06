@@ -9,7 +9,12 @@ import Foundation
 public enum Web3Error: Error {
     case transactionSerializationError
     case connectionError
+
     case dataError
+    case typeError
+    case valueError
+    case serverError(code: Int)
+
     case walletError
     case inputError(desc: String)
     case nodeError(desc: String)
@@ -17,6 +22,7 @@ public enum Web3Error: Error {
     case keystoreError(err: AbstractKeystoreError)
     case generalError(err: Error)
     case unknownError
+
 
     public var errorDescription: String {
         switch self {
@@ -41,6 +47,12 @@ public enum Web3Error: Error {
             return err.localizedDescription
         case .unknownError:
             return "Unknown Error"
+        case .typeError:
+            return "Unsupported type"
+        case let .serverError(code: code):
+            return "Server error: \(code)"
+        case .valueError:
+            return "You're passing value that doesn't supported by this method."
         }
     }
 }
