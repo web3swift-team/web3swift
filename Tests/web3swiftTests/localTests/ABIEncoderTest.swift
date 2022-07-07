@@ -1,5 +1,5 @@
 //
-//  ABIEncoderSoliditySha3Test.swift
+//  ABIEncoderTest.swift
 //  Tests
 //
 //  Created by JeneaVranceanu on 28/03/2022.
@@ -10,7 +10,7 @@ import Foundation
 import XCTest
 @testable import web3swift
 
-class ABIEncoderSoliditySha3Test: LocalTestCase {
+class ABIEncoderTest: LocalTestCase {
 
     func test_soliditySha3() throws {
         var hex = try ABIEncoder.soliditySha3(true).toHexString().addHexPrefix()
@@ -99,5 +99,19 @@ class ABIEncoderSoliditySha3Test: LocalTestCase {
             didFail = true
         }
         XCTAssertTrue(didFail)
+    }
+
+    func test_abiEncoding_emptyValues() {
+        let zeroBytes = ABIEncoder.encode(types: [ABI.Element.InOut](), values: [AnyObject]())!
+        XCTAssert(zeroBytes.count == 0)
+
+        let functionWithNoInput = ABI.Element.Function(name: "testFunction",
+                                                       inputs: [],
+                                                       outputs: [],
+                                                       constant: false,
+                                                       payable: false)
+        let encodedFunction = functionWithNoInput.encodeParameters([])
+        XCTAssertTrue(functionWithNoInput.methodEncoding == encodedFunction)
+        XCTAssertTrue("0xe16b4a9b" == encodedFunction?.toHexString().addHexPrefix().lowercased())
     }
 }

@@ -17,12 +17,12 @@
         "ENSTests",
         "GasOracleTests",
         "InfuraTests",
+        "LocalTestCase",
         "OracleTests",
         "RemoteParsingTests",
         "RemoteTests",
         "ST20AndSecurityTokenTests",
-        "WebsocketTests",
-        "LocalTestCase"
+        "WebsocketTests"
       ],
       "target" : {
         "containerPath" : "container:web3swift.xcodeproj",
