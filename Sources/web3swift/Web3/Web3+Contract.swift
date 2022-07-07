@@ -17,7 +17,7 @@ extension web3 {
 
     /// Web3 instance bound contract instance.
     public class web3contract {
-        var contract: EthereumContract
+        private(set) public var contract: EthereumContract
         var web3: web3
         public var transactionOptions: TransactionOptions? = nil
 
@@ -47,16 +47,27 @@ extension web3 {
             self.transactionOptions = mergedOptions
         }
 
-        /// Deploys a constact instance using the previously provided (at initialization) ABI, some bytecode, constructor parameters and options.
+        /// Deploys a constact instance using the previously provided  ABI, some bytecode, constructor parameters and options.
         /// If extraData is supplied it is appended to encoded bytecode and constructor parameters.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func deploy(bytecode: Data, parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
+        public func deploy(bytecode: Data,
+                           constructor: ABI.Element.Constructor? = nil,
+                           parameters: [AnyObject]? = nil,
+                           extraData: Data? = nil,
+                           transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
-            guard var tx = self.contract.deploy(bytecode: bytecode, parameters: parameters, extraData: extraData) else {return nil}
+            guard var tx = self.contract.deploy(bytecode: bytecode,
+                                                constructor: constructor,
+                                                parameters: parameters,
+                                                extraData: extraData)
+            else { return nil }
+
             tx.chainID = self.web3.provider.network?.chainID
-            let writeTX = WriteTransaction.init(transaction: tx, web3: self.web3, contract: self.contract, method: "fallback", transactionOptions: mergedOptions)
-            return writeTX
+            return WriteTransaction(transaction: tx,
+                                    web3: self.web3,
+                                    contract: self.contract,
+                                    transactionOptions: mergedOptions)
         }
 
         /// Creates and object responsible for calling a particular function of the contract. If method name is not found in ABI - returns nil.

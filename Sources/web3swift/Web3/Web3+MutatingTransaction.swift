@@ -10,23 +10,29 @@ import Core
 
 public class WriteTransaction: ReadTransaction {
 
-    public func assembleTransaction(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
-        var assembledTransaction: EthereumTransaction = self.transaction
+    public func assemblePromise(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
+        var assembledTransaction: EthereumTransaction = transaction
+        let queue = web3.requestDispatcher.queue
+        let returnPromise = Promise<EthereumTransaction> { seal in
+            if method != "fallback" {
+                guard let method = contract.methods[method]?.first else {
+                    seal.reject(Web3Error.inputError(desc: "Contract's ABI does not have such method"))
+                    return
+                }
+
+                if method.constant {
+                    seal.reject(Web3Error.inputError(desc: "Trying to transact to the constant function"))
+                    return
+                }
+            }
 
         if self.method != "fallback" {
-            let m = self.contract.methods[self.method]
-            if m == nil {
+            let function = self.contract.methods[self.method]?.first
+            if function == nil {
                 throw Web3Error.inputError(desc: "Contract's ABI does not have such method")
             }
-            switch m! {
-            case .function(let function):
-                if function.constant {
-                    throw Web3Error.inputError(desc: "Trying to transact to the constant function")
-                }
-            case .constructor(_):
-                break
-            default:
-                throw Web3Error.inputError(desc: "Contract's ABI does not have such method")
+            if function.constant {
+                throw Web3Error.inputError(desc: "Trying to transact to the constant function")
             }
         }
 
