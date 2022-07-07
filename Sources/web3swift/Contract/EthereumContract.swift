@@ -37,7 +37,10 @@ public class EthereumContract: ContractProtocol {
     }()
 
     private(set) public lazy var allMethods: [ABI.Element.Function] = {
-        return methods.values.flatMap { $0 }
+        return methods.filter { pair in
+            let data = Data.fromHex(pair.key)
+            return data?.count == 4
+        }.values.flatMap { $0 }
     }()
 
     private(set) public lazy var events: [String: ABI.Element.Event] = {
