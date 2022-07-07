@@ -14,8 +14,6 @@ extension Array: APIResultType where Element: APIResultType { }
 
 extension String: APIResultType { }
 
-extension Bool: APIResultType { }
-
 /// This is utility protocol for decoding API Responses
 ///
 /// You better not use it in any other part of a bit of code except `APIResponse<T>` decoding.

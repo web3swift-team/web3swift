@@ -23,3 +23,5 @@ extension web3.Personal {
         return response.result
     }
 }
+
+extension Bool: APIResultType { }
