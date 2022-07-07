@@ -21,7 +21,7 @@ public protocol ContractProtocol {
 
     /// Functions filtered from `abi`.
     /// Contains methods mapped to function name, like `getData`,
-    /// name with input parameters `getData(bytes32)` and 4 bytes signature `0xffFFffFF`.
+    /// name with input parameters `getData(bytes32)` and 4 bytes signature `0xffffffff` (expected to be lowercased).
     /// The mapping by name (e.g. `getData`) is the one most likely expected to return arrays with
     /// more than one entry due to the fact that solidity allows method overloading.
     var methods: [String:[ABI.Element.Function]] {get}
@@ -50,7 +50,7 @@ public protocol ContractProtocol {
     /// Creates transaction to deploy a smart contract.
     /// - Parameters:
     ///   - bytecode: bytecode to deploy.
-    ///   - constructor: constructor to encode `parameters` with.
+    ///   - constructor: constructor of the smart contract bytecode is related to. Used to encode `parameters`.
     ///   - parameters: parameters for `constructor`.
     ///   - extraData: any extra data. It can be encoded input arguments for a constuctor but then you should set `constructor` and
     ///   `parameters` to be `nil`.
