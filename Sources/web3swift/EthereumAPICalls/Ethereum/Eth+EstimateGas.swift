@@ -11,8 +11,7 @@ import BigInt
 extension web3.Eth {
 
     public func estimateGas(for transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> BigUInt {
-        // FIXME: Add appropriate error
-        guard let transactionParameters = transaction.encodeAsDictionary(from: transactionOptions?.from) else { throw Web3Error.unknownError }
+        guard let transactionParameters = transaction.encodeAsDictionary(from: transactionOptions?.from) else { throw Web3Error.dataError }
 
         let request: APIRequest = .estimateGas(transactionParameters, transactionOptions?.callOnBlock ?? .latest)
         let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)

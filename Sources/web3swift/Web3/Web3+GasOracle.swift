@@ -39,8 +39,9 @@ extension Web3 {
         /// Another example: If you set it [100.0] you'll get the very highest value of a dataset e.g. max Tip amount.
         var percentiles: [Double]
 
-        // TODO: Disabled until 3.0 version, coz will be enabled from 3.0.0.
-//        var forceDropCache = false
+        var forceDropCache = false
+
+        var cacheTimeout: Double
 
         /// Oracle initializer
         /// - Parameters:
@@ -48,11 +49,12 @@ extension Web3 {
         ///   - block: Number of block from which counts starts backward
         ///   - blockCount: Count of block to calculate statistics
         ///   - percentiles: Percentiles of fees to which result of predictions will be split in
-        public init(_ provider: web3, block: BlockNumber = .latest, blockCount: BigUInt = 20, percentiles: [Double] = [25, 50, 75]) {
+        public init(_ provider: web3, block: BlockNumber = .latest, blockCount: BigUInt = 20, percentiles: [Double] = [25, 50, 75], cacheTimeout: Double = 10) {
             self.web3Provider = provider
             self.block = block
             self.blockCount = blockCount
             self.percentiles = percentiles
+            self.cacheTimeout = cacheTimeout
         }
 
 
@@ -84,12 +86,18 @@ extension Web3 {
         }
 
         private func suggestGasValues() async throws -> FeeHistory {
-            // This is some kind of cache.
-            // It stores about 9 seconds, than it rewrites it with newer data.
-            // TODO: Disabled until 3.0 version, coz `distance` available from iOS 13.
-//            guard feeHistory == nil, forceDropCache, feeHistory!.timestamp.distance(to: Date()) > cacheTimeout else { return feeHistory! }
+            /// This is some kind of cache.
+            /// It stores about 10 seconds, than it rewrites it with newer data.
 
-            return try await eth.feeHistory(blockCount: blockCount, block: block, percentiles: percentiles)
+            /// We're explicitly checking that feeHistory is not nil before force unwrapping it.
+            // swiftlint: disable force_unwrapping
+            guard feeHistory == nil, forceDropCache, feeHistory!.timestamp.distance(to: Date()) > cacheTimeout else { return feeHistory! }
+
+            feeHistory = try await eth.feeHistory(blockCount: blockCount, block: block, percentiles: percentiles)
+
+            /// We're assigning this value the line very above, so it's free to force unwrapping here
+            return feeHistory!
+            // swiftlint: enable force_unwrapping
         }
 
         /// Suggesting tip values
@@ -126,9 +134,8 @@ extension Web3 {
             switch block {
             case .latest: latestBlockNumber = try await eth.blockNumber()
             case let .exact(number): latestBlockNumber = number
-            // FIXME: Make real error here
-                // Error throws since pending and erliest are unable to be used in this method.
-            default: throw Web3Error.unknownError
+            // Error throws since pending and erliest are unable to be used in this method.
+            default: throw Web3Error.valueError
             }
 
             /// checking if latest block number is greather than number of blocks to take in account

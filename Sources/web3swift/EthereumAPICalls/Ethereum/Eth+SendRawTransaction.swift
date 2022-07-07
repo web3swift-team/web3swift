@@ -16,8 +16,7 @@ extension web3.Eth {
     }
 
     public func send(raw transaction: EthereumTransaction) async throws -> TransactionSendingResult {
-        // FIXME: Add appropriate error
-        guard let transactionHexData = transaction.encode()?.toHexString().addHexPrefix() else { throw Web3Error.unknownError }
+        guard let transactionHexData = transaction.encode()?.toHexString().addHexPrefix() else { throw Web3Error.dataError }
         let request: APIRequest = .sendRawTransaction(transactionHexData)
         let response: APIResponse<Hash> = try await APIRequest.sendRequest(with: self.provider, for: request)
 
