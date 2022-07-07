@@ -14,7 +14,7 @@ import BigInt
 
 @testable import web3swift
 
-class web3swiftTransactionsTests: LocalTestCase {
+class TransactionsTests: LocalTestCase {
 
     enum TestCase: Int {
         case legacyFallback = 0

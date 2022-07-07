@@ -8,7 +8,7 @@ import XCTest
 
 @testable import web3swift
 
-class web3swiftEventloopTests: LocalTestCase {
+class EventloopTests: LocalTestCase {
 
     func testBasicEventLoop() throws {
         var ticksToWait = 5

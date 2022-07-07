@@ -7,7 +7,7 @@
 import XCTest
 @testable import web3swift
 
-class web3swiftEIP681Tests: LocalTestCase {
+class EIP681Tests: LocalTestCase {
 
     // Custom payment
     // ethereum:0xfb6916095ca1df60bb79Ce92ce3ea74c37c5d359?value=2.014e18

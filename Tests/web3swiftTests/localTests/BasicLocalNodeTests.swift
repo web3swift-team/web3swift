@@ -10,7 +10,7 @@ import BigInt
 
 @testable import web3swift
 
-class web3swiftBasicLocalNodeTests: LocalTestCase {
+class BasicLocalNodeTests: LocalTestCase {
 
     func testDeployWithRemoteSigning() throws {
         let allAddresses = try ganache.eth.getAccounts()

@@ -9,10 +9,10 @@ import BigInt
 
 @testable import web3swift
 
-class web3swiftERC20ClassTests: LocalTestCase {
+class ERC20ClassTests: LocalTestCase {
 
     func testERC20TokenCreation() throws {
-        let (_, receipt, _) = try web3swiftHelpers.localDeployERC20(ganache)
+        let (_, receipt, _) = try TestHelpers.localDeployERC20(ganache)
         let erc20token = ERC20.init(web3: ganache, provider: ganache.provider, address: receipt.contractAddress!)
         erc20token.readProperties()
         XCTAssert(erc20token.symbol == "w3s")
@@ -21,7 +21,7 @@ class web3swiftERC20ClassTests: LocalTestCase {
     }
 
     func testERC20tokenBalanceAndAllowance() throws {
-        let (_, receipt, _) = try web3swiftHelpers.localDeployERC20(ganache)
+        let (_, receipt, _) = try TestHelpers.localDeployERC20(ganache)
         let erc20token = ERC20.init(web3: ganache, provider: ganache.provider, address: receipt.contractAddress!)
 
         let userAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!

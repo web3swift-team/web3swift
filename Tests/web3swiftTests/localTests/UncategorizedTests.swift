@@ -10,7 +10,7 @@ import BigInt
 
 @testable import web3swift
 
-class web3swiftTests: LocalTestCase {
+class UncategorizedTests: LocalTestCase {
 
     func testBitFunctions () throws {
         let data = Data([0xf0, 0x02, 0x03])

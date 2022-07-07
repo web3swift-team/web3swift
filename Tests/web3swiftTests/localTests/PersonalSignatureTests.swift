@@ -10,7 +10,7 @@ import BigInt
 
 @testable import web3swift
 
-class web3swiftPersonalSignatureTests: LocalTestCase {
+class PersonalSignatureTests: LocalTestCase {
 
     func testPersonalSignature() throws {
         let tempKeystore = try! EthereumKeystoreV3(password: "")
