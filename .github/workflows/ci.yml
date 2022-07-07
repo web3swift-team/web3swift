@@ -51,7 +51,7 @@ jobs:
       group: carthage-${{ github.run_id }}
       cancel-in-progress: false
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_13.3.1.app/Contents/Developer
     strategy:
       fail-fast: false
       max-parallel: 2
