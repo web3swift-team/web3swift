@@ -12,25 +12,17 @@ fileprivate typealias PromiseResult = PromiseKit.Result
 public class WriteTransaction: ReadTransaction {
 
     public func assemblePromise(transactionOptions: TransactionOptions? = nil) -> Promise<EthereumTransaction> {
-        var assembledTransaction: EthereumTransaction = self.transaction
-        let queue = self.web3.requestDispatcher.queue
+        var assembledTransaction: EthereumTransaction = transaction
+        let queue = web3.requestDispatcher.queue
         let returnPromise = Promise<EthereumTransaction> { seal in
-            if self.method != "fallback" {
-                let m = self.contract.methods[self.method]
-                if m == nil {
+            if method != "fallback" {
+                guard let method = contract.methods[method]?.first else {
                     seal.reject(Web3Error.inputError(desc: "Contract's ABI does not have such method"))
                     return
                 }
-                switch m! {
-                case .function(let function):
-                    if function.constant {
-                        seal.reject(Web3Error.inputError(desc: "Trying to transact to the constant function"))
-                        return
-                    }
-                case .constructor(_):
-                    break
-                default:
-                    seal.reject(Web3Error.inputError(desc: "Contract's ABI does not have such method"))
+
+                if method.constant {
+                    seal.reject(Web3Error.inputError(desc: "Trying to transact to the constant function"))
                     return
                 }
             }
@@ -39,7 +31,7 @@ public class WriteTransaction: ReadTransaction {
             if mergedOptions.value != nil {
                 assembledTransaction.value = mergedOptions.value!
             }
-            var forAssemblyPipeline: (EthereumTransaction, EthereumContract, TransactionOptions) = (assembledTransaction, self.contract, mergedOptions)
+            var forAssemblyPipeline = (assembledTransaction, contract, mergedOptions)
 
             for hook in self.web3.preAssemblyHooks {
                 let prom: Promise<Bool> = Promise<Bool> {seal in
@@ -84,7 +76,7 @@ public class WriteTransaction: ReadTransaction {
             }
             switch gasLimitPolicy {
             case .automatic, .withMargin, .limited:
-                gasEstimatePromise = self.web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
+                gasEstimatePromise = web3.eth.estimateGasPromise(assembledTransaction, transactionOptions: optionsForGasEstimation)
             case .manual(let gasLimit):
                 gasEstimatePromise = Promise<BigUInt>.value(gasLimit)
             }
@@ -97,15 +89,15 @@ public class WriteTransaction: ReadTransaction {
             }
             switch noncePolicy {
             case .latest:
-                getNoncePromise = self.web3.eth.getTransactionCountPromise(address: from, onBlock: "latest")
+                getNoncePromise = web3.eth.getTransactionCountPromise(address: from, onBlock: "latest")
             case .pending:
-                getNoncePromise = self.web3.eth.getTransactionCountPromise(address: from, onBlock: "pending")
+                getNoncePromise = web3.eth.getTransactionCountPromise(address: from, onBlock: "pending")
             case .manual(let nonce):
                 getNoncePromise = Promise<BigUInt>.value(nonce)
             }
 
             // determine gas costing, taking transaction type into account
-            let oracle = Web3.Oracle(self.web3, percentiles: [75])
+            let oracle = Web3.Oracle(web3, percentiles: [75])
             let finalGasPrice: BigUInt? // legacy gas model
             let finalGasFee: BigUInt? // EIP-1559 gas model
             let finalTipFee: BigUInt? // EIP-1559 gas model
@@ -225,18 +217,18 @@ public class WriteTransaction: ReadTransaction {
                 mergedOptions = forAssemblyPipeline.2
 
                 return assembledTransaction
-            }).done(on: queue) {tx in
+            }).done(on: queue) { tx in
                 seal.fulfill(tx)
-                }.catch(on: queue) {err in
-                    seal.reject(err)
+            }.catch(on: queue) { err in
+                seal.reject(err)
             }
         }
         return returnPromise
     }
 
     public func sendPromise(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) -> Promise<TransactionSendingResult>{
-        let queue = self.web3.requestDispatcher.queue
-        return self.assemblePromise(transactionOptions: transactionOptions).then(on: queue) { transaction throws -> Promise<TransactionSendingResult> in
+        let queue = web3.requestDispatcher.queue
+        return assemblePromise(transactionOptions: transactionOptions).then(on: queue) { transaction throws -> Promise<TransactionSendingResult> in
             let mergedOptions = self.transactionOptions.merge(transactionOptions)
             var cleanedOptions = TransactionOptions()
             cleanedOptions.from = mergedOptions.from
@@ -246,10 +238,10 @@ public class WriteTransaction: ReadTransaction {
     }
 
     public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) throws -> TransactionSendingResult {
-        return try self.sendPromise(password: password, transactionOptions: transactionOptions).wait()
+        return try sendPromise(password: password, transactionOptions: transactionOptions).wait()
     }
 
     public func assemble(transactionOptions: TransactionOptions? = nil) throws -> EthereumTransaction {
-        return try self.assemblePromise(transactionOptions: transactionOptions).wait()
+        return try assemblePromise(transactionOptions: transactionOptions).wait()
     }
 }

@@ -17,7 +17,11 @@ public class ReadTransaction {
 
     var web3: web3
 
-    public init (transaction: EthereumTransaction, web3 web3Instance: web3, contract: EthereumContract, method: String, transactionOptions: TransactionOptions?) {
+    public init(transaction: EthereumTransaction,
+                web3 web3Instance: web3,
+                contract: EthereumContract,
+                method: String = "fallback",
+                transactionOptions: TransactionOptions? = nil) {
         self.transaction = transaction
         self.web3 = web3Instance
         self.contract = contract
@@ -53,11 +57,11 @@ public class ReadTransaction {
                         throw Web3Error.processingError(desc: "Can not decode returned parameters")
                     }
                     seal.fulfill(decodedData)
-                } catch{
+                } catch {
                     seal.reject(error)
                 }
-                }.catch(on: queue) {err in
-                    seal.reject(err)
+            }.catch(on: queue) {err in
+                seal.reject(err)
             }
         }
         return returnPromise
