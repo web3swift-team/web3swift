@@ -7,7 +7,7 @@ import web3swift
 // SuperClass that all local tests should be derived from
 // while this class does show up in the navigator, it has no associated tests
 class LocalTestCase: XCTestCase {
-    static let url = URL.init(string: "http://127.0.0.1:8545")!
+    static let url = URL(string: "http://127.0.0.1:8545")!
     let ganache = try! Web3.new(LocalTestCase.url)
     static var isSetUp = false
 

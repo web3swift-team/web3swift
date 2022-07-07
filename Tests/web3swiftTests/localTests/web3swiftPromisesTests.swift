@@ -54,9 +54,7 @@ class web3swiftPromisesTests: LocalTestCase {
 
         let allAddresses = try ganache.eth.getAccounts()
         let contract = ganache.contract(Web3.Utils.estimateGasTestABI, at: nil, abiVersion: 2)!
-
-        let parameters = [] as [AnyObject]
-        let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
+        let deployTx = contract.deploy(bytecode: bytecode)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
         let result = try deployTx.sendPromise().wait()

@@ -18,9 +18,7 @@ class web3swiftAdvancedABIv2Tests: LocalTestCase {
 
         let allAddresses = try ganache.eth.getAccounts()
         var contract = ganache.contract(abiString, at: nil, abiVersion: 2)!
-
-        let parameters = [] as [AnyObject]
-        let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
+        let deployTx = contract.deploy(bytecode: bytecode)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
         let result = try deployTx.sendPromise().wait()
@@ -51,9 +49,7 @@ class web3swiftAdvancedABIv2Tests: LocalTestCase {
 
         let allAddresses = try ganache.eth.getAccounts()
         var contract = ganache.contract(abiString, at: nil, abiVersion: 2)!
-
-        let parameters = [] as [AnyObject]
-        let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
+        let deployTx = contract.deploy(bytecode: bytecode)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
         let result = try deployTx.sendPromise().wait()
@@ -84,9 +80,7 @@ class web3swiftAdvancedABIv2Tests: LocalTestCase {
 
         let allAddresses = try ganache.eth.getAccounts()
         var contract = ganache.contract(abiString, at: nil, abiVersion: 2)!
-
-        let parameters = [] as [AnyObject]
-        let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
+        let deployTx = contract.deploy(bytecode: bytecode)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
         let result = try deployTx.sendPromise().wait()
@@ -117,9 +111,7 @@ class web3swiftAdvancedABIv2Tests: LocalTestCase {
 
         let allAddresses = try ganache.eth.getAccounts()
         var contract = ganache.contract(abiString, at: nil, abiVersion: 2)!
-
-        let parameters = [] as [AnyObject]
-        let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
+        let deployTx = contract.deploy(bytecode: bytecode)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
         let result = try deployTx.sendPromise().wait()
@@ -150,9 +142,7 @@ class web3swiftAdvancedABIv2Tests: LocalTestCase {
 
         let allAddresses = try ganache.eth.getAccounts()
         var contract = ganache.contract(abiString, at: nil, abiVersion: 2)!
-
-        let parameters = [] as [AnyObject]
-        let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
+        let deployTx = contract.deploy(bytecode: bytecode)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
         let result = try deployTx.sendPromise().wait()
