@@ -246,7 +246,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     }
 
     /// override WebsocketDelegate
-    override public func didReceive(event: WebSocketEvent, client: WebSocket) {
+    override public func didReceive(event: WebSocketEvent, client: WebSocketClient) {
         switch event {
         case .connected(let headers):
             debugMode ? print("websocket is connected, headers:\n \(headers)") : nil
@@ -283,6 +283,9 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
             debugMode ? print("error: \(String(describing: error))") : nil
             websocketConnected = false
             delegate.gotError(error: error!)
+        case .peerClosed:
+            debugMode ? print("peerClosed") : nil
+            delegate.gotError(error: Web3Error.connectionError)
         }
     }
 

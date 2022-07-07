@@ -1,5 +1,5 @@
+github "JeneaVranceanu/Starscream" "ed96ef4949c9d3e793c5b1adf8d287191e99a97e"
 github "attaswift/BigInt" "v5.3.0"
 github "attaswift/SipHash" "v1.2.2"
-github "daltoniam/Starscream" "4.0.4"
-github "krzyzanowskim/CryptoSwift" "1.4.2"
-github "mxcl/PromiseKit" "6.16.2"
+github "krzyzanowskim/CryptoSwift" "1.5.1"
+github "mxcl/PromiseKit" "6.17.1"
