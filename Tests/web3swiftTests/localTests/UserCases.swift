@@ -10,8 +10,8 @@ import Core
 
 @testable import web3swift
 
-class web3swiftUserCases: XCTestCase {
-    
+class UserCases: XCTestCase {
+
     func getKeystoreData() -> Data? {
         let bundle = Bundle(for: type(of: self))
         guard let path = bundle.path(forResource: "key", ofType: "json") else {return nil}
@@ -20,7 +20,7 @@ class web3swiftUserCases: XCTestCase {
     }
     
     func testUserCase1() async throws {
-        let (web3, _, receipt, abiString) = try await web3swiftHelpers.localDeployERC20()
+        let (web3, _, receipt, abiString) = try await TestHelpers.localDeployERC20()
         let account = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let contract = web3.contract(abiString, at: receipt.contractAddress!)!
         let readTransaction = contract.read("balanceOf", parameters:[account] as [AnyObject])!

@@ -11,7 +11,7 @@ import Core
 
 @testable import web3swift
 
-class web3swiftPersonalSignatureTests: XCTestCase {
+class PersonalSignatureTests: XCTestCase {
     
     func testPersonalSignature() async throws {
         let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)

@@ -10,7 +10,7 @@ import BigInt
 
 @testable import web3swift
 
-class web3swiftPromisesTests: XCTestCase {
+class PromisesTests: XCTestCase {
     var urlSession : URLSession?
     
     func testGetBalancePromise() async throws {
@@ -97,6 +97,7 @@ class web3swiftPromisesTests: XCTestCase {
         print(estimate2)
         XCTAssertLessThanOrEqual(estimate2 - estimate1, 22000)
     }
+
     // FIXME: Temporary deleted method `sendETH` should be restored.
 //    func testSendETHPromise() async throws {
 //        let web3 = try await Web3.new(URL(string: "http://127.0.0.1:8545")!)
@@ -111,10 +112,9 @@ class web3swiftPromisesTests: XCTestCase {
 //    }
 //
     func testERC20tokenBalancePromise() async throws {
-        let (web3, _, receipt, _) = try await web3swiftHelpers.localDeployERC20()
+        let (web3, _, receipt, _) = try await TestHelpers.localDeployERC20()
         
         let token = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress, abiVersion: 2)!
-        
         let userAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let tokenBalance = try await token.read("balanceOf", parameters: [userAddress] as [AnyObject])!.decodedData()
         guard let bal = tokenBalance["0"] as? BigUInt else {return XCTFail()}

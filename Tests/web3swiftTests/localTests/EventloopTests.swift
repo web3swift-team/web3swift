@@ -8,8 +8,8 @@ import XCTest
 import Core
 
 @testable import web3swift
-//TODO: refactor me
-class web3swiftEventloopTests: XCTestCase {
+
+class EventloopTests: XCTestCase {
 
     func testBasicEventLoop() async throws {
         var ticksToWait = 5

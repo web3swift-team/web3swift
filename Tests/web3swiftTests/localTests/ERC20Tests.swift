@@ -10,11 +10,10 @@ import Core
 
 @testable import web3swift
 
-class web3swiftERC20Tests: XCTestCase {
+class ERC20Tests: XCTestCase {
     
     func testERC20name() async throws {
-        let (web3, _, receipt, _) = try await web3swiftHelpers.localDeployERC20()
-        
+        let (web3, _, receipt, _) = try await TestHelpers.localDeployERC20()
         let parameters = [] as [AnyObject]
         let contract = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress!)!
         let readTX = contract.read("name", parameters:parameters)!
@@ -25,8 +24,7 @@ class web3swiftERC20Tests: XCTestCase {
     }
     
     func testERC20tokenBalance() async throws {
-        let (web3, _, receipt, _) = try await web3swiftHelpers.localDeployERC20()
-        
+        let (web3, _, receipt, _) = try await TestHelpers.localDeployERC20()
         let addressOfUser = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let contract = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress!, abiVersion: 2)!
         guard let readTX = contract.read("balanceOf", parameters: [addressOfUser] as [AnyObject]) else {return XCTFail()}
