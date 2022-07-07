@@ -27,7 +27,9 @@ class web3swiftHelpers {
             EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!,
             1024
         ] as [AnyObject]
-        let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
+        let deployTx = contract.deploy(bytecode: bytecode,
+                                       constructor: contract.contract.constructor,
+                                       parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
         let result = try await deployTx.send()
