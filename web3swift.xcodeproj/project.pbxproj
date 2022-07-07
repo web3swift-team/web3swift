@@ -206,6 +206,7 @@
 		CB50A52827060BD600D7E39B /* EIP712Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50A52727060BD600D7E39B /* EIP712Tests.swift */; };
 		D606A56B279F5D59003643ED /* DecodeSolidityErrorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D606A56A279F5D59003643ED /* DecodeSolidityErrorType.swift */; };
 		D6A3D9B827F1E785009E3BCF /* ABIEncoderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3D9B727F1E785009E3BCF /* ABIEncoderTest.swift */; };
+		D6EC73AE2876E4670079DBDF /* EthereumContractTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EC73AD2876E4670079DBDF /* EthereumContractTest.swift */; };
 		E22A911F241ED71A00EC1021 /* browser.min.js in Resources */ = {isa = PBXBuildFile; fileRef = E22A911E241ED71A00EC1021 /* browser.min.js */; };
 		E2B76710241ED479007EBFE3 /* browser.js in Resources */ = {isa = PBXBuildFile; fileRef = E2B7670F241ED479007EBFE3 /* browser.js */; };
 		E2EDC5EA241EDE3600410EA6 /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */; platformFilter = ios; };
@@ -438,6 +439,7 @@
 		CB50A52927060C5300D7E39B /* EIP712.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EIP712.swift; sourceTree = "<group>"; };
 		D606A56A279F5D59003643ED /* DecodeSolidityErrorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeSolidityErrorType.swift; sourceTree = "<group>"; };
 		D6A3D9B727F1E785009E3BCF /* ABIEncoderTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABIEncoderTest.swift; sourceTree = "<group>"; };
+		D6EC73AD2876E4670079DBDF /* EthereumContractTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumContractTest.swift; sourceTree = "<group>"; };
 		E22A911E241ED71A00EC1021 /* browser.min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.min.js; sourceTree = "<group>"; };
 		E2B7670F241ED479007EBFE3 /* browser.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = browser.js; sourceTree = "<group>"; };
 		E2EDC5E9241EDE3600410EA6 /* BrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
@@ -1025,13 +1027,15 @@
 				5CDEF973275A74670004A2F2 /* LocalTests.xctestplan */,
 				6029BE712817A4A8006FA0DF /* LocalTestCase.swift */,
 				5C26D89F27F3725500431EB0 /* EIP1559BlockTests.swift */,
-				604FA4FE27ECBDC80021108F /* DataConversionTests.swift */,
-				5CF7E8A0276B79290009900F /* AdvancedABIv2Tests.swift */,
-				5CF7E89C276B79280009900F /* BasicLocalNodeTests.swift */,
 				5CF7E8A1276B79290009900F /* EIP67Tests.swift */,
 				5CF7E891276B79270009900F /* EIP681Tests.swift */,
 				5CF7E898276B79270009900F /* ERC20ClassTests.swift */,
 				5CF7E897276B79270009900F /* ERC20Tests.swift */,
+				CB50A52727060BD600D7E39B /* EIP712Tests.swift */,
+				604FA4FE27ECBDC80021108F /* DataConversionTests.swift */,
+				5CF7E8A0276B79290009900F /* AdvancedABIv2Tests.swift */,
+				D6A3D9B727F1E785009E3BCF /* ABIEncoderTest.swift */,
+				5CF7E89C276B79280009900F /* BasicLocalNodeTests.swift */,
 				5CF7E89F276B79280009900F /* EventloopTests.swift */,
 				5CF7E895276B79270009900F /* TestHelpers.swift */,
 				5CF7E894276B79270009900F /* KeystoresTests.swift */,
@@ -1042,9 +1046,8 @@
 				5CF7E89A276B79280009900F /* UncategorizedTests.swift */,
 				5CF7E893276B79270009900F /* TransactionsTests.swift */,
 				5CF7E89E276B79280009900F /* UserCases.swift */,
-				CB50A52727060BD600D7E39B /* EIP712Tests.swift */,
-				D6A3D9B727F1E785009E3BCF /* ABIEncoderTest.swift */,
 				D606A56A279F5D59003643ED /* DecodeSolidityErrorType.swift */,
+				D6EC73AD2876E4670079DBDF /* EthereumContractTest.swift */,
 			);
 			path = localTests;
 			sourceTree = "<group>";
@@ -1452,6 +1455,7 @@
 				604FA4FF27ECBDC80021108F /* DataConversionTests.swift in Sources */,
 				5CF7E8B1276B792A0009900F /* AdvancedABIv2Tests.swift in Sources */,
 				5CF7E8A6276B792A0009900F /* TestHelpers.swift in Sources */,
+				D6EC73AE2876E4670079DBDF /* EthereumContractTest.swift in Sources */,
 				5CF7E8AA276B792A0009900F /* NumberFormattingUtilTests.swift in Sources */,
 				5CF7E8A3276B792A0009900F /* PersonalSignatureTests.swift in Sources */,
 				D6A3D9B827F1E785009E3BCF /* ABIEncoderTest.swift in Sources */,

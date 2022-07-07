@@ -1,5 +1,5 @@
 //
-//  OracleTests.swift
+//  GasOracleTests.swift
 //  Web3swift
 //
 //  Created by Yaroslav on 11.04.2022.
@@ -11,7 +11,7 @@ import BigInt
 @testable import web3swift
 
 // MARK: Works only with network connection
-class OracleTests: XCTestCase {
+class GasOracleTests: XCTestCase {
 
     let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
 
