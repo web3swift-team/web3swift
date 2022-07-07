@@ -16,11 +16,17 @@ public class EthereumContract: ContractProtocol {
 
     private(set) public lazy var methods: [String: [ABI.Element.Function]] = {
         var methods = [String: [ABI.Element.Function]]()
+
+        func appendFunction(_ key: String, _ value: ABI.Element.Function) {
+            var array = methods[key] ?? []
+            array.append(value)
+            methods[key] = array
+        }
+
         for case let .function(function) in abi where function.name != nil {
-            let name = function.name!
-            var array = methods[name] ?? []
-            array.append(function)
-            methods[name] = array
+            appendFunction(function.name!, function)
+            appendFunction(function.signature, function)
+            appendFunction(function.methodString.addHexPrefix().lowercased(), function)
         }
         return methods
     }()
