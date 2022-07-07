@@ -27,6 +27,11 @@ public class EthereumContract: ContractProtocol {
             appendFunction(function.name!, function)
             appendFunction(function.signature, function)
             appendFunction(function.methodString.addHexPrefix().lowercased(), function)
+
+            /// ABI cannot have two functions with exactly the same name and input arguments
+            if (methods[function.signature]?.count ?? 0) > 1 {
+                fatalError("Given ABI is invalid: contains two functions with possibly different return values but exactly the same name and input parameters!")
+            }
         }
         return methods
     }()
