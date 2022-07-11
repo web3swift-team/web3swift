@@ -13,6 +13,7 @@
   },
   "testTargets" : [
     {
+      "parallelizable" : true,
       "skippedTests" : [
         "ABIEncoderSoliditySha3Test",
         "ABIEncoderTest",
