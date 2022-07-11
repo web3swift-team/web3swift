@@ -82,6 +82,21 @@ public struct TransactionOptions {
         opts.callOnBlock = .pending
         return opts
     }
+    
+    public init(type: TransactionType? = nil, to: EthereumAddress? = nil, from: EthereumAddress? = nil, chainID: BigUInt? = nil, gasLimit: GasLimitPolicy? = nil, gasPrice: GasPricePolicy? = nil, maxFeePerGas: FeePerGasPolicy? = nil, maxPriorityFeePerGas: FeePerGasPolicy? = nil, value: BigUInt? = nil, nonce: NoncePolicy? = nil, callOnBlock: BlockNumber? = nil, accessList: [AccessListEntry]? = nil) {
+        self.type = type
+        self.to = to
+        self.from = from
+        self.chainID = chainID
+        self.gasLimit = gasLimit
+        self.gasPrice = gasPrice
+        self.maxFeePerGas = maxFeePerGas
+        self.maxPriorityFeePerGas = maxPriorityFeePerGas
+        self.value = value
+        self.nonce = nonce
+        self.callOnBlock = callOnBlock
+        self.accessList = accessList
+    }
 
     public func resolveNonce(_ suggestedByNode: BigUInt) -> BigUInt {
         guard let noncePolicy = self.nonce else { return suggestedByNode }

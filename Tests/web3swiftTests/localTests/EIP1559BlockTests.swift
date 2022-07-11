@@ -1,9 +1,11 @@
 import XCTest
 import BigInt
-import Core
 
 @testable
 import web3swift
+
+@testable
+import Core
 
 class EIP1559BlockTests: LocalTestCase {
     let uselessBlockPart = (

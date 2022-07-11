@@ -9,8 +9,8 @@
 import Foundation
 
 public struct PathAddressStorage {
-    private(set) var addresses: [EthereumAddress]
-    private(set) var paths: [String]
+    public private(set) var addresses: [EthereumAddress]
+    public private(set) var paths: [String]
 
     init() {
         addresses = []

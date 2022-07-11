@@ -45,7 +45,7 @@ class web3swiftPromisesTests: XCTestCase {
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
         guard let writeTX = contract?.write("fallback") else {return XCTFail()}
         writeTX.transactionOptions.from = tempKeystore!.addresses?.first
-        writeTX.transactionOptions.value = BigUInt("1.0", Web3.Utils.eth)
+        writeTX.transactionOptions.value = BigUInt("1.0", Utilities.Units.eth)
         let estimate = try await writeTX.estimateGas(with: nil)
         print(estimate)
         XCTAssert(estimate == 21000)

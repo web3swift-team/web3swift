@@ -218,21 +218,3 @@ public class WriteTransaction: ReadTransaction {
         }
     }
 }
-
-extension TransactionOptions {
-    init() {
-        self.init()
-//        self.from = nil
-//        self.to = nil
-//        self.accessList = nil
-//        self.callOnBlock = nil
-//        self.chainID = nil
-//        self.gasLimit = nil
-//        self.gasPrice = nil
-//        self.maxFeePerGas = nil
-//        self.maxPriorityFeePerGas = nil
-//        self.nonce = nil
-//        self.type = nil
-//        self.value = nil
-    }
-}
