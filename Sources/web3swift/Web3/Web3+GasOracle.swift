@@ -8,6 +8,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 extension Web3 {
     /// Oracle is the class to do a transaction fee suggestion
@@ -167,7 +168,7 @@ extension Web3 {
                         return transaction
                     }
                 }
-                .map { $0.meta?.gasPrice ?? 0 }
+                .compactMap { $0.meta?.gasPrice ?? 0 }
 
             return calculatePercentiles(for: lastNthBlockGasPrice)
         }

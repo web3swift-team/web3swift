@@ -14,24 +14,24 @@ import BigInt
 public struct EthereumMetadata {
 
     /// hash for the block that contains this transaction on chain
-    var blockHash: Data?
+    public var blockHash: Data?
 
     /// block number for the block containing this transaction on chain
-    var blockNumber: BigUInt?
+    public var blockNumber: BigUInt?
 
     /// index for this transaction within the containing block
-    var transactionIndex: UInt?
+    public var transactionIndex: UInt?
 
     /// hash for this transaction as returned by the node [not computed]
     /// this can be used for validation against the computed hash returned
     /// by the transaction envelope.
-    var transactionHash: Data?
+    public var transactionHash: Data?
 
     /// gasPrice value returned by the node
     /// note this is a duplicate value for legacy and EIP-2930 transaction types
     /// but is included here since EIP-1559 does not contain a `gasPrice`, but 
     /// nodes still report the value.
-    var gasPrice: BigUInt?
+    public var gasPrice: BigUInt?
 }
 
 public extension EthereumMetadata {

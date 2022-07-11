@@ -1,4 +1,5 @@
 import XCTest
+import Core
 @testable import web3swift
 
 class EIP712Tests: LocalTestCase {

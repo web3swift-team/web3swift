@@ -6,7 +6,7 @@
 
 import XCTest
 import BigInt
-//import EthereumAddress
+import Core
 
 @testable import web3swift
 

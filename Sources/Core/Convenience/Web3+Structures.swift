@@ -244,9 +244,6 @@ public struct Block: Decodable {
         case transactions
         case uncles
     }
-
-    /// Returns chain version of mainnet block with such number
-    var mainChainVersion: Web3.MainChainVersion { Web3.getChainVersion(of: number) }
 }
 
 extension Block {
@@ -294,19 +291,6 @@ extension Block {
 }
 
 extension Block: APIResultType { }
-
-public struct EventParserResult: EventParserResultProtocol {
-    public var eventName: String
-    public var transactionReceipt: TransactionReceipt?
-    public var contractAddress: EthereumAddress
-    public var decodedResult: [String: Any]
-    public var eventLog: EventLog? = nil
-}
-
-public struct TransactionSendingResult {
-    public var transaction: EthereumTransaction
-    public var hash: String
-}
 
 public struct TxPoolStatus: Decodable {
     public var pending: BigUInt

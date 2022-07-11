@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Core
 
 // Pseudo-introspection using a registry contract
 protocol IERC820: IERC165 {

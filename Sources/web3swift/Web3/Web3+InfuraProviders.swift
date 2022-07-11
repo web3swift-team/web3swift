@@ -6,30 +6,7 @@
 import Foundation
 import BigInt
 import Starscream
-
-public enum BlockNumber {
-    case pending
-    /// Latest block of a chain
-    case latest
-    /// Earliest block of a chain
-    case earliest
-    /// Exact block number
-    case exact(BigUInt)
-
-    /// Block number as a hex string
-    public var stringValue: String {
-        switch self {
-        case .pending:
-            return "pending"
-        case .latest:
-            return "latest"
-        case .earliest:
-            return "earliest"
-        case .exact(let number):
-            return String(number, radix: 16).addHexPrefix()
-        }
-    }
-}
+import Core
 
 /// Custom Web3 HTTP provider of Infura nodes.
 public final class InfuraProvider: Web3HttpProvider {

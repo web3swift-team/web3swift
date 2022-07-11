@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 public struct Web3Signer {
     public static func signTX(transaction: inout EthereumTransaction,
@@ -25,7 +26,7 @@ public struct Web3Signer {
                                                                 useExtraEntropy: Bool = false) throws -> Data? {
         var privateKey = try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
         defer { Data.zero(&privateKey) }
-        guard let hash = Web3.Utils.hashPersonalMessage(personalMessage) else { return nil }
+        guard let hash = Utilities.hashPersonalMessage(personalMessage) else { return nil }
         let (compressedSignature, _) = SECP256K1.signForRecovery(hash: hash, privateKey: privateKey, useExtraEntropy: useExtraEntropy)
         return compressedSignature
     }

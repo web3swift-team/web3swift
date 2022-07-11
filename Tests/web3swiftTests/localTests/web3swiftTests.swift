@@ -8,6 +8,7 @@
 import XCTest
 import CryptoSwift
 import BigInt
+import Core
 
 @testable import web3swift
 
@@ -23,12 +24,12 @@ class web3swiftTests: XCTestCase {
     
     func testCombiningPublicKeys() throws {
         let priv1 = Data(repeating: 0x01, count: 32)
-        let pub1 = Web3.Utils.privateToPublic(priv1, compressed: true)!
+        let pub1 = Utilities.privateToPublic(priv1, compressed: true)!
         let priv2 = Data(repeating: 0x02, count: 32)
-        let pub2 = Web3.Utils.privateToPublic(priv2, compressed: true)!
+        let pub2 = Utilities.privateToPublic(priv2, compressed: true)!
         let combined = SECP256K1.combineSerializedPublicKeys(keys: [pub1, pub2], outputCompressed: true)
         let compinedPriv = Data(repeating: 0x03, count: 32)
-        let compinedPub = Web3.Utils.privateToPublic(compinedPriv, compressed: true)
+        let compinedPub = Utilities.privateToPublic(compinedPriv, compressed: true)
         XCTAssert(compinedPub == combined)
     }
     

@@ -8,6 +8,7 @@ import Foundation
 import XCTest
 import CryptoSwift
 import BigInt
+import Core
 
 // swiftlint:disable file_length
 // swiftlint:disable type_body_length
@@ -606,8 +607,8 @@ class web3swiftTransactionsTests: XCTestCase {
                 nonce: 9, value: 1000000000000000000, data: Data(),
                 v: 0, r: 0, s: 0, parameters: params)
             let privateKeyData = Data.fromHex("0x4646464646464646464646464646464646464646464646464646464646464646")!
-            let publicKey = Web3.Utils.privateToPublic(privateKeyData, compressed: false)
-            let sender = Web3.Utils.publicToAddress(publicKey!)
+            let publicKey = Utilities.privateToPublic(privateKeyData, compressed: false)
+            let sender = Utilities.publicToAddress(publicKey!)
             transaction.chainID = 1
             print(transaction)
             let hash = transaction.hashForSignature()
@@ -629,7 +630,7 @@ class web3swiftTransactionsTests: XCTestCase {
             let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
             let allAddresses = try await web3.eth.ownedAccounts()
             let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
-            let value = Web3.Utils.parseToBigUInt("1.0", units: .eth)
+            let value = Utilities.parseToBigUInt("1.0", units: .eth)
             let from = allAddresses[0]
             let writeTX = contract!.write("fallback")!
             writeTX.transactionOptions.from = from

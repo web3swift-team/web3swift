@@ -60,19 +60,6 @@ public extension Data {
         return nil
     }
 
-    static func fromHex(_ hex: String) -> Data? {
-        let string = hex.lowercased().stripHexPrefix()
-        let array = Array<UInt8>(hex: string)
-        if (array.count == 0) {
-            if (hex == "0x" || hex == "") {
-                return Data()
-            } else {
-                return nil
-            }
-        }
-        return Data(array)
-    }
-
     func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public
         if startingBit + length / 8 > self.count, length > 64, startingBit > 0, length >= 1 {return nil}
         let bytes = self[(startingBit/8) ..< (startingBit+length+7)/8]

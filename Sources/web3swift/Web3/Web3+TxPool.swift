@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 extension web3.TxPool {
 //    public func getInspect() async throws -> [String: [String: [String: String]]] {

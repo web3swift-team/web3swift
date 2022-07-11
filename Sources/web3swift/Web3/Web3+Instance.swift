@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.

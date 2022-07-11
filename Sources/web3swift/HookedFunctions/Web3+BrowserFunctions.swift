@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 extension web3.BrowserFunctions {
 
@@ -64,9 +65,9 @@ extension web3.BrowserFunctions {
             vData -= 35
         }
         guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else {return nil}
-        guard let hash = Web3.Utils.hashPersonalMessage(personalMessage) else {return nil}
+        guard let hash = Utilities.hashPersonalMessage(personalMessage) else {return nil}
         guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
-        return Web3.Utils.publicToAddressString(publicKey)
+        return Utilities.publicToAddressString(publicKey)
     }
 
     public func sendTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") async -> [String: Any]? {

@@ -82,7 +82,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     /// the address of the sender of the transaction recovered from the signature
     public var sender: EthereumAddress? {
         guard let publicKey = self.recoverPublicKey() else { return nil }
-        return Web3.Utils.publicToAddress(publicKey)
+        return Utilities.publicToAddress(publicKey)
     }
 
     /// the transaction hash

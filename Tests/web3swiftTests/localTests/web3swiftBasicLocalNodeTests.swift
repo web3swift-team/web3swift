@@ -9,6 +9,7 @@
 import XCTest
 import CryptoSwift
 import BigInt
+import Core
 
 @testable import web3swift
 
@@ -57,7 +58,7 @@ class web3swiftBasicLocalNodeTests: XCTestCase {
         let parameters = [] as [AnyObject]
         let sendTx = contract.method("fallback", parameters: parameters)!
         
-        let valueToSend = Web3.Utils.parseToBigUInt("1.0", units: .eth)
+        let valueToSend = Utilities.parseToBigUInt("1.0", units: .eth)
         sendTx.transactionOptions.value = valueToSend
         sendTx.transactionOptions.from = allAddresses[0]
         
@@ -113,7 +114,7 @@ class web3swiftBasicLocalNodeTests: XCTestCase {
 //        let allAddresses = try web3.eth.ownedAccounts()
 //
 //        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-//        let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)!
+//        let contract = web3.contract(Web3.Utilities.coldWalletABI, at: sendToAddress, abiVersion: 2)!
 //
 //        let parameters = [] as [AnyObject]
 //        let sendTx = contract.method("fallback", parameters: parameters)!

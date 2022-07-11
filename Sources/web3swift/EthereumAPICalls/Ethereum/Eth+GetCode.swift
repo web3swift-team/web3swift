@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import Core
 import BigInt
 
 extension web3.Eth {

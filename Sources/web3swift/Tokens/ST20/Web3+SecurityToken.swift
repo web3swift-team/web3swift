@@ -8,7 +8,7 @@
 
 import Foundation
 import BigInt
-
+import Core
 
 /// The Ownable contract has an owner address, and provides basic authorization control functions, this simplifies the implementation of "user permissions".
 protocol IOwnable {
@@ -125,7 +125,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -148,7 +148,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -171,7 +171,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
         let tx = contract.write("burn", parameters: [value] as [AnyObject], transactionOptions: basicOptions)!
@@ -211,7 +211,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
         let tx = contract.write("transfer", parameters: [to, value] as [AnyObject], transactionOptions: basicOptions)!
@@ -233,7 +233,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -256,7 +256,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(newAmount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(newAmount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -279,7 +279,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 

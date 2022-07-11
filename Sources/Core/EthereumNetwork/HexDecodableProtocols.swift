@@ -44,7 +44,21 @@ extension BigInt: LiteralInitiableFromString { }
 
 extension BigUInt: LiteralInitiableFromString { }
 
-extension Data: LiteralInitiableFromString { }
+extension Data: LiteralInitiableFromString {    
+    public static func fromHex(_ hex: String) -> Data? {
+        let string = hex.lowercased().stripHexPrefix()
+        let array = Array<UInt8>(hex: string)
+        if (array.count == 0) {
+            if (hex == "0x" || hex == "") {
+                return Data()
+            } else {
+                return nil
+            }
+        }
+        return Data(array)
+    }
+
+}
 
 public protocol IntegerInitableWithRadix {
     init?<S: StringProtocol>(_ text: S, radix: Int)

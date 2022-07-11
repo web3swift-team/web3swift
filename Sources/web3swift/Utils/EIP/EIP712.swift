@@ -1,6 +1,7 @@
 import BigInt
 import CryptoSwift
 import Foundation
+import Core
 
 // TODO: Refactor me
 

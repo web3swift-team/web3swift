@@ -7,9 +7,8 @@
 // TODO: Replace `XCTAssert` with more explicite `XCTAssertEqual`, where Applicable
 
 import XCTest
-
+import Core
 import BigInt
-//import EthereumAddress
 
 @testable import web3swift
 
@@ -46,7 +45,7 @@ class web3swiftPromisesTests: XCTestCase {
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
         guard let writeTX = contract?.write("fallback") else {return XCTFail()}
         writeTX.transactionOptions.from = tempKeystore!.addresses?.first
-        writeTX.transactionOptions.value = BigUInt("1.0", .eth)
+        writeTX.transactionOptions.value = BigUInt("1.0", Web3.Utils.eth)
         let estimate = try await writeTX.estimateGas(with: nil)
         print(estimate)
         XCTAssert(estimate == 21000)
@@ -95,7 +94,7 @@ class web3swiftPromisesTests: XCTestCase {
         let fromAddress = tempKeystore!.addresses?.first
         options.from = fromAddress
         
-        let amount1 = Web3.Utils.parseToBigUInt("0.000000000000000001", units: .eth) // 1 wei
+        let amount1 = Utilities.parseToBigUInt("0.000000000000000001", units: Utilities.Units.eth) // 1 wei
         
         guard let tx1 = contract.write("test",
                                        parameters: [amount1] as [AnyObject],
@@ -106,7 +105,7 @@ class web3swiftPromisesTests: XCTestCase {
         let estimate1 = try await tx1.estimateGas(with: nil)
         print(estimate1)
         
-        let amount2 = Web3.Utils.parseToBigUInt("0.00000005", units: .eth) // 50 gwei
+        let amount2 = Utilities.parseToBigUInt("0.00000005", units: .eth) // 50 gwei
         guard let tx2 = contract.write("test",
                                        parameters: [amount2] as [AnyObject],
                                        extraData: Data(),

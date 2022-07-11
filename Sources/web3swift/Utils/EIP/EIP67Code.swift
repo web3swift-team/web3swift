@@ -7,6 +7,7 @@
 import Foundation
 import CoreImage
 import BigInt
+import Core
 
 extension Web3 {
 

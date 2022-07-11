@@ -7,6 +7,7 @@
 //
 import XCTest
 import BigInt
+import Core
 
 @testable import web3swift
 

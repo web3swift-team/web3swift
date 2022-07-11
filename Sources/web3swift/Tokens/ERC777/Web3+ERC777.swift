@@ -7,6 +7,7 @@
 //
 import Foundation
 import BigInt
+import Core
 
 
 // A New Advanced Token Standard
@@ -120,7 +121,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
         let tx = contract.write("transfer", parameters: [to, value] as [AnyObject], transactionOptions: basicOptions)!
@@ -142,7 +143,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -165,7 +166,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(newAmount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(newAmount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -229,7 +230,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
         let tx = contract.write("send", parameters: [to, value, data] as [AnyObject], transactionOptions: basicOptions)!
@@ -251,7 +252,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
         let tx = contract.write("operatorSend", parameters: [originalOwner, to, value, data, operatorData] as [AnyObject], transactionOptions: basicOptions)!
@@ -273,7 +274,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
         let tx = contract.write("burn", parameters: [value, data] as [AnyObject], transactionOptions: basicOptions)!
@@ -295,7 +296,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
         let tx = contract.write("burn", parameters: [originalOwner, value, data, operatorData] as [AnyObject], transactionOptions: basicOptions)!
@@ -374,7 +375,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 

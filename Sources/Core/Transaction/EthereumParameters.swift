@@ -49,6 +49,20 @@ public struct EthereumParameters {
 
     /// access list for contract execution (EIP-2930 and EIP-1559 only)
     public var accessList: [AccessListEntry]?
+    
+    public init(type: TransactionType? = nil, to: EthereumAddress? = nil, nonce: BigUInt? = nil, chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data? = nil, gasLimit: BigUInt? = nil, gasPrice: BigUInt? = nil, maxFeePerGas: BigUInt? = nil, maxPriorityFeePerGas: BigUInt? = nil, accessList: [AccessListEntry]? = nil) {
+        self.type = type
+        self.to = to
+        self.nonce = nonce
+        self.chainID = chainID
+        self.value = value
+        self.data = data
+        self.gasLimit = gasLimit
+        self.gasPrice = gasPrice
+        self.maxFeePerGas = maxFeePerGas
+        self.maxPriorityFeePerGas = maxPriorityFeePerGas
+        self.accessList = accessList
+    }
 }
 
 public extension EthereumParameters {

@@ -5,6 +5,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 public struct EthereumContract: ContractProtocol {
     public var transactionOptions: TransactionOptions? = TransactionOptions.defaultOptions

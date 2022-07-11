@@ -31,10 +31,6 @@ extension Array: APIRequestParameterType where Element: APIRequestParameterEleme
 
 protocol APIRequestParameterElementType: Encodable { }
 
-extension TransactionParameters: APIRequestParameterType { }
-
-extension EventFilterParameters: APIRequestParameterType { }
-
 extension Int: APIRequestParameterElementType { }
 
 extension UInt: APIRequestParameterElementType { }
@@ -95,8 +91,9 @@ enum RequestParameter {
 
 
 extension RequestParameter: RawRepresentable {
+    
     /**
-     This init required by `RawRepresentable` protocol, which is requred to encode mixed type values array in JSON.
+     This init required by ``RawRepresentable`` protocol, which is requred to encode mixed type values array in JSON.
 
      This protocol used to implement custom `encode` method for that enum,
      which is encodes array of self into array of self assotiated values.
@@ -107,6 +104,7 @@ extension RequestParameter: RawRepresentable {
         /// force casting in this switch is safe because
         /// each `rawValue` forced to casts only in exact case which is runs based on `rawValues` type
         // swiftlint:disable force_cast
+        
         switch type(of: rawValue) {
         case is Int.Type: self = .int(rawValue as! Int)
         case is [Int].Type: self = .intArray(rawValue as! [Int])
@@ -123,8 +121,8 @@ extension RequestParameter: RawRepresentable {
         case is Bool.Type: self = .bool(rawValue as! Bool)
         case is [Bool].Type: self = .boolArray(rawValue as! [Bool])
 
-        case is TransactionParameters.Type: self = .transaction(rawValue as! TransactionParameters)
-        case is EventFilterParameters.Type: self = .eventFilter(rawValue as! EventFilterParameters)
+        case is [EthereumTransaction].Type: self = .transaction(rawValue as! TransactionParameters)
+        case is [EventFilterParameters].Type: self = .eventFilter(rawValue as! EventFilterParameters)
         default: return nil
         }
         // swiftlint:enable force_cast

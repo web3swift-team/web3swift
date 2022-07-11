@@ -5,57 +5,7 @@
 //
 
 import Foundation
-
-public enum Web3Error: Error {
-    case transactionSerializationError
-    case connectionError
-
-    case dataError
-    case typeError
-    case valueError
-    case serverError(code: Int)
-
-    case walletError
-    case inputError(desc: String)
-    case nodeError(desc: String)
-    case processingError(desc: String)
-    case keystoreError(err: AbstractKeystoreError)
-    case generalError(err: Error)
-    case unknownError
-
-
-    public var errorDescription: String {
-        switch self {
-
-        case .transactionSerializationError:
-            return "Transaction Serialization Error"
-        case .connectionError:
-            return "Connection Error"
-        case .dataError:
-            return "Data Error"
-        case .walletError:
-            return "Wallet Error"
-        case .inputError(let desc):
-            return desc
-        case .nodeError(let desc):
-            return desc
-        case .processingError(let desc):
-            return desc
-        case .keystoreError(let err):
-            return err.localizedDescription
-        case .generalError(let err):
-            return err.localizedDescription
-        case .unknownError:
-            return "Unknown Error"
-        case .typeError:
-            return "Unsupported type"
-        case let .serverError(code: code):
-            return "Server error: \(code)"
-        case .valueError:
-            return "You're passing value that doesn't supported by this method."
-        }
-    }
-}
+import Core
 
 /// An arbitary Web3 object. Is used only to construct provider bound fully functional object by either supplying provider URL
 /// or using pre-coded Infura nodes

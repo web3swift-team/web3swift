@@ -7,6 +7,7 @@
 import Foundation
 import BigInt
 
+
 /*
     AbstractEnvelope is the main protocol definition to enable support for different transaction types.
     it defines the basic parameters and methods required by all transaction types.

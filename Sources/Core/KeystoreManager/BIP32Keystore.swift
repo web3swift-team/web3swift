@@ -139,7 +139,7 @@ public class BIP32Keystore: AbstractKeystore {
         guard let newNode = parentNode.derive(index: newIndex, derivePrivateKey: true, hardened: false) else {
             throw AbstractKeystoreError.keyDerivationError
         }
-        guard let newAddress = Web3.Utils.publicToAddress(newNode.publicKey) else {
+        guard let newAddress = Utilities.publicToAddress(newNode.publicKey) else {
             throw AbstractKeystoreError.keyDerivationError
         }
         let prefixPath = self.rootPrefix
@@ -190,7 +190,7 @@ public class BIP32Keystore: AbstractKeystore {
         guard let newNode = rootNode.derive(path: pathAppendix!, derivePrivateKey: true) else {
             throw AbstractKeystoreError.keyDerivationError
         }
-        guard let newAddress = Web3.Utils.publicToAddress(newNode.publicKey) else {
+        guard let newAddress = Utilities.publicToAddress(newNode.publicKey) else {
             throw AbstractKeystoreError.keyDerivationError
         }
         var newPath: String

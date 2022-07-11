@@ -5,6 +5,7 @@
 //
 
 import XCTest
+import Core
 
 @testable import web3swift
 //TODO: refactor me
@@ -37,7 +38,7 @@ class web3swiftEventloopTests: XCTestCase {
 
    // func testNonceMiddleware() throws {
    //     let web3 = try Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
-   //     let middleware = Web3.Utils.NonceMiddleware()
+   //     let middleware = Web3.Utilities.NonceMiddleware()
    //     middleware.attach(web3)
 
    //     let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!

@@ -8,6 +8,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 public protocol ContractProtocol {
     var address: EthereumAddress? {get set}

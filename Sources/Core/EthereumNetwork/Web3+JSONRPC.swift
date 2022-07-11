@@ -49,10 +49,21 @@ public struct TransactionParameters: Codable {
     }
 }
 
+extension TransactionParameters: APIRequestParameterType { }
+
 /// Event filter parameters JSON structure for interaction with Ethereum node.
 public struct EventFilterParameters: Codable {
     public var fromBlock: String?
     public var toBlock: String?
     public var topics: [[String?]?]?
     public var address: [String?]?
+    
+    public init() {
+        fromBlock = nil
+        toBlock = nil
+        topics = nil
+        address = nil
+    }
 }
+
+extension EventFilterParameters: APIRequestParameterType { }

@@ -6,7 +6,7 @@
 
 import Foundation
 import BigInt
-
+import Core
 
 extension Web3.Utils {
 

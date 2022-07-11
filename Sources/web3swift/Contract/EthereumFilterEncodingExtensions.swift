@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 extension BigUInt: EventFilterEncodable {
     public func eventFilterEncoded() -> String? {

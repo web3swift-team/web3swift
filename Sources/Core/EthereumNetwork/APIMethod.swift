@@ -224,7 +224,7 @@ extension APIRequest {
         }
     }
 
-    var encodedBody: Data {
+   public var encodedBody: Data {
         let request = RequestBody(method: self.call, params: self.parameters)
         // this is safe to force try this here
         // Because request must failed to compile if it not conformable with `Encodable` protocol
@@ -289,7 +289,7 @@ extension APIRequest {
         }
     }
 
-    var call: String {
+    public var call: String {
         switch self {
         case .gasPrice: return "eth_gasPrice"
         case .blockNumber: return "eth_blockNumber"
@@ -335,7 +335,7 @@ extension APIRequest {
         return urlRequest
     }
     
-    static func send<Result>(uRLRequest: URLRequest, with session: URLSession) async throws -> APIResponse<Result> {
+    public static func send<Result>(uRLRequest: URLRequest, with session: URLSession) async throws -> APIResponse<Result> {
         let (data, response) = try await session.data(for: uRLRequest)
 
         guard 200 ..< 400 ~= response.statusCode else { throw Web3Error.serverError(code: response.statusCode) }

@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 extension web3.web3contract {
     /// An event parser to fetch events produced by smart-contract related transactions. Should not be constructed manually, but rather by calling the corresponding function on the web3contract object.
@@ -237,4 +238,12 @@ extension web3.web3contract {
             return collected
         }
     }
+}
+
+public struct EventParserResult: EventParserResultProtocol {
+    public var eventName: String
+    public var transactionReceipt: TransactionReceipt?
+    public var contractAddress: EthereumAddress
+    public var decodedResult: [String: Any]
+    public var eventLog: EventLog? = nil
 }
