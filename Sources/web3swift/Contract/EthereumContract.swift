@@ -8,7 +8,6 @@ import BigInt
 
 public class EthereumContract: DefaultContractProtocol {
 
-    public var transactionOptions: TransactionOptions? = TransactionOptions.defaultOptions
     public var address: EthereumAddress? = nil
 
     public let abi: [ABI.Element]

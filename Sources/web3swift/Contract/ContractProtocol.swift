@@ -11,10 +11,7 @@ import BigInt
 
 public protocol ContractProtocol {
     var address: EthereumAddress? {get set}
-
-    /// Default options added to all ``EthereumTransaction`` objects created by this protocol.
-    var transactionOptions: TransactionOptions? {get set}
-
+    
     /// All ABI elements like: events, functions, constructors and errors.
     var abi: [ABI.Element] {get}
 
