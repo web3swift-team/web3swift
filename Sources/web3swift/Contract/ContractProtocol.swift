@@ -138,3 +138,118 @@ extension ContractProtocol {
         return decodeInputData(methodId, data: data)
     }
 }
+
+/// Contains default implementations of all functions of ``ContractProtocol``.
+public protocol DefaultContractProtocol: ContractProtocol {}
+extension DefaultContractProtocol {
+    public func deploy(bytecode: Data,
+                       constructor: ABI.Element.Constructor?,
+                       parameters: [AnyObject]?,
+                       extraData: Data?) -> EthereumTransaction? {
+        var fullData = bytecode
+
+        if let constructor = constructor,
+           let parameters = parameters,
+           !parameters.isEmpty {
+            guard constructor.inputs.count == parameters.count,
+                  let encodedData = constructor.encodeParameters(parameters)
+            else {
+                NSLog("Constructor encoding will fail as the number of input arguments doesn't match the number of given arguments.")
+                return nil
+            }
+            fullData.append(encodedData)
+        }
+
+        if let extraData = extraData {
+            fullData.append(extraData)
+        }
+
+        return EthereumTransaction(to: .contractDeploymentAddress(),
+                                   value: BigUInt(0),
+                                   data: fullData,
+                                   parameters: .init(gasLimit: BigUInt(0), gasPrice: BigUInt(0)))
+    }
+
+    public func method(_ method: String,
+                       parameters: [AnyObject],
+                       extraData: Data?) -> EthereumTransaction? {
+        guard let to = self.address else { return nil }
+
+        let params = EthereumParameters(gasLimit: BigUInt(0), gasPrice: BigUInt(0))
+
+        if method == "fallback" {
+            return EthereumTransaction(to: to, value: BigUInt(0), data: extraData ?? Data(), parameters: params)
+        }
+
+        let method = Data.fromHex(method) == nil ? method : method.addHexPrefix().lowercased()
+
+        guard let abiMethod = methods[method]?.first,
+              var encodedData = abiMethod.encodeParameters(parameters) else { return nil }
+
+        if let extraData = extraData {
+            encodedData.append(extraData)
+        }
+
+        return EthereumTransaction(to: to, value: BigUInt(0), data: encodedData, parameters: params)
+    }
+
+    public func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?) {
+        for (eName, ev) in self.events {
+            if (!ev.anonymous) {
+                if eventLog.topics[0] != ev.topic {
+                    continue
+                }
+                else {
+                    let logTopics = eventLog.topics
+                    let logData = eventLog.data
+                    let parsed = ev.decodeReturnedLogs(eventLogTopics: logTopics, eventLogData: logData)
+                    if parsed != nil {
+                        return (eName, parsed!)
+                    }
+                }
+            } else {
+                let logTopics = eventLog.topics
+                let logData = eventLog.data
+                let parsed = ev.decodeReturnedLogs(eventLogTopics: logTopics, eventLogData: logData)
+                if parsed != nil {
+                    return (eName, parsed!)
+                }
+            }
+        }
+        return (nil, nil)
+    }
+
+    public func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool? {
+        guard let event = events[eventName] else { return nil }
+        if event.anonymous {
+            return true
+        }
+        return bloom.test(topic: event.topic)
+    }
+
+    public func decodeReturnData(_ method: String, data: Data) -> [String: Any]? {
+        if method == "fallback" {
+            return [String: Any]()
+        }
+        return methods[method]?.compactMap({ function in
+            return function.decodeReturnData(data)
+        }).first
+    }
+
+    public func decodeInputData(_ method: String, data: Data) -> [String: Any]? {
+        if method == "fallback" {
+            return nil
+        }
+        return methods[method]?.compactMap({ function in
+            return function.decodeInputData(data)
+        }).first
+    }
+
+    public func decodeInputData(_ data: Data) -> [String: Any]? {
+        guard data.count % 32 == 4 else { return nil }
+        let methodSignature = data[0..<4].toHexString().addHexPrefix().lowercased()
+
+        guard let function = methods[methodSignature]?.first else { return nil }
+        return function.decodeInputData(Data(data[4 ..< data.count]))
+    }
+}
