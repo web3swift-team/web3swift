@@ -32,7 +32,7 @@ let package = Package(
         ),
         .target(
             name: "web3swift",
-            dependencies: ["Core", "BigInt", "secp256k1", "Starscream", "CryptoSwift"],
+            dependencies: ["Core", "BigInt", "secp256k1", "Starscream"],
             exclude: excludeFiles,
             resources: [
                 .copy("./Browser/browser.js"),

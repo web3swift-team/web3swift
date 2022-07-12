@@ -124,6 +124,20 @@ extension EthereumAddress {
 
 }
 
+extension EthereumAddress: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let stringValue = try container.decode(String.self)
+        self.init(stringValue)!
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        let value = self.address.lowercased()
+        var signleValuedCont = encoder.singleValueContainer()
+        try signleValuedCont.encode(value)
+    }
+}
+
 extension EthereumAddress: Hashable { }
 
 extension EthereumAddress: APIResultType { }
