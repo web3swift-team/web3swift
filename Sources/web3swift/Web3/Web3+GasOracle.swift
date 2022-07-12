@@ -92,7 +92,7 @@ extension Web3 {
 
             /// We're explicitly checking that feeHistory is not nil before force unwrapping it.
             // swiftlint: disable force_unwrapping
-            guard let feeHistory, !forceDropCache, feeHistory.timestamp.distance(to: Date()) < cacheTimeout else {
+            guard let feeHistory = feeHistory, !forceDropCache, feeHistory.timestamp.distance(to: Date()) < cacheTimeout else {
                 return try await eth.feeHistory(blockCount: blockCount, block: block, percentiles: percentiles)
             }
 
