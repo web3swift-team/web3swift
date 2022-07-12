@@ -45,7 +45,7 @@ public protocol ContractProtocol {
     ///
     /// If ABI failed to be decoded `nil` will be returned. Reasons could be invalid keys and values in ABI, invalid JSON structure,
     /// new Solidity keywords, types etc. that are not yet supported, etc.
-    init?(_ abiString: String, at: EthereumAddress?)
+    init(_ abiString: String, at: EthereumAddress?) throws
 
     /// Creates transaction to deploy a smart contract.
     /// - Parameters:
