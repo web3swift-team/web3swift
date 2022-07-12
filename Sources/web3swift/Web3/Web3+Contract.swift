@@ -31,7 +31,7 @@ extension web3 {
                 print("ABIv1 bound contract is now deprecated")
                 return nil
             case 2:
-                guard let c = EthereumContract(abiString, at: at) else {return nil}
+                guard let c = try? EthereumContract(abiString, at: at) else {return nil}
                 contract = c
             default:
                 return nil
