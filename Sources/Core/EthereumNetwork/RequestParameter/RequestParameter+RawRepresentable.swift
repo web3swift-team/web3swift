@@ -9,10 +9,10 @@ import Foundation
 
 extension RequestParameter: RawRepresentable {
     /**
-     This init required by ``RawRepresentable`` protocol, which is requred to encode mixed type values array in JSON.
+     This init is required by ``RawRepresentable`` protocol, which is required to encode mixed type values array in JSON.
 
-     This protocol used to implement custom `encode` method for that enum,
-     which is encodes array of self into array of self assotiated values.
+     This protocol is used to implement custom `encode` method for that enum,
+     which encodes an array of self-assosiated values.
 
      You're totally free to use explicit and more convenience member init as `RequestParameter.int(12)` in your code.
      */
@@ -46,7 +46,7 @@ extension RequestParameter: RawRepresentable {
 
     /// Returning associated value of the enum case.
     var rawValue: APIRequestParameterType {
-        // cases can't be merged, coz it cause compiler error since it couldn't predict what exact type on exact case will be returned.
+        // cases can't be merged, coz it causes compile error since it couldn't predict exact type that will be returned.
         switch self {
         case let .int(value): return value
         case let .intArray(value): return value

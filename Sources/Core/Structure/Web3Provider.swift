@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Web3Provider.swift
 //  
 //
 //  Created by Yaroslav Yashin on 11.07.2022.

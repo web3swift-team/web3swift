@@ -10,17 +10,16 @@ import Foundation
 /**
  Enum to compose request to the node params.
 
- In most cases request params are passed to Ethereum JSON RPC request as array of mixed type values, such as `[12,"this",true]`,
- thus this is not appropriate API design we have what we have.
+ In most cases request params are passed to Ethereum JSON RPC request as array of mixed type values, such as `[12,"this",true]`.
 
  Meanwhile swift don't provide strict way to compose such array it gives some hacks to solve this task
  and one of them is using `RawRepresentable` protocol.
 
- Conforming this protocol gives designated type ability to represent itself in `String` representation in any way.
+ This protocol allows the designated type to represent itself in `String` representation.
 
- So in our case we're using such to implement custom `encode` method to any used in node request params types.
+ So in our case we're using it to implement custom `encode` method for all possible types used as request params.
 
- Latter is required to encode array of `RequestParameter` to not to `[RequestParameter.int(1)]`, but to `[1]`.
+ This `encode` method is required to encode array of `RequestParameter` to not to `[RequestParameter.int(1)]`, but to `[1]`.
 
  Here's an example of using this enum in field.
  ```swift

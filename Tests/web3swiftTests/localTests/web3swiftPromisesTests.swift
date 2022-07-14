@@ -4,8 +4,6 @@
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
-// TODO: Replace `XCTAssert` with more explicite `XCTAssertEqual`, where Applicable
-
 import XCTest
 import Core
 import BigInt
@@ -20,21 +18,6 @@ class web3swiftPromisesTests: XCTestCase {
         let balance = try await web3.eth.getBalance(for: "0xe22b8979739D724343bd002F9f432F5990879901")
         print(balance)
     }
-    // FIXME: Temporary deleted method `sendETH` should be restored.
-//    func testGetTransactionDetailsPromise() async throws {
-//        let gasLimit = BigUInt(78423)
-//        let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
-//        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-//        let allAddresses = try await web3.eth.ownedAccounts()
-//        guard let writeTX = web3.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
-//        writeTX.transactionOptions.from = allAddresses[0]
-//        writeTX.transactionOptions.gasLimit = .manual(gasLimit)
-//        let writeResult = try await writeTX.send()
-//        let txHash = writeResult.hash
-//        let result = try await web3.eth.transactionDetails(txHash)
-//        print(result)
-//        XCTAssert(result.transaction.parameters.gasLimit == BigUInt(gasLimit))
-//    }
     
     func testEstimateGasPromise() async throws {
         let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
@@ -48,7 +31,7 @@ class web3swiftPromisesTests: XCTestCase {
         writeTX.transactionOptions.value = BigUInt("1.0", Utilities.Units.eth)
         let estimate = try await writeTX.estimateGas(with: nil)
         print(estimate)
-        XCTAssert(estimate == 21000)
+        XCTAssertEqual(estimate, 21000)
     }
     
     func testEstimateGasFixPromise() async throws {
@@ -114,7 +97,7 @@ class web3swiftPromisesTests: XCTestCase {
         }
         let estimate2 = try await tx2.estimateGas(with: nil)
         print(estimate2)
-        XCTAssert(estimate2 - estimate1 <= 22000)
+        XCTAssertLessThanOrEqual(estimate2 - estimate1, 22000)
     }
     // FIXME: Temporary deleted method `sendETH` should be restored.
 //    func testSendETHPromise() async throws {

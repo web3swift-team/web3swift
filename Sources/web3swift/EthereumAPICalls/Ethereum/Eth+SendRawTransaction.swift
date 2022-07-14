@@ -34,10 +34,3 @@ public struct TransactionSendingResult {
     public var transaction: EthereumTransaction
     public var hash: String
 }
-
-
-//extension TransactionSendingResult {
-//    init(transaction: EthereumTransaction, hash: Hash) {
-//        self.init(transaction: transaction, hash: hash)
-//    }
-//}

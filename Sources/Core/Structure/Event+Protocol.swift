@@ -16,6 +16,23 @@ public protocol EventParserResultProtocol {
     var eventLog: EventLog? {get}
 }
 
+public struct EventParserResult: EventParserResultProtocol {
+    public var eventName: String
+    public var transactionReceipt: TransactionReceipt?
+    public var contractAddress: EthereumAddress
+    public var decodedResult: [String: Any]
+    public var eventLog: EventLog? = nil
+    
+    public init(eventName: String, transactionReceipt: TransactionReceipt? = nil, contractAddress: EthereumAddress, decodedResult: [String : Any], eventLog: EventLog? = nil) {
+        self.eventName = eventName
+        self.transactionReceipt = transactionReceipt
+        self.contractAddress = contractAddress
+        self.decodedResult = decodedResult
+        self.eventLog = eventLog
+    }
+}
+
+
 /// Protocol for generic Ethereum event parser
 public protocol EventParserProtocol {
     func parseTransaction(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol]

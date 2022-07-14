@@ -239,11 +239,3 @@ extension web3.web3contract {
         }
     }
 }
-
-public struct EventParserResult: EventParserResultProtocol {
-    public var eventName: String
-    public var transactionReceipt: TransactionReceipt?
-    public var contractAddress: EthereumAddress
-    public var decodedResult: [String: Any]
-    public var eventLog: EventLog? = nil
-}

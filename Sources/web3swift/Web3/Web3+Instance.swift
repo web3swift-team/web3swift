@@ -132,7 +132,7 @@ public class web3 {
     public class BrowserFunctions: TransactionOptionsInheritable {
         var provider: Web3Provider
         //        weak var web3: web3?
-        var web3: web3
+        public var web3: web3
         public var transactionOptions: TransactionOptions {
             return self.web3.transactionOptions
         }

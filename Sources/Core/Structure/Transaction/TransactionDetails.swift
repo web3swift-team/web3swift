@@ -1,5 +1,9 @@
-
-
+//
+//  TransactionDetails.swift
+//
+//
+//  Created by Yaroslav Yashin on 12.07.2022.
+//
 
 import Foundation
 import BigInt

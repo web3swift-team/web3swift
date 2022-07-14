@@ -69,11 +69,11 @@ extension Array {
 }
 
 extension Array where Element: Comparable {
-    /// Sorts array and drops most and least values.
-    /// - Returns: Sorted array without most and least values, nil if `array.count` <= 2
+    /// Sorts array and drops first and last values.
+    /// - Returns: Sorted array without first and last values, nil if `array.count` <= 1
     func cropAnomalyValues() -> Self? {
         var sortedArray = self.sorted()
-        // Array should at least counts two to pass that formations.
+        // Array should at least have two values to pass that formations.
         guard sortedArray.count > 1 else { return nil }
         sortedArray.removeLast()
         sortedArray.removeFirst()

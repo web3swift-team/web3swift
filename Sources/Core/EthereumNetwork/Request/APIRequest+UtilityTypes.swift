@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  APIRequest+UtilityTypes.swift
 //  
 //
 //  Created by Yaroslav Yashin on 12.07.2022.
