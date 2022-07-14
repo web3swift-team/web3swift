@@ -27,55 +27,55 @@ extension APIRequest {
             return [RequestParameter]()
 
         case .estimateGas(let transactionParameters, let blockNumber):
-            return [RequestParameter.transaction(transactionParameters), RequestParameter.string(blockNumber.stringValue)]
+            return [.transaction(transactionParameters), .string(blockNumber.stringValue)]
 
         case let .sendRawTransaction(hash):
-            return [RequestParameter.string(hash)]
+            return [.string(hash)]
 
         case let .sendTransaction(transactionParameters):
-            return [RequestParameter.transaction(transactionParameters)]
+            return [.transaction(transactionParameters)]
 
         case .getTransactionByHash(let hash):
-            return [RequestParameter.string(hash)]
+            return [.string(hash)]
 
         case .getTransactionReceipt(let receipt):
-            return [RequestParameter.string(receipt)]
+            return [.string(receipt)]
 
         case .getLogs(let eventFilterParameters):
-            return [RequestParameter.eventFilter(eventFilterParameters)]
+            return [.eventFilter(eventFilterParameters)]
 
         case .personalSign(let address, let string):
-            return [RequestParameter.string(address), RequestParameter.string(string)]
+            return [.string(address), .string(string)]
 
         case .call(let transactionParameters, let blockNumber):
-            return [RequestParameter.transaction(transactionParameters), RequestParameter.string(blockNumber.stringValue)]
+            return [.transaction(transactionParameters), .string(blockNumber.stringValue)]
 
         case .getTransactionCount(let address, let blockNumber):
-            return [RequestParameter.string(address), RequestParameter.string(blockNumber.stringValue)]
+            return [.string(address), .string(blockNumber.stringValue)]
 
         case .getBalance(let address, let blockNumber):
-            return [RequestParameter.string(address), RequestParameter.string(blockNumber.stringValue)]
+            return [.string(address), .string(blockNumber.stringValue)]
 
         case .getStorageAt(let address, let bigUInt, let blockNumber):
-            return [RequestParameter.string(address), RequestParameter.string(bigUInt.hexString), RequestParameter.string(blockNumber.stringValue)]
+            return [.string(address), .string(bigUInt.hexString), .string(blockNumber.stringValue)]
 
         case .getCode(let address, let blockNumber):
-            return [RequestParameter.string(address), RequestParameter.string(blockNumber.stringValue)]
+            return [.string(address), .string(blockNumber.stringValue)]
 
         case .getBlockByHash(let hash, let bool):
-            return [RequestParameter.string(hash), RequestParameter.bool(bool)]
+            return [.string(hash), .bool(bool)]
 
         case .getBlockByNumber(let block, let bool):
-            return [RequestParameter.string(block.stringValue), RequestParameter.bool(bool)]
+            return [.string(block.stringValue), .bool(bool)]
 
         case .feeHistory(let uInt, let blockNumber, let array):
-            return [RequestParameter.string(uInt.hexString), RequestParameter.string(blockNumber.stringValue), RequestParameter.doubleArray(array)]
+            return [.string(uInt.hexString), .string(blockNumber.stringValue), .doubleArray(array)]
 
         case .createAccount(let string):
-            return [RequestParameter.string(string)]
+            return [.string(string)]
 
         case .unlockAccount(let address, let string, let uInt):
-            return [RequestParameter.string(address), RequestParameter.string(string), RequestParameter.uint(uInt ?? 0)]
+            return [.string(address), .string(string), .uint(uInt ?? 0)]
         }
     }
 
