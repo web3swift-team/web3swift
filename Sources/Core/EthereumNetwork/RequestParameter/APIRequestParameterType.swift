@@ -25,4 +25,4 @@ extension String: APIRequestParameterType { }
 
 extension Bool: APIRequestParameterType { }
 
-extension Array: APIRequestParameterType where Element: APIRequestParameterElementType { }
+extension Array: APIRequestParameterType where Element: APIRequestParameterType { }
