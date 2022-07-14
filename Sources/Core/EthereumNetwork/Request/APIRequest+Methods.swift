@@ -26,7 +26,13 @@ extension APIRequest {
     public static func send<Result>(uRLRequest: URLRequest, with session: URLSession) async throws -> APIResponse<Result> {
         let (data, response) = try await session.data(for: uRLRequest)
 
-        guard 200 ..< 400 ~= response.statusCode else { throw Web3Error.serverError(code: response.statusCode) }
+        guard 200 ..< 400 ~= response.statusCode else {
+            if 400 ..< 500 ~= response.statusCode {
+                throw Web3Error.clientError(code: response.statusCode)
+            } else {
+                throw Web3Error.serverError(code: response.statusCode)
+            }
+        }
 
         /// This bit of code is purposed to work with literal types that comes in Response in hexString type.
         /// Currently it's just `Data` and any kind of Integers `(U)Int`, `Big(U)Int`.

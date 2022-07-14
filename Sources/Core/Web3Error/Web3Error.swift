@@ -15,6 +15,7 @@ public enum Web3Error: Error {
     case typeError
     case valueError
     case serverError(code: Int)
+    case clientError(code: Int)
 
     case walletError
     case inputError(desc: String)
@@ -52,6 +53,8 @@ public enum Web3Error: Error {
             return "Unsupported type"
         case let .serverError(code: code):
             return "Server error: \(code)"
+        case let .clientError(code: code):
+            return "Client error: \(code)"
         case .valueError:
             return "You're passing value that doesn't supported by this method."
         }
