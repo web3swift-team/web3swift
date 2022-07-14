@@ -7,7 +7,6 @@
 
 import Foundation
 
-/// Providers abstraction for custom providers (websockets, other custom private key managers). At the moment should not be used.
 public protocol Web3Provider {
     var network: Networks? {get set}
     var attachedKeystoreManager: KeystoreManager? {get set}
