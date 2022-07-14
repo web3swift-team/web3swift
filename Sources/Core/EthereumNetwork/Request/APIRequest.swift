@@ -67,14 +67,20 @@ public typealias TransactionHash = Hash // 64 chars length without 0x
 /// This protocol is just utility one, which declares some convenient initializer which have both `Int` and `BigInt` types, but don’t have any common protocol which declares such requirement.
 ///
 /// ### Utility types
-/// - `struct RequestBody: Encodable` — just a request body that passes into request body.
-/// - `public enum REST: String` — enum of REST methods. Only `POST` and `GET` presented yet.
-/// - `enum RequestParameter` — this enum is a request composing helper. It make happened to encode request attribute as heterogeneous array.
-/// - `protocol APIRequestParameterType: Encodable` — this type is part of the ``RequestParameter`` enum mechanism which purpose is to restrict types that can be passed as associated types within `RequestParameter` cases.
-/// - `protocol APIRequestParameterElementType: Encodable` — this type purpose is the same as ``APIRequestParameterType` one except this one is made for `Element`s of an `Array` s when the latter is an associated type of a given `RequestParameter` case.
+///  - `struct RequestBody: Encodable` — just a request body that passes into request body.
+///  - `public enum REST: String` — enum of REST methods. Only `POST` and `GET` presented yet.
+///  - `enum RequestParameter` — this enum is a request composing helper. It make happened to encode request attribute as heterogeneous array.
+///  - `protocol APIRequestParameterType: Encodable` — this type is part of the ``RequestParameter`` enum mechanism which purpose is to restrict types that can be passed as associated types within `RequestParameter` cases.
+///  - `protocol APIRequestParameterElementType: Encodable` — this type purpose is the same as ``APIRequestParameterType` one except this one is made for `Element`s of an `Array` s when the latter is an associated type of a given `RequestParameter` case.
+///
+/// ## Supported Namespaces
+///  - eth Namespace - https://ethereum.org/en/developers/docs/apis/json-rpc/#json-rpc-methods
+///  - personal Namespace - https://geth.ethereum.org/docs/rpc/ns-personal
+///  - tx Namespace - https://geth.ethereum.org/docs/rpc/ns-txpool
 public enum APIRequest {
     // MARK: - Official Ethereum API
-    
+    // eth Namespace - https://ethereum.org/en/developers/docs/apis/json-rpc/#json-rpc-methods
+
     /// Gas price request
     case gasPrice
    
@@ -188,7 +194,8 @@ public enum APIRequest {
     ///         by effective tip per gas and the coresponding effective tip for the percentile will be determined, accounting for gas consumed."
     case feeHistory(BigUInt, BlockNumber, [Double])
 
-    // MARK: - Additional Ethereum API
+    // MARK: - Personal Ethereum API
+    // personal Namespace - https://geth.ethereum.org/docs/rpc/ns-personal
     
     /// Creates new account.
     ///
@@ -212,6 +219,9 @@ public enum APIRequest {
     ///   - String: Passphrase to unlock the account.
     ///   - UInt?: Duration in seconds how long the account should remain unlocked for.
     case unlockAccount(Address, String, UInt?)
+
+    // MARK: - Tx Ethereum API
+    // tx Namespace - https://geth.ethereum.org/docs/rpc/ns-txpool
     case getTxPoolStatus // No in Eth API
     case getTxPoolContent // No in Eth API
     case getTxPoolInspect // No in Eth API
