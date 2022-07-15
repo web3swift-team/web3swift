@@ -9,26 +9,31 @@
 import Foundation
 import BigInt
 
+/// Standard representation of a smart contract.
 public protocol ContractProtocol {
+    /// Address of the referenced smart contract. Can be set later, e.g. if the contract is deploying and address is not yet known.
     var address: EthereumAddress? {get set}
     
     /// All ABI elements like: events, functions, constructors and errors.
     var abi: [ABI.Element] {get}
 
-    /// Functions filtered from `abi`.
-    /// Contains methods mapped to function name, like `getData`,
-    /// name with input parameters `getData(bytes32)` and 4 bytes signature `0xffffffff` (expected to be lowercased).
+    /// Functions filtered from ``abi``.
+    /// Functions are mapped to:
+    /// - name, like `getData` that is defined in ``ABI/Element/Function/name``;
+    /// - name with input parameters that is a combination of ``ABI/Element/Function/name`` and
+    /// ``ABI/Element/Function/inputs``, e.g. `getData(bytes32)`;
+    /// - and 4 bytes signature `0xffffffff` (expected to be lowercased).
     /// The mapping by name (e.g. `getData`) is the one most likely expected to return arrays with
     /// more than one entry due to the fact that solidity allows method overloading.
     var methods: [String:[ABI.Element.Function]] {get}
 
-    /// All entries from `methods`.
+    /// All values from ``methods``.
     var allMethods: [ABI.Element.Function] {get}
 
-    /// Events filtered from `abi`.
+    /// Events filtered from ``abi`` and mapped to their unchanged ``ABI/Element/Event/name``.
     var events: [String:ABI.Element.Event] {get}
 
-    /// All events from `events`.
+    /// All values from ``events``.
     var allEvents: [ABI.Element.Event] {get}
 
     /// Errors filtered from ``abi`` and mapped to their unchanged ``ABI/Element/EthError/name``.
@@ -49,7 +54,64 @@ public protocol ContractProtocol {
     /// new Solidity keywords, types etc. that are not yet supported, etc.
     init(_ abiString: String, at: EthereumAddress?) throws
 
-    /// Creates transaction to deploy a smart contract.
+    /// Creates a smart contract deployment transaction.
+    ///
+    /// ## How to
+    /// To create a smart contract deployment transaction there is only one requirement - `bytecode`.
+    /// That is the compiled smart contract that is ready to be executed by EVM, or eWASM if that is a Serenity.
+    /// Creating a transaction is as simple as:
+    ///
+    /// ```swift
+    /// contractInstance.deploy(bytecode: smartContractBytecode)
+    /// ```
+    ///
+    /// One of the default implementations of `ContractProtocol` is ``EthereumContract``.
+    /// ```swift
+    /// let contract = EthereumContract(abi: [])
+    /// contract.deploy(bytecode: smartContractBytecode)
+    /// ```
+    ///
+    /// ### Setting constructor arguments
+    /// Some smart contracts expect input arguments for a constructor that is called on contract deployment.
+    /// To set these input arguments you must provide `constructor` and `parameters`.
+    /// Constructor can be statically created if you know upfront what are the input arguments and their exact order:
+    ///
+    /// ```swift
+    /// let inputArgsTypes: [ABI.Element.InOut] = [.init(name: "firstArgument", type: ABI.Element.ParameterType.string),
+    ///                                            .init(name: "secondArgument", type: ABI.Element.ParameterType.uint(bits: 256))]
+    /// let constructor = ABI.Element.Constructor(inputs: inputArgsTypes, constant: false, payable: payable)
+    /// let constructorArguments = ["This is the array of constructor arguments", 10_000] as [AnyObject]
+    ///
+    /// contract.deploy(bytecode: smartContractBytecode,
+    ///                 constructor: constructor,
+    ///                 parameters: constructorArguments)
+    /// ```
+    ///
+    /// Alternatively, if you have ABI string that holds meta data about the constructor you can use it instead of creating constructor manually.
+    /// But you must make sure the arguments for constructor call are of expected type in and correct order.
+    /// Example of ABI string can be found in ``Web3/Utils/erc20ABI``.
+    /// 
+    /// ```swift
+    /// let contract = EthereumContract(abiString)
+    /// let constructorArguments = ["This is the array of constructor arguments", 10_000] as [AnyObject]
+    ///
+    /// contract.deploy(bytecode: smartContractBytecode,
+    ///                 constructor: contract.constructor,
+    ///                 parameters: constructorArguments)
+    /// ```
+    ///
+    /// ⚠️ If you pass in only constructor or only parameters - it will have no effect on the final transaction object.
+    /// Also, you have an option to set any extra bytes at the end of ``EthereumTransaction/data``  attribute.
+    /// Alternatively you can encode constructor parameters outside of the deploy function and only set `extraData` to pass in these
+    /// parameters:
+    ///
+    /// ```swift
+    /// // `encodeParameters` call returns `Data?`. Check it for nullability before calling `deploy`
+    /// // function to create `EthereumTransaction`.
+    /// let encodedConstructorArguments = someConstructor.encodeParameters(arrayOfInputArguments)
+    /// constructor.deploy(bytecode: smartContractBytecode, extraData: encodedConstructorArguments)
+    /// ```
+    ///
     /// - Parameters:
     ///   - bytecode: bytecode to deploy.
     ///   - constructor: constructor of the smart contract bytecode is related to. Used to encode `parameters`.
@@ -103,11 +165,18 @@ public protocol ContractProtocol {
     func decodeInputData(_ data: Data) -> [String: Any]?
 
     /// Attempts to parse given event based on the data from `allEvents`, or in other words based on the given smart contract ABI.
-    func parseEvent(_ eventLog: EventLog) -> (eventName:String?, eventData:[String: Any]?)
+    func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?)
 
-    func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool?
+    /// Tests for probable presence of an event with `eventName` in a given bloom filter.
+    /// - Parameters:
+    ///   - eventName: event name like `ValueReceived`.
+    ///   - bloom: bloom filter.
+    /// - Returns: `true` if event is possibly present, `false` if definitely not present and `nil` if event with given name
+    /// is not part of the ``EthereumContract/abi``.
     func testBloomForEventPresence(eventName: String, bloom: EthereumBloomFilter) -> Bool?
 }
+
+// MARK: - Overloaded ContractProtocol's functions
 
 extension ContractProtocol {
 
@@ -119,10 +188,10 @@ extension ContractProtocol {
                 constructor: ABI.Element.Constructor? = nil,
                 parameters: [AnyObject]? = nil,
                 extraData: Data? = nil) -> EthereumTransaction? {
-        return deploy(bytecode: bytecode,
-                      constructor: constructor,
-                      parameters: parameters,
-                      extraData: extraData)
+        deploy(bytecode: bytecode,
+               constructor: constructor,
+               parameters: parameters,
+               extraData: extraData)
     }
 
     /// Overloading of ``ContractProtocol/method(_:parameters:extraData:)`` to allow
@@ -132,7 +201,7 @@ extension ContractProtocol {
     func method(_ method: String = "fallback",
                 parameters: [AnyObject]? = nil,
                 extraData: Data? = nil) -> EthereumTransaction? {
-        return self.method(method, parameters: parameters ?? [], extraData: extraData)
+        self.method(method, parameters: parameters ?? [], extraData: extraData)
     }
 
     func decodeInputData(_ data: Data) -> [String: Any]? {
