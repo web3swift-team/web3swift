@@ -7,7 +7,6 @@ import Foundation
 import BigInt
 
 public extension ABI {
-    // JSON Decoding
     struct Input: Decodable {
         public var name: String?
         public var type: String

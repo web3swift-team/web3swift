@@ -49,6 +49,17 @@ public extension Sequence where Element == ABI.Element {
         return events
     }
 
+    /// Filters out all ``ABI/Element/EthError`` types and maps them to their names
+    /// provided in ``ABI/Element/EthError/name`` variable.
+    /// - Returns: dictionary of all errors mapped to their names.
+    func getErrors() -> [String: ABI.Element.EthError] {
+        var errors = [String: ABI.Element.EthError]()
+        for case let .error(error) in self {
+            errors[error.name] = error
+        }
+        return errors
+    }
+
     /// Filters out ``ABI/Element/Constructor``.
     /// If there are multiple of them the first encountered will be returned and if there are none a default constructor will be returned
     /// that accepts no input parameters.
