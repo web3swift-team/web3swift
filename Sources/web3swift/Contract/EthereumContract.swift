@@ -7,6 +7,8 @@ import Foundation
 import BigInt
 import Core
 
+/// Default representation of a smart contract. Created out of an array of ``ABI/Element`` which could be functions, events,
+/// constructor, errors and optional ``EthereumAddress`` that could be set later.
 public class EthereumContract: DefaultContractProtocol {
 
     public var address: EthereumAddress? = nil
@@ -16,6 +18,8 @@ public class EthereumContract: DefaultContractProtocol {
     public let allMethods: [ABI.Element.Function]
     public let events: [String: ABI.Element.Event]
     public let allEvents: [ABI.Element.Event]
+    public let errors: [String: ABI.Element.EthError]
+    public let allErrors: [ABI.Element.EthError]
     public let constructor: ABI.Element.Constructor
 
     public init(abi: [ABI.Element], at: EthereumAddress? = nil) throws {
@@ -30,6 +34,8 @@ public class EthereumContract: DefaultContractProtocol {
         events = abi.getEvents()
         allEvents = Array(events.values)
         constructor = abi.getConstructor()
+        errors = abi.getErrors()
+        allErrors = Array(errors.values)
     }
 
     public convenience required init(_ abiString: String, at: EthereumAddress? = nil) throws {
