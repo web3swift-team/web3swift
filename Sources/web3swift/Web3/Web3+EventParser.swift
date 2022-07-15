@@ -136,7 +136,7 @@ extension web3.web3contract.EventParser {
             }
         }
 
-        guard let eventOfSuchTypeIsPresent = self.contract.testBloomForEventPrecence(eventName: self.eventName, bloom: bloom) else {
+        guard let eventOfSuchTypeIsPresent = self.contract.testBloomForEventPresence(eventName: self.eventName, bloom: bloom) else {
             throw Web3Error.processingError(desc: "Error processing bloom for events")
         }
         if (!eventOfSuchTypeIsPresent) {

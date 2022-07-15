@@ -106,7 +106,7 @@ public protocol ContractProtocol {
     /// Attempts to parse given event based on the data from `allEvents`, or in other words based on the given smart contract ABI.
     func parseEvent(_ eventLog: EventLog) -> (eventName:String?, eventData:[String: Any]?)
 
-    func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool?
+    func testBloomForEventPresence(eventName: String, bloom: EthereumBloomFilter) -> Bool?
 }
 
 extension ContractProtocol {
@@ -223,7 +223,7 @@ extension DefaultContractProtocol {
         return (nil, nil)
     }
 
-    public func testBloomForEventPrecence(eventName: String, bloom: EthereumBloomFilter) -> Bool? {
+    public func testBloomForEventPresence(eventName: String, bloom: EthereumBloomFilter) -> Bool? {
         guard let event = events[eventName] else { return nil }
         if event.anonymous {
             return true

@@ -18,7 +18,7 @@ class EIP681Tests: XCTestCase {
     //ethereum:0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1/transfer?address=0x6891dC3962e710f0ff711B9c6acc26133Fd35Cb4&uint256=1
 
     func testEIP681Parsing() async throws {
-        let parsed = Web3.EIP681CodeParser.parse("ethereum:0x5ffc014343cd971b7eb70732021e26c35b744cc4?value=2.014e18")
+        let parsed = await Web3.EIP681CodeParser.parse("ethereum:0x5ffc014343cd971b7eb70732021e26c35b744cc4?value=2.014e18")
         XCTAssert(parsed != nil)
     }
     
