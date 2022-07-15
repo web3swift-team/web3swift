@@ -744,7 +744,6 @@
 			isa = PBXGroup;
 			children = (
 				D6AC93D4287D963700A1CAD9 /* ABIError.swift */,
-				D6AC93D3287D963700A1CAD9 /* Sequence+ABIExtension.swift */,
 				3AA815442276E44100F5DB52 /* ABIDecoding.swift */,
 				3AA815452276E44100F5DB52 /* ABIElements.swift */,
 				3AA815462276E44100F5DB52 /* ABITypeParser.swift */,
@@ -752,6 +751,7 @@
 				3AA815482276E44100F5DB52 /* ABI.swift */,
 				3AA815492276E44100F5DB52 /* ABIEncoding.swift */,
 				3AA8154A2276E44100F5DB52 /* ABIParsing.swift */,
+				D6AC93D3287D963700A1CAD9 /* Sequence+ABIExtension.swift */,
 			);
 			path = EthereumABI;
 			sourceTree = "<group>";
