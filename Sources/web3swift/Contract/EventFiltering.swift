@@ -196,7 +196,7 @@ internal func parseReceiptForLogs(receipt: TransactionReceipt, contract: Contrac
             return [EventParserResultProtocol]()
         }
     }
-    guard let eventOfSuchTypeIsPresent = contract.testBloomForEventPrecence(eventName: eventName, bloom: bloom) else {return nil}
+    guard let eventOfSuchTypeIsPresent = contract.testBloomForEventPresence(eventName: eventName, bloom: bloom) else {return nil}
     if (!eventOfSuchTypeIsPresent) {
         return [EventParserResultProtocol]()
     }
