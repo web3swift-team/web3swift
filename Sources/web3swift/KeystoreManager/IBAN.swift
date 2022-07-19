@@ -11,6 +11,12 @@ public struct ICAP {
     public var asset: String
     public var institution: String
     public var client: String
+
+    public init(asset: String, institution: String, client: String) {
+        self.asset = asset
+        self.institution = institution
+        self.client = client
+    }
 }
 
 public struct IBAN {

@@ -18,14 +18,14 @@ public enum IERC1376DelegateMode: UInt {
 }
 
 public struct DirectDebitInfo {
-    let amount: BigUInt
-    let startTime: BigUInt
-    let interval: BigUInt
+    public let amount: BigUInt
+    public let startTime: BigUInt
+    public let interval: BigUInt
 }
 
 public struct DirectDebit {
-    let info: DirectDebitInfo
-    let epoch: BigUInt
+    public let info: DirectDebitInfo
+    public let epoch: BigUInt
 }
 
 extension DirectDebit: Hashable {
