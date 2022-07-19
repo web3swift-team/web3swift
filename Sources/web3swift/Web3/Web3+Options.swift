@@ -88,6 +88,32 @@ public struct TransactionOptions {
 
     public var accessList: [AccessListEntry]?
 
+    public init(type: TransactionType? = nil,
+                to: EthereumAddress? = nil,
+                from: EthereumAddress? = nil,
+                chainID: BigUInt? = nil,
+                gasLimit: TransactionOptions.GasLimitPolicy? = nil,
+                gasPrice: TransactionOptions.GasPricePolicy? = nil,
+                maxFeePerGas: TransactionOptions.FeePerGasPolicy? = nil,
+                maxPriorityFeePerGas: TransactionOptions.FeePerGasPolicy? = nil,
+                value: BigUInt? = nil,
+                nonce: TransactionOptions.NoncePolicy? = nil,
+                callOnBlock: TransactionOptions.CallingBlockPolicy? = nil,
+                accessList: [AccessListEntry]? = nil) {
+        self.type = type
+        self.to = to
+        self.from = from
+        self.chainID = chainID
+        self.gasLimit = gasLimit
+        self.gasPrice = gasPrice
+        self.maxFeePerGas = maxFeePerGas
+        self.maxPriorityFeePerGas = maxPriorityFeePerGas
+        self.value = value
+        self.nonce = nonce
+        self.callOnBlock = callOnBlock
+        self.accessList = accessList
+    }
+
     public static var defaultOptions: TransactionOptions {
         var opts = TransactionOptions()
         opts.type = .legacy
