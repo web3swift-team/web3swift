@@ -9,6 +9,7 @@
 import XCTest
 import CryptoSwift
 import BigInt
+import Core
 
 @testable import web3swift
 
@@ -57,7 +58,7 @@ class web3swiftBasicLocalNodeTests: XCTestCase {
         let parameters = [] as [AnyObject]
         let sendTx = contract.method("fallback", parameters: parameters)!
         
-        let valueToSend = Web3.Utils.parseToBigUInt("1.0", units: .eth)
+        let valueToSend = Utilities.parseToBigUInt("1.0", units: .eth)
         sendTx.transactionOptions.value = valueToSend
         sendTx.transactionOptions.from = allAddresses[0]
         
@@ -95,79 +96,4 @@ class web3swiftBasicLocalNodeTests: XCTestCase {
         let txnGasPrice = details.transaction.parameters.gasPrice ?? 0
         XCTAssert(balanceBeforeFrom - (balanceAfterFrom + receipt.gasUsed * txnGasPrice) == valueToSend)
     }
-
-    // FIXME: Crashes on CI/CD
-    // FIXME: Fails on ganache
-    // func testSignPersonal() throws {
-    //     let web3 = try Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
-    //     let allAddresses = try web3.eth.ownedAccounts()
-        
-    //     let response = try web3.personal.signPersonalMessage(message: "hello world".data(using: .utf8)!, from: allAddresses[0])
-        
-    //     XCTAssert(response.toHexString() == "b686c8ddc854bd49de9eb62eb4e52af4c69a89802b40fe9a295e346b111406393c6e3f05114561ab845a47196ad22c33cec67592af9a9e42bfc067a20c7d4b6101")
-    // }
-    
-    // MARK: Ganache doesn't support a mempool for now
-//    func testTxPoolStatus() throws {
-//        let web3 = try Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
-//        let allAddresses = try web3.eth.ownedAccounts()
-//
-//        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-//        let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)!
-//
-//        let parameters = [] as [AnyObject]
-//        let sendTx = contract.method("fallback", parameters: parameters)!
-//
-//        let valueToSend = Web3.Utils.parseToBigUInt("1.0", units: .eth)
-//        sendTx.transactionOptions.value = valueToSend
-//        sendTx.transactionOptions.from = allAddresses[0]
-//
-//        let _ = try sendTx.sendPromise()
-//
-//        let result = try web3.txPool.getStatus()
-//
-//        print(result)
-//    }
-//
-//    func testTxPoolInspect() throws {
-//        let web3 = try Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
-//        let allAddresses = try web3.eth.ownedAccounts()
-//
-//        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-//        let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)!
-//
-//        let parameters = [] as [AnyObject]
-//        let sendTx = contract.method("fallback", parameters: parameters)!
-//
-//        let valueToSend = Web3.Utils.parseToBigUInt("1.0", units: .eth)
-//        sendTx.transactionOptions.value = valueToSend
-//        sendTx.transactionOptions.from = allAddresses[0]
-//
-//        let _ = try sendTx.sendPromise()
-//
-//        let result = try web3.txPool.getInspect()
-//
-//        print(result)
-//    }
-//
-//    func testTxPoolContent() throws {
-//        let web3 = try Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
-//        let allAddresses = try web3.eth.ownedAccounts()
-//
-//        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-//        let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)!
-//
-//        let parameters = [] as [AnyObject]
-//        let sendTx = contract.method("fallback", parameters: parameters)!
-//
-//        let valueToSend = Web3.Utils.parseToBigUInt("1.0", units: .eth)
-//        sendTx.transactionOptions.value = valueToSend
-//        sendTx.transactionOptions.from = allAddresses[0]
-//
-//        let _ = try sendTx.sendPromise()
-//
-//        let result = try web3.txPool.getContent()
-//
-//        print(result)
-//    }
 }

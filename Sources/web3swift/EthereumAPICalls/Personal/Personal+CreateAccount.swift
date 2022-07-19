@@ -6,7 +6,7 @@
 
 import Foundation
 import BigInt
-
+import Core
 
 extension web3.Personal {
     public func createAccount(password: String = "web3swift") async throws -> EthereumAddress {

@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 extension BigUInt: EventFilterComparable {
     public func isEqualTo(_ other: AnyObject) -> Bool {

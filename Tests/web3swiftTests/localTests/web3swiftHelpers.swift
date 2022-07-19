@@ -8,6 +8,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 import web3swift
 

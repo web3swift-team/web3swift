@@ -9,6 +9,7 @@ import Starscream
 
 import BigInt
 import Foundation
+import Core
 
 public protocol IWebsocketProvider {
     var socket: WebSocket {get}

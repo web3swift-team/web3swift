@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import Core
 
 
 extension web3.Eth {
@@ -26,4 +27,10 @@ extension web3.Eth {
         }
         return result
     }
+}
+
+
+public struct TransactionSendingResult {
+    public var transaction: EthereumTransaction
+    public var hash: String
 }

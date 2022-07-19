@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 extension web3.Personal {
 
@@ -59,7 +60,7 @@ extension web3.Personal {
 
      */
     public func ecrecover(personalMessage: Data, signature: Data) throws -> EthereumAddress {
-        guard let recovered = Web3.Utils.personalECRecover(personalMessage, signature: signature) else {
+        guard let recovered = Utilities.personalECRecover(personalMessage, signature: signature) else {
             throw Web3Error.dataError
         }
         return recovered
@@ -77,7 +78,7 @@ extension web3.Personal {
 
      */
     public func ecrecover(hash: Data, signature: Data) throws -> EthereumAddress {
-        guard let recovered = Web3.Utils.hashECRecover(hash: hash, signature: signature) else {
+        guard let recovered = Utilities.hashECRecover(hash: hash, signature: signature) else {
             throw Web3Error.dataError
         }
         return recovered

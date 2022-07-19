@@ -7,6 +7,7 @@
 import XCTest
 import CryptoSwift
 import BigInt
+import Core
 
 @testable import web3swift
 
@@ -25,7 +26,7 @@ class web3swiftPersonalSignatureTests: XCTestCase {
         print("V = " + String(unmarshalledSignature.v))
         print("R = " + Data(unmarshalledSignature.r).toHexString())
         print("S = " + Data(unmarshalledSignature.s).toHexString())
-        print("Personal hash = " + Web3.Utils.hashPersonalMessage(message.data(using: .utf8)!)!.toHexString())
+        print("Personal hash = " + Utilities.hashPersonalMessage(message.data(using: .utf8)!)!.toHexString())
         let signer = try web3.personal.ecrecover(personalMessage: message.data(using: .utf8)!, signature: signature)
         XCTAssert(expectedAddress == signer, "Failed to sign personal message")
     }
@@ -70,7 +71,7 @@ class web3swiftPersonalSignatureTests: XCTestCase {
         print("V = " + String(unmarshalledSignature.v))
         print("R = " + Data(unmarshalledSignature.r).toHexString())
         print("S = " + Data(unmarshalledSignature.s).toHexString())
-        print("Personal hash = " + Web3.Utils.hashPersonalMessage(message.data(using: .utf8)!)!.toHexString())
+        print("Personal hash = " + Utilities.hashPersonalMessage(message.data(using: .utf8)!)!.toHexString())
         
         // Calling contract
         contract = web3.contract(abiString, at: receipt.contractAddress!)!
@@ -78,7 +79,7 @@ class web3swiftPersonalSignatureTests: XCTestCase {
         tx?.transactionOptions.from = expectedAddress
         var result = try await tx!.call()
         guard let hash = result["hash"]! as? Data else {return XCTFail()}
-        XCTAssert(Web3.Utils.hashPersonalMessage(message.data(using: .utf8)!)! == hash)
+        XCTAssert(Utilities.hashPersonalMessage(message.data(using: .utf8)!)! == hash)
         
         tx = contract.read("recoverSigner", parameters: [message, unmarshalledSignature.v, Data(unmarshalledSignature.r), Data(unmarshalledSignature.s)] as [AnyObject])
         tx?.transactionOptions.from = expectedAddress

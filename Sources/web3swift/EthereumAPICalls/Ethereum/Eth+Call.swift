@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import Core
 
 
 extension web3.Eth {

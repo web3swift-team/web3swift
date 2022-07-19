@@ -8,6 +8,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 public extension ENS {
     class ETHRegistrarController {
@@ -65,7 +66,7 @@ public extension ENS {
         }
 
         public func registerName(from: EthereumAddress, name: String, owner: EthereumAddress, duration: UInt, secret: String, price: String) throws -> WriteTransaction {
-            guard let amount = Web3.Utils.parseToBigUInt(price, units: .eth) else {throw Web3Error.inputError(desc: "Wrong price: no way for parsing to ether units")}
+            guard let amount = Utilities.parseToBigUInt(price, units: .eth) else {throw Web3Error.inputError(desc: "Wrong price: no way for parsing to ether units")}
             defaultOptions.value = amount
             defaultOptions.from = from
             defaultOptions.to = self.address
@@ -74,7 +75,7 @@ public extension ENS {
         }
 
         public func extendNameRegistration(from: EthereumAddress, name: String, duration: UInt32, price: String) throws -> WriteTransaction {
-            guard let amount = Web3.Utils.parseToBigUInt(price, units: .eth) else {throw Web3Error.inputError(desc: "Wrong price: no way for parsing to ether units")}
+            guard let amount = Utilities.parseToBigUInt(price, units: .eth) else {throw Web3Error.inputError(desc: "Wrong price: no way for parsing to ether units")}
             defaultOptions.value = amount
             defaultOptions.from = from
             defaultOptions.to = self.address

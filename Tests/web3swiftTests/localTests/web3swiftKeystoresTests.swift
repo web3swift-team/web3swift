@@ -6,6 +6,7 @@
 
 import XCTest
 import CryptoSwift
+import Core
 
 @testable import web3swift
 
@@ -131,7 +132,7 @@ class web3swiftKeystoresTests: LocalTestCase {
         XCTAssertNotNil(keystore)
         let account = keystore!.addresses![0]
         let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
-        let pubKey = Web3.Utils.privateToPublic(key, compressed: true)
+        let pubKey = Utilities.privateToPublic(key, compressed: true)
         XCTAssert(pubKey?.toHexString() == "027160bd3a4d938cac609ff3a11fe9233de7b76c22a80d2b575e202cbf26631659")
     }
 
@@ -147,7 +148,7 @@ class web3swiftKeystoresTests: LocalTestCase {
         XCTAssertNotNil(keystore)
         let account = keystore!.addresses![0]
         let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
-        let pubKey = Web3.Utils.privateToPublic(key, compressed: true)
+        let pubKey = Utilities.privateToPublic(key, compressed: true)
         XCTAssert(pubKey?.toHexString() == "027160bd3a4d938cac609ff3a11fe9233de7b76c22a80d2b575e202cbf26631659")
     }
 

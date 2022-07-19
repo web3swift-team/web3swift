@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import Core
 
 internal func filterLogs(decodedLogs: [EventParserResultProtocol], eventFilter: EventFilter) -> [EventParserResultProtocol] {
     let filteredLogs = decodedLogs.filter { (result) -> Bool in

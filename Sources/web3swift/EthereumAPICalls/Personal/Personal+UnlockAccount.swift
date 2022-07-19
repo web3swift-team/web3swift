@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 
 extension web3.Personal {
@@ -23,3 +24,5 @@ extension web3.Personal {
         return response.result
     }
 }
+
+extension Bool: APIResultType { }

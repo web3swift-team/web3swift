@@ -8,6 +8,7 @@
 
 import Foundation
 import XCTest
+import Core
 @testable import web3swift
 
 class ABIEncoderSoliditySha3Test: LocalTestCase {

@@ -8,7 +8,7 @@
 
 import Foundation
 import BigInt
-
+import Core
 
 public enum IERC1376DelegateMode: UInt {
     case PublicMsgSender = 0
@@ -128,7 +128,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
         let tx = contract.write("transfer", parameters: [to, value] as [AnyObject], transactionOptions: basicOptions)!
@@ -150,7 +150,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -173,7 +173,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(newAmount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(newAmount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -196,7 +196,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -228,10 +228,10 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let eValue = Web3.Utils.parseToBigUInt(expectedValue, decimals: intDecimals) else {
+        guard let eValue = Utilities.parseToBigUInt(expectedValue, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        guard let nValue = Web3.Utils.parseToBigUInt(newValue, decimals: intDecimals) else {
+        guard let nValue = Utilities.parseToBigUInt(newValue, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -254,7 +254,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let amount = Web3.Utils.parseToBigUInt(value, decimals: intDecimals) else {
+        guard let amount = Utilities.parseToBigUInt(value, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -277,7 +277,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let amount = Web3.Utils.parseToBigUInt(value, decimals: intDecimals) else {
+        guard let amount = Utilities.parseToBigUInt(value, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -319,7 +319,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(data, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(data, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
         let tx = contract.write("transfer", parameters: [value] as [AnyObject], transactionOptions: basicOptions)!
@@ -341,7 +341,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let amount = Web3.Utils.parseToBigUInt(value, decimals: intDecimals) else {
+        guard let amount = Utilities.parseToBigUInt(value, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
         let tx = contract.write("transferAndCall", parameters: [to, amount, data] as [AnyObject], transactionOptions: basicOptions)!
@@ -383,7 +383,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let amount = Web3.Utils.parseToBigUInt(value, decimals: intDecimals) else {
+        guard let amount = Utilities.parseToBigUInt(value, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 

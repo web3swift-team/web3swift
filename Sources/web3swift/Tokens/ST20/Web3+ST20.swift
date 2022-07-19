@@ -8,7 +8,7 @@
 
 import Foundation
 import BigInt
-
+import Core
 
 // NPolymath Token Standard
 protocol IST20: IERC20 {
@@ -90,7 +90,7 @@ public class ST20: IST20, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -113,7 +113,7 @@ public class ST20: IST20, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -136,7 +136,7 @@ public class ST20: IST20, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
         let tx = contract.write("burn", parameters: [value] as [AnyObject], transactionOptions: basicOptions)!
@@ -176,7 +176,7 @@ public class ST20: IST20, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
         let tx = contract.write("transfer", parameters: [to, value] as [AnyObject], transactionOptions: basicOptions)!
@@ -198,7 +198,7 @@ public class ST20: IST20, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -221,7 +221,7 @@ public class ST20: IST20, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(newAmount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(newAmount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
@@ -244,7 +244,7 @@ public class ST20: IST20, ERC20BaseProperties {
         decimals = decTyped
 
         let intDecimals = Int(decimals)
-        guard let value = Web3.Utils.parseToBigUInt(amount, decimals: intDecimals) else {
+        guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 

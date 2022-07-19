@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 extension web3.web3contract {
     /// An event parser to fetch events produced by smart-contract related transactions. Should not be constructed manually, but rather by calling the corresponding function on the web3contract object.

@@ -7,6 +7,7 @@
 //
 import XCTest
 import Starscream
+import Core
 
 @testable import web3swift
 

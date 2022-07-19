@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 public class ReadTransaction {
     public var transaction: EthereumTransaction

@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 extension web3.Eth {
     public func ownedAccounts() async throws -> [EthereumAddress] {

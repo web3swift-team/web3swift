@@ -8,6 +8,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 extension Web3 {
     /// Oracle is the class to do a transaction fee suggestion
@@ -90,14 +91,14 @@ extension Web3 {
             /// It stores about 10 seconds, than it rewrites it with newer data.
 
             /// We're explicitly checking that feeHistory is not nil before force unwrapping it.
+            guard let feeHistory = feeHistory, !forceDropCache, feeHistory.timestamp.distance(to: Date()) < cacheTimeout else {
             // swiftlint: disable force_unwrapping
-            guard feeHistory == nil, forceDropCache, feeHistory!.timestamp.distance(to: Date()) > cacheTimeout else { return feeHistory! }
-
-            feeHistory = try await eth.feeHistory(blockCount: blockCount, block: block, percentiles: percentiles)
-
-            /// We're assigning this value the line very above, so it's free to force unwrapping here
-            return feeHistory!
+                feeHistory = try await eth.feeHistory(blockCount: blockCount, block: block, percentiles: percentiles)
+                return feeHistory!
             // swiftlint: enable force_unwrapping
+            }
+
+            return feeHistory
         }
 
         /// Suggesting tip values
@@ -167,7 +168,7 @@ extension Web3 {
                         return transaction
                     }
                 }
-                .map { $0.meta?.gasPrice ?? 0 }
+                .compactMap { $0.meta?.gasPrice ?? 0 }
 
             return calculatePercentiles(for: lastNthBlockGasPrice)
         }

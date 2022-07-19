@@ -8,6 +8,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 public extension ENS {
     class ReverseRegistrar {

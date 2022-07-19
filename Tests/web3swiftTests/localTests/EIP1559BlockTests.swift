@@ -4,6 +4,9 @@ import BigInt
 @testable
 import web3swift
 
+@testable
+import Core
+
 class EIP1559BlockTests: LocalTestCase {
     let uselessBlockPart = (
         number: BigUInt(12_965_000),
