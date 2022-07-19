@@ -217,7 +217,7 @@ let tx = contract.write(
 
 ####  Write Transaction with your custom contract ABI
 #### Requirement : Your custom contract ABI string
-```Code
+```swift
     func contractTransactionMethod(){
         let yourCoin = self.yourbalance.text ?? "0.0" //Get token for sending
         let userDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] //get user directory for keystore
@@ -299,11 +299,11 @@ open ./web3swiftBrowser.xcworkspace
 ### Default web3swift build
 
 1. Install carthage:
-```
+```bash
 brew install carthage
 ```
 2. Run carthage update:
-```
+```bash
 # Available platforms: `iOS, macOS` 
 carthage update --platform iOS --use-xcframeworks
 ```
@@ -311,7 +311,7 @@ carthage update --platform iOS --use-xcframeworks
 `Command + B`
 
 ### Build web3swift into .framework:
-```
+```bash
 carthage build --no-skip-current --platform iOS
 ```
 
@@ -346,49 +346,24 @@ Here are quick references for essential features:
 - [ENS](https://github.com/skywinder/web3swift/blob/master/Documentation/Usage.md#ens)
 
 ## Projects that are using web3swift
-
-If you are using this library in your project, please [add a link](https://github.com/skywinder/web3swift/edit/develop/README.md) to this repo.
-
-* [MyEtherWallet/MEWconnect-iOS](https://github.com/MyEtherWallet/MEWconnect-iOS)
-* [Peepeth iOS client](https://github.com/matterinc/PeepethClient)
-* [Ethereum & ERC20Tokens Wallet](https://itunes.apple.com/us/app/ethereum-erc20tokens-wallet/id1386738877?ls=1&mt=8)
-* [Pay-iOS](https://github.com/BANKEX/Pay-iOS)
-* [GeoChain](https://github.com/awallish/GeoChain)
-* [NewHorizonLabs/TRX-Wallet](https://github.com/NewHorizonLabs/TRX-Wallet)
-* [SteadyAction/EtherWalletKit](https://github.com/SteadyAction/EtherWalletKit)
-* [UP Wallet/loopr-ios](https://github.com/Loopring/loopr-ios)
-* [MyENS Wallet](https://github.com/barrasso/enswallet)
-* [LoanStar](https://github.com/barrasso/loan-star)
-* [AlphaWallet](https://github.com/AlphaWallet/alpha-wallet-ios)
-* [Follow_iOS](https://github.com/FollowInc/Follow_iOS)
-* [Biomedical Data Sharing dApp - Geolocation](https://github.com/HD2i/Geolocation-iOS)
-* [Alice Wallet](https://github.com/alicedapp/AliceX)
-* [web3-react-native](https://github.com/cawfree/web3-react-native)
-* [ProLabArt](https://prolabart.com)
-<!-- Add your project below -->
-<!-- * [Project Name](link to projext) -->
-* [YOUR APP CAN BE THERE (click me)](https://github.com/skywinder/web3swift/edit/develop/README.md) :wink:
-
-*Nothing makes developers happier than seeing someone else use our work and go wild with it.*
+Please take a look at [Our costumers](https://github.com/skywinder/web3swift/wiki/Our-Customers) wiki page.
 
 ## Support
 
-**[Join our discord](https://discord.gg/8bHCNmhS7x) if you need a support or want to contribute to web3swift development!**
+**[Join our discord](https://discord.gg/8bHCNmhS7x) and [Telegram](https://t.me/web3swift) if you need a support or want to contribute to web3swift development!**
 
-- If you **need help**, [open an issue](https://github.com/skywinder/web3swift/issues).
-- If you'd like to **see web3swift best practices**, check [Projects that using web3swift](https://github.com/skywinder/web3swift#projects-that-using-web3swift).
+- If you **need help**, please take a look at our [FAQ](https://github.com/skywinder/web3swift/wiki/FAQ "") or [open an issue](https://github.com/skywinder/web3swift/issues).
+- If you'd like to **see web3swift best practices**, check [Projects that using web3swift](https://github.com/skywinder/web3swift/wiki/Our-Customers).
 - If you **found a bug**, [open an issue](https://github.com/skywinder/web3swift/issues).
 
 
 ## Contribute
-
 Want to improve? It's awesome:
 
 Then good news for you: **We are ready to pay for your contribution via [@gitcoin bot](https://gitcoin.co/grants/358/web3swift)!**
 
 - If you **have a feature request**, [open an issue](https://github.com/skywinder/web3swift/issues).
-
-If you **want to contribute**, [submit a pull request](https://github.com/skywinder/web3swift/pulls).
+- If you **want to contribute**, [submit a pull request](https://github.com/skywinder/web3swift/pulls).
 
 #### Contribution
 0. You are more than welcome to participate and get bounty by contributing! **Your contribution will be paid via  [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift).**
@@ -415,6 +390,7 @@ We want to continue to do everything we can to move the needle forward.
 - Alex Vlasov, [@shamatar](https://github.com/shamatar) - for the initial implementation
 - Petr Korolev, [@skywinder](https://github.com/skywinder) - botstrap and continous support
 - Anton Grigorev, [@baldyash](https://github.com/BaldyAsh) - core contributor, who use it and making a lot of ipmprovments
+- Yaroslav Yashin [@yaroslavyaroslav](https://github.com/yaroslavyaroslav) - core contributor of 3.0.0 and later releases.
 - Thanks to [web3swift's growing list of contributors](https://github.com/skywinder/web3swift/graphs/contributors).
 
 ## Security Disclosure

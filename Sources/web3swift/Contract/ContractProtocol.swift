@@ -58,9 +58,8 @@ public struct EventFilter {
         }
     }
 
-    public init() { }
-
-    public init(fromBlock: Block?, toBlock: Block?,
+    public init(fromBlock: Block? = nil,
+                toBlock: Block? = nil,
                 addresses: [EthereumAddress]? = nil,
                 parameterFilters: [[EventFilterable]?]? = nil) {
         self.fromBlock = fromBlock
