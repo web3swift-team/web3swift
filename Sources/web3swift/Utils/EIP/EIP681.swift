@@ -25,6 +25,14 @@ extension Web3 {
         public struct EIP681Parameter {
             public var type: ABI.Element.ParameterType
             public var value: AnyObject
+<<<<<<< HEAD
+=======
+
+            public init(type: ABI.Element.ParameterType, value: Any) {
+                self.type = type
+                self.value = value
+            }
+>>>>>>> c159f067... Make value as any object in eip681 parameters
         }
         public var isPayRequest: Bool
         public var targetAddress: TargetAddress
