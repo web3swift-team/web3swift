@@ -28,7 +28,7 @@ extension Web3 {
 <<<<<<< HEAD
 =======
 
-            public init(type: ABI.Element.ParameterType, value: Any) {
+            public init(type: ABI.Element.ParameterType, value: AnyObject) {
                 self.type = type
                 self.value = value
             }
