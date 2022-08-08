@@ -18,6 +18,7 @@ public class WriteTransaction: ReadTransaction {
             if function == nil {
                 throw Web3Error.inputError(desc: "Contract's ABI does not have such method")
             }
+
             if function!.constant {
                 throw Web3Error.inputError(desc: "Trying to transact to the constant function")
             }
