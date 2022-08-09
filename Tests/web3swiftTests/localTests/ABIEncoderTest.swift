@@ -11,7 +11,7 @@ import XCTest
 import Core
 @testable import web3swift
 
-class ABIEncoderTest: LocalTestCase {
+class ABIEncoderTest: XCTestCase {
 
     func test_soliditySha3() throws {
         var hex = try ABIEncoder.soliditySha3(true).toHexString().addHexPrefix()
