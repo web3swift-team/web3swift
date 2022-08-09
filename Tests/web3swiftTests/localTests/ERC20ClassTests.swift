@@ -10,12 +10,13 @@ import Core
 
 @testable import web3swift
 
-class ERC20ClassTests: XCTestCase {
+class ERC20ClassTests: LocalTestCase {
 
     func testERC20TokenCreation() async throws {
         let (web3, _, receipt, _) = try await TestHelpers.localDeployERC20()
         let erc20token = ERC20.init(web3: web3, provider: web3.provider, address: receipt.contractAddress!)
         try await erc20token.readProperties()
+
         let symbol = try await erc20token.symbol()
         let name = try await erc20token.name()
         let decimals = try await erc20token.decimals()
