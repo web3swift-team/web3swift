@@ -72,6 +72,8 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     /// the nonce value for the transaction
     var nonce: BigUInt { get set }
 
+    var from: EthereumAddress? { get }
+
     /// On chain address that this transaction is being sent to
     var to: EthereumAddress { get set }
 
@@ -95,6 +97,12 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     /// used to provide external access to the otherwise
     /// protected parameters of the object
     var parameters: TransactionParameters { get set }
+
+    /// - Returns: the public key decoded from the signature data
+    var publicKey: Data? { get }
+    
+    /// - Returns: a hash of the transaction suitable for signing
+    var signatureHash: Data? { get }
 
     // required initializers
     // for Decodable support
@@ -141,7 +149,7 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
 
     /// Encodes the transaction as a set of strings for JSON transmission
     /// - Returns: A TransactionParameters object containg all the parameters for the transaction
-    func encodeAsDictionary(from: EthereumAddress?) -> TransactionParameters?
+//    func encodeAsDictionary(from: EthereumAddress?) -> TransactionParameters?
 
     /// used by the signing algorithm to set the v, r, s parameters
     /// - Parameters:
@@ -157,9 +165,37 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
 }
 
 public extension AbstractEnvelope {
+    
+    var from: EthereumAddress? {
+        guard let publicKey = publicKey else { return nil }
+        return Utilities.publicToAddress(publicKey)
+    }
+    
     mutating func clearSignatureData() {
         self.v = 1
         self.r = 0
         self.s = 0
     }
+    
+    /// - Returns: a hash of the transaction suitable for signing
+    var signatureHash: Data? {
+        guard let encoded = self.encode(for: .signature) else { return nil }
+        let hash = encoded.sha3(.keccak256)
+        return hash
+    }
+    
+    /// - Returns: the public key decoded from the signature data
+    var publicKey: Data? {
+        guard let sigData = self.getUnmarshalledSignatureData() else { return nil }
+        guard let vData = BigUInt(sigData.v).serialize().setLengthLeft(1) else { return nil }
+        let rData = sigData.r
+        let sData = sigData.s
+
+        guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else { return nil }
+        guard let hash = signatureHash else { return nil }
+
+        guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else { return nil }
+        return publicKey
+    }
 }
+

@@ -13,6 +13,12 @@ public struct EIP1559Envelope: EIP2718Envelope {
     // common parameters for any transaction
     public var nonce: BigUInt = 0
     public var chainID: BigUInt
+
+    public var from: EthereumAddress? {
+        guard let publicKey = publicKey else { return nil }
+        return Utilities.publicToAddress(publicKey)
+    }
+
     public var to: EthereumAddress
     public var value: BigUInt
     public var data: Data
@@ -294,7 +300,7 @@ extension EIP1559Envelope {
         return result
     }
 
-    public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? {
+    public var encodeAsDictionary: TransactionParameters? {
         var toString: String?
         switch self.to.type {
         case .normal:

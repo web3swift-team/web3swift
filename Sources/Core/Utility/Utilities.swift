@@ -34,7 +34,6 @@ public struct Utilities {
         return addressData
     }
     
-    
     /// Convert a public key to the corresponding EthereumAddress. Accepts public keys in compressed (33 bytes), non-compressed (65 bytes)
     /// or raw concat(X, Y) (64 bytes) format.
     ///

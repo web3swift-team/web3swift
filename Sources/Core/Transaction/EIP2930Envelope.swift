@@ -13,6 +13,7 @@ public struct EIP2930Envelope: EIP2718Envelope {
     // common parameters for any transaction
     public var nonce: BigUInt = 0
     public var chainID: BigUInt
+    public var from: EthereumAddress?
     public var to: EthereumAddress
     public var value: BigUInt
     public var data: Data
@@ -24,6 +25,7 @@ public struct EIP2930Envelope: EIP2718Envelope {
     public var gasPrice: BigUInt = 0
     public var gasLimit: BigUInt = 0
     public var accessList: [AccessListEntry] = []
+    public var publicKey: Data?
 
     // for CustomStringConvertible
     public var description: String {
@@ -268,7 +270,7 @@ extension EIP2930Envelope {
         return result
     }
 
-    public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? {
+    public var encodeAsDictionary: TransactionParameters? {
         var toString: String?
         switch self.to.type {
         case .normal:
@@ -279,6 +281,11 @@ extension EIP2930Envelope {
         
         // FIXME: This is now working!
         var params = TransactionParameters(TransactionOptions.defaultOptions)
+
+        guard let publicKey = self.publicKey,
+              let publicAddress = Utilities.publicToAddress(publicKey) else { return nil }
+
+        var params = TransactionParameters(from: from?.address.lowercased(), to: toString)
         let typeEncoding = String(UInt8(self.type.rawValue), radix: 16).addHexPrefix()
 //        params.type = typeEncoding
 //        let chainEncoding = self.chainID.abiEncode(bits: 256)
