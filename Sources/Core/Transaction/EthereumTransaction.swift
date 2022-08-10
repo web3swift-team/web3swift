@@ -25,37 +25,37 @@ public struct EthereumTransaction: CustomStringConvertible {
     /// the unique nonce value for the transaction
     public var nonce: BigUInt {
         get { return envelope.nonce }
-        set(nonce) { envelope.nonce = nonce }
+        set { envelope.nonce = newValue }
     }
 
     /// The chainId of the blockchain the transaction belongs to
     public var chainID: BigUInt? {
         get { return envelope.parameters.chainID }
-        set(newID) { envelope.parameters.chainID = newID }
+        set { envelope.parameters.chainID = newValue }
     }
 
     /// the chain-native value of the transaction in Wei
     public var value: BigUInt {
         get { return envelope.parameters.value ?? 0 }
-        set(newValue) { envelope.parameters.value = newValue }
+        set { envelope.parameters.value = newValue }
     }
 
     /// the EthereumAddress object holding the destination address for the transaction
     public var to: EthereumAddress {
         get { return envelope.to }
-        set(newValue) { envelope.to = newValue }
+        set { envelope.to = newValue }
     }
 
     /// the payload data for the transaction
     public var data: Data {
         get { return envelope.parameters.data ?? Data() }
-        set(newValue) { envelope.parameters.data = newValue }
+        set { envelope.parameters.data = newValue }
     }
 
     // transaction type specific parameters should be accessed with EthereumParameters
     public var parameters: TransactionParameters {
         get { return envelope.parameters }
-        set(val) { envelope.parameters = val }
+        set { envelope.parameters = newValue }
     }
 
     // signature data is read-only
