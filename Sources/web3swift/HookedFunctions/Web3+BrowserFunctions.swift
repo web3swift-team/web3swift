@@ -207,7 +207,7 @@ extension web3.BrowserFunctions {
             guard let keystore = keystoreManager.walletForAddress(from) else {return nil}
             try Web3Signer.signTX(transaction: &transaction, keystore: keystore, account: from, password: password)
             print(transaction)
-            let signedData = transaction.encode()?.toHexString().addHexPrefix()
+            let signedData = transaction.encode(for: .transaction)?.toHexString().addHexPrefix()
             return signedData
         } catch {
             return nil
