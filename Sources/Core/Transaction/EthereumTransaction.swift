@@ -399,8 +399,7 @@ extension EthereumTransaction {
 
     @available(*, deprecated, message: "use encode() instead")
     public func encode(forSignature: Bool = false, chainID: BigUInt? = nil) -> Data? {
-        if forSignature == true { return self.envelope.encode(for: .signature) }
-        return self.envelope.encode(for: .transaction)
+        envelope.encode(for: forSignature ? .signature : .transaction)
     }
 
     @available(*, deprecated, message: "use Decodable instead")
