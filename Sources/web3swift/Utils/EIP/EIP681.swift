@@ -57,8 +57,6 @@ extension Web3 {
             self.isPayRequest = isPayRequest
             self.targetAddress = targetAddress
         }
-<<<<<<< HEAD
-=======
 
         public func makeEIP681Link(urlEncode: Bool = false) -> String? {
             let address: String
@@ -230,7 +228,6 @@ extension Web3 {
             default: return nil
             }
         }
->>>>>>> 35c85fd7... feat: encoding query parameters for EIP681 - except tuples, this is still a TODO
     }
 
     public struct EIP681CodeParser {
