@@ -6,14 +6,15 @@
 
 import XCTest
 import BigInt
+import Core
 
 @testable import web3swift
 
-class EIP681Tests: LocalTestCase {
+class EIP681Tests: XCTestCase {
 
-    func testParsing() throws {
+    func testParsing() async throws {
         let testAddress = "0x5ffc014343cd971b7eb70732021e26c35b744cc4"
-        let eip681Code = Web3.EIP681CodeParser.parse("ethereum:\(testAddress)?value=2.014e18")
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)?value=2.014e18")
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
@@ -26,9 +27,9 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(eip681Code.amount, BigUInt(2014000000000000000))
     }
 
-    func testParsingWithEncoding() throws {
+    func testParsingWithEncoding() async throws {
         let testAddress = "0x5ffc014343cd971b7eb70732021e26c35b744cc4"
-        let eip681Code = Web3.EIP681CodeParser.parse("ethereum:\(testAddress)?value=2.014e18".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)?value=2.014e18".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
@@ -40,9 +41,9 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(eip681Code.amount, BigUInt(2014000000000000000))
     }
 
-    func testParsing2() throws {
+    func testParsing2() async throws {
         let testAddress = "0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1"
-        let eip681Code = Web3.EIP681CodeParser.parse("ethereum:\(testAddress)/transfer?address=0x6891dC3962e710f0ff711B9c6acc26133Fd35Cb4&uint256=1")
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)/transfer?address=0x6891dC3962e710f0ff711B9c6acc26133Fd35Cb4&uint256=1")
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
@@ -60,9 +61,9 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(eip681Code.parameters[1].value as? BigUInt, BigUInt(1))
     }
 
-    func testParsing2WithEncoding() throws {
+    func testParsing2WithEncoding() async throws {
         let testAddress = "0x8932404A197D84Ec3Ea55971AADE11cdA1dddff1"
-        let eip681Code = Web3.EIP681CodeParser.parse("ethereum:\(testAddress)/transfer?address=0x6891dC3962e710f0ff711B9c6acc26133Fd35Cb4&uint256=1"
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)/transfer?address=0x6891dC3962e710f0ff711B9c6acc26133Fd35Cb4&uint256=1"
             .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
@@ -81,9 +82,9 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(eip681Code.parameters[1].value as? BigUInt, BigUInt(1))
     }
 
-    func testENSParsing() throws {
+    func testENSParsing() async throws {
         let testAddress = "somename.eth"
-        let eip681Code = Web3.EIP681CodeParser.parse("ethereum:\(testAddress)/transfer?address=somename.eth&uint256=1")
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)/transfer?address=somename.eth&uint256=1")
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
@@ -103,9 +104,9 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(eip681Code.parameters[1].value as? BigUInt, BigUInt(1))
     }
 
-    func testENSParsingWithEncoding() throws {
+    func testENSParsingWithEncoding() async throws {
         let testAddress = "somename.eth"
-        let eip681Code = Web3.EIP681CodeParser.parse("ethereum:\(testAddress)/transfer?address=somename.eth&uint256=1".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)/transfer?address=somename.eth&uint256=1".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
@@ -125,10 +126,10 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(eip681Code.parameters[1].value as? BigUInt, BigUInt(1))
     }
 
-    func testParsingOfArrayOfBytesAsParameter() throws {
+    func testParsingOfArrayOfBytesAsParameter() async throws {
         let testAddress = "0x9aBbDB06A61cC686BD635484439549D45c2449cc"
         let chainID = BigUInt(2828)
-        let eip681Code = Web3.EIP681CodeParser.parse("ethereum:\(testAddress)@\(chainID.description)/setData?bytes32[]=[0x4b80742de2bf82acb3630000005e9F5BB83481d5627aA8c48527C174579bC428,0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3,0xdf30dba06db6a30e65354d9a64c6098600000000000000000000000000000004]&bytes[]=[0x0000000000000000000000000000000000000000000000000000000000000038,0x0000000000000000000000000000000000000000000000000000000000000004,0x005e9F5BB83481d5627aA8c48527C174579bC428]")
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)@\(chainID.description)/setData?bytes32[]=[0x4b80742de2bf82acb3630000005e9F5BB83481d5627aA8c48527C174579bC428,0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3,0xdf30dba06db6a30e65354d9a64c6098600000000000000000000000000000004]&bytes[]=[0x0000000000000000000000000000000000000000000000000000000000000038,0x0000000000000000000000000000000000000000000000000000000000000004,0x005e9F5BB83481d5627aA8c48527C174579bC428]")
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
@@ -155,10 +156,10 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(data?[2], Data.fromHex("0x005e9F5BB83481d5627aA8c48527C174579bC428")!)
     }
 
-    func testParsingOfArrayOfBytesAsParameterWithEncoding() throws {
+    func testParsingOfArrayOfBytesAsParameterWithEncoding() async throws {
         let testAddress = "0x9aBbDB06A61cC686BD635484439549D45c2449cc"
         let chainID = BigUInt(2828)
-        let eip681Code = Web3.EIP681CodeParser.parse("ethereum:\(testAddress)@\(chainID.description)/setData?bytes32[]=[0x4b80742de2bf82acb3630000005e9F5BB83481d5627aA8c48527C174579bC428,0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3,0xdf30dba06db6a30e65354d9a64c6098600000000000000000000000000000004]&bytes[]=[0x0000000000000000000000000000000000000000000000000000000000000038,0x0000000000000000000000000000000000000000000000000000000000000004,0x005e9F5BB83481d5627aA8c48527C174579bC428]".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)@\(chainID.description)/setData?bytes32[]=[0x4b80742de2bf82acb3630000005e9F5BB83481d5627aA8c48527C174579bC428,0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3,0xdf30dba06db6a30e65354d9a64c6098600000000000000000000000000000004]&bytes[]=[0x0000000000000000000000000000000000000000000000000000000000000038,0x0000000000000000000000000000000000000000000000000000000000000004,0x005e9F5BB83481d5627aA8c48527C174579bC428]".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
@@ -185,10 +186,10 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(data?[2], Data.fromHex("0x005e9F5BB83481d5627aA8c48527C174579bC428")!)
     }
 
-    func testParsingOfArrayOfIntAsParameter() throws {
+    func testParsingOfArrayOfIntAsParameter() async throws {
         let testAddress = "0x9aBbDB06A61cC686BD635484439549D45c2449cc"
         let chainID = BigUInt(2828)
-        let eip681Code = Web3.EIP681CodeParser.parse("ethereum:\(testAddress)@\(chainID.description)/functionName123?int256[]=[1,2,5000,3,4,10000]")
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)@\(chainID.description)/functionName123?int256[]=[1,2,5000,3,4,10000]")
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
@@ -207,10 +208,10 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(data, Array<BigInt>(arrayLiteral: 1, 2, 5000, 3, 4, 10000))
     }
 
-    func testParsingOfArrayOfIntOfFixedLengthAsParameter() throws {
+    func testParsingOfArrayOfIntOfFixedLengthAsParameter() async throws {
         let testAddress = "0x9aBbDB06A61cC686BD635484439549D45c2449cc"
         let chainID = BigUInt(2828)
-        let eip681Code = Web3.EIP681CodeParser.parse("ethereum:\(testAddress)@\(chainID.description)/functionName123?int256[3]=[1,2,5000]")
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)@\(chainID.description)/functionName123?int256[3]=[1,2,5000]")
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
@@ -229,19 +230,19 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(data, Array<BigInt>(arrayLiteral: 1, 2, 5000))
     }
 
-    func testParsingQueryParameterFixedLengthArray() throws {
+    func testParsingQueryParameterFixedLengthArray() async throws {
         /// Declared `int256[3]` with 2 values instead of expected 3.
-        var eip681Code = Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?int256[3]=[1,2]")
+        var eip681Code = await Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?int256[3]=[1,2]")
         XCTAssert(eip681Code != nil)
         XCTAssert(eip681Code?.parameters.count == 0)
         /// Declared `int256[3]` with 4 values instead of expected 3.
-        eip681Code = Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?int256[3]=[1,2,2,3]")
+        eip681Code = await Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?int256[3]=[1,2,2,3]")
         XCTAssert(eip681Code != nil)
         XCTAssert(eip681Code?.parameters.count == 0)
     }
 
-    func testParsingQueryParameterStringsArray() throws {
-        var eip681Code = Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?string[]=[\"123\",\"2,5000\",\"wwweer2-=!\"]")
+    func testParsingQueryParameterStringsArray() async throws {
+        var eip681Code = await Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?string[]=[\"123\",\"2,5000\",\"wwweer2-=!\"]")
         XCTAssert(eip681Code != nil)
         guard eip681Code != nil else { return }
 
@@ -249,7 +250,7 @@ class EIP681Tests: LocalTestCase {
         var data = eip681Code!.parameters[0].value as? [String]
         XCTAssertEqual(data, ["123","2,5000","wwweer2-=!"])
 
-        eip681Code = Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?string[]=[123,2,5000,wwweer2-=!]")
+        eip681Code = await Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?string[]=[123,2,5000,wwweer2-=!]")
         XCTAssert(eip681Code != nil)
         guard eip681Code != nil else { return }
 
@@ -258,8 +259,8 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(data, ["123","2","5000","wwweer2-=!"])
     }
 
-    func testParsingQueryParameterArrayOfStringsArrays() throws {
-        var eip681Code = Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?string[][]=[[\"123\",\"2,5000\",\"wwweer2-=!\"],[\"test1\",\"demo\"]]")
+    func testParsingQueryParameterArrayOfStringsArrays() async throws {
+        var eip681Code = await Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?string[][]=[[\"123\",\"2,5000\",\"wwweer2-=!\"],[\"test1\",\"demo\"]]")
         XCTAssert(eip681Code != nil)
         guard eip681Code != nil else { return }
 
@@ -268,7 +269,7 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(data?[0], ["123","2,5000","wwweer2-=!"])
         XCTAssertEqual(data?[1], ["test1","demo"])
 
-        eip681Code = Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?string[][]=[[123,2,5000,wwweer2-=!],[test1,demo]]")
+        eip681Code = await Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?string[][]=[[123,2,5000,wwweer2-=!],[test1,demo]]")
         XCTAssert(eip681Code != nil)
         guard eip681Code != nil else { return }
 
@@ -278,7 +279,7 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(data?[1], ["test1","demo"])
     }
 
-    func testMakeEIP681Link() throws {
+    func testMakeEIP681Link() async throws {
         var eip681Link = Web3.EIP681Code(Web3.EIP681Code.TargetAddress.ethereumAddress(EthereumAddress("0x9aBbDB06A61cC686BD635484439549D45c2449cc")!))
 
         eip681Link.functionName = "setData"
