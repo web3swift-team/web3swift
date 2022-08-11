@@ -57,6 +57,179 @@ extension Web3 {
             self.isPayRequest = isPayRequest
             self.targetAddress = targetAddress
         }
+<<<<<<< HEAD
+=======
+
+        public func makeEIP681Link() -> String? {
+            let address: String
+            switch targetAddress {
+            case .ethereumAddress(let ethereumAddress):
+                address = ethereumAddress.address
+            case let .ensAddress(ensAdress):
+                address = ensAdress
+            }
+            var link = "ethereum:\(address)\(chainID != nil ? "@\(chainID!.description)" : "")"
+            if let functionName = functionName, !functionName.isEmpty {
+                link = "\(link)/\(functionName)"
+            }
+            if !parameters.isEmpty {
+                let queryParameters: [String] = parameters.compactMap { eip681Parameter in
+                    guard let queryValue = Web3
+                        .EIP681CodeEncoder
+                        .encodeFunctionArgument(eip681Parameter.type, eip681Parameter.value)
+                    else {
+                        return nil
+                    }
+                    return "\(eip681Parameter.type.abiRepresentation)=\(queryValue)"
+                }
+
+                if queryParameters.count == parameters.count {
+                    link = "\(link)?\(queryParameters.joined(separator: "&"))"
+                }
+            }
+            return link
+        }
+    }
+
+    public struct EIP681CodeEncoder {
+        public static func encodeFunctionArgument(_ inputType: ABI.Element.ParameterType,
+                                                   _ rawValue: AnyObject) -> String? {
+            switch inputType {
+            case .address:
+                if let ethAddress = rawValue as? EthereumAddress {
+                    return ethAddress.address
+                }
+                if let bytes = rawValue as? Data,
+                   let ethAddress = EthereumAddress(bytes) {
+                    return ethAddress.address
+                }
+                if let string = rawValue as? String {
+                    if let ethAddress = EthereumAddress(string) {
+                        return ethAddress.address
+                    }
+                    if let url = URL(string: string) {
+                        return string
+                    }
+                }
+                return nil
+            case .uint(bits: _):
+                let value: BigUInt?
+                if let bigInt = rawValue as? BigInt {
+                    value = BigUInt(bigInt)
+                } else if let bigUInt = rawValue as? BigUInt {
+                    value = bigUInt
+                } else if let bytes = rawValue as? Data {
+                    value = BigUInt(bytes)
+                } else if let string = rawValue as? String {
+                    value = BigUInt(string, radix: 10) ?? BigUInt(string.stripHexPrefix(), radix: 16)
+                } else if let number = rawValue as? Int {
+                    value = BigUInt(exactly: number)
+                } else if let number = rawValue as? Double {
+                    value = BigUInt(exactly: number)
+                } else {
+                    value = nil
+                }
+                return value?.description
+            case .int(bits: _):
+                let value: BigInt?
+                if let bigInt = rawValue as? BigInt {
+                    value = bigInt
+                } else if let bigUInt = rawValue as? BigUInt {
+                    value = BigInt(bigUInt)
+                } else if let bytes = rawValue as? Data {
+                    value = BigInt(bytes)
+                } else if let string = rawValue as? String {
+                    value = BigInt(string, radix: 10) ?? BigInt(string.stripHexPrefix(), radix: 16)
+                } else if let number = rawValue as? Int {
+                    value = BigInt(exactly: number)
+                } else if let number = rawValue as? Double {
+                    value = BigInt(exactly: number)
+                } else {
+                    value = nil
+                }
+                return value?.description
+            case .string:
+                if let bytes = rawValue as? Data,
+                   let string = String(data: bytes, encoding: .utf8) {
+                    return string
+                } else if let string = rawValue as? String {
+                    return string
+                }
+                return nil
+            case .dynamicBytes:
+                if let bytes = rawValue as? Data {
+                    return bytes.toHexString().addHexPrefix()
+                } else if let bytes = rawValue as? [UInt8] {
+                    return Data(bytes).toHexString().addHexPrefix()
+                } else if let string = rawValue as? String {
+                    if let bytes = Data.fromHex(string) {
+                        return string.addHexPrefix()
+                    }
+                    return string.data(using: .utf8)?.toHexString().addHexPrefix()
+                }
+                return nil
+            case let .bytes(length):
+                var data: Data? = nil
+                if let bytes = rawValue as? Data {
+                    data = bytes
+                } else if let bytes = rawValue as? [UInt8] {
+                    data = Data(bytes)
+                } else if let string = rawValue as? String {
+                    if let bytes = Data.fromHex(string) {
+                        data = bytes
+                    }
+                    data = string.data(using: .utf8)
+                }
+
+                if let data = data,
+                   data.count == length {
+                    return data.toHexString().addHexPrefix()
+                }
+                return nil
+            case .bool:
+                if let bool = rawValue as? Bool {
+                    return bool ? "true" : "false"
+                }
+                if let number = rawValue as? Int,
+                   let int = BigInt(exactly: number) {
+                    return int == 0 ? "false" : "true"
+                }
+                if let number = rawValue as? Double,
+                   let int = BigInt(exactly: number) {
+                    return int == 0 ? "false" : "true"
+                }
+                if let string = rawValue as? String {
+                    switch string.lowercased() {
+                    case "true", "yes", "1":
+                        return "true"
+                    default:
+                        return "false"
+                    }
+                }
+                if let bytes = rawValue as? Data {
+                    return bytes.count == 0 || bytes.count == 1 && bytes.first == 0 ? "false" : "true"
+                }
+                return nil
+            case let .array(type, length):
+                if let array = rawValue as? [AnyObject] {
+                    let mappedArray = array.compactMap { object in
+                        encodeFunctionArgument(type, object)
+                    }
+
+                    if length != 0 && UInt64(mappedArray.count) == length {
+                        return "[\(mappedArray.joined(separator: ","))]"
+                    } else if length == 0 && mappedArray.count == array.count {
+                        return "[\(mappedArray.joined(separator: ","))]"
+                    }
+                }
+                return nil
+            case let .tuple(types):
+                // TODO: implement!
+                return nil
+            default: return nil
+            }
+        }
+>>>>>>> 35c85fd7... feat: encoding query parameters for EIP681 - except tuples, this is still a TODO
     }
 
     public struct EIP681CodeParser {
