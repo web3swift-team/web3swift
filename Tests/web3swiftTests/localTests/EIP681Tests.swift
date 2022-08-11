@@ -277,4 +277,32 @@ class EIP681Tests: LocalTestCase {
         XCTAssertEqual(data?[0], ["123","2","5000","wwweer2-=!"])
         XCTAssertEqual(data?[1], ["test1","demo"])
     }
+
+    func testMakeEIP681Link() throws {
+        var eip681Link = Web3.EIP681Code(Web3.EIP681Code.TargetAddress.ethereumAddress(EthereumAddress("0x9aBbDB06A61cC686BD635484439549D45c2449cc")!))
+
+        eip681Link.functionName = "setData"
+        eip681Link.parameters = [Web3.EIP681Code.EIP681Parameter(type: .array(type: .bytes(length: 32), length: 0),
+                                                                 value: [Data.fromHex("0x1234789565875498655487123478956587549865548712347895658754980000")!,
+                                                                         Data.fromHex("0x1234789565875498655487123478956587549865548712347895658754986554")!] as AnyObject),
+                                 Web3.EIP681Code.EIP681Parameter(type: .array(type: .dynamicBytes, length: 0),
+                                                                 value: [Data.fromHex("0x12345607")!,
+                                                                         Data.fromHex("0x8965abcdef")!] as AnyObject),
+                                 Web3.EIP681Code.EIP681Parameter(type: .uint(bits: 256),
+                                                                 value: 98986565 as AnyObject),
+                                 Web3.EIP681Code.EIP681Parameter(type: .int(bits: 256),
+                                                                 value: 155445566 as AnyObject),
+                                 Web3.EIP681Code.EIP681Parameter(type: .address,
+                                                                 value: EthereumAddress("0x9aBbDB06A61cC686BD635484439549D45c2449cc")! as AnyObject),
+                                 Web3.EIP681Code.EIP681Parameter(type: .bytes(length: 5),
+                                                                 value: "0x9aBbDB06A6" as AnyObject),
+                                 Web3.EIP681Code.EIP681Parameter(type: .bytes(length: 3),
+                                                                 value: Data.fromHex("0x9aBbDB")! as AnyObject),
+                                 Web3.EIP681Code.EIP681Parameter(type: .dynamicBytes,
+                                                                 value: Data.fromHex("0x11009aBbDB87879898656545")! as AnyObject),
+                                 Web3.EIP681Code.EIP681Parameter(type: .string,
+                                                                 value: "this is EIP681 query parameter string" as AnyObject)]
+
+        XCTAssertEqual(eip681Link.makeEIP681Link(), "ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc/setData?bytes32[]=[0x1234789565875498655487123478956587549865548712347895658754980000,0x1234789565875498655487123478956587549865548712347895658754986554]&bytes[]=[0x12345607,0x8965abcdef]&uint256=98986565&int256=155445566&address=0x9aBbDB06A61cC686BD635484439549D45c2449cc&bytes5=0x9abbdb06a6&bytes3=0x9abbdb&bytes=0x11009abbdb87879898656545&string=this is EIP681 query parameter string")
+    }
 }
