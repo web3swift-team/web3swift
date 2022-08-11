@@ -60,7 +60,7 @@ extension Web3 {
 <<<<<<< HEAD
 =======
 
-        public func makeEIP681Link() -> String? {
+        public func makeEIP681Link(urlEncode: Bool = false) -> String? {
             let address: String
             switch targetAddress {
             case .ethereumAddress(let ethereumAddress):
@@ -87,7 +87,7 @@ extension Web3 {
                     link = "\(link)?\(queryParameters.joined(separator: "&"))"
                 }
             }
-            return link
+            return urlEncode ? link.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) : link
         }
     }
 
