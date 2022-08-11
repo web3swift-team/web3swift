@@ -32,6 +32,8 @@ public struct EthereumAddress: Equatable {
         return lhs.addressData == rhs.addressData && lhs.type == rhs.type
     }
 
+    /// Raw representation of the address.
+    /// If the ``type`` is ``EthereumAddress/AddressType/contractDeployment`` an empty `Data` object is returned.
     public var addressData: Data {
         get {
             switch self.type {
@@ -43,6 +45,9 @@ public struct EthereumAddress: Equatable {
             }
         }
     }
+
+    /// Checksummed address with `0x` HEX prefix.
+    /// If the ``type`` is ``EthereumAddress/AddressType/contractDeployment`` only `0x` prefix is returned.
     public var address: String {
         switch self.type {
         case .normal:
@@ -52,6 +57,11 @@ public struct EthereumAddress: Equatable {
         }
     }
 
+    /// Validates and checksumms given `addr`.
+    /// If given string is not an address, incomplete address or is invalid validation will fail and `nil` will be returned.
+    /// - Parameter addr: address in string format, case insensitive, `0x` prefix is not required.
+    /// - Returns: validates and checksumms the address. Returns `nil` if checksumm has failed or given string cannot be
+    /// represented as `ASCII` data. Otherwise, checksummed address is returned with `0x` prefix.
     public static func toChecksumAddress(_ addr: String) -> String? {
         let address = addr.lowercased().stripHexPrefix()
         guard let hash = address.data(using: .ascii)?.sha3(.keccak256).toHexString().stripHexPrefix() else {return nil}
@@ -72,15 +82,19 @@ public struct EthereumAddress: Equatable {
         return ret
     }
 
+    /// Creates a special ``EthereumAddress`` that serves the purpose of the receiver, or `to` address of a transaction if it is a
+    /// smart contract deployment.
+    /// - Returns: special instance with type ``EthereumAddress/AddressType/contractDeployment`` and
+    /// empty ``EthereumAddress/address``.
     public static func contractDeploymentAddress() -> EthereumAddress {
-        return EthereumAddress("0x", type: .contractDeployment)!
+        EthereumAddress("0x", type: .contractDeployment)!
     }
 }
 
 /// In swift structs it's better to implement initializers in extension
 /// Since it's make available syntetized initializer then for free.
 extension EthereumAddress {
-    public init?(_ addressString:String, type: AddressType = .normal, ignoreChecksum: Bool = false) {
+    public init?(_ addressString: String, type: AddressType = .normal, ignoreChecksum: Bool = false) {
         switch type {
         case .normal:
             guard let data = Data.fromHex(addressString) else {return nil}

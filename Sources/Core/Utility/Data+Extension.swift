@@ -59,7 +59,7 @@ public extension Data {
         }
         return nil
     }
-
+    
     func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public
         if startingBit + length / 8 > self.count, length > 64, startingBit > 0, length >= 1 {return nil}
         let bytes = self[(startingBit/8) ..< (startingBit+length+7)/8]

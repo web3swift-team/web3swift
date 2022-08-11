@@ -16,9 +16,9 @@ extension web3.web3contract {
         public var eventName: String
         public var filter: EventFilter?
         var web3: web3
+        
         public init? (web3 web3Instance: web3, eventName: String, contract: ContractProtocol, filter: EventFilter? = nil) {
-            //  guard let _ = contract.allEvents.index(of: eventName) else {return nil}
-            guard let _ = contract.allEvents.firstIndex(of: eventName) else {return nil}
+            guard contract.events[eventName] != nil else { return nil }
             self.eventName = eventName
             self.web3 = web3Instance
             self.contract = contract
@@ -136,7 +136,7 @@ extension web3.web3contract.EventParser {
             }
         }
 
-        guard let eventOfSuchTypeIsPresent = self.contract.testBloomForEventPrecence(eventName: self.eventName, bloom: bloom) else {
+        guard let eventOfSuchTypeIsPresent = self.contract.testBloomForEventPresence(eventName: self.eventName, bloom: bloom) else {
             throw Web3Error.processingError(desc: "Error processing bloom for events")
         }
         if (!eventOfSuchTypeIsPresent) {

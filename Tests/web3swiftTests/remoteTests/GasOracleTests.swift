@@ -1,5 +1,5 @@
 //
-//  OracleTests.swift
+//  GasOracleTests.swift
 //  Web3swift
 //
 //  Created by Yaroslav on 11.04.2022.
@@ -12,7 +12,7 @@ import Core
 @testable import web3swift
 
 // MARK: Works only with network connection
-class OracleTests: XCTestCase {
+class GasOracleTests: XCTestCase {
 
     let blockNumber: BigUInt = 14571792
 

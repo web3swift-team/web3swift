@@ -11,7 +11,7 @@ import Core
 
 @testable import web3swift
 
-class web3swiftEIP67Tests: LocalTestCase {
+class EIP67Tests: LocalTestCase {
 
     func testEIP67encoding() throws {
         var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!)

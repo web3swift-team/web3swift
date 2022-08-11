@@ -7,6 +7,65 @@
 import Foundation
 import Core
 
+public struct EventFilter {
+    public enum Block {
+        case latest
+        case pending
+        case blockNumber(UInt64)
+
+        var encoded: String {
+            switch self {
+            case .latest:
+                return "latest"
+            case .pending:
+                return "pending"
+            case .blockNumber(let number):
+                return String(number, radix: 16).addHexPrefix()
+            }
+        }
+    }
+
+    public init() { }
+
+    public init(fromBlock: Block?, toBlock: Block?,
+                addresses: [EthereumAddress]? = nil,
+                parameterFilters: [[EventFilterable]?]? = nil) {
+        self.fromBlock = fromBlock
+        self.toBlock = toBlock
+        self.addresses = addresses
+        self.parameterFilters = parameterFilters
+    }
+
+    public var fromBlock: Block?
+    public var toBlock: Block?
+    public var addresses: [EthereumAddress]?
+    public var parameterFilters: [[EventFilterable]?]?
+
+    public func rpcPreEncode() -> EventFilterParameters {
+        var encoding = EventFilterParameters()
+        if self.fromBlock != nil {
+            encoding.fromBlock = self.fromBlock!.encoded
+        }
+        if self.toBlock != nil {
+            encoding.toBlock = self.toBlock!.encoded
+        }
+        if self.addresses != nil {
+            if self.addresses!.count == 1 {
+                encoding.address = [self.addresses![0].address]
+            } else {
+                var encodedAddresses = [String?]()
+                for addr in self.addresses! {
+                    encodedAddresses.append(addr.address)
+                }
+                encoding.address = encodedAddresses
+            }
+        }
+        return encoding
+    }
+}
+
+// MARK: - Internal functions
+
 internal func filterLogs(decodedLogs: [EventParserResultProtocol], eventFilter: EventFilter) -> [EventParserResultProtocol] {
     let filteredLogs = decodedLogs.filter { (result) -> Bool in
         if eventFilter.addresses == nil {
@@ -138,7 +197,7 @@ internal func parseReceiptForLogs(receipt: TransactionReceipt, contract: Contrac
             return [EventParserResultProtocol]()
         }
     }
-    guard let eventOfSuchTypeIsPresent = contract.testBloomForEventPrecence(eventName: eventName, bloom: bloom) else {return nil}
+    guard let eventOfSuchTypeIsPresent = contract.testBloomForEventPresence(eventName: eventName, bloom: bloom) else {return nil}
     if (!eventOfSuchTypeIsPresent) {
         return [EventParserResultProtocol]()
     }

@@ -8,8 +8,8 @@ import XCTest
 import Core
 
 @testable import web3swift
-//TODO: refactor me
-class web3swiftEventloopTests: XCTestCase {
+
+class EventloopTests: XCTestCase {
 
     func testBasicEventLoop() async throws {
         var ticksToWait = 5
@@ -35,12 +35,4 @@ class web3swiftEventloopTests: XCTestCase {
 
         await waitForExpectations(timeout: 60, handler: nil)
     }
-
-   func getKeystoreData() -> Data? {
-       let bundle = Bundle(for: type(of: self))
-       guard let path = bundle.path(forResource: "key", ofType: "json") else {return nil}
-       guard let data = NSData(contentsOfFile: path) else {return nil}
-       return data as Data
-   }
-
 }

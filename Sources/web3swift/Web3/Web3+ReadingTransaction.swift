@@ -16,7 +16,11 @@ public class ReadTransaction {
 
     var web3: web3
 
-    public init (transaction: EthereumTransaction, web3 web3Instance: web3, contract: EthereumContract, method: String, transactionOptions: TransactionOptions?) {
+    public init(transaction: EthereumTransaction,
+                web3 web3Instance: web3,
+                contract: EthereumContract,
+                method: String = "fallback",
+                transactionOptions: TransactionOptions? = nil) {
         self.transaction = transaction
         self.web3 = web3Instance
         self.contract = contract

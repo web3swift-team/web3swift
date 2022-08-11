@@ -15,7 +15,7 @@ import Core
 
 @testable import web3swift
 
-class web3swiftTransactionsTests: XCTestCase {
+class TransactionsTests: XCTestCase {
 
     enum TestCase: Int {
         case legacyFallback = 0

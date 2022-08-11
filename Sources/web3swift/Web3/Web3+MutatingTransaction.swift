@@ -11,22 +11,16 @@ import Core
 public class WriteTransaction: ReadTransaction {
 
     public func assembleTransaction(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
-        var assembledTransaction: EthereumTransaction = self.transaction
+        var assembledTransaction: EthereumTransaction = transaction
 
         if self.method != "fallback" {
-            let m = self.contract.methods[self.method]
-            if m == nil {
+            let function = self.contract.methods[self.method]?.first
+            if function == nil {
                 throw Web3Error.inputError(desc: "Contract's ABI does not have such method")
             }
-            switch m! {
-            case .function(let function):
-                if function.constant {
-                    throw Web3Error.inputError(desc: "Trying to transact to the constant function")
-                }
-            case .constructor(_):
-                break
-            default:
-                throw Web3Error.inputError(desc: "Contract's ABI does not have such method")
+
+            if function!.constant {
+                throw Web3Error.inputError(desc: "Trying to transact to the constant function")
             }
         }
 
@@ -184,16 +178,16 @@ public class WriteTransaction: ReadTransaction {
     }
 
     public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult {
-        let transaction = try await self.assembleTransaction(transactionOptions: transactionOptions)
+        let transaction = try await assembleTransaction(transactionOptions: transactionOptions)
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
         var cleanedOptions = TransactionOptions()
         cleanedOptions.from = mergedOptions.from
         cleanedOptions.to = mergedOptions.to
-        return try await self.web3.eth.send(transaction, transactionOptions: cleanedOptions, password: password)
+        return try await web3.eth.send(transaction, transactionOptions: cleanedOptions, password: password)
     }
 
     public func assemble(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
-        return try await self.assembleTransaction(transactionOptions: transactionOptions)
+        return try await assembleTransaction(transactionOptions: transactionOptions)
     }
 
     func gasEstimate(for policy: TransactionOptions.GasLimitPolicy,
@@ -201,7 +195,7 @@ public class WriteTransaction: ReadTransaction {
                      optionsForGasEstimation: TransactionOptions) async throws -> BigUInt {
         switch policy {
         case .automatic, .withMargin, .limited:
-            return try await self.web3.eth.estimateGas(for: assembledTransaction, transactionOptions: optionsForGasEstimation)
+            return try await web3.eth.estimateGas(for: assembledTransaction, transactionOptions: optionsForGasEstimation)
         case .manual(let gasLimit):
             return gasLimit
         }

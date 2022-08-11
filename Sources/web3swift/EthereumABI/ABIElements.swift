@@ -8,7 +8,6 @@ import BigInt
 import Core
 
 public extension ABI {
-    // JSON Decoding
     struct Input: Decodable {
         public var name: String?
         public var type: String
@@ -172,22 +171,19 @@ public extension ABI {
     }
 }
 
+// MARK: - Function parameters encoding
+
 extension ABI.Element {
     public func encodeParameters(_ parameters: [AnyObject]) -> Data? {
         switch self {
         case .constructor(let constructor):
-            guard parameters.count == constructor.inputs.count else {return nil}
-            guard let data = ABIEncoder.encode(types: constructor.inputs, values: parameters) else {return nil}
-            return data
+            return constructor.encodeParameters(parameters)
         case .event(_):
             return nil
         case .fallback(_):
             return nil
         case .function(let function):
-            guard parameters.count == function.inputs.count else {return nil}
-            let signature = function.methodEncoding
-            guard let data = ABIEncoder.encode(types: function.inputs, values: parameters) else {return nil}
-            return signature + data
+            return function.encodeParameters(parameters)
         case .receive(_):
             return nil
         case .error(_):
@@ -195,6 +191,33 @@ extension ABI.Element {
         }
     }
 }
+
+extension ABI.Element.Constructor {
+    public func encodeParameters(_ parameters: [AnyObject]) -> Data? {
+        guard parameters.count == inputs.count else { return nil }
+        return ABIEncoder.encode(types: inputs, values: parameters)
+    }
+}
+
+extension ABI.Element.Function {
+    public func encodeParameters(_ parameters: [AnyObject]) -> Data? {
+        guard parameters.count == inputs.count,
+              let data = ABIEncoder.encode(types: inputs, values: parameters)
+        else { return nil }
+        return methodEncoding + data
+    }
+}
+
+// MARK: - Event logs decoding
+
+extension ABI.Element.Event {
+    public func decodeReturnedLogs(eventLogTopics: [Data], eventLogData: Data) -> [String: Any]? {
+        guard let eventContent = ABIDecoder.decodeLog(event: self, eventLogTopics: eventLogTopics, eventLogData: eventLogData) else {return nil}
+        return eventContent
+    }
+}
+
+// MARK: - Function input/output decoding
 
 extension ABI.Element {
     public func decodeReturnData(_ data: Data) -> [String: Any]? {
@@ -206,56 +229,90 @@ extension ABI.Element {
         case .fallback(_):
             return nil
         case .function(let function):
-            // the response size greater than equal 100 bytes, when read function aborted by "require" statement.
-            // if "require" statement has no message argument, the response is empty (0 byte).
-            if(data.bytes.count >= 100) {
-                let check00_31 = BigUInt("08C379A000000000000000000000000000000000000000000000000000000000", radix: 16)!
-                let check32_63 = BigUInt("0000002000000000000000000000000000000000000000000000000000000000", radix: 16)!
+            return function.decodeReturnData(data)
+        case .receive(_):
+            return nil
+        case .error(_):
+            return nil
+        }
+    }
 
-                // check data[00-31] and data[32-63]
-                if check00_31 == BigUInt(data[0...31]) && check32_63 == BigUInt(data[32...63]) {
-                    // data.bytes[64-67] contains the length of require message
-                    let len = (Int(data.bytes[64])<<24) | (Int(data.bytes[65])<<16) | (Int(data.bytes[66])<<8) | Int(data.bytes[67])
+    public func decodeInputData(_ data: Data) -> [String: Any]? {
+        guard data.count == 0 || data.count % 32 == 4 else { return nil }
 
-                    let message = String(bytes: data.bytes[68..<(68+len)], encoding: .utf8)!
+        switch self {
+        case .constructor(let constructor):
+            return constructor.decodeInputData(data)
+        case .event(_):
+            return nil
+        case .fallback(_):
+            return nil
+        case .function(let function):
+            return function.decodeInputData(data)
+        case .receive(_):
+            return nil
+        case .error(_):
+            return nil
+        }
+    }
+}
 
-                    print("read function aborted by require statement: \(message)")
+extension ABI.Element.Function {
+    public func decodeInputData(_ rawData: Data) -> [String: Any]? {
+        return web3swift.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
+    }
 
-                    var returnArray = [String: Any]()
+    public func decodeReturnData(_ data: Data) -> [String: Any]? {
+        // the response size greater than equal 100 bytes, when read function aborted by "require" statement.
+        // if "require" statement has no message argument, the response is empty (0 byte).
+        if data.bytes.count >= 100 {
+            let check00_31 = BigUInt("08C379A000000000000000000000000000000000000000000000000000000000", radix: 16)!
+            let check32_63 = BigUInt("0000002000000000000000000000000000000000000000000000000000000000", radix: 16)!
 
-                    // set infomation
-                    returnArray["_abortedByRequire"] = true
-                    returnArray["_errorMessageFromRequire"] = message
+            // check data[00-31] and data[32-63]
+            if check00_31 == BigUInt(data[0...31]) && check32_63 == BigUInt(data[32...63]) {
+                // data.bytes[64-67] contains the length of require message
+                let len = (Int(data.bytes[64])<<24) | (Int(data.bytes[65])<<16) | (Int(data.bytes[66])<<8) | Int(data.bytes[67])
 
-                    // set empty values
-                    for i in 0 ..< function.outputs.count {
-                        let name = "\(i)"
-                        returnArray[name] = function.outputs[i].type.emptyValue
-                        if function.outputs[i].name != "" {
-                            returnArray[function.outputs[i].name] = function.outputs[i].type.emptyValue
-                        }
-                    }
+                let message = String(bytes: data.bytes[68..<(68+len)], encoding: .utf8)!
 
-                    return returnArray
-                }
-            }
-            // the "require" statement with no message argument will be caught here
-            if (data.count == 0 && function.outputs.count == 1) {
-                let name = "0"
-                let value = function.outputs[0].type.emptyValue
+                print("read function aborted by require statement: \(message)")
+
                 var returnArray = [String: Any]()
-                returnArray[name] = value
-                if function.outputs[0].name != "" {
-                    returnArray[function.outputs[0].name] = value
+
+                // set infomation
+                returnArray["_abortedByRequire"] = true
+                returnArray["_errorMessageFromRequire"] = message
+
+                // set empty values
+                for i in 0 ..< outputs.count {
+                    let name = "\(i)"
+                    returnArray[name] = outputs[i].type.emptyValue
+                    if outputs[i].name != "" {
+                        returnArray[outputs[i].name] = outputs[i].type.emptyValue
+                    }
                 }
+
                 return returnArray
             }
+        }
 
-            guard function.outputs.count*32 <= data.count else {return nil}
-            var returnArray = [String: Any]()
+        var returnArray = [String: Any]()
+
+        // the "require" statement with no message argument will be caught here
+        if data.count == 0 && outputs.count == 1 {
+            let name = "0"
+            let value = outputs[0].type.emptyValue
+            returnArray[name] = value
+            if outputs[0].name != "" {
+                returnArray[outputs[0].name] = value
+            }
+        } else {
+            guard outputs.count * 32 <= data.count else { return nil }
+
             var i = 0
-            guard let values = ABIDecoder.decode(types: function.outputs, data: data) else {return nil}
-            for output in function.outputs {
+            guard let values = ABIDecoder.decode(types: outputs, data: data) else { return nil }
+            for output in outputs {
                 let name = "\(i)"
                 returnArray[name] = values[i]
                 if output.name != "" {
@@ -264,98 +321,74 @@ extension ABI.Element {
                 i = i + 1
             }
             // set a flag to detect the request succeeded
-            returnArray["_success"] = true
-            return returnArray
-        case .receive(_):
-            return nil
-        case .error(_):
+        }
+
+        if returnArray.isEmpty {
             return nil
         }
-    }
 
+        returnArray["_success"] = true
+        return returnArray
+    }
+}
+
+extension ABI.Element.Constructor {
     public func decodeInputData(_ rawData: Data) -> [String: Any]? {
-        var data = rawData
-        var sig: Data? = nil
-        switch rawData.count % 32 {
-        case 0:
-            break
-        case 4:
-            sig = rawData[0 ..< 4]
-            data = Data(rawData[4 ..< rawData.count])
-        default:
-            return nil
-        }
-        switch self {
-        case .constructor(let function):
-            if (data.count == 0 && function.inputs.count == 1) {
-                let name = "0"
-                let value = function.inputs[0].type.emptyValue
-                var returnArray = [String: Any]()
-                returnArray[name] = value
-                if function.inputs[0].name != "" {
-                    returnArray[function.inputs[0].name] = value
-                }
-                return returnArray
-            }
-
-            guard function.inputs.count*32 <= data.count else {return nil}
-            var returnArray = [String: Any]()
-            var i = 0
-            guard let values = ABIDecoder.decode(types: function.inputs, data: data) else {return nil}
-            for input in function.inputs {
-                let name = "\(i)"
-                returnArray[name] = values[i]
-                if input.name != "" {
-                    returnArray[input.name] = values[i]
-                }
-                i = i + 1
-            }
-            return returnArray
-        case .event(_):
-            return nil
-        case .fallback(_):
-            return nil
-        case .function(let function):
-            if sig != nil && sig != function.methodEncoding {
-                return nil
-            }
-            if (data.count == 0 && function.inputs.count == 1) {
-                let name = "0"
-                let value = function.inputs[0].type.emptyValue
-                var returnArray = [String: Any]()
-                returnArray[name] = value
-                if function.inputs[0].name != "" {
-                    returnArray[function.inputs[0].name] = value
-                }
-                return returnArray
-            }
-
-            guard function.inputs.count*32 <= data.count else {return nil}
-            var returnArray = [String: Any]()
-            var i = 0
-            guard let values = ABIDecoder.decode(types: function.inputs, data: data) else {return nil}
-            for input in function.inputs {
-                let name = "\(i)"
-                returnArray[name] = values[i]
-                if input.name != "" {
-                    returnArray[input.name] = values[i]
-                }
-                i = i + 1
-            }
-            return returnArray
-        case .receive(_):
-            return nil
-        case .error(_):
-            return nil
-        }
+        return web3swift.decodeInputData(rawData, inputs: inputs)
     }
 }
 
-extension ABI.Element.Event {
-    public func decodeReturnedLogs(eventLogTopics: [Data], eventLogData: Data) -> [String: Any]? {
-        guard let eventContent = ABIDecoder.decodeLog(event: self, eventLogTopics: eventLogTopics, eventLogData: eventLogData) else {return nil}
-        return eventContent
+/// Generic input decoding function.
+/// - Parameters:
+///   - rawData: data to decode. Must match the followin criteria: `data.count == 0 || data.count % 32 == 4`.
+///   - methodEncoding: 4 bytes represeting method signature like `0xFFffFFff`. Can be ommited to avoid checking method encoding.
+///   - inputs: expected input types. Order must be the same as in function declaration.
+/// - Returns: decoded dictionary of input arguments mapped to their indices and arguments' names if these are not empty.
+/// If decoding of at least one argument fails, `rawData` size is invalid or `methodEncoding` doesn't match - `nil` is returned.
+fileprivate func decodeInputData(_ rawData: Data,
+                                 methodEncoding: Data? = nil,
+                                 inputs: [ABI.Element.InOut]) -> [String: Any]? {
+    let data: Data
+    let sig: Data?
+
+    switch rawData.count % 32 {
+    case 0:
+        sig = nil
+        data = Data()
+        break
+    case 4:
+        sig = rawData[0 ..< 4]
+        data = Data(rawData[4 ..< rawData.count])
+    default:
+        return nil
     }
+
+    if methodEncoding != nil && sig != nil && sig != methodEncoding {
+        return nil
+    }
+
+    var returnArray = [String: Any]()
+
+    if data.count == 0 && inputs.count == 1 {
+        let name = "0"
+        let value = inputs[0].type.emptyValue
+        returnArray[name] = value
+        if inputs[0].name != "" {
+            returnArray[inputs[0].name] = value
+        }
+    } else {
+        guard inputs.count * 32 <= data.count else { return nil }
+
+        var i = 0
+        guard let values = ABIDecoder.decode(types: inputs, data: data) else {return nil}
+        for input in inputs {
+            let name = "\(i)"
+            returnArray[name] = values[i]
+            if input.name != "" {
+                returnArray[input.name] = values[i]
+            }
+            i = i + 1
+        }
+    }
+    return returnArray
 }
-
-

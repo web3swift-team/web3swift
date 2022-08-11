@@ -10,7 +10,7 @@ import Core
 
 @testable import web3swift
 
-class web3swiftKeystoresTests: LocalTestCase {
+class KeystoresTests: LocalTestCase {
 
     let mnemonic = "fruit wave dwarf banana earth journey tattoo true farm silk olive fence"
 
