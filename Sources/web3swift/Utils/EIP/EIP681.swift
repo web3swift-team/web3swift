@@ -25,14 +25,11 @@ extension Web3 {
         public struct EIP681Parameter {
             public var type: ABI.Element.ParameterType
             public var value: AnyObject
-<<<<<<< HEAD
-=======
 
             public init(type: ABI.Element.ParameterType, value: AnyObject) {
                 self.type = type
                 self.value = value
             }
->>>>>>> c159f067... Make value as any object in eip681 parameters
         }
         public var isPayRequest: Bool
         public var targetAddress: TargetAddress
@@ -108,7 +105,7 @@ extension Web3 {
             if tail == nil {
                 return code
             }
-            guard let components = URLComponents(string: tail!) else {return code}
+            guard let components = URLComponents(string: tail!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? tail!) else {return code}
             if components.path == "" {
                 code.isPayRequest = true
             } else {
@@ -119,72 +116,16 @@ extension Web3 {
             var inputs = [ABI.Element.InOut]()
             for comp in queryItems {
                 if let inputType = try? ABITypeParser.parseTypeString(comp.name) {
-                    guard let value = comp.value else {continue}
-                    var nativeValue: AnyObject? = nil
-                    switch inputType {
-                    case .address:
-                        let val = EIP681Code.TargetAddress(value)
-                        switch val {
-                        case .ethereumAddress(let ethereumAddress):
-                            nativeValue = ethereumAddress as AnyObject
-                        //  default:
-                        //      return nil
-                        case .ensAddress(let ens):
-                            do {
-                                let web = await web3(provider: InfuraProvider(Networks.fromInt(UInt(code.chainID ?? 1)) ?? Networks.Mainnet)!)
-                                let ensModel = ENS(web3: web)
-                                try await ensModel?.setENSResolver(withDomain: ens)
-                                let address = try await ensModel?.getAddress(forNode: ens)
-                                nativeValue = address as AnyObject
-                            } catch {
-                                return nil
-                            }
-                        }
-                    case .uint(bits: _):
-                        if let val = BigUInt(value, radix: 10) {
-                            nativeValue = val as AnyObject
-                        } else if let val = BigUInt(value.stripHexPrefix(), radix: 16) {
-                            nativeValue = val as AnyObject
-                        }
-                    case .int(bits: _):
-                        if let val = BigInt(value, radix: 10) {
-                            nativeValue = val as AnyObject
-                        } else if let val = BigInt(value.stripHexPrefix(), radix: 16) {
-                            nativeValue = val as AnyObject
-                        }
-                    case .string:
-                        nativeValue = value as AnyObject
-                    case .dynamicBytes:
-                        if let val = Data.fromHex(value) {
-                            nativeValue = val as AnyObject
-                        } else if let val = value.data(using: .utf8) {
-                            nativeValue = val as AnyObject
-                        }
-                    case .bytes(length: _):
-                        if let val = Data.fromHex(value) {
-                            nativeValue = val as AnyObject
-                        } else if let val = value.data(using: .utf8) {
-                            nativeValue = val as AnyObject
-                        }
-                    case .bool:
-                        switch value {
-                        case "true", "True", "TRUE", "1":
-                            nativeValue = true as AnyObject
-                        case "false", "False", "FALSE", "0":
-                            nativeValue = false as AnyObject
-                        default:
-                            nativeValue = true as AnyObject
-                        }
-                    default:
-                        continue
-                    }
-                    if nativeValue != nil {
-                        inputs.append(ABI.Element.InOut(name: String(inputNumber), type: inputType))
-                        code.parameters.append(EIP681Code.EIP681Parameter(type: inputType, value: nativeValue!))
-                        inputNumber = inputNumber + 1
-                    } else {
-                        return nil
-                    }
+                    guard let rawValue = comp.value,
+                          let functionArgument = parseFunctionArgument(inputType,
+                                                                       rawValue.trimmingCharacters(in: .whitespacesAndNewlines),
+                                                                       chainID: code.chainID ?? 0,
+                                                                       inputNumber: inputNumber)
+                    else { continue }
+
+                    inputs.append(functionArgument.argType)
+                    code.parameters.append(functionArgument.parameter)
+                    inputNumber = inputNumber + 1
                 } else {
                     switch comp.name {
                     case "value":
@@ -235,5 +176,196 @@ extension Web3 {
             print(code)
             return code
         }
+
+        private static func parseFunctionArgument(_ inputType: ABI.Element.ParameterType,
+                                                  _ rawValue: String,
+                                                  chainID: BigUInt,
+                                                  inputNumber: Int) -> FunctionArgument? {
+            var parsedValue: AnyObject? = nil
+            switch inputType {
+            case .address:
+                let val = EIP681Code.TargetAddress(rawValue)
+                switch val {
+                case .ethereumAddress(let ethereumAddress):
+                    parsedValue = ethereumAddress as AnyObject
+                case .ensAddress(let ens):
+                    do {
+                        let web = web3(provider: InfuraProvider(Networks.fromInt(Int(chainID)) ?? Networks.Mainnet)!)
+                        let ensModel = ENS(web3: web)
+                        try ensModel?.setENSResolver(withDomain: ens)
+                        let address = try ensModel?.getAddress(forNode: ens)
+                        parsedValue = address as AnyObject
+                    } catch {
+                        return nil
+                    }
+                }
+            case .uint(bits: _):
+                if let val = BigUInt(rawValue, radix: 10) {
+                    parsedValue = val as AnyObject
+                } else if let val = BigUInt(rawValue.stripHexPrefix(), radix: 16) {
+                    parsedValue = val as AnyObject
+                }
+            case .int(bits: _):
+                if let val = BigInt(rawValue, radix: 10) {
+                    parsedValue = val as AnyObject
+                } else if let val = BigInt(rawValue.stripHexPrefix(), radix: 16) {
+                    parsedValue = val as AnyObject
+                }
+            case .string:
+                parsedValue = rawValue as AnyObject
+            case .dynamicBytes:
+                if let val = Data.fromHex(rawValue) {
+                    parsedValue = val as AnyObject
+                } else if let val = rawValue.data(using: .utf8) {
+                    parsedValue = val as AnyObject
+                }
+            case .bytes(length: _):
+                if let val = Data.fromHex(rawValue) {
+                    parsedValue = val as AnyObject
+                } else if let val = rawValue.data(using: .utf8) {
+                    parsedValue = val as AnyObject
+                }
+            case .bool:
+                switch rawValue {
+                case "true", "True", "TRUE", "1":
+                    parsedValue = true as AnyObject
+                case "false", "False", "FALSE", "0":
+                    parsedValue = false as AnyObject
+                default:
+                    parsedValue = true as AnyObject
+                }
+            case let .array(type, length):
+                var rawValues: [String] = []
+                if case .array = type {
+                    guard let internalArrays = splitArrayOfArrays(rawValue),
+                          (length == 0 || UInt64(internalArrays.count) == length) else { return nil }
+                    rawValues = internalArrays
+                } else if case let .tuple(internalTypes) = type {
+                    // TODO: implement!
+                } else if case .string = type {
+                    guard let strings = splitArrayOfStrings(rawValue),
+                          (length == 0 || UInt64(strings.count) == length) else { return nil }
+                    rawValues = strings
+                } else {
+                    let rawValue = String(rawValue.dropFirst().dropLast())
+                    rawValues = rawValue.split(separator: ",").map { String($0) }
+                }
+
+                parsedValue = rawValues.compactMap {
+                    parseFunctionArgument(type,
+                                          String($0),
+                                          chainID: chainID,
+                                          inputNumber: inputNumber)?
+                        .parameter
+                        .value
+                } as AnyObject
+
+                guard (parsedValue as? [AnyObject])?.count == rawValues.count &&
+                        (length == 0 || UInt64(rawValues.count) == length) else { return nil }
+            case let .tuple(types):
+                // TODO: implement!
+                return nil
+            default: return nil
+            }
+
+            guard let parsedValue = parsedValue else { return nil }
+            return FunctionArgument(ABI.Element.InOut(name: String(inputNumber), type: inputType),
+                                    EIP681Code.EIP681Parameter(type: inputType, value: parsedValue))
+        }
+
+        // MARK: - Parsing functions for complex data structures
+
+        /// Attempts to split given ``rawValue`` into `[String]` where each element of that array
+        /// represent a valid, stringified, array in of itself.
+        /// With an input like `"[[],[],[]]"` the output is expected to be `["[]","[]","[]"]`.
+        /// - Parameter rawValue: supposedly an array of arrays in a form `[[...],[...],...]`
+        /// - Returns: separated stringified arrays, or `nil` if separation failed.
+        private static func splitArrayOfArrays(_ rawValue: String) -> [String]? {
+            /// Dropping first and last square brackets.
+            /// That modifies the upper bound value of the first match of `squareBracketRegex`.
+            let rawValue = String(rawValue.dropFirst().dropLast())
+
+            let squareBracketRegex = try! NSRegularExpression(pattern: "(\\[*)")
+            let match = squareBracketRegex.firstMatch(in: rawValue, range: rawValue.fullNSRange)
+
+            guard let bracketsCount = match?.range.upperBound,
+                  bracketsCount > 0 else {
+                return nil
+            }
+
+            let splitRegex = try! NSRegularExpression(pattern: "(\\]){\(bracketsCount)},(\\[){\(bracketsCount)}")
+            var indices: [Int] = splitRegex.matches(in: rawValue, range: rawValue.fullNSRange)
+                .map { $0.range.lowerBound + bracketsCount }
+            if !indices.isEmpty {
+                indices.append(rawValue.count)
+                var prevIndex = 0
+                var result = [String]()
+                for index in indices {
+                    result.append(rawValue[prevIndex..<index])
+                    prevIndex = index + 1
+                }
+                return result
+            }
+            return [rawValue]
+        }
+
+        /// Attempts to split a string that represents an array of strings.
+        /// Example:
+        ///
+        ///      // input
+        ///      "[\"1\",\"abcd,efgh\",\"-=-=-\"]"
+        ///      // output
+        ///      ["1","abcd,efgh","-=-=-"]
+        ///
+        ///      // input
+        ///      "[1,abcd,efgh,-=-=-]"
+        ///      // output
+        ///      ["1","abcd","efgh","-=-=-"]
+        ///
+        /// - Parameter rawValue: stringified array of strings.
+        /// - Returns: an array of separated individual elements, or `nil` if separation failed.
+        private static func splitArrayOfStrings(_ rawValue: String) -> [String]? {
+            /// Dropping first and last square brackets to exclude them from the first and the last separated element.
+            let rawValue = String(rawValue.dropFirst().dropLast())
+
+            let elementsBoundary = try! NSRegularExpression(pattern: "\",\"")
+            var indices = Array(elementsBoundary
+                .matches(in: rawValue, range: rawValue.fullNSRange)
+                .map { result in
+                    result.range.lowerBound + 1
+                })
+
+            if !indices.isEmpty {
+                indices.append(rawValue.count)
+                var prevIndex = 0
+                var rawValues = [String]()
+                for index in indices {
+                    var argument = rawValue[prevIndex..<index]
+                    if let index = argument.firstIndex(of: "\""),
+                       argument.distance(from: argument.startIndex, to: index) == 0 {
+                        argument = String(argument.dropFirst())
+                    }
+                    if let index = argument.lastIndex(of: "\""),
+                       argument.distance(from: argument.endIndex, to: index) == -1 {
+                        argument = String(argument.dropLast())
+                    }
+                    rawValues.append(argument)
+                    prevIndex = index + 1
+                }
+                return rawValues
+            }
+            return rawValue.split(separator: ",").map { String($0) }
+        }
+    }
+}
+
+fileprivate class FunctionArgument {
+    let argType: ABI.Element.InOut
+    let parameter: Web3.EIP681Code.EIP681Parameter
+
+    init(_ argType: ABI.Element.InOut,
+         _ parameter: Web3.EIP681Code.EIP681Parameter) {
+        self.argType = argType
+        self.parameter = parameter
     }
 }
