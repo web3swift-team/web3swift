@@ -235,7 +235,7 @@ class TransactionsTests: XCTestCase {
 
             // now sign the transaction with the private key
             try jsonTxn.sign(privateKey: privateKeyData, useExtraEntropy: false)
-            let rawTxn = jsonTxn.encode()!.toHexString().addHexPrefix()
+            let rawTxn = jsonTxn.encode(for: .transaction)!.toHexString().addHexPrefix()
 
             // check the hash, if they match everything was parsed, and re-encoded correctly
             XCTAssertEqual(rawTxn, vector.RLP, "Transaction Encoding Mismatch")
@@ -304,7 +304,7 @@ class TransactionsTests: XCTestCase {
 
             // now sign the transaction with the private key
             try jsonTxn.sign(privateKey: privateKeyData, useExtraEntropy: false)
-            let rawTxn = jsonTxn.encode()!.toHexString().addHexPrefix()
+            let rawTxn = jsonTxn.encode(for: .transaction)!.toHexString().addHexPrefix()
 
             // check the hash, if they match everything was parsed, and re-encoded correctly
             XCTAssertEqual(rawTxn, vector.RLP, "Transaction Encoding Mismatch")
@@ -373,7 +373,7 @@ class TransactionsTests: XCTestCase {
 
             // now sign the transaction with the private key
             try jsonTxn.sign(privateKey: privateKeyData, useExtraEntropy: false)
-            let rawTxn = jsonTxn.encode()!.toHexString().addHexPrefix()
+            let rawTxn = jsonTxn.encode(for: .transaction)!.toHexString().addHexPrefix()
 
             // check the hash, if they match everything was parsed, and re-encoded correctly
             XCTAssertEqual(rawTxn, vector.RLP, "Transaction Encoding Mismatch")
@@ -442,7 +442,7 @@ class TransactionsTests: XCTestCase {
 
             // now sign the transaction with the private key
             try jsonTxn.sign(privateKey: privateKeyData, useExtraEntropy: false)
-            let rawTxn = jsonTxn.encode()!.toHexString().addHexPrefix()
+            let rawTxn = jsonTxn.encode(for: .transaction)!.toHexString().addHexPrefix()
 
             // check the hash, if they match everything was parsed, and re-encoded correctly
             XCTAssertEqual(rawTxn, vector.RLP, "Transaction Encoding Mismatch")
@@ -511,7 +511,7 @@ class TransactionsTests: XCTestCase {
 
             // now sign the transaction with the private key
             try jsonTxn.sign(privateKey: privateKeyData, useExtraEntropy: false)
-            let rawTxn = jsonTxn.encode()!.toHexString().addHexPrefix()
+            let rawTxn = jsonTxn.encode(for: .transaction)!.toHexString().addHexPrefix()
 
             // check the hash, if they match everything was parsed, and re-encoded correctly
             XCTAssertEqual(rawTxn, vector.RLP, "Transaction Encoding Mismatch")
@@ -580,7 +580,7 @@ class TransactionsTests: XCTestCase {
 
             // now sign the transaction with the private key
             try jsonTxn.sign(privateKey: privateKeyData, useExtraEntropy: false)
-            let rawTxn = jsonTxn.encode()!.toHexString().addHexPrefix()
+            let rawTxn = jsonTxn.encode(for: .transaction)!.toHexString().addHexPrefix()
 
             // check the hash, if they match everything was parsed, and re-encoded correctly
             XCTAssertEqual(rawTxn, vector.RLP, "Transaction Encoding Mismatch")

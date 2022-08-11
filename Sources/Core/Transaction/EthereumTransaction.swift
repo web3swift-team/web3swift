@@ -178,7 +178,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? { self.envelope.encodeAsDictionary(from: from) }
 
     /// - Returns: a raw bytestream of the transaction, encoded according to the transactionType
-    func encode(for type: EncodeType = .transaction) -> Data? {
+    public func encode(for type: EncodeType = .transaction) -> Data? {
         return self.envelope.encode(for: type)
     }
 }
@@ -399,8 +399,7 @@ extension EthereumTransaction {
 
     @available(*, deprecated, message: "use encode() instead")
     public func encode(forSignature: Bool = false, chainID: BigUInt? = nil) -> Data? {
-        if forSignature == true { return self.envelope.encode(for: .signature) }
-        return self.envelope.encode(for: .transaction)
+        envelope.encode(for: forSignature ? .signature : .transaction)
     }
 
     @available(*, deprecated, message: "use Decodable instead")
