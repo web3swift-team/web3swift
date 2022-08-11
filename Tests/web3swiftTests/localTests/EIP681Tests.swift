@@ -303,6 +303,12 @@ class EIP681Tests: LocalTestCase {
                                  Web3.EIP681Code.EIP681Parameter(type: .string,
                                                                  value: "this is EIP681 query parameter string" as AnyObject)]
 
-        XCTAssertEqual(eip681Link.makeEIP681Link(), "ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc/setData?bytes32[]=[0x1234789565875498655487123478956587549865548712347895658754980000,0x1234789565875498655487123478956587549865548712347895658754986554]&bytes[]=[0x12345607,0x8965abcdef]&uint256=98986565&int256=155445566&address=0x9aBbDB06A61cC686BD635484439549D45c2449cc&bytes5=0x9abbdb06a6&bytes3=0x9abbdb&bytes=0x11009abbdb87879898656545&string=this is EIP681 query parameter string")
+        let unencodedResult =  "ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc/setData?bytes32[]=[0x1234789565875498655487123478956587549865548712347895658754980000,0x1234789565875498655487123478956587549865548712347895658754986554]&bytes[]=[0x12345607,0x8965abcdef]&uint256=98986565&int256=155445566&address=0x9aBbDB06A61cC686BD635484439549D45c2449cc&bytes5=0x9abbdb06a6&bytes3=0x9abbdb&bytes=0x11009abbdb87879898656545&string=this is EIP681 query parameter string"
+
+        XCTAssertEqual(eip681Link.makeEIP681Link(), unencodedResult)
+        let encodedOutputLink = eip681Link.makeEIP681Link(urlEncode: true)
+        XCTAssertEqual(encodedOutputLink, unencodedResult.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
+        XCTAssertNotNil(encodedOutputLink)
+        XCTAssertNotNil(URL(string: encodedOutputLink ?? ""))
     }
 }
