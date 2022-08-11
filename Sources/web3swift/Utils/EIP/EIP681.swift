@@ -107,7 +107,7 @@ extension Web3 {
                     if let ethAddress = EthereumAddress(string) {
                         return ethAddress.address
                     }
-                    if let url = URL(string: string) {
+                    if URL(string: string) != nil {
                         return string
                     }
                 }
@@ -163,7 +163,7 @@ extension Web3 {
                     return Data(bytes).toHexString().addHexPrefix()
                 } else if let string = rawValue as? String {
                     if let bytes = Data.fromHex(string) {
-                        return string.addHexPrefix()
+                        return bytes.toHexString().addHexPrefix()
                     }
                     return string.data(using: .utf8)?.toHexString().addHexPrefix()
                 }
@@ -177,8 +177,9 @@ extension Web3 {
                 } else if let string = rawValue as? String {
                     if let bytes = Data.fromHex(string) {
                         data = bytes
+                    } else {
+                        data = string.data(using: .utf8)
                     }
-                    data = string.data(using: .utf8)
                 }
 
                 if let data = data,
