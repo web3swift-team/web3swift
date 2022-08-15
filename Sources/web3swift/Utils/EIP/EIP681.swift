@@ -461,7 +461,9 @@ extension Web3 {
             /// Dropping first and last square brackets.
             /// That modifies the upper bound value of the first match of `squareBracketRegex`.
             let rawValue = String(rawValue.dropFirst().dropLast())
-
+            
+            // TODO: try replacing this manual parsing with JSONDecoder and RawRepresentable
+            
             let squareBracketRegex = try! NSRegularExpression(pattern: "(\\[*)")
             let match = squareBracketRegex.firstMatch(in: rawValue, range: rawValue.fullNSRange)
 
@@ -504,7 +506,9 @@ extension Web3 {
         private static func splitArrayOfStrings(_ rawValue: String) -> [String]? {
             /// Dropping first and last square brackets to exclude them from the first and the last separated element.
             let rawValue = String(rawValue.dropFirst().dropLast())
-
+            
+            // TODO: try replacing this manual parsing with JSONDecoder and RawRepresentable
+            
             let elementsBoundary = try! NSRegularExpression(pattern: "\",\"")
             var indices = Array(elementsBoundary
                 .matches(in: rawValue, range: rawValue.fullNSRange)
