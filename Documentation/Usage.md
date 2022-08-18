@@ -196,6 +196,7 @@ Firstly you need to initialize 'web3' instance for almost all further operations
 let endpoint = "https://some.endpoint"
 let web3 = web3(provider: Web3HttpProvider(URL(string: endpoint)!)!)
 // precompiled Infura providers
+let web3 = Web3.InfuraGoerliWeb3()  // Goerli Infura Endpoint Provider
 let web3 = Web3.InfuraMainnetWeb3() // Mainnet Infura Endpoint Provider
 let web3 = Web3.InfuraRinkebyWeb3() // Rinkeby Infura Endpoint Provider
 let web3 = Web3.InfuraRopstenWeb3() // Ropsten Infura Endpoint Provider
