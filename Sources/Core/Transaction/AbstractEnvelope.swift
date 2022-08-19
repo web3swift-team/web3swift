@@ -155,7 +155,6 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
 }
 
 public extension AbstractEnvelope {
-
     mutating func clearSignatureData() {
         self.v = 1
         self.r = 0
