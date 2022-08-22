@@ -13,17 +13,20 @@ public protocol TransactionOptionsInheritable {
 
 /// Options for sending or calling a particular Ethereum transaction
 public struct TransactionOptions {
-    // Sets the transaction envelope type.
-    // default here is legacy, so it will work on all chains
-    // but the provider should perhaps set better defaults based on what chain is connected
-    // id for Ethereum, default to EIP-1559
+    /// Sets the transaction envelope type.
+    ///
+    /// Default here is legacy, so it will work on all chains
+    /// but the provider should perhaps set better defaults based on what chain is connected
+    /// id for Ethereum, default to EIP-1559
     public var type: TransactionType?
 
     /// Sets the transaction destination. It can either be a contract address or a private key controlled wallet address.
     ///
     /// Usually should never be nil, left undefined for a contract-creation transaction.
     public var to: EthereumAddress?
-    /// Sets from what account a transaction should be sent. Used only internally as the sender of Ethereum transaction
+    /// Sets from what account a transaction should be sent.
+    ///
+    /// Used only internally as the sender of Ethereum transaction
     /// is determined purely from the transaction signature. Indicates to the Ethereum node or to the local keystore what private key
     /// should be used to sign a transaction.
     ///
