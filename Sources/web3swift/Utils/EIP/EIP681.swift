@@ -419,7 +419,7 @@ extension Web3 {
                     rawValues = strings
                 } else {
                     let rawValue = String(rawValue.dropFirst().dropLast())
-                    rawValues = rawValue.split(separator: ",").map { String($0) }
+                    rawValues = rawValue.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
                 }
 
                 var nativeValueArray: [AnyObject] = []
@@ -480,7 +480,7 @@ extension Web3 {
                 var prevIndex = 0
                 var result = [String]()
                 for index in indices {
-                    result.append(rawValue[prevIndex..<index])
+                    result.append(rawValue[prevIndex..<index].trimmingCharacters(in: .whitespacesAndNewlines))
                     prevIndex = index + 1
                 }
                 return result

@@ -312,4 +312,42 @@ class EIP681Tests: XCTestCase {
         XCTAssertNotNil(encodedOutputLink)
         XCTAssertNotNil(URL(string: encodedOutputLink ?? ""))
     }
+
+
+    func testEIP681ParsingArraysWithWhitespacesIn() async throws {
+        /// This link is constructed in a way that it holds whitespace characters in query parameters in places where
+        /// no such characters should be placed. But it must be decoded correctly.
+        let rawLink = "ethereum:0xAfbd9b509d98a69F8de31932c97CD35bb809CC50@2828/setData?bytes32[]=[0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47 , 0x4b80742de2bf82acb3630000ba99930e9e0bfd77cdc70f9b9656cecc2869e31a  ,      0x4b80742de2bf82acb363000090c650d2c6c5b796c6342118867cbf91f51d8135 , 0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3  ,    0xdf30dba06db6a30e65354d9a64c6098600000000000000000000000000000000 , 0xdf30dba06db6a30e65354d9a64c6098600000000000000000000000000000001     , 0xdf30dba06db6a30e65354d9a64c6098600000000000000000000000000000002 , 0x4b80742de2bf82acb3630000254bfe7e25184f72df435b5a9da39db6089dcaf5 , 0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5]&bytes[]=[0x90c650d2c6c5b796c6342118867cbf91f51d8135 , 0x0000000000000000000000000000000000000000000000000000000000003fbf , 0x0000000000000000000000000000000000000000000000000000000000000008 , 0x0000000000000000000000000000000000000000000000000000000000000003 , 0xba99930e9e0bfd77cdc70f9b9656cecc2869e31a , 0x90c650d2c6c5b796c6342118867cbf91f51d8135 , 0x254bfe7e25184f72df435b5a9da39db6089dcaf5 , 0x0000000000000000000000000000000000000000000000000000000000003fbf , 0x6f357c6a0f079fb3a680e3b3ef2f154772df5f6d345bc052ad733a69bba326f363b6cc30697066733a2f2f516d5042485a4c45686d624c57594e374575505a334b437a735663595a53797544596a59506a7a523342706b6934]"
+        let eip681Code = await Web3.EIP681CodeParser.parse(rawLink)
+        XCTAssert(eip681Code != nil)
+        guard let eip681Code = eip681Code else { return }
+
+        let keys = eip681Code.parameters[0].value as? [Data]
+        let values = eip681Code.parameters[1].value as? [Data]
+        XCTAssertNotNil(keys)
+        XCTAssertNotNil(values)
+
+        guard let keys = keys,
+              let values = values else { return }
+
+        XCTAssertEqual(keys[0].toHexString().addHexPrefix(),"0x0cfc51aec37c55a4d0b1a65c6255c4bf2fbdf6277f3cc0730c45b828b6db8b47")
+        XCTAssertEqual(keys[1].toHexString().addHexPrefix(),"0x4b80742de2bf82acb3630000ba99930e9e0bfd77cdc70f9b9656cecc2869e31a")
+        XCTAssertEqual(keys[2].toHexString().addHexPrefix(),"0x4b80742de2bf82acb363000090c650d2c6c5b796c6342118867cbf91f51d8135")
+        XCTAssertEqual(keys[3].toHexString().addHexPrefix(),"0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3")
+        XCTAssertEqual(keys[4].toHexString().addHexPrefix(), "0xdf30dba06db6a30e65354d9a64c6098600000000000000000000000000000000")
+        XCTAssertEqual(keys[5].toHexString().addHexPrefix(), "0xdf30dba06db6a30e65354d9a64c6098600000000000000000000000000000001")
+        XCTAssertEqual(keys[6].toHexString().addHexPrefix(), "0xdf30dba06db6a30e65354d9a64c6098600000000000000000000000000000002")
+        XCTAssertEqual(keys[7].toHexString().addHexPrefix(), "0x4b80742de2bf82acb3630000254bfe7e25184f72df435b5a9da39db6089dcaf5")
+        XCTAssertEqual(keys[8].toHexString().addHexPrefix(), "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5")
+
+        XCTAssertEqual(values[0].toHexString().addHexPrefix(), "0x90c650d2c6c5b796c6342118867cbf91f51d8135")
+        XCTAssertEqual(values[1].toHexString().addHexPrefix(), "0x0000000000000000000000000000000000000000000000000000000000003fbf")
+        XCTAssertEqual(values[2].toHexString().addHexPrefix(), "0x0000000000000000000000000000000000000000000000000000000000000008")
+        XCTAssertEqual(values[3].toHexString().addHexPrefix(), "0x0000000000000000000000000000000000000000000000000000000000000003")
+        XCTAssertEqual(values[4].toHexString().addHexPrefix(), "0xba99930e9e0bfd77cdc70f9b9656cecc2869e31a")
+        XCTAssertEqual(values[5].toHexString().addHexPrefix(), "0x90c650d2c6c5b796c6342118867cbf91f51d8135")
+        XCTAssertEqual(values[6].toHexString().addHexPrefix(), "0x254bfe7e25184f72df435b5a9da39db6089dcaf5")
+        XCTAssertEqual(values[7].toHexString().addHexPrefix(), "0x0000000000000000000000000000000000000000000000000000000000003fbf")
+        XCTAssertEqual(values[8].toHexString().addHexPrefix(), "0x6f357c6a0f079fb3a680e3b3ef2f154772df5f6d345bc052ad733a69bba326f363b6cc30697066733a2f2f516d5042485a4c45686d624c57594e374575505a334b437a735663595a53797544596a59506a7a523342706b6934")
+    }
 }
