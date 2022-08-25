@@ -58,9 +58,9 @@ public struct LegacyEnvelope: AbstractEnvelope {
         return toReturn
     }
 
-    public var parameters: EthereumParameters {
+    public var parameters: TransactionParameters {
         get {
-            return EthereumParameters(
+            return TransactionParameters(
                 type: type,
                 to: to,
                 nonce: nonce,
@@ -187,7 +187,7 @@ extension LegacyEnvelope {
 
     public init(to: EthereumAddress, nonce: BigUInt? = nil,
                 v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,
-                parameters: EthereumParameters? = nil) {
+                parameters: TransactionParameters? = nil) {
         self.to = to
         self.nonce = nonce ?? parameters?.nonce ?? 0
         self.explicitChainID = parameters?.chainID // Legacy can have a nil ChainID
@@ -250,14 +250,16 @@ extension LegacyEnvelope {
         case .contractDeployment:
             break
         }
-        var params = TransactionParameters(from: from?.address.lowercased(), to: toString)
-        let gasEncoding = gasLimit > 21100 ? self.gasLimit.abiEncode(bits: 256) : nil
-        params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let gasPriceEncoding = gasPrice > 10000000 ? self.gasPrice.abiEncode(bits: 256) : nil
-        params.gasPrice = gasPriceEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let valueEncoding = self.value.abiEncode(bits: 256)
-        params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        params.data = self.data.toHexString().addHexPrefix()
+        
+        // FIXME: THIS IS NOT WORKING!!!
+        var params = TransactionParameters(TransactionOptions.defaultOptions)
+//        let gasEncoding = gasLimit > 21100 ? self.gasLimit.abiEncode(bits: 256) : nil
+//        params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
+//        let gasPriceEncoding = gasPrice > 10000000 ? self.gasPrice.abiEncode(bits: 256) : nil
+//        params.gasPrice = gasPriceEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
+//        let valueEncoding = self.value.abiEncode(bits: 256)
+//        params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
+//        params.data = self.data.toHexString().addHexPrefix()
         return params
     }
 

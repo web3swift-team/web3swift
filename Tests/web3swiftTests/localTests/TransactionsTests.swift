@@ -599,7 +599,7 @@ class TransactionsTests: XCTestCase {
 
     func testDirectTransaction() throws {
         do {
-            var params = EthereumParameters()
+            var params = TransactionParameters()
             params.gasPrice = 20000000000
             params.gasLimit = 21000
             var transaction = EthereumTransaction(

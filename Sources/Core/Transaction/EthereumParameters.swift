@@ -10,8 +10,7 @@ import BigInt
 ///  Structure capable of carying the parameters for any transaction type.
 ///  while all fields in this struct are optional, they are not necessarily
 ///  optional for the type of transaction they apply to.
-public struct EthereumParameters {
-
+public struct TransactionParameters {
     /// signifies the transaction type that this payload is for
     /// indicates what fields should be populated. 
     /// this should always be set to give an idea of what other fields to expect
@@ -65,8 +64,8 @@ public struct EthereumParameters {
     }
 }
 
-public extension EthereumParameters {
-    init(from opts: TransactionOptions) {
+public extension TransactionParameters {
+    init(_ opts: TransactionOptions) {
         self.type = opts.type
         self.to = opts.to
         if opts.nonce != nil { self.nonce = opts.resolveNonce(0) }
@@ -79,3 +78,40 @@ public extension EthereumParameters {
         self.accessList = opts.accessList
     }
 }
+
+extension TransactionParameters: Codable {
+    enum CodingKeys: String, CodingKey {
+        case type
+        case to
+        case nonce
+        case chainID
+        case value
+        case data
+        case gasLimit
+        case gasPrice
+        case maxFeePerGas
+        case maxPriorityFeePerGas
+        case accessList
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        // FIXME: THIS IS NOT WORKING!!!
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        type = try values.decodeIfPresent(TransactionType.self, forKey: .type)
+        to = try values.decodeIfPresent(EthereumAddress.self, forKey: .to)
+        nonce = try values.decodeIfPresent(BigUInt.self, forKey: .nonce)
+        chainID = try values.decodeIfPresent(BigUInt.self, forKey: .chainID)
+        value = try values.decodeIfPresent(BigUInt.self, forKey: .value)
+        data = try values.decodeIfPresent(Data.self, forKey: .data)
+        gasLimit = try values.decodeIfPresent(BigUInt.self, forKey: .gasLimit)
+        maxFeePerGas = try values.decodeIfPresent(BigUInt.self, forKey: .maxFeePerGas)
+        maxPriorityFeePerGas = try values.decodeIfPresent(BigUInt.self, forKey: .maxPriorityFeePerGas)
+        accessList = try values.decodeIfPresent([AccessListEntry].self, forKey: .accessList)
+    }
+}
+
+extension TransactionParameters: APIRequestParameterType { }
+

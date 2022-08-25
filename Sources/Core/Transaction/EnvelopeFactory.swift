@@ -72,10 +72,10 @@ public struct EnvelopeFactory {
     ///   - v: signature v parameter (default 1) - will get set properly once signed
     ///   - r: signature r parameter (default 0) - will get set properly once signed
     ///   - s: signature s parameter (default 0) - will get set properly once signed
-    ///   - options: EthereumParameters containing additional parametrs for the transaction like gas
+    ///   - options: TransactionParameters containing additional parametrs for the transaction like gas
     /// - Returns: a new envelope of type dictated by 'type'
     static func createEnvelope(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
-                               v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: EthereumParameters? = nil) -> AbstractEnvelope {
+                               v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: TransactionParameters? = nil) -> AbstractEnvelope {
         let envelopeType: TransactionType = type ?? parameters?.type ?? .legacy
 
         switch envelopeType {

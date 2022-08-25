@@ -60,9 +60,9 @@ public struct EIP1559Envelope: EIP2718Envelope {
         return toReturn
     }
 
-    public var parameters: EthereumParameters {
+    public var parameters: TransactionParameters {
         get {
-            return EthereumParameters(
+            return TransactionParameters(
                 type: type,
                 to: to,
                 nonce: nonce,
@@ -235,7 +235,7 @@ extension EIP1559Envelope {
 
     public init(to: EthereumAddress, nonce: BigUInt? = nil,
                 v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,
-                parameters: EthereumParameters? = nil) {
+                parameters: TransactionParameters? = nil) {
         self.to = to
         self.nonce = nonce ?? parameters?.nonce ?? 0
         self.chainID = parameters?.chainID ?? 0
@@ -302,26 +302,28 @@ extension EIP1559Envelope {
         case .contractDeployment:
             break
         }
-        var params = TransactionParameters(from: from?.address.lowercased(), to: toString)
-        let typeEncoding = String(UInt8(self.type.rawValue), radix: 16).addHexPrefix()
-        params.type = typeEncoding
-        let chainEncoding = self.chainID.abiEncode(bits: 256)
-        params.chainID = chainEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        var accessEncoding: [TransactionParameters.AccessListEntry] = []
-        for listEntry in self.accessList {
-            guard let encoded = listEntry.encodeAsDictionary() else { return nil }
-            accessEncoding.append(encoded)
-        }
-        params.accessList = accessEncoding
-        let gasEncoding = gasLimit > 21100 ? self.gasLimit.abiEncode(bits: 256) : nil
-        params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let maxFeeEncoding = self.maxFeePerGas.abiEncode(bits: 256)
-        params.maxFeePerGas = maxFeeEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let maxPriorityEncoding = self.maxPriorityFeePerGas.abiEncode(bits: 256)
-        params.maxPriorityFeePerGas = maxPriorityEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let valueEncoding = self.value.abiEncode(bits: 256)
-        params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        params.data = self.data.toHexString().addHexPrefix()
+        
+        // FIXME: THIS IS NOT WORKING!!
+        var params = TransactionParameters(TransactionOptions.defaultOptions)
+//        let typeEncoding = String(UInt8(self.type.rawValue), radix: 16).addHexPrefix()
+//        params.type = typeEncoding
+//        let chainEncoding = self.chainID.abiEncode(bits: 256)
+//        params.chainID = chainEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
+//        var accessEncoding: [TransactionParameters.AccessListEntry] = []
+//        for listEntry in self.accessList {
+//            guard let encoded = listEntry.encodeAsDictionary() else { return nil }
+//            accessEncoding.append(encoded)
+//        }
+//        params.accessList = accessEncoding
+//        let gasEncoding = gasLimit > 21100 ? self.gasLimit.abiEncode(bits: 256) : nil
+//        params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
+//        let maxFeeEncoding = self.maxFeePerGas.abiEncode(bits: 256)
+//        params.maxFeePerGas = maxFeeEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
+//        let maxPriorityEncoding = self.maxPriorityFeePerGas.abiEncode(bits: 256)
+//        params.maxPriorityFeePerGas = maxPriorityEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
+//        let valueEncoding = self.value.abiEncode(bits: 256)
+//        params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
+//        params.data = self.data.toHexString().addHexPrefix()
         return params
     }
 }

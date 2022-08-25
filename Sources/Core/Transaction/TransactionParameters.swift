@@ -23,33 +23,30 @@ public struct Counter {
     }
 }
 
-/// Transaction parameters JSON structure for interaction with Ethereum node.
-public struct TransactionParameters: Codable {
-    /// accessList parameter JSON structure
-    public struct AccessListEntry: Codable {
-        public var address: String
-        public var storageKeys: [String]
-    }
+// /// Transaction parameters JSON structure for interaction with Ethereum node.
+// public struct TransactionParameters: Codable {
+//     /// accessList parameter JSON structure
 
-    public var type: String?  // must be set for new EIP-2718 transaction types
-    public var chainID: String?
-    public var data: String?
-    public var from: String?
-    public var gas: String?
-    public var gasPrice: String? // Legacy & EIP-2930
-    public var maxFeePerGas: String? // EIP-1559
-    public var maxPriorityFeePerGas: String? // EIP-1559
-    public var accessList: [AccessListEntry]? // EIP-1559 & EIP-2930
-    public var to: String?
-    public var value: String? = "0x0"
 
-    public init(from _from: String?, to _to: String?) {
-        from = _from
-        to = _to
-    }
-}
+//     public var type: String?  // must be set for new EIP-2718 transaction types
+//     public var chainID: String?
+//     public var data: String?
+//     public var from: String?
+//     public var gas: String?
+//     public var gasPrice: String? // Legacy & EIP-2930
+//     public var maxFeePerGas: String? // EIP-1559
+//     public var maxPriorityFeePerGas: String? // EIP-1559
+//     public var accessList: [AccessListEntry]? // EIP-1559 & EIP-2930
+//     public var to: String?
+//     public var value: String? = "0x0"
 
-extension TransactionParameters: APIRequestParameterType { }
+//     public init(from _from: String?, to _to: String?) {
+//         from = _from
+//         to = _to
+//     }
+// }
+
+
 
 /// Event filter parameters JSON structure for interaction with Ethereum node.
 public struct EventFilterParameters: Codable {
