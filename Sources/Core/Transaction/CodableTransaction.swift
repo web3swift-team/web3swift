@@ -10,7 +10,7 @@ import BigInt
 ///  Structure capable of carying the parameters for any transaction type.
 ///  while all fields in this struct are optional, they are not necessarily
 ///  optional for the type of transaction they apply to.
-public struct TransactionParameters {
+public struct CodableTransaction {
     /// signifies the transaction type that this payload is for
     /// indicates what fields should be populated. 
     /// this should always be set to give an idea of what other fields to expect
@@ -64,7 +64,7 @@ public struct TransactionParameters {
     }
 }
 
-public extension TransactionParameters {
+public extension CodableTransaction {
     init(_ opts: TransactionOptions) {
         self.type = opts.type
         self.to = opts.to
@@ -79,7 +79,7 @@ public extension TransactionParameters {
     }
 }
 
-extension TransactionParameters: Codable {
+extension CodableTransaction: Codable {
     enum CodingKeys: String, CodingKey {
         case type
         case to
@@ -124,5 +124,5 @@ extension TransactionParameters: Codable {
     }
 }
 
-extension TransactionParameters: APIRequestParameterType { }
+extension CodableTransaction: APIRequestParameterType { }
 

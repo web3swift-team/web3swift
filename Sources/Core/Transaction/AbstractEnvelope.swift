@@ -96,7 +96,7 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     /// Transaction Parameters object
     /// used to provide external access to the otherwise
     /// protected parameters of the object
-    var parameters: TransactionParameters { get set }
+    var parameters: CodableTransaction { get set }
 
     /// - Returns: the public key decoded from the signature data
     var publicKey: Data? { get }
@@ -132,7 +132,7 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     ///   - r: Signature R component
     ///   - s: Signature S component
     ///   - parameters: EthereumParameters struct containing any other required parameters
-    init(to: EthereumAddress, nonce: BigUInt?, v: BigUInt, r: BigUInt, s: BigUInt, parameters: TransactionParameters?)
+    init(to: EthereumAddress, nonce: BigUInt?, v: BigUInt, r: BigUInt, s: BigUInt, parameters: CodableTransaction?)
 
     /// Applies the passed options to the transaction envelope
     ///   - Parameters:

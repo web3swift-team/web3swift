@@ -53,7 +53,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     }
 
     // transaction type specific parameters should be accessed with EthereumParameters
-    public var parameters: TransactionParameters {
+    public var parameters: CodableTransaction {
         get { return envelope.parameters }
         set { envelope.parameters = newValue }
     }
@@ -210,9 +210,9 @@ extension EthereumTransaction {
     ///   - parameters: EthereumParameters object containing additional parametrs for the transaction like gas
     public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
                 chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
-                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: TransactionParameters? = nil) {
+                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: CodableTransaction? = nil) {
 
-        var params = parameters ?? TransactionParameters()
+        var params = parameters ?? CodableTransaction()
 
         params.chainID = chainID ?? params.chainID
         params.value = value ?? params.value

@@ -58,9 +58,9 @@ public struct LegacyEnvelope: AbstractEnvelope {
         return toReturn
     }
 
-    public var parameters: TransactionParameters {
+    public var parameters: CodableTransaction {
         get {
-            return TransactionParameters(
+            return CodableTransaction(
                 type: type,
                 to: to,
                 nonce: nonce,
@@ -187,7 +187,7 @@ extension LegacyEnvelope {
 
     public init(to: EthereumAddress, nonce: BigUInt? = nil,
                 v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,
-                parameters: TransactionParameters? = nil) {
+                parameters: CodableTransaction? = nil) {
         self.to = to
         self.nonce = nonce ?? parameters?.nonce ?? 0
         self.explicitChainID = parameters?.chainID // Legacy can have a nil ChainID
