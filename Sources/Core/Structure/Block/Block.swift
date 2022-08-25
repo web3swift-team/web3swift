@@ -11,7 +11,7 @@ import BigInt
 /// Ethereum Block
 ///
 /// Official specification: [](https://github.com/ethereum/execution-apis/blob/main/src/schemas/block.json)
-public struct Block: Decodable {
+public struct Block {
 
     public var number: BigUInt // MARK: This is optional in web3js, but required in Ethereum JSON-RPC
     public var hash: Data // MARK: This is optional in web3js, but required in Ethereum JSON-RPC
@@ -60,7 +60,7 @@ public struct Block: Decodable {
     }
 }
 
-extension Block {
+extension Block: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
