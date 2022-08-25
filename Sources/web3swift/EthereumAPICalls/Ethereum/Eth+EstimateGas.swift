@@ -12,9 +12,10 @@ import Core
 extension web3.Eth {
 
     public func estimateGas(for transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> BigUInt {
-        guard let transactionParameters = transaction.encodeAsDictionary(from: transactionOptions?.from) else { throw Web3Error.dataError }
+//        guard let transactionParameters = transaction.parameters else { throw Web3Error.dataError }
 
-        let request: APIRequest = .estimateGas(transactionParameters, transactionOptions?.callOnBlock ?? .latest)
+        // FIXME: Something wrong with this. We should not to get parameters + options in one method.
+        let request: APIRequest = .estimateGas(transaction.parameters, transactionOptions?.callOnBlock ?? .latest)
         let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)
 
         if let policy = transactionOptions?.gasLimit {

@@ -2,65 +2,127 @@
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
-//  Additions to support new transaction types by Mark Loit March 2022
-//
-//  Made most structs generics by Yaroslav Yashin 2022
+//  Additions for new transaction types by Mark Loit 2022
 
 import Foundation
 import BigInt
 
-/// Global counter object to enumerate JSON RPC requests.
-public struct Counter {
-    public static var counter: UInt = 1
-    public static var lockQueue = DispatchQueue(label: "counterQueue")
-    public static func increment() -> UInt {
-        defer {
-            lockQueue.sync {
-                Counter.counter += 1
-            }
-        }
-        return counter
-    }
-}
+///  Structure capable of carying the parameters for any transaction type.
+///  while all fields in this struct are optional, they are not necessarily
+///  optional for the type of transaction they apply to.
+public struct TransactionParameters {
+    /// signifies the transaction type that this payload is for
+    /// indicates what fields should be populated. 
+    /// this should always be set to give an idea of what other fields to expect
+    public var type: TransactionType?
 
-// /// Transaction parameters JSON structure for interaction with Ethereum node.
-// public struct TransactionParameters: Codable {
-//     /// accessList parameter JSON structure
+    /// the destination, or contract, address for the transaction
+    public var to: EthereumAddress?
 
+    /// the nonce for the transaction
+    public var nonce: BigUInt?
 
-//     public var type: String?  // must be set for new EIP-2718 transaction types
-//     public var chainID: String?
-//     public var data: String?
-//     public var from: String?
-//     public var gas: String?
-//     public var gasPrice: String? // Legacy & EIP-2930
-//     public var maxFeePerGas: String? // EIP-1559
-//     public var maxPriorityFeePerGas: String? // EIP-1559
-//     public var accessList: [AccessListEntry]? // EIP-1559 & EIP-2930
-//     public var to: String?
-//     public var value: String? = "0x0"
+    /// the chainId that transaction is targeted for
+    /// should be set for all types, except some Legacy transactions (Pre EIP-155)
+    /// will not have this set
+    public var chainID: BigUInt?
 
-//     public init(from _from: String?, to _to: String?) {
-//         from = _from
-//         to = _to
-//     }
-// }
+    /// the native value of the transaction
+    public var value: BigUInt?
 
+    /// any additional data for the transaction
+    public var data: Data?
 
+    /// the max number of gas units allowed to process this transaction
+    public var gasLimit: BigUInt?
 
-/// Event filter parameters JSON structure for interaction with Ethereum node.
-public struct EventFilterParameters: Codable {
-    public var fromBlock: String?
-    public var toBlock: String?
-    public var topics: [[String?]?]?
-    public var address: [String?]?
+    /// the price per gas unit for the tranaction (Legacy and EIP-2930 only)
+    public var gasPrice: BigUInt?
+
+    /// the max base fee per gas unit (EIP-1559 only)
+    /// this value must be >= baseFee + maxPriorityFeePerGas
+    public var maxFeePerGas: BigUInt?
+
+    /// the maximum tip to pay the miner (EIP-1559 only)
+    public var maxPriorityFeePerGas: BigUInt?
+
+    /// access list for contract execution (EIP-2930 and EIP-1559 only)
+    public var accessList: [AccessListEntry]?
     
-    public init(fromBlock: String? = nil, toBlock: String? = nil, topics: [[String?]?]? = nil, address: [String?]? = nil) {
-        self.fromBlock = fromBlock
-        self.toBlock = toBlock
-        self.topics = topics
-        self.address = address
+    public init(type: TransactionType? = nil, to: EthereumAddress? = nil, nonce: BigUInt? = nil, chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data? = nil, gasLimit: BigUInt? = nil, gasPrice: BigUInt? = nil, maxFeePerGas: BigUInt? = nil, maxPriorityFeePerGas: BigUInt? = nil, accessList: [AccessListEntry]? = nil) {
+        self.type = type
+        self.to = to
+        self.nonce = nonce
+        self.chainID = chainID
+        self.value = value
+        self.data = data
+        self.gasLimit = gasLimit
+        self.gasPrice = gasPrice
+        self.maxFeePerGas = maxFeePerGas
+        self.maxPriorityFeePerGas = maxPriorityFeePerGas
+        self.accessList = accessList
     }
 }
 
-extension EventFilterParameters: APIRequestParameterType { }
+public extension TransactionParameters {
+    init(_ opts: TransactionOptions) {
+        self.type = opts.type
+        self.to = opts.to
+        if opts.nonce != nil { self.nonce = opts.resolveNonce(0) }
+        self.chainID = opts.chainID
+        self.value = opts.value
+        if opts.gasLimit != nil { self.gasLimit = opts.resolveGasLimit(0) }
+        if opts.gasPrice != nil { self.gasPrice = opts.resolveGasPrice(0) }
+        if opts.maxFeePerGas != nil { self.maxFeePerGas = opts.resolveMaxFeePerGas(0) }
+        if opts.maxPriorityFeePerGas != nil { self.maxPriorityFeePerGas = opts.resolveMaxPriorityFeePerGas(0) }
+        self.accessList = opts.accessList
+    }
+}
+
+extension TransactionParameters: Codable {
+    enum CodingKeys: String, CodingKey {
+        case type
+        case to
+        case nonce
+        case chainID
+        case value
+        case data
+        case gasLimit
+        case gasPrice
+        case maxFeePerGas
+        case maxPriorityFeePerGas
+        case accessList
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var containier = encoder.container(keyedBy: CodingKeys.self)
+        try containier.encode(type?.rawValue, forKey: .type)
+        try containier.encode(to, forKey: .to)
+        try containier.encode(nonce, forKey: .nonce)
+        try containier.encode(chainID, forKey: .chainID)
+        try containier.encode(value, forKey: .value)
+        try containier.encode(data, forKey: .data)
+        try containier.encode(gasLimit, forKey: .gasLimit)
+        try containier.encode(gasPrice, forKey: .gasPrice)
+        try containier.encode(maxFeePerGas, forKey: .maxFeePerGas)
+        try containier.encode(maxPriorityFeePerGas, forKey: .maxPriorityFeePerGas)
+        try containier.encode(accessList, forKey: .accessList)
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        type = try values.decodeIfPresent(TransactionType.self, forKey: .type)
+        to = try values.decodeIfPresent(EthereumAddress.self, forKey: .to)
+        nonce = try values.decodeIfPresent(BigUInt.self, forKey: .nonce)
+        chainID = try values.decodeIfPresent(BigUInt.self, forKey: .chainID)
+        value = try values.decodeIfPresent(BigUInt.self, forKey: .value)
+        data = try values.decodeIfPresent(Data.self, forKey: .data)
+        gasLimit = try values.decodeIfPresent(BigUInt.self, forKey: .gasLimit)
+        maxFeePerGas = try values.decodeIfPresent(BigUInt.self, forKey: .maxFeePerGas)
+        maxPriorityFeePerGas = try values.decodeIfPresent(BigUInt.self, forKey: .maxPriorityFeePerGas)
+        accessList = try values.decodeIfPresent([AccessListEntry].self, forKey: .accessList)
+    }
+}
+
+extension TransactionParameters: APIRequestParameterType { }
+

@@ -242,26 +242,6 @@ extension LegacyEnvelope {
         return RLP.encode(fields)
     }
 
-    public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? {
-        var toString: String?
-        switch self.to.type {
-        case .normal:
-            toString = self.to.address.lowercased()
-        case .contractDeployment:
-            break
-        }
-        
-        // FIXME: THIS IS NOT WORKING!!!
-        var params = TransactionParameters(TransactionOptions.defaultOptions)
-//        let gasEncoding = gasLimit > 21100 ? self.gasLimit.abiEncode(bits: 256) : nil
-//        params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-//        let gasPriceEncoding = gasPrice > 10000000 ? self.gasPrice.abiEncode(bits: 256) : nil
-//        params.gasPrice = gasPriceEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-//        let valueEncoding = self.value.abiEncode(bits: 256)
-//        params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-//        params.data = self.data.toHexString().addHexPrefix()
-        return params
-    }
 
     public func getUnmarshalledSignatureData() -> SECP256K1.UnmarshaledSignature? {
         if self.r == 0 && self.s == 0 { return nil }

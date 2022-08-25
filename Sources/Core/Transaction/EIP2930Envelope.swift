@@ -307,7 +307,7 @@ extension EIP2930Envelope {
     }
 }
 
-public struct AccessListEntry: CustomStringConvertible, Decodable {
+public struct AccessListEntry: CustomStringConvertible, Codable {
     var address: EthereumAddress
     var storageKeys: [BigUInt]
 
@@ -406,7 +406,9 @@ public struct AccessListEntry: CustomStringConvertible, Decodable {
 
         return [address.address as AnyObject, storage as AnyObject]
     }
-//
+
+    // FIXME: THIS NOT WORKING!!!
+
 //    public func encodeAsDictionary() -> AccessListEntry? {
 //        var addrString: String
 //        switch self.address.type {

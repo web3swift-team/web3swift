@@ -175,7 +175,7 @@ public struct EthereumTransaction: CustomStringConvertible {
 //    /// Encodes the transactin as set of JSON strings for transmission to a JSONRPC node, used by createRequest
 //    /// - Parameter from: the EthereumAddress to use as the "from" field, left unset if nil
 //    /// - Returns: a TransactionParameters object suitable for passing to Web3+JSONRPC provider
-//    public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? { self.envelope.encodeAsDictionary(from: from) }
+//    public var encodeAsDictionary: TransactionParameters? { self.envelope.parameters }
 
     /// - Returns: a raw bytestream of the transaction, encoded according to the transactionType
     public func encode(for type: EncodeType = .transaction) -> Data? {
