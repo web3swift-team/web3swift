@@ -40,6 +40,11 @@ public struct EthereumTransaction: CustomStringConvertible {
         set { envelope.parameters.value = newValue }
     }
 
+    // TODO: Make me returing self public key.
+    public var from: EthereumAddress {
+        EthereumAddress(_address: "0x0")
+    }
+
     /// the EthereumAddress object holding the destination address for the transaction
     public var to: EthereumAddress {
         get { return envelope.to }
@@ -53,7 +58,7 @@ public struct EthereumTransaction: CustomStringConvertible {
     }
 
     // transaction type specific parameters should be accessed with EthereumParameters
-    public var parameters: CodableTransaction {
+    var parameters: CodableTransaction {
         get { return envelope.parameters }
         set { envelope.parameters = newValue }
     }
@@ -147,13 +152,13 @@ public struct EthereumTransaction: CustomStringConvertible {
     /// - Parameter options: a TransactionOptions object containing parameters to be appled to the transaction
     /// if options specifies a type, and it is different from the current type the transaction will be migrated
     /// to the new type. migrating will invalidate any signature data
-    public mutating func applyOptions(_ options: TransactionOptions) {
-        if options.type != nil && self.type != options.type {
+    public mutating func applyTransaction(_ transaction: EthereumTransaction) {
+        if transaction.type != nil && self.type != transaction.type {
             // swiftlint:disable force_unwrapping
-            self.migrate(to: options.type!)
+            self.migrate(to: transaction.type)
             // swiftlint:enable force_unwrapping
         }
-        self.envelope.applyOptions(options)
+        self.envelope.applyTransaction(transaction)
     }
 
     /// Descriptionconverts transaction to the new selected type
@@ -209,17 +214,22 @@ extension EthereumTransaction {
     /// - Parameters:
     ///   - with: An envelope object conforming to the AbstractEnvelope protocol
     ///   - options: a TransactionOptions object containing additional options to apply to the transaction
-    public init(with: AbstractEnvelope, options: TransactionOptions? = nil) {
+    public init(with: AbstractEnvelope, transaction: EthereumTransaction? = nil) {
         self.envelope = with
         // swiftlint:disable force_unwrapping
-        if options != nil { self.envelope.applyOptions(options!) }
+        if transaction != nil { self.envelope.applyTransaction(transaction!) }
         // swiftlint:enable force_unwrapping
     }
 
 
-    @available(*, deprecated, message: "use encode() instead")
-    public func encode(forSignature: Bool = false, chainID: BigUInt? = nil) -> Data? {
-        envelope.encode(for: forSignature ? .signature : .transaction)
+    public static func defaultTransaction(of envelop: AbstractEnvelope) -> EthereumTransaction {
+        // FIXME: Remove force unwrap
+        var transaction = EthereumTransaction(to: EthereumAddress("0x0")!, data: Data())
+        // FIXME: Type computed property
+        transaction.envelope = envelop
+        
+        return transaction
     }
+}
 
 

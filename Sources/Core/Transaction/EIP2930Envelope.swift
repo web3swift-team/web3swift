@@ -245,15 +245,15 @@ extension EIP2930Envelope {
         self.s = s
     }
 
-    public mutating func applyOptions(_ options: TransactionOptions) {
+    public mutating func applyTransaction(_ transaction: EthereumTransaction) {
         // type cannot be changed here, and is ignored
-        self.nonce = options.resolveNonce(self.nonce)
-        self.gasPrice = options.resolveGasPrice(self.gasPrice)
-        self.gasLimit = options.resolveGasLimit(self.gasLimit)
+        self.nonce = transaction.resolveNonce(self.nonce)
+        self.gasPrice = transaction.resolveGasPrice(self.gasPrice)
+        self.gasLimit = transaction.resolveGasLimit(self.gasLimit)
         // swiftlint:disable force_unwrapping
-        if options.value != nil { self.value = options.value! }
-        if options.to != nil { self.to = options.to! }
-        if options.accessList != nil { self.accessList = options.accessList! }
+        if transaction.value != nil { self.value = transaction.value }
+        if transaction.to != nil { self.to = transaction.to! }
+        if transaction.accessList != nil { self.accessList = transaction.accessList! }
         // swiftlint:enable force_unwrapping
     }
 

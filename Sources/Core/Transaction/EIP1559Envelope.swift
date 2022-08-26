@@ -276,15 +276,15 @@ extension EIP1559Envelope {
         self.s = s
     }
 
-    public mutating func applyOptions(_ options: TransactionOptions) {
+    public mutating func applyTransaction(_ transaction: EthereumTransaction) {
         // type cannot be changed here, and is ignored
-        self.nonce = options.resolveNonce(self.nonce)
-        self.maxPriorityFeePerGas = options.resolveMaxPriorityFeePerGas(self.maxPriorityFeePerGas)
-        self.maxFeePerGas = options.resolveMaxFeePerGas(self.maxFeePerGas)
-        self.gasLimit = options.resolveGasLimit(self.gasLimit)
-        self.value = options.value ?? self.value
-        self.to = options.to ?? self.to
-        self.accessList = options.accessList ?? self.accessList
+        self.nonce = transaction.resolveNonce(self.nonce)
+        self.maxPriorityFeePerGas = transaction.resolveMaxPriorityFeePerGas(self.maxPriorityFeePerGas)
+        self.maxFeePerGas = transaction.resolveMaxFeePerGas(self.maxFeePerGas)
+        self.gasLimit = transaction.resolveGasLimit(self.gasLimit)
+        self.value = transaction.value ?? self.value
+        self.to = transaction.to ?? self.to
+        self.accessList = transaction.accessList ?? self.accessList
     }
 
     public func encode(for type: EncodeType = .transaction) -> Data? {

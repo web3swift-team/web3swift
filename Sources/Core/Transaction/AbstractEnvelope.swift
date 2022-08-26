@@ -137,7 +137,7 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     /// Applies the passed options to the transaction envelope
     ///   - Parameters:
     ///     - {default}: TransactionOptions struct
-    mutating func applyOptions(_ options: TransactionOptions)
+    mutating func applyTransaction(_ transaction: EthereumTransaction)
 
     /// Transaction encoder for transmission or signing
     ///  - Parameters:
