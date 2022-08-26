@@ -163,12 +163,6 @@ public class web3 {
             public var calledFunction: EventLoopCall
         }
 
-        //  public struct MonitoredContract {
-        //      public var name: String
-        //      public var queue: DispatchQueue
-        //      public var calledFunction: EventLoopContractCall
-        //  }
-
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3

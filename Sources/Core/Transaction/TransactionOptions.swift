@@ -281,16 +281,3 @@ extension TransactionOptions: Decodable {
         }
     }
 }
-
-extension TransactionOptions {
-    @available(*, deprecated, message: "use Decodable instead")
-    public static func fromJSON(_ json: [String: Any]) -> TransactionOptions? {
-        do {
-            let jsonData: Data = try JSONSerialization.data(withJSONObject: json, options: [])
-            return try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
-        } catch {
-            return nil
-        }
-    }
-
-}
