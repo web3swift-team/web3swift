@@ -49,6 +49,7 @@ extension Web3.Utils {
 
         }
 
+        // FIXME: Rewrite this to EthereumTransaction
         func preAssemblyFunction(tx: EthereumTransaction, contract: EthereumContract, transactionOptions: TransactionOptions) -> (EthereumTransaction, EthereumContract, TransactionOptions, Bool) {
             guard let from = transactionOptions.from else {
                 // do nothing

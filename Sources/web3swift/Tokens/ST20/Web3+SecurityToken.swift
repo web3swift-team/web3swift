@@ -62,6 +62,7 @@ protocol ISecurityToken: IST20, IOwnable {
     func getInvestorsLength() async throws -> BigUInt
 }
 
+// FIXME: Rewrite this to EthereumTransaction
 public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     internal var _name: String? = nil

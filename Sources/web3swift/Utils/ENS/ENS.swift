@@ -75,6 +75,7 @@ public class ENS {
         self.reverseRegistrar = reverseRegistrar
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     lazy var defaultOptions: TransactionOptions = {
         return TransactionOptions.defaultOptions
     }()
@@ -96,6 +97,7 @@ public class ENS {
         return addr
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func setAddress(forNode node: String, address: EthereumAddress, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
@@ -130,6 +132,7 @@ public class ENS {
         return name
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func setName(forNode node: String, name: String, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
@@ -148,6 +151,7 @@ public class ENS {
         return result
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func getContent(forNode node: String) async throws -> Data {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
@@ -164,6 +168,7 @@ public class ENS {
         return content
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func setContent(forNode node: String, hash: String, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
@@ -198,6 +203,7 @@ public class ENS {
         return abi
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func setABI(forNode node: String, contentType: ENS.Resolver.ContentType, data: Data, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
@@ -232,6 +238,7 @@ public class ENS {
         return pk
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func setPublicKey(forNode node: String, publicKey: PublicKey, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
@@ -266,6 +273,7 @@ public class ENS {
         return text
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func setText(forNode node: String, key: String, value: String, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")

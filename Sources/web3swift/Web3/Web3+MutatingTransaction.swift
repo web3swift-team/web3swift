@@ -10,6 +10,7 @@ import Core
 
 public class WriteTransaction: ReadTransaction {
 
+    // FIXME: Rewrite this to EthereumTransaction (don't touch the logic)
     public func assembleTransaction(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
         var assembledTransaction: EthereumTransaction = transaction
 
@@ -177,6 +178,7 @@ public class WriteTransaction: ReadTransaction {
         return assembledTransaction
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult {
         let transaction = try await assembleTransaction(transactionOptions: transactionOptions)
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
@@ -187,10 +189,12 @@ public class WriteTransaction: ReadTransaction {
         return try await web3.eth.send(transaction, transactionOptions: cleanedOptions, password: password)
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func assemble(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
         return try await assembleTransaction(transactionOptions: transactionOptions)
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     func gasEstimate(for policy: TransactionOptions.GasLimitPolicy,
                      assembledTransaction: EthereumTransaction,
                      optionsForGasEstimation: TransactionOptions) async throws -> BigUInt {
@@ -202,6 +206,7 @@ public class WriteTransaction: ReadTransaction {
         }
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     func nonce(for policy: TransactionOptions.NoncePolicy, from: EthereumAddress) async throws -> BigUInt {
         switch policy {
         case .latest:

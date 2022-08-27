@@ -247,6 +247,7 @@ extension ERC721: IERC721Enumerable {
 
 }
 
+// FIXME: Rewrite this to EthereumTransaction
 extension ERC721: IERC721Metadata {
 
     public func name() async throws -> String {

@@ -12,6 +12,7 @@ import Core
 
 
 // Multi Token Standard
+// FIXME: Rewrite this to EthereumTransaction
 protocol IERC1155: IERC165 {
 
     func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, id: BigUInt, value: BigUInt, data: [UInt8]) async throws -> WriteTransaction

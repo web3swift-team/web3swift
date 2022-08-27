@@ -8,6 +8,7 @@ import Foundation
 import BigInt
 import Core
 
+// FIXME: Rewrite this to EthereumTransaction
 public class ReadTransaction {
     public var transaction: EthereumTransaction
     public var contract: EthereumContract
@@ -16,6 +17,7 @@ public class ReadTransaction {
 
     var web3: web3
 
+    // FIXME: Rewrite this to EthereumTransaction
     public init(transaction: EthereumTransaction,
                 web3 web3Instance: web3,
                 contract: EthereumContract,
@@ -35,6 +37,7 @@ public class ReadTransaction {
     // it's merging Transactions Oprions sending request (Transaction with appropriate binary data) to contract, get's Data response
     // and only then it decodes it.
     // It should be splitted in this way up to three (merge, send, decode)
+    // FIXME: Rewrite this to EthereumTransaction
     public func decodedData(with transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
         // MARK: Read data from ABI flow
         var assembledTransaction: EthereumTransaction = self.transaction
@@ -61,6 +64,7 @@ public class ReadTransaction {
         return decodedData
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func estimateGas(with transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
         var assembledTransaction: EthereumTransaction = self.transaction
 
@@ -90,10 +94,13 @@ public class ReadTransaction {
     }
 
     // FIXME: Duplicating and pointing to another?!
+    // FIXME: Rewrite this to EthereumTransaction
     public func estimateGas(transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
         return try await self.estimateGas(with: transactionOptions)
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
+    // FIXME: Useless wrapper, delete me
     public func call(transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
         return try await self.decodedData(with: transactionOptions)
     }

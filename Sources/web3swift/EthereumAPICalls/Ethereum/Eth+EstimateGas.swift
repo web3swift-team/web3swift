@@ -11,6 +11,7 @@ import Core
 
 extension web3.Eth {
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func estimateGas(for transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> BigUInt {
 //        guard let transactionParameters = transaction.parameters else { throw Web3Error.dataError }
 

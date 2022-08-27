@@ -70,6 +70,7 @@ extension web3.BrowserFunctions {
         return Utilities.publicToAddressString(publicKey)
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func sendTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") async -> [String: Any]? {
         do {
           let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
@@ -85,6 +86,7 @@ extension web3.BrowserFunctions {
         } catch { return nil }
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func sendTransaction(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") async -> [String: Any]? {
         do {
             let result = try await self.web3.eth.send(transaction, transactionOptions: transactionOptions, password: password)
@@ -109,6 +111,7 @@ extension web3.BrowserFunctions {
         } catch { return nil }
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func estimateGas(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions) async -> BigUInt? {
         do {
             let result = try await self.web3.eth.estimateGas(for: transaction, transactionOptions: transactionOptions)
@@ -118,6 +121,7 @@ extension web3.BrowserFunctions {
         }
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func prepareTxForApproval(_ transactionJSON: [String: Any]) async -> (transaction: EthereumTransaction?, options: TransactionOptions?) {
         do {
             let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
@@ -129,6 +133,7 @@ extension web3.BrowserFunctions {
         }
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func prepareTxForApproval(_ trans: EthereumTransaction, options opts: TransactionOptions) async throws -> (transaction: EthereumTransaction?, options: TransactionOptions?) {
         do {
             var transaction = trans
@@ -148,6 +153,7 @@ extension web3.BrowserFunctions {
         }
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func signTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") async -> String? {
         do {
             let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
@@ -168,6 +174,7 @@ extension web3.BrowserFunctions {
         } catch { return nil }
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func signTransaction(_ trans: EthereumTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") async -> String? {
         do {
             var transaction = trans

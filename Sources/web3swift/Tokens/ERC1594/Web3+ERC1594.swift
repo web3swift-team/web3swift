@@ -31,6 +31,7 @@ protocol IERC1594: IERC20 {
 
 }
 
+// FIXME: Rewrite this to EthereumTransaction
 public class ERC1594: IERC1594, ERC20BaseProperties {
 
     internal var _name: String? = nil

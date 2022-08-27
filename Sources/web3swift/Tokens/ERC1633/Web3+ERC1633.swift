@@ -11,6 +11,7 @@ import BigInt
 import Core
 
 // Re-Fungible Token Standard (RFT)
+// FIXME: Rewrite this to EthereumTransaction
 protocol IERC1633: IERC20, IERC165 {
 
     func parentToken() async throws -> EthereumAddress

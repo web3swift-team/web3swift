@@ -30,6 +30,7 @@ protocol IERC777: IERC20, IERC820 {
 
 // This namespace contains functions to work with ERC777 tokens.
 // can be imperatively read and saved
+// FIXME: Rewrite this to EthereumTransaction
 public class ERC777: IERC777, ERC20BaseProperties {
 
     internal var _name: String? = nil

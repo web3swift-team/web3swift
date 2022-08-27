@@ -21,6 +21,7 @@ public extension ENS {
             return contract!
         }()
 
+        // FIXME: Rewrite this to EthereumTransaction
         lazy var defaultOptions: TransactionOptions = {
             return TransactionOptions.defaultOptions
         }()

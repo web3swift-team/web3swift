@@ -11,6 +11,7 @@ import Core
 
 extension web3.Eth {
 
+    // FIXME: Rewrite this to EthereumTransaction
     public func send(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions? = nil, password: String = "web3swift") async throws -> TransactionSendingResult {
         //  print(transaction)
         var assembledTransaction: EthereumTransaction = transaction

@@ -8,7 +8,7 @@ import Foundation
 import BigInt
 import Core
 
-
+// FIXME: Rewrite this to EthereumTransaction
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
     public var provider: Web3Provider
@@ -36,6 +36,7 @@ public class web3 {
         return self.ethInstance!
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public class Eth: TransactionOptionsInheritable {
         var provider: Web3Provider
         //  weak var web3: web3?
@@ -60,6 +61,7 @@ public class web3 {
         return self.personalInstance!
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public class Personal: TransactionOptionsInheritable {
         var provider: Web3Provider
         //        weak var web3: web3?
@@ -84,6 +86,7 @@ public class web3 {
         return self.txPoolInstance!
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public class TxPool: TransactionOptionsInheritable {
         var provider: Web3Provider
         //        weak var web3: web3?
@@ -129,6 +132,7 @@ public class web3 {
         return self.browserFunctionsInstance!
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public class BrowserFunctions: TransactionOptionsInheritable {
         var provider: Web3Provider
         //        weak var web3: web3?
@@ -153,6 +157,7 @@ public class web3 {
         return self.eventLoopInstance!
     }
 
+    // FIXME: Rewrite this to EthereumTransaction
     public class Eventloop: TransactionOptionsInheritable {
 
         public typealias EventLoopCall = (web3) async -> Void

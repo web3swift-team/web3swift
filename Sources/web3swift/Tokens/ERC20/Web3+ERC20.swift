@@ -23,6 +23,7 @@ protocol IERC20 {
 // This namespace contains functions to work with ERC20 tokens.
 // variables are lazyly evaluated or global token information (name, ticker, total supply)
 // can be imperatively read and saved
+// FIXME: Rewrite this to EthereumTransaction
 public class ERC20: IERC20, ERC20BaseProperties {
     var _name: String?
     var _symbol: String?
