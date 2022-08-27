@@ -7,8 +7,8 @@
 import Foundation
 import BigInt
 
-public protocol EthereumTransactionInheritable {
-    var transaction: EthereumTransaction { get }
+public protocol TransactionOptionsInheritable {
+    var transactionOptions: TransactionOptions { get }
 }
 
 /// Options for sending or calling a particular Ethereum transaction

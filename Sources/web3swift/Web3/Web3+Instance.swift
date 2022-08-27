@@ -12,8 +12,7 @@ import Core
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
     public var provider: Web3Provider
-    // TODO: Should be default options
-    public var transaction = EthereumTransaction.defaultTransaction
+    public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
 
     /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
     public init(provider prov: Web3Provider) {
@@ -37,12 +36,12 @@ public class web3 {
         return self.ethInstance!
     }
 
-    public class Eth: EthereumTransactionInheritable {
+    public class Eth: TransactionOptionsInheritable {
         var provider: Web3Provider
         //  weak var web3: web3?
         var web3: web3
-        public var transaction: EthereumTransaction {
-            return self.web3.transaction
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
@@ -61,12 +60,12 @@ public class web3 {
         return self.personalInstance!
     }
 
-    public class Personal: EthereumTransactionInheritable {
+    public class Personal: TransactionOptionsInheritable {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var transaction: EthereumTransaction {
-            return self.web3.transaction
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
@@ -85,12 +84,12 @@ public class web3 {
         return self.txPoolInstance!
     }
 
-    public class TxPool: EthereumTransactionInheritable {
+    public class TxPool: TransactionOptionsInheritable {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var transaction: EthereumTransaction {
-            return self.web3.transaction
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
@@ -130,12 +129,12 @@ public class web3 {
         return self.browserFunctionsInstance!
     }
 
-    public class BrowserFunctions: EthereumTransactionInheritable {
+    public class BrowserFunctions: TransactionOptionsInheritable {
         var provider: Web3Provider
         //        weak var web3: web3?
         public var web3: web3
-        public var transaction: EthereumTransaction {
-            return self.web3.transaction
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
@@ -154,7 +153,7 @@ public class web3 {
         return self.eventLoopInstance!
     }
 
-    public class Eventloop: EthereumTransactionInheritable {
+    public class Eventloop: TransactionOptionsInheritable {
 
         public typealias EventLoopCall = (web3) async -> Void
         public typealias EventLoopContractCall = (web3contract) -> Void
@@ -173,8 +172,8 @@ public class web3 {
         //  public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
         public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
 
-        public var transaction: EthereumTransaction {
-            return self.web3.transaction
+        public var transactionOptions: TransactionOptions {
+            return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
