@@ -170,19 +170,6 @@ public struct EthereumTransaction: CustomStringConvertible {
         self.envelope.clearSignatureData()
     }
 
-    /// Apples the provided parameters/options in to the object, if set replacing what is currently set
-    /// - Parameter options: a TransactionOptions object containing parameters to be appled to the transaction
-    /// if options specifies a type, and it is different from the current type the transaction will be migrated
-    /// to the new type. migrating will invalidate any signature data
-//    public mutating func applyTransaction(_ transaction: EthereumTransaction) {
-//        if transaction.type != nil && self.type != transaction.type {
-//            // swiftlint:disable force_unwrapping
-//            self.migrate(to: transaction.type)
-//            // swiftlint:enable force_unwrapping
-//        }
-//        self.envelope.applyTransaction(transaction)
-//    }
-
     /// Descriptionconverts transaction to the new selected type
     /// - Parameter to: TransactionType to select what transaction type to convert to
     public mutating func migrate(to type: TransactionType) {
@@ -203,18 +190,6 @@ public struct EthereumTransaction: CustomStringConvertible {
     public func encode(for type: EncodeType = .transaction) -> Data? {
         return self.envelope.encode(for: type)
     }
-//    
-//    public static var defaultValues: EthereumTransaction {
-//        var opts = TransactionOptions()
-//        opts.type = .legacy
-//        opts.gasLimit = .automatic
-//        opts.gasPrice = .automatic
-//        opts.maxFeePerGas = .automatic
-//        opts.maxPriorityFeePerGas = .automatic
-//        opts.nonce = .pending
-//        opts.callOnBlock = .pending
-//        return opts
-//    }
 }
 
 extension EthereumTransaction: Decodable {
@@ -254,15 +229,4 @@ extension EthereumTransaction {
         
         self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, v: v, r: r, s: s, parameters: params)
     }
-    
-    //    /// basic intializer that accepts an already created transaction envelope
-    //    /// - Parameters:
-    //    ///   - with: An envelope object conforming to the AbstractEnvelope protocol
-    //    ///   - options: a TransactionOptions object containing additional options to apply to the transaction
-    //    public init(with: AbstractEnvelope, transaction: EthereumTransaction? = nil) {
-    //        self.envelope = with
-    //        // swiftlint:disable force_unwrapping
-    //        if transaction != nil { self.envelope.applyTransaction(transaction!) }
-    //        // swiftlint:enable force_unwrapping
-    //    }
 }

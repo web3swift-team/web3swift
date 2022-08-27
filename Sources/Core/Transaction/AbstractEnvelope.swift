@@ -134,11 +134,6 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     ///   - parameters: EthereumParameters struct containing any other required parameters
     init(to: EthereumAddress, nonce: BigUInt?, v: BigUInt, r: BigUInt, s: BigUInt, parameters: CodableTransaction?)
 
-    /// Applies the passed options to the transaction envelope
-    ///   - Parameters:
-    ///     - {default}: TransactionOptions struct
-//    mutating func applyTransaction(_ transaction: EthereumTransaction)
-
     /// Transaction encoder for transmission or signing
     ///  - Parameters:
     ///    - {default}: EncodeType enum

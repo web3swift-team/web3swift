@@ -64,21 +64,6 @@ public struct CodableTransaction {
     }
 }
 
-public extension CodableTransaction {
-    init(_ opts: TransactionOptions) {
-        self.type = opts.type
-        self.to = opts.to
-        if opts.nonce != nil { self.nonce = opts.resolveNonce(0) }
-        self.chainID = opts.chainID
-        self.value = opts.value
-        if opts.gasLimit != nil { self.gasLimit = opts.resolveGasLimit(0) }
-        if opts.gasPrice != nil { self.gasPrice = opts.resolveGasPrice(0) }
-        if opts.maxFeePerGas != nil { self.maxFeePerGas = opts.resolveMaxFeePerGas(0) }
-        if opts.maxPriorityFeePerGas != nil { self.maxPriorityFeePerGas = opts.resolveMaxPriorityFeePerGas(0) }
-        self.accessList = opts.accessList
-    }
-}
-
 extension CodableTransaction: Codable {
     enum CodingKeys: String, CodingKey {
         case type

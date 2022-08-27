@@ -6,6 +6,7 @@
 
 import Foundation
 import BigInt
+import Core
 
 public protocol TransactionOptionsInheritable {
     var transactionOptions: TransactionOptions { get }
