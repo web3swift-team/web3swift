@@ -78,10 +78,10 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     var to: EthereumAddress { get set }
 
     // /// The native value of the transaction in Wei
-    // var value: BigUInt { get set }
-
+    var value: BigUInt { get set }
+    
     // /// Any encoded data accompanying the transaction
-    // var data: Data { get set }
+    var data: Data { get set }
 
     // Signature data should not be set directly
     /// signature V compoonent
@@ -137,7 +137,7 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     /// Applies the passed options to the transaction envelope
     ///   - Parameters:
     ///     - {default}: TransactionOptions struct
-    mutating func applyOptions(_ options: TransactionOptions)
+//    mutating func applyTransaction(_ transaction: EthereumTransaction)
 
     /// Transaction encoder for transmission or signing
     ///  - Parameters:

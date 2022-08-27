@@ -6,7 +6,7 @@
 
 import Foundation
 import BigInt
-
+    
 /// Abstraction object for a transaction pulled from, or destined for the blockchain
 /// provides all the necessary functionality to encode/decode sign/verify transactions
 public struct EthereumTransaction: CustomStringConvertible {
@@ -65,6 +65,33 @@ public struct EthereumTransaction: CustomStringConvertible {
     public var r: BigUInt { return envelope.r }
     /// signature s component (read only)
     public var s: BigUInt { return envelope.s }
+    
+    public var gasLimit: BigUInt? {
+        get { return envelope.parameters.gasLimit }
+        set { envelope.parameters.gasLimit = newValue }
+    }
+
+    public var gasPrice: BigUInt? {
+        get { return envelope.parameters.gasPrice }
+        set { envelope.parameters.gasLimit = newValue }
+    }
+
+    public var maxFeePerGas: BigUInt? {
+        get { return envelope.parameters.maxFeePerGas }
+        set { envelope.parameters.maxFeePerGas = newValue }
+    }
+    
+    public var maxPriorityFeePerGas: BigUInt? {
+        get { return envelope.parameters.maxPriorityFeePerGas }
+        set { envelope.parameters.maxPriorityFeePerGas = newValue }
+    }
+
+    public var callOnBlock: BlockNumber?
+
+    public var accessList: [AccessListEntry]? {
+        get { return envelope.parameters.accessList }
+        set { envelope.parameters.accessList = newValue }
+    }
 
     private init() { preconditionFailure("Memberwise not supported") } // disable the memberwise initializer
 
@@ -147,14 +174,14 @@ public struct EthereumTransaction: CustomStringConvertible {
     /// - Parameter options: a TransactionOptions object containing parameters to be appled to the transaction
     /// if options specifies a type, and it is different from the current type the transaction will be migrated
     /// to the new type. migrating will invalidate any signature data
-    public mutating func applyOptions(_ options: TransactionOptions) {
-        if options.type != nil && self.type != options.type {
-            // swiftlint:disable force_unwrapping
-            self.migrate(to: options.type!)
-            // swiftlint:enable force_unwrapping
-        }
-        self.envelope.applyOptions(options)
-    }
+//    public mutating func applyTransaction(_ transaction: EthereumTransaction) {
+//        if transaction.type != nil && self.type != transaction.type {
+//            // swiftlint:disable force_unwrapping
+//            self.migrate(to: transaction.type)
+//            // swiftlint:enable force_unwrapping
+//        }
+//        self.envelope.applyTransaction(transaction)
+//    }
 
     /// Descriptionconverts transaction to the new selected type
     /// - Parameter to: TransactionType to select what transaction type to convert to
@@ -176,6 +203,29 @@ public struct EthereumTransaction: CustomStringConvertible {
     public func encode(for type: EncodeType = .transaction) -> Data? {
         return self.envelope.encode(for: type)
     }
+//    
+//    public static var defaultValues: EthereumTransaction {
+//        var opts = TransactionOptions()
+//        opts.type = .legacy
+//        opts.gasLimit = .automatic
+//        opts.gasPrice = .automatic
+//        opts.maxFeePerGas = .automatic
+//        opts.maxPriorityFeePerGas = .automatic
+//        opts.nonce = .pending
+//        opts.callOnBlock = .pending
+//        return opts
+//    }
+}
+
+extension EthereumTransaction: Decodable {
+    /// initializer required to support the Decodable protocol
+    /// - Parameter decoder: the decoder stream for the input data
+    public init(from decoder: Decoder) throws {
+        guard let env = try EnvelopeFactory.createEnvelope(from: decoder) else { throw Web3Error.dataError }
+        self.envelope = env
+        // capture any metadata that might be present
+        self.meta = try EthereumMetadata(from: decoder)
+    }
 }
 
 extension EthereumTransaction {
@@ -195,31 +245,24 @@ extension EthereumTransaction {
     public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
                 chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
                 v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: CodableTransaction? = nil) {
-
+        
         var params = parameters ?? CodableTransaction()
-
+        
         params.chainID = chainID ?? params.chainID
         params.value = value ?? params.value
         params.data = data
-
+        
         self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, v: v, r: r, s: s, parameters: params)
     }
-
-    /// basic intializer that accepts an already created transaction envelope
-    /// - Parameters:
-    ///   - with: An envelope object conforming to the AbstractEnvelope protocol
-    ///   - options: a TransactionOptions object containing additional options to apply to the transaction
-    public init(with: AbstractEnvelope, options: TransactionOptions? = nil) {
-        self.envelope = with
-        // swiftlint:disable force_unwrapping
-        if options != nil { self.envelope.applyOptions(options!) }
-        // swiftlint:enable force_unwrapping
-    }
-
-
-    @available(*, deprecated, message: "use encode() instead")
-    public func encode(forSignature: Bool = false, chainID: BigUInt? = nil) -> Data? {
-        envelope.encode(for: forSignature ? .signature : .transaction)
-    }
-
-
+    
+    //    /// basic intializer that accepts an already created transaction envelope
+    //    /// - Parameters:
+    //    ///   - with: An envelope object conforming to the AbstractEnvelope protocol
+    //    ///   - options: a TransactionOptions object containing additional options to apply to the transaction
+    //    public init(with: AbstractEnvelope, transaction: EthereumTransaction? = nil) {
+    //        self.envelope = with
+    //        // swiftlint:disable force_unwrapping
+    //        if transaction != nil { self.envelope.applyTransaction(transaction!) }
+    //        // swiftlint:enable force_unwrapping
+    //    }
+}
