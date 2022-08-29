@@ -116,7 +116,8 @@ internal func filterLogs(decodedLogs: [EventParserResultProtocol], eventFilter: 
     return filteredLogs
 }
 
-internal func encodeTopicToGetLogs(contract: EthereumContract, eventName: String?, filter: EventFilter) -> EventFilterParameters? {
+// FIXME: Make me internal
+public func encodeTopicToGetLogs(contract: EthereumContract, eventName: String?, filter: EventFilter) -> EventFilterParameters? {
     var eventTopic: Data? = nil
     var event: ABI.Element.Event? = nil
     if eventName != nil {
@@ -176,7 +177,8 @@ internal func encodeTopicToGetLogs(contract: EthereumContract, eventName: String
     return preEncoding
 }
 
-internal func parseReceiptForLogs(receipt: TransactionReceipt, contract: ContractProtocol, eventName: String, filter: EventFilter?) -> [EventParserResultProtocol]? {
+// FIXME: Make me internal
+public func parseReceiptForLogs(receipt: TransactionReceipt, contract: ContractProtocol, eventName: String, filter: EventFilter?) -> [EventParserResultProtocol]? {
     guard let bloom = receipt.logsBloom else {return nil}
     if contract.address != nil {
         let addressPresent = bloom.test(topic: contract.address!.addressData)
