@@ -94,8 +94,8 @@ class RemoteParsingTests: XCTestCase {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
        let contract = web3.contract(jsonString, at: nil, abiVersion: 2)
        var filter = EventFilter()
-       filter.fromBlock = .blockNumber(5200120)
-       filter.toBlock = .blockNumber(5200120)
+       filter.fromBlock = .exact(5200120)
+       filter.toBlock = .exact(5200120)
        filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")!] as [EventFilterable])]
         guard let result = try await contract?.getIndexedEvents(eventName: "Transfer", filter: filter) else {return XCTFail()}
@@ -107,8 +107,8 @@ class RemoteParsingTests: XCTestCase {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
        let contract = web3.contract(jsonString, at: nil, abiVersion: 2)
        var filter = EventFilter()
-       filter.fromBlock = .blockNumber(5200120)
-       filter.toBlock = .blockNumber(5200120)
+       filter.fromBlock = .exact(5200120)
+       filter.toBlock = .exact(5200120)
        filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), (nil as [EventFilterable]?)]
         guard let result = try await contract?.getIndexedEvents(eventName: "Transfer", filter: filter) else {return XCTFail()}

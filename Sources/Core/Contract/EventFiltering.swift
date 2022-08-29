@@ -7,26 +7,10 @@
 import Foundation
 
 public struct EventFilter {
-    public enum Block {
-        case latest
-        case pending
-        case blockNumber(UInt64)
-
-        var encoded: String {
-            switch self {
-            case .latest:
-                return "latest"
-            case .pending:
-                return "pending"
-            case .blockNumber(let number):
-                return String(number, radix: 16).addHexPrefix()
-            }
-        }
-    }
 
     public init() { }
 
-    public init(fromBlock: Block?, toBlock: Block?,
+    public init(fromBlock: BlockNumber?, toBlock: BlockNumber?,
                 addresses: [EthereumAddress]? = nil,
                 parameterFilters: [[EventFilterable]?]? = nil) {
         self.fromBlock = fromBlock
@@ -35,18 +19,18 @@ public struct EventFilter {
         self.parameterFilters = parameterFilters
     }
 
-    public var fromBlock: Block?
-    public var toBlock: Block?
+    public var fromBlock: BlockNumber?
+    public var toBlock: BlockNumber?
     public var addresses: [EthereumAddress]?
     public var parameterFilters: [[EventFilterable]?]?
 
-    public func rpcPreEncode() -> EventFilterParameters {
+    internal func rpcPreEncode() -> EventFilterParameters {
         var encoding = EventFilterParameters()
         if self.fromBlock != nil {
-            encoding.fromBlock = self.fromBlock!.encoded
+            encoding.fromBlock = self.fromBlock!.description
         }
         if self.toBlock != nil {
-            encoding.toBlock = self.toBlock!.encoded
+            encoding.toBlock = self.toBlock!.description
         }
         if self.addresses != nil {
             if self.addresses!.count == 1 {
