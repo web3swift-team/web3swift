@@ -190,11 +190,6 @@ public class WriteTransaction: ReadTransaction {
     }
 
     // FIXME: Rewrite this to EthereumTransaction
-    public func assemble(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
-        return try await assembleTransaction(transactionOptions: transactionOptions)
-    }
-
-    // FIXME: Rewrite this to EthereumTransaction
     func gasEstimate(for policy: TransactionOptions.GasLimitPolicy,
                      assembledTransaction: EthereumTransaction,
                      optionsForGasEstimation: TransactionOptions) async throws -> BigUInt {
