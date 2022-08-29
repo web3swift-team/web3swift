@@ -11,6 +11,62 @@ import BigInt
 import Core
 
 /// Standard representation of a smart contract.
+///
+/// ## How to
+/// To create a smart contract deployment transaction there is only one requirement - `bytecode`.
+/// That is the compiled smart contract that is ready to be executed by EVM, or eWASM if that is a Serenity.
+/// Creating a transaction is as simple as:
+///
+/// ```swift
+/// contractInstance.deploy(bytecode: smartContractBytecode)
+/// ```
+///
+/// One of the default implementations of `ContractProtocol` is ``EthereumContract``.
+/// ```swift
+/// let contract = EthereumContract(abi: [])
+/// contract.deploy(bytecode: smartContractBytecode)
+/// ```
+///
+/// ### Setting constructor arguments
+/// Some smart contracts expect input arguments for a constructor that is called on contract deployment.
+/// To set these input arguments you must provide `constructor` and `parameters`.
+/// Constructor can be statically created if you know upfront what are the input arguments and their exact order:
+///
+/// ```swift
+/// let inputArgsTypes: [ABI.Element.InOut] = [.init(name: "firstArgument", type: ABI.Element.ParameterType.string),
+///                                            .init(name: "secondArgument", type: ABI.Element.ParameterType.uint(bits: 256))]
+/// let constructor = ABI.Element.Constructor(inputs: inputArgsTypes, constant: false, payable: payable)
+/// let constructorArguments = ["This is the array of constructor arguments", 10_000] as [AnyObject]
+///
+/// contract.deploy(bytecode: smartContractBytecode,
+///                 constructor: constructor,
+///                 parameters: constructorArguments)
+/// ```
+///
+/// Alternatively, if you have ABI string that holds meta data about the constructor you can use it instead of creating constructor manually.
+/// But you must make sure the arguments for constructor call are of expected type in and correct order.
+/// Example of ABI string can be found in ``Web3/Utils/erc20ABI``.
+///
+/// ```swift
+/// let contract = EthereumContract(abiString)
+/// let constructorArguments = ["This is the array of constructor arguments", 10_000] as [AnyObject]
+///
+/// contract.deploy(bytecode: smartContractBytecode,
+///                 constructor: contract.constructor,
+///                 parameters: constructorArguments)
+/// ```
+///
+/// ⚠️ If you pass in only constructor or only parameters - it will have no effect on the final transaction object.
+/// Also, you have an option to set any extra bytes at the end of ``EthereumTransaction/data``  attribute.
+/// Alternatively you can encode constructor parameters outside of the deploy function and only set `extraData` to pass in these
+/// parameters:
+///
+/// ```swift
+/// // `encodeParameters` call returns `Data?`. Check it for nullability before calling `deploy`
+/// // function to create `EthereumTransaction`.
+/// let encodedConstructorArguments = someConstructor.encodeParameters(arrayOfInputArguments)
+/// constructor.deploy(bytecode: smartContractBytecode, extraData: encodedConstructorArguments)
+/// ```
 public protocol ContractProtocol {
     /// Address of the referenced smart contract. Can be set later, e.g. if the contract is deploying and address is not yet known.
     var address: EthereumAddress? {get set}
@@ -56,62 +112,6 @@ public protocol ContractProtocol {
     init(_ abiString: String, at: EthereumAddress?) throws
 
     /// Creates a smart contract deployment transaction.
-    ///
-    /// ## How to
-    /// To create a smart contract deployment transaction there is only one requirement - `bytecode`.
-    /// That is the compiled smart contract that is ready to be executed by EVM, or eWASM if that is a Serenity.
-    /// Creating a transaction is as simple as:
-    ///
-    /// ```swift
-    /// contractInstance.deploy(bytecode: smartContractBytecode)
-    /// ```
-    ///
-    /// One of the default implementations of `ContractProtocol` is ``EthereumContract``.
-    /// ```swift
-    /// let contract = EthereumContract(abi: [])
-    /// contract.deploy(bytecode: smartContractBytecode)
-    /// ```
-    ///
-    /// ### Setting constructor arguments
-    /// Some smart contracts expect input arguments for a constructor that is called on contract deployment.
-    /// To set these input arguments you must provide `constructor` and `parameters`.
-    /// Constructor can be statically created if you know upfront what are the input arguments and their exact order:
-    ///
-    /// ```swift
-    /// let inputArgsTypes: [ABI.Element.InOut] = [.init(name: "firstArgument", type: ABI.Element.ParameterType.string),
-    ///                                            .init(name: "secondArgument", type: ABI.Element.ParameterType.uint(bits: 256))]
-    /// let constructor = ABI.Element.Constructor(inputs: inputArgsTypes, constant: false, payable: payable)
-    /// let constructorArguments = ["This is the array of constructor arguments", 10_000] as [AnyObject]
-    ///
-    /// contract.deploy(bytecode: smartContractBytecode,
-    ///                 constructor: constructor,
-    ///                 parameters: constructorArguments)
-    /// ```
-    ///
-    /// Alternatively, if you have ABI string that holds meta data about the constructor you can use it instead of creating constructor manually.
-    /// But you must make sure the arguments for constructor call are of expected type in and correct order.
-    /// Example of ABI string can be found in ``Web3/Utils/erc20ABI``.
-    /// 
-    /// ```swift
-    /// let contract = EthereumContract(abiString)
-    /// let constructorArguments = ["This is the array of constructor arguments", 10_000] as [AnyObject]
-    ///
-    /// contract.deploy(bytecode: smartContractBytecode,
-    ///                 constructor: contract.constructor,
-    ///                 parameters: constructorArguments)
-    /// ```
-    ///
-    /// ⚠️ If you pass in only constructor or only parameters - it will have no effect on the final transaction object.
-    /// Also, you have an option to set any extra bytes at the end of ``EthereumTransaction/data``  attribute.
-    /// Alternatively you can encode constructor parameters outside of the deploy function and only set `extraData` to pass in these
-    /// parameters:
-    ///
-    /// ```swift
-    /// // `encodeParameters` call returns `Data?`. Check it for nullability before calling `deploy`
-    /// // function to create `EthereumTransaction`.
-    /// let encodedConstructorArguments = someConstructor.encodeParameters(arrayOfInputArguments)
-    /// constructor.deploy(bytecode: smartContractBytecode, extraData: encodedConstructorArguments)
-    /// ```
     ///
     /// - Parameters:
     ///   - bytecode: bytecode to deploy.
