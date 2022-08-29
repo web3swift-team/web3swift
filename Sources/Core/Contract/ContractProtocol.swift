@@ -8,7 +8,6 @@
 
 import Foundation
 import BigInt
-import Core
 
 /// Standard representation of a smart contract.
 ///

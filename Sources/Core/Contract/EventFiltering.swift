@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import Core
 
 public struct EventFilter {
     public enum Block {

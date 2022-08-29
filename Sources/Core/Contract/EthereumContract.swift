@@ -5,7 +5,6 @@
 
 import Foundation
 import BigInt
-import Core
 
 /// Default representation of a smart contract. Created out of an array of ``ABI/Element`` which could be functions, events,
 /// constructor, errors and optional ``EthereumAddress`` that could be set later.

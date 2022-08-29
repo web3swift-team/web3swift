@@ -6,7 +6,6 @@
 
 import Foundation
 import BigInt
-import Core
 
 public protocol EventFilterComparable {
     func isEqualTo(_ other: AnyObject) -> Bool

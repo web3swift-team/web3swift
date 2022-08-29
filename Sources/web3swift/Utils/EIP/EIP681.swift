@@ -221,7 +221,7 @@ extension Web3 {
                     }
                 }
                 return nil
-            case let .tuple(types):
+            case .tuple(_):
                 // TODO: implement!
                 return nil
             default: return nil
@@ -360,7 +360,7 @@ extension Web3 {
                     nativeValue = ethereumAddress as AnyObject
                 case .ensAddress(let ens):
                     do {
-                        let web = await web3(provider: InfuraProvider(Networks.fromInt(UInt(chainID ?? 1)) ?? Networks.Mainnet)!)
+                        let web = await web3(provider: InfuraProvider(Networks.fromInt(UInt(chainID)) ?? Networks.Mainnet)!)
                         let ensModel = ENS(web3: web)
                         try await ensModel?.setENSResolver(withDomain: ens)
                         let address = try await ensModel?.getAddress(forNode: ens)
@@ -410,7 +410,7 @@ extension Web3 {
                     guard let internalArrays = splitArrayOfArrays(rawValue),
                           (length == 0 || UInt64(internalArrays.count) == length) else { return nil }
                     rawValues = internalArrays
-                } else if case let .tuple(internalTypes) = type {
+                } else if case .tuple(_) = type {
                     // TODO: implement!
                 } else if case .string = type {
                     guard let strings = splitArrayOfStrings(rawValue),
@@ -438,7 +438,7 @@ extension Web3 {
 
                 guard nativeValueArray.count == rawValues.count &&
                         (length == 0 || UInt64(rawValues.count) == length) else { return nil }
-            case let .tuple(types):
+            case .tuple(_):
                 // TODO: implement!
                 return nil
             default: return nil

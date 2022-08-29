@@ -5,7 +5,6 @@
 
 import Foundation
 import BigInt
-import Core
 
 public struct ABIEncoder { }
 
