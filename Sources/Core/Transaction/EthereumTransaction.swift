@@ -40,6 +40,8 @@ public struct EthereumTransaction: CustomStringConvertible {
         set { envelope.parameters.value = newValue }
     }
 
+    // FIXME: Should be from: EthereumAddress property
+
     /// the EthereumAddress object holding the destination address for the transaction
     public var to: EthereumAddress {
         get { return envelope.to }

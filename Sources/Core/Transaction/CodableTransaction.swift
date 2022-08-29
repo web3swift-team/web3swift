@@ -16,6 +16,8 @@ public struct CodableTransaction {
     /// this should always be set to give an idea of what other fields to expect
     public var type: TransactionType?
 
+    // FIXME: Should be from: EthereumAddress property
+
     /// the destination, or contract, address for the transaction
     public var to: EthereumAddress?
 

@@ -19,15 +19,15 @@ extension Web3 {
 
 extension Web3.Utils {
 
-    /// Calculate address of deployed contract deterministically based on the address of the deploying Ethereum address
-    /// and the nonce of this address
-    public static func calculateContractAddress(from: EthereumAddress, nonce: BigUInt) -> EthereumAddress? {
-        guard let normalizedAddress = from.addressData.setLengthLeft(32) else {return nil}
-        guard let data = RLP.encode([normalizedAddress, nonce] as [AnyObject]) else {return nil}
-        guard let contractAddressData = Utilities.sha3(data)?[12..<32] else {return nil}
-        guard let contractAddress = EthereumAddress(Data(contractAddressData)) else {return nil}
-        return contractAddress
-    }
+    // /// Calculate address of deployed contract deterministically based on the address of the deploying Ethereum address
+    // /// and the nonce of this address
+    // public static func calculateContractAddress(from: EthereumAddress, nonce: BigUInt) -> EthereumAddress? {
+    //     guard let normalizedAddress = from.addressData.setLengthLeft(32) else {return nil}
+    //     guard let data = RLP.encode([normalizedAddress, nonce] as [AnyObject]) else {return nil}
+    //     guard let contractAddressData = Utilities.sha3(data)?[12..<32] else {return nil}
+    //     guard let contractAddress = EthereumAddress(Data(contractAddressData)) else {return nil}
+    //     return contractAddress
+    // }
 
     /// Various units used in Ethereum ecosystem
     public enum Units {
