@@ -123,11 +123,6 @@ extension web3 {
             return writeTX
         }
 
-        /// Parses an EventLog object by using a description from the contract's ABI.
-        public func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?) {
-            return self.contract.parseEvent(eventLog)
-        }
-
         /// Creates an "EventParserProtocol" compliant object to use it for parsing particular block or transaction for events.
         public func createEventParser(_ eventName: String, filter: EventFilter?) -> EventParserProtocol? {
             let parser = EventParser(web3: self.web3, eventName: eventName, contract: self.contract, filter: filter)

@@ -220,7 +220,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: - Encoding ABI Data flow
         let tx = contract?.read("getFlagData")
         XCTAssertNotNil(tx)
-        let _ = try await tx!.call()
+        let _ = try await tx!.decodedData()
     }
 
 }

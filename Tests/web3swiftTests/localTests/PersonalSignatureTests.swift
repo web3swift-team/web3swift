@@ -77,13 +77,13 @@ class PersonalSignatureTests: XCTestCase {
         contract = web3.contract(abiString, at: receipt.contractAddress!)!
         var tx = contract.read("hashPersonalMessage", parameters: [message as AnyObject])
         tx?.transactionOptions.from = expectedAddress
-        var result = try await tx!.call()
+        var result = try await tx!.decodedData()
         guard let hash = result["hash"]! as? Data else {return XCTFail()}
         XCTAssert(Utilities.hashPersonalMessage(message.data(using: .utf8)!)! == hash)
         
         tx = contract.read("recoverSigner", parameters: [message, unmarshalledSignature.v, Data(unmarshalledSignature.r), Data(unmarshalledSignature.s)] as [AnyObject])
         tx?.transactionOptions.from = expectedAddress
-        result = try await tx!.call()
+        result = try await tx!.decodedData()
         guard let signer = result["signer"]! as? EthereumAddress else {return XCTFail()}
         XCTAssert(signer == expectedAddress)
     }

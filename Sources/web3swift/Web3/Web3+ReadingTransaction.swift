@@ -9,6 +9,8 @@ import BigInt
 import Core
 
 // FIXME: Rewrite this to EthereumTransaction
+
+/// Wrapper for `EthererumTransaction.data` property appropriate encoding.
 public class ReadTransaction {
     public var transaction: EthereumTransaction
     public var contract: EthereumContract
@@ -37,6 +39,7 @@ public class ReadTransaction {
     // it's merging Transactions Oprions sending request (Transaction with appropriate binary data) to contract, get's Data response
     // and only then it decodes it.
     // It should be splitted in this way up to three (merge, send, decode)
+    // TODO: Remove type erasing here, some broad wide protocol should be added instead
     // FIXME: Rewrite this to EthereumTransaction
     public func decodedData(with transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
         // MARK: Read data from ABI flow

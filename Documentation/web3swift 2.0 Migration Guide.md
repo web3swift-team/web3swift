@@ -234,7 +234,7 @@ return value
 
 // web3swift 2.0
 let options = options ?? transaction.transactionOptions
-guard let result = try? transaction.call(transactionOptions: options) else {return}
+guard let result = try? transaction.decodedData(with: options) else {return}
 return result
 ```
 

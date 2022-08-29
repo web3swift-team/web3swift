@@ -8,6 +8,7 @@ import Foundation
 import BigInt
 import Core
 
+/// Wrapper for `EthererumTransaction.data` property appropriate encoding.
 public class WriteTransaction: ReadTransaction {
 
     // FIXME: Rewrite this to EthereumTransaction (don't touch the logic)

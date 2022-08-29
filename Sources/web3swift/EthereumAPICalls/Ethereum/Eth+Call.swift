@@ -11,6 +11,7 @@ import Core
 extension web3.Eth {
 
     // FIXME: Rewrite this to EthereumTransaction
+    // FIXME: Not working yet.
     public func callTransaction(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> Data {
         // MARK: Read data from ABI flow
         guard let transactionParameters = transaction.encodeAsDictionary(from: transactionOptions?.from) else { throw Web3Error.dataError}
