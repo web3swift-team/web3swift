@@ -1,6 +1,5 @@
 //
 //  HexDecodableProtocols.swift
-//  Web3swift
 //
 //  Created by Yaroslav on 25.05.2022.
 //

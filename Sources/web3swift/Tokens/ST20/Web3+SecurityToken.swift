@@ -1,6 +1,5 @@
 //
 //  Web3+SecurityToken.swift
-//  web3swift
 //
 //  Created by Anton on 05/03/2019.
 //  Copyright © 2019 The Matter Inc. All rights reserved.

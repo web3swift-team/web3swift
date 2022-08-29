@@ -1,6 +1,5 @@
 //
 //  Promise+Web3+Eth+GetCode.swift
-//  web3swift
 //
 //  Created by Ndriqim Haxhaj on 8/25/21.
 //

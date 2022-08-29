@@ -1,6 +1,5 @@
 //
 //  Web3+ERC721x.swift
-//  web3swift-iOS
 //
 //  Created by Anton Grigorev on 20/12/2018.
 //  Copyright © 2018 The Matter Inc. All rights reserved.

@@ -1,6 +1,5 @@
 //
 //  Promise+Web3+Eth+FeeHistory.swift
-//  web3swift
 //
 //  Created by Yaroslav on 11.04.2022.
 //  Copyright © 2022 web3swift. All rights reserved.

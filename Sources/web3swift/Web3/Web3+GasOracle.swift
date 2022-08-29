@@ -1,6 +1,5 @@
 //
 //  Web3+GasOracle.swift
-//  web3swift
 //
 //  Created by Yaroslav on 31.03.2022.
 //  Copyright © 2022 web3swift. All rights reserved.

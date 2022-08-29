@@ -1,6 +1,5 @@
 //
 //  GasOracleTests.swift
-//  Web3swift
 //
 //  Created by Yaroslav on 11.04.2022.
 //

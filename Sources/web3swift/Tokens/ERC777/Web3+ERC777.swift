@@ -1,6 +1,5 @@
 //
 //  Web3+ERC777.swift
-//  web3swift
 //
 //  Created by Anton Grigorev on 07/12/2018.
 //  Copyright © 2018 The Matter Inc. All rights reserved.
