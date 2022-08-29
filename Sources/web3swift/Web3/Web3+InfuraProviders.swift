@@ -4,7 +4,6 @@
 //
 import Foundation
 import BigInt
-import Starscream
 import Core
 
 /// Custom Web3 HTTP provider of Infura nodes.
