@@ -340,11 +340,20 @@ extension Web3 {
             }
 
             if code.functionName != nil {
+                /// The number of input values must be excatly the same as the number of query items.
+                /// If at least one is off - it was declared/encoded incorrectly.
+                if inputs.count != queryItems.count {
+                    return nil
+                }
+
                 let functionEncoding = ABI.Element.Function(name: code.functionName!, inputs: inputs, outputs: [ABI.Element.InOut](), constant: false, payable: code.amount != nil)
                 code.function = functionEncoding
             }
 
+            #if DEBUG
             print(code)
+            #endif
+
             return code
         }
 

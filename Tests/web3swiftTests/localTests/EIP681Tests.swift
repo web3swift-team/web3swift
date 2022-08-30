@@ -230,17 +230,6 @@ class EIP681Tests: XCTestCase {
         XCTAssertEqual(data, Array<BigInt>(arrayLiteral: 1, 2, 5000))
     }
 
-    func testParsingQueryParameterFixedLengthArray() async throws {
-        /// Declared `int256[3]` with 2 values instead of expected 3.
-        var eip681Code = await Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?int256[3]=[1,2]")
-        XCTAssert(eip681Code != nil)
-        XCTAssert(eip681Code?.parameters.count == 0)
-        /// Declared `int256[3]` with 4 values instead of expected 3.
-        eip681Code = await Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?int256[3]=[1,2,2,3]")
-        XCTAssert(eip681Code != nil)
-        XCTAssert(eip681Code?.parameters.count == 0)
-    }
-
     func testParsingQueryParameterStringsArray() async throws {
         var eip681Code = await Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?string[]=[\"123\",\"2,5000\",\"wwweer2-=!\"]")
         XCTAssert(eip681Code != nil)
@@ -349,5 +338,19 @@ class EIP681Tests: XCTestCase {
         XCTAssertEqual(values[6].toHexString().addHexPrefix(), "0x254bfe7e25184f72df435b5a9da39db6089dcaf5")
         XCTAssertEqual(values[7].toHexString().addHexPrefix(), "0x0000000000000000000000000000000000000000000000000000000000003fbf")
         XCTAssertEqual(values[8].toHexString().addHexPrefix(), "0x6f357c6a0f079fb3a680e3b3ef2f154772df5f6d345bc052ad733a69bba326f363b6cc30697066733a2f2f516d5042485a4c45686d624c57594e374575505a334b437a735663595a53797544596a59506a7a523342706b6934")
+    }
+
+    /// Query string has a variable of type `int256[3]` that expects 3 elements set as value but instead it gets 4.
+    /// Parsing must fail for the following reasons:
+    ///  - we assume that function in the link expects a certian set of arguments of certain types without which calling it woulf fail;
+    ///  - if arguments of expected types are provided but values for them are invalid - function call will fail as well;
+    ///  - if parsing of at least one argument has failed - function call will fail as well;
+    /// If we are parsing EIP681 that has a function call encoded in it the link must be completely valid.
+    /// It's not possible to guarantee the expected behaviour during execution of this transaction call if at least on of the query
+    /// key-value pairs is invalid.
+    func testWrongArraySize() async throws {
+        let wrongEip681Link = "ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?int256[3]=[1,2,2,3]"
+        let eip681Code = await Web3.EIP681CodeParser.parse(wrongEip681Link)
+        XCTAssertNil(eip681Code)
     }
 }
