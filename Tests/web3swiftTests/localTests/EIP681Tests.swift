@@ -353,4 +353,23 @@ class EIP681Tests: XCTestCase {
         let eip681Code = await Web3.EIP681CodeParser.parse(wrongEip681Link)
         XCTAssertNil(eip681Code)
     }
+
+    func testEncodingValueGasLimitAndPrice() async throws {
+        let rawCode = "ethereum:0x5ffc014343cd971b7eb70732021e26c35b744cc4?value=77445123&gasLimit=1234&gasPrice=789456"
+        let eip681Code = await Web3.EIP681CodeParser.parse(rawCode)
+        XCTAssertNotNil(eip681Code)
+        guard let eip681Code = eip681Code else { return }
+        let encodedEip681Link = eip681Code.makeEIP681Link()
+        XCTAssertNotNil(encodedEip681Link)
+        guard let encodedEip681Link = encodedEip681Link,
+              let components = URLComponents(string: encodedEip681Link),
+              let queryItems = components.queryItems else {
+            XCTFail("Failed to parse query items from encoded URL: \(String(describing: encodedEip681Link))")
+            return
+        }
+        let mappedQueryItems = queryItems.map { "\($0.name)=\($0.value ?? "-")" }
+        XCTAssertTrue(mappedQueryItems.contains("gasPrice=789456"))
+        XCTAssertTrue(mappedQueryItems.contains("value=77445123"))
+        XCTAssertTrue(mappedQueryItems.contains("gasLimit=1234"))
+    }
 }
