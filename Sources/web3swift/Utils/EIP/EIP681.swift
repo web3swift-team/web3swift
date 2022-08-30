@@ -361,7 +361,7 @@ extension Web3 {
             }
 
             if code.functionName != nil {
-                /// The number of input values must be excatly the same as the number of query items.
+                /// The number of input values must be exactly the same as the number of query items.
                 /// If at least one is off - it was declared/encoded incorrectly.
                 if inputs.count != queryItems.count {
                     return nil
