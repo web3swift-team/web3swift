@@ -89,9 +89,23 @@ extension Web3 {
                     return nil
                 }
             }
+
+            if let gasLimit = gasLimit {
+                queryParameters.append("gasLimit=\(gasLimit.description)")
+            }
+
+            if let gasPrice = gasPrice {
+                queryParameters.append("gasPrice=\(gasPrice.description)")
+            }
+
+            if let amount = amount {
+                queryParameters.append("value=\(amount.description)")
+            }
+
             if !queryParameters.isEmpty {
                 link = "\(link)?\(queryParameters.joined(separator: "&"))"
             }
+
             return urlEncode ? link.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) : link
         }
     }
