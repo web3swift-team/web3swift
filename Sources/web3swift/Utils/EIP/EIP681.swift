@@ -70,8 +70,9 @@ extension Web3 {
             if let functionName = functionName, !functionName.isEmpty {
                 link = "\(link)/\(functionName)"
             }
+            var queryParameters = [String]()
             if !parameters.isEmpty {
-                let queryParameters: [String] = parameters.compactMap { eip681Parameter in
+                let mappedParameters: [String] = parameters.compactMap { eip681Parameter in
                     guard let queryValue = Web3
                         .EIP681CodeEncoder
                         .encodeFunctionArgument(eip681Parameter.type, eip681Parameter.value)
@@ -81,9 +82,15 @@ extension Web3 {
                     return "\(eip681Parameter.type.abiRepresentation)=\(queryValue)"
                 }
 
-                if queryParameters.count == parameters.count {
-                    link = "\(link)?\(queryParameters.joined(separator: "&"))"
+                if mappedParameters.count == parameters.count {
+                    queryParameters.append(contentsOf: mappedParameters)
+                } else {
+                    NSLog("Failed to map all provided parameters of type `EIP681Parameter`.\nSuccessuflly mapped parameters are: \(mappedParameters.joined(separator: "\n"))")
+                    return nil
                 }
+            }
+            if !queryParameters.isEmpty {
+                link = "\(link)?\(queryParameters.joined(separator: "&"))"
             }
             return urlEncode ? link.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) : link
         }
