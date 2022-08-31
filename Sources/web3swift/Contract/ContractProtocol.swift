@@ -216,6 +216,7 @@ extension ContractProtocol {
 /// Contains default implementations of all functions of ``ContractProtocol``.
 public protocol DefaultContractProtocol: ContractProtocol {}
 extension DefaultContractProtocol {
+    // MARK: Writing Data flow
     public func deploy(bytecode: Data,
                        constructor: ABI.Element.Constructor?,
                        parameters: [AnyObject]?,
@@ -238,12 +239,25 @@ extension DefaultContractProtocol {
             fullData.append(extraData)
         }
 
+        // MARK: Writing Data flow
         return EthereumTransaction(to: .contractDeploymentAddress(),
                                    value: BigUInt(0),
                                    data: fullData,
                                    parameters: .init(gasLimit: BigUInt(0), gasPrice: BigUInt(0)))
     }
 
+    /// Call given contract method with given parameters
+    /// - Parameters:
+    ///   - method: Method to call
+    ///   - parameters: Parameters to pass to method call
+    ///   - extraData: Any additional data that needs to be encoded
+    /// - Returns: preset EthereumTransaction with filled date
+    ///
+    /// Returned transaction have filled following priperties:
+    ///   - to: contractAddress
+    ///   - value: 0
+    ///   - data: parameters + extraData
+    ///   - params: EthereumParameters with no contract method call encoded data.
     public func method(_ method: String,
                        parameters: [AnyObject],
                        extraData: Data?) -> EthereumTransaction? {
@@ -251,19 +265,25 @@ extension DefaultContractProtocol {
 
         let params = EthereumParameters(gasLimit: BigUInt(0), gasPrice: BigUInt(0))
 
+        // MARK: - Encoding ABI Data flow
         if method == "fallback" {
             return EthereumTransaction(to: to, value: BigUInt(0), data: extraData ?? Data(), parameters: params)
         }
 
         let method = Data.fromHex(method) == nil ? method : method.addHexPrefix().lowercased()
 
+        // MARK: - Encoding ABI Data flow
         guard let abiMethod = methods[method]?.first,
               var encodedData = abiMethod.encodeParameters(parameters) else { return nil }
 
+        // Extra data just appends in the end of parameters data
         if let extraData = extraData {
             encodedData.append(extraData)
         }
 
+        // MARK: - Encoding ABI Data flow
+        // return filled EthereumTransaction, which is could be sent iterate with a contract.
+        // But no gas related data here yet.
         return EthereumTransaction(to: to, value: BigUInt(0), data: encodedData, parameters: params)
     }
 
