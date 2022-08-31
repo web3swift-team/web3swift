@@ -36,6 +36,7 @@ class ERC20Tests: LocalTestCase {
         print(String(bal))
     }
 
+    // FIXME: Make me work
 //    func testERC20TokenSend() async throws {
 //        let web3 = Web3.
 //        let value: String = "1.0" // In Tokens

@@ -31,6 +31,10 @@ public class ReadTransaction {
         }
     }
 
+    // FIXME: This is wrong naming, because this method doesn't decode,
+    // it's merging Transactions Oprions sending request (Transaction with appropriate binary data) to contract, get's Data response
+    // and only then it decodes it.
+    // It should be splitted in this way up to three (merge, send, decode)
     public func decodedData(with transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
         var assembledTransaction: EthereumTransaction = self.transaction
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
@@ -83,6 +87,7 @@ public class ReadTransaction {
 
     }
 
+    // FIXME: Duplicating and pointing to another?!
     public func estimateGas(transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
         return try await self.estimateGas(with: transactionOptions)
     }

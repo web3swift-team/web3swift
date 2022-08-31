@@ -84,6 +84,7 @@ extension web3 {
             return writeTX
         }
 
+        // FIXME: Actually this is not rading contract or smth, this is about composing appropriate binary data to iterate with it later.
         /// Creates and object responsible for calling a particular function of the contract. If method name is not found in ABI - returns nil.
         /// If extraData is supplied it is appended to encoded function parameters. Can be usefull if one wants to call
         /// the function not listed in ABI. "Parameters" should be an array corresponding to the list of parameters of the function.
