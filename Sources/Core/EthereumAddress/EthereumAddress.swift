@@ -23,7 +23,6 @@ public struct EthereumAddress: Equatable {
             case .contractDeployment:
                 return true
             }
-
         }
     }
     var _address: String
@@ -124,6 +123,7 @@ extension EthereumAddress {
                 self.type = .normal
                 return
             }
+        // TODO: Where it ever set?
         case .contractDeployment:
             self._address = "0x"
             self.type = .contractDeployment

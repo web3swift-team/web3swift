@@ -8,7 +8,7 @@
 import Foundation
 import BigInt
 
-public struct TransactionReceipt: Decodable {
+public struct TransactionReceipt {
     public var transactionHash: Data
     public var blockHash: Data
     public var blockNumber: BigUInt
@@ -20,12 +20,20 @@ public struct TransactionReceipt: Decodable {
     public var status: TXStatus
     public var logsBloom: EthereumBloomFilter?
 
+    static func notProcessed(transactionHash: Data) -> TransactionReceipt {
+        TransactionReceipt(transactionHash: transactionHash, blockHash: Data(), blockNumber: BigUInt(0), transactionIndex: BigUInt(0), contractAddress: nil, cumulativeGasUsed: BigUInt(0), gasUsed: BigUInt(0), logs: [EventLog](), status: .notYetProcessed, logsBloom: nil)
+    }
+}
+
+extension TransactionReceipt {
     public enum TXStatus {
         case ok
         case failed
         case notYetProcessed
     }
+}
 
+extension TransactionReceipt: Decodable {
     enum CodingKeys: String, CodingKey {
         case blockHash
         case blockNumber
@@ -39,12 +47,6 @@ public struct TransactionReceipt: Decodable {
         case status
     }
 
-    static func notProcessed(transactionHash: Data) -> TransactionReceipt {
-        TransactionReceipt(transactionHash: transactionHash, blockHash: Data(), blockNumber: BigUInt(0), transactionIndex: BigUInt(0), contractAddress: nil, cumulativeGasUsed: BigUInt(0), gasUsed: BigUInt(0), logs: [EventLog](), status: .notYetProcessed, logsBloom: nil)
-    }
-}
-
-extension TransactionReceipt {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 

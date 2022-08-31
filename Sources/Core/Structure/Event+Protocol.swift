@@ -6,6 +6,7 @@
 import Foundation
 import BigInt
 
+// FIXME: Make me work or delete
 /// Protocol for generic Ethereum event parsing results
 public protocol EventParserResultProtocol {
     var eventName: String {get}
