@@ -75,7 +75,7 @@ public struct EthereumTransaction: CustomStringConvertible {
 
     public var gasPrice: BigUInt? {
         get { return envelope.parameters.gasPrice }
-        set { envelope.parameters.gasLimit = newValue }
+        set { envelope.parameters.gasPrice = newValue }
     }
 
     public var maxFeePerGas: BigUInt? {
