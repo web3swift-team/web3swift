@@ -131,6 +131,12 @@ extension ABIEncoder {
         return nil
     }
 
+
+    /// Encode Elements In Out
+    /// - Parameters:
+    ///   - types: Contract element InOut to encode
+    ///   - values: Contract values of a given element to encode
+    /// - Returns: Encoded data
     public static func encode(types: [ABI.Element.InOut], values: [AnyObject]) -> Data? {
         guard types.count == values.count else {return nil}
         let params = types.compactMap { (el) -> ABI.Element.ParameterType in
@@ -139,6 +145,12 @@ extension ABIEncoder {
         return encode(types: params, values: values)
     }
 
+
+    /// Encode Elements Prarmeter Type
+    /// - Parameters:
+    ///   - types: Contract parameters type to encode
+    ///   - values: Contract values of a given element to encode
+    /// - Returns: Encoded data
     public static func encode(types: [ABI.Element.ParameterType], values: [AnyObject]) -> Data? {
         guard types.count == values.count else {return nil}
         var tails = [Data]()
