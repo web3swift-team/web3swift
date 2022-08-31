@@ -14,7 +14,7 @@ public struct Utilities {
     /// or raw concat(X, Y) (64 bytes) format.
     ///
     /// Returns 20 bytes of address data.
-    public static func publicToAddressData(_ publicKey: Data) -> Data? {
+    static func publicToAddressData(_ publicKey: Data) -> Data? {
         if publicKey.count == 33 {
             guard let decompressedKey = SECP256K1.combineSerializedPublicKeys(keys: [publicKey], outputCompressed: false) else {return nil}
             return publicToAddressData(decompressedKey)
@@ -46,7 +46,7 @@ public struct Utilities {
     
     
     /// Convert the private key (32 bytes of Data) to compressed (33 bytes) or non-compressed (65 bytes) public key.
-    public static func privateToPublic(_ privateKey: Data, compressed: Bool = false) -> Data? {
+    static func privateToPublic(_ privateKey: Data, compressed: Bool = false) -> Data? {
         guard let publicKey = SECP256K1.privateToPublic(privateKey:  privateKey, compressed: compressed) else {return nil}
         return publicKey
     }
@@ -56,14 +56,14 @@ public struct Utilities {
     /// or raw concat(X, Y) (64 bytes) format.
     ///
     /// Returns a 0x prefixed hex string.
-    public static func publicToAddressString(_ publicKey: Data) -> String? {
+    static func publicToAddressString(_ publicKey: Data) -> String? {
         guard let addressData = Utilities.publicToAddressData(publicKey) else {return nil}
         let address = addressData.toHexString().addHexPrefix().lowercased()
         return address
     }
 
     /// Converts address data (20 bytes) to the 0x prefixed hex string. Does not perform checksumming.
-    public static func addressDataToString(_ addressData: Data) -> String? {
+    static func addressDataToString(_ addressData: Data) -> String? {
         guard addressData.count == 20 else {return nil}
         return addressData.toHexString().addHexPrefix().lowercased()
     }
@@ -71,7 +71,7 @@ public struct Utilities {
     /// Hashes a personal message by first padding it with the "\u{19}Ethereum Signed Message:\n" string and message length string.
     /// Should be used if some arbitrary information should be hashed and signed to prevent signing an Ethereum transaction
     /// by accident.
-    public static func hashPersonalMessage(_ personalMessage: Data) -> Data? {
+    static func hashPersonalMessage(_ personalMessage: Data) -> Data? {
         var prefix = "\u{19}Ethereum Signed Message:\n"
         prefix += String(personalMessage.count)
         guard let prefixData = prefix.data(using: .ascii) else {return nil}
@@ -89,7 +89,7 @@ public struct Utilities {
     /// Parse a user-supplied string using the number of decimals for particular Ethereum unit.
     /// If input is non-numeric or precision is not sufficient - returns nil.
     /// Allowed decimal separators are ".", ",".
-    public static func parseToBigUInt(_ amount: String, units: Utilities.Units = .eth) -> BigUInt? {
+    static func parseToBigUInt(_ amount: String, units: Utilities.Units = .eth) -> BigUInt? {
         let unitDecimals = units.decimals
         return parseToBigUInt(amount, decimals: unitDecimals)
     }
@@ -97,7 +97,7 @@ public struct Utilities {
     /// Parse a user-supplied string using the number of decimals.
     /// If input is non-numeric or precision is not sufficient - returns nil.
     /// Allowed decimal separators are ".", ",".
-    public static func parseToBigUInt(_ amount: String, decimals: Int = 18) -> BigUInt? {
+    static func parseToBigUInt(_ amount: String, decimals: Int = 18) -> BigUInt? {
         let separators = CharacterSet(charactersIn: ".,")
         let components = amount.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: separators)
         guard components.count == 1 || components.count == 2 else {return nil}
@@ -118,7 +118,7 @@ public struct Utilities {
     /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
     ///
     /// Returns nil of formatting is not possible to satisfy.
-    public static func formatToEthereumUnits(_ bigNumber: BigInt, toUnits: Utilities.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".") -> String? {
+    static func formatToEthereumUnits(_ bigNumber: BigInt, toUnits: Utilities.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".") -> String? {
         let magnitude = bigNumber.magnitude
         guard let formatted = formatToEthereumUnits(magnitude, toUnits: toUnits, decimals: decimals, decimalSeparator: decimalSeparator) else {return nil}
         switch bigNumber.sign {
@@ -134,7 +134,7 @@ public struct Utilities {
     /// Fallbacks to scientific format if higher precision is required.
     ///
     /// Returns nil of formatting is not possible to satisfy.
-    public static func formatToPrecision(_ bigNumber: BigInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+    static func formatToPrecision(_ bigNumber: BigInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
         let magnitude = bigNumber.magnitude
         guard let formatted = formatToPrecision(magnitude, numberDecimals: numberDecimals, formattingDecimals: formattingDecimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific) else {return nil}
         switch bigNumber.sign {
@@ -149,7 +149,7 @@ public struct Utilities {
     /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
     ///
     /// Returns nil of formatting is not possible to satisfy.
-    public static func formatToEthereumUnits(_ bigNumber: BigUInt, toUnits: Utilities.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+    static func formatToEthereumUnits(_ bigNumber: BigUInt, toUnits: Utilities.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
         return formatToPrecision(bigNumber, numberDecimals: toUnits.decimals, formattingDecimals: decimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific)
     }
 
@@ -158,7 +158,7 @@ public struct Utilities {
     /// Fallbacks to scientific format if higher precision is required.
     ///
     /// Returns nil of formatting is not possible to satisfy.
-    public static func formatToPrecision(_ bigNumber: BigUInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+    static func formatToPrecision(_ bigNumber: BigUInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
         if bigNumber == 0 {
             return "0"
         }
@@ -214,7 +214,7 @@ public struct Utilities {
     /// BE WARNED - changing a message will result in different Ethereum address, but not in error.
     ///
     /// Input parameters should be hex Strings.
-    static public func personalECRecover(_ personalMessage: String, signature: String) -> EthereumAddress? {
+    static func personalECRecover(_ personalMessage: String, signature: String) -> EthereumAddress? {
         guard let data = Data.fromHex(personalMessage) else {return nil}
         guard let sig = Data.fromHex(signature) else {return nil}
         return Utilities.personalECRecover(data, signature: sig)
@@ -224,7 +224,7 @@ public struct Utilities {
     /// BE WARNED - changing a message will result in different Ethereum address, but not in error.
     ///
     /// Input parameters should be Data objects.
-    static public func personalECRecover(_ personalMessage: Data, signature: Data) -> EthereumAddress? {
+    static func personalECRecover(_ personalMessage: Data, signature: Data) -> EthereumAddress? {
         if signature.count != 65 { return nil}
         let rData = signature[0..<32].bytes
         let sData = signature[32..<64].bytes
@@ -248,7 +248,7 @@ public struct Utilities {
     /// Takes a hash of some message. What message is hashed should be checked by user separately.
     ///
     /// Input parameters should be Data objects.
-    static public func hashECRecover(hash: Data, signature: Data) -> EthereumAddress? {
+    static func hashECRecover(hash: Data, signature: Data) -> EthereumAddress? {
         if signature.count != 65 { return nil}
         let rData = signature[0..<32].bytes
         let sData = signature[32..<64].bytes
@@ -266,19 +266,19 @@ public struct Utilities {
     }
 
     /// returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
-    static public func keccak256(_ data: Data) -> Data? {
+    static func keccak256(_ data: Data) -> Data? {
         if data.count == 0 {return nil}
         return data.sha3(.keccak256)
     }
 
     /// returns Ethereum variant of sha3 (keccak256) of data. Returns nil is data is empty
-    static public func sha3(_ data: Data) -> Data? {
+    static func sha3(_ data: Data) -> Data? {
         if data.count == 0 {return nil}
         return data.sha3(.keccak256)
     }
 
     /// returns sha256 of data. Returns nil is data is empty
-    static public func sha256(_ data: Data) -> Data? {
+    static func sha256(_ data: Data) -> Data? {
         if data.count == 0 {return nil}
         return data.sha256()
     }
@@ -307,18 +307,6 @@ public struct Utilities {
         completeSignature.append(Data(unmarshalledSignature.s))
         completeSignature.append(Data([unmarshalledSignature.v]))
         return completeSignature
-    }
-
-    public static func hexToData(_ string: String) -> Data? {
-        return Data.fromHex(string)
-    }
-
-    public static func hexToBigUInt(_ string: String) -> BigUInt? {
-        return BigUInt(string.stripHexPrefix(), radix: 16)
-    }
-
-    public static func randomBytes(length: Int) -> Data? {
-        return Data.randomBytes(length: length)
     }
 }
 

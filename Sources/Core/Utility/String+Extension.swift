@@ -5,7 +5,7 @@
 
 import Foundation
 
-public extension String {
+extension String {
     var fullRange: Range<Index> {
         return startIndex..<endIndex
     }

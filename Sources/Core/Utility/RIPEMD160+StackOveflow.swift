@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct RIPEMD160 {
+struct RIPEMD160 {
 
     private var MDbuf: (UInt32, UInt32, UInt32, UInt32, UInt32)
     private var buffer: Data
@@ -392,7 +392,7 @@ public struct RIPEMD160 {
     }
 }
 
-public extension RIPEMD160 {
+extension RIPEMD160 {
 
     static func hash(message: Data) throws -> Data {
         var md = RIPEMD160()
@@ -407,7 +407,7 @@ public extension RIPEMD160 {
     }
 }
 
-public extension RIPEMD160 {
+extension RIPEMD160 {
 
     static func hmac(key: Data, message: Data) throws -> Data {
 

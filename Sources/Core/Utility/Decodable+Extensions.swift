@@ -31,7 +31,7 @@ extension KeyedDecodingContainer {
     /// - Parameter key: The key that the decoded value is associated with.
     /// - Returns: A decoded value of type `T`
     /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `DecodableFromHex`.
-    public func decodeHex<T: DecodableFromHex>(_ type: T.Type, forKey: KeyedDecodingContainer<K>.Key) throws -> T {
+    func decodeHex<T: DecodableFromHex>(_ type: T.Type, forKey: KeyedDecodingContainer<K>.Key) throws -> T {
         let hexString = try self.decode(String.self, forKey: forKey)
         guard let value = T(from: hexString) else { throw Web3Error.dataError }
         return value
@@ -45,7 +45,7 @@ extension KeyedDecodingContainer {
     /// - Parameter key: The key that the decoded value is associated with.
     /// - Returns: A decoded value of type `[T]`
     /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `[[DecodableFromHex]]`.
-    public func decodeHex<T: DecodableFromHex>(_ type: [T].Type, forKey: KeyedDecodingContainer<K>.Key) throws -> [T] {
+    func decodeHex<T: DecodableFromHex>(_ type: [T].Type, forKey: KeyedDecodingContainer<K>.Key) throws -> [T] {
         var container = try nestedUnkeyedContainer(forKey: forKey)
         guard let array = try? container.decodeHex(type) else { throw Web3Error.dataError }
         return array
@@ -59,7 +59,7 @@ extension KeyedDecodingContainer {
     /// - Parameter key: The key that the decoded value is associated with.
     /// - Returns: A decoded value of type `[[T]]`
     /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `[[DecodableFromHex]]`.
-    public func decodeHex<T: DecodableFromHex>(_ type: [[T]].Type, forKey: KeyedDecodingContainer<K>.Key) throws -> [[T]] {
+    func decodeHex<T: DecodableFromHex>(_ type: [[T]].Type, forKey: KeyedDecodingContainer<K>.Key) throws -> [[T]] {
         var container = try nestedUnkeyedContainer(forKey: forKey)
         guard let array = try? container.decodeHex(type) else { throw Web3Error.dataError }
         return array
@@ -73,13 +73,13 @@ extension KeyedDecodingContainer {
     /// - Parameter key: The key that the decoded value is associated with.
     /// - Returns: A decoded value of type `T`, or nil if key is not present
     /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `DecodableFromHex`.
-    public func decodeHexIfPresent<T: DecodableFromHex>(_ type: T.Type, forKey: KeyedDecodingContainer<K>.Key) throws -> T? {
+    func decodeHexIfPresent<T: DecodableFromHex>(_ type: T.Type, forKey: KeyedDecodingContainer<K>.Key) throws -> T? {
         guard contains(forKey) else { return nil }
         return try decodeHex(type, forKey: forKey)
     }
 }
 
-public extension UnkeyedDecodingContainer {
+extension UnkeyedDecodingContainer {
     /// Decodes a unkeyed value from hex to `[DecodableFromHex]`
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `EthereumAddress`
@@ -118,12 +118,12 @@ public extension UnkeyedDecodingContainer {
     }
 }
 
-public protocol DecodableFromHex: Decodable {
+protocol DecodableFromHex: Decodable {
     init?(from hexString: String)
 }
 
 extension Data: DecodableFromHex {
-    public init?(from hexString: String) {
+    init?(from hexString: String) {
         self.init()
         guard let tmp = Self.fromHex(hexString) else { return nil }
         self = tmp
@@ -131,19 +131,19 @@ extension Data: DecodableFromHex {
 }
 
 extension UInt: DecodableFromHex {
-    public init?(from hexString: String) {
+    init?(from hexString: String) {
         self.init(hexString.stripHexPrefix(), radix: 16)
     }
 }
 
 extension BigUInt: DecodableFromHex {
-    public init?(from hexString: String) {
+    init?(from hexString: String) {
         self.init(hexString.stripHexPrefix(), radix: 16)
     }
 }
 
 extension Date: DecodableFromHex {
-    public init?(from hexString: String) {
+    init?(from hexString: String) {
         self.init()
         let stripedHexString = hexString.stripHexPrefix()
         guard let timestampInt = UInt(stripedHexString, radix: 16) else { return nil }
@@ -152,7 +152,7 @@ extension Date: DecodableFromHex {
 }
 
 extension EthereumAddress: DecodableFromHex {
-    public init?(from hexString: String) {
+    init?(from hexString: String) {
         self.init(hexString, ignoreChecksum: true)
     }
 }

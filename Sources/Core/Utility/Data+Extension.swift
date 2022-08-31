@@ -5,8 +5,7 @@
 
 import Foundation
 
-public extension Data {
-
+extension Data {
     init<T>(fromArray values: [T]) {
         let values = values
         let ptrUB = values.withUnsafeBufferPointer { (ptr: UnsafeBufferPointer) in return ptr }

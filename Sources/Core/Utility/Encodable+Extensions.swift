@@ -9,29 +9,6 @@ import Foundation
 import BigInt
 
 extension KeyedEncodingContainer {
-//    /// Encodes the given value for the given key.
-//    ///
-//    /// - parameter value: The value to encode.
-//    /// - parameter key: The key to associate the value with.
-//    /// - throws: `EncodingError.invalidValue` if the given value is invalid in
-//    ///   the current context for this format.
-//    public mutating func encode(_ value: [String: Any], forKey key: KeyedEncodingContainer<K>.Key) throws {
-//        var container = nestedContainer(keyedBy: AnyCodingKey.self, forKey: key)
-//        try container.encode(value)
-//    }
-
-//    /// Encodes the given value for the given key.
-//    ///
-//    /// - parameter value: The value to encode.
-//    /// - parameter key: The key to associate the value with.
-//    /// - throws: `EncodingError.invalidValue` if the given value is invalid in
-//    ///   the current context for this format.
-//    public mutating func encode(_ value: [Any], forKey key: KeyedEncodingContainer<K>.Key) throws {
-//        var container = nestedUnkeyedContainer(forKey: key)
-//        try container.encode(value)
-//    }
-
-
     mutating func encodeHex<T: EncodableToHex>(_ value: T, forKey key: KeyedEncodingContainer<K>.Key) throws {
         try encode(value.hexString, forKey: key)
     }
@@ -40,21 +17,6 @@ extension KeyedEncodingContainer {
         var container = nestedUnkeyedContainer(forKey: key)
         try container.encodeHex(value)
     }
-
-//    /// Encodes the given value for the given key if it is not `nil`.
-//    ///
-//    /// - parameter value: The value to encode.
-//    /// - parameter key: The key to associate the value with.
-//    /// - throws: `EncodingError.invalidValue` if the given value is invalid in
-//    ///   the current context for this format.
-//    public mutating func encodeIfPresent(_ value: [String: Any]?, forKey key: KeyedEncodingContainer<K>.Key) throws {
-//        if let value = value {
-//            var container = nestedContainer(keyedBy: AnyCodingKey.self, forKey: key)
-//            try container.encode(value)
-//        } else {
-//            try encodeNil(forKey: key)
-//        }
-//    }
 
     /// Encodes the given value for the given key if it is not `nil`.
     ///
