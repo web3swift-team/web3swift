@@ -12,7 +12,6 @@ extension web3.Eth {
 
     // FIXME: Rewrite this to EthereumTransaction
     public func estimateGas(for transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> BigUInt {
-//        guard let transactionParameters = transaction.parameters else { throw Web3Error.dataError }
 
         // FIXME: Something wrong with this. We should not to get parameters + options in one method.
         let request: APIRequest = .estimateGas(transaction.parameters, transactionOptions?.callOnBlock ?? .latest)

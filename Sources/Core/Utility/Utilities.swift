@@ -46,7 +46,7 @@ public struct Utilities {
     
     
     /// Convert the private key (32 bytes of Data) to compressed (33 bytes) or non-compressed (65 bytes) public key.
-    static func privateToPublic(_ privateKey: Data, compressed: Bool = false) -> Data? {
+    public static func privateToPublic(_ privateKey: Data, compressed: Bool = false) -> Data? {
         guard let publicKey = SECP256K1.privateToPublic(privateKey:  privateKey, compressed: compressed) else {return nil}
         return publicKey
     }
@@ -56,7 +56,7 @@ public struct Utilities {
     /// or raw concat(X, Y) (64 bytes) format.
     ///
     /// Returns a 0x prefixed hex string.
-    static func publicToAddressString(_ publicKey: Data) -> String? {
+    public static func publicToAddressString(_ publicKey: Data) -> String? {
         guard let addressData = Utilities.publicToAddressData(publicKey) else {return nil}
         let address = addressData.toHexString().addHexPrefix().lowercased()
         return address
@@ -71,7 +71,7 @@ public struct Utilities {
     /// Hashes a personal message by first padding it with the "\u{19}Ethereum Signed Message:\n" string and message length string.
     /// Should be used if some arbitrary information should be hashed and signed to prevent signing an Ethereum transaction
     /// by accident.
-    static func hashPersonalMessage(_ personalMessage: Data) -> Data? {
+    public static func hashPersonalMessage(_ personalMessage: Data) -> Data? {
         var prefix = "\u{19}Ethereum Signed Message:\n"
         prefix += String(personalMessage.count)
         guard let prefixData = prefix.data(using: .ascii) else {return nil}
@@ -89,7 +89,7 @@ public struct Utilities {
     /// Parse a user-supplied string using the number of decimals for particular Ethereum unit.
     /// If input is non-numeric or precision is not sufficient - returns nil.
     /// Allowed decimal separators are ".", ",".
-    static func parseToBigUInt(_ amount: String, units: Utilities.Units = .eth) -> BigUInt? {
+    public static func parseToBigUInt(_ amount: String, units: Utilities.Units = .eth) -> BigUInt? {
         let unitDecimals = units.decimals
         return parseToBigUInt(amount, decimals: unitDecimals)
     }
@@ -97,7 +97,7 @@ public struct Utilities {
     /// Parse a user-supplied string using the number of decimals.
     /// If input is non-numeric or precision is not sufficient - returns nil.
     /// Allowed decimal separators are ".", ",".
-    static func parseToBigUInt(_ amount: String, decimals: Int = 18) -> BigUInt? {
+    public static func parseToBigUInt(_ amount: String, decimals: Int = 18) -> BigUInt? {
         let separators = CharacterSet(charactersIn: ".,")
         let components = amount.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: separators)
         guard components.count == 1 || components.count == 2 else {return nil}
@@ -119,7 +119,7 @@ public struct Utilities {
     ///
     /// Returns nil of formatting is not possible to satisfy.
     static func formatToEthereumUnits(_ bigNumber: BigInt, toUnits: Utilities.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".") -> String? {
-        let magnitude = bigNumber.magnitude
+        let magnitude = BigInt(bigNumber.magnitude)
         guard let formatted = formatToEthereumUnits(magnitude, toUnits: toUnits, decimals: decimals, decimalSeparator: decimalSeparator) else {return nil}
         switch bigNumber.sign {
         case .plus:
@@ -134,7 +134,7 @@ public struct Utilities {
     /// Fallbacks to scientific format if higher precision is required.
     ///
     /// Returns nil of formatting is not possible to satisfy.
-    static func formatToPrecision(_ bigNumber: BigInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+    public static func formatToPrecision(_ bigNumber: BigInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
         let magnitude = bigNumber.magnitude
         guard let formatted = formatToPrecision(magnitude, numberDecimals: numberDecimals, formattingDecimals: formattingDecimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific) else {return nil}
         switch bigNumber.sign {
@@ -145,20 +145,20 @@ public struct Utilities {
         }
     }
 
-    /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
-    /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
-    ///
-    /// Returns nil of formatting is not possible to satisfy.
-    static func formatToEthereumUnits(_ bigNumber: BigUInt, toUnits: Utilities.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
-        return formatToPrecision(bigNumber, numberDecimals: toUnits.decimals, formattingDecimals: decimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific)
-    }
+//    /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
+//    /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
+//    ///
+//    /// Returns nil of formatting is not possible to satisfy.
+//    static func formatToEthereumUnits(_ bigNumber: BigUInt, toUnits: Utilities.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+//        return formatToPrecision(bigNumber, numberDecimals: toUnits.decimals, formattingDecimals: decimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific)
+//    }
 
     /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "numberDecimals",
     /// then limits the decimal part to "formattingDecimals" symbols and uses a "decimalSeparator" as a separator.
     /// Fallbacks to scientific format if higher precision is required.
     ///
     /// Returns nil of formatting is not possible to satisfy.
-    static func formatToPrecision(_ bigNumber: BigUInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+    public static func formatToPrecision(_ bigNumber: BigUInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
         if bigNumber == 0 {
             return "0"
         }
@@ -224,7 +224,7 @@ public struct Utilities {
     /// BE WARNED - changing a message will result in different Ethereum address, but not in error.
     ///
     /// Input parameters should be Data objects.
-    static func personalECRecover(_ personalMessage: Data, signature: Data) -> EthereumAddress? {
+    public static func personalECRecover(_ personalMessage: Data, signature: Data) -> EthereumAddress? {
         if signature.count != 65 { return nil}
         let rData = signature[0..<32].bytes
         let sData = signature[32..<64].bytes
@@ -248,7 +248,7 @@ public struct Utilities {
     /// Takes a hash of some message. What message is hashed should be checked by user separately.
     ///
     /// Input parameters should be Data objects.
-    static func hashECRecover(hash: Data, signature: Data) -> EthereumAddress? {
+    public static func hashECRecover(hash: Data, signature: Data) -> EthereumAddress? {
         if signature.count != 65 { return nil}
         let rData = signature[0..<32].bytes
         let sData = signature[32..<64].bytes
@@ -321,7 +321,7 @@ extension Utilities {
         case Microether
         case Finney
 
-        var decimals: Int {
+        public var decimals: Int {
             get {
                 switch self {
                 case .eth:

@@ -13,8 +13,9 @@ extension web3.Eth {
     // FIXME: Not working yet.
     public func callTransaction(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> Data {
         // MARK: Read data from ABI flow
-        guard let transactionParameters = transaction.encodeAsDictionary(from: transactionOptions?.from) else { throw Web3Error.dataError}
-        let request: APIRequest = .call(transactionParameters, transactionOptions?.callOnBlock ?? .latest)
+        // guard let transactionParameters = transaction.encodeAsDictionary(from: transactionOptions?.from) else { throw Web3Error.dataError}
+        // FIXME: Make me EthereumTransaction
+        let request: APIRequest = .call(transaction.parameters, transactionOptions?.callOnBlock ?? .latest)
         let response: APIResponse<Data> = try await APIRequest.sendRequest(with: self.provider, for: request)
         return response.result
     }

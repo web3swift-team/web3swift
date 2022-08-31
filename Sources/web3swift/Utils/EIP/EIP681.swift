@@ -520,6 +520,7 @@ extension Web3 {
                 var prevIndex = 0
                 var rawValues = [String]()
                 for index in indices {
+
                     var argument = rawValue[prevIndex..<index]
                     if let index = argument.firstIndex(of: "\""),
                        argument.distance(from: argument.startIndex, to: index) == 0 {
