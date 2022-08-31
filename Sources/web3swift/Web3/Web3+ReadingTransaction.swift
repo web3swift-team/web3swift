@@ -36,6 +36,7 @@ public class ReadTransaction {
     // and only then it decodes it.
     // It should be splitted in this way up to three (merge, send, decode)
     public func decodedData(with transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
+        // MARK: Read data from ABI flow
         var assembledTransaction: EthereumTransaction = self.transaction
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
         var optionsForCall = TransactionOptions()
@@ -47,6 +48,7 @@ public class ReadTransaction {
             assembledTransaction.value = value
         }
 
+        // MARK: Read data from ABI flow
         let data: Data = try await self.web3.eth.callTransaction(assembledTransaction, transactionOptions: optionsForCall)
 
         if self.method == "fallback" {

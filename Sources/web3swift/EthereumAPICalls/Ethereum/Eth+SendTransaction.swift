@@ -46,9 +46,11 @@ extension web3.Eth {
             }
             return try await self.web3.eth.send(raw: assembledTransaction)
         }
-
+        // MARK: Writing Data flow
+        // From EthereumTransaction.data to TransactionParameters.data
         guard let transactionParameters = transaction.encodeAsDictionary(from: transactionOptions?.from) else { throw Web3Error.dataError }
 
+        // MARK: Sending Data flow
         let request: APIRequest = .sendTransaction(transactionParameters)
         let response: APIResponse<Hash> = try await APIRequest.sendRequest(with: self.provider, for: request)
 

@@ -59,6 +59,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
         let parameters = [] as [AnyObject]
+        // MARK: Writing Data flow
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
@@ -79,6 +80,8 @@ class AdvancedABIv2Tests: LocalTestCase {
         }
 
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
+        // MARK: Read data from ABI flow
+        // MARK: - Encoding ABI Data flow
         let tx = contract.read("testStaticArray")
         let testStaticArray = try await tx!.decodedData()
         print(testStaticArray.description)
@@ -93,6 +96,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
         let parameters = [] as [AnyObject]
+        // MARK: Writing Data flow
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
@@ -113,6 +117,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         }
 
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
+
         let tx = contract.read("testDynArray")
         let testDynArray = try await tx!.decodedData()
         print(testDynArray.description)
@@ -127,6 +132,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
         let parameters = [] as [AnyObject]
+        // MARK: Writing Data flow
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
@@ -147,6 +153,8 @@ class AdvancedABIv2Tests: LocalTestCase {
         }
 
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
+        // MARK: Read data from ABI flow
+        // MARK: - Encoding ABI Data flow
         let tx = contract.read("testDynOfDyn")
         let testDynOfDyn = try await tx!.decodedData()
         print(testDynOfDyn.description)
@@ -161,6 +169,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
         let parameters = [] as [AnyObject]
+        // MARK: Writing Data flow
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
         deployTx.transactionOptions.gasLimit = .manual(3000000)
@@ -181,6 +190,8 @@ class AdvancedABIv2Tests: LocalTestCase {
         }
 
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
+        // MARK: Read data from ABI flow
+        // MARK: - Encoding ABI Data flow
         let tx = contract.read("testStOfDyn")
         let testStOfDyn = try await tx!.decodedData()
         print(testStOfDyn.description)
@@ -192,6 +203,8 @@ class AdvancedABIv2Tests: LocalTestCase {
         let web3 = try await Web3.new(LocalTestCase.url)
         let contract = web3.contract(abiString, at: contractAddress, abiVersion: 2)
         XCTAssert(contract != nil)
+        // MARK: Read data from ABI flow
+        // MARK: - Encoding ABI Data flow
         let tx = contract?.read("empty")
         XCTAssertNotNil(tx)
         let _ = try await tx!.decodedData()
@@ -203,6 +216,8 @@ class AdvancedABIv2Tests: LocalTestCase {
         let web3 = try await Web3.new(LocalTestCase.url)
         let contract = web3.contract(abiString, at: contractAddress, abiVersion: 2)
         XCTAssert(contract != nil)
+        // MARK: Read data from ABI flow
+        // MARK: - Encoding ABI Data flow
         let tx = contract?.read("getFlagData")
         XCTAssertNotNil(tx)
         let _ = try await tx!.call()

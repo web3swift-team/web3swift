@@ -15,10 +15,17 @@ class ERC20ClassTests: LocalTestCase {
     func testERC20TokenCreation() async throws {
         let (web3, _, receipt, _) = try await TestHelpers.localDeployERC20()
         let erc20token = ERC20.init(web3: web3, provider: web3.provider, address: receipt.contractAddress!)
+        // MARK: No data used in call
         try await erc20token.readProperties()
 
+        // MARK: - Duplicated call readProperties
+        // MARK: No data used in call
         let symbol = try await erc20token.symbol()
+        // MARK: - Duplicated call readProperties
+        // MARK: No data used in call
         let name = try await erc20token.name()
+        // MARK: - Duplicated call readProperties
+        // MARK: No data used in call
         let decimals = try await erc20token.decimals()
         XCTAssert(symbol == "w3s")
         XCTAssert(name == "web3swift")

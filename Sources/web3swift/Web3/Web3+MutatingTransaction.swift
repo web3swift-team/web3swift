@@ -183,6 +183,7 @@ public class WriteTransaction: ReadTransaction {
         var cleanedOptions = TransactionOptions()
         cleanedOptions.from = mergedOptions.from
         cleanedOptions.to = mergedOptions.to
+        // MARK: Sending Data flow
         return try await web3.eth.send(transaction, transactionOptions: cleanedOptions, password: password)
     }
 

@@ -79,22 +79,27 @@ class web3swiftPromisesTests: XCTestCase {
 
         let amount1 = Utilities.parseToBigUInt("0.000000000000000001", units: Utilities.Units.eth) // 1 wei
 
+        // MARK: Writing Data flow
         guard let tx1 = contract.write("test",
                                        parameters: [amount1] as [AnyObject],
                                        extraData: Data(),
                                        transactionOptions: options) else {
             return
         }
+        // MARK: Writing Data flow
         let estimate1 = try await tx1.estimateGas(with: nil)
         print(estimate1)
 
         let amount2 = Utilities.parseToBigUInt("0.00000005", units: .eth) // 50 gwei
+
+        // MARK: Writing Data flow
         guard let tx2 = contract.write("test",
                                        parameters: [amount2] as [AnyObject],
                                        extraData: Data(),
                                        transactionOptions: options) else {
             return
         }
+        // MARK: Writing Data flow
         let estimate2 = try await tx2.estimateGas(with: nil)
         print(estimate2)
         XCTAssertLessThanOrEqual(estimate2 - estimate1, 22000)

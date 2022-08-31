@@ -47,6 +47,7 @@ extension web3 {
             self.transactionOptions = mergedOptions
         }
 
+        // MARK: Writing Data flow
         /// Deploys a constact instance using the previously provided  ABI, some bytecode, constructor parameters and options.
         /// If extraData is supplied it is appended to encoded bytecode and constructor parameters.
         ///
@@ -57,6 +58,7 @@ extension web3 {
                            extraData: Data? = nil,
                            transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
+            // MARK: Writing Data flow
             guard var tx = self.contract.deploy(bytecode: bytecode,
                                                 constructor: constructor,
                                                 parameters: parameters,
@@ -93,8 +95,10 @@ extension web3 {
         /// Returns a "Transaction intermediate" object.
         public func read(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: TransactionOptions? = nil) -> ReadTransaction? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
+            // MARK: - Encoding ABI Data flow
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             tx.chainID = self.web3.provider.network?.chainID
+            // MARK: Read data from ABI flow
             let writeTX = ReadTransaction.init(transaction: tx, web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
             return writeTX
         }
