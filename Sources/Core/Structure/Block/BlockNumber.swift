@@ -32,3 +32,10 @@ public enum BlockNumber: CustomStringConvertible {
         }
     }
 }
+
+extension BlockNumber: APIRequestParameterType {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(description)
+    }
+}

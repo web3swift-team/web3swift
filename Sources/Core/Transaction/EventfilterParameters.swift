@@ -23,39 +23,14 @@ public struct Counter {
     }
 }
 
-// /// Transaction parameters JSON structure for interaction with Ethereum node.
-// public struct TransactionParameters: Codable {
-//     /// accessList parameter JSON structure
-
-
-//     public var type: String?  // must be set for new EIP-2718 transaction types
-//     public var chainID: String?
-//     public var data: String?
-//     public var from: String?
-//     public var gas: String?
-//     public var gasPrice: String? // Legacy & EIP-2930
-//     public var maxFeePerGas: String? // EIP-1559
-//     public var maxPriorityFeePerGas: String? // EIP-1559
-//     public var accessList: [AccessListEntry]? // EIP-1559 & EIP-2930
-//     public var to: String?
-//     public var value: String? = "0x0"
-
-//     public init(from _from: String?, to _to: String?) {
-//         from = _from
-//         to = _to
-//     }
-// }
-
-
-
 /// Event filter parameters JSON structure for interaction with Ethereum node.
-public struct EventFilterParameters: Codable {
-    public var fromBlock: String?
-    public var toBlock: String?
-    public var topics: [[String?]?]?
-    public var address: [String?]?
+public struct EventFilterParameters: Encodable {
+    public var fromBlock: BlockNumber
+    public var toBlock: BlockNumber
+    public var address: [EthereumAddress]
+    public var topics: [Topic?]
     
-    public init(fromBlock: String? = nil, toBlock: String? = nil, topics: [[String?]?]? = nil, address: [String?]? = nil) {
+    public init(fromBlock: BlockNumber = .latest, toBlock: BlockNumber = .latest, address: [EthereumAddress] = [], topics: [Topic?] = []) {
         self.fromBlock = fromBlock
         self.toBlock = toBlock
         self.topics = topics
@@ -63,4 +38,97 @@ public struct EventFilterParameters: Codable {
     }
 }
 
+extension EventFilterParameters {
+    enum CodingKeys: String, CodingKey {
+        case fromBlock
+        case toBlock
+        case address
+        case topics
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(fromBlock.description, forKey: .fromBlock)
+        try container.encode(toBlock.description, forKey: .toBlock)
+        try container.encode(address.description, forKey: .address)
+        try container.encode(topics.textRepresentation, forKey: .topics)
+    }
+}
+
+extension EventFilterParameters {
+    /**
+     This enum covers the optional nested Arrays
+
+     ``EventFilterParameters`` include ``topic`` property with is array of optional values,
+     and where `nil` value is a thing, and should be kept in server request.
+
+     This is not a trivial case for swift lang or any other stricktly typed lang.
+
+     So to make this possible ``Topic`` enum is provided.
+
+     It handle two cases: ``.string(String?)`` and ``.strings([Topic?]?)``,
+     where former should be used to assign first demention value,
+     and the latter to assign second dimension value into ``EventFilterParameters.topics`` property.
+
+     So to encode as a parameter follow JSON array:
+     ```JSON
+     [
+         "0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b",
+         null,
+         [
+             "0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b",
+             "0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc"
+         ]
+     ]
+     ```
+
+     you have to pass to the ``topics`` property follow swift array:
+     ```swift
+     let topics: [Topic?] = [
+         .string("0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b"),
+         .string(nil),
+         .strings([
+             .string("0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b"),
+             .string("0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc"),
+         ])
+     ]
+     ```
+     */
+    public enum Topic:  Encodable {
+        case string(String?)
+        case strings([Topic?]?)
+
+        var rawValue: String {
+            switch self {
+            case let .string(string):
+                // Assiciated value can contain only String or nil, both of them always encoded as a JSON could be represented as String again.
+                return String(data: try! JSONEncoder().encode(string), encoding: .utf8)!
+            case let .strings(strings):
+                return strings!.textRepresentation
+            }
+        }
+    }
+}
+
 extension EventFilterParameters: APIRequestParameterType { }
+
+// - Why don't you develope some JSON composer to just send a server request, Yaroslav?
+// - Indeed, see no reason, why should i pass this.
+// Oh i wish to look deep in the Vitaliks eyes someday.
+extension Array where Element == EventFilterParameters.Topic? {
+    var textRepresentation: String {
+        var string = "["
+        for (number, element) in self.enumerated() {
+            if number > 0 {
+                string += ","
+            }
+            if let element = element {
+                string += element.rawValue
+            } else {
+                string += "null"
+            }
+        }
+        string += "]"
+        return string
+    }
+}

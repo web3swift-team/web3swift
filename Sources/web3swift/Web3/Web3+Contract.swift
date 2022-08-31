@@ -122,10 +122,10 @@ extension web3 {
             return writeTX
         }
 
-        /// Creates an "EventParserProtocol" compliant object to use it for parsing particular block or transaction for events.
-        public func createEventParser(_ eventName: String, filter: EventFilter?) -> EventParserProtocol? {
-            let parser = EventParser(web3: self.web3, eventName: eventName, contract: self.contract, filter: filter)
-            return parser
-        }
+//        /// Creates an "EventParserProtocol" compliant object to use it for parsing particular block or transaction for events.
+//        public func createEventParser(_ eventName: String, filter: EventFilter?) -> EventParserProtocol? {
+//            let parser = EventParser(web3: self.web3, eventName: eventName, contract: self.contract, filter: filter)
+//            return parser
+//        }
     }
 }

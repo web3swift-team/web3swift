@@ -223,5 +223,4 @@ public enum APIRequest {
     // tx Namespace - https://geth.ethereum.org/docs/rpc/ns-txpool
     case getTxPoolStatus // No in Eth API
     case getTxPoolContent // No in Eth API
-    case getTxPoolInspect // No in Eth API
 }
