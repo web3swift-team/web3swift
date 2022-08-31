@@ -626,7 +626,7 @@ class TransactionsTests: XCTestCase {
     
     func testEthSendExampleAndGetTransactionReceiptAndDetails() async {
         do {
-            let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
+            let web3 = try await Web3.new(LocalTestCase.url)
             let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
             let allAddresses = try await web3.eth.ownedAccounts()
             let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)

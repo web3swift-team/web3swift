@@ -112,7 +112,7 @@ class UncategorizedTests: XCTestCase {
     
     func testPublicMappingsAccess() async throws {
         let jsonString = "[{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"users\",\"outputs\":[{\"name\":\"name\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"address\"}],\"name\":\"userDeviceCount\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalUsers\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}]"
-        let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
+        let web3 = try await Web3.new(LocalTestCase.url)
         guard let addr = EthereumAddress("0xdef61132a0c1259464b19e4590e33666aae38574") else {return XCTFail()}
         let contract = web3.contract(jsonString, at: addr, abiVersion: 2)
         XCTAssert(contract != nil)

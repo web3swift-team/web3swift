@@ -36,4 +36,24 @@ class ERC20Tests: LocalTestCase {
         print(String(bal))
     }
 
+//    func testERC20TokenSend() async throws {
+//        let web3 = Web3.
+//        let value: String = "1.0" // In Tokens
+//        let walletAddress = EthereumAddress(wallet.address)! // Your wallet address
+//        let toAddress = EthereumAddress(toAddressString)!
+//        let erc20ContractAddress = EthereumAddress(token.address)!
+//        let contract = web3.contract(Web3.Utils.erc20ABI, at: erc20ContractAddress, abiVersion: 2)!
+//        let amount = Web3.Utils.parseToBigUInt(value, units: .eth)
+//        var options = TransactionOptions.defaultOptions
+//        options.value = amount
+//        options.from = walletAddress
+//        options.gasPrice = .automatic
+//        options.gasLimit = .automatic
+//        let method = "transfer"
+//        let tx = contract.write(
+//          method,
+//          parameters: [toAddress, amount] as [AnyObject],
+//          extraData: Data(),
+//          transactionOptions: options)!
+//    }
 }

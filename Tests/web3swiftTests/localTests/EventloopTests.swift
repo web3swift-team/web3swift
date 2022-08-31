@@ -27,7 +27,7 @@ class EventloopTests: XCTestCase {
             }
         }
 
-        let web3main = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
+        let web3main = try await Web3.new(LocalTestCase.url)
         let functionToCall: web3.Eventloop.EventLoopCall = getBlockNumber
         let monitoredProperty = web3.Eventloop.MonitoredProperty.init(name: "onNewBlock", calledFunction: functionToCall)
         web3main.eventLoop.monitoredProperties.append(monitoredProperty)

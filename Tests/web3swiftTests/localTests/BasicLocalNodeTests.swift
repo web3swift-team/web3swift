@@ -14,7 +14,7 @@ import Core
 class BasicLocalNodeTests: LocalTestCase {
 
     func testDeployWithRemoteSigning() async throws {
-        let web3 = try await Web3.new(URL.init(string: "http://127.0.0.1:8545")!)
+        let web3 = try await Web3.new(LocalTestCase.url)
         let allAddresses = try await web3.eth.ownedAccounts()
 
         let abiString =  "[{\"constant\":true,\"inputs\":[],\"name\":\"getFlagData\",\"outputs\":[{\"name\":\"data\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"data\",\"type\":\"string\"}],\"name\":\"setFlagData\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
@@ -48,7 +48,7 @@ class BasicLocalNodeTests: LocalTestCase {
     }
 
     func testEthSendExampleWithRemoteSigning() async throws {
-        let web3 = try await Web3.new(URL(string: "http://127.0.0.1:8545")!)
+        let web3 = try await Web3.new(LocalTestCase.url)
         let allAddresses = try await web3.eth.ownedAccounts()
         let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)!
