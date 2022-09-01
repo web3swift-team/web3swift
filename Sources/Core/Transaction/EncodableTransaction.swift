@@ -22,7 +22,10 @@ public struct EncodableTransaction {
     // MARK: - Properties that always sends to a Node
 
     /// the address of the sender of the transaction recovered from the signature
-    public var sender: EthereumAddress? { envelope.sender }
+    public var sender: EthereumAddress? {
+        guard let publicKey = self.recoverPublicKey() else { return nil }
+        return Utilities.publicToAddress(publicKey)
+    }
 
     public var from: EthereumAddress?
 
