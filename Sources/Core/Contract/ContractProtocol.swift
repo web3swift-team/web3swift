@@ -56,13 +56,13 @@ import BigInt
 /// ```
 ///
 /// ⚠️ If you pass in only constructor or only parameters - it will have no effect on the final transaction object.
-/// Also, you have an option to set any extra bytes at the end of ``EthereumTransaction/data``  attribute.
+/// Also, you have an option to set any extra bytes at the end of ``EncodableTransaction/data``  attribute.
 /// Alternatively you can encode constructor parameters outside of the deploy function and only set `extraData` to pass in these
 /// parameters:
 ///
 /// ```swift
 /// // `encodeParameters` call returns `Data?`. Check it for nullability before calling `deploy`
-/// // function to create `EthereumTransaction`.
+/// // function to create `EncodableTransaction`.
 /// let encodedConstructorArguments = someConstructor.encodeParameters(arrayOfInputArguments)
 /// constructor.deploy(bytecode: smartContractBytecode, extraData: encodedConstructorArguments)
 /// ```
@@ -123,7 +123,7 @@ public protocol ContractProtocol {
     func deploy(bytecode: Data,
                 constructor: ABI.Element.Constructor?,
                 parameters: [AnyObject]?,
-                extraData: Data?) -> EthereumTransaction?
+                extraData: Data?) -> EncodableTransaction?
 
     /// Creates function call transaction with data set as `method` encoded with given `parameters`.
     /// The `method` must be part of the ABI used to init this contract.
@@ -135,7 +135,7 @@ public protocol ContractProtocol {
     ///   - parameters: method input arguments;
     ///   - extraData: additional data to append at the end of `transaction.data` field;
     /// - Returns: transaction object if `method` was found and `parameters` were successfully encoded.
-    func method(_ method: String, parameters: [AnyObject], extraData: Data?) -> EthereumTransaction?
+    func method(_ method: String, parameters: [AnyObject], extraData: Data?) -> EncodableTransaction?
 
     /// Decode output data of a function.
     /// - Parameters:
@@ -187,7 +187,7 @@ extension ContractProtocol {
     func deploy(_ bytecode: Data,
                 constructor: ABI.Element.Constructor? = nil,
                 parameters: [AnyObject]? = nil,
-                extraData: Data? = nil) -> EthereumTransaction? {
+                extraData: Data? = nil) -> EncodableTransaction? {
         deploy(bytecode: bytecode,
                constructor: constructor,
                parameters: parameters,
@@ -200,7 +200,7 @@ extension ContractProtocol {
     /// See ``ContractProtocol/method(_:parameters:extraData:)`` for details.
     func method(_ method: String = "fallback",
                 parameters: [AnyObject]? = nil,
-                extraData: Data? = nil) -> EthereumTransaction? {
+                extraData: Data? = nil) -> EncodableTransaction? {
         self.method(method, parameters: parameters ?? [], extraData: extraData)
     }
 
@@ -219,7 +219,7 @@ extension DefaultContractProtocol {
     public func deploy(bytecode: Data,
                        constructor: ABI.Element.Constructor?,
                        parameters: [AnyObject]?,
-                       extraData: Data?) -> EthereumTransaction? {
+                       extraData: Data?) -> EncodableTransaction? {
         var fullData = bytecode
 
         if let constructor = constructor,
@@ -239,11 +239,12 @@ extension DefaultContractProtocol {
         }
 
         // MARK: Writing Data flow
-        return EthereumTransaction(to: .contractDeploymentAddress(),
+        return EncodableTransaction(to: .contractDeploymentAddress(),
                                    value: BigUInt(0),
-                                   data: fullData,
-                                   // FIXME: This not working yet and should be changed up to release
-                                   parameters: EncodableTransaction())
+                                   data: fullData
+                                   // FIXME: Return parameters
+//                                   parameters: EncodableTransaction()
+        )
     }
 
     /// Call given contract method with given parameters
@@ -251,7 +252,7 @@ extension DefaultContractProtocol {
     ///   - method: Method to call
     ///   - parameters: Parameters to pass to method call
     ///   - extraData: Any additional data that needs to be encoded
-    /// - Returns: preset EthereumTransaction with filled date
+    /// - Returns: preset EncodableTransaction with filled date
     ///
     /// Returned transaction have filled following priperties:
     ///   - to: contractAddress
@@ -261,7 +262,7 @@ extension DefaultContractProtocol {
     public func method(_ method: String,
                        parameters: [AnyObject],
                        // FIXME: Return type CodableTransaction
-                       extraData: Data?) -> EthereumTransaction? {
+                       extraData: Data?) -> EncodableTransaction? {
         guard let to = self.address else { return nil }
 
         // FIXME: This should be changed up to release
@@ -269,7 +270,9 @@ extension DefaultContractProtocol {
 
         // MARK: - Encoding ABI Data flow
         if method == "fallback" {
-            return EthereumTransaction(to: to, value: BigUInt(0), data: extraData ?? Data(), parameters: params)
+            // FIXME: Return parameters
+            return EncodableTransaction(to: to, value: BigUInt(0), data: extraData ?? Data()//, parameters: params
+            )
         }
 
         let method = Data.fromHex(method) == nil ? method : method.addHexPrefix().lowercased()
@@ -284,9 +287,11 @@ extension DefaultContractProtocol {
         }
 
         // MARK: - Encoding ABI Data flow
-        // return filled EthereumTransaction, which is could be sent iterate with a contract.
+        // return filled EncodableTransaction, which is could be sent iterate with a contract.
         // But no gas related data here yet.
-        return EthereumTransaction(to: to, value: BigUInt(0), data: encodedData, parameters: params)
+        // FIXME: Return parameters
+        return EncodableTransaction(to: to, value: BigUInt(0), data: encodedData//, parameters: params
+        )
     }
 
     public func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?) {

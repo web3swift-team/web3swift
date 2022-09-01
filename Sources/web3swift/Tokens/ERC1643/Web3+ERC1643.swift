@@ -20,7 +20,7 @@ protocol IERC1643: IERC20 {
 
 }
 
-// FIXME: Rewrite this to EthereumTransaction
+// FIXME: Rewrite this to EncodableTransaction
 public class ERC1643: IERC1643, ERC20BaseProperties {
 
     internal var _name: String? = nil

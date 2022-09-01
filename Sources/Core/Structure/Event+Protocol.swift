@@ -35,11 +35,11 @@ public struct EventParserResult: EventParserResultProtocol {
 
 /// Protocol for generic Ethereum event parser
 public protocol EventParserProtocol {
-    func parseTransaction(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol]
+    func parseTransaction(_ transaction: EncodableTransaction) async throws -> [EventParserResultProtocol]
     func parseTransactionByHash(_ hash: Data) async throws -> [EventParserResultProtocol]
     func parseBlock(_ block: Block) async throws -> [EventParserResultProtocol]
     func parseBlockByNumber(_ blockNumber: BigUInt) async throws -> [EventParserResultProtocol]
-    func parseTransactionPromise(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol]
+    func parseTransactionPromise(_ transaction: EncodableTransaction) async throws -> [EventParserResultProtocol]
     func parseTransactionByHashPromise(_ hash: Data) async throws -> [EventParserResultProtocol]
     func parseBlockByNumberPromise(_ blockNumber: BigUInt) async throws -> [EventParserResultProtocol]
     func parseBlockPromise(_ block: Block) async throws -> [EventParserResultProtocol]

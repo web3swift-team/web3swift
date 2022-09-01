@@ -10,9 +10,9 @@ import Core
 /// Wrapper for `EthererumTransaction.data` property appropriate encoding.
 public class WriteTransaction: ReadTransaction {
 
-    // FIXME: Rewrite this to EthereumTransaction (don't touch the logic)
-    public func assembleTransaction(transactionOptions: TransactionOptions? = nil) async throws -> EthereumTransaction {
-        var assembledTransaction: EthereumTransaction = transaction
+    // FIXME: Rewrite this to EncodableTransaction (don't touch the logic)
+    public func assembleTransaction(transactionOptions: TransactionOptions? = nil) async throws -> EncodableTransaction {
+        var assembledTransaction: EncodableTransaction = transaction
 
         if self.method != "fallback" {
             let function = self.contract.methods[self.method]?.first
@@ -29,7 +29,7 @@ public class WriteTransaction: ReadTransaction {
         if mergedOptions.value != nil {
             assembledTransaction.value = mergedOptions.value!
         }
-        var forAssemblyPipeline: (EthereumTransaction, EthereumContract, TransactionOptions) = (assembledTransaction, self.contract, mergedOptions)
+        var forAssemblyPipeline: (EncodableTransaction, EthereumContract, TransactionOptions) = (assembledTransaction, self.contract, mergedOptions)
 
         for hook in self.web3.preAssemblyHooks {
             let hookResult = hook.function(forAssemblyPipeline)
@@ -178,7 +178,7 @@ public class WriteTransaction: ReadTransaction {
         return assembledTransaction
     }
 
-    // FIXME: Rewrite this to EthereumTransaction
+    // FIXME: Rewrite this to EncodableTransaction
     public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult {
         let transaction = try await assembleTransaction(transactionOptions: transactionOptions)
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
@@ -189,9 +189,9 @@ public class WriteTransaction: ReadTransaction {
         return try await web3.eth.send(transaction, transactionOptions: cleanedOptions, password: password)
     }
 
-    // FIXME: Rewrite this to EthereumTransaction
+    // FIXME: Rewrite this to EncodableTransaction
     func gasEstimate(for policy: TransactionOptions.GasLimitPolicy,
-                     assembledTransaction: EthereumTransaction,
+                     assembledTransaction: EncodableTransaction,
                      optionsForGasEstimation: TransactionOptions) async throws -> BigUInt {
         switch policy {
         case .automatic, .withMargin, .limited:
@@ -201,7 +201,7 @@ public class WriteTransaction: ReadTransaction {
         }
     }
 
-    // FIXME: Rewrite this to EthereumTransaction
+    // FIXME: Rewrite this to EncodableTransaction
     func nonce(for policy: TransactionOptions.NoncePolicy, from: EthereumAddress) async throws -> BigUInt {
         switch policy {
         case .latest:

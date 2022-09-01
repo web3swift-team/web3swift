@@ -265,7 +265,7 @@ extension EIP1559Envelope {
         self.s = s
     }
 
-//    public mutating func applyTransaction(_ transaction: EthereumTransaction) {
+//    public mutating func applyTransaction(_ transaction: EncodableTransaction) {
 //        // type cannot be changed here, and is ignored
 //        self.nonce = transaction.resolveNonce(self.nonce)
 //        self.maxPriorityFeePerGas = transaction.resolveMaxPriorityFeePerGas(self.maxPriorityFeePerGas)

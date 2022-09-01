@@ -34,7 +34,7 @@ protocol IERC721x: IERC721, IERC721Metadata, IERC721Enumerable {
     func symbol() async throws -> String
 }
 
-// FIXME: Rewrite this to EthereumTransaction
+// FIXME: Rewrite this to EncodableTransaction
 public class ERC721x: IERC721x {
 
     private var _tokenId: BigUInt? = nil

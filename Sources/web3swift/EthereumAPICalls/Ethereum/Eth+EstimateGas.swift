@@ -10,11 +10,11 @@ import Core
 
 extension web3.Eth {
 
-    // FIXME: Rewrite this to EthereumTransaction
-    public func estimateGas(for transaction: EthereumTransaction, transactionOptions: TransactionOptions?) async throws -> BigUInt {
+    // FIXME: Rewrite this to EncodableTransaction
+    public func estimateGas(for transaction: EncodableTransaction, transactionOptions: TransactionOptions?) async throws -> BigUInt {
 
         // FIXME: Something wrong with this. We should not to get parameters + options in one method.
-        let request: APIRequest = .estimateGas(transaction.parameters, transactionOptions?.callOnBlock ?? .latest)
+        let request: APIRequest = .estimateGas(transaction, transactionOptions?.callOnBlock ?? .latest)
         let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)
 
         if let policy = transactionOptions?.gasLimit {

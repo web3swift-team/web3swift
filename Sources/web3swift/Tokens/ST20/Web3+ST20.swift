@@ -26,7 +26,7 @@ protocol IST20: IERC20 {
 
 // This namespace contains functions to work with ST-20 tokens.
 // can be imperatively read and saved
-// FIXME: Rewrite this to EthereumTransaction
+// FIXME: Rewrite this to EncodableTransaction
 public class ST20: IST20, ERC20BaseProperties {
 
     internal var _name: String? = nil

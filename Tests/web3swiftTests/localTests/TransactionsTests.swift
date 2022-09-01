@@ -187,7 +187,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            let jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+            let jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
             // check that the transaction type is legacy
             XCTAssertEqual(jsonTxn.type, .legacy, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
@@ -207,7 +207,7 @@ class TransactionsTests: XCTestCase {
         let expectedAddress = EthereumAddress(testSenderAddress)!
         let rlpData = Data.fromHex(vector.RLP)!
 
-        guard let rlpTxn = EthereumTransaction(rawValue: rlpData) else {
+        guard let rlpTxn = EncodableTransaction(rawValue: rlpData) else {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is legacy
@@ -227,7 +227,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            var jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+            var jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
 
             // unsign the input transaction
             jsonTxn.unsign()
@@ -256,7 +256,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            let jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+            let jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
             // check that the transaction type is legacy
             XCTAssertEqual(jsonTxn.type, .legacy, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
@@ -276,7 +276,7 @@ class TransactionsTests: XCTestCase {
         let expectedAddress = EthereumAddress(testSenderAddress)!
         let rlpData = Data.fromHex(vector.RLP)!
 
-        guard let rlpTxn = EthereumTransaction(rawValue: rlpData) else {
+        guard let rlpTxn = EncodableTransaction(rawValue: rlpData) else {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is legacy
@@ -296,7 +296,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            var jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+            var jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
 
             // unsign the input transaction
             jsonTxn.unsign()
@@ -325,7 +325,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            let jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+            let jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
             // check that the transaction type is eip2930
             XCTAssertEqual(jsonTxn.type, .eip2930, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
@@ -345,7 +345,7 @@ class TransactionsTests: XCTestCase {
         let expectedAddress = EthereumAddress(testSenderAddress)!
         let rlpData = Data.fromHex(vector.RLP)!
 
-        guard let rlpTxn = EthereumTransaction(rawValue: rlpData) else {
+        guard let rlpTxn = EncodableTransaction(rawValue: rlpData) else {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is eip2930
@@ -365,7 +365,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            var jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+            var jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
 
             // unsign the input transaction
             jsonTxn.unsign()
@@ -394,7 +394,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            let jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+            let jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
             // check that the transaction type is eip2930
             XCTAssertEqual(jsonTxn.type, .eip2930, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
@@ -414,7 +414,7 @@ class TransactionsTests: XCTestCase {
         let expectedAddress = EthereumAddress(testSenderAddress)!
         let rlpData = Data.fromHex(vector.RLP)!
 
-        guard let rlpTxn = EthereumTransaction(rawValue: rlpData) else {
+        guard let rlpTxn = EncodableTransaction(rawValue: rlpData) else {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is eip2930
@@ -434,7 +434,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            var jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+            var jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
 
             // unsign the input transaction
             jsonTxn.unsign()
@@ -463,7 +463,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            let jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+            let jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
             // check that the transaction type is eip1559
             XCTAssertEqual(jsonTxn.type, .eip1559, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
@@ -483,7 +483,7 @@ class TransactionsTests: XCTestCase {
         let expectedAddress = EthereumAddress(testSenderAddress)!
         let rlpData = Data.fromHex(vector.RLP)!
 
-        guard let rlpTxn = EthereumTransaction(rawValue: rlpData) else {
+        guard let rlpTxn = EncodableTransaction(rawValue: rlpData) else {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is eip1559
@@ -503,7 +503,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            var jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+            var jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
 
             // unsign the input transaction
             jsonTxn.unsign()
@@ -532,7 +532,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            let jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+            let jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
             // check that the transaction type is eip1559
             XCTAssertEqual(jsonTxn.type, .eip1559, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
@@ -552,7 +552,7 @@ class TransactionsTests: XCTestCase {
         let expectedAddress = EthereumAddress(testSenderAddress)!
         let rlpData = Data.fromHex(vector.RLP)!
 
-        guard let rlpTxn = EthereumTransaction(rawValue: rlpData) else {
+        guard let rlpTxn = EncodableTransaction(rawValue: rlpData) else {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is eip1559
@@ -572,7 +572,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            var jsonTxn: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
+            var jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
 
             // unsign the input transaction
             jsonTxn.unsign()
@@ -601,10 +601,11 @@ class TransactionsTests: XCTestCase {
             var params = EncodableTransaction()
             params.gasPrice = 20000000000
             params.gasLimit = 21000
-            var transaction = EthereumTransaction(
+            var transaction = EncodableTransaction(
                 to: EthereumAddress("0x3535353535353535353535353535353535353535")!,
                 nonce: 9, value: 1000000000000000000, data: Data(),
-                v: 0, r: 0, s: 0, parameters: params)
+                // FIXME: Return parameters here
+                v: 0, r: 0, s: 0)
             let privateKeyData = Data.fromHex("0x4646464646464646464646464646464646464646464646464646464646464646")!
             let publicKey = Utilities.privateToPublic(privateKeyData, compressed: false)
             let sender = Utilities.publicToAddress(publicKey!)
@@ -654,7 +655,7 @@ class TransactionsTests: XCTestCase {
 
             let details = try await web3.eth.transactionDetails(txHash)
             print(details)
-            let txnGasLimit = details.transaction.parameters.gasLimit
+            let txnGasLimit = details.transaction.gasLimit
             XCTAssert(txnGasLimit == BigUInt(78423))
         } catch Web3Error.nodeError(let descr) {
             guard descr == "insufficient funds for gas * price + value" else {return XCTFail()}

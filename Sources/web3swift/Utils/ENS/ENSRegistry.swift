@@ -35,7 +35,7 @@ public extension ENS {
             }
         }
 
-        // FIXME: Rewrite this to EthereumTransaction
+        // FIXME: Rewrite this to EncodableTransaction
         lazy var defaultOptions: TransactionOptions = {
             return TransactionOptions.defaultOptions
         }()
@@ -70,7 +70,7 @@ public extension ENS {
             return ans
         }
 
-        // FIXME: Rewrite this to EthereumTransaction
+        // FIXME: Rewrite this to EncodableTransaction
         public func setOwner(node: String, owner: EthereumAddress, options: TransactionOptions?, password: String? = nil) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
             options.to = self.registryContractAddress
@@ -80,7 +80,7 @@ public extension ENS {
             return result
         }
 
-        // FIXME: Rewrite this to EthereumTransaction
+        // FIXME: Rewrite this to EncodableTransaction
         public func setSubnodeOwner(node: String, label: String, owner: EthereumAddress, options: TransactionOptions?, password: String? = nil) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
             options.to = self.registryContractAddress
@@ -91,7 +91,7 @@ public extension ENS {
             return result
         }
 
-        // FIXME: Rewrite this to EthereumTransaction
+        // FIXME: Rewrite this to EncodableTransaction
         public func setResolver(node: String, resolver: EthereumAddress, options: TransactionOptions?, password: String? = nil) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
             options.to = self.registryContractAddress
@@ -101,7 +101,7 @@ public extension ENS {
             return result
         }
 
-        // FIXME: Rewrite this to EthereumTransaction
+        // FIXME: Rewrite this to EncodableTransaction
         public func setTTL(node: String, ttl: BigUInt, options: TransactionOptions?, password: String? = nil) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
             options.to = self.registryContractAddress

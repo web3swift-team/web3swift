@@ -7,19 +7,19 @@ import Foundation
 import BigInt
 import Core
 
-// FIXME: Rewrite this to EthereumTransaction
+// FIXME: Rewrite this to EncodableTransaction
 
 /// Wrapper for `EthererumTransaction.data` property appropriate encoding.
 public class ReadTransaction {
-    public var transaction: EthereumTransaction
+    public var transaction: EncodableTransaction
     public var contract: EthereumContract
     public var method: String
     public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
 
     var web3: web3
 
-    // FIXME: Rewrite this to EthereumTransaction
-    public init(transaction: EthereumTransaction,
+    // FIXME: Rewrite this to EncodableTransaction
+    public init(transaction: EncodableTransaction,
                 web3 web3Instance: web3,
                 contract: EthereumContract,
                 method: String = "fallback",
@@ -39,10 +39,10 @@ public class ReadTransaction {
     // and only then it decodes it.
     // It should be splitted in this way up to three (merge, send, decode)
     // TODO: Remove type erasing here, some broad wide protocol should be added instead
-    // FIXME: Rewrite this to EthereumTransaction
+    // FIXME: Rewrite this to EncodableTransaction
     public func decodedData(with transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
         // MARK: Read data from ABI flow
-        var assembledTransaction: EthereumTransaction = self.transaction
+        var assembledTransaction: EncodableTransaction = self.transaction
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
         var optionsForCall = TransactionOptions()
         optionsForCall.from = mergedOptions.from
@@ -66,9 +66,9 @@ public class ReadTransaction {
         return decodedData
     }
 
-    // FIXME: Rewrite this to EthereumTransaction
+    // FIXME: Rewrite this to EncodableTransaction
     public func estimateGas(with transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
-        var assembledTransaction: EthereumTransaction = self.transaction
+        var assembledTransaction: EncodableTransaction = self.transaction
 
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
         var optionsForGasEstimation = TransactionOptions()
@@ -96,12 +96,12 @@ public class ReadTransaction {
     }
 
     // FIXME: Duplicating and pointing to another?!
-    // FIXME: Rewrite this to EthereumTransaction
+    // FIXME: Rewrite this to EncodableTransaction
     public func estimateGas(transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
         return try await self.estimateGas(with: transactionOptions)
     }
 
-    // FIXME: Rewrite this to EthereumTransaction
+    // FIXME: Rewrite this to EncodableTransaction
     // FIXME: Useless wrapper, delete me
     public func call(transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
         return try await self.decodedData(with: transactionOptions)

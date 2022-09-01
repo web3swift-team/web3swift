@@ -51,7 +51,7 @@ public extension ENS {
             return contract!
         }()
 
-        // FIXME: Rewrite this to EthereumTransaction
+        // FIXME: Rewrite this to EncodableTransaction
         lazy var defaultOptions: TransactionOptions = {
             return TransactionOptions.defaultOptions
         }()
@@ -89,7 +89,7 @@ public extension ENS {
             return address
         }
 
-        // FIXME: Rewrite this to EthereumTransaction
+        // FIXME: Rewrite this to EncodableTransaction
         @available(*, message: "Available for only owner")
         public func setAddress(forNode node: String, address: EthereumAddress, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
@@ -108,7 +108,7 @@ public extension ENS {
             return name
         }
 
-        // FIXME: Rewrite this to EthereumTransaction
+        // FIXME: Rewrite this to EncodableTransaction
         @available(*, message: "Available for only owner")
         func setCanonicalName(forNode node: String, name: String, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
@@ -127,7 +127,7 @@ public extension ENS {
             return content
         }
 
-        // FIXME: Rewrite this to EthereumTransaction
+        // FIXME: Rewrite this to EncodableTransaction
         @available(*, message: "Available for only owner")
         func setContentHash(forNode node: String, hash: String, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
@@ -147,7 +147,7 @@ public extension ENS {
             return (encoding, data)
         }
 
-        // FIXME: Rewrite this to EthereumTransaction
+        // FIXME: Rewrite this to EncodableTransaction
         @available(*, message: "Available for only owner")
         func setContractABI(forNode node: String, contentType: ENS.Resolver.ContentType, data: Data, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
@@ -168,7 +168,7 @@ public extension ENS {
             return pubkey
         }
 
-        // FIXME: Rewrite this to EthereumTransaction
+        // FIXME: Rewrite this to EncodableTransaction
         @available(*, message: "Available for only owner")
         public func setPublicKey(forNode node: String, publicKey: PublicKey, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
@@ -188,7 +188,7 @@ public extension ENS {
             return text
         }
 
-        // FIXME: Rewrite this to EthereumTransaction
+        // FIXME: Rewrite this to EncodableTransaction
         @available(*, message: "Available for only owner")
         public func setTextData(forNode node: String, key: String, value: String, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions

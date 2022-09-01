@@ -40,7 +40,7 @@ protocol IERC1410: IERC20 {
 
 }
 
-// FIXME: Rewrite this to EthereumTransaction
+// FIXME: Rewrite this to EncodableTransaction
 public class ERC1410: IERC1410, ERC20BaseProperties {
 
     internal var _name: String? = nil

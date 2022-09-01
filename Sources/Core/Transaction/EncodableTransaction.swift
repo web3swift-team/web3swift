@@ -22,7 +22,7 @@ public struct EncodableTransaction {
     // MARK: - Properties that always sends to a Node
 
     /// the address of the sender of the transaction recovered from the signature
-    public var from: EthereumAddress? {
+    public var sender: EthereumAddress? {
         guard let publicKey = self.recoverPublicKey() else { return nil }
         return Utilities.publicToAddress(publicKey)
     }
@@ -157,7 +157,7 @@ public struct EncodableTransaction {
         self.envelope = newEnvelope
     }
 
-    /// Create a new EthereumTransaction from a raw stream of bytes from the blockchain
+    /// Create a new EncodableTransaction from a raw stream of bytes from the blockchain
     public init?(rawValue: Data) {
         guard let env = EnvelopeFactory.createEnvelope(rawValue: rawValue) else { return nil }
         self.envelope = env
@@ -187,7 +187,7 @@ public struct EncodableTransaction {
 extension EncodableTransaction: Codable {
     enum CodingKeys: String, CodingKey {
         case type
-        case from
+        case sender = "from"
         case to
         case nonce
         case chainID
@@ -236,9 +236,35 @@ extension EncodableTransaction: CustomStringConvertible {
         var toReturn = ""
         toReturn += "Transaction" + "\n"
         toReturn += String(describing: self.envelope)
-        toReturn += "from: " + String(describing: self.from?.address)  + "\n"
+        toReturn += "from: " + String(describing: self.sender?.address)  + "\n"
         toReturn += "hash: " + String(describing: self.hash?.toHexString().addHexPrefix()) + "\n"
         return toReturn
+    }
+}
+
+extension EncodableTransaction {
+    // the kitchen sink init: can produce a transaction of any type
+    /// Universal initializer to create a new EncodableTransaction object
+    /// - Parameters:
+    ///   - type: TransactionType enum for selecting the type of transaction to create (default is .legacy)
+    ///   - to: EthereumAddress of the destination for this transaction (required)
+    ///   - nonce: nonce for this transaction (default 0)
+    ///   - chainID: chainId the transaction belongs to (default: type specific)
+    ///   - value: Native value for the transaction (default 0)
+    ///   - data: Payload data for the transaction (required)
+    ///   - v: signature v parameter (default 1) - will get set properly once signed
+    ///   - r: signature r parameter (default 0) - will get set properly once signed
+    ///   - s: signature s parameter (default 0) - will get set properly once signed
+    ///   - parameters: EthereumParameters object containing additional parametrs for the transaction like gas
+    public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
+                chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
+                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
+
+        self.chainID = chainID ?? 0
+        self.value = value ?? 0
+        self.data = data ?? Data()
+
+        self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, v: v, r: r, s: s)
     }
 }
 

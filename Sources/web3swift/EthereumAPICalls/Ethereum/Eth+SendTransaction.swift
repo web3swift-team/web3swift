@@ -10,14 +10,14 @@ import Core
 
 extension web3.Eth {
 
-    // FIXME: Rewrite this to EthereumTransaction
-    public func send(_ transaction: EthereumTransaction, transactionOptions: TransactionOptions? = nil, password: String = "web3swift") async throws -> TransactionSendingResult {
+    // FIXME: Rewrite this to EncodableTransaction
+    public func send(_ transaction: EncodableTransaction, transactionOptions: TransactionOptions? = nil, password: String = "web3swift") async throws -> TransactionSendingResult {
         //  print(transaction)
-        var assembledTransaction: EthereumTransaction = transaction
+        var assembledTransaction: EncodableTransaction = transaction
 
         var mergedOptions = self.web3.transactionOptions.merge(transactionOptions)
 
-        var forAssemblyPipeline: (EthereumTransaction, TransactionOptions) = (assembledTransaction, mergedOptions)
+        var forAssemblyPipeline: (EncodableTransaction, TransactionOptions) = (assembledTransaction, mergedOptions)
 
         for hook in self.web3.preSubmissionHooks {
             let hookResult = hook.function(forAssemblyPipeline)
@@ -47,7 +47,7 @@ extension web3.Eth {
             return try await self.web3.eth.send(raw: assembledTransaction)
         }
         // MARK: Writing Data flow
-        // From EthereumTransaction.data to TransactionParameters.data
+        // From EncodableTransaction.data to TransactionParameters.data
         // guard let transactionParameters = transaction.encodeAsDictionary(from: transactionOptions?.from) else { throw Web3Error.dataError }
 
         // MARK: Sending Data flow
