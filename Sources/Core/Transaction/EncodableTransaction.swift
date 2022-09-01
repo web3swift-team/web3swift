@@ -169,6 +169,19 @@ public struct EncodableTransaction {
     public func encode(for type: EncodeType = .transaction) -> Data? {
         return self.envelope.encode(for: type)
     }
+
+    public mutating func applyOptions(_ options: TransactionOptions) {
+        // type cannot be changed here, and is ignored
+        // FIXME: Add appropiate values of resolveAny
+        self.nonce = options.resolveNonce(0)
+        self.gasPrice = options.resolveGasPrice(0)
+        self.gasLimit = options.resolveGasLimit(0)
+        self.maxFeePerGas = options.resolveMaxFeePerGas(0)
+        self.maxPriorityFeePerGas = options.resolveMaxPriorityFeePerGas(0)
+        self.value = options.value ?? 0
+        self.to = options.to ?? EthereumAddress("This")!
+        self.accessList = options.accessList
+    }
 }
 
 extension EncodableTransaction: Codable {
