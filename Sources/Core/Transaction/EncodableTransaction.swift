@@ -93,7 +93,7 @@ public struct EncodableTransaction {
     }
 
     // FIXME: This should made private up to release
-    public init() { preconditionFailure("Memberwise not supported") } // disable the memberwise initializer
+    private init() { preconditionFailure("Memberwise not supported") } // disable the memberwise initializer
 
 
     /// - Returns: a hash of the transaction suitable for signing
@@ -173,15 +173,17 @@ public struct EncodableTransaction {
     public mutating func applyOptions(_ options: TransactionOptions) {
         // type cannot be changed here, and is ignored
         // FIXME: Add appropiate values of resolveAny
-        self.nonce = options.resolveNonce(0)
-        self.gasPrice = options.resolveGasPrice(0)
-        self.gasLimit = options.resolveGasLimit(0)
-        self.maxFeePerGas = options.resolveMaxFeePerGas(0)
-        self.maxPriorityFeePerGas = options.resolveMaxPriorityFeePerGas(0)
-        self.value = options.value ?? 0
-        self.to = options.to ?? EthereumAddress("This")!
+        self.nonce = options.resolveNonce(nonce)
+        self.gasPrice = options.resolveGasPrice(gasPrice ?? 0)
+        self.gasLimit = options.resolveGasLimit(gasLimit ?? 0)
+        self.maxFeePerGas = options.resolveMaxFeePerGas(maxFeePerGas ?? 0)
+        self.maxPriorityFeePerGas = options.resolveMaxPriorityFeePerGas(maxPriorityFeePerGas ?? 0)
+        self.value = options.value ?? value
+        self.to = options.to ?? to
         self.accessList = options.accessList
     }
+
+    public static var emptyTransaction = EncodableTransaction(to: EthereumAddress("0xa64f2fD4F60cEBE072997010cB0cb22695FDdCc5")!)
 }
 
 extension EncodableTransaction: Codable {
@@ -257,12 +259,12 @@ extension EncodableTransaction {
     ///   - s: signature s parameter (default 0) - will get set properly once signed
     ///   - parameters: EthereumParameters object containing additional parametrs for the transaction like gas
     public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
-                chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
+                chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data = Data(),
                 v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
 
         self.chainID = chainID ?? 0
         self.value = value ?? 0
-        self.data = data ?? Data()
+        self.data = data
 
         self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, v: v, r: r, s: s)
     }

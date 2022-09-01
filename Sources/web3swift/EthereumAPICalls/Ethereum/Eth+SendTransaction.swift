@@ -19,6 +19,8 @@ extension web3.Eth {
 
         var forAssemblyPipeline: (EncodableTransaction, TransactionOptions) = (assembledTransaction, mergedOptions)
 
+        // usually not calling
+        // Can't find where this hooks are implemented.
         for hook in self.web3.preSubmissionHooks {
             let hookResult = hook.function(forAssemblyPipeline)
             if hookResult.2 {
@@ -48,11 +50,12 @@ extension web3.Eth {
         }
         // MARK: Writing Data flow
         // From EncodableTransaction.data to TransactionParameters.data
+        assembledTransaction.applyOptions(mergedOptions)
         // guard let transactionParameters = transaction.encodeAsDictionary(from: transactionOptions?.from) else { throw Web3Error.dataError }
 
         // MARK: Sending Data flow
         // FIXME: This gives empty object, fix me, there were TransactionParameters applied.
-        let request: APIRequest = .sendTransaction(EncodableTransaction())
+        let request: APIRequest = .sendTransaction(assembledTransaction)
         let response: APIResponse<Hash> = try await APIRequest.sendRequest(with: self.provider, for: request)
 
         let result = TransactionSendingResult(transaction: assembledTransaction, hash: response.result)

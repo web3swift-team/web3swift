@@ -160,7 +160,7 @@ public class WriteTransaction: ReadTransaction {
             finalOptions.maxFeePerGas = .manual(mergedOptions.resolveMaxFeePerGas(gasFee))
         }
 
-//        assembledTransaction.applyOptions(finalOptions)
+        assembledTransaction.applyOptions(finalOptions)
 
         forAssemblyPipeline = (assembledTransaction, self.contract, mergedOptions)
 

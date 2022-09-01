@@ -58,10 +58,10 @@ public struct LegacyEnvelope: AbstractEnvelope {
         return toReturn
     }
 
+    // FIXME: Delete me
     public var parameters: EncodableTransaction {
         get {
-            return EncodableTransaction(
-          )
+            return EncodableTransaction.emptyTransaction
         }
         set(val) {
             nonce = val.nonce ?? nonce

@@ -266,7 +266,7 @@ extension DefaultContractProtocol {
         guard let to = self.address else { return nil }
 
         // FIXME: This should be changed up to release
-        let params = EncodableTransaction()
+        var transaction = EncodableTransaction(to: to)
 
         // MARK: - Encoding ABI Data flow
         if method == "fallback" {
@@ -286,12 +286,10 @@ extension DefaultContractProtocol {
             encodedData.append(extraData)
         }
 
+        transaction.data = encodedData
+
         // MARK: - Encoding ABI Data flow
-        // return filled EncodableTransaction, which is could be sent iterate with a contract.
-        // But no gas related data here yet.
-        // FIXME: Return parameters
-        return EncodableTransaction(to: to, value: BigUInt(0), data: encodedData//, parameters: params
-        )
+        return transaction
     }
 
     public func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?) {

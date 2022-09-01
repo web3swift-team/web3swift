@@ -45,11 +45,10 @@ public struct EIP2930Envelope: EIP2718Envelope {
         return toReturn
     }
 
+    // FIXME: Delete me
     public var parameters: EncodableTransaction {
         get {
-            return EncodableTransaction(
-
-            )
+            return EncodableTransaction.emptyTransaction
         }
         set(val) {
             nonce = val.nonce ?? nonce
