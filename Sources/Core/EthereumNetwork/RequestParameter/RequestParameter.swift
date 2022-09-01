@@ -50,6 +50,6 @@ enum RequestParameter {
     case bool(Bool)
     case boolArray([Bool])
 
-    case transaction(CodableTransaction)
+    case transaction(EncodableTransaction)
     case eventFilter(EventFilterParameters)
 }

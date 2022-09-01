@@ -37,7 +37,7 @@ extension RequestParameter: RawRepresentable {
         case is Bool.Type: self = .bool(rawValue as! Bool)
         case is [Bool].Type: self = .boolArray(rawValue as! [Bool])
 
-        case is [EthereumTransaction].Type: self = .transaction(rawValue as! CodableTransaction)
+        case is [EthereumTransaction].Type: self = .transaction(rawValue as! EncodableTransaction)
         case is [EventFilterParameters].Type: self = .eventFilter(rawValue as! EventFilterParameters)
         default: return nil
         }

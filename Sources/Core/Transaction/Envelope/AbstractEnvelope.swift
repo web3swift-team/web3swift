@@ -47,7 +47,7 @@ public enum TransactionType: UInt, CustomStringConvertible, CaseIterable {
     }
 }
 
-extension TransactionType: Decodable { }
+extension TransactionType: Codable { }
 
 /// Encoding selector for transaction transmission/hashing or signing
 public enum EncodeType {
@@ -96,7 +96,7 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     /// Transaction Parameters object
     /// used to provide external access to the otherwise
     /// protected parameters of the object
-    var parameters: CodableTransaction { get set }
+    var parameters: EncodableTransaction { get set }
 
     /// - Returns: the public key decoded from the signature data
     var publicKey: Data? { get }
@@ -132,7 +132,7 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     ///   - r: Signature R component
     ///   - s: Signature S component
     ///   - parameters: EthereumParameters struct containing any other required parameters
-    init(to: EthereumAddress, nonce: BigUInt?, v: BigUInt, r: BigUInt, s: BigUInt, parameters: CodableTransaction?)
+    init(to: EthereumAddress, nonce: BigUInt?, v: BigUInt, r: BigUInt, s: BigUInt, parameters: EncodableTransaction?)
 
     /// Transaction encoder for transmission or signing
     ///  - Parameters:

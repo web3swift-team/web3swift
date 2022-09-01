@@ -10,7 +10,7 @@ import BigInt
 ///  Structure capable of carying the parameters for any transaction type.
 ///  while all fields in this struct are optional, they are not necessarily
 ///  optional for the type of transaction they apply to.
-public struct CodableTransaction {
+public struct EncodableTransaction {
     /// signifies the transaction type that this payload is for
     /// indicates what fields should be populated. 
     /// this should always be set to give an idea of what other fields to expect
@@ -66,7 +66,7 @@ public struct CodableTransaction {
     }
 }
 
-extension CodableTransaction: Codable {
+extension EncodableTransaction: Encodable {
     enum CodingKeys: String, CodingKey {
         case type
         case to
@@ -83,33 +83,19 @@ extension CodableTransaction: Codable {
 
     public func encode(to encoder: Encoder) throws {
         var containier = encoder.container(keyedBy: CodingKeys.self)
-        try containier.encode(type?.rawValue, forKey: .type)
+        try containier.encode(type?.rawValue.hexString, forKey: .type)
         try containier.encode(to, forKey: .to)
-        try containier.encode(nonce, forKey: .nonce)
-        try containier.encode(chainID, forKey: .chainID)
-        try containier.encode(value, forKey: .value)
-        try containier.encode(data, forKey: .data)
-        try containier.encode(gasLimit, forKey: .gasLimit)
-        try containier.encode(gasPrice, forKey: .gasPrice)
-        try containier.encode(maxFeePerGas, forKey: .maxFeePerGas)
-        try containier.encode(maxPriorityFeePerGas, forKey: .maxPriorityFeePerGas)
+        try containier.encode(nonce?.hexString, forKey: .nonce)
+        try containier.encode(chainID?.hexString, forKey: .chainID)
+        try containier.encode(value?.hexString, forKey: .value)
+        try containier.encode(data?.toHexString().addHexPrefix(), forKey: .data)
+        try containier.encode(gasLimit?.hexString, forKey: .gasLimit)
+        try containier.encode(gasPrice?.hexString, forKey: .gasPrice)
+        try containier.encode(maxFeePerGas?.hexString, forKey: .maxFeePerGas)
+        try containier.encode(maxPriorityFeePerGas?.hexString, forKey: .maxPriorityFeePerGas)
         try containier.encode(accessList, forKey: .accessList)
-    }
-
-    public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        type = try values.decodeIfPresent(TransactionType.self, forKey: .type)
-        to = try values.decodeIfPresent(EthereumAddress.self, forKey: .to)
-        nonce = try values.decodeIfPresent(BigUInt.self, forKey: .nonce)
-        chainID = try values.decodeIfPresent(BigUInt.self, forKey: .chainID)
-        value = try values.decodeIfPresent(BigUInt.self, forKey: .value)
-        data = try values.decodeIfPresent(Data.self, forKey: .data)
-        gasLimit = try values.decodeIfPresent(BigUInt.self, forKey: .gasLimit)
-        maxFeePerGas = try values.decodeIfPresent(BigUInt.self, forKey: .maxFeePerGas)
-        maxPriorityFeePerGas = try values.decodeIfPresent(BigUInt.self, forKey: .maxPriorityFeePerGas)
-        accessList = try values.decodeIfPresent([AccessListEntry].self, forKey: .accessList)
     }
 }
 
-extension CodableTransaction: APIRequestParameterType { }
+extension EncodableTransaction: APIRequestParameterType { }
 

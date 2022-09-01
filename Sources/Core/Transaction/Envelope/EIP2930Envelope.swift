@@ -45,9 +45,9 @@ public struct EIP2930Envelope: EIP2718Envelope {
         return toReturn
     }
 
-    public var parameters: CodableTransaction {
+    public var parameters: EncodableTransaction {
         get {
-            return CodableTransaction(
+            return EncodableTransaction(
                 type: type,
                 to: to,
                 nonce: nonce,
@@ -213,7 +213,7 @@ extension EIP2930Envelope {
 
     public init(to: EthereumAddress, nonce: BigUInt? = nil,
                 v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,
-                parameters: CodableTransaction? = nil) {
+                parameters: EncodableTransaction? = nil) {
         self.to = to
         self.nonce = nonce ?? parameters?.nonce ?? 0
         self.chainID = parameters?.chainID ?? 0
@@ -270,41 +270,41 @@ extension EIP2930Envelope {
         return result
     }
 
-    public var encodeAsDictionary: TransactionParameters? {
-        var toString: String?
-        switch self.to.type {
-        case .normal:
-            toString = self.to.address.lowercased()
-        case .contractDeployment:
-            break
-        }
-        
-        // FIXME: This is now working!
-        var params = TransactionParameters(TransactionOptions.defaultOptions)
-
-        guard let publicKey = self.publicKey,
-              let publicAddress = Utilities.publicToAddress(publicKey) else { return nil }
-
-        var params = TransactionParameters(from: from?.address.lowercased(), to: toString)
-        let typeEncoding = String(UInt8(self.type.rawValue), radix: 16).addHexPrefix()
-//        params.type = typeEncoding
-//        let chainEncoding = self.chainID.abiEncode(bits: 256)
-//        params.chainID = chainEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-//        var accessEncoding: [AccessListEntry] = []
-//        for listEntry in self.accessList {
-//            guard let encoded = listEntry.encodeAsDictionary() else { return nil }
-//            accessEncoding.append(encoded)
+//    public var encodeAsDictionary: TransactionParameters? {
+//        var toString: String?
+//        switch self.to.type {
+//        case .normal:
+//            toString = self.to.address.lowercased()
+//        case .contractDeployment:
+//            break
 //        }
-//        params.accessList = accessEncoding
-//        let gasEncoding = gasLimit > 21100 ? self.gasLimit.abiEncode(bits: 256) : nil
-//        params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-//        let gasPriceEncoding = gasPrice > 10000000 ? self.gasPrice.abiEncode(bits: 256) : nil
-//        params.gasPrice = gasPriceEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-//        let valueEncoding = self.value.abiEncode(bits: 256)
-//        params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-//        params.data = self.data.toHexString().addHexPrefix()
-        return params
-    }
+//
+//        // FIXME: This is now working!
+//        var params = TransactionParameters(TransactionOptions.defaultOptions)
+//
+//        guard let publicKey = self.publicKey,
+//              let publicAddress = Utilities.publicToAddress(publicKey) else { return nil }
+//
+//        var params = TransactionParameters(from: from?.address.lowercased(), to: toString)
+//        let typeEncoding = String(UInt8(self.type.rawValue), radix: 16).addHexPrefix()
+////        params.type = typeEncoding
+////        let chainEncoding = self.chainID.abiEncode(bits: 256)
+////        params.chainID = chainEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
+////        var accessEncoding: [AccessListEntry] = []
+////        for listEntry in self.accessList {
+////            guard let encoded = listEntry.encodeAsDictionary() else { return nil }
+////            accessEncoding.append(encoded)
+////        }
+////        params.accessList = accessEncoding
+////        let gasEncoding = gasLimit > 21100 ? self.gasLimit.abiEncode(bits: 256) : nil
+////        params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
+////        let gasPriceEncoding = gasPrice > 10000000 ? self.gasPrice.abiEncode(bits: 256) : nil
+////        params.gasPrice = gasPriceEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
+////        let valueEncoding = self.value.abiEncode(bits: 256)
+////        params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
+////        params.data = self.data.toHexString().addHexPrefix()
+//        return params
+//    }
 }
 
 public struct AccessListEntry: CustomStringConvertible, Codable {

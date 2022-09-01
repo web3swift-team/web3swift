@@ -51,7 +51,8 @@ extension web3.Eth {
         // guard let transactionParameters = transaction.encodeAsDictionary(from: transactionOptions?.from) else { throw Web3Error.dataError }
 
         // MARK: Sending Data flow
-        let request: APIRequest = .sendTransaction(transactionParameters)
+        // FIXME: This gives empty object, fix me, there were TransactionParameters applied.
+        let request: APIRequest = .sendTransaction(EncodableTransaction())
         let response: APIResponse<Hash> = try await APIRequest.sendRequest(with: self.provider, for: request)
 
         let result = TransactionSendingResult(transaction: assembledTransaction, hash: response.result)

@@ -75,7 +75,7 @@ public struct EnvelopeFactory {
     ///   - options: TransactionParameters containing additional parametrs for the transaction like gas
     /// - Returns: a new envelope of type dictated by 'type'
     static func createEnvelope(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
-                               v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: CodableTransaction? = nil) -> AbstractEnvelope {
+                               v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: EncodableTransaction? = nil) -> AbstractEnvelope {
         let envelopeType: TransactionType = type ?? parameters?.type ?? .legacy
 
         switch envelopeType {

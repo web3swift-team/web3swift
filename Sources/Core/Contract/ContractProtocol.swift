@@ -263,7 +263,7 @@ extension DefaultContractProtocol {
                        extraData: Data?) -> EthereumTransaction? {
         guard let to = self.address else { return nil }
 
-        let params = CodableTransaction(gasLimit: BigUInt(0), gasPrice: BigUInt(0))
+        let params = EncodableTransaction(gasLimit: BigUInt(0), gasPrice: BigUInt(0))
 
         // MARK: - Encoding ABI Data flow
         if method == "fallback" {
