@@ -222,8 +222,9 @@ extension EthereumTransaction {
     public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
                 chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data,
                 v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: EncodableTransaction? = nil) {
-        
-        var params = parameters ?? EncodableTransaction()
+
+        // FIXME: This not working
+        var params = parameters!
         
         params.chainID = chainID ?? params.chainID
         params.value = value ?? params.value

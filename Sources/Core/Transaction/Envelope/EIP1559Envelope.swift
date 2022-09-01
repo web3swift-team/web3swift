@@ -68,18 +68,7 @@ public struct EIP1559Envelope: EIP2718Envelope {
 
     public var parameters: EncodableTransaction {
         get {
-            return EncodableTransaction(
-                type: type,
-                to: to,
-                nonce: nonce,
-                chainID: chainID,
-                value: value,
-                data: data,
-                gasLimit: gasLimit,
-                maxFeePerGas: maxFeePerGas,
-                maxPriorityFeePerGas: maxPriorityFeePerGas,
-                accessList: accessList
-            )
+            return EncodableTransaction()
         }
         set(val) {
             nonce = val.nonce ?? nonce

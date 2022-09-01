@@ -242,7 +242,8 @@ extension DefaultContractProtocol {
         return EthereumTransaction(to: .contractDeploymentAddress(),
                                    value: BigUInt(0),
                                    data: fullData,
-                                   parameters: .init(gasLimit: BigUInt(0), gasPrice: BigUInt(0)))
+                                   // FIXME: This not working yet and should be changed up to release
+                                   parameters: EncodableTransaction())
     }
 
     /// Call given contract method with given parameters
@@ -263,7 +264,8 @@ extension DefaultContractProtocol {
                        extraData: Data?) -> EthereumTransaction? {
         guard let to = self.address else { return nil }
 
-        let params = EncodableTransaction(gasLimit: BigUInt(0), gasPrice: BigUInt(0))
+        // FIXME: This should be changed up to release
+        let params = EncodableTransaction()
 
         // MARK: - Encoding ABI Data flow
         if method == "fallback" {

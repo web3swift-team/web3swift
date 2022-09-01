@@ -61,15 +61,7 @@ public struct LegacyEnvelope: AbstractEnvelope {
     public var parameters: EncodableTransaction {
         get {
             return EncodableTransaction(
-                type: type,
-                to: to,
-                nonce: nonce,
-                chainID: chainID,
-                value: value,
-                data: data,
-                gasLimit: gasLimit,
-                gasPrice: gasPrice
-            )
+          )
         }
         set(val) {
             nonce = val.nonce ?? nonce
