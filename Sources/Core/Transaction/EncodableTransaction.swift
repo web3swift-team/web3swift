@@ -49,7 +49,10 @@ public struct EncodableTransaction {
     /// the chainId that transaction is targeted for
     /// should be set for all types, except some Legacy transactions (Pre EIP-155)
     /// will not have this set
-    public var chainID: BigUInt?
+    public var chainID: BigUInt {
+        get { return envelope.chainID }
+        set { envelope.chainID = newValue }
+    }
 
     /// the native value of the transaction
     public var value: BigUInt
@@ -60,7 +63,10 @@ public struct EncodableTransaction {
     // MARK: - Properties transaction type related either sends to a node if exist
 
     /// the max number of gas units allowed to process this transaction
-    public var gasLimit: BigUInt?
+    public var gasLimit: BigUInt {
+        get { return envelope.gasLimit }
+        set { return envelope.gasLimit = newValue }
+    }
 
     /// the price per gas unit for the tranaction (Legacy and EIP-2930 only)
     public var gasPrice: BigUInt?
@@ -155,7 +161,7 @@ public struct EncodableTransaction {
         if self.type == type { return }
 
         let newEnvelope = EnvelopeFactory.createEnvelope(type: type, to: self.envelope.to,
-                                                         nonce: self.envelope.nonce, parameters: self.envelope.parameters)
+                                                         nonce: self.envelope.nonce)
         self.envelope = newEnvelope
     }
 
@@ -222,14 +228,14 @@ extension EncodableTransaction: Codable {
         try containier.encode(type.rawValue.hexString, forKey: .type)
         try containier.encode(from, forKey: .from)
         try containier.encode(nonce.hexString, forKey: .nonce)
-        try containier.encode(chainID?.hexString, forKey: .chainID)
+        try containier.encode(chainID.hexString, forKey: .chainID)
         try containier.encode(accessList, forKey: .accessList)
         try containier.encode(data.toHexString().addHexPrefix(), forKey: .data)
         try containier.encode(value.hexString, forKey: .value)
 
         // Encoding only fields with value.
         // TODO: Rewrite me somehow better.
-        if let gasLimit = gasLimit, !gasLimit.isZero {
+        if !gasLimit.isZero {
             try containier.encode(gasLimit.hexString, forKey: .gasLimit)
         }
 
@@ -284,7 +290,6 @@ extension EncodableTransaction {
                 chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data = Data(),
                 v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
 
-        self.chainID = chainID ?? 0
         self.value = value ?? 0
         self.data = data
 

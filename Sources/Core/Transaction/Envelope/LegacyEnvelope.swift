@@ -12,7 +12,7 @@ public struct LegacyEnvelope: AbstractEnvelope {
 
     // common parameters for any transaction
     public var nonce: BigUInt = 0
-    public var chainID: BigUInt? {
+    public var chainID: BigUInt {
         get {
             if let id = explicitChainID, id != 0 { return id }
             return impliedChainID
@@ -33,9 +33,9 @@ public struct LegacyEnvelope: AbstractEnvelope {
     // legacy chainID Mechanism
     private var explicitChainID: BigUInt? // set directly or via options
     // private var impliedChainID: BigUInt? // we calculate this once, or when explicitely asked to
-    private var impliedChainID: BigUInt? {
+    private var impliedChainID: BigUInt {
         if r == 0 && s == 0 { return v }
-        if v == 27 || v == 28 || v < 35 { return nil }
+        if v == 27 || v == 28 || v < 35 { return 0 }
         return ((v - 1) / 2) - 17
     }
 
@@ -225,7 +225,7 @@ extension LegacyEnvelope {
         switch type {
         case .transaction: fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, v, r, s] as [AnyObject]
         case .signature:
-            if let chainID = self.chainID, chainID != 0 {
+            if chainID != 0 {
                 fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, chainID, BigUInt(0), BigUInt(0)] as [AnyObject]
             } else {
                 fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data] as [AnyObject]

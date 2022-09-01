@@ -29,8 +29,8 @@ public class ReadTransaction {
         self.contract = contract
         self.method = method
         self.transactionOptions = self.transactionOptions.merge(transactionOptions)
-        if self.web3.provider.network != nil {
-            self.transaction.chainID = self.web3.provider.network?.chainID
+        if let network = self.web3.provider.network {
+            self.transaction.chainID = network.chainID
         }
     }
 

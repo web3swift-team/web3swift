@@ -74,13 +74,17 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
 
     var sender: EthereumAddress? { get }
 
+    var chainID: BigUInt { get set }
+
     /// On chain address that this transaction is being sent to
     var to: EthereumAddress { get set }
 
-    // /// The native value of the transaction in Wei
+    /// The native value of the transaction in Wei
     var value: BigUInt { get set }
+
+    var gasLimit: BigUInt { get set }
     
-    // /// Any encoded data accompanying the transaction
+    /// Any encoded data accompanying the transaction
     var data: Data { get set }
 
     // Signature data should not be set directly
@@ -92,11 +96,6 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
 
     /// signature S compoonent
     var s: BigUInt { get set }
-
-    /// Transaction Parameters object
-    /// used to provide external access to the otherwise
-    /// protected parameters of the object
-    var parameters: EncodableTransaction { get set }
 
     /// - Returns: the public key decoded from the signature data
     var publicKey: Data? { get }
