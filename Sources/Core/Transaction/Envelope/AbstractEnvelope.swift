@@ -72,7 +72,7 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     /// the nonce value for the transaction
     var nonce: BigUInt { get set }
 
-    var from: EthereumAddress? { get }
+    var sender: EthereumAddress? { get }
 
     /// On chain address that this transaction is being sent to
     var to: EthereumAddress { get set }
@@ -157,7 +157,7 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
 
 public extension AbstractEnvelope {
     
-    var from: EthereumAddress? {
+    var sender: EthereumAddress? {
         guard let publicKey = publicKey else { return nil }
         return Utilities.publicToAddress(publicKey)
     }

@@ -23,9 +23,10 @@ public struct EncodableTransaction {
 
     /// the address of the sender of the transaction recovered from the signature
     public var sender: EthereumAddress? {
-        guard let publicKey = self.recoverPublicKey() else { return nil }
-        return Utilities.publicToAddress(publicKey)
+        envelope.sender
     }
+
+    public var from: EthereumAddress?
 
     /// the destination, or contract, address for the transaction
     public var to: EthereumAddress {
@@ -179,6 +180,7 @@ public struct EncodableTransaction {
         self.maxFeePerGas = options.resolveMaxFeePerGas(maxFeePerGas ?? 0)
         self.maxPriorityFeePerGas = options.resolveMaxPriorityFeePerGas(maxPriorityFeePerGas ?? 0)
         self.value = options.value ?? value
+        self.from = options.from
         self.to = options.to ?? to
         self.accessList = options.accessList
     }
@@ -189,13 +191,13 @@ public struct EncodableTransaction {
 extension EncodableTransaction: Codable {
     enum CodingKeys: String, CodingKey {
         case type
-        case sender = "from"
+        case from
         case to
         case nonce
         case chainID
         case value
         case data
-        case gasLimit
+        case gasLimit = "gas"
         case gasPrice
         case maxFeePerGas
         case maxPriorityFeePerGas
@@ -217,16 +219,35 @@ extension EncodableTransaction: Codable {
     public func encode(to encoder: Encoder) throws {
         var containier = encoder.container(keyedBy: CodingKeys.self)
         try containier.encode(type.rawValue.hexString, forKey: .type)
-        try containier.encode(to, forKey: .to)
+        try containier.encode(from, forKey: .from)
         try containier.encode(nonce.hexString, forKey: .nonce)
         try containier.encode(chainID?.hexString, forKey: .chainID)
-        try containier.encode(value.hexString, forKey: .value)
-        try containier.encode(data.toHexString().addHexPrefix(), forKey: .data)
-        try containier.encode(gasLimit?.hexString, forKey: .gasLimit)
-        try containier.encode(gasPrice?.hexString, forKey: .gasPrice)
-        try containier.encode(maxFeePerGas?.hexString, forKey: .maxFeePerGas)
-        try containier.encode(maxPriorityFeePerGas?.hexString, forKey: .maxPriorityFeePerGas)
         try containier.encode(accessList, forKey: .accessList)
+        try containier.encode(data.toHexString().addHexPrefix(), forKey: .data)
+        try containier.encode(value.hexString, forKey: .value)
+
+        // Encoding only fields with value.
+        // TODO: Rewrite me somehow better.
+        if let gasLimit = gasLimit, !gasLimit.isZero {
+            try containier.encode(gasLimit.hexString, forKey: .gasLimit)
+        }
+
+        if let gasPrice = gasPrice, !gasPrice.isZero {
+            try containier.encode(gasPrice.hexString, forKey: .gasPrice)
+        }
+
+        if let maxFeePerGas = maxFeePerGas, !maxFeePerGas.isZero {
+            try containier.encode(maxFeePerGas.hexString, forKey: .maxFeePerGas)
+        }
+
+        if let maxPriorityFeePerGas = maxPriorityFeePerGas, !maxPriorityFeePerGas.isZero {
+            try containier.encode(maxPriorityFeePerGas.hexString, forKey: .maxPriorityFeePerGas)
+        }
+
+        // Don't encode empty address
+        if !to.address.elementsEqual("0x") {
+            try containier.encode(to, forKey: .to)
+        }
     }
 
 }
