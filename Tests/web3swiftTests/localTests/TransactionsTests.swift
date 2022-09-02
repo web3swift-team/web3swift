@@ -598,14 +598,13 @@ class TransactionsTests: XCTestCase {
 
     func testDirectTransaction() throws {
         do {
-            var params = EncodableTransaction.emptyTransaction
-            params.gasPrice = 20000000000
-            params.gasLimit = 21000
             var transaction = EncodableTransaction(
                 to: EthereumAddress("0x3535353535353535353535353535353535353535")!,
-                nonce: 9, value: 1000000000000000000, data: Data(),
+                nonce: 9, value: 1_000_000_000_000_000_000, data: Data(),
                 // FIXME: Return parameters here
                 v: 0, r: 0, s: 0)
+            transaction.gasPrice = 20_000_000_000
+            transaction.gasLimit = 21_000
             let privateKeyData = Data.fromHex("0x4646464646464646464646464646464646464646464646464646464646464646")!
             let publicKey = Utilities.privateToPublic(privateKeyData, compressed: false)
             let sender = Utilities.publicToAddress(publicKey!)

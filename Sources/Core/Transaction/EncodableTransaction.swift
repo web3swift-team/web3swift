@@ -55,8 +55,12 @@ public struct EncodableTransaction {
     }
 
     /// the native value of the transaction
-    public var value: BigUInt
+    public var value: BigUInt {
+        get { return envelope.value }
+        set { envelope.value = newValue }
+    }
 
+    // MARK: - Ruins signing and decoding tests if tied to envelop
     /// any additional data for the transaction
     public var data: Data
 
@@ -169,7 +173,7 @@ public struct EncodableTransaction {
     public init?(rawValue: Data) {
         guard let env = EnvelopeFactory.createEnvelope(rawValue: rawValue) else { return nil }
         self.envelope = env
-        value = 0
+        // FIXME: This is duplication and should be fixed.
         data = Data()
     }
 
@@ -216,7 +220,7 @@ extension EncodableTransaction: Codable {
     public init(from decoder: Decoder) throws {
         guard let env = try EnvelopeFactory.createEnvelope(from: decoder) else { throw Web3Error.dataError }
         self.envelope = env
-        value = 0
+        // FIXME: This is duplication and should be fixed.
         data = Data()
 
         // capture any metadata that might be present
@@ -289,10 +293,8 @@ extension EncodableTransaction {
     public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
                 chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data = Data(),
                 v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
-
-        self.value = value ?? 0
+        // FIXME: This is duplication and should be fixed.
         self.data = data
-
         self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, v: v, r: r, s: s)
     }
 }
