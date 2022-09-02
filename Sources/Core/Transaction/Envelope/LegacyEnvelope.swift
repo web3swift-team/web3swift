@@ -12,7 +12,7 @@ public struct LegacyEnvelope: AbstractEnvelope {
 
     // common parameters for any transaction
     public var nonce: BigUInt = 0
-    public var chainID: BigUInt {
+    public var chainID: BigUInt? {
         get {
             if let id = explicitChainID, id != 0 { return id }
             return impliedChainID
@@ -33,9 +33,9 @@ public struct LegacyEnvelope: AbstractEnvelope {
     // legacy chainID Mechanism
     private var explicitChainID: BigUInt? // set directly or via options
     // private var impliedChainID: BigUInt? // we calculate this once, or when explicitely asked to
-    private var impliedChainID: BigUInt {
+    private var impliedChainID: BigUInt? {
         if r == 0 && s == 0 { return v }
-        if v == 27 || v == 28 || v < 35 { return 0 }
+        if v == 27 || v == 28 || v < 35 { return nil }
         return ((v - 1) / 2) - 17
     }
 
@@ -57,23 +57,6 @@ public struct LegacyEnvelope: AbstractEnvelope {
         toReturn += "s: " + String(self.s) + "\n"
         return toReturn
     }
-
-    // FIXME: Delete me
-    public var parameters: EncodableTransaction {
-        get {
-            return EncodableTransaction.emptyTransaction
-        }
-        set(val) {
-            nonce = val.nonce ?? nonce
-            explicitChainID = val.chainID ?? explicitChainID
-            to = val.to ?? to
-            value = val.value ?? value
-            data = val.data ?? data
-            gasLimit = val.gasLimit ?? gasLimit
-            gasPrice = val.gasPrice ?? gasPrice
-        }
-    }
-
 }
 
 extension LegacyEnvelope {
@@ -177,21 +160,6 @@ extension LegacyEnvelope {
         self.s = BigUInt(sData)
     }
 
-    public init(to: EthereumAddress, nonce: BigUInt? = nil,
-                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,
-                parameters: EncodableTransaction? = nil) {
-        self.to = to
-        self.nonce = nonce ?? parameters?.nonce ?? 0
-        self.explicitChainID = parameters?.chainID // Legacy can have a nil ChainID
-        self.value = parameters?.value ?? 0
-        self.data = parameters?.data ?? Data()
-        self.v = v
-        self.r = r
-        self.s = s
-        self.gasPrice = parameters?.gasPrice ?? 0
-        self.gasLimit = parameters?.gasLimit ?? 0
-    }
-
     // memberwise
     public init(to: EthereumAddress, nonce: BigUInt = 0,
                 chainID: BigUInt? = nil, value: BigUInt = 0, data: Data,
@@ -225,7 +193,7 @@ extension LegacyEnvelope {
         switch type {
         case .transaction: fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, v, r, s] as [AnyObject]
         case .signature:
-            if chainID != 0 {
+            if let chainID = self.chainID, chainID != 0 {
                 fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, chainID, BigUInt(0), BigUInt(0)] as [AnyObject]
             } else {
                 fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data] as [AnyObject]

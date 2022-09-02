@@ -49,7 +49,7 @@ public struct EncodableTransaction {
     /// the chainId that transaction is targeted for
     /// should be set for all types, except some Legacy transactions (Pre EIP-155)
     /// will not have this set
-    public var chainID: BigUInt {
+    public var chainID: BigUInt? {
         get { return envelope.chainID }
         set { envelope.chainID = newValue }
     }
@@ -164,9 +164,10 @@ public struct EncodableTransaction {
     public mutating func migrate(to type: TransactionType) {
         if self.type == type { return }
 
-        let newEnvelope = EnvelopeFactory.createEnvelope(type: type, to: self.envelope.to,
-                                                         nonce: self.envelope.nonce)
-        self.envelope = newEnvelope
+        // FIXME: Move it back
+//        let newEnvelope = EnvelopeFactory.createEnvelope(type: type, to: self.envelope.to,
+//                                                         nonce: self.envelope.nonce)
+//        self.envelope = newEnvelope
     }
 
     /// Create a new EncodableTransaction from a raw stream of bytes from the blockchain
@@ -187,7 +188,7 @@ public struct EncodableTransaction {
         // FIXME: Add appropiate values of resolveAny
         self.nonce = options.resolveNonce(nonce)
         self.gasPrice = options.resolveGasPrice(gasPrice ?? 0)
-        self.gasLimit = options.resolveGasLimit(gasLimit ?? 0)
+        self.gasLimit = options.resolveGasLimit(gasLimit)
         self.maxFeePerGas = options.resolveMaxFeePerGas(maxFeePerGas ?? 0)
         self.maxPriorityFeePerGas = options.resolveMaxPriorityFeePerGas(maxPriorityFeePerGas ?? 0)
         self.value = options.value ?? value
@@ -230,15 +231,16 @@ extension EncodableTransaction: Codable {
     public func encode(to encoder: Encoder) throws {
         var containier = encoder.container(keyedBy: CodingKeys.self)
         try containier.encode(type.rawValue.hexString, forKey: .type)
-        try containier.encode(from, forKey: .from)
         try containier.encode(nonce.hexString, forKey: .nonce)
-        try containier.encode(chainID.hexString, forKey: .chainID)
         try containier.encode(accessList, forKey: .accessList)
         try containier.encode(data.toHexString().addHexPrefix(), forKey: .data)
         try containier.encode(value.hexString, forKey: .value)
 
         // Encoding only fields with value.
         // TODO: Rewrite me somehow better.
+        if let chainID = chainID {
+//            try containier.encode(chainID.hexString, forKey: .chainID)
+        }
         if !gasLimit.isZero {
             try containier.encode(gasLimit.hexString, forKey: .gasLimit)
         }
@@ -258,6 +260,10 @@ extension EncodableTransaction: Codable {
         // Don't encode empty address
         if !to.address.elementsEqual("0x") {
             try containier.encode(to, forKey: .to)
+        }
+
+        if let from = from {
+            try containier.encode(from, forKey: .from)
         }
     }
 
@@ -291,11 +297,16 @@ extension EncodableTransaction {
     ///   - s: signature s parameter (default 0) - will get set properly once signed
     ///   - parameters: EthereumParameters object containing additional parametrs for the transaction like gas
     public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
-                chainID: BigUInt? = nil, value: BigUInt? = nil, data: Data = Data(),
-                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
+                chainID: BigUInt = 0, value: BigUInt = 0, data: Data = Data(),
+                gasLimit: BigUInt = 0, maxFeePerGas: BigUInt? = nil, maxPriorityFeePerGas: BigUInt? = nil,  gasPrice: BigUInt? = nil,
+                accessList: [AccessListEntry]? = nil, v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
         // FIXME: This is duplication and should be fixed.
         self.data = data
-        self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, v: v, r: r, s: s)
+        self.gasPrice = gasPrice
+        self.maxFeePerGas = maxFeePerGas
+        self.maxPriorityFeePerGas = maxPriorityFeePerGas
+        self.accessList = accessList
+        self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, chainID: chainID, value: value, data: data, gasLimit: gasLimit, maxFeePerGas: maxFeePerGas, maxPriorityFeePerGas: maxPriorityFeePerGas, gasPrice: gasPrice, accessList: accessList, v: v, r: r, s: s)
     }
 }
 

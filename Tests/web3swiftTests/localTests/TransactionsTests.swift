@@ -601,10 +601,13 @@ class TransactionsTests: XCTestCase {
             var transaction = EncodableTransaction(
                 to: EthereumAddress("0x3535353535353535353535353535353535353535")!,
                 nonce: 9, value: 1_000_000_000_000_000_000, data: Data(),
+                gasLimit: 21_000, gasPrice: 20_000_000_000,
                 // FIXME: Return parameters here
                 v: 0, r: 0, s: 0)
-            transaction.gasPrice = 20_000_000_000
-            transaction.gasLimit = 21_000
+            // FIXME: Make me work back again.
+            // Now it not connected to envelope.
+//            transaction.gasPrice = 20_000_000_000
+//            transaction.gasLimit = 21_000
             let privateKeyData = Data.fromHex("0x4646464646464646464646464646464646464646464646464646464646464646")!
             let publicKey = Utilities.privateToPublic(privateKeyData, compressed: false)
             let sender = Utilities.publicToAddress(publicKey!)

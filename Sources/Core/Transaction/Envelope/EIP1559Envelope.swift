@@ -12,7 +12,7 @@ public struct EIP1559Envelope: EIP2718Envelope {
 
     // common parameters for any transaction
     public var nonce: BigUInt = 0
-    public var chainID: BigUInt
+    public var chainID: BigUInt?
 
     public var from: EthereumAddress? {
         guard let publicKey = publicKey else { return nil }
@@ -65,25 +65,6 @@ public struct EIP1559Envelope: EIP2718Envelope {
         toReturn += "s: " + String(self.s) + "\n"
         return toReturn
     }
-
-    // FIXME: Delete me
-    public var parameters: EncodableTransaction {
-        get {
-            return EncodableTransaction.emptyTransaction
-        }
-        set(val) {
-            nonce = val.nonce ?? nonce
-            chainID = val.chainID ?? chainID
-            to = val.to ?? to
-            value = val.value ?? value
-            data = val.data ?? data
-            gasLimit = val.gasLimit ?? gasLimit
-            maxFeePerGas = val.maxFeePerGas ?? maxFeePerGas
-            maxPriorityFeePerGas = val.maxPriorityFeePerGas ?? maxPriorityFeePerGas
-            accessList = val.accessList ?? accessList
-        }
-    }
-
 }
 
 extension EIP1559Envelope {
@@ -227,23 +208,6 @@ extension EIP1559Envelope {
             }
             self.accessList = newList
         }
-    }
-
-    public init(to: EthereumAddress, nonce: BigUInt? = nil,
-                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,
-                parameters: EncodableTransaction? = nil) {
-        self.to = to
-        self.nonce = nonce ?? parameters?.nonce ?? 0
-        self.chainID = parameters?.chainID ?? 0
-        self.value = parameters?.value ?? 0
-        self.data =  parameters?.data ?? Data()
-        self.v = v
-        self.r = r
-        self.s = s
-        self.maxPriorityFeePerGas = parameters?.maxPriorityFeePerGas ?? 0
-        self.maxFeePerGas = parameters?.maxFeePerGas ?? 0
-        self.gasLimit = parameters?.gasLimit ?? 0
-        self.accessList = parameters?.accessList ?? []
     }
 
     // memberwise

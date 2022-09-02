@@ -74,7 +74,7 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
 
     var sender: EthereumAddress? { get }
 
-    var chainID: BigUInt { get set }
+    var chainID: BigUInt? { get set }
 
     /// On chain address that this transaction is being sent to
     var to: EthereumAddress { get set }
@@ -117,21 +117,6 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     /// will return an new `EncodableTransaction` object on success
     /// returns nil if a required field is not found in the decoder stream, or can't be decoded
     init?(rawValue: Data) // Decode from Ethereum Data
-
-    // pseudo memberwise initializer
-    // accepts all common parameters (full description with default implementation below)
-    // Note the `nil` parameters, even though non-optional in the struct, are there to allow
-    // fallback to pulling the value from `options`. If options also does not have a value, a suitable default is used
-    // precedence is as follows: direct parameter > options value > default value
-    /// Default memberwse initializer that all envelopes must support
-    /// - Parameters:
-    ///   - to: EthereumAddress of destination
-    ///   - nonce: nonce for the transaction
-    ///   - v: Signature V component
-    ///   - r: Signature R component
-    ///   - s: Signature S component
-    ///   - parameters: EthereumParameters struct containing any other required parameters
-    init(to: EthereumAddress, nonce: BigUInt?, v: BigUInt, r: BigUInt, s: BigUInt, parameters: EncodableTransaction?)
 
     /// Transaction encoder for transmission or signing
     ///  - Parameters:

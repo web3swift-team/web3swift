@@ -64,6 +64,8 @@ public struct EnvelopeFactory {
         }
     }
 
+    // MARK: Delete all default values in initializer, because of this is a internal factory, so it shouldn't be convenient,
+    // rather then is should have no magic in itself.
     /// Description Create a new transaction envelope of the type dictated by the type parameter
     /// - Parameters:
     ///   - type: TransactionType enum, dictates what kind of envelope to create defaults to .legacy if nil
@@ -74,14 +76,16 @@ public struct EnvelopeFactory {
     ///   - s: signature s parameter (default 0) - will get set properly once signed
     ///   - options: TransactionParameters containing additional parametrs for the transaction like gas
     /// - Returns: a new envelope of type dictated by 'type'
-    static func createEnvelope(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
-                               v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0, parameters: EncodableTransaction? = nil) -> AbstractEnvelope {
-        let envelopeType: TransactionType = type ?? parameters?.type ?? .legacy
+    static func createEnvelope(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt,
+                               chainID: BigUInt, value: BigUInt, data: Data,
+                               gasLimit: BigUInt, maxFeePerGas: BigUInt?, maxPriorityFeePerGas: BigUInt?, gasPrice: BigUInt?,
+                               accessList: [AccessListEntry]?, v: BigUInt, r: BigUInt, s: BigUInt) -> AbstractEnvelope {
+        let envelopeType: TransactionType = type ?? .legacy
 
         switch envelopeType {
-        case .eip2930: return EIP2930Envelope(to: to, nonce: nonce, v: v, r: r, s: s, parameters: parameters)
-        case .eip1559: return EIP1559Envelope(to: to, nonce: nonce, v: v, r: r, s: s, parameters: parameters)
-        default: return LegacyEnvelope(to: to, nonce: nonce, v: v, r: r, s: s, parameters: parameters)
+        case .eip2930: return EIP2930Envelope(to: to, nonce: nonce, chainID: chainID, value: value, data: data, gasPrice: gasPrice ?? 0, gasLimit: gasLimit, accessList: accessList, v: v, r: r, s: s)
+        case .eip1559: return EIP1559Envelope(to: to, nonce: nonce, chainID: chainID, value: value, data: data, maxPriorityFeePerGas: maxPriorityFeePerGas ?? 0, maxFeePerGas: maxFeePerGas ?? 0, gasLimit: gasLimit, accessList: accessList, v: v, r: r, s: s)
+        default: return LegacyEnvelope(to: to, nonce: nonce, chainID: chainID, value: value, data: data, gasPrice: gasPrice ?? 0, gasLimit: gasLimit, v: v, r: r, s: s)
         }
     }
 }
