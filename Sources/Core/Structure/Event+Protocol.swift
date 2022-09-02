@@ -47,6 +47,7 @@ public protocol EventParserProtocol {
 
 /// Enum for the most-used Ethereum networks. Network ID is crucial for EIP155 support
 public enum Networks {
+    case Goerli
     case Rinkeby
     case Mainnet
     case Ropsten
@@ -55,6 +56,7 @@ public enum Networks {
 
     public var name: String {
         switch self {
+        case .Goerli: return "goerli"
         case .Rinkeby: return "rinkeby"
         case .Ropsten: return "ropsten"
         case .Mainnet: return "mainnet"
@@ -69,6 +71,7 @@ public enum Networks {
         case .Mainnet: return BigUInt(1)
         case .Ropsten: return BigUInt(3)
         case .Rinkeby: return BigUInt(4)
+        case .Goerli: return BigUInt(5)
         case .Kovan: return BigUInt(42)
         }
     }
@@ -83,6 +86,8 @@ public enum Networks {
             return Networks.Ropsten
         case 4:
             return Networks.Rinkeby
+        case 5:
+            return Networks.Goerli
         case 42:
             return Networks.Kovan
         default:
