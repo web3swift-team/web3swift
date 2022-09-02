@@ -96,7 +96,7 @@ public enum APIRequest {
     /// - Parameters:
     ///     - TransactionParameters: parameters of planned transaction
     ///     - BlockNumber: block where it should be evalueated
-    case estimateGas(EncodableTransaction, BlockNumber)
+    case estimateGas(CodableTransaction, BlockNumber)
     
     /// Send raw transaction
     /// - Parameters:
@@ -106,7 +106,7 @@ public enum APIRequest {
     /// Send transaction object
     /// - Parameters:
     ///     - TransactionParameters: transaction to be sent into chain
-    case sendTransaction(EncodableTransaction)
+    case sendTransaction(CodableTransaction)
    
     /// Get transaction by hash
     /// - Parameters:
@@ -135,7 +135,7 @@ public enum APIRequest {
     /// - Parameters:
     ///     - TransactionParameters: transaction to be sent into chain
     ///     - BlockNumber: block where it should be evalueated
-    case call(EncodableTransaction, BlockNumber)
+    case call(CodableTransaction, BlockNumber)
     
     /// Get a transaction counts on a given block
     ///

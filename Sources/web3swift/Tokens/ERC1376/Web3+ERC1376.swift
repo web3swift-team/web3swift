@@ -65,7 +65,7 @@ protocol IERC1376: IERC20 {
     func withdrawDirectDebit(from: EthereumAddress, debtors: [EthereumAddress], strict: Bool) async throws -> WriteTransaction
 }
 
-// FIXME: Rewrite this to EncodableTransaction
+// FIXME: Rewrite this to CodableTransaction
 public class ERC1376: IERC1376, ERC20BaseProperties {
 
     internal var _name: String? = nil

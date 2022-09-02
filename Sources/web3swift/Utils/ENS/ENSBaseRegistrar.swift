@@ -9,7 +9,7 @@ import Foundation
 import BigInt
 import Core
 
-// FIXME: Rewrite this to EncodableTransaction
+// FIXME: Rewrite this to CodableTransaction
 public extension ENS {
     class BaseRegistrar: ERC721 {
         lazy var defaultOptions: TransactionOptions = {

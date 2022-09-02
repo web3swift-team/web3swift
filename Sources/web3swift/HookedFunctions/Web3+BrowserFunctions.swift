@@ -69,11 +69,11 @@ extension web3.BrowserFunctions {
         return Utilities.publicToAddressString(publicKey)
     }
 
-//    // FIXME: Rewrite this to EncodableTransaction
+//    // FIXME: Rewrite this to CodableTransaction
 //    public func sendTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") async -> [String: Any]? {
 //        do {
 //          let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
-//          let transaction: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+//          let transaction: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 //          let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
 //          var transactionOptions = TransactionOptions()
 //          transactionOptions.from = options.from
@@ -85,8 +85,8 @@ extension web3.BrowserFunctions {
 //        } catch { return nil }
 //    }
 
-    // FIXME: Rewrite this to EncodableTransaction
-    public func sendTransaction(_ transaction: EncodableTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") async -> [String: Any]? {
+    // FIXME: Rewrite this to CodableTransaction
+    public func sendTransaction(_ transaction: CodableTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") async -> [String: Any]? {
         do {
             let result = try await self.web3.eth.send(transaction, transactionOptions: transactionOptions, password: password)
             return ["txhash": result.hash]
@@ -98,7 +98,7 @@ extension web3.BrowserFunctions {
 //    public func estimateGas(_ transactionJSON: [String: Any]) async -> BigUInt? {
 //        do {
 //            let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
-//            let transaction: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+//            let transaction: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 //            let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
 //            var transactionOptions = TransactionOptions()
 //            transactionOptions.from = options.from
@@ -110,8 +110,8 @@ extension web3.BrowserFunctions {
 //        } catch { return nil }
 //    }
 
-    // FIXME: Rewrite this to EncodableTransaction
-    public func estimateGas(_ transaction: EncodableTransaction, transactionOptions: TransactionOptions) async -> BigUInt? {
+    // FIXME: Rewrite this to CodableTransaction
+    public func estimateGas(_ transaction: CodableTransaction, transactionOptions: TransactionOptions) async -> BigUInt? {
         do {
             let result = try await self.web3.eth.estimateGas(for: transaction, transactionOptions: transactionOptions)
             return result
@@ -120,11 +120,11 @@ extension web3.BrowserFunctions {
         }
     }
 
-//    // FIXME: Rewrite this to EncodableTransaction
-//    public func prepareTxForApproval(_ transactionJSON: [String: Any]) async -> (transaction: EncodableTransaction?, options: TransactionOptions?) {
+//    // FIXME: Rewrite this to CodableTransaction
+//    public func prepareTxForApproval(_ transactionJSON: [String: Any]) async -> (transaction: CodableTransaction?, options: TransactionOptions?) {
 //        do {
 //            let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
-//            let transaction: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+//            let transaction: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 //            let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
 //            return try await self.prepareTxForApproval(transaction, options: options)
 //        } catch {
@@ -132,8 +132,8 @@ extension web3.BrowserFunctions {
 //        }
 //    }
 
-    // FIXME: Rewrite this to EncodableTransaction
-    public func prepareTxForApproval(_ trans: EncodableTransaction, options opts: TransactionOptions) async throws -> (transaction: EncodableTransaction?, options: TransactionOptions?) {
+    // FIXME: Rewrite this to CodableTransaction
+    public func prepareTxForApproval(_ trans: CodableTransaction, options opts: TransactionOptions) async throws -> (transaction: CodableTransaction?, options: TransactionOptions?) {
         do {
             var transaction = trans
             var options = opts
@@ -152,7 +152,7 @@ extension web3.BrowserFunctions {
         }
     }
 
-//    // FIXME: Rewrite this to EncodableTransaction
+//    // FIXME: Rewrite this to CodableTransaction
 //    public func signTransaction(_ transactionJSON: [String: Any], password: String = "web3swift") async -> String? {
 //        do {
 //            let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])

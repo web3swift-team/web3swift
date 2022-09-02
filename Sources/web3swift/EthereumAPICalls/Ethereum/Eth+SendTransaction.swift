@@ -10,14 +10,14 @@ import Core
 
 extension web3.Eth {
 
-    // FIXME: Rewrite this to EncodableTransaction
-    public func send(_ transaction: EncodableTransaction, transactionOptions: TransactionOptions? = nil, password: String = "web3swift") async throws -> TransactionSendingResult {
+    // FIXME: Rewrite this to CodableTransaction
+    public func send(_ transaction: CodableTransaction, transactionOptions: TransactionOptions? = nil, password: String = "web3swift") async throws -> TransactionSendingResult {
         //  print(transaction)
-        var assembledTransaction: EncodableTransaction = transaction
+        var assembledTransaction: CodableTransaction = transaction
 
         var mergedOptions = self.web3.transactionOptions.merge(transactionOptions)
 
-        var forAssemblyPipeline: (EncodableTransaction, TransactionOptions) = (assembledTransaction, mergedOptions)
+        var forAssemblyPipeline: (CodableTransaction, TransactionOptions) = (assembledTransaction, mergedOptions)
 
         // usually not calling
         // Can't find where this hooks are implemented.
@@ -49,7 +49,7 @@ extension web3.Eth {
             return try await self.web3.eth.send(raw: assembledTransaction)
         }
         // MARK: Writing Data flow
-        // From EncodableTransaction.data to TransactionParameters.data
+        // From CodableTransaction.data to TransactionParameters.data
         assembledTransaction.applyOptions(mergedOptions)
         // guard let transactionParameters = transaction.encodeAsDictionary(from: transactionOptions?.from) else { throw Web3Error.dataError }
 

@@ -161,8 +161,8 @@ extension Web3 {
                 return collected
             }
 
-            let lastNthBlockGasPrice = blocks.flatMap { b -> [EncodableTransaction] in
-                    b.transactions.compactMap { t -> EncodableTransaction? in
+            let lastNthBlockGasPrice = blocks.flatMap { b -> [CodableTransaction] in
+                    b.transactions.compactMap { t -> CodableTransaction? in
                         guard case let .transaction(transaction) = t else { return nil }
                         return transaction
                     }

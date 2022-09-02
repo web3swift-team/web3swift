@@ -63,7 +63,7 @@ protocol IERC1400: IERC20 {
 // This namespace contains functions to work with ERC1400 tokens.
 // variables are lazyly evaluated or global token information (name, ticker, total supply)
 // can be imperatively read and saved
-// FIXME: Rewrite this to EncodableTransaction
+// FIXME: Rewrite this to CodableTransaction
 public class ERC1400: IERC1400, ERC20BaseProperties {
 
     internal var _name: String? = nil

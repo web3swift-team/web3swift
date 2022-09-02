@@ -177,7 +177,7 @@ extension LegacyEnvelope {
         self.s = s
     }
 
-//    public mutating func applyTransaction(_ transaction: EncodableTransaction) {
+//    public mutating func applyTransaction(_ transaction: CodableTransaction) {
 //        // type cannot be changed here, and is ignored
 //        self.nonce = transaction.resolveNonce(self.nonce)
 //        self.gasPrice = transaction.resolveGasPrice(self.gasPrice)

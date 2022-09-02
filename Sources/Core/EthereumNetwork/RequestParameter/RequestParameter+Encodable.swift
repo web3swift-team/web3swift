@@ -46,7 +46,7 @@ extension RequestParameter: Encodable {
         case is Bool.Type: try enumContainer.encode(rawValue as! Bool)
         case is [Bool].Type: try enumContainer.encode(rawValue as! [Bool])
 
-        case is EncodableTransaction.Type: try enumContainer.encode(rawValue as! EncodableTransaction)
+        case is CodableTransaction.Type: try enumContainer.encode(rawValue as! CodableTransaction)
         case is EventFilterParameters.Type: try enumContainer.encode(rawValue as! EventFilterParameters)
         default: break /// can't be executed, coz possible `self.rawValue` types are strictly defined in it's inplementation.`
         }

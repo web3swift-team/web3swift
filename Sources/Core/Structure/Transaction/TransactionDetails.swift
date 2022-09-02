@@ -12,7 +12,7 @@ public struct TransactionDetails: Decodable {
     public var blockHash: Data?
     public var blockNumber: BigUInt?
     public var transactionIndex: BigUInt?
-    public var transaction: EncodableTransaction
+    public var transaction: CodableTransaction
 
     enum CodingKeys: String, CodingKey {
         case blockHash
@@ -25,6 +25,6 @@ public struct TransactionDetails: Decodable {
         self.blockNumber = try? container.decodeHex(BigUInt.self, forKey: .blockNumber)
         self.blockHash = try?  container.decodeHex(Data.self, forKey: .blockHash)
         self.transactionIndex = try? container.decodeHex(BigUInt.self, forKey: .transactionIndex)
-        self.transaction = try EncodableTransaction(from: decoder)
+        self.transaction = try CodableTransaction(from: decoder)
     }
 }

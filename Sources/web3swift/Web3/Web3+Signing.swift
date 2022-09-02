@@ -9,7 +9,7 @@ import BigInt
 import Core
 
 public struct Web3Signer {
-    public static func signTX(transaction: inout EncodableTransaction,
+    public static func signTX(transaction: inout CodableTransaction,
                               keystore: AbstractKeystore,
                               account: EthereumAddress,
                               password: String,

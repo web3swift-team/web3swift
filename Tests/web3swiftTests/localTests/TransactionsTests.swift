@@ -187,7 +187,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            let jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+            let jsonTxn: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
             // check that the transaction type is legacy
             XCTAssertEqual(jsonTxn.type, .legacy, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
@@ -207,7 +207,7 @@ class TransactionsTests: XCTestCase {
         let expectedAddress = EthereumAddress(testSenderAddress)!
         let rlpData = Data.fromHex(vector.RLP)!
 
-        guard let rlpTxn = EncodableTransaction(rawValue: rlpData) else {
+        guard let rlpTxn = CodableTransaction(rawValue: rlpData) else {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is legacy
@@ -227,7 +227,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            var jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+            var jsonTxn: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 
             // unsign the input transaction
             jsonTxn.unsign()
@@ -256,7 +256,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            let jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+            let jsonTxn: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
             // check that the transaction type is legacy
             XCTAssertEqual(jsonTxn.type, .legacy, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
@@ -276,7 +276,7 @@ class TransactionsTests: XCTestCase {
         let expectedAddress = EthereumAddress(testSenderAddress)!
         let rlpData = Data.fromHex(vector.RLP)!
 
-        guard let rlpTxn = EncodableTransaction(rawValue: rlpData) else {
+        guard let rlpTxn = CodableTransaction(rawValue: rlpData) else {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is legacy
@@ -296,7 +296,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            var jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+            var jsonTxn: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 
             // unsign the input transaction
             jsonTxn.unsign()
@@ -325,7 +325,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            let jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+            let jsonTxn: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
             // check that the transaction type is eip2930
             XCTAssertEqual(jsonTxn.type, .eip2930, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
@@ -345,7 +345,7 @@ class TransactionsTests: XCTestCase {
         let expectedAddress = EthereumAddress(testSenderAddress)!
         let rlpData = Data.fromHex(vector.RLP)!
 
-        guard let rlpTxn = EncodableTransaction(rawValue: rlpData) else {
+        guard let rlpTxn = CodableTransaction(rawValue: rlpData) else {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is eip2930
@@ -365,7 +365,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            var jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+            var jsonTxn: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 
             // unsign the input transaction
             jsonTxn.unsign()
@@ -394,7 +394,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            let jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+            let jsonTxn: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
             // check that the transaction type is eip2930
             XCTAssertEqual(jsonTxn.type, .eip2930, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
@@ -414,7 +414,7 @@ class TransactionsTests: XCTestCase {
         let expectedAddress = EthereumAddress(testSenderAddress)!
         let rlpData = Data.fromHex(vector.RLP)!
 
-        guard let rlpTxn = EncodableTransaction(rawValue: rlpData) else {
+        guard let rlpTxn = CodableTransaction(rawValue: rlpData) else {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is eip2930
@@ -434,7 +434,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            var jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+            var jsonTxn: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 
             // unsign the input transaction
             jsonTxn.unsign()
@@ -463,7 +463,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            let jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+            let jsonTxn: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
             // check that the transaction type is eip1559
             XCTAssertEqual(jsonTxn.type, .eip1559, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
@@ -483,7 +483,7 @@ class TransactionsTests: XCTestCase {
         let expectedAddress = EthereumAddress(testSenderAddress)!
         let rlpData = Data.fromHex(vector.RLP)!
 
-        guard let rlpTxn = EncodableTransaction(rawValue: rlpData) else {
+        guard let rlpTxn = CodableTransaction(rawValue: rlpData) else {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is eip1559
@@ -503,7 +503,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            var jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+            var jsonTxn: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 
             // unsign the input transaction
             jsonTxn.unsign()
@@ -532,7 +532,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            let jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+            let jsonTxn: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
             // check that the transaction type is eip1559
             XCTAssertEqual(jsonTxn.type, .eip1559, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
@@ -552,7 +552,7 @@ class TransactionsTests: XCTestCase {
         let expectedAddress = EthereumAddress(testSenderAddress)!
         let rlpData = Data.fromHex(vector.RLP)!
 
-        guard let rlpTxn = EncodableTransaction(rawValue: rlpData) else {
+        guard let rlpTxn = CodableTransaction(rawValue: rlpData) else {
             return XCTFail("Decoding RLP encoded transaction failed")
         }
         // check that the transaction type is eip1559
@@ -572,7 +572,7 @@ class TransactionsTests: XCTestCase {
         let jsonData = vector.JSON.data(using: .utf8)!
 
         do {
-            var jsonTxn: EncodableTransaction = try JSONDecoder().decode(EncodableTransaction.self, from: jsonData)
+            var jsonTxn: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 
             // unsign the input transaction
             jsonTxn.unsign()
@@ -598,7 +598,7 @@ class TransactionsTests: XCTestCase {
 
     func testDirectTransaction() throws {
         do {
-            var transaction = EncodableTransaction(
+            var transaction = CodableTransaction(
                 to: EthereumAddress("0x3535353535353535353535353535353535353535")!,
                 nonce: 9, value: 1_000_000_000_000_000_000, data: Data(),
                 gasLimit: 21_000, gasPrice: 20_000_000_000,

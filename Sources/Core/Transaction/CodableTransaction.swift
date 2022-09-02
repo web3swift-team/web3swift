@@ -10,7 +10,7 @@ import BigInt
 ///  Structure capable of carying the parameters for any transaction type.
 ///  while all fields in this struct are optional, they are not necessarily
 ///  optional for the type of transaction they apply to.
-public struct EncodableTransaction {
+public struct CodableTransaction {
     /// internal acccess only. The transaction envelope object itself that contains all the transaction data
     /// and type specific implementation
     internal var envelope: AbstractEnvelope
@@ -170,7 +170,7 @@ public struct EncodableTransaction {
 //        self.envelope = newEnvelope
     }
 
-    /// Create a new EncodableTransaction from a raw stream of bytes from the blockchain
+    /// Create a new CodableTransaction from a raw stream of bytes from the blockchain
     public init?(rawValue: Data) {
         guard let env = EnvelopeFactory.createEnvelope(rawValue: rawValue) else { return nil }
         self.envelope = env
@@ -197,10 +197,10 @@ public struct EncodableTransaction {
         self.accessList = options.accessList
     }
 
-    public static var emptyTransaction = EncodableTransaction(to: EthereumAddress("0xa64f2fD4F60cEBE072997010cB0cb22695FDdCc5")!)
+    public static var emptyTransaction = CodableTransaction(to: EthereumAddress("0xa64f2fD4F60cEBE072997010cB0cb22695FDdCc5")!)
 }
 
-extension EncodableTransaction: Codable {
+extension CodableTransaction: Codable {
     enum CodingKeys: String, CodingKey {
         case type
         case from
@@ -273,7 +273,7 @@ extension EncodableTransaction: Codable {
 
 }
 
-extension EncodableTransaction: CustomStringConvertible {
+extension CodableTransaction: CustomStringConvertible {
     /// required by CustomString convertable
     /// returns a string description for the transaction and its data
     public var description: String {
@@ -286,9 +286,9 @@ extension EncodableTransaction: CustomStringConvertible {
     }
 }
 
-extension EncodableTransaction {
+extension CodableTransaction {
     // the kitchen sink init: can produce a transaction of any type
-    /// Universal initializer to create a new EncodableTransaction object
+    /// Universal initializer to create a new CodableTransaction object
     /// - Parameters:
     ///   - type: TransactionType enum for selecting the type of transaction to create (default is .legacy)
     ///   - to: EthereumAddress of the destination for this transaction (required)
@@ -314,4 +314,4 @@ extension EncodableTransaction {
     }
 }
 
-extension EncodableTransaction: APIRequestParameterType { }
+extension CodableTransaction: APIRequestParameterType { }

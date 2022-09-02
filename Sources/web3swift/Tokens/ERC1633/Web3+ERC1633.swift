@@ -10,7 +10,7 @@ import BigInt
 import Core
 
 // Re-Fungible Token Standard (RFT)
-// FIXME: Rewrite this to EncodableTransaction
+// FIXME: Rewrite this to CodableTransaction
 protocol IERC1633: IERC20, IERC165 {
 
     func parentToken() async throws -> EthereumAddress

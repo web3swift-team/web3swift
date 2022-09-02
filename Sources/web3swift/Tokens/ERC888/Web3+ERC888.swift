@@ -15,7 +15,7 @@ protocol IERC888 {
     func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction
 }
 
-// FIXME: Rewrite this to EncodableTransaction
+// FIXME: Rewrite this to CodableTransaction
 public class ERC888: IERC888, ERC20BaseProperties {
 
     internal var _name: String? = nil

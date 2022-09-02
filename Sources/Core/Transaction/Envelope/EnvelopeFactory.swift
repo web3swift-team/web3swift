@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 
-/// Utility class for creating transaction envelopes. Generally not used directly, but are used by EncodableTransaction
+/// Utility class for creating transaction envelopes. Generally not used directly, but are used by CodableTransaction
 public struct EnvelopeFactory {
     // Transaction factory function to create a new transaction with the correct internal envelope
     // from a raw transaction stream of bytes

@@ -14,14 +14,14 @@ extension web3 {
         return web3contract(web3: self, abiString: abiString, at: at, transactionOptions: self.transactionOptions, abiVersion: abiVersion)
     }
 
-    // FIXME: Rewrite this to EncodableTransaction
+    // FIXME: Rewrite this to CodableTransaction
     /// Web3 instance bound contract instance.
     public class web3contract {
         public let contract: EthereumContract
         public let web3: web3
         public var transactionOptions: TransactionOptions? = nil
 
-        // FIXME: Rewrite this to EncodableTransaction
+        // FIXME: Rewrite this to CodableTransaction
         /// Initialize the bound contract instance by supplying the Web3 provider bound object, ABI, Ethereum address and some default
         /// options for further function calls. By default the contract inherits options from the web3 object. Additionally supplied "options"
         /// do override inherited ones.
@@ -49,7 +49,7 @@ extension web3 {
         }
 
         // MARK: Writing Data flow
-        // FIXME: Rewrite this to EncodableTransaction
+        // FIXME: Rewrite this to CodableTransaction
         /// Deploys a constact instance using the previously provided  ABI, some bytecode, constructor parameters and options.
         /// If extraData is supplied it is appended to encoded bytecode and constructor parameters.
         ///
@@ -76,7 +76,7 @@ extension web3 {
                                     transactionOptions: mergedOptions)
         }
 
-        // FIXME: Rewrite this to EncodableTransaction
+        // FIXME: Rewrite this to CodableTransaction
         /// Creates and object responsible for calling a particular function of the contract. If method name is not found in ABI - returns nil.
         /// If extraData is supplied it is appended to encoded function parameters. Can be usefull if one wants to call
         /// the function not listed in ABI. "Parameters" should be an array corresponding to the list of parameters of the function.
@@ -94,7 +94,7 @@ extension web3 {
         }
 
         // FIXME: Actually this is not rading contract or smth, this is about composing appropriate binary data to iterate with it later.
-        // FIXME: Rewrite this to EncodableTransaction
+        // FIXME: Rewrite this to CodableTransaction
         /// Creates and object responsible for calling a particular function of the contract. If method name is not found in ABI - returns nil.
         /// If extraData is supplied it is appended to encoded function parameters. Can be usefull if one wants to call
         /// the function not listed in ABI. "Parameters" should be an array corresponding to the list of parameters of the function.
@@ -113,7 +113,7 @@ extension web3 {
             return writeTX
         }
 
-        // FIXME: Rewrite this to EncodableTransaction
+        // FIXME: Rewrite this to CodableTransaction
         /// Creates and object responsible for calling a particular function of the contract. If method name is not found in ABI - returns nil.
         /// If extraData is supplied it is appended to encoded function parameters. Can be usefull if one wants to call
         /// the function not listed in ABI. "Parameters" should be an array corresponding to the list of parameters of the function.

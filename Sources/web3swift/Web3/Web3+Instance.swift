@@ -7,7 +7,7 @@ import Foundation
 import BigInt
 import Core
 
-// FIXME: Rewrite this to EncodableTransaction
+// FIXME: Rewrite this to CodableTransaction
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
     public var provider: Web3Provider
@@ -35,7 +35,7 @@ public class web3 {
         return self.ethInstance!
     }
 
-    // FIXME: Rewrite this to EncodableTransaction
+    // FIXME: Rewrite this to CodableTransaction
     public class Eth: TransactionOptionsInheritable {
         var provider: Web3Provider
         //  weak var web3: web3?
@@ -60,7 +60,7 @@ public class web3 {
         return self.personalInstance!
     }
 
-    // FIXME: Rewrite this to EncodableTransaction
+    // FIXME: Rewrite this to CodableTransaction
     public class Personal: TransactionOptionsInheritable {
         var provider: Web3Provider
         //        weak var web3: web3?
@@ -85,7 +85,7 @@ public class web3 {
         return self.txPoolInstance!
     }
 
-    // FIXME: Rewrite this to EncodableTransaction
+    // FIXME: Rewrite this to CodableTransaction
     public class TxPool: TransactionOptionsInheritable {
         var provider: Web3Provider
         //        weak var web3: web3?
@@ -131,7 +131,7 @@ public class web3 {
         return self.browserFunctionsInstance!
     }
 
-    // FIXME: Rewrite this to EncodableTransaction
+    // FIXME: Rewrite this to CodableTransaction
     public class BrowserFunctions: TransactionOptionsInheritable {
         var provider: Web3Provider
         //        weak var web3: web3?
@@ -156,7 +156,7 @@ public class web3 {
         return self.eventLoopInstance!
     }
 
-    // FIXME: Rewrite this to EncodableTransaction
+    // FIXME: Rewrite this to CodableTransaction
     public class Eventloop: TransactionOptionsInheritable {
 
         public typealias EventLoopCall = (web3) async -> Void
@@ -185,9 +185,9 @@ public class web3 {
         }
     }
 
-    public typealias AssemblyHookFunction = ((EncodableTransaction, EthereumContract, TransactionOptions)) -> (EncodableTransaction, EthereumContract, TransactionOptions, Bool)
+    public typealias AssemblyHookFunction = ((CodableTransaction, EthereumContract, TransactionOptions)) -> (CodableTransaction, EthereumContract, TransactionOptions, Bool)
 
-    public typealias SubmissionHookFunction = ((EncodableTransaction, TransactionOptions)) -> (EncodableTransaction, TransactionOptions, Bool)
+    public typealias SubmissionHookFunction = ((CodableTransaction, TransactionOptions)) -> (CodableTransaction, TransactionOptions, Bool)
 
     public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> ()
 

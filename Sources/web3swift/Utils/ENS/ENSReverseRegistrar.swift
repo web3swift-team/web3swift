@@ -20,7 +20,7 @@ public extension ENS {
             return contract!
         }()
 
-        // FIXME: Rewrite this to EncodableTransaction
+        // FIXME: Rewrite this to CodableTransaction
         lazy var defaultOptions: TransactionOptions = {
             return TransactionOptions.defaultOptions
         }()

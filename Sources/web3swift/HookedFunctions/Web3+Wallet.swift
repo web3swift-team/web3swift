@@ -27,7 +27,7 @@ extension web3.Web3Wallet {
         return addresses[0]
     }
 
-    public func signTX(transaction: inout EncodableTransaction, account: EthereumAddress, password: String = "web3swift") throws -> Bool {
+    public func signTX(transaction: inout CodableTransaction, account: EthereumAddress, password: String = "web3swift") throws -> Bool {
         do {
             guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {
                 throw Web3Error.walletError

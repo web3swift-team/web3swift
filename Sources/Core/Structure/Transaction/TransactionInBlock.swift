@@ -9,7 +9,7 @@ import Foundation
 
 public enum TransactionInBlock: Decodable {
     case hash(Data)
-    case transaction(EncodableTransaction)
+    case transaction(CodableTransaction)
     case null
 
     public init(from decoder: Decoder) throws {
@@ -17,7 +17,7 @@ public enum TransactionInBlock: Decodable {
         if let string = try? value.decode(String.self) {
             guard let d = Data.fromHex(string) else {throw Web3Error.dataError}
             self = .hash(d)
-        } else if let transaction = try? value.decode(EncodableTransaction.self) {
+        } else if let transaction = try? value.decode(CodableTransaction.self) {
             self = .transaction(transaction)
         } else {
             self = .null

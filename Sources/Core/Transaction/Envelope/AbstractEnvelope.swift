@@ -18,7 +18,7 @@ import BigInt
     Adding a new transaction type in the future should be as straight forward as adding to the TransactionType enum here
     then creating a new struct that implements to `EIP2718Envelope`, and implementing the required elements for the type
     Finally adding the type specific inits to the factory routines in `EnvelopeFactory` so that objectts of the new type 
-    will get generated when `EncodableTransaction` is being created with data for the new type
+    will get generated when `CodableTransaction` is being created with data for the new type
 */
 
 /// Enumeration for supported transaction types
@@ -60,7 +60,7 @@ public enum EncodeType {
 }
 
 /// Protocol definition for all transaction envelope types
-/// All envelopes must conform to this protocol to work with `EncodableTransaction`
+/// All envelopes must conform to this protocol to work with `CodableTransaction`
 /// each implememtation holds all the type specific data
 /// and implments the type specific encoding/decoding
 public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
@@ -105,16 +105,16 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
 
     // required initializers
     // for Decodable support
-    /// initializer for creating an `EncodableTransaction` with the Decodable protocol
-    /// will return an new `EncodableTransaction` object on success
+    /// initializer for creating an `CodableTransaction` with the Decodable protocol
+    /// will return an new `CodableTransaction` object on success
     /// thows a `Web3.dataError` if an error occurs while trying to decode a value
     /// returns nil if a required field is not found in the decoder stream
     init?(from decoder: Decoder) throws // Decodable Protocol
 
     // initializes from a raw stream of bytes
     // can fail if input stream is not of the right size/cannot be decoded
-    /// initializer for creating an `EncodableTransaction` with raw bytestream data
-    /// will return an new `EncodableTransaction` object on success
+    /// initializer for creating an `CodableTransaction` with raw bytestream data
+    /// will return an new `CodableTransaction` object on success
     /// returns nil if a required field is not found in the decoder stream, or can't be decoded
     init?(rawValue: Data) // Decode from Ethereum Data
 
