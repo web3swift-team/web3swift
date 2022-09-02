@@ -197,7 +197,7 @@ public struct CodableTransaction {
         self.accessList = options.accessList
     }
 
-    public static var emptyTransaction = CodableTransaction(to: EthereumAddress("0xa64f2fD4F60cEBE072997010cB0cb22695FDdCc5")!)
+    public static var emptyTransaction = CodableTransaction(to: EthereumAddress.contractDeploymentAddress())
 }
 
 extension CodableTransaction: Codable {
