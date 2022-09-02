@@ -229,8 +229,8 @@ extension EncodableTransaction: Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
+        // FIXME: There's a huge mess here, please take a look here at code review if any.
         var containier = encoder.container(keyedBy: CodingKeys.self)
-        try containier.encode(type.rawValue.hexString, forKey: .type)
         try containier.encode(nonce.hexString, forKey: .nonce)
         try containier.encode(accessList, forKey: .accessList)
         try containier.encode(data.toHexString().addHexPrefix(), forKey: .data)
@@ -238,9 +238,13 @@ extension EncodableTransaction: Codable {
 
         // Encoding only fields with value.
         // TODO: Rewrite me somehow better.
-        if let chainID = chainID {
-//            try containier.encode(chainID.hexString, forKey: .chainID)
+        if type != .legacy {
+            try containier.encode(type.rawValue.hexString, forKey: .type)
+            if let chainID = chainID, !chainID.isZero {
+                try containier.encode(chainID.hexString, forKey: .chainID)
+            }
         }
+
         if !gasLimit.isZero {
             try containier.encode(gasLimit.hexString, forKey: .gasLimit)
         }
