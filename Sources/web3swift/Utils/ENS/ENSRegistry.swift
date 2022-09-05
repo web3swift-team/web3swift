@@ -37,7 +37,7 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         lazy var defaultOptions: TransactionOptions = {
-            return TransactionOptions.defaultOptions
+            return TransactionOptions.emptyTransaction
         }()
 
         lazy var registryContract: web3.web3contract = {

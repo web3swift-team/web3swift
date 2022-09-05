@@ -216,7 +216,7 @@ extension ERC20BaseProperties {
         }
         let contract = self.contract
         guard contract.contract.address != nil else {return}
-        var transactionOptionsVAR = TransactionOptions.defaultOptions
+        var transactionOptionsVAR = TransactionOptions.emptyTransaction
         transactionOptionsVAR.callOnBlock = .latest
         let transactionOptions = transactionOptionsVAR
         async let namePromise = contract

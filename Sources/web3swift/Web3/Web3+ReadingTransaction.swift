@@ -14,7 +14,7 @@ public class ReadTransaction {
     public var transaction: CodableTransaction
     public var contract: EthereumContract
     public var method: String
-    public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
+    public var transactionOptions: TransactionOptions = TransactionOptions.emptyTransaction
 
     var web3: web3
 

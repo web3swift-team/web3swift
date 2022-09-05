@@ -13,7 +13,7 @@ import Core
 public extension ENS {
     class BaseRegistrar: ERC721 {
         lazy var defaultOptions: TransactionOptions = {
-            return TransactionOptions.defaultOptions
+            return TransactionOptions.emptyTransaction
         }()
 
         public init(web3: web3, address: EthereumAddress) {

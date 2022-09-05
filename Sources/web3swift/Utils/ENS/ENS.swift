@@ -76,7 +76,7 @@ public class ENS {
 
     // FIXME: Rewrite this to CodableTransaction
     lazy var defaultOptions: TransactionOptions = {
-        return TransactionOptions.defaultOptions
+        return TransactionOptions.emptyTransaction
     }()
 
     // MARK: - Convenience public resolver methods

@@ -72,7 +72,7 @@ class web3swiftPromisesTests: XCTestCase {
             return
         }
 
-        var options = TransactionOptions.defaultOptions
+        var options = TransactionOptions.emptyTransaction
         let fromAddress = tempKeystore!.addresses?.first
         options.from = fromAddress
 

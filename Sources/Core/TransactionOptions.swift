@@ -75,7 +75,7 @@ public struct TransactionOptions {
 
     public var accessList: [AccessListEntry]?
 
-    public static var defaultOptions: TransactionOptions {
+    public static var emptyTransaction: TransactionOptions {
         var opts = TransactionOptions()
         opts.type = .legacy
         opts.gasLimit = .automatic
@@ -180,7 +180,7 @@ public struct TransactionOptions {
     ///
     /// Returns default options if both parameters are nil.
     public static func merge(_ options: TransactionOptions?, with other: TransactionOptions?) -> TransactionOptions? {
-        var newOptions = TransactionOptions.defaultOptions // default has lowest priority
+        var newOptions = TransactionOptions.emptyTransaction // default has lowest priority
         newOptions = newOptions.merge(options)
         newOptions = newOptions.merge(other) // other has highest priority
         return newOptions

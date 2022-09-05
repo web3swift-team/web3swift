@@ -22,7 +22,7 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         lazy var defaultOptions: TransactionOptions = {
-            return TransactionOptions.defaultOptions
+            return TransactionOptions.emptyTransaction
         }()
 
         public init(web3: web3, address: EthereumAddress) {

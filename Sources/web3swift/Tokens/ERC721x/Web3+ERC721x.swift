@@ -76,7 +76,7 @@ public class ERC721x: IERC721x {
         }
         let contract = self.contract
         guard contract.contract.address != nil else {return}
-        var transactionOptions = TransactionOptions.defaultOptions
+        var transactionOptions = TransactionOptions.emptyTransaction
         transactionOptions.callOnBlock = .latest
 
         guard let tokenIdPromise = try await contract.read("tokenId", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.decodedData() else {return}

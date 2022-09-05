@@ -11,7 +11,7 @@ import Core
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
     public var provider: Web3Provider
-    public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
+    public var transactionOptions: TransactionOptions = TransactionOptions.emptyTransaction
 
     /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
     public init(provider prov: Web3Provider) {
