@@ -50,7 +50,7 @@ public struct TransactionOptions {
         case withMargin(Double)
     }
 
-    public var gasPrice: GasPricePolicy?
+    public private (set) var gasPrice: GasPricePolicy?
 
     // new gas parameters for EIP-1559 support
     public enum FeePerGasPolicy {
