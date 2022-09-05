@@ -21,8 +21,8 @@ public extension ENS {
         }()
 
         // FIXME: Rewrite this to CodableTransaction
-        lazy var defaultOptions: TransactionOptions = {
-            return TransactionOptions.emptyTransaction
+        lazy var defaultOptions: CodableTransaction = {
+            return CodableTransaction.emptyTransaction
         }()
 
         public init(web3: web3, address: EthereumAddress) {

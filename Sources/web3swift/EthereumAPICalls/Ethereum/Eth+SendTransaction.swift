@@ -11,13 +11,13 @@ import Core
 extension web3.Eth {
 
     // FIXME: Rewrite this to CodableTransaction
-    public func send(_ transaction: CodableTransaction, transactionOptions: TransactionOptions? = nil, password: String = "web3swift") async throws -> TransactionSendingResult {
+    public func send(_ transaction: CodableTransaction, transactionOptions: CodableTransaction? = nil, password: String = "web3swift") async throws -> TransactionSendingResult {
         //  print(transaction)
         var assembledTransaction: CodableTransaction = transaction
 
         var mergedOptions = self.web3.transactionOptions.merge(transactionOptions)
 
-        var forAssemblyPipeline: (CodableTransaction, TransactionOptions) = (assembledTransaction, mergedOptions)
+        var forAssemblyPipeline: (CodableTransaction, CodableTransaction) = (assembledTransaction, mergedOptions)
 
         // usually not calling
         // Can't find where this hooks are implemented.

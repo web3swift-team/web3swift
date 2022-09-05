@@ -44,7 +44,7 @@ class ERC20Tests: LocalTestCase {
 //        let erc20ContractAddress = EthereumAddress(token.address)!
 //        let contract = web3.contract(Web3.Utils.erc20ABI, at: erc20ContractAddress, abiVersion: 2)!
 //        let amount = Web3.Utils.parseToBigUInt(value, units: .eth)
-//        var options = TransactionOptions.emptyTransaction
+//        var options = CodableTransaction.emptyTransaction
 //        options.value = amount
 //        options.from = walletAddress
 //        options.gasPricePolicy = .automatic

@@ -74,8 +74,8 @@ extension web3.BrowserFunctions {
 //        do {
 //          let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
 //          let transaction: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
-//          let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
-//          var transactionOptions = TransactionOptions.emptyTransaction
+//          let options: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
+//          var transactionOptions = CodableTransaction.emptyTransaction
 //          transactionOptions.from = options.from
 //          transactionOptions.to = options.to
 //          transactionOptions.value = options.value ?? 0
@@ -86,7 +86,7 @@ extension web3.BrowserFunctions {
 //    }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func sendTransaction(_ transaction: CodableTransaction, transactionOptions: TransactionOptions, password: String = "web3swift") async -> [String: Any]? {
+    public func sendTransaction(_ transaction: CodableTransaction, transactionOptions: CodableTransaction, password: String = "web3swift") async -> [String: Any]? {
         do {
             let result = try await self.web3.eth.send(transaction, transactionOptions: transactionOptions, password: password)
             return ["txhash": result.hash]
@@ -99,8 +99,8 @@ extension web3.BrowserFunctions {
 //        do {
 //            let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
 //            let transaction: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
-//            let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
-//            var transactionOptions = TransactionOptions.emptyTransaction
+//            let options: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
+//            var transactionOptions = CodableTransaction.emptyTransaction
 //            transactionOptions.from = options.from
 //            transactionOptions.to = options.to
 //            transactionOptions.value = options.value ?? 0
@@ -111,7 +111,7 @@ extension web3.BrowserFunctions {
 //    }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func estimateGas(_ transaction: CodableTransaction, transactionOptions: TransactionOptions) async -> BigUInt? {
+    public func estimateGas(_ transaction: CodableTransaction, transactionOptions: CodableTransaction) async -> BigUInt? {
         do {
             let result = try await self.web3.eth.estimateGas(for: transaction, transactionOptions: transactionOptions)
             return result
@@ -125,7 +125,7 @@ extension web3.BrowserFunctions {
 //        do {
 //            let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
 //            let transaction: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
-//            let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
+//            let options: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 //            return try await self.prepareTxForApproval(transaction, options: options)
 //        } catch {
 //            return (nil, nil)
@@ -133,7 +133,7 @@ extension web3.BrowserFunctions {
 //    }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func prepareTxForApproval(_ trans: CodableTransaction, options opts: TransactionOptions) async throws -> (transaction: CodableTransaction?, options: TransactionOptions?) {
+    public func prepareTxForApproval(_ trans: CodableTransaction, options opts: CodableTransaction) async throws -> (transaction: CodableTransaction?, options: CodableTransaction?) {
         do {
             var transaction = trans
             var options = opts
@@ -157,7 +157,7 @@ extension web3.BrowserFunctions {
 //        do {
 //            let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
 //            let transaction: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
-//            let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
+//            let options: CodableTransaction = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
 //            var transactionOptions = TransactionOptions.emptyTransaction
 //            transactionOptions.from = options.from
 //            transactionOptions.to = options.to

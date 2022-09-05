@@ -73,7 +73,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
     internal var _decimals: UInt8? = nil
     internal var _hasReadProperties: Bool = false
 
-    public var transactionOptions: TransactionOptions
+    public var transactionOptions: CodableTransaction
     public var web3: web3
     public var provider: Web3Provider
     public var address: EthereumAddress
@@ -97,7 +97,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = TransactionOptions.emptyTransaction
+        var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
         let result = try await contract.read("balanceOf", parameters: [account] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData(with: transactionOptions)
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
@@ -106,7 +106,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = TransactionOptions.emptyTransaction
+        var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
         let result = try await contract.read("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData(with: transactionOptions)
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
@@ -115,7 +115,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -137,7 +137,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -160,7 +160,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -183,7 +183,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -206,7 +206,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     public func totalSupply() async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = TransactionOptions.emptyTransaction
+        var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
         let result = try await contract.read("totalSupply", parameters: [AnyObject](), extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData(with: transactionOptions)
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
@@ -215,7 +215,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func approve(from: EthereumAddress, spender: EthereumAddress, expectedValue: String, newValue: String) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -241,7 +241,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func increaseAllowance(from: EthereumAddress, spender: EthereumAddress, value: String) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -264,7 +264,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func decreaseAllowance(from: EthereumAddress, spender: EthereumAddress, value: String, strict: Bool) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -287,7 +287,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func setERC20ApproveChecking(from: EthereumAddress, approveChecking: Bool) throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
 
@@ -297,7 +297,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func spendableAllowance(owner: EthereumAddress, spender: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = TransactionOptions.emptyTransaction
+        var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
         let result = try await contract.read("spendableAllowance", parameters: [owner, spender] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData(with: transactionOptions)
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
@@ -306,7 +306,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func transfer(from: EthereumAddress, data: String) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -328,7 +328,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func transferAndCall(from: EthereumAddress, to: EthereumAddress, value: String, data: [UInt8]) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -350,7 +350,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func nonceOf(owner: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = TransactionOptions.emptyTransaction
+        var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
         let result = try await contract.read("nonceOf", parameters: [owner] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData(with: transactionOptions)
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
@@ -359,7 +359,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func increaseNonce(from: EthereumAddress) throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -370,7 +370,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func delegateTransferAndCall(from: EthereumAddress, nonce: BigUInt, fee: BigUInt, gasAmount: BigUInt, to: EthereumAddress, value: String, data: [UInt8], mode: IERC1376DelegateMode, v: UInt8, r: Data, s: Data) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -395,7 +395,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func directDebit(debtor: EthereumAddress, receiver: EthereumAddress) async throws -> DirectDebit {
         let contract = self.contract
-        var transactionOptions = TransactionOptions.emptyTransaction
+        var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
         let result = try await contract.read("directDebit", parameters: [debtor, receiver] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData(with: transactionOptions)
         guard let res = result["0"] as? DirectDebit else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
@@ -404,7 +404,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func setupDirectDebit(from: EthereumAddress, receiver: EthereumAddress, info: DirectDebitInfo) throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
 
@@ -414,7 +414,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func terminateDirectDebit(from: EthereumAddress, receiver: EthereumAddress) throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
 
@@ -424,7 +424,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func withdrawDirectDebit(from: EthereumAddress, debtor: EthereumAddress) throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
 
@@ -434,7 +434,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func withdrawDirectDebit(from: EthereumAddress, debtors: [EthereumAddress], strict: Bool) throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
 

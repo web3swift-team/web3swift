@@ -35,7 +35,7 @@ public class ERC1155: IERC1155 {
     private var _tokenId: BigUInt? = nil
     private var _hasReadProperties: Bool = false
 
-    public var transactionOptions: TransactionOptions
+    public var transactionOptions: CodableTransaction
     public var web3: web3
     public var provider: Web3Provider
     public var address: EthereumAddress
@@ -71,7 +71,7 @@ public class ERC1155: IERC1155 {
         }
         let contract = self.contract
         guard contract.contract.address != nil else {return}
-        var transactionOptions = TransactionOptions.emptyTransaction
+        var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
 
         guard let tokenIdPromise = try await contract.read("id", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.decodedData() else {return}
@@ -84,7 +84,7 @@ public class ERC1155: IERC1155 {
 
     public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, id: BigUInt, value: BigUInt, data: [UInt8]) throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
 
@@ -94,7 +94,7 @@ public class ERC1155: IERC1155 {
 
     public func safeBatchTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, ids: [BigUInt], values: [BigUInt], data: [UInt8]) throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
 
@@ -104,7 +104,7 @@ public class ERC1155: IERC1155 {
 
     public func balanceOf(account: EthereumAddress, id: BigUInt) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = TransactionOptions.emptyTransaction
+        var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
         let result = try await contract.read("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData(with: transactionOptions)
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
@@ -113,7 +113,7 @@ public class ERC1155: IERC1155 {
 
     public func setApprovalForAll(from: EthereumAddress, operator user: EthereumAddress, approved: Bool, scope: Data) throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
 
@@ -123,7 +123,7 @@ public class ERC1155: IERC1155 {
 
     public func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress, scope: Data) async throws -> Bool {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.callOnBlock = .latest
         let result = try await contract.read("isApprovedForAll", parameters: [owner, user, scope] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData(with: transactionOptions)
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
@@ -132,7 +132,7 @@ public class ERC1155: IERC1155 {
 
     public func supportsInterface(interfaceID: String) async throws -> Bool {
         let contract = self.contract
-        var transactionOptions = TransactionOptions.emptyTransaction
+        var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
         transactionOptions.gasLimitPolicy = .manual(30000)
         let result = try await contract.read("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData(with: transactionOptions)

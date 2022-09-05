@@ -22,7 +22,7 @@ class LocalTestCase: XCTestCase {
         let allAddresses = try! await web3.eth.ownedAccounts()
         let sendToAddress = allAddresses[0]
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
-        let value = Utilities.parseToBigUInt("1.0", units: .eth)
+        let value = Utilities.parseToBigUInt("1.0", units: .eth)!
 
         let from = allAddresses[0]
         let writeTX = contract!.write("fallback")!

@@ -49,7 +49,7 @@ extension Web3.Utils {
         }
 
         // FIXME: Rewrite this to CodableTransaction
-        func preAssemblyFunction(tx: CodableTransaction, contract: EthereumContract, transactionOptions: TransactionOptions) -> (CodableTransaction, EthereumContract, TransactionOptions, Bool) {
+        func preAssemblyFunction(tx: CodableTransaction, contract: EthereumContract, transactionOptions: CodableTransaction) -> (CodableTransaction, EthereumContract, CodableTransaction, Bool) {
             guard let from = transactionOptions.from else {
                 // do nothing
                 return (tx, contract, transactionOptions, true)

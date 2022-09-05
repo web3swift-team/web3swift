@@ -11,7 +11,7 @@ import Core
 public class WriteTransaction: ReadTransaction {
 
     // FIXME: Rewrite this to CodableTransaction (don't touch the logic)
-    public func assembleTransaction(transactionOptions: TransactionOptions? = nil) async throws -> CodableTransaction {
+    public func assembleTransaction(transactionOptions: CodableTransaction? = nil) async throws -> CodableTransaction {
         var assembledTransaction: CodableTransaction = transaction
 
         if self.method != "fallback" {
@@ -27,9 +27,9 @@ public class WriteTransaction: ReadTransaction {
 
         var mergedOptions = self.transactionOptions.merge(transactionOptions)
         if mergedOptions.value != nil {
-            assembledTransaction.value = mergedOptions.value!
+            assembledTransaction.value = mergedOptions.value
         }
-        var forAssemblyPipeline: (CodableTransaction, EthereumContract, TransactionOptions) = (assembledTransaction, self.contract, mergedOptions)
+        var forAssemblyPipeline: (CodableTransaction, EthereumContract, CodableTransaction) = (assembledTransaction, self.contract, mergedOptions)
 
         for hook in self.web3.preAssemblyHooks {
             let hookResult = hook.function(forAssemblyPipeline)
@@ -51,7 +51,7 @@ public class WriteTransaction: ReadTransaction {
         }
 
         // assemble promise for gas estimation
-        var optionsForGasEstimation = TransactionOptions.emptyTransaction
+        var optionsForGasEstimation = CodableTransaction.emptyTransaction
         optionsForGasEstimation.from = mergedOptions.from
         optionsForGasEstimation.to = mergedOptions.to
         optionsForGasEstimation.value = mergedOptions.value
@@ -141,8 +141,8 @@ public class WriteTransaction: ReadTransaction {
         let nonce = results[0]
         let gasEstimate = results[1]
 
-        var finalOptions = TransactionOptions.emptyTransaction
-        finalOptions.type = mergedOptions.type
+        var finalOptions = CodableTransaction.emptyTransaction
+//        finalOptions.type = mergedOptions.type
         finalOptions.noncePolicy = .manual(nonce)
         finalOptions.gasLimitPolicy = .manual(mergedOptions.resolveGasLimit(gasEstimate))
         finalOptions.accessList = mergedOptions.accessList
@@ -179,10 +179,10 @@ public class WriteTransaction: ReadTransaction {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult {
+    public func send(password: String = "web3swift", transactionOptions: CodableTransaction? = nil) async throws -> TransactionSendingResult {
         let transaction = try await assembleTransaction(transactionOptions: transactionOptions)
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
-        var cleanedOptions = TransactionOptions.emptyTransaction
+        var cleanedOptions = CodableTransaction.emptyTransaction
         cleanedOptions.from = mergedOptions.from
         cleanedOptions.to = mergedOptions.to
         // MARK: Sending Data flow
@@ -190,9 +190,9 @@ public class WriteTransaction: ReadTransaction {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    func gasEstimate(for policy: TransactionOptions.GasLimitPolicy,
+    func gasEstimate(for policy: CodableTransaction.GasLimitPolicy,
                      assembledTransaction: CodableTransaction,
-                     optionsForGasEstimation: TransactionOptions) async throws -> BigUInt {
+                     optionsForGasEstimation: CodableTransaction) async throws -> BigUInt {
         switch policy {
         case .automatic, .withMargin, .limited:
             return try await web3.eth.estimateGas(for: assembledTransaction, transactionOptions: optionsForGasEstimation)
@@ -202,7 +202,7 @@ public class WriteTransaction: ReadTransaction {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    func nonce(for policy: TransactionOptions.NoncePolicy, from: EthereumAddress) async throws -> BigUInt {
+    func nonce(for policy: CodableTransaction.NoncePolicy, from: EthereumAddress) async throws -> BigUInt {
         switch policy {
         case .latest:
             return try await self.web3.eth.getTransactionCount(for: from, onBlock: .latest)

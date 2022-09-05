@@ -183,7 +183,7 @@ public struct CodableTransaction {
         return self.envelope.encode(for: type)
     }
 
-    public mutating func applyOptions(_ options: TransactionOptions) {
+    public mutating func applyOptions(_ options: CodableTransaction) {
         // type cannot be changed here, and is ignored
         // FIXME: Add appropiate values of resolveAny
         self.nonce = options.resolveNonce(nonce)
@@ -196,6 +196,12 @@ public struct CodableTransaction {
         self.to = options.to ?? to
         self.accessList = options.accessList
     }
+
+    public var noncePolicy: NoncePolicy?
+    public var maxFeePerGasPolicy: FeePerGasPolicy?
+    public var maxPriorityFeePerGasPolicy: FeePerGasPolicy?
+    public var gasPricePolicy: GasPricePolicy?
+    public var gasLimitPolicy: GasLimitPolicy?
 
     public static var emptyTransaction = CodableTransaction(to: EthereumAddress.contractDeploymentAddress())
 }
@@ -297,6 +303,90 @@ extension CodableTransaction {
         case latest
         case manual(BigUInt)
     }
+
+    public func resolveNonce(_ suggestedByNode: BigUInt) -> BigUInt {
+        guard let noncePolicy = self.noncePolicy else { return suggestedByNode }
+        switch noncePolicy {
+        case .pending, .latest:
+            return suggestedByNode
+        case .manual(let value):
+            return value
+        }
+    }
+
+    public func resolveGasPrice(_ suggestedByNode: BigUInt) -> BigUInt {
+        guard let gasPricePolicy = self.gasPricePolicy else { return suggestedByNode }
+        switch gasPricePolicy {
+        case .automatic, .withMargin:
+            return suggestedByNode
+        case .manual(let value):
+            return value
+        }
+    }
+
+    public func resolveGasLimit(_ suggestedByNode: BigUInt) -> BigUInt {
+        guard let gasLimitPolicy = self.gasLimitPolicy else { return suggestedByNode }
+        switch gasLimitPolicy {
+        case .automatic, .withMargin:
+            return suggestedByNode
+        case .manual(let value):
+            return value
+        case .limited(let limit):
+            if limit <= suggestedByNode {
+                return suggestedByNode
+            } else {
+                return limit
+            }
+        }
+    }
+
+    public func resolveMaxFeePerGas(_ suggestedByNode: BigUInt) -> BigUInt {
+        guard let maxFeePerGasPolicy = self.maxFeePerGasPolicy else { return suggestedByNode }
+        switch maxFeePerGasPolicy {
+        case .automatic:
+            return suggestedByNode
+        case .manual(let value):
+            return value
+        }
+    }
+
+    public func resolveMaxPriorityFeePerGas(_ suggestedByNode: BigUInt) -> BigUInt {
+        guard let maxPriorityFeePerGasPolicy = self.maxPriorityFeePerGasPolicy else { return suggestedByNode }
+        switch maxPriorityFeePerGasPolicy {
+        case .automatic:
+            return suggestedByNode
+        case .manual(let value):
+            return value
+        }
+    }
+
+        public func merge(_ otherOptions: CodableTransaction?) -> CodableTransaction {
+            guard let other = otherOptions else { return self }
+            var opts = CodableTransaction.emptyTransaction
+//            opts.type = mergeIfNotNil(first: self.type, second: other.type)
+            
+            opts.from = mergeIfNotNil(first: self.from, second: other.from)
+            opts.chainID = mergeIfNotNil(first: self.chainID, second: other.chainID)
+            opts.gasLimitPolicy = mergeIfNotNil(first: self.gasLimitPolicy, second: other.gasLimitPolicy)
+            opts.gasPricePolicy = mergeIfNotNil(first: self.gasPricePolicy, second: other.gasPricePolicy)
+            opts.maxFeePerGasPolicy = mergeIfNotNil(first: self.maxFeePerGasPolicy, second: other.maxFeePerGasPolicy)
+            opts.maxPriorityFeePerGasPolicy = mergeIfNotNil(first: self.maxPriorityFeePerGasPolicy, second: other.maxPriorityFeePerGasPolicy)
+//            opts.value = mergeIfNotNil(first: self.value, second: other.value)
+            opts.noncePolicy = mergeIfNotNil(first: self.noncePolicy, second: other.noncePolicy)
+            opts.callOnBlock = mergeIfNotNil(first: self.callOnBlock, second: other.callOnBlock)
+            return opts
+        }
+    
+        /// Merges two sets of options by overriding the parameters from the first set by parameters from the second
+        /// set if those are not nil.
+        ///
+        /// Returns default options if both parameters are nil.
+        public static func merge(_ options: CodableTransaction?, with other: CodableTransaction?) -> CodableTransaction? {
+            var newOptions = CodableTransaction.emptyTransaction // default has lowest priority
+            newOptions = newOptions.merge(options)
+            newOptions = newOptions.merge(other) // other has highest priority
+            return newOptions
+        }
 }
 
 
@@ -342,3 +432,12 @@ extension CodableTransaction {
 }
 
 extension CodableTransaction: APIRequestParameterType { }
+
+private func mergeIfNotNil<T>(first: T?, second: T?) -> T? {
+    if second != nil {
+        return second
+    } else if first != nil {
+        return first
+    }
+    return nil
+}

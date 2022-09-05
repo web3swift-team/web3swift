@@ -19,13 +19,13 @@ extension web3 {
     public class web3contract {
         public let contract: EthereumContract
         public let web3: web3
-        public var transactionOptions: TransactionOptions? = nil
+        public var transactionOptions: CodableTransaction? = nil
 
         // FIXME: Rewrite this to CodableTransaction
         /// Initialize the bound contract instance by supplying the Web3 provider bound object, ABI, Ethereum address and some default
         /// options for further function calls. By default the contract inherits options from the web3 object. Additionally supplied "options"
         /// do override inherited ones.
-        public init?(web3 web3Instance: web3, abiString: String, at: EthereumAddress? = nil, transactionOptions: TransactionOptions? = nil, abiVersion: Int = 2) {
+        public init?(web3 web3Instance: web3, abiString: String, at: EthereumAddress? = nil, transactionOptions: CodableTransaction? = nil, abiVersion: Int = 2) {
             self.web3 = web3Instance
             self.transactionOptions = web3.transactionOptions
             switch abiVersion {
@@ -39,7 +39,7 @@ extension web3 {
                 return nil
             }
             var mergedOptions = self.transactionOptions?.merge(transactionOptions)
-            if at != nil {
+            if let at = at {
                 contract.address = at
                 mergedOptions?.to = at
             } else if let addr = mergedOptions?.to {
@@ -58,7 +58,7 @@ extension web3 {
                            constructor: ABI.Element.Constructor? = nil,
                            parameters: [AnyObject]? = nil,
                            extraData: Data? = nil,
-                           transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
+                           transactionOptions: CodableTransaction? = nil) -> WriteTransaction? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             // MARK: Writing Data flow
             guard var tx = self.contract.deploy(bytecode: bytecode,
@@ -83,7 +83,7 @@ extension web3 {
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func method(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
+        public func method(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> WriteTransaction? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             if let network = self.web3.provider.network {
@@ -101,7 +101,7 @@ extension web3 {
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func read(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: TransactionOptions? = nil) -> ReadTransaction? {
+        public func read(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> ReadTransaction? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             // MARK: - Encoding ABI Data flow
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
@@ -120,7 +120,7 @@ extension web3 {
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func write(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: TransactionOptions? = nil) -> WriteTransaction? {
+        public func write(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> WriteTransaction? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             if let network = self.web3.provider.network {

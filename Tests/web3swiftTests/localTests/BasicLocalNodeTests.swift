@@ -56,7 +56,7 @@ class BasicLocalNodeTests: LocalTestCase {
         let parameters = [] as [AnyObject]
         let sendTx = contract.method("fallback", parameters: parameters)!
 
-        let valueToSend = Utilities.parseToBigUInt("1.0", units: .eth)
+        let valueToSend = Utilities.parseToBigUInt("1.0", units: .eth)!
         sendTx.transactionOptions.value = valueToSend
         sendTx.transactionOptions.from = allAddresses[0]
 

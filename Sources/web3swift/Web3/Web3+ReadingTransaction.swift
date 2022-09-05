@@ -14,7 +14,7 @@ public class ReadTransaction {
     public var transaction: CodableTransaction
     public var contract: EthereumContract
     public var method: String
-    public var transactionOptions: TransactionOptions = TransactionOptions.emptyTransaction
+    public var transactionOptions: CodableTransaction = CodableTransaction.emptyTransaction
 
     var web3: web3
 
@@ -23,7 +23,7 @@ public class ReadTransaction {
                 web3 web3Instance: web3,
                 contract: EthereumContract,
                 method: String = "fallback",
-                transactionOptions: TransactionOptions? = nil) {
+                transactionOptions: CodableTransaction? = nil) {
         self.transaction = transaction
         self.web3 = web3Instance
         self.contract = contract
@@ -40,18 +40,16 @@ public class ReadTransaction {
     // It should be splitted in this way up to three (merge, send, decode)
     // TODO: Remove type erasing here, some broad wide protocol should be added instead
     // FIXME: Rewrite this to CodableTransaction
-    public func decodedData(with transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
+    public func decodedData(with transactionOptions: CodableTransaction? = nil) async throws -> [String: Any] {
         // MARK: Read data from ABI flow
         var assembledTransaction: CodableTransaction = self.transaction
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
-        var optionsForCall = TransactionOptions.emptyTransaction
+        var optionsForCall = CodableTransaction.emptyTransaction
         optionsForCall.from = mergedOptions.from
         optionsForCall.to = mergedOptions.to
         optionsForCall.value = mergedOptions.value
         optionsForCall.callOnBlock = mergedOptions.callOnBlock
-        if let value = mergedOptions.value {
-            assembledTransaction.value = value
-        }
+        assembledTransaction.value = mergedOptions.value
 
         // MARK: Read data from ABI flow
         let data: Data = try await self.web3.eth.callTransaction(assembledTransaction, transactionOptions: optionsForCall)
@@ -67,11 +65,11 @@ public class ReadTransaction {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func estimateGas(with transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
+    public func estimateGas(with transactionOptions: CodableTransaction? = nil) async throws -> BigUInt {
         var assembledTransaction: CodableTransaction = self.transaction
 
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
-        var optionsForGasEstimation = TransactionOptions.emptyTransaction
+        var optionsForGasEstimation = CodableTransaction.emptyTransaction
         optionsForGasEstimation.from = mergedOptions.from
         optionsForGasEstimation.to = mergedOptions.to
         optionsForGasEstimation.value = mergedOptions.value
@@ -88,7 +86,7 @@ public class ReadTransaction {
 
         optionsForGasEstimation.callOnBlock = mergedOptions.callOnBlock
         if mergedOptions.value != nil {
-            assembledTransaction.value = mergedOptions.value!
+            assembledTransaction.value = mergedOptions.value
         }
 
         return try await self.web3.eth.estimateGas(for: assembledTransaction, transactionOptions: optionsForGasEstimation)
@@ -97,13 +95,13 @@ public class ReadTransaction {
 
     // FIXME: Duplicating and pointing to another?!
     // FIXME: Rewrite this to CodableTransaction
-    public func estimateGas(transactionOptions: TransactionOptions? = nil) async throws -> BigUInt {
+    public func estimateGas(transactionOptions: CodableTransaction? = nil) async throws -> BigUInt {
         return try await self.estimateGas(with: transactionOptions)
     }
 
     // FIXME: Rewrite this to CodableTransaction
     // FIXME: Useless wrapper, delete me
-    public func call(transactionOptions: TransactionOptions? = nil) async throws -> [String: Any] {
+    public func call(transactionOptions: CodableTransaction? = nil) async throws -> [String: Any] {
         return try await self.decodedData(with: transactionOptions)
     }
 }

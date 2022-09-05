@@ -11,7 +11,7 @@ extension web3.Eth {
 
     // FIXME: Rewrite this to CodableTransaction
     // FIXME: Not working yet.
-    public func callTransaction(_ transaction: CodableTransaction, transactionOptions: TransactionOptions?) async throws -> Data {
+    public func callTransaction(_ transaction: CodableTransaction, transactionOptions: CodableTransaction?) async throws -> Data {
         // MARK: Read data from ABI flow
         // guard let transactionParameters = transaction.encodeAsDictionary(from: transactionOptions?.from) else { throw Web3Error.dataError}
         // FIXME: Make me CodableTransaction

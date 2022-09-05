@@ -23,7 +23,7 @@ public class ERC888: IERC888, ERC20BaseProperties {
     internal var _decimals: UInt8? = nil
     internal var _hasReadProperties: Bool = false
 
-    public var transactionOptions: TransactionOptions
+    public var transactionOptions: CodableTransaction
     public var web3: web3
     public var provider: Web3Provider
     public var address: EthereumAddress
@@ -47,7 +47,7 @@ public class ERC888: IERC888, ERC20BaseProperties {
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = TransactionOptions.emptyTransaction
+        var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
         let result = try await contract.read("balanceOf", parameters: [account] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData(with: transactionOptions)
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
@@ -56,7 +56,7 @@ public class ERC888: IERC888, ERC20BaseProperties {
 
     public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions.emptyTransaction
+        var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest

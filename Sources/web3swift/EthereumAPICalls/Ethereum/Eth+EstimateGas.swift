@@ -11,7 +11,7 @@ import Core
 extension web3.Eth {
 
     // FIXME: Rewrite this to CodableTransaction
-    public func estimateGas(for transaction: CodableTransaction, transactionOptions: TransactionOptions?) async throws -> BigUInt {
+    public func estimateGas(for transaction: CodableTransaction, transactionOptions: CodableTransaction?) async throws -> BigUInt {
 
         // FIXME: Something wrong with this. We should not to get parameters + options in one method.
         let request: APIRequest = .estimateGas(transaction, transactionOptions?.callOnBlock ?? .latest)

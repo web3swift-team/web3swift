@@ -11,7 +11,7 @@ import Core
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
     public var provider: Web3Provider
-    public var transactionOptions: TransactionOptions = TransactionOptions.emptyTransaction
+    public var transactionOptions: CodableTransaction = CodableTransaction.emptyTransaction
 
     /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
     public init(provider prov: Web3Provider) {
@@ -40,7 +40,7 @@ public class web3 {
         var provider: Web3Provider
         //  weak var web3: web3?
         var web3: web3
-        public var transactionOptions: TransactionOptions {
+        public var transactionOptions: CodableTransaction {
             return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
@@ -65,7 +65,7 @@ public class web3 {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var transactionOptions: TransactionOptions {
+        public var transactionOptions: CodableTransaction {
             return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
@@ -90,7 +90,7 @@ public class web3 {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var transactionOptions: TransactionOptions {
+        public var transactionOptions: CodableTransaction {
             return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
@@ -136,7 +136,7 @@ public class web3 {
         var provider: Web3Provider
         //        weak var web3: web3?
         public var web3: web3
-        public var transactionOptions: TransactionOptions {
+        public var transactionOptions: CodableTransaction {
             return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
@@ -176,7 +176,7 @@ public class web3 {
         //  public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
         public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
 
-        public var transactionOptions: TransactionOptions {
+        public var transactionOptions: CodableTransaction {
             return self.web3.transactionOptions
         }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
@@ -185,9 +185,9 @@ public class web3 {
         }
     }
 
-    public typealias AssemblyHookFunction = ((CodableTransaction, EthereumContract, TransactionOptions)) -> (CodableTransaction, EthereumContract, TransactionOptions, Bool)
+    public typealias AssemblyHookFunction = ((CodableTransaction, EthereumContract, CodableTransaction)) -> (CodableTransaction, EthereumContract, CodableTransaction, Bool)
 
-    public typealias SubmissionHookFunction = ((CodableTransaction, TransactionOptions)) -> (CodableTransaction, TransactionOptions, Bool)
+    public typealias SubmissionHookFunction = ((CodableTransaction, CodableTransaction)) -> (CodableTransaction, CodableTransaction, Bool)
 
     public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> ()
 
