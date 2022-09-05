@@ -66,7 +66,8 @@ extension Web3.Utils {
             //            var modifiedTX = tx
             //            modifiedTX.nonce = newNonce
             var newOptions = transactionOptions
-            newOptions.nonce = .manual(newNonce)
+            // FIXME: Make this wotk again.
+//            newOptions.nonce = .manual(newNonce)
             return (tx, contract, newOptions, true)
         }
 

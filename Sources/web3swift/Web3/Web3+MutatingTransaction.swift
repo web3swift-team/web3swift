@@ -143,7 +143,8 @@ public class WriteTransaction: ReadTransaction {
 
         var finalOptions = TransactionOptions()
         finalOptions.type = mergedOptions.type
-        finalOptions.nonce = .manual(nonce)
+        // FIXME: Make this work again.
+//        finalOptions.nonce = .manual(nonce)
         finalOptions.gasLimit = .manual(mergedOptions.resolveGasLimit(gasEstimate))
         finalOptions.accessList = mergedOptions.accessList
 

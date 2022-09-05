@@ -57,8 +57,8 @@ public struct TransactionOptions {
         case automatic
         case manual(BigUInt)
     }
-    public var maxFeePerGas: FeePerGasPolicy?
-    public var maxPriorityFeePerGas: FeePerGasPolicy?
+    public private (set) var maxFeePerGas: FeePerGasPolicy?
+    public private (set) var maxPriorityFeePerGas: FeePerGasPolicy?
 
     /// The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
     public var value: BigUInt?
@@ -69,7 +69,7 @@ public struct TransactionOptions {
         case manual(BigUInt)
     }
 
-    public var nonce: NoncePolicy?
+    public private (set) var nonce: NoncePolicy?
 
     public var callOnBlock: BlockNumber?
 
