@@ -143,24 +143,22 @@ public class WriteTransaction: ReadTransaction {
 
         var finalOptions = TransactionOptions()
         finalOptions.type = mergedOptions.type
-        // FIXME: Make this work again.
-//        finalOptions.nonce = .manual(nonce)
+        finalOptions.noncePolicy = .manual(nonce)
         finalOptions.gasLimitPolicy = .manual(mergedOptions.resolveGasLimit(gasEstimate))
         finalOptions.accessList = mergedOptions.accessList
 
         // set the finalized gas parameters
-        // FIXME: Make this working again.
-//        if let gasPrice = finalGasPrice {
-//            finalOptions.gasPricePolicy = .manual(mergedOptions.resolveGasPrice(gasPrice))
-//        }
-//
-//        if let tipFee = finalTipFee {
-//            finalOptions.maxPriorityFeePerGasPolicy = .manual(mergedOptions.resolveMaxPriorityFeePerGas(tipFee))
-//        }
-//
-//        if let gasFee = finalGasFee {
-//            finalOptions.maxFeePerGasPolicy = .manual(mergedOptions.resolveMaxFeePerGas(gasFee))
-//        }
+        if let gasPrice = finalGasPrice {
+            finalOptions.gasPricePolicy = .manual(mergedOptions.resolveGasPrice(gasPrice))
+        }
+
+        if let tipFee = finalTipFee {
+            finalOptions.maxPriorityFeePerGasPolicy = .manual(mergedOptions.resolveMaxPriorityFeePerGas(tipFee))
+        }
+
+        if let gasFee = finalGasFee {
+            finalOptions.maxFeePerGasPolicy = .manual(mergedOptions.resolveMaxFeePerGas(gasFee))
+        }
 
         assembledTransaction.applyOptions(finalOptions)
 
