@@ -75,7 +75,7 @@ extension web3.BrowserFunctions {
 //          let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
 //          let transaction: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 //          let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
-//          var transactionOptions = TransactionOptions()
+//          var transactionOptions = TransactionOptions.emptyTransaction
 //          transactionOptions.from = options.from
 //          transactionOptions.to = options.to
 //          transactionOptions.value = options.value ?? 0
@@ -100,7 +100,7 @@ extension web3.BrowserFunctions {
 //            let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
 //            let transaction: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 //            let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
-//            var transactionOptions = TransactionOptions()
+//            var transactionOptions = TransactionOptions.emptyTransaction
 //            transactionOptions.from = options.from
 //            transactionOptions.to = options.to
 //            transactionOptions.value = options.value ?? 0
@@ -158,7 +158,7 @@ extension web3.BrowserFunctions {
 //            let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
 //            let transaction: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
 //            let options: TransactionOptions = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
-//            var transactionOptions = TransactionOptions()
+//            var transactionOptions = TransactionOptions.emptyTransaction
 //            transactionOptions.from = options.from
 //            transactionOptions.to = options.to
 //            transactionOptions.value = options.value ?? 0

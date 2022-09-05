@@ -44,7 +44,7 @@ public class ReadTransaction {
         // MARK: Read data from ABI flow
         var assembledTransaction: CodableTransaction = self.transaction
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
-        var optionsForCall = TransactionOptions()
+        var optionsForCall = TransactionOptions.emptyTransaction
         optionsForCall.from = mergedOptions.from
         optionsForCall.to = mergedOptions.to
         optionsForCall.value = mergedOptions.value
@@ -71,7 +71,7 @@ public class ReadTransaction {
         var assembledTransaction: CodableTransaction = self.transaction
 
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
-        var optionsForGasEstimation = TransactionOptions()
+        var optionsForGasEstimation = TransactionOptions.emptyTransaction
         optionsForGasEstimation.from = mergedOptions.from
         optionsForGasEstimation.to = mergedOptions.to
         optionsForGasEstimation.value = mergedOptions.value

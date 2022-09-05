@@ -160,7 +160,7 @@ public struct TransactionOptions {
 
     public func merge(_ otherOptions: TransactionOptions?) -> TransactionOptions {
         guard let other = otherOptions else { return self }
-        var opts = TransactionOptions()
+        var opts = TransactionOptions.emptyTransaction
         opts.type = mergeIfNotNil(first: self.type, second: other.type)
         opts.to = mergeIfNotNil(first: self.to, second: other.to)
         opts.from = mergeIfNotNil(first: self.from, second: other.from)

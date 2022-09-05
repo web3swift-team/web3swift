@@ -51,7 +51,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = TransactionOptions()
+        var transactionOptions = TransactionOptions.emptyTransaction
         transactionOptions.callOnBlock = .latest
         let result = try await contract
             .read("balanceOf", parameters: [account] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!
@@ -62,7 +62,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
     public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = TransactionOptions()
+        var transactionOptions = TransactionOptions.emptyTransaction
         transactionOptions.callOnBlock = .latest
         let result = try await contract
             .read("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!
@@ -73,7 +73,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
     public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions()
+        var basicOptions = TransactionOptions.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -97,7 +97,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
     public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions()
+        var basicOptions = TransactionOptions.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -122,7 +122,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
     public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions()
+        var basicOptions = TransactionOptions.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -147,7 +147,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
     public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteTransaction {
         let contract = self.contract
-        var basicOptions = TransactionOptions()
+        var basicOptions = TransactionOptions.emptyTransaction
         basicOptions.from = from
         basicOptions.to = self.address
         basicOptions.callOnBlock = .latest
@@ -172,7 +172,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
     public func totalSupply() async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = TransactionOptions()
+        var transactionOptions = TransactionOptions.emptyTransaction
         transactionOptions.callOnBlock = .latest
         let result = try await contract
             .read("totalSupply", parameters: [AnyObject](), extraData: Data(), transactionOptions: self.transactionOptions)!

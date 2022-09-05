@@ -51,7 +51,7 @@ public class WriteTransaction: ReadTransaction {
         }
 
         // assemble promise for gas estimation
-        var optionsForGasEstimation = TransactionOptions()
+        var optionsForGasEstimation = TransactionOptions.emptyTransaction
         optionsForGasEstimation.from = mergedOptions.from
         optionsForGasEstimation.to = mergedOptions.to
         optionsForGasEstimation.value = mergedOptions.value
@@ -141,7 +141,7 @@ public class WriteTransaction: ReadTransaction {
         let nonce = results[0]
         let gasEstimate = results[1]
 
-        var finalOptions = TransactionOptions()
+        var finalOptions = TransactionOptions.emptyTransaction
         finalOptions.type = mergedOptions.type
         finalOptions.noncePolicy = .manual(nonce)
         finalOptions.gasLimitPolicy = .manual(mergedOptions.resolveGasLimit(gasEstimate))
@@ -182,7 +182,7 @@ public class WriteTransaction: ReadTransaction {
     public func send(password: String = "web3swift", transactionOptions: TransactionOptions? = nil) async throws -> TransactionSendingResult {
         let transaction = try await assembleTransaction(transactionOptions: transactionOptions)
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
-        var cleanedOptions = TransactionOptions()
+        var cleanedOptions = TransactionOptions.emptyTransaction
         cleanedOptions.from = mergedOptions.from
         cleanedOptions.to = mergedOptions.to
         // MARK: Sending Data flow
