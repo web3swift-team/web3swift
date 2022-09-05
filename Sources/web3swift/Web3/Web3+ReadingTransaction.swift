@@ -78,12 +78,12 @@ public class ReadTransaction {
 
         // MARK: - Fixing estimate gas problem: gas price param shouldn't be nil
         // FIXME: Make this work again.
-//        if let gasPricePolicy = mergedOptions.gasPrice {
+//        if let gasPricePolicy = mergedOptions.gasPricePolicy {
 //            switch gasPricePolicy {
 //            case .manual(_):
-//                optionsForGasEstimation.gasPrice = gasPricePolicy
+//                optionsForGasEstimation.gasPricePolicy = gasPricePolicy
 //            default:
-//                optionsForGasEstimation.gasPrice = .manual(1) // 1 wei to fix wrong estimating gas problem
+//                optionsForGasEstimation.gasPricePolicy = .manual(1) // 1 wei to fix wrong estimating gas problem
 //            }
 //        }
 

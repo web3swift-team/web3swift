@@ -17,7 +17,7 @@ extension web3.Eth {
         let request: APIRequest = .estimateGas(transaction, transactionOptions?.callOnBlock ?? .latest)
         let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)
 
-        if let policy = transactionOptions?.gasLimit {
+        if let policy = transactionOptions?.gasLimitPolicy {
             switch policy {
             case .automatic:
                 return response.result

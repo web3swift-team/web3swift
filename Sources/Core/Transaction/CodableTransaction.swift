@@ -273,6 +273,33 @@ extension CodableTransaction: Codable {
 
 }
 
+extension CodableTransaction {
+    public enum GasLimitPolicy {
+        case automatic
+        case manual(BigUInt)
+        case limited(BigUInt)
+        case withMargin(Double)
+    }
+
+    public enum GasPricePolicy {
+        case automatic
+        case manual(BigUInt)
+        case withMargin(Double)
+    }
+
+    public enum FeePerGasPolicy {
+        case automatic
+        case manual(BigUInt)
+    }
+
+    public enum NoncePolicy {
+        case pending
+        case latest
+        case manual(BigUInt)
+    }
+}
+
+
 extension CodableTransaction: CustomStringConvertible {
     /// required by CustomString convertable
     /// returns a string description for the transaction and its data

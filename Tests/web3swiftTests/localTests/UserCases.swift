@@ -42,9 +42,9 @@ class UserCases: XCTestCase {
     //        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
     //        guard let writeTX = web3.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
     //        writeTX.transactionOptions.from = allAddresses[0]
-    //        writeTX.transactionOptions.gasPrice = .manual(gasPrice)
+    //        writeTX.transactionOptions.gasPricePolicy = .manual(gasPrice)
     //        let gasEstimate = try await writeTX.estimateGas(with: nil)
-    //        writeTX.transactionOptions.gasLimit = .manual(gasEstimate + 1234)
+    //        writeTX.transactionOptions.gasLimitPolicy = .manual(gasEstimate + 1234)
     //        let assembled = try await writeTX.assembleTransaction()
     //        XCTAssert(assembled.gasLimit == gasEstimate + 1234)
     //    }
@@ -58,9 +58,9 @@ class UserCases: XCTestCase {
     //            return XCTFail()
     //        }
     //        writeTX.transactionOptions.from = allAddresses[0]
-    //        writeTX.transactionOptions.gasPrice = .manual(gasPrice * 2)
+    //        writeTX.transactionOptions.gasPricePolicy = .manual(gasPrice * 2)
     //        let gasEstimate = try await writeTX.estimateGas(with: nil)
-    //        writeTX.transactionOptions.gasLimit = .manual(gasEstimate + 1234)
+    //        writeTX.transactionOptions.gasLimitPolicy = .manual(gasEstimate + 1234)
     //        let assembled = try await writeTX.assembleTransaction()
     //        let txnGasLimit = assembled.parameters.gasLimit
     //        let txnGasPrice = assembled.parameters.gasPrice
@@ -79,7 +79,7 @@ class UserCases: XCTestCase {
         let parameters = [] as [AnyObject]
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimit = .manual(3000000)
+        deployTx.transactionOptions.gasLimitPolicy = .manual(3000000)
         let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)

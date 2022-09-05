@@ -187,7 +187,7 @@ public class ERC1633: IERC1633, ERC20BaseProperties {
         let contract = self.contract
         var transactionOptions = TransactionOptions()
         transactionOptions.callOnBlock = .latest
-        transactionOptions.gasLimit = .manual(30000)
+        transactionOptions.gasLimitPolicy = .manual(30000)
         let result = try await contract.read("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData(with: transactionOptions)
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res

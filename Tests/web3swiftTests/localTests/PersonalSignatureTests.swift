@@ -41,7 +41,7 @@ class PersonalSignatureTests: XCTestCase {
         let deployTx = contract.deploy(bytecode: bytecode)!
         let allAddresses = try await web3.eth.ownedAccounts()
         deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimit = .manual(3000000)
+        deployTx.transactionOptions.gasLimitPolicy = .manual(3000000)
         let deployResult = try await deployTx.send()
         let txHash = deployResult.hash
         print("Transaction with hash " + txHash)

@@ -181,7 +181,7 @@ extension LegacyEnvelope {
 //        // type cannot be changed here, and is ignored
 //        self.nonce = transaction.resolveNonce(self.nonce)
 //        self.gasPrice = transaction.resolveGasPrice(self.gasPrice)
-//        self.gasLimit = transaction.resolveGasLimit(self.gasLimit)
+//        self.gasLimitPolicy = transaction.resolveGasLimit(self.gasLimit)
 //        // swiftlint:disable force_unwrapping
 //        if transaction.value != nil { self.value = transaction.value! }
 //        if transaction.to != nil { self.to = transaction.to! }

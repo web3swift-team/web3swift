@@ -55,19 +55,19 @@ public class WriteTransaction: ReadTransaction {
         optionsForGasEstimation.from = mergedOptions.from
         optionsForGasEstimation.to = mergedOptions.to
         optionsForGasEstimation.value = mergedOptions.value
-        optionsForGasEstimation.gasLimit = mergedOptions.gasLimit
+        optionsForGasEstimation.gasLimitPolicy = mergedOptions.gasLimitPolicy
         optionsForGasEstimation.callOnBlock = mergedOptions.callOnBlock
 
         // assemble gasLimit async call
         let assembledTransactionPostHood = assembledTransaction
         let optionsForGasEstimationPostHood = optionsForGasEstimation
-        guard let gasLimitPolicy = mergedOptions.gasLimit else {
+        guard let gasLimitPolicy = mergedOptions.gasLimitPolicy else {
             throw Web3Error.inputError(desc: "No gasLimit policy provided")
         }
         async let gasEstimateAsync = gasEstimate(for: gasLimitPolicy, assembledTransaction: assembledTransactionPostHood, optionsForGasEstimation: optionsForGasEstimationPostHood)
 
         // assemble nonce async call
-        guard let noncePolicy = mergedOptions.nonce else {
+        guard let noncePolicy = mergedOptions.noncePolicy else {
             throw Web3Error.inputError(desc: "No nonce policy provided")
         }
         async let getNonceAsync = nonce(for: noncePolicy, from: from)
@@ -84,7 +84,7 @@ public class WriteTransaction: ReadTransaction {
                 finalTipFee = nil
 
                 // determine the (legacy) gas price
-                guard let gasPricePolicy = mergedOptions.gasPrice else {
+                guard let gasPricePolicy = mergedOptions.gasPricePolicy else {
                     throw Web3Error.inputError(desc: "No gasPrice policy provided")
                 }
                 switch gasPricePolicy {
@@ -102,7 +102,7 @@ public class WriteTransaction: ReadTransaction {
                 finalGasPrice = nil
 
                 // determine the tip
-                guard let maxPriorityFeePerGasPolicy = mergedOptions.maxPriorityFeePerGas else {
+                guard let maxPriorityFeePerGasPolicy = mergedOptions.maxPriorityFeePerGasPolicy else {
                     throw Web3Error.inputError(desc: "No maxPriorityFeePerGas policy provided")
                 }
                 switch maxPriorityFeePerGasPolicy {
@@ -117,7 +117,7 @@ public class WriteTransaction: ReadTransaction {
                 }
 
                 // determine the baseFee, and calculate the maxFeePerGas
-                guard let maxFeePerGasPolicy = mergedOptions.maxFeePerGas else {
+                guard let maxFeePerGasPolicy = mergedOptions.maxFeePerGasPolicy else {
                     throw Web3Error.inputError(desc: "No maxFeePerGas policy provided")
                 }
                 switch maxFeePerGasPolicy {
@@ -145,21 +145,21 @@ public class WriteTransaction: ReadTransaction {
         finalOptions.type = mergedOptions.type
         // FIXME: Make this work again.
 //        finalOptions.nonce = .manual(nonce)
-        finalOptions.gasLimit = .manual(mergedOptions.resolveGasLimit(gasEstimate))
+        finalOptions.gasLimitPolicy = .manual(mergedOptions.resolveGasLimit(gasEstimate))
         finalOptions.accessList = mergedOptions.accessList
 
         // set the finalized gas parameters
         // FIXME: Make this working again.
 //        if let gasPrice = finalGasPrice {
-//            finalOptions.gasPrice = .manual(mergedOptions.resolveGasPrice(gasPrice))
+//            finalOptions.gasPricePolicy = .manual(mergedOptions.resolveGasPrice(gasPrice))
 //        }
 //
 //        if let tipFee = finalTipFee {
-//            finalOptions.maxPriorityFeePerGas = .manual(mergedOptions.resolveMaxPriorityFeePerGas(tipFee))
+//            finalOptions.maxPriorityFeePerGasPolicy = .manual(mergedOptions.resolveMaxPriorityFeePerGas(tipFee))
 //        }
 //
 //        if let gasFee = finalGasFee {
-//            finalOptions.maxFeePerGas = .manual(mergedOptions.resolveMaxFeePerGas(gasFee))
+//            finalOptions.maxFeePerGasPolicy = .manual(mergedOptions.resolveMaxFeePerGas(gasFee))
 //        }
 
         assembledTransaction.applyOptions(finalOptions)

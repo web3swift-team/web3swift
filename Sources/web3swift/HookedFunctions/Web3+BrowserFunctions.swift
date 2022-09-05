@@ -79,8 +79,8 @@ extension web3.BrowserFunctions {
 //          transactionOptions.from = options.from
 //          transactionOptions.to = options.to
 //          transactionOptions.value = options.value ?? 0
-//          transactionOptions.gasLimit = options.gasLimit ?? .automatic
-//          transactionOptions.gasPrice = options.gasPrice ?? .automatic
+//          transactionOptions.gasLimitPolicy = options.gasLimitPolicy ?? .automatic
+//          transactionOptions.gasPricePolicy = options.gasPricePolicy ?? .automatic
 //            return await self.sendTransaction(transaction, transactionOptions: transactionOptions, password: password)
 //        } catch { return nil }
 //    }
@@ -104,8 +104,8 @@ extension web3.BrowserFunctions {
 //            transactionOptions.from = options.from
 //            transactionOptions.to = options.to
 //            transactionOptions.value = options.value ?? 0
-//            transactionOptions.gasLimit = .automatic
-//            transactionOptions.gasPrice = options.gasPrice ?? .automatic
+//            transactionOptions.gasLimitPolicy = .automatic
+//            transactionOptions.gasPricePolicy = options.gasPricePolicy ?? .automatic
 //            return await self.estimateGas(transaction, transactionOptions: transactionOptions)
 //        } catch { return nil }
 //    }
@@ -141,11 +141,11 @@ extension web3.BrowserFunctions {
             let gasPrice = try await self.web3.eth.gasPrice()
             transaction.gasPrice = gasPrice
             // FIXME: Make this work again
-//            options.gasPrice = .manual(gasPrice)
+//            options.gasPricePolicy = .manual(gasPricePolicy)
             guard let gasEstimate = await self.estimateGas(transaction, transactionOptions: options) else {return (nil, nil)}
             transaction.gasLimit = gasEstimate
 
-            options.gasLimit = .limited(gasEstimate)
+            options.gasLimitPolicy = .limited(gasEstimate)
             print(transaction)
             return (transaction, options)
         } catch {
@@ -163,8 +163,8 @@ extension web3.BrowserFunctions {
 //            transactionOptions.from = options.from
 //            transactionOptions.to = options.to
 //            transactionOptions.value = options.value ?? 0
-//            transactionOptions.gasLimit = options.gasLimit ?? .automatic
-//            transactionOptions.gasPrice = options.gasPrice ?? .automatic
+//            transactionOptions.gasLimitPolicy = options.gasLimit ?? .automatic
+//            transactionOptions.gasPricePolicy = options.gasPrice ?? .automatic
 //            if let nonceString = transactionJSON["nonce"] as? String, let nonce = BigUInt(nonceString.stripHexPrefix(), radix: 16) {
 //                transactionOptions.nonce = .manual(nonce)
 //            } else {

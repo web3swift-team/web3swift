@@ -44,7 +44,7 @@ class web3swiftPromisesTests: XCTestCase {
         let parameters = [] as [AnyObject]
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimit = .manual(3000000)
+        deployTx.transactionOptions.gasLimitPolicy = .manual(3000000)
         let result = try await deployTx.send()
         let txHash = result.hash
         print("Transaction with hash " + txHash)
@@ -111,7 +111,7 @@ class web3swiftPromisesTests: XCTestCase {
     //        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
     //        guard let writeTX = web3.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
     //        writeTX.transactionOptions.from = allAddresses[0]
-    //        writeTX.transactionOptions.gasPrice = .manual(gasPrice)
+    //        writeTX.transactionOptions.gasPricePolicy = .manual(gasPricePolicy)
     //        let result = try await writeTX.send()
     //        print(result)
     //    }

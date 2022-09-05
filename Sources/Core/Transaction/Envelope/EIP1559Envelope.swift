@@ -235,7 +235,7 @@ extension EIP1559Envelope {
 //        self.nonce = transaction.resolveNonce(self.nonce)
 //        self.maxPriorityFeePerGas = transaction.resolveMaxPriorityFeePerGas(self.maxPriorityFeePerGas)
 //        self.maxFeePerGas = transaction.resolveMaxFeePerGas(self.maxFeePerGas)
-//        self.gasLimit = transaction.resolveGasLimit(self.gasLimit)
+//        self.gasLimitPolicy = transaction.resolveGasLimit(self.gasLimit)
 //        self.value = transaction.value ?? self.value
 //        self.to = transaction.to ?? self.to
 //        self.accessList = transaction.accessList ?? self.accessList

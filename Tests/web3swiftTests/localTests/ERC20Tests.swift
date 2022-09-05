@@ -47,8 +47,8 @@ class ERC20Tests: LocalTestCase {
 //        var options = TransactionOptions.emptyTransaction
 //        options.value = amount
 //        options.from = walletAddress
-//        options.gasPrice = .automatic
-//        options.gasLimit = .automatic
+//        options.gasPricePolicy = .automatic
+//        options.gasLimitPolicy = .automatic
 //        let method = "transfer"
 //        let tx = contract.write(
 //          method,

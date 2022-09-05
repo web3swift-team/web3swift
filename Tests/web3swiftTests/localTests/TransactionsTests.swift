@@ -637,7 +637,7 @@ class TransactionsTests: XCTestCase {
             let writeTX = contract!.write("fallback")!
             writeTX.transactionOptions.from = from
             writeTX.transactionOptions.value = value
-            writeTX.transactionOptions.gasLimit = .manual(78423)
+            writeTX.transactionOptions.gasLimitPolicy = .manual(78423)
             let result = try await writeTX.send(password: "")
             let txHash = result.hash
             print("Transaction with hash " + txHash)

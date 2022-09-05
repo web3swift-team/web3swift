@@ -42,7 +42,7 @@ public struct TransactionOptions {
         case limited(BigUInt)
         case withMargin(Double)
     }
-    public var gasLimit: GasLimitPolicy?
+    public var gasLimitPolicy: GasLimitPolicy?
 
     public enum GasPricePolicy {
         case automatic
@@ -50,15 +50,15 @@ public struct TransactionOptions {
         case withMargin(Double)
     }
 
-    public private (set) var gasPrice: GasPricePolicy?
+    public var gasPricePolicy: GasPricePolicy?
 
     // new gas parameters for EIP-1559 support
     public enum FeePerGasPolicy {
         case automatic
         case manual(BigUInt)
     }
-    public private (set) var maxFeePerGas: FeePerGasPolicy?
-    public private (set) var maxPriorityFeePerGas: FeePerGasPolicy?
+    public private (set) var maxFeePerGasPolicy: FeePerGasPolicy?
+    public private (set) var maxPriorityFeePerGasPolicy: FeePerGasPolicy?
 
     /// The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
     public var value: BigUInt?
@@ -69,7 +69,7 @@ public struct TransactionOptions {
         case manual(BigUInt)
     }
 
-    public private (set) var nonce: NoncePolicy?
+    public private (set) var noncePolicy: NoncePolicy?
 
     public var callOnBlock: BlockNumber?
 
@@ -78,11 +78,11 @@ public struct TransactionOptions {
     public static var emptyTransaction: TransactionOptions {
         var opts = TransactionOptions()
         opts.type = .legacy
-        opts.gasLimit = .automatic
-        opts.gasPrice = .automatic
-        opts.maxFeePerGas = .automatic
-        opts.maxPriorityFeePerGas = .automatic
-        opts.nonce = .pending
+        opts.gasLimitPolicy = .automatic
+        opts.gasPricePolicy = .automatic
+        opts.maxFeePerGasPolicy = .automatic
+        opts.maxPriorityFeePerGasPolicy = .automatic
+        opts.noncePolicy = .pending
         opts.callOnBlock = .pending
         return opts
     }
@@ -92,18 +92,18 @@ public struct TransactionOptions {
         self.to = to
         self.from = from
         self.chainID = chainID
-        self.gasLimit = gasLimit
-        self.gasPrice = gasPrice
-        self.maxFeePerGas = maxFeePerGas
-        self.maxPriorityFeePerGas = maxPriorityFeePerGas
+        self.gasLimitPolicy = gasLimit
+        self.gasPricePolicy = gasPrice
+        self.maxFeePerGasPolicy = maxFeePerGas
+        self.maxPriorityFeePerGasPolicy = maxPriorityFeePerGas
         self.value = value
-        self.nonce = nonce
+        self.noncePolicy = nonce
         self.callOnBlock = callOnBlock
         self.accessList = accessList
     }
 
     public func resolveNonce(_ suggestedByNode: BigUInt) -> BigUInt {
-        guard let noncePolicy = self.nonce else { return suggestedByNode }
+        guard let noncePolicy = self.noncePolicy else { return suggestedByNode }
         switch noncePolicy {
         case .pending, .latest:
             return suggestedByNode
@@ -113,7 +113,7 @@ public struct TransactionOptions {
     }
 
     public func resolveGasPrice(_ suggestedByNode: BigUInt) -> BigUInt {
-        guard let gasPricePolicy = self.gasPrice else { return suggestedByNode }
+        guard let gasPricePolicy = self.gasPricePolicy else { return suggestedByNode }
         switch gasPricePolicy {
         case .automatic, .withMargin:
             return suggestedByNode
@@ -123,7 +123,7 @@ public struct TransactionOptions {
     }
 
     public func resolveGasLimit(_ suggestedByNode: BigUInt) -> BigUInt {
-        guard let gasLimitPolicy = self.gasLimit else { return suggestedByNode }
+        guard let gasLimitPolicy = self.gasLimitPolicy else { return suggestedByNode }
         switch gasLimitPolicy {
         case .automatic, .withMargin:
             return suggestedByNode
@@ -139,7 +139,7 @@ public struct TransactionOptions {
     }
 
     public func resolveMaxFeePerGas(_ suggestedByNode: BigUInt) -> BigUInt {
-        guard let maxFeePerGasPolicy = self.maxFeePerGas else { return suggestedByNode }
+        guard let maxFeePerGasPolicy = self.maxFeePerGasPolicy else { return suggestedByNode }
         switch maxFeePerGasPolicy {
         case .automatic:
             return suggestedByNode
@@ -149,7 +149,7 @@ public struct TransactionOptions {
     }
 
     public func resolveMaxPriorityFeePerGas(_ suggestedByNode: BigUInt) -> BigUInt {
-        guard let maxPriorityFeePerGasPolicy = self.maxPriorityFeePerGas else { return suggestedByNode }
+        guard let maxPriorityFeePerGasPolicy = self.maxPriorityFeePerGasPolicy else { return suggestedByNode }
         switch maxPriorityFeePerGasPolicy {
         case .automatic:
             return suggestedByNode
@@ -165,12 +165,12 @@ public struct TransactionOptions {
         opts.to = mergeIfNotNil(first: self.to, second: other.to)
         opts.from = mergeIfNotNil(first: self.from, second: other.from)
         opts.chainID = mergeIfNotNil(first: self.chainID, second: other.chainID)
-        opts.gasLimit = mergeIfNotNil(first: self.gasLimit, second: other.gasLimit)
-        opts.gasPrice = mergeIfNotNil(first: self.gasPrice, second: other.gasPrice)
-        opts.maxFeePerGas = mergeIfNotNil(first: self.maxFeePerGas, second: other.maxFeePerGas)
-        opts.maxPriorityFeePerGas = mergeIfNotNil(first: self.maxPriorityFeePerGas, second: other.maxPriorityFeePerGas)
+        opts.gasLimitPolicy = mergeIfNotNil(first: self.gasLimitPolicy, second: other.gasLimitPolicy)
+        opts.gasPricePolicy = mergeIfNotNil(first: self.gasPricePolicy, second: other.gasPricePolicy)
+        opts.maxFeePerGasPolicy = mergeIfNotNil(first: self.maxFeePerGasPolicy, second: other.maxFeePerGasPolicy)
+        opts.maxPriorityFeePerGasPolicy = mergeIfNotNil(first: self.maxPriorityFeePerGasPolicy, second: other.maxPriorityFeePerGasPolicy)
         opts.value = mergeIfNotNil(first: self.value, second: other.value)
-        opts.nonce = mergeIfNotNil(first: self.nonce, second: other.nonce)
+        opts.noncePolicy = mergeIfNotNil(first: self.noncePolicy, second: other.noncePolicy)
         opts.callOnBlock = mergeIfNotNil(first: self.callOnBlock, second: other.callOnBlock)
         return opts
     }
