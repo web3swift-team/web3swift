@@ -38,7 +38,7 @@ class TestHelpers {
         
         Thread.sleep(forTimeInterval: 1.0)
         
-        let receipt = try await web3.eth.transactionReceipt(txHash)
+        let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
         print(receipt)
         
         switch receipt.status {

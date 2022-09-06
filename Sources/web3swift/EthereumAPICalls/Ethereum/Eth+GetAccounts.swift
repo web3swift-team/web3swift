@@ -1,6 +1,6 @@
 //
-//  Created by Alex Vlasov.
-//  Copyright © 2018 Alex Vlasov. All rights reserved.
+//  Created by Yaroslav Yashin.
+//  Copyright © 2022 Yaroslav Yashin. All rights reserved.
 //
 
 import Foundation

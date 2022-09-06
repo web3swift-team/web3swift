@@ -28,3 +28,5 @@ public struct TransactionDetails: Decodable {
         self.transaction = try CodableTransaction(from: decoder)
     }
 }
+
+extension TransactionDetails: APIResultType { }

@@ -86,7 +86,7 @@ class UserCases: XCTestCase {
 
         Thread.sleep(forTimeInterval: 1.0)
 
-        let receipt = try await web3.eth.transactionReceipt(txHash)
+        let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
         print(receipt)
         XCTAssert(receipt.contractAddress != nil)
 
@@ -97,7 +97,7 @@ class UserCases: XCTestCase {
             break
         }
 
-        let details = try await web3.eth.transactionDetails(txHash)
+        let details = try await web3.eth.transactionDetails(txHash.data(using: .utf8)!)
         print(details)
         XCTAssert(details.transaction.to == .contractDeploymentAddress())
     }

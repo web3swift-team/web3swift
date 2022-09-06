@@ -21,10 +21,12 @@ public class WriteOperation: ReadOperation {
             } catch {
                 throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
             }
-            return try await web3.eth.send(raw: transaction)
+            guard let transactionData = transaction.encode(for: .transaction) else { throw Web3Error.dataError }
+            return try await web3.eth.send(raw: transactionData)
         }
         // MARK: Sending Data flow
-        return try await web3.eth.send(transaction)
+        guard let transactionData = transaction.encode(for: .transaction) else { throw Web3Error.dataError }
+        return try await web3.eth.send(raw: transactionData)
     }
 
     // FIXME: Rewrite this to CodableTransaction

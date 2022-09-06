@@ -1,6 +1,6 @@
 //
-//  Created by Alex Vlasov.
-//  Copyright © 2018 Alex Vlasov. All rights reserved.
+//  Created by Yaroslav Yashin.
+//  Copyright © 2022 Yaroslav Yashin. All rights reserved.
 //
 
 import Foundation
@@ -9,12 +9,8 @@ import Core
 
 
 extension web3.Eth {
-
-    // FIXME: Rewrite this to CodableTransaction
-    public func estimateGas(for transaction: CodableTransaction) async throws -> BigUInt {
-
-        // FIXME: Something wrong with this. We should not to get parameters + options in one method.
-        let request: APIRequest = .estimateGas(transaction, transaction.callOnBlock ?? .latest)
+    public func estimateGas(for transaction: CodableTransaction, onBlock: BlockNumber = .latest) async throws -> BigUInt {
+        let request: APIRequest = .estimateGas(transaction, onBlock)
         let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)
 
         if let policy = transaction.gasLimitPolicy {

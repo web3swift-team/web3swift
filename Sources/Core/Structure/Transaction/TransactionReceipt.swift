@@ -74,3 +74,5 @@ extension TransactionReceipt: Decodable {
         self.logs = try container.decode([EventLog].self, forKey: .logs)
     }
 }
+
+extension TransactionReceipt: APIResultType { }
