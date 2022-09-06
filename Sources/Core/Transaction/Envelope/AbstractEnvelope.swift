@@ -63,7 +63,7 @@ public enum EncodeType {
 /// All envelopes must conform to this protocol to work with `CodableTransaction`
 /// each implememtation holds all the type specific data
 /// and implments the type specific encoding/decoding
-public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
+protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
 
     /// The type of transaction this envelope represents
     var type: TransactionType { get }
@@ -139,7 +139,7 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     mutating func clearSignatureData()
 }
 
-public extension AbstractEnvelope {
+extension AbstractEnvelope {
     
     var sender: EthereumAddress? {
         guard let publicKey = publicKey else { return nil }
