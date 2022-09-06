@@ -22,10 +22,13 @@ public struct EIP2930Envelope: EIP2718Envelope {
     public var s: BigUInt
 
     // EIP-2930 specific parameters
-    public var gasPrice: BigUInt = 0
+    public var gasPrice: BigUInt? = 0
     public var gasLimit: BigUInt = 0
     public var accessList: [AccessListEntry] = []
     public var publicKey: Data?
+
+    var maxFeePerGas: BigUInt? = nil
+    var maxPriorityFeePerGas: BigUInt? = nil
 
     // for CustomStringConvertible
     public var description: String {
@@ -33,7 +36,7 @@ public struct EIP2930Envelope: EIP2718Envelope {
         toReturn += "Type: " + String(describing: self.type) + "\n"
         toReturn += "chainID: " + String(describing: self.chainID) + "\n"
         toReturn += "Nonce: " + String(describing: self.nonce) + "\n"
-        toReturn += "Gas price: " + String(self.gasPrice) + "\n"
+        toReturn += "Gas price: " + String(self.gasPrice ?? 0) + "\n"
         toReturn += "Gas limit: " + String(describing: self.gasLimit) + "\n"
         toReturn += "To: " + self.to.address + "\n"
         toReturn += "Value: " + String(describing: self.value) + "\n"

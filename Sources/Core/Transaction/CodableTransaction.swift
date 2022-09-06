@@ -79,14 +79,23 @@ public struct CodableTransaction {
     }
 
     /// the price per gas unit for the tranaction (Legacy and EIP-2930 only)
-    public internal (set) var gasPrice: BigUInt?
+    public internal (set) var gasPrice: BigUInt? {
+        get { return envelope.gasPrice }
+        set { return envelope.gasPrice = newValue }
+    }
 
     /// the max base fee per gas unit (EIP-1559 only)
     /// this value must be >= baseFee + maxPriorityFeePerGas
-    public internal (set) var maxFeePerGas: BigUInt?
+    public internal (set) var maxFeePerGas: BigUInt? {
+        get { return envelope.maxFeePerGas }
+        set { return envelope.maxFeePerGas = newValue }
+    }
 
     /// the maximum tip to pay the miner (EIP-1559 only)
-    public internal (set) var maxPriorityFeePerGas: BigUInt?
+    public internal (set) var maxPriorityFeePerGas: BigUInt? {
+        get { return envelope.maxPriorityFeePerGas }
+        set { return envelope.maxPriorityFeePerGas = newValue }
+    }
 
     public var callOnBlock: BlockNumber?
 
@@ -317,7 +326,7 @@ extension CodableTransaction {
         let oracle = Oracle(provider)
         switch gasPricePolicy {
         case .automatic, .withMargin:
-            return await oracle.gasPriceLegacyPercentiles().max()!
+            return await oracle.gasPriceLegacyPercentiles().max() ?? 0
         case .manual(let value):
             return value
         }
@@ -344,7 +353,7 @@ extension CodableTransaction {
         let oracle = Oracle(provider)
         switch maxFeePerGasPolicy {
         case .automatic:
-            return await oracle.baseFeePercentiles().max()!
+            return await oracle.baseFeePercentiles().max() ?? 0
         case .manual(let value):
             return value
         }
@@ -354,7 +363,7 @@ extension CodableTransaction {
         let oracle = Oracle(provider)
         switch maxPriorityFeePerGasPolicy {
         case .automatic:
-            return await oracle.tipFeePercentiles().max()!
+            return await oracle.tipFeePercentiles().max() ?? 0
         case .manual(let value):
             return value
         }
@@ -395,9 +404,6 @@ extension CodableTransaction {
                 accessList: [AccessListEntry]? = nil, v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
         // FIXME: This is duplication and should be fixed.
         self.data = data
-        self.gasPrice = gasPrice
-        self.maxFeePerGas = maxFeePerGas
-        self.maxPriorityFeePerGas = maxPriorityFeePerGas
         self.accessList = accessList
         self.gasLimitPolicy = .automatic
         self.noncePolicy = .pending

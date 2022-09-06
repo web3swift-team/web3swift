@@ -83,6 +83,15 @@ protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
     var value: BigUInt { get set }
 
     var gasLimit: BigUInt { get set }
+
+    var gasPrice: BigUInt? { get set }
+
+    /// the max base fee per gas unit (EIP-1559 only)
+    /// this value must be >= baseFee + maxPriorityFeePerGas
+    var maxFeePerGas: BigUInt? { get set }
+
+    /// the maximum tip to pay the miner (EIP-1559 only)
+    var maxPriorityFeePerGas: BigUInt? { get set }
     
     /// Any encoded data accompanying the transaction
     var data: Data { get set }

@@ -27,8 +27,11 @@ public struct LegacyEnvelope: AbstractEnvelope {
     public var s: BigUInt
 
     // legacy specific parameters
-    public var gasPrice: BigUInt = 0
+    public var gasPrice: BigUInt? = 0
     public var gasLimit: BigUInt = 0
+
+    var maxFeePerGas: BigUInt? = nil
+    var maxPriorityFeePerGas: BigUInt? = nil
 
     // legacy chainID Mechanism
     private var explicitChainID: BigUInt? // set directly or via options
@@ -44,7 +47,7 @@ public struct LegacyEnvelope: AbstractEnvelope {
         var toReturn = ""
         toReturn += "Type: " + String(describing: self.type) + "\n"
         toReturn += "Nonce: " + String(describing: self.nonce) + "\n"
-        toReturn += "Gas price: " + String(self.gasPrice) + "\n"
+        toReturn += "Gas price: " + String(self.gasPrice ?? 0) + "\n"
         toReturn += "Gas limit: " + String(describing: self.gasLimit) + "\n"
         toReturn += "To: " + self.to.address + "\n"
         toReturn += "Value: " + String(describing: self.value) + "\n"
