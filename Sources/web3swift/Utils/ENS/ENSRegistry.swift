@@ -79,7 +79,7 @@ public extension ENS {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.registryContract.write("setOwner", parameters: [nameHash, owner] as [AnyObject], extraData: Data(), transactionOptions: options) else {throw Web3Error.transactionSerializationError}
             guard let result = await password == nil
-                    ? try? transaction.send()
+                    ? try? transaction.send(password: "web3swift")
                     : try? transaction.send(password: password!)
             else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
@@ -95,7 +95,7 @@ public extension ENS {
             guard let labelHash = NameHash.nameHash(label) else {throw Web3Error.processingError(desc: "Failed to get label hash")}
             guard let transaction = self.registryContract.write("setSubnodeOwner", parameters: [nameHash, labelHash, owner] as [AnyObject], extraData: Data(), transactionOptions: options) else {throw Web3Error.transactionSerializationError}
             guard let result = await password == nil
-                    ? try? transaction.send()
+                    ? try? transaction.send(password: "web3swift")
                     : try? transaction.send(password: password!)
             else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
@@ -110,7 +110,7 @@ public extension ENS {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.registryContract.write("setResolver", parameters: [nameHash, resolver] as [AnyObject], extraData: Data(), transactionOptions: options) else {throw Web3Error.transactionSerializationError}
             guard let result = await password == nil
-                    ? try? transaction.send()
+                    ? try? transaction.send(password: "web3swift")
                     : try? transaction.send(password: password!)
             else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
@@ -125,7 +125,7 @@ public extension ENS {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.registryContract.write("setTTL", parameters: [nameHash, ttl] as [AnyObject], extraData: Data(), transactionOptions: options) else {throw Web3Error.transactionSerializationError}
             guard let result = await password == nil
-                    ? try? transaction.send()
+                    ? try? transaction.send(password: "web3swift")
                     : try? transaction.send(password: password!)
             else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result

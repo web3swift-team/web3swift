@@ -179,7 +179,7 @@ public class WriteTransaction: ReadTransaction {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func send(password: String = "web3swift") async throws -> TransactionSendingResult {
+    public func send(password: String) async throws -> TransactionSendingResult {
         if let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager {
             do {
                 try Web3Signer.signTX(transaction: &transaction,
