@@ -85,16 +85,6 @@ extension web3.BrowserFunctions {
 //        } catch { return nil }
 //    }
 
-    // FIXME: Rewrite this to CodableTransaction
-    public func sendTransaction(_ transaction: CodableTransaction, transactionOptions: CodableTransaction, password: String = "web3swift") async -> [String: Any]? {
-        do {
-            let result = try await self.web3.eth.send(transaction, transactionOptions: transactionOptions, password: password)
-            return ["txhash": result.hash]
-        } catch {
-            return nil
-        }
-    }
-//
 //    public func estimateGas(_ transactionJSON: [String: Any]) async -> BigUInt? {
 //        do {
 //            let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
