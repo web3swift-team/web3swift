@@ -34,19 +34,18 @@ public class ERC20: IERC20, ERC20BaseProperties {
     public var provider: Web3Provider
     public var address: EthereumAddress
 
-    lazy var contract: web3.web3contract = {
+    lazy var contract: web3.Contract = {
         let contract = self.web3.contract(Web3.Utils.erc20ABI, at: self.address, abiVersion: 2)
         precondition(contract != nil)
         return contract!
     }()
 
-    public init(web3: web3, provider: Web3Provider, address: EthereumAddress) {
+    public init(web3: web3, provider: Web3Provider, address: EthereumAddress, transaction: CodableTransaction = .emptyTransaction) {
         self.web3 = web3
         self.provider = provider
         self.address = address
-        var mergedOptions = web3.transactionOptions
-        mergedOptions.to = address
-        self.transactionOptions = mergedOptions
+        self.transactionOptions = transaction
+        self.transactionOptions.to = address
     }
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
@@ -184,7 +183,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 }
 
 protocol ERC20BaseProperties: AnyObject {
-    var contract: web3.web3contract { get }
+    var contract: web3.Contract { get }
     var _name: String? { get set }
     var _symbol: String? { get set }
     var _decimals: UInt8? { get set }

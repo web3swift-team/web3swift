@@ -22,9 +22,7 @@ public class ReadOperation {
     public init(transaction: CodableTransaction = CodableTransaction.emptyTransaction,
                 web3 web3Instance: web3,
                 contract: EthereumContract,
-                method: String = "fallback",
-                // FIXME: Delete options.
-                transactionOptions: CodableTransaction? = nil) {
+                method: String = "fallback") {
         self.transaction = transaction
         self.web3 = web3Instance
         self.contract = contract

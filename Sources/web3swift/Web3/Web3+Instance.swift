@@ -11,7 +11,6 @@ import Core
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
     public var provider: Web3Provider
-    public var transactionOptions: CodableTransaction = CodableTransaction.emptyTransaction
 
     /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
     public init(provider prov: Web3Provider) {
@@ -36,13 +35,11 @@ public class web3 {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public class Eth: CodableTransactionInheritable {
+    public class Eth {
         var provider: Web3Provider
         //  weak var web3: web3?
         var web3: web3
-        public var transactionOptions: CodableTransaction {
-            return self.web3.transactionOptions
-        }
+
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -61,13 +58,10 @@ public class web3 {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public class Personal: CodableTransactionInheritable {
+    public class Personal {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var transactionOptions: CodableTransaction {
-            return self.web3.transactionOptions
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -86,13 +80,10 @@ public class web3 {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public class TxPool: CodableTransactionInheritable {
+    public class TxPool {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var transactionOptions: CodableTransaction {
-            return self.web3.transactionOptions
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -132,13 +123,10 @@ public class web3 {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public class BrowserFunctions: CodableTransactionInheritable {
+    public class BrowserFunctions {
         var provider: Web3Provider
         //        weak var web3: web3?
         public var web3: web3
-        public var transactionOptions: CodableTransaction {
-            return self.web3.transactionOptions
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -157,10 +145,10 @@ public class web3 {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public class Eventloop: CodableTransactionInheritable {
+    public class Eventloop {
 
         public typealias EventLoopCall = (web3) async -> Void
-        public typealias EventLoopContractCall = (web3contract) -> Void
+        public typealias EventLoopContractCall = (Contract) -> Void
 
         public struct MonitoredProperty {
             public var name: String
@@ -175,10 +163,6 @@ public class web3 {
         public var monitoredProperties: [MonitoredProperty] = [MonitoredProperty]()
         //  public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
         public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
-
-        public var transactionOptions: CodableTransaction {
-            return self.web3.transactionOptions
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance

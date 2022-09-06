@@ -45,7 +45,7 @@ public extension ENS {
             }
         }
 
-        lazy var resolverContract: web3.web3contract = {
+        lazy var resolverContract: web3.Contract = {
             let contract = self.web3.contract(Web3.Utils.resolverABI, at: self.resolverContractAddress, abiVersion: 2)
             precondition(contract != nil)
             return contract!

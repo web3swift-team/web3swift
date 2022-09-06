@@ -40,7 +40,7 @@ public extension ENS {
             return CodableTransaction.emptyTransaction
         }()
 
-        lazy var registryContract: web3.web3contract = {
+        lazy var registryContract: web3.Contract = {
             let contract = self.web3.contract(Web3.Utils.ensRegistryABI, at: self.registryContractAddress, abiVersion: 2)
             precondition(contract != nil)
             return contract!

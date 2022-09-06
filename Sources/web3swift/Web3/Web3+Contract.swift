@@ -10,42 +10,39 @@ import Core
 extension web3 {
 
     /// The contract instance. Initialized in runtime from ABI string (that is a JSON array). In addition an existing contract address can be supplied to provide the default "to" address in all the following requests. ABI version is 2 by default and should not be changed.
-    public func contract(_ abiString: String, at: EthereumAddress? = nil, abiVersion: Int = 2) -> web3contract? {
-        return web3contract(web3: self, abiString: abiString, at: at, transactionOptions: self.transactionOptions, abiVersion: abiVersion)
+    public func contract(_ abiString: String, at: EthereumAddress? = nil, abiVersion: Int = 2) -> Contract? {
+        return Contract(web3: self, abiString: abiString, at: at, abiVersion: abiVersion)
     }
 
     // FIXME: Rewrite this to CodableTransaction
     /// Web3 instance bound contract instance.
-    public class web3contract {
+    public class Contract {
         public let contract: EthereumContract
         public let web3: web3
-        public var transactionOptions: CodableTransaction? = nil
+        public var transaction = CodableTransaction.emptyTransaction
 
         // FIXME: Rewrite this to CodableTransaction
         /// Initialize the bound contract instance by supplying the Web3 provider bound object, ABI, Ethereum address and some default
         /// options for further function calls. By default the contract inherits options from the web3 object. Additionally supplied "options"
         /// do override inherited ones.
-        public init?(web3 web3Instance: web3, abiString: String, at: EthereumAddress? = nil, transactionOptions: CodableTransaction? = nil, abiVersion: Int = 2) {
+        public init?(web3 web3Instance: web3, abiString: String, at: EthereumAddress? = nil, transaction: CodableTransaction = .emptyTransaction, abiVersion: Int = 2) {
             self.web3 = web3Instance
-            self.transactionOptions = web3.transactionOptions
+            self.transaction = transaction
             switch abiVersion {
             case 1:
                 print("ABIv1 bound contract is now deprecated")
                 return nil
             case 2:
-                guard let c = try? EthereumContract(abiString, at: at) else {return nil}
-                contract = c
+                guard let contract = try? EthereumContract(abiString, at: at) else {return nil}
+                self.contract = contract
             default:
                 return nil
             }
-            var mergedOptions = self.transactionOptions?.merge(transactionOptions)
+
             if let at = at {
-                contract.address = at
-                mergedOptions?.to = at
-            } else if let addr = mergedOptions?.to {
-                contract.address = addr
+                self.contract.address = at
+                self.transaction.to = at
             }
-            self.transactionOptions = mergedOptions
         }
 
         // MARK: Writing Data flow
@@ -59,7 +56,6 @@ extension web3 {
                            parameters: [AnyObject]? = nil,
                            extraData: Data? = nil,
                            transactionOptions: CodableTransaction? = nil) -> WriteOperation? {
-            let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             // MARK: Writing Data flow
             guard var tx = self.contract.deploy(bytecode: bytecode,
                                                 constructor: constructor,
@@ -70,9 +66,9 @@ extension web3 {
             if let network = self.web3.provider.network {
                 tx.chainID = network.chainID
             }
-            return WriteOperation(web3: self.web3,
-                                    contract: self.contract,
-                                    transactionOptions: mergedOptions)
+            return WriteOperation(transaction: self.transaction,
+                                  web3: self.web3,
+                                  contract: self.contract)
         }
 
         // FIXME: Actually this is not rading contract or smth, this is about composing appropriate binary data to iterate with it later.
@@ -84,14 +80,14 @@ extension web3 {
         ///
         /// Returns a "Transaction intermediate" object.
         public func createReadOperation(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> ReadOperation? {
-            let mergedOptions = self.transactionOptions?.merge(transactionOptions)
+            let mergedTransaction = self.transaction.merge(transactionOptions)
             // MARK: - Encoding ABI Data flow
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             if let network = self.web3.provider.network {
                 tx.chainID = network.chainID
             }
             // MARK: Read data from ABI flow
-            let writeTX = ReadOperation.init(web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
+            let writeTX = ReadOperation.init(transaction: mergedTransaction, web3: self.web3, contract: self.contract, method: method)
             return writeTX
         }
 
@@ -103,12 +99,12 @@ extension web3 {
         ///
         /// Returns a "Transaction intermediate" object.
         public func createWriteOperation(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> WriteOperation? {
-            let mergedOptions = self.transactionOptions?.merge(transactionOptions)
+            let mergedTransaction = self.transaction.merge(transactionOptions)
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             if let network = self.web3.provider.network {
                 tx.chainID = network.chainID
             }
-            let writeTX = WriteOperation.init(web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
+            let writeTX = WriteOperation.init(transaction: mergedTransaction, web3: self.web3, contract: self.contract, method: method)
             return writeTX
         }
     }

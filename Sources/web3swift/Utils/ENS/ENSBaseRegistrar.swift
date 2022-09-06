@@ -24,8 +24,8 @@ public extension ENS {
             self.contract = contract
         }
 
-        override public init(web3: web3, provider: Web3Provider, address: EthereumAddress) {
-            super.init(web3: web3, provider: provider, address: address)
+        override public init(web3: web3, provider: Web3Provider, address: EthereumAddress, transaction: CodableTransaction = .emptyTransaction) {
+            super.init(web3: web3, provider: provider, address: address, transaction: transaction)
             guard let contract = self.web3.contract(Web3.Utils.baseRegistrarABI, at: self.address, abiVersion: 2) else {
                 return
             }

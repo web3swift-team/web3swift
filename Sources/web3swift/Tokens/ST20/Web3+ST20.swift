@@ -41,20 +41,19 @@ public class ST20: IST20, ERC20BaseProperties {
     public var address: EthereumAddress
     public var abi: String
 
-    lazy var contract: web3.web3contract = {
+    lazy var contract: web3.Contract = {
         let contract = self.web3.contract(self.abi, at: self.address, abiVersion: 2)
         precondition(contract != nil)
         return contract!
     }()
 
-    public init(web3: web3, provider: Web3Provider, address: EthereumAddress, abi: String = Web3.Utils.st20ABI) {
+    public init(web3: web3, provider: Web3Provider, address: EthereumAddress, abi: String = Web3.Utils.st20ABI, transaction: CodableTransaction = .emptyTransaction) {
         self.web3 = web3
         self.provider = provider
         self.address = address
-        var mergedOptions = web3.transactionOptions
-        mergedOptions.to = address
+        self.transactionOptions = transaction
+        self.transactionOptions.to = address
         self.abi = abi
-        self.transactionOptions = mergedOptions
     }
 
     // Must be 18!
