@@ -26,10 +26,10 @@ class LocalTestCase: XCTestCase {
 
         let from = allAddresses[0]
         let writeTX = contract!.write("fallback")!
-        writeTX.transactionOptions.from = from
-        writeTX.transactionOptions.value = value
-        writeTX.transactionOptions.gasLimitPolicy = .manual(78423)
-        writeTX.transactionOptions.gasPricePolicy = .manual(20000000000)
+        writeTX.transaction.from = from
+        writeTX.transaction.value = value
+        writeTX.transaction.gasLimitPolicy = .manual(78423)
+        writeTX.transaction.gasPricePolicy = .manual(20000000000)
 
         for _ in block..<25 {
             let _ = try! await writeTX.send(password: "")
