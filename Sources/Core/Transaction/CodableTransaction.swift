@@ -183,19 +183,16 @@ public struct CodableTransaction {
         return self.envelope.encode(for: type)
     }
 
-//    public mutating func resolve() {
-//        // type cannot be changed here, and is ignored
-//        // FIXME: Add appropiate values of resolveAny
-//        self.nonce = options.resolveNonce(nonce)
-//        self.gasPrice = options.resolveGasPrice(gasPrice ?? 0)
-//        self.gasLimit = options.resolveGasLimit(gasLimit)
-//        self.maxFeePerGas = options.resolveMaxFeePerGas(maxFeePerGas ?? 0)
-//        self.maxPriorityFeePerGas = options.resolveMaxPriorityFeePerGas(maxPriorityFeePerGas ?? 0)
-//        self.value = options.value ?? value
-//        self.from = options.from
-//        self.to = options.to ?? to
-//        self.accessList = options.accessList
-//    }
+    public mutating func resolve(provider: Web3Provider) async {
+        // type cannot be changed here, and is ignored
+        // FIXME: This is resolves nothing yet.
+        // FIXME: Delete force try
+        self.nonce = try! await self.resolveNonce(provider: provider)
+        self.gasPrice = try! await self.resolveGasPrice(provider: provider)
+        self.gasLimit = try! await self.resolveGasLimit(provider: provider)
+        self.maxFeePerGas = try! await self.resolveMaxFeePerGas(provider: provider)
+        self.maxPriorityFeePerGas = try! await self.resolveMaxPriorityFeePerGas(provider: provider)
+    }
 
     public var noncePolicy: NoncePolicy
     public var maxFeePerGasPolicy: FeePerGasPolicy
@@ -304,52 +301,60 @@ extension CodableTransaction {
         case manual(BigUInt)
     }
 
-    public func resolveNonce(_ suggestedByNode: BigUInt) -> BigUInt {
+    public func resolveNonce(provider: Web3Provider) async throws -> BigUInt {
         switch noncePolicy {
         case .pending, .latest, .earliest:
-            return suggestedByNode
+            guard let address = from ?? sender else { throw Web3Error.valueError }
+            let request: APIRequest = .getTransactionCount(address.address , callOnBlock ?? .latest)
+            let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)
+            return response.result
         case .exact(let value):
             return value
         }
     }
 
-    public func resolveGasPrice(_ suggestedByNode: BigUInt) -> BigUInt {
+    public func resolveGasPrice(provider: Web3Provider) async throws -> BigUInt {
+        let oracle = Oracle(provider)
         switch gasPricePolicy {
         case .automatic, .withMargin:
-            return suggestedByNode
+            return await oracle.gasPriceLegacyPercentiles().max()!
         case .manual(let value):
             return value
         }
     }
 
-    public func resolveGasLimit(_ suggestedByNode: BigUInt) -> BigUInt {
+    public func resolveGasLimit(provider: Web3Provider) async throws -> BigUInt {
+        let request: APIRequest = .estimateGas(self, self.callOnBlock ?? .latest)
+        let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)
         switch gasLimitPolicy {
         case .automatic, .withMargin:
-            return suggestedByNode
+            return response.result
         case .manual(let value):
             return value
         case .limited(let limit):
-            if limit <= suggestedByNode {
-                return suggestedByNode
+            if limit <= response.result {
+                return response.result
             } else {
                 return limit
             }
         }
     }
 
-    public func resolveMaxFeePerGas(_ suggestedByNode: BigUInt) -> BigUInt {
+    public func resolveMaxFeePerGas(provider: Web3Provider) async throws -> BigUInt {
+        let oracle = Oracle(provider)
         switch maxFeePerGasPolicy {
         case .automatic:
-            return suggestedByNode
+            return await oracle.baseFeePercentiles().max()!
         case .manual(let value):
             return value
         }
     }
 
-    public func resolveMaxPriorityFeePerGas(_ suggestedByNode: BigUInt) -> BigUInt {
+    public func resolveMaxPriorityFeePerGas(provider: Web3Provider) async throws -> BigUInt {
+        let oracle = Oracle(provider)
         switch maxPriorityFeePerGasPolicy {
         case .automatic:
-            return suggestedByNode
+            return await oracle.tipFeePercentiles().max()!
         case .manual(let value):
             return value
         }
@@ -406,12 +411,3 @@ extension CodableTransaction {
 }
 
 extension CodableTransaction: APIRequestParameterType { }
-
-private func mergeIfNotNil<T>(first: T?, second: T?) -> T? {
-    if second != nil {
-        return second
-    } else if first != nil {
-        return first
-    }
-    return nil
-}

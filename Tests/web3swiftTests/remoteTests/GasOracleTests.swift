@@ -17,7 +17,7 @@ class GasOracleTests: XCTestCase {
 
     func testPretictBaseFee() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
+        lazy var oracle: Oracle = .init(web3.provider, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
         let etalonPercentiles: [BigUInt] = [
             94217344703,    // 10 percentile
             105983352568,    // 40 percentile
@@ -31,7 +31,7 @@ class GasOracleTests: XCTestCase {
 
     func testPredictTip() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
+        lazy var oracle: Oracle = .init(web3.provider, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
         let etalonPercentiles: [BigUInt] = [
             1217066957,     // 10 percentile
             1525000000,     // 40 percentile
@@ -45,7 +45,7 @@ class GasOracleTests: XCTestCase {
 
     func testPredictBothFee() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        lazy var oracle: Web3.Oracle = .init(web3, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
+        lazy var oracle: Oracle = .init(web3.provider, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
         let etalonPercentiles: ([BigUInt], [BigUInt]) = (
             baseFee: [
                 94217344703,    // 10 percentile
