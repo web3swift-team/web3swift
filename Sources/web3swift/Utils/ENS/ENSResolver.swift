@@ -96,7 +96,7 @@ public extension ENS {
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.write("setAddr", parameters: [nameHash, address] as [AnyObject], extraData: Data(), transactionOptions: options) else {throw Web3Error.transactionSerializationError}
-            guard let result = await password == nil ? try? transaction.send(): try? transaction.send(password: password!, transactionOptions: options) else {throw Web3Error.processingError(desc: "Can't send transaction")}
+            guard let result = await password == nil ? try? transaction.send(): try? transaction.send(password: password!) else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
 
@@ -115,7 +115,10 @@ public extension ENS {
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.write("setName", parameters: [nameHash, name] as [AnyObject], extraData: Data(), transactionOptions: options) else {throw Web3Error.transactionSerializationError}
-            guard let result = await password == nil ? try? transaction.send(): try? transaction.send(password: password!, transactionOptions: options) else {throw Web3Error.processingError(desc: "Can't send transaction")}
+            guard let result = await password == nil
+                    ? try? transaction.send()
+                    : try? transaction.send(password: password!)
+            else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
 
@@ -134,7 +137,10 @@ public extension ENS {
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.write("setContenthash", parameters: [nameHash, hash] as [AnyObject], extraData: Data(), transactionOptions: options) else {throw Web3Error.transactionSerializationError}
-            guard let result = await password == nil ? try? transaction.send(): try? transaction.send(password: password!, transactionOptions: options) else {throw Web3Error.processingError(desc: "Can't send transaction")}
+            guard let result = await password == nil
+                    ? try? transaction.send()
+                    : try? transaction.send(password: password!)
+            else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
 
@@ -154,7 +160,10 @@ public extension ENS {
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.write("setABI", parameters: [nameHash, contentType.rawValue, data] as [AnyObject], extraData: Data(), transactionOptions: options) else {throw Web3Error.transactionSerializationError}
-            guard let result = await password == nil ? try? transaction.send(): try? transaction.send(password: password!, transactionOptions: options) else {throw Web3Error.processingError(desc: "Can't send transaction")}
+            guard let result = await password == nil
+                    ? try? transaction.send()
+                    : try? transaction.send(password: password!)
+            else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
 
@@ -176,7 +185,10 @@ public extension ENS {
             let pubkeyWithoutPrefix = publicKey.getComponentsWithoutPrefix()
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.write("setPubkey", parameters: [nameHash, pubkeyWithoutPrefix.x, pubkeyWithoutPrefix.y] as [AnyObject], extraData: Data(), transactionOptions: options) else {throw Web3Error.transactionSerializationError}
-            guard let result = await password == nil ? try? transaction.send(): try? transaction.send(password: password!, transactionOptions: options) else {throw Web3Error.processingError(desc: "Can't send transaction")}
+            guard let result = await password == nil
+                    ? try? transaction.send()
+                    : try? transaction.send(password: password!)
+            else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
 
@@ -195,7 +207,10 @@ public extension ENS {
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.write("setText", parameters: [nameHash, key, value] as [AnyObject], extraData: Data(), transactionOptions: options) else {throw Web3Error.transactionSerializationError}
-            guard let result = await password == nil ? try? transaction.send(): try? transaction.send(password: password!, transactionOptions: options) else {throw Web3Error.processingError(desc: "Can't send transaction")}
+            guard let result = await password == nil
+                    ? try? transaction.send()
+                    : try? transaction.send(password: password!)
+            else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
     }

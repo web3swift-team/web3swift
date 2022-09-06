@@ -179,26 +179,20 @@ public class WriteTransaction: ReadTransaction {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func send(password: String = "web3swift", transactionOptions: CodableTransaction? = nil) async throws -> TransactionSendingResult {
-        var assembledTransaction = try await assembleTransaction(transactionOptions: transactionOptions)
-        let mergedOptions = self.transactionOptions.merge(transactionOptions)
-        var cleanedOptions = CodableTransaction.emptyTransaction
-        cleanedOptions.from = mergedOptions.from
-        cleanedOptions.to = mergedOptions.to
-
+    public func send(password: String = "web3swift") async throws -> TransactionSendingResult {
         if let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager {
-            guard let from = mergedOptions.from else {
-                throw Web3Error.inputError(desc: "No 'from' field provided")
-            }
             do {
-                try Web3Signer.signTX(transaction: &assembledTransaction, keystore: attachedKeystoreManager, account: from, password: password)
+                try Web3Signer.signTX(transaction: &transaction,
+                                      keystore: attachedKeystoreManager,
+                                      account: transaction.from ?? transaction.sender ?? EthereumAddress.contractDeploymentAddress(),
+                                      password: password)
             } catch {
                 throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
             }
-            return try await self.web3.eth.send(raw: assembledTransaction)
+            return try await web3.eth.send(raw: transaction)
         }
         // MARK: Sending Data flow
-        return try await web3.eth.send(assembledTransaction)
+        return try await web3.eth.send(transaction)
     }
 
     // FIXME: Rewrite this to CodableTransaction
@@ -207,7 +201,7 @@ public class WriteTransaction: ReadTransaction {
                      optionsForGasEstimation: CodableTransaction) async throws -> BigUInt {
         switch policy {
         case .automatic, .withMargin, .limited:
-            return try await web3.eth.estimateGas(for: assembledTransaction, transactionOptions: optionsForGasEstimation)
+            return try await web3.eth.estimateGas(for: assembledTransaction)
         case .manual(let gasLimit):
             return gasLimit
         }

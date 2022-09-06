@@ -89,7 +89,7 @@ public class ReadTransaction {
             assembledTransaction.value = mergedOptions.value
         }
 
-        return try await self.web3.eth.estimateGas(for: assembledTransaction, transactionOptions: optionsForGasEstimation)
+        return try await self.web3.eth.estimateGas(for: assembledTransaction)
 
     }
 

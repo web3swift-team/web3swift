@@ -101,9 +101,9 @@ extension web3.BrowserFunctions {
 //    }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func estimateGas(_ transaction: CodableTransaction, transactionOptions: CodableTransaction) async -> BigUInt? {
+    public func estimateGas(_ transaction: CodableTransaction) async -> BigUInt? {
         do {
-            let result = try await self.web3.eth.estimateGas(for: transaction, transactionOptions: transactionOptions)
+            let result = try await self.web3.eth.estimateGas(for: transaction)
             return result
         } catch {
             return nil
@@ -131,7 +131,7 @@ extension web3.BrowserFunctions {
             let gasPrice = try await self.web3.eth.gasPrice()
             transaction.gasPrice = gasPrice
             options.gasPricePolicy = .manual(gasPrice)
-            guard let gasEstimate = await self.estimateGas(transaction, transactionOptions: options) else {return (nil, nil)}
+            guard let gasEstimate = await self.estimateGas(transaction) else {return (nil, nil)}
             transaction.gasLimit = gasEstimate
 
             options.gasLimitPolicy = .limited(gasEstimate)
