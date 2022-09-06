@@ -26,8 +26,7 @@ public class WriteOperation: ReadOperation {
             return try await web3.eth.send(raw: transactionData)
         }
         // MARK: Sending Data flow
-        guard let transactionData = transaction.encode(for: .transaction) else { throw Web3Error.dataError }
-        return try await web3.eth.send(raw: transactionData)
+        return try await web3.eth.send(transaction, password: password)
     }
 
     // FIXME: Rewrite this to CodableTransaction

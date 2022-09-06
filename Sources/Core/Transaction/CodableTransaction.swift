@@ -8,10 +8,6 @@ import Foundation
 import BigInt
 
 
-public protocol CodableTransactionInheritable {
-    var transactionOptions: CodableTransaction { get }
-}
-
 ///  Structure capable of carying the parameters for any transaction type.
 ///  while all fields in this struct are optional, they are not necessarily
 ///  optional for the type of transaction they apply to.

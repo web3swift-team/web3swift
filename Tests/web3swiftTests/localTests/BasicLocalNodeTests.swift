@@ -33,7 +33,7 @@ class BasicLocalNodeTests: LocalTestCase {
 
         Thread.sleep(forTimeInterval: 1.0)
 
-        let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
+        let receipt = try await web3.eth.transactionReceipt(txHash.stripHexPrefix().data(using: .utf8)!)
         print(receipt)
 
         switch receipt.status {
@@ -43,7 +43,7 @@ class BasicLocalNodeTests: LocalTestCase {
             break
         }
 
-        let details = try await web3.eth.transactionDetails(txHash.data(using: .utf8)!)
+        let details = try await web3.eth.transactionDetails(txHash.stripHexPrefix().data(using: .utf8)!)
         print(details)
     }
 
