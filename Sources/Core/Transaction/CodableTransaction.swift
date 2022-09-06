@@ -427,6 +427,12 @@ extension CodableTransaction {
         self.maxFeePerGas = maxFeePerGas
         self.maxPriorityFeePerGas = maxPriorityFeePerGas
         self.accessList = accessList
+        self.gasLimitPolicy = .automatic
+        self.noncePolicy = .pending
+        self.gasPricePolicy = .automatic
+        self.maxFeePerGasPolicy = .automatic
+        self.maxPriorityFeePerGasPolicy = .automatic
+
         self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, chainID: chainID, value: value, data: data, gasLimit: gasLimit, maxFeePerGas: maxFeePerGas, maxPriorityFeePerGas: maxPriorityFeePerGas, gasPrice: gasPrice, accessList: accessList, v: v, r: r, s: s)
     }
 }
