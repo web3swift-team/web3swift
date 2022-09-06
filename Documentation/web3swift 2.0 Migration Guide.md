@@ -218,7 +218,7 @@ return value
 let options = options ?? transaction.transactionOptions
 guard let result = password == nil ?
     try? transaction.send() :
-    try? transaction.send(password: <your password>, transactionOptions: options) else {return}
+    try? transaction.send(password: <your password> ) else {return}
 return result
 ```
 

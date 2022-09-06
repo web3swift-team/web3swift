@@ -80,7 +80,6 @@ extension web3 {
         ///
         /// Returns a "Transaction intermediate" object.
         public func createReadOperation(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data()) -> ReadOperation? {
-//            let mergedTransaction = self.transaction.merge(transactionOptions)
             // MARK: - Encoding ABI Data flow
             guard var data = self.contract.method(method, parameters: parameters, extraData: extraData) else { return nil }
 
@@ -102,8 +101,7 @@ extension web3 {
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func createWriteOperation(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> WriteOperation? {
-            let mergedTransaction = self.transaction.merge(transactionOptions)
+        public func createWriteOperation(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data()) -> WriteOperation? {
             guard var data = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             transaction.data = data
             if let network = self.web3.provider.network {
