@@ -22,8 +22,8 @@ class AdvancedABIv2Tests: LocalTestCase {
 
         // MARK: Writing Data flow
         let deployTx = contract.deploy(bytecode: bytecode)!
-        deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimitPolicy = .manual(3000000)
+        deployTx.transaction.from = allAddresses[0]
+        deployTx.transaction.gasLimitPolicy = .manual(3000000)
         // MARK: Sending Data flow
         let result = try await deployTx.send(password: "web3swift")
         let txHash = result.hash
@@ -60,8 +60,8 @@ class AdvancedABIv2Tests: LocalTestCase {
         let parameters = [] as [AnyObject]
         // MARK: Writing Data flow
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
-        deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimitPolicy = .manual(3000000)
+        deployTx.transaction.from = allAddresses[0]
+        deployTx.transaction.gasLimitPolicy = .manual(3000000)
         let result = try await deployTx.send(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
@@ -97,8 +97,8 @@ class AdvancedABIv2Tests: LocalTestCase {
         let parameters = [] as [AnyObject]
         // MARK: Writing Data flow
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
-        deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimitPolicy = .manual(3000000)
+        deployTx.transaction.from = allAddresses[0]
+        deployTx.transaction.gasLimitPolicy = .manual(3000000)
         let result = try await deployTx.send(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
@@ -133,8 +133,8 @@ class AdvancedABIv2Tests: LocalTestCase {
         let parameters = [] as [AnyObject]
         // MARK: Writing Data flow
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
-        deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimitPolicy = .manual(3000000)
+        deployTx.transaction.from = allAddresses[0]
+        deployTx.transaction.gasLimitPolicy = .manual(3000000)
         let result = try await deployTx.send(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
@@ -170,8 +170,8 @@ class AdvancedABIv2Tests: LocalTestCase {
         let parameters = [] as [AnyObject]
         // MARK: Writing Data flow
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
-        deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimitPolicy = .manual(3000000)
+        deployTx.transaction.from = allAddresses[0]
+        deployTx.transaction.gasLimitPolicy = .manual(3000000)
         let result = try await deployTx.send(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)

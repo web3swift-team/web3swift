@@ -635,9 +635,9 @@ class TransactionsTests: XCTestCase {
             let value = Utilities.parseToBigUInt("1.0", units: .eth)
             let from = allAddresses[0]
             let writeTX = contract!.write("fallback")!
-            writeTX.transactionOptions.from = from
-            writeTX.transactionOptions.value = value!
-            writeTX.transactionOptions.gasLimitPolicy = .manual(78423)
+            writeTX.transaction.from = from
+            writeTX.transaction.value = value!
+            writeTX.transaction.gasLimitPolicy = .manual(78423)
             let result = try await writeTX.send(password: "")
             let txHash = result.hash
             print("Transaction with hash " + txHash)

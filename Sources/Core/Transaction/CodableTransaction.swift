@@ -7,6 +7,11 @@
 import Foundation
 import BigInt
 
+
+public protocol CodableTransactionInheritable {
+    var transactionOptions: CodableTransaction { get }
+}
+
 ///  Structure capable of carying the parameters for any transaction type.
 ///  while all fields in this struct are optional, they are not necessarily
 ///  optional for the type of transaction they apply to.
@@ -432,6 +437,7 @@ extension CodableTransaction {
         self.gasPricePolicy = .automatic
         self.maxFeePerGasPolicy = .automatic
         self.maxPriorityFeePerGasPolicy = .automatic
+        self.callOnBlock = .latest
 
         self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, chainID: chainID, value: value, data: data, gasLimit: gasLimit, maxFeePerGas: maxFeePerGas, maxPriorityFeePerGas: maxPriorityFeePerGas, gasPrice: gasPrice, accessList: accessList, v: v, r: r, s: s)
     }

@@ -55,7 +55,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
         transactionOptions.callOnBlock = .latest
         let result = try await contract
             .read("balanceOf", parameters: [account] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!
-            .call(transactionOptions: transactionOptions)
+            .call()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -66,7 +66,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
         transactionOptions.callOnBlock = .latest
         let result = try await contract
             .read("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!
-            .call(transactionOptions: transactionOptions)
+            .call()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -176,7 +176,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
         transactionOptions.callOnBlock = .latest
         let result = try await contract
             .read("totalSupply", parameters: [AnyObject](), extraData: Data(), transactionOptions: self.transactionOptions)!
-            .call(transactionOptions: transactionOptions)
+            .call()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }

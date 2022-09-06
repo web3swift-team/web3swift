@@ -40,8 +40,8 @@ class PersonalSignatureTests: XCTestCase {
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
         let deployTx = contract.deploy(bytecode: bytecode)!
         let allAddresses = try await web3.eth.ownedAccounts()
-        deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimitPolicy = .manual(3000000)
+        deployTx.transaction.from = allAddresses[0]
+        deployTx.transaction.gasLimitPolicy = .manual(3000000)
         let deployResult = try await deployTx.send(password: "web3swift")
         let txHash = deployResult.hash
         print("Transaction with hash " + txHash)
@@ -75,13 +75,13 @@ class PersonalSignatureTests: XCTestCase {
         // Calling contract
         contract = web3.contract(abiString, at: receipt.contractAddress!)!
         var tx = contract.read("hashPersonalMessage", parameters: [message as AnyObject])
-        tx?.transactionOptions.from = expectedAddress
+        tx?.transaction.from = expectedAddress
         var result = try await tx!.decodedData()
         guard let hash = result["hash"]! as? Data else {return XCTFail()}
         XCTAssert(Utilities.hashPersonalMessage(message.data(using: .utf8)!)! == hash)
         
         tx = contract.read("recoverSigner", parameters: [message, unmarshalledSignature.v, Data(unmarshalledSignature.r), Data(unmarshalledSignature.s)] as [AnyObject])
-        tx?.transactionOptions.from = expectedAddress
+        tx?.transaction.from = expectedAddress
         result = try await tx!.decodedData()
         guard let signer = result["signer"]! as? EthereumAddress else {return XCTFail()}
         XCTAssert(signer == expectedAddress)

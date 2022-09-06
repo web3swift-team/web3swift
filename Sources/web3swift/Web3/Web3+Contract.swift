@@ -70,8 +70,7 @@ extension web3 {
             if let network = self.web3.provider.network {
                 tx.chainID = network.chainID
             }
-            return WriteTransaction(transaction: tx,
-                                    web3: self.web3,
+            return WriteTransaction(web3: self.web3,
                                     contract: self.contract,
                                     transactionOptions: mergedOptions)
         }
@@ -89,7 +88,7 @@ extension web3 {
             if let network = self.web3.provider.network {
                 tx.chainID = network.chainID
             }
-            let writeTX = WriteTransaction.init(transaction: tx, web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
+            let writeTX = WriteTransaction.init(web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
             return writeTX
         }
 
@@ -109,7 +108,7 @@ extension web3 {
                 tx.chainID = network.chainID
             }
             // MARK: Read data from ABI flow
-            let writeTX = ReadTransaction.init(transaction: tx, web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
+            let writeTX = ReadTransaction.init(web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
             return writeTX
         }
 
@@ -126,7 +125,7 @@ extension web3 {
             if let network = self.web3.provider.network {
                 tx.chainID = network.chainID
             }
-            let writeTX = WriteTransaction.init(transaction: tx, web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
+            let writeTX = WriteTransaction.init(web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
             return writeTX
         }
 

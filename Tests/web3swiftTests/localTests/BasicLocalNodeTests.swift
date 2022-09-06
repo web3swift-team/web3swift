@@ -24,8 +24,8 @@ class BasicLocalNodeTests: LocalTestCase {
         let parameters = [] as [AnyObject]
         // MARK: Writing Data flow
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
-        deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimitPolicy = .manual(3000000)
+        deployTx.transaction.from = allAddresses[0]
+        deployTx.transaction.gasLimitPolicy = .manual(3000000)
 
         let result = try await deployTx.send(password: "web3swift")
         let txHash = result.hash
@@ -57,8 +57,8 @@ class BasicLocalNodeTests: LocalTestCase {
         let sendTx = contract.method("fallback", parameters: parameters)!
 
         let valueToSend = Utilities.parseToBigUInt("1.0", units: .eth)!
-        sendTx.transactionOptions.value = valueToSend
-        sendTx.transactionOptions.from = allAddresses[0]
+        sendTx.transaction.value = valueToSend
+        sendTx.transaction.from = allAddresses[0]
 
         let balanceBeforeTo = try await web3.eth.getBalance(for: sendToAddress)
         let balanceBeforeFrom = try await web3.eth.getBalance(for: allAddresses[0])

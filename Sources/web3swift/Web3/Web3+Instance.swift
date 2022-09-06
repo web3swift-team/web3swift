@@ -36,7 +36,7 @@ public class web3 {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public class Eth: TransactionOptionsInheritable {
+    public class Eth: CodableTransactionInheritable {
         var provider: Web3Provider
         //  weak var web3: web3?
         var web3: web3
@@ -61,7 +61,7 @@ public class web3 {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public class Personal: TransactionOptionsInheritable {
+    public class Personal: CodableTransactionInheritable {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3
@@ -86,7 +86,7 @@ public class web3 {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public class TxPool: TransactionOptionsInheritable {
+    public class TxPool: CodableTransactionInheritable {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3
@@ -132,7 +132,7 @@ public class web3 {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public class BrowserFunctions: TransactionOptionsInheritable {
+    public class BrowserFunctions: CodableTransactionInheritable {
         var provider: Web3Provider
         //        weak var web3: web3?
         public var web3: web3
@@ -157,7 +157,7 @@ public class web3 {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public class Eventloop: TransactionOptionsInheritable {
+    public class Eventloop: CodableTransactionInheritable {
 
         public typealias EventLoopCall = (web3) async -> Void
         public typealias EventLoopContractCall = (web3contract) -> Void
