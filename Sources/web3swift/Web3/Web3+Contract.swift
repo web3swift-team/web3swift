@@ -75,23 +75,6 @@ extension web3 {
                                     transactionOptions: mergedOptions)
         }
 
-        // FIXME: Rewrite this to CodableTransaction
-        /// Creates and object responsible for calling a particular function of the contract. If method name is not found in ABI - returns nil.
-        /// If extraData is supplied it is appended to encoded function parameters. Can be usefull if one wants to call
-        /// the function not listed in ABI. "Parameters" should be an array corresponding to the list of parameters of the function.
-        /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
-        ///
-        /// Returns a "Transaction intermediate" object.
-        public func method(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> WriteOperation? {
-            let mergedOptions = self.transactionOptions?.merge(transactionOptions)
-            guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
-            if let network = self.web3.provider.network {
-                tx.chainID = network.chainID
-            }
-            let writeTX = WriteOperation.init(web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
-            return writeTX
-        }
-
         // FIXME: Actually this is not rading contract or smth, this is about composing appropriate binary data to iterate with it later.
         // FIXME: Rewrite this to CodableTransaction
         /// Creates and object responsible for calling a particular function of the contract. If method name is not found in ABI - returns nil.
@@ -100,7 +83,7 @@ extension web3 {
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func read(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> ReadOperation? {
+        public func createReadOperation(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> ReadOperation? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             // MARK: - Encoding ABI Data flow
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
@@ -119,7 +102,7 @@ extension web3 {
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func write(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> WriteOperation? {
+        public func createWriteOperation(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> WriteOperation? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             if let network = self.web3.provider.network {
@@ -128,11 +111,5 @@ extension web3 {
             let writeTX = WriteOperation.init(web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
             return writeTX
         }
-
-//        /// Creates an "EventParserProtocol" compliant object to use it for parsing particular block or transaction for events.
-//        public func createEventParser(_ eventName: String, filter: EventFilter?) -> EventParserProtocol? {
-//            let parser = EventParser(web3: self.web3, eventName: eventName, contract: self.contract, filter: filter)
-//            return parser
-//        }
     }
 }

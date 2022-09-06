@@ -58,8 +58,8 @@ class EthereumContractTest: LocalTestCase {
 
         /// Encoding method that expects parameters but we are not giving any.
         /// Result must be `nil`.
-        XCTAssertNil(contract.method("setData(bytes32,bytes)"))
-        XCTAssertNil(contract.method(getFuncSignature("setData(bytes32,bytes)")))
+        XCTAssertNil(contract.createWriteOperation("setData(bytes32,bytes)"))
+        XCTAssertNil(contract.createWriteOperation(getFuncSignature("setData(bytes32,bytes)")))
     }
 
     func test_encodeMethodBasedOnNameWithParameters() async throws {
@@ -73,7 +73,7 @@ class EthereumContractTest: LocalTestCase {
              Data.randomBytes(length: 32)!]
         ] as [AnyObject]
         let functionNameWithParameters = "setData(bytes32[],bytes[])"
-        let transaction = contract.method(functionNameWithParameters, parameters: parameters)
+        let transaction = contract.createWriteOperation(functionNameWithParameters, parameters: parameters)
         XCTAssertNotNil(transaction)
 
         func testDecoding(_ method: String) {
@@ -93,7 +93,7 @@ class EthereumContractTest: LocalTestCase {
                                         at: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")!)!
         let parameters: [AnyObject] = [Data.randomBytes(length: 32)!, Data.randomBytes(length: 32)!] as [AnyObject]
         let functionSignature = getFuncSignature("setData(bytes32,bytes)")
-        let transaction = contract.method(functionSignature, parameters: parameters)
+        let transaction = contract.createWriteOperation(functionSignature, parameters: parameters)
         XCTAssertNotNil(transaction)
 
         let decodedData = contract.contract.methods[functionSignature]?.first?.decodeInputData(transaction!.transaction.data)

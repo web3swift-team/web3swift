@@ -11,17 +11,21 @@ import Core
 
 /// Wrapper for `EthererumTransaction.data` property appropriate encoding.
 public class ReadOperation {
-    public var transaction = CodableTransaction.emptyTransaction
+    public var transaction: CodableTransaction
     public var contract: EthereumContract
     public var method: String
+    public private (set) var data: Data?
 
     var web3: web3
 
     // FIXME: Rewrite this to CodableTransaction
-    public init(web3 web3Instance: web3,
+    public init(transaction: CodableTransaction = CodableTransaction.emptyTransaction,
+                web3 web3Instance: web3,
                 contract: EthereumContract,
                 method: String = "fallback",
+                // FIXME: Delete options.
                 transactionOptions: CodableTransaction? = nil) {
+        self.transaction = transaction
         self.web3 = web3Instance
         self.contract = contract
         self.method = method
@@ -29,6 +33,17 @@ public class ReadOperation {
             self.transaction.chainID = network.chainID
         }
     }
+
+    // FIXME: Update all properties of transaction relating gon contract specifics.
+    public func prepareTransaction() {
+
+    }
+
+    public func execute() async throws -> Data {
+        let data: Data = try await self.web3.eth.callTransaction(transaction)
+        return data
+    }
+
 
     // FIXME: This is wrong naming, because this method doesn't decode,
     // it's merging Transactions Oprions sending request (Transaction with appropriate binary data) to contract, get's Data response
@@ -38,8 +53,8 @@ public class ReadOperation {
     // FIXME: Rewrite this to CodableTransaction
     public func decodedData() async throws -> [String: Any] {
         // MARK: Read data from ABI flow
+        // FIXME: This should be dropped, and after `execute()` call, just to decode raw data.
         let data: Data = try await self.web3.eth.callTransaction(transaction)
-
         if self.method == "fallback" {
             let resultHex = data.toHexString().addHexPrefix()
             return ["result": resultHex as Any]
@@ -48,11 +63,6 @@ public class ReadOperation {
             throw Web3Error.processingError(desc: "Can not decode returned parameters")
         }
         return decodedData
-    }
-
-    // FIXME: Rewrite this to CodableTransaction
-    public func estimateGas() async throws -> BigUInt {
-        return try await self.web3.eth.estimateGas(for: transaction)
     }
 
     // FIXME: Rewrite this to CodableTransaction

@@ -25,7 +25,7 @@ class LocalTestCase: XCTestCase {
         let value = Utilities.parseToBigUInt("1.0", units: .eth)!
 
         let from = allAddresses[0]
-        let writeTX = contract!.write("fallback")!
+        let writeTX = contract!.createWriteOperation("fallback")!
         writeTX.transaction.from = from
         writeTX.transaction.value = value
         writeTX.transaction.gasLimitPolicy = .manual(78423)

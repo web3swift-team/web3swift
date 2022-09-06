@@ -44,7 +44,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
-        let tx = contract.read("testSingle")
+        let tx = contract.createReadOperation("testSingle")
         let testSingle = try await tx!.decodedData()
         print(testSingle.description)
     }
@@ -81,7 +81,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
-        let tx = contract.read("testStaticArray")
+        let tx = contract.createReadOperation("testStaticArray")
         let testStaticArray = try await tx!.decodedData()
         print(testStaticArray.description)
     }
@@ -117,7 +117,7 @@ class AdvancedABIv2Tests: LocalTestCase {
 
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
 
-        let tx = contract.read("testDynArray")
+        let tx = contract.createReadOperation("testDynArray")
         let testDynArray = try await tx!.decodedData()
         print(testDynArray.description)
     }
@@ -154,7 +154,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
-        let tx = contract.read("testDynOfDyn")
+        let tx = contract.createReadOperation("testDynOfDyn")
         let testDynOfDyn = try await tx!.decodedData()
         print(testDynOfDyn.description)
     }
@@ -191,7 +191,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
-        let tx = contract.read("testStOfDyn")
+        let tx = contract.createReadOperation("testStOfDyn")
         let testStOfDyn = try await tx!.decodedData()
         print(testStOfDyn.description)
     }
@@ -204,7 +204,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         XCTAssert(contract != nil)
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
-        let tx = contract?.read("empty")
+        let tx = contract?.createReadOperation("empty")
         XCTAssertNotNil(tx)
         let _ = try await tx!.decodedData()
     }
@@ -217,7 +217,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         XCTAssert(contract != nil)
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
-        let tx = contract?.read("getFlagData")
+        let tx = contract?.createReadOperation("getFlagData")
         XCTAssertNotNil(tx)
         let _ = try await tx!.decodedData()
     }

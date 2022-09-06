@@ -54,7 +54,7 @@ class BasicLocalNodeTests: LocalTestCase {
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)!
 
         let parameters = [] as [AnyObject]
-        let sendTx = contract.method("fallback", parameters: parameters)!
+        let sendTx = contract.createWriteOperation("fallback", parameters: parameters)!
 
         let valueToSend = Utilities.parseToBigUInt("1.0", units: .eth)!
         sendTx.transaction.value = valueToSend

@@ -261,7 +261,6 @@ extension DefaultContractProtocol {
     ///   - params: EthereumParameters with no contract method call encoded data.
     public func method(_ method: String,
                        parameters: [AnyObject],
-                       // FIXME: Return type CodableTransaction
                        extraData: Data?) -> CodableTransaction? {
         guard let to = self.address else { return nil }
 
