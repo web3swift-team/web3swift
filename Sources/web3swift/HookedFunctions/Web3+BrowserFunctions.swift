@@ -121,26 +121,26 @@ extension web3.BrowserFunctions {
 //            return (nil, nil)
 //        }
 //    }
-
-    // FIXME: Rewrite this to CodableTransaction
-    public func prepareTxForApproval(_ trans: CodableTransaction, options opts: CodableTransaction) async throws -> (transaction: CodableTransaction?, options: CodableTransaction?) {
-        do {
-            var transaction = trans
-            var options = opts
-            guard let _ = options.from else {return (nil, nil)}
-            let gasPrice = try await self.web3.eth.gasPrice()
-            transaction.gasPrice = gasPrice
-            options.gasPricePolicy = .manual(gasPrice)
-            guard let gasEstimate = await self.estimateGas(transaction) else {return (nil, nil)}
-            transaction.gasLimit = gasEstimate
-
-            options.gasLimitPolicy = .limited(gasEstimate)
-            print(transaction)
-            return (transaction, options)
-        } catch {
-            return (nil, nil)
-        }
-    }
+//
+//    // FIXME: Rewrite this to CodableTransaction
+//    public func prepareTxForApproval(_ trans: CodableTransaction, options opts: CodableTransaction) async throws -> (transaction: CodableTransaction?, options: CodableTransaction?) {
+//        do {
+//            var transaction = trans
+//            var options = opts
+//            guard let _ = options.from else {return (nil, nil)}
+//            let gasPrice = try await self.web3.eth.gasPrice()
+//            transaction.gasPrice = gasPrice
+//            options.gasPricePolicy = .manual(gasPrice)
+//            guard let gasEstimate = await self.estimateGas(transaction) else {return (nil, nil)}
+//            transaction.gasLimit = gasEstimate
+//
+//            options.gasLimitPolicy = .limited(gasEstimate)
+//            print(transaction)
+//            return (transaction, options)
+//        } catch {
+//            return (nil, nil)
+//        }
+//    }
 
 //    // FIXME: Rewrite this to CodableTransaction
 //    public func signTransaction(_ transactionJSON: [String: Any], password: String ) async -> String? {

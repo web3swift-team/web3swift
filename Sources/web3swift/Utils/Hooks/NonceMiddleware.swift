@@ -66,7 +66,7 @@ extension Web3.Utils {
             //            var modifiedTX = tx
             //            modifiedTX.nonce = newNonce
             var newOptions = transactionOptions
-            newOptions.noncePolicy = .manual(newNonce)
+            newOptions.noncePolicy = .exact(newNonce)
             return (tx, contract, newOptions, true)
         }
 

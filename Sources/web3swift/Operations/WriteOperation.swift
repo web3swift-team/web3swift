@@ -36,7 +36,9 @@ public class WriteOperation: ReadOperation {
             return try await self.web3.eth.getTransactionCount(for: from, onBlock: .latest)
         case .pending:
             return try await self.web3.eth.getTransactionCount(for: from, onBlock: .pending)
-        case .manual(let nonce):
+        case .earliest:
+            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .earliest)
+        case .exact(let nonce):
             return nonce
         }
     }

@@ -16,6 +16,7 @@ public protocol CodableTransactionInheritable {
 ///  while all fields in this struct are optional, they are not necessarily
 ///  optional for the type of transaction they apply to.
 public struct CodableTransaction {
+    public typealias NoncePolicy = BlockNumber
     /// internal acccess only. The transaction envelope object itself that contains all the transaction data
     /// and type specific implementation
     internal var envelope: AbstractEnvelope
@@ -45,12 +46,6 @@ public struct CodableTransaction {
     /// this should always be set to give an idea of what other fields to expect
     public var type: TransactionType { return envelope.type }
 
-    /// the nonce for the transaction
-    public var nonce: BigUInt {
-        get { return envelope.nonce }
-        set { envelope.nonce = newValue }
-    }
-
     /// the chainId that transaction is targeted for
     /// should be set for all types, except some Legacy transactions (Pre EIP-155)
     /// will not have this set
@@ -71,21 +66,27 @@ public struct CodableTransaction {
 
     // MARK: - Properties transaction type related either sends to a node if exist
 
+    /// the nonce for the transaction
+    public internal (set) var nonce: BigUInt {
+        get { return envelope.nonce }
+        set { envelope.nonce = newValue }
+    }
+
     /// the max number of gas units allowed to process this transaction
-    public var gasLimit: BigUInt {
+    public internal (set) var gasLimit: BigUInt {
         get { return envelope.gasLimit }
         set { return envelope.gasLimit = newValue }
     }
 
     /// the price per gas unit for the tranaction (Legacy and EIP-2930 only)
-    public var gasPrice: BigUInt?
+    public internal (set) var gasPrice: BigUInt?
 
     /// the max base fee per gas unit (EIP-1559 only)
     /// this value must be >= baseFee + maxPriorityFeePerGas
-    public var maxFeePerGas: BigUInt?
+    public internal (set) var maxFeePerGas: BigUInt?
 
     /// the maximum tip to pay the miner (EIP-1559 only)
-    public var maxPriorityFeePerGas: BigUInt?
+    public internal (set) var maxPriorityFeePerGas: BigUInt?
 
     public var callOnBlock: BlockNumber?
 
@@ -109,9 +110,7 @@ public struct CodableTransaction {
         return hash
     }
 
-    // FIXME: This should made private up to release
     private init() { preconditionFailure("Memberwise not supported") } // disable the memberwise initializer
-
 
     /// - Returns: a hash of the transaction suitable for signing
     public func hashForSignature() -> Data? {
@@ -135,6 +134,8 @@ public struct CodableTransaction {
     }
 
     /// Signs the transaction
+    ///
+    /// This method signs transaction iteself and not related to contract call data signing.
     /// - Parameters:
     ///   - privateKey: the private key to use for signing
     ///   - useExtraEntropy: boolean whether to use extra entropy when signing (default false)
@@ -164,23 +165,17 @@ public struct CodableTransaction {
         self.envelope.clearSignatureData()
     }
 
-    /// Descriptionconverts transaction to the new selected type
-    /// - Parameter to: TransactionType to select what transaction type to convert to
-    public mutating func migrate(to type: TransactionType) {
-        if self.type == type { return }
-
-        // FIXME: Move it back
-//        let newEnvelope = EnvelopeFactory.createEnvelope(type: type, to: self.envelope.to,
-//                                                         nonce: self.envelope.nonce)
-//        self.envelope = newEnvelope
-    }
-
     /// Create a new CodableTransaction from a raw stream of bytes from the blockchain
     public init?(rawValue: Data) {
         guard let env = EnvelopeFactory.createEnvelope(rawValue: rawValue) else { return nil }
         self.envelope = env
         // FIXME: This is duplication and should be fixed.
         data = Data()
+        noncePolicy = .latest
+        gasLimitPolicy = .automatic
+        gasPricePolicy = .automatic
+        maxFeePerGasPolicy = .automatic
+        maxPriorityFeePerGasPolicy = .automatic
     }
 
     /// - Returns: a raw bytestream of the transaction, encoded according to the transactionType
@@ -188,25 +183,25 @@ public struct CodableTransaction {
         return self.envelope.encode(for: type)
     }
 
-    public mutating func applyOptions(_ options: CodableTransaction) {
-        // type cannot be changed here, and is ignored
-        // FIXME: Add appropiate values of resolveAny
-        self.nonce = options.resolveNonce(nonce)
-        self.gasPrice = options.resolveGasPrice(gasPrice ?? 0)
-        self.gasLimit = options.resolveGasLimit(gasLimit)
-        self.maxFeePerGas = options.resolveMaxFeePerGas(maxFeePerGas ?? 0)
-        self.maxPriorityFeePerGas = options.resolveMaxPriorityFeePerGas(maxPriorityFeePerGas ?? 0)
-        self.value = options.value ?? value
-        self.from = options.from
-        self.to = options.to ?? to
-        self.accessList = options.accessList
-    }
+//    public mutating func resolve() {
+//        // type cannot be changed here, and is ignored
+//        // FIXME: Add appropiate values of resolveAny
+//        self.nonce = options.resolveNonce(nonce)
+//        self.gasPrice = options.resolveGasPrice(gasPrice ?? 0)
+//        self.gasLimit = options.resolveGasLimit(gasLimit)
+//        self.maxFeePerGas = options.resolveMaxFeePerGas(maxFeePerGas ?? 0)
+//        self.maxPriorityFeePerGas = options.resolveMaxPriorityFeePerGas(maxPriorityFeePerGas ?? 0)
+//        self.value = options.value ?? value
+//        self.from = options.from
+//        self.to = options.to ?? to
+//        self.accessList = options.accessList
+//    }
 
-    public var noncePolicy: NoncePolicy?
-    public var maxFeePerGasPolicy: FeePerGasPolicy?
-    public var maxPriorityFeePerGasPolicy: FeePerGasPolicy?
-    public var gasPricePolicy: GasPricePolicy?
-    public var gasLimitPolicy: GasLimitPolicy?
+    public var noncePolicy: NoncePolicy
+    public var maxFeePerGasPolicy: FeePerGasPolicy
+    public var maxPriorityFeePerGasPolicy: FeePerGasPolicy
+    public var gasPricePolicy: GasPricePolicy
+    public var gasLimitPolicy: GasLimitPolicy
 
     public static var emptyTransaction = CodableTransaction(to: EthereumAddress.contractDeploymentAddress())
 }
@@ -234,6 +229,12 @@ extension CodableTransaction: Codable {
         self.envelope = env
         // FIXME: This is duplication and should be fixed.
         data = Data()
+
+        noncePolicy = .latest
+        gasLimitPolicy = .automatic
+        gasPricePolicy = .automatic
+        maxFeePerGasPolicy = .automatic
+        maxPriorityFeePerGasPolicy = .automatic
 
         // capture any metadata that might be present
         self.meta = try EthereumMetadata(from: decoder)
@@ -303,24 +304,16 @@ extension CodableTransaction {
         case manual(BigUInt)
     }
 
-    public enum NoncePolicy {
-        case pending
-        case latest
-        case manual(BigUInt)
-    }
-
     public func resolveNonce(_ suggestedByNode: BigUInt) -> BigUInt {
-        guard let noncePolicy = self.noncePolicy else { return suggestedByNode }
         switch noncePolicy {
-        case .pending, .latest:
+        case .pending, .latest, .earliest:
             return suggestedByNode
-        case .manual(let value):
+        case .exact(let value):
             return value
         }
     }
 
     public func resolveGasPrice(_ suggestedByNode: BigUInt) -> BigUInt {
-        guard let gasPricePolicy = self.gasPricePolicy else { return suggestedByNode }
         switch gasPricePolicy {
         case .automatic, .withMargin:
             return suggestedByNode
@@ -330,7 +323,6 @@ extension CodableTransaction {
     }
 
     public func resolveGasLimit(_ suggestedByNode: BigUInt) -> BigUInt {
-        guard let gasLimitPolicy = self.gasLimitPolicy else { return suggestedByNode }
         switch gasLimitPolicy {
         case .automatic, .withMargin:
             return suggestedByNode
@@ -346,7 +338,6 @@ extension CodableTransaction {
     }
 
     public func resolveMaxFeePerGas(_ suggestedByNode: BigUInt) -> BigUInt {
-        guard let maxFeePerGasPolicy = self.maxFeePerGasPolicy else { return suggestedByNode }
         switch maxFeePerGasPolicy {
         case .automatic:
             return suggestedByNode
@@ -356,7 +347,6 @@ extension CodableTransaction {
     }
 
     public func resolveMaxPriorityFeePerGas(_ suggestedByNode: BigUInt) -> BigUInt {
-        guard let maxPriorityFeePerGasPolicy = self.maxPriorityFeePerGasPolicy else { return suggestedByNode }
         switch maxPriorityFeePerGasPolicy {
         case .automatic:
             return suggestedByNode
@@ -364,34 +354,6 @@ extension CodableTransaction {
             return value
         }
     }
-
-        public func merge(_ otherOptions: CodableTransaction?) -> CodableTransaction {
-            guard let other = otherOptions else { return self }
-            var opts = CodableTransaction.emptyTransaction
-//            opts.type = mergeIfNotNil(first: self.type, second: other.type)
-            
-            opts.from = mergeIfNotNil(first: self.from, second: other.from)
-            opts.chainID = mergeIfNotNil(first: self.chainID, second: other.chainID)
-            opts.gasLimitPolicy = mergeIfNotNil(first: self.gasLimitPolicy, second: other.gasLimitPolicy)
-            opts.gasPricePolicy = mergeIfNotNil(first: self.gasPricePolicy, second: other.gasPricePolicy)
-            opts.maxFeePerGasPolicy = mergeIfNotNil(first: self.maxFeePerGasPolicy, second: other.maxFeePerGasPolicy)
-            opts.maxPriorityFeePerGasPolicy = mergeIfNotNil(first: self.maxPriorityFeePerGasPolicy, second: other.maxPriorityFeePerGasPolicy)
-//            opts.value = mergeIfNotNil(first: self.value, second: other.value)
-            opts.noncePolicy = mergeIfNotNil(first: self.noncePolicy, second: other.noncePolicy)
-            opts.callOnBlock = mergeIfNotNil(first: self.callOnBlock, second: other.callOnBlock)
-            return opts
-        }
-    
-        /// Merges two sets of options by overriding the parameters from the first set by parameters from the second
-        /// set if those are not nil.
-        ///
-        /// Returns default options if both parameters are nil.
-        public static func merge(_ options: CodableTransaction?, with other: CodableTransaction?) -> CodableTransaction? {
-            var newOptions = CodableTransaction.emptyTransaction // default has lowest priority
-            newOptions = newOptions.merge(options)
-            newOptions = newOptions.merge(other) // other has highest priority
-            return newOptions
-        }
 }
 
 
