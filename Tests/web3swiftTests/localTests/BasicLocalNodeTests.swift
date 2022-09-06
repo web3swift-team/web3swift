@@ -90,8 +90,8 @@ class BasicLocalNodeTests: LocalTestCase {
         print("Balance after to: " + balanceAfterTo.description)
         print("Balance after from: " + balanceAfterFrom.description)
 
-        XCTAssert(balanceAfterTo - balanceBeforeTo == valueToSend)
+        XCTAssertEqual(balanceAfterTo - balanceBeforeTo, valueToSend)
         let txnGasPrice = details.transaction.meta?.gasPrice ?? 0
-        XCTAssert(balanceBeforeFrom - (balanceAfterFrom + receipt.gasUsed * txnGasPrice) == valueToSend)
+        XCTAssertEqual(balanceBeforeFrom - (balanceAfterFrom + receipt.gasUsed * txnGasPrice), valueToSend)
     }
 }
