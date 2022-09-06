@@ -10,7 +10,7 @@ import Core
 // FIXME: Rewrite this to CodableTransaction
 
 /// Wrapper for `EthererumTransaction.data` property appropriate encoding.
-public class ReadTransaction {
+public class ReadOperation {
     public var transaction = CodableTransaction.emptyTransaction
     public var contract: EthereumContract
     public var method: String

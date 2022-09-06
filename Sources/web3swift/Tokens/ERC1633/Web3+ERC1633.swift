@@ -65,7 +65,7 @@ public class ERC1633: IERC1633, ERC20BaseProperties {
         return res
     }
 
-    public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -87,7 +87,7 @@ public class ERC1633: IERC1633, ERC20BaseProperties {
         return tx
     }
 
-    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -110,7 +110,7 @@ public class ERC1633: IERC1633, ERC20BaseProperties {
         return tx
     }
 
-    public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteTransaction {
+    public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -142,7 +142,7 @@ public class ERC1633: IERC1633, ERC20BaseProperties {
         return res
     }
 
-    public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from

@@ -12,7 +12,7 @@ import Core
 // MultiDimensional Token Standard
 protocol IERC888 {
     func getBalance(account: EthereumAddress) async throws -> BigUInt
-    func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction
+    func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation
 }
 
 // FIXME: Rewrite this to CodableTransaction
@@ -54,7 +54,7 @@ public class ERC888: IERC888, ERC20BaseProperties {
         return res
     }
 
-    public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from

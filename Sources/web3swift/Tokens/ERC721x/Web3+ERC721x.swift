@@ -20,15 +20,15 @@ protocol IERC721x: IERC721, IERC721Metadata, IERC721Enumerable {
 
     func tokensOwned(account: EthereumAddress) async throws -> ([BigUInt], [BigUInt])
 
-    func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) async throws -> WriteTransaction
-    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) async throws -> WriteTransaction
+    func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) async throws -> WriteOperation
+    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) async throws -> WriteOperation
 
     // Fungible Safe Transfer From
-    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt) async throws -> WriteTransaction
-    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt, data: [UInt8]) async throws -> WriteTransaction
+    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt) async throws -> WriteOperation
+    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt, data: [UInt8]) async throws -> WriteOperation
 
     // Batch Safe Transfer From
-    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenIds: [BigUInt], amounts: [BigUInt], data: [UInt8]) async throws -> WriteTransaction
+    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenIds: [BigUInt], amounts: [BigUInt], data: [UInt8]) async throws -> WriteOperation
 
     func name() async throws -> String
     func symbol() async throws -> String
@@ -114,7 +114,7 @@ public class ERC721x: IERC721x {
         return res
     }
 
-    public func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction {
+    public func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -124,7 +124,7 @@ public class ERC721x: IERC721x {
         return tx
     }
 
-    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction {
+    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -134,7 +134,7 @@ public class ERC721x: IERC721x {
         return tx
     }
 
-    public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction {
+    public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -144,7 +144,7 @@ public class ERC721x: IERC721x {
         return tx
     }
 
-    public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, data: [UInt8]) throws -> WriteTransaction {
+    public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, data: [UInt8]) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -154,7 +154,7 @@ public class ERC721x: IERC721x {
         return tx
     }
 
-    public func approve(from: EthereumAddress, approved: EthereumAddress, tokenId: BigUInt) throws -> WriteTransaction {
+    public func approve(from: EthereumAddress, approved: EthereumAddress, tokenId: BigUInt) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -164,7 +164,7 @@ public class ERC721x: IERC721x {
         return tx
     }
 
-    public func setApprovalForAll(from: EthereumAddress, operator user: EthereumAddress, approved: Bool) throws -> WriteTransaction {
+    public func setApprovalForAll(from: EthereumAddress, operator user: EthereumAddress, approved: Bool) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -274,7 +274,7 @@ public class ERC721x: IERC721x {
         return res
     }
 
-    func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) throws -> WriteTransaction {
+    func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -284,7 +284,7 @@ public class ERC721x: IERC721x {
         return tx
     }
 
-    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) throws -> WriteTransaction {
+    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -294,7 +294,7 @@ public class ERC721x: IERC721x {
         return tx
     }
 
-    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt) throws -> WriteTransaction {
+    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -304,7 +304,7 @@ public class ERC721x: IERC721x {
         return tx
     }
 
-    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt, data: [UInt8]) throws -> WriteTransaction {
+    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt, data: [UInt8]) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -314,7 +314,7 @@ public class ERC721x: IERC721x {
         return tx
     }
 
-    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenIds: [BigUInt], amounts: [BigUInt], data: [UInt8]) throws -> WriteTransaction {
+    func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenIds: [BigUInt], amounts: [BigUInt], data: [UInt8]) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from

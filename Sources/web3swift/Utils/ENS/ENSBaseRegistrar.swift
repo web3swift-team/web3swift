@@ -33,7 +33,7 @@ public extension ENS {
         }
 
         @available(*, message: "Available for only owner")
-        public func addController(from: EthereumAddress, controllerAddress: EthereumAddress) throws -> WriteTransaction {
+        public func addController(from: EthereumAddress, controllerAddress: EthereumAddress) throws -> WriteOperation {
             defaultOptions.from = from
             defaultOptions.to = self.address
             guard let transaction = self.contract.write("addController", parameters: [controllerAddress as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
@@ -41,7 +41,7 @@ public extension ENS {
         }
 
         @available(*, message: "Available for only owner")
-        public func removeController(from: EthereumAddress, controllerAddress: EthereumAddress) throws -> WriteTransaction {
+        public func removeController(from: EthereumAddress, controllerAddress: EthereumAddress) throws -> WriteOperation {
             defaultOptions.from = from
             defaultOptions.to = self.address
             guard let transaction = self.contract.write("removeController", parameters: [controllerAddress as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
@@ -49,7 +49,7 @@ public extension ENS {
         }
 
         @available(*, message: "Available for only owner")
-        public func setResolver(from: EthereumAddress, resolverAddress: EthereumAddress) throws -> WriteTransaction {
+        public func setResolver(from: EthereumAddress, resolverAddress: EthereumAddress) throws -> WriteOperation {
             defaultOptions.from = from
             defaultOptions.to = self.address
             guard let transaction = self.contract.write("setResolver", parameters: [resolverAddress as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
@@ -71,7 +71,7 @@ public extension ENS {
             return available
         }
 
-        public func reclaim(from: EthereumAddress, record: BigUInt) throws -> WriteTransaction {
+        public func reclaim(from: EthereumAddress, record: BigUInt) throws -> WriteOperation {
             defaultOptions.from = from
             defaultOptions.to = self.address
             guard let transaction = self.contract.write("reclaim", parameters: [record as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}

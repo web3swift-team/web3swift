@@ -15,16 +15,16 @@ protocol IERC777: IERC20, IERC820 {
     func getGranularity() async throws -> BigUInt
     func getBalance(account: EthereumAddress) async throws -> BigUInt
     func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt
-    func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction
-    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteTransaction
-    func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteTransaction
-    func authorize(from: EthereumAddress, operator user: EthereumAddress) async throws -> WriteTransaction
-    func revoke(from: EthereumAddress, operator user: EthereumAddress) async throws -> WriteTransaction
+    func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation
+    func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteOperation
+    func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteOperation
+    func authorize(from: EthereumAddress, operator user: EthereumAddress) async throws -> WriteOperation
+    func revoke(from: EthereumAddress, operator user: EthereumAddress) async throws -> WriteOperation
     func isOperatorFor(operator user: EthereumAddress, tokenHolder: EthereumAddress) async throws -> Bool
-    func send(from: EthereumAddress, to: EthereumAddress, amount: String, data: [UInt8]) async throws -> WriteTransaction
-    func operatorSend(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String, data: [UInt8], operatorData: [UInt8]) async throws -> WriteTransaction
-    func burn(from: EthereumAddress, amount: String, data: [UInt8]) async throws -> WriteTransaction
-    func operatorBurn(from: EthereumAddress, amount: String, originalOwner: EthereumAddress, data: [UInt8], operatorData: [UInt8]) async throws -> WriteTransaction
+    func send(from: EthereumAddress, to: EthereumAddress, amount: String, data: [UInt8]) async throws -> WriteOperation
+    func operatorSend(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String, data: [UInt8], operatorData: [UInt8]) async throws -> WriteOperation
+    func burn(from: EthereumAddress, amount: String, data: [UInt8]) async throws -> WriteOperation
+    func operatorBurn(from: EthereumAddress, amount: String, originalOwner: EthereumAddress, data: [UInt8], operatorData: [UInt8]) async throws -> WriteOperation
 }
 
 // This namespace contains functions to work with ERC777 tokens.
@@ -106,7 +106,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         return res
     }
 
-    public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -128,7 +128,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         return tx
     }
 
-    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -151,7 +151,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         return tx
     }
 
-    public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteTransaction {
+    public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -184,7 +184,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
     }
 
     // ERC777 methods
-    public func authorize(from: EthereumAddress, operator user: EthereumAddress) throws -> WriteTransaction {
+    public func authorize(from: EthereumAddress, operator user: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -195,7 +195,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         return tx
     }
 
-    public func revoke(from: EthereumAddress, operator user: EthereumAddress) throws -> WriteTransaction {
+    public func revoke(from: EthereumAddress, operator user: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -215,7 +215,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         return res
     }
 
-    public func send(from: EthereumAddress, to: EthereumAddress, amount: String, data: [UInt8]) async throws -> WriteTransaction {
+    public func send(from: EthereumAddress, to: EthereumAddress, amount: String, data: [UInt8]) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -237,7 +237,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         return tx
     }
 
-    public func operatorSend(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String, data: [UInt8], operatorData: [UInt8]) async throws -> WriteTransaction {
+    public func operatorSend(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String, data: [UInt8], operatorData: [UInt8]) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -259,7 +259,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         return tx
     }
 
-    public func burn(from: EthereumAddress, amount: String, data: [UInt8]) async throws -> WriteTransaction {
+    public func burn(from: EthereumAddress, amount: String, data: [UInt8]) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -281,7 +281,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         return tx
     }
 
-    public func operatorBurn(from: EthereumAddress, amount: String, originalOwner: EthereumAddress, data: [UInt8], operatorData: [UInt8]) async throws -> WriteTransaction {
+    public func operatorBurn(from: EthereumAddress, amount: String, originalOwner: EthereumAddress, data: [UInt8], operatorData: [UInt8]) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -321,7 +321,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         return res
     }
 
-    public func setInterfaceImplementer(from: EthereumAddress, addr: EthereumAddress, interfaceHash: Data, implementer: EthereumAddress) throws -> WriteTransaction {
+    public func setInterfaceImplementer(from: EthereumAddress, addr: EthereumAddress, interfaceHash: Data, implementer: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -331,7 +331,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         return tx
     }
 
-    public func setManager(from: EthereumAddress, addr: EthereumAddress, newManager: EthereumAddress) throws -> WriteTransaction {
+    public func setManager(from: EthereumAddress, addr: EthereumAddress, newManager: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -350,7 +350,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         return res
     }
 
-    public func updateERC165Cache(from: EthereumAddress, contract: EthereumAddress, interfaceId: [UInt8]) throws -> WriteTransaction {
+    public func updateERC165Cache(from: EthereumAddress, contract: EthereumAddress, interfaceId: [UInt8]) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -360,7 +360,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         return tx
     }
 
-    public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from

@@ -12,10 +12,10 @@ import Core
 /// The Ownable contract has an owner address, and provides basic authorization control functions, this simplifies the implementation of "user permissions".
 protocol IOwnable {
     /// Allows the current owner to relinquish control of the contract.
-    func renounceOwnership(from: EthereumAddress) async throws -> WriteTransaction
+    func renounceOwnership(from: EthereumAddress) async throws -> WriteOperation
 
     /// Allows the current owner to transfer control of the contract to a newOwner.
-    func transferOwnership(from: EthereumAddress, newOwner: EthereumAddress) async throws -> WriteTransaction
+    func transferOwnership(from: EthereumAddress, newOwner: EthereumAddress) async throws -> WriteOperation
 }
 
 /// Security token interface
@@ -55,7 +55,7 @@ protocol ISecurityToken: IST20, IOwnable {
     func balanceOfAt(investor: EthereumAddress, checkpointId: BigUInt) async throws -> BigUInt
 
     /// Creates a checkpoint that can be used to query historical balances / totalSuppy
-    func createCheckpoint(from: EthereumAddress) async throws -> WriteTransaction
+    func createCheckpoint(from: EthereumAddress) async throws -> WriteOperation
 
     /// gets length of investors array
     func getInvestorsLength() async throws -> BigUInt
@@ -110,7 +110,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         return res
     }
 
-    func verifyTransfer(from: EthereumAddress, originalOwner: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    func verifyTransfer(from: EthereumAddress, originalOwner: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -133,7 +133,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         return tx
     }
 
-    func mint(from: EthereumAddress, investor: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    func mint(from: EthereumAddress, investor: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -156,7 +156,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         return tx
     }
 
-    public func burn(from: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func burn(from: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -196,7 +196,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         return res
     }
 
-    public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -218,7 +218,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         return tx
     }
 
-    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -241,7 +241,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         return tx
     }
 
-    public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteTransaction {
+    public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -264,7 +264,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         return tx
     }
 
-    public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -296,7 +296,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         return res
     }
 
-    public func renounceOwnership(from: EthereumAddress) throws -> WriteTransaction {
+    public func renounceOwnership(from: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -307,7 +307,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         return tx
     }
 
-    public func transferOwnership(from: EthereumAddress, newOwner: EthereumAddress) throws -> WriteTransaction {
+    public func transferOwnership(from: EthereumAddress, newOwner: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -401,7 +401,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         return res
     }
 
-    public func createCheckpoint(from: EthereumAddress) throws -> WriteTransaction {
+    public func createCheckpoint(from: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from

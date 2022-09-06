@@ -30,21 +30,21 @@ public extension ENS {
             self.address = address
         }
 
-        public func claimAddress(from: EthereumAddress, owner: EthereumAddress) throws -> WriteTransaction {
+        public func claimAddress(from: EthereumAddress, owner: EthereumAddress) throws -> WriteOperation {
             defaultOptions.from = from
             defaultOptions.to = self.address
             guard let transaction = self.contract.write("claim", parameters: [owner as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
-        public func claimAddressWithResolver(from: EthereumAddress, owner: EthereumAddress, resolver: EthereumAddress) throws -> WriteTransaction {
+        public func claimAddressWithResolver(from: EthereumAddress, owner: EthereumAddress, resolver: EthereumAddress) throws -> WriteOperation {
             defaultOptions.from = from
             defaultOptions.to = self.address
             guard let transaction = self.contract.write("claimWithResolver", parameters: [owner, resolver] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
-        public func setName(from: EthereumAddress, name: String) throws -> WriteTransaction {
+        public func setName(from: EthereumAddress, name: String) throws -> WriteOperation {
             defaultOptions.from = from
             defaultOptions.to = self.address
             guard let transaction = self.contract.write("setName", parameters: [name] as [AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}

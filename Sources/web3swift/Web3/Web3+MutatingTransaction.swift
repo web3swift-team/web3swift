@@ -8,7 +8,7 @@ import BigInt
 import Core
 
 /// Wrapper for `EthererumTransaction.data` property appropriate encoding.
-public class WriteTransaction: ReadTransaction {
+public class WriteOperation: ReadOperation {
 
     // FIXME: Rewrite this to CodableTransaction
     public func send(password: String) async throws -> TransactionSendingResult {

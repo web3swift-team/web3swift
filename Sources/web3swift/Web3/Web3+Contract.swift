@@ -58,7 +58,7 @@ extension web3 {
                            constructor: ABI.Element.Constructor? = nil,
                            parameters: [AnyObject]? = nil,
                            extraData: Data? = nil,
-                           transactionOptions: CodableTransaction? = nil) -> WriteTransaction? {
+                           transactionOptions: CodableTransaction? = nil) -> WriteOperation? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             // MARK: Writing Data flow
             guard var tx = self.contract.deploy(bytecode: bytecode,
@@ -70,7 +70,7 @@ extension web3 {
             if let network = self.web3.provider.network {
                 tx.chainID = network.chainID
             }
-            return WriteTransaction(web3: self.web3,
+            return WriteOperation(web3: self.web3,
                                     contract: self.contract,
                                     transactionOptions: mergedOptions)
         }
@@ -82,13 +82,13 @@ extension web3 {
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func method(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> WriteTransaction? {
+        public func method(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> WriteOperation? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             if let network = self.web3.provider.network {
                 tx.chainID = network.chainID
             }
-            let writeTX = WriteTransaction.init(web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
+            let writeTX = WriteOperation.init(web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
             return writeTX
         }
 
@@ -100,7 +100,7 @@ extension web3 {
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func read(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> ReadTransaction? {
+        public func read(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> ReadOperation? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             // MARK: - Encoding ABI Data flow
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
@@ -108,7 +108,7 @@ extension web3 {
                 tx.chainID = network.chainID
             }
             // MARK: Read data from ABI flow
-            let writeTX = ReadTransaction.init(web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
+            let writeTX = ReadOperation.init(web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
             return writeTX
         }
 
@@ -119,13 +119,13 @@ extension web3 {
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func write(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> WriteTransaction? {
+        public func write(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data(), transactionOptions: CodableTransaction? = nil) -> WriteOperation? {
             let mergedOptions = self.transactionOptions?.merge(transactionOptions)
             guard var tx = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             if let network = self.web3.provider.network {
                 tx.chainID = network.chainID
             }
-            let writeTX = WriteTransaction.init(web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
+            let writeTX = WriteOperation.init(web3: self.web3, contract: self.contract, method: method, transactionOptions: mergedOptions)
             return writeTX
         }
 

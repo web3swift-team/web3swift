@@ -58,14 +58,14 @@ public extension ENS {
             return hash
         }
 
-        public func sumbitCommitment(from: EthereumAddress, commitment: Data) throws -> WriteTransaction {
+        public func sumbitCommitment(from: EthereumAddress, commitment: Data) throws -> WriteOperation {
             defaultOptions.from = from
             defaultOptions.to = self.address
             guard let transaction = self.contract.write("commit", parameters: [commitment as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
-        public func registerName(from: EthereumAddress, name: String, owner: EthereumAddress, duration: UInt, secret: String, price: String) throws -> WriteTransaction {
+        public func registerName(from: EthereumAddress, name: String, owner: EthereumAddress, duration: UInt, secret: String, price: String) throws -> WriteOperation {
             guard let amount = Utilities.parseToBigUInt(price, units: .eth) else {throw Web3Error.inputError(desc: "Wrong price: no way for parsing to ether units")}
             defaultOptions.value = amount
             defaultOptions.from = from
@@ -74,7 +74,7 @@ public extension ENS {
             return transaction
         }
 
-        public func extendNameRegistration(from: EthereumAddress, name: String, duration: UInt32, price: String) throws -> WriteTransaction {
+        public func extendNameRegistration(from: EthereumAddress, name: String, duration: UInt32, price: String) throws -> WriteOperation {
             guard let amount = Utilities.parseToBigUInt(price, units: .eth) else {throw Web3Error.inputError(desc: "Wrong price: no way for parsing to ether units")}
             defaultOptions.value = amount
             defaultOptions.from = from
@@ -84,7 +84,7 @@ public extension ENS {
         }
 
         @available(*, message: "Available for only owner")
-        public func withdraw(from: EthereumAddress) throws -> WriteTransaction {
+        public func withdraw(from: EthereumAddress) throws -> WriteOperation {
             defaultOptions.from = from
             defaultOptions.to = self.address
             guard let transaction = self.contract.write("withdraw", parameters: [AnyObject](), extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}

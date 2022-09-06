@@ -35,17 +35,17 @@ extension DirectDebitInfo: Hashable {
 
 // Service-Friendly Token Standard
 protocol IERC1376: IERC20 {
-    func approve(from: EthereumAddress, spender: EthereumAddress, expectedValue: String, newValue: String) async throws -> WriteTransaction
-    func increaseAllowance(from: EthereumAddress, spender: EthereumAddress, value: String) async throws -> WriteTransaction
-    func decreaseAllowance(from: EthereumAddress, spender: EthereumAddress, value: String, strict: Bool) async throws -> WriteTransaction
-    func setERC20ApproveChecking(from: EthereumAddress, approveChecking: Bool) async throws -> WriteTransaction
+    func approve(from: EthereumAddress, spender: EthereumAddress, expectedValue: String, newValue: String) async throws -> WriteOperation
+    func increaseAllowance(from: EthereumAddress, spender: EthereumAddress, value: String) async throws -> WriteOperation
+    func decreaseAllowance(from: EthereumAddress, spender: EthereumAddress, value: String, strict: Bool) async throws -> WriteOperation
+    func setERC20ApproveChecking(from: EthereumAddress, approveChecking: Bool) async throws -> WriteOperation
 
     func spendableAllowance(owner: EthereumAddress, spender: EthereumAddress) async throws -> BigUInt
-    func transfer(from: EthereumAddress, data: String) async throws -> WriteTransaction
-    func transferAndCall(from: EthereumAddress, to: EthereumAddress, value: String, data: [UInt8]) async throws -> WriteTransaction
+    func transfer(from: EthereumAddress, data: String) async throws -> WriteOperation
+    func transferAndCall(from: EthereumAddress, to: EthereumAddress, value: String, data: [UInt8]) async throws -> WriteOperation
 
     func nonceOf(owner: EthereumAddress) async throws -> BigUInt
-    func increaseNonce(from: EthereumAddress) async throws -> WriteTransaction
+    func increaseNonce(from: EthereumAddress) async throws -> WriteOperation
     func delegateTransferAndCall(from: EthereumAddress,
                                  nonce: BigUInt,
                                  fee: BigUInt,
@@ -56,13 +56,13 @@ protocol IERC1376: IERC20 {
                                  mode: IERC1376DelegateMode,
                                  v: UInt8,
                                  r: Data,
-                                 s: Data) async throws -> WriteTransaction
+                                 s: Data) async throws -> WriteOperation
 
     func directDebit(debtor: EthereumAddress, receiver: EthereumAddress) async throws -> DirectDebit
-    func setupDirectDebit(from: EthereumAddress, receiver: EthereumAddress, info: DirectDebitInfo) async throws -> WriteTransaction
-    func terminateDirectDebit(from: EthereumAddress, receiver: EthereumAddress) async throws -> WriteTransaction
-    func withdrawDirectDebit(from: EthereumAddress, debtor: EthereumAddress) async throws -> WriteTransaction
-    func withdrawDirectDebit(from: EthereumAddress, debtors: [EthereumAddress], strict: Bool) async throws -> WriteTransaction
+    func setupDirectDebit(from: EthereumAddress, receiver: EthereumAddress, info: DirectDebitInfo) async throws -> WriteOperation
+    func terminateDirectDebit(from: EthereumAddress, receiver: EthereumAddress) async throws -> WriteOperation
+    func withdrawDirectDebit(from: EthereumAddress, debtor: EthereumAddress) async throws -> WriteOperation
+    func withdrawDirectDebit(from: EthereumAddress, debtors: [EthereumAddress], strict: Bool) async throws -> WriteOperation
 }
 
 // FIXME: Rewrite this to CodableTransaction
@@ -113,7 +113,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return res
     }
 
-    public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -135,7 +135,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return tx
     }
 
-    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -158,7 +158,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return tx
     }
 
-    public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteTransaction {
+    public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -181,7 +181,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return tx
     }
 
-    public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteTransaction {
+    public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -213,7 +213,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return res
     }
 
-    func approve(from: EthereumAddress, spender: EthereumAddress, expectedValue: String, newValue: String) async throws -> WriteTransaction {
+    func approve(from: EthereumAddress, spender: EthereumAddress, expectedValue: String, newValue: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -239,7 +239,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return tx
     }
 
-    func increaseAllowance(from: EthereumAddress, spender: EthereumAddress, value: String) async throws -> WriteTransaction {
+    func increaseAllowance(from: EthereumAddress, spender: EthereumAddress, value: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -262,7 +262,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return tx
     }
 
-    func decreaseAllowance(from: EthereumAddress, spender: EthereumAddress, value: String, strict: Bool) async throws -> WriteTransaction {
+    func decreaseAllowance(from: EthereumAddress, spender: EthereumAddress, value: String, strict: Bool) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -285,7 +285,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return tx
     }
 
-    func setERC20ApproveChecking(from: EthereumAddress, approveChecking: Bool) throws -> WriteTransaction {
+    func setERC20ApproveChecking(from: EthereumAddress, approveChecking: Bool) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -304,7 +304,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return res
     }
 
-    func transfer(from: EthereumAddress, data: String) async throws -> WriteTransaction {
+    func transfer(from: EthereumAddress, data: String) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -326,7 +326,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return tx
     }
 
-    func transferAndCall(from: EthereumAddress, to: EthereumAddress, value: String, data: [UInt8]) async throws -> WriteTransaction {
+    func transferAndCall(from: EthereumAddress, to: EthereumAddress, value: String, data: [UInt8]) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -357,7 +357,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return res
     }
 
-    func increaseNonce(from: EthereumAddress) throws -> WriteTransaction {
+    func increaseNonce(from: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -368,7 +368,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return tx
     }
 
-    func delegateTransferAndCall(from: EthereumAddress, nonce: BigUInt, fee: BigUInt, gasAmount: BigUInt, to: EthereumAddress, value: String, data: [UInt8], mode: IERC1376DelegateMode, v: UInt8, r: Data, s: Data) async throws -> WriteTransaction {
+    func delegateTransferAndCall(from: EthereumAddress, nonce: BigUInt, fee: BigUInt, gasAmount: BigUInt, to: EthereumAddress, value: String, data: [UInt8], mode: IERC1376DelegateMode, v: UInt8, r: Data, s: Data) async throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -402,7 +402,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return res
     }
 
-    func setupDirectDebit(from: EthereumAddress, receiver: EthereumAddress, info: DirectDebitInfo) throws -> WriteTransaction {
+    func setupDirectDebit(from: EthereumAddress, receiver: EthereumAddress, info: DirectDebitInfo) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -412,7 +412,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return tx
     }
 
-    func terminateDirectDebit(from: EthereumAddress, receiver: EthereumAddress) throws -> WriteTransaction {
+    func terminateDirectDebit(from: EthereumAddress, receiver: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -422,7 +422,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return tx
     }
 
-    func withdrawDirectDebit(from: EthereumAddress, debtor: EthereumAddress) throws -> WriteTransaction {
+    func withdrawDirectDebit(from: EthereumAddress, debtor: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
@@ -432,7 +432,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         return tx
     }
 
-    func withdrawDirectDebit(from: EthereumAddress, debtors: [EthereumAddress], strict: Bool) throws -> WriteTransaction {
+    func withdrawDirectDebit(from: EthereumAddress, debtors: [EthereumAddress], strict: Bool) throws -> WriteOperation {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.from = from
