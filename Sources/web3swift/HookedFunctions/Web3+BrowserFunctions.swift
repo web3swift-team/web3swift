@@ -81,7 +81,7 @@ extension web3.BrowserFunctions {
 //          transactionOptions.value = options.value ?? 0
 //          transactionOptions.gasLimitPolicy = options.gasLimitPolicy ?? .automatic
 //          transactionOptions.gasPricePolicy = options.gasPricePolicy ?? .automatic
-//            return await self.sendTransaction(transaction, transactionOptions: transactionOptions, password: password)
+//            return await self.sendTransaction(transaction , password: password)
 //        } catch { return nil }
 //    }
 
@@ -96,7 +96,7 @@ extension web3.BrowserFunctions {
 //            transactionOptions.value = options.value ?? 0
 //            transactionOptions.gasLimitPolicy = .automatic
 //            transactionOptions.gasPricePolicy = options.gasPricePolicy ?? .automatic
-//            return await self.estimateGas(transaction, transactionOptions: transactionOptions)
+//            return await self.estimateGas(transaction )
 //        } catch { return nil }
 //    }
 
@@ -159,7 +159,7 @@ extension web3.BrowserFunctions {
 //            } else {
 //                transactionOptions.nonce = .pending
 //            }
-//            return await self.signTransaction(transaction, transactionOptions: transactionOptions, password: password)
+//            return await self.signTransaction(transaction , password: password)
 //        } catch { return nil }
 //    }
 
@@ -184,7 +184,7 @@ extension web3.BrowserFunctions {
 //            case .manual(let gasLimit):
 //                transaction.parameters.gasLimit = gasLimit
 //            default:
-//                let gasLimit = try await self.web3.eth.estimateGas(for: transaction, transactionOptions: transactionOptions)
+//                let gasLimit = try await self.web3.eth.estimateGas(for: transaction )
 //                transaction.parameters.gasLimit = gasLimit
 //            }
 //

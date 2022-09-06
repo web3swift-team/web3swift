@@ -73,7 +73,7 @@ public class ERC1155: IERC1155 {
         var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
 
-        guard let tokenIdPromise = try await contract.createReadOperation("id", parameters: [] as [AnyObject], extraData: Data(), transactionOptions: transactionOptions)?.decodedData() else {return}
+        guard let tokenIdPromise = try await contract.createReadOperation("id", parameters: [] as [AnyObject], extraData: Data())?.decodedData() else {return}
 
         guard let tokenId = tokenIdPromise["0"] as? BigUInt else {return}
         self._tokenId = tokenId
@@ -87,7 +87,7 @@ public class ERC1155: IERC1155 {
         basicOptions.from = from
         basicOptions.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, id, value, data] as [AnyObject], transactionOptions: basicOptions)!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, id, value, data] as [AnyObject] )!
         return tx
     }
 
@@ -98,7 +98,7 @@ public class ERC1155: IERC1155 {
         basicOptions.to = self.address
 
         let tx = contract
-            .createWriteOperation("safeBatchTransferFrom", parameters: [originalOwner, to, ids, values, data] as [AnyObject], transactionOptions: basicOptions)!
+            .createWriteOperation("safeBatchTransferFrom", parameters: [originalOwner, to, ids, values, data] as [AnyObject] )!
         return tx
     }
 
@@ -107,12 +107,12 @@ public class ERC1155: IERC1155 {
         var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
         let result = try await contract
-            .createReadOperation("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!
+            .createReadOperation("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data() )!
             .decodedData()
 
         /*
          let result = try await contract
-             .prepareToRead("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!
+             .prepareToRead("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data() )!
              .execute()
              .decodeData()
 
@@ -127,7 +127,7 @@ public class ERC1155: IERC1155 {
         basicOptions.from = from
         basicOptions.to = self.address
 
-        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved, scope] as [AnyObject], transactionOptions: basicOptions)!
+        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved, scope] as [AnyObject] )!
         return tx
     }
 
@@ -135,7 +135,7 @@ public class ERC1155: IERC1155 {
         let contract = self.contract
         var basicOptions = CodableTransaction.emptyTransaction
         basicOptions.callOnBlock = .latest
-        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user, scope] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData()
+        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user, scope] as [AnyObject], extraData: Data() )!.decodedData()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -145,7 +145,7 @@ public class ERC1155: IERC1155 {
         var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
         transactionOptions.gasLimitPolicy = .manual(30000)
-        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData()
+        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data() )!.decodedData()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }

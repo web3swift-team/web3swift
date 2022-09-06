@@ -53,7 +53,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
         let contract = self.contract
         var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
-        let result = try await contract.createReadOperation("balanceOf", parameters: [account] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData()
+        let result = try await contract.createReadOperation("balanceOf", parameters: [account] as [AnyObject], extraData: Data() )!.decodedData()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -62,7 +62,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
         let contract = self.contract
         var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
-        let result = try await contract.createReadOperation("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData()
+        let result = try await contract.createReadOperation("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data() )!.decodedData()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -75,7 +75,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals", transactionOptions: basicOptions)!.decodedData()
+        let callResult = try await contract.createReadOperation("decimals" )!.decodedData()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -85,7 +85,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("transfer", parameters: [to, value] as [AnyObject], transactionOptions: basicOptions)!
+        let tx = contract.createWriteOperation("transfer", parameters: [to, value] as [AnyObject] )!
         return tx
     }
 
@@ -97,7 +97,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals", transactionOptions: basicOptions)!.decodedData()
+        let callResult = try await contract.createReadOperation("decimals" )!.decodedData()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -108,7 +108,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value] as [AnyObject], transactionOptions: basicOptions)!
+        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value] as [AnyObject] )!
         return tx
     }
 
@@ -120,7 +120,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals", transactionOptions: basicOptions)!.decodedData()
+        let callResult = try await contract.createReadOperation("decimals" )!.decodedData()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -131,7 +131,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value] as [AnyObject], transactionOptions: basicOptions)!
+        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value] as [AnyObject] )!
         return tx
     }
 
@@ -139,7 +139,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
         let contract = self.contract
         var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
-        let result = try await contract.createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData()
+        let result = try await contract.createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data() )!.decodedData()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -152,7 +152,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals", transactionOptions: basicOptions)!.decodedData()
+        let callResult = try await contract.createReadOperation("decimals" )!.decodedData()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -163,7 +163,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("approve", parameters: [spender, value] as [AnyObject], transactionOptions: basicOptions)!
+        let tx = contract.createWriteOperation("approve", parameters: [spender, value] as [AnyObject] )!
         return tx
     }
 
@@ -172,7 +172,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
         let contract = self.contract
         var transactionOptions = CodableTransaction.emptyTransaction
         transactionOptions.callOnBlock = .latest
-        let result = try await contract.createReadOperation("isControllable", parameters: [AnyObject](), extraData: Data(), transactionOptions: self.transactionOptions)!.decodedData()
+        let result = try await contract.createReadOperation("isControllable", parameters: [AnyObject](), extraData: Data() )!.decodedData()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -185,7 +185,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals", transactionOptions: basicOptions)!.decodedData()
+        let callResult = try await contract.createReadOperation("decimals" )!.decodedData()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -196,7 +196,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("controllerTransfer", parameters: [originalOwner, to, value, data, operatorData] as [AnyObject], transactionOptions: basicOptions)!
+        let tx = contract.createWriteOperation("controllerTransfer", parameters: [originalOwner, to, value, data, operatorData] as [AnyObject] )!
         return tx
     }
 
@@ -208,7 +208,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
         basicOptions.callOnBlock = .latest
 
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals", transactionOptions: basicOptions)!.decodedData()
+        let callResult = try await contract.createReadOperation("decimals" )!.decodedData()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -219,7 +219,7 @@ public class ERC1644: IERC1644, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("controllerRedeem", parameters: [tokenHolder, value, data, operatorData] as [AnyObject], transactionOptions: basicOptions)!
+        let tx = contract.createWriteOperation("controllerRedeem", parameters: [tokenHolder, value, data, operatorData] as [AnyObject] )!
         return tx
     }
 }

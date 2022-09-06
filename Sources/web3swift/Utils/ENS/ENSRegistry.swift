@@ -48,7 +48,7 @@ public extension ENS {
 
         public func getOwner(node: String) async throws -> EthereumAddress {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.registryContract.createReadOperation("owner", parameters: [nameHash as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.registryContract.createReadOperation("owner", parameters: [nameHash as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.decodedData() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let address = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "No address in result")}
             return address
@@ -56,7 +56,7 @@ public extension ENS {
 
         public func getResolver(forDomain domain: String) async throws -> Resolver {
             guard let nameHash = NameHash.nameHash(domain) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.registryContract.createReadOperation("resolver", parameters: [nameHash as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.registryContract.createReadOperation("resolver", parameters: [nameHash as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.decodedData() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let resolverAddress = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "No address in result")}
             return Resolver(web3: self.web3, resolverContractAddress: resolverAddress)
@@ -64,7 +64,7 @@ public extension ENS {
 
         public func getTTL(node: String) async throws -> BigUInt {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.registryContract.createReadOperation("ttl", parameters: [nameHash as AnyObject], extraData: Data(), transactionOptions: defaultOptions) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.registryContract.createReadOperation("ttl", parameters: [nameHash as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.decodedData() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let ans = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "No answer in result")}
             return ans

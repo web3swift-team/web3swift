@@ -135,7 +135,7 @@ public protocol ContractProtocol {
     ///   - parameters: method input arguments;
     ///   - extraData: additional data to append at the end of `transaction.data` field;
     /// - Returns: transaction object if `method` was found and `parameters` were successfully encoded.
-    func method(_ method: String, parameters: [AnyObject], extraData: Data?) -> CodableTransaction?
+    func method(_ method: String, parameters: [AnyObject], extraData: Data?) -> Data?
 
     /// Decode output data of a function.
     /// - Parameters:
@@ -261,17 +261,10 @@ extension DefaultContractProtocol {
     ///   - params: EthereumParameters with no contract method call encoded data.
     public func method(_ method: String,
                        parameters: [AnyObject],
-                       extraData: Data?) -> CodableTransaction? {
-        guard let to = self.address else { return nil }
-
-        // FIXME: This should be changed up to release
-        var transaction = CodableTransaction(to: to)
-
+                       extraData: Data?) -> Data? {
         // MARK: - Encoding ABI Data flow
         if method == "fallback" {
-            // FIXME: Return parameters
-            return CodableTransaction(to: to, value: BigUInt(0), data: extraData ?? Data()//, parameters: params
-            )
+            return extraData ?? Data()
         }
 
         let method = Data.fromHex(method) == nil ? method : method.addHexPrefix().lowercased()
@@ -285,10 +278,8 @@ extension DefaultContractProtocol {
             encodedData.append(extraData)
         }
 
-        transaction.data = encodedData
-
         // MARK: - Encoding ABI Data flow
-        return transaction
+        return encodedData
     }
 
     public func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?) {
