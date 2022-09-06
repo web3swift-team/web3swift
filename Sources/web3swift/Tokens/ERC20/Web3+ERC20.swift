@@ -54,7 +54,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
         transactionOptions.callOnBlock = .latest
         let result = try await contract
             .createReadOperation("balanceOf", parameters: [account] as [AnyObject], extraData: Data() )!
-            .call()
+            .callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -65,7 +65,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
         transactionOptions.callOnBlock = .latest
         let result = try await contract
             .createReadOperation("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data() )!
-            .call()
+            .callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -80,7 +80,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
         // get the decimals manually
         let callResult = try await contract
             .createReadOperation("decimals" )!
-            .call()
+            .callContractMethod()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
                 throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -104,7 +104,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
         // get the decimals manually
         let callResult = try await contract
             .createReadOperation("decimals" )!
-            .call()
+            .callContractMethod()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -129,7 +129,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
         // get the decimals manually
         let callResult = try await contract
             .createReadOperation("decimals" )!
-            .call()
+            .callContractMethod()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -154,7 +154,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
         // get the decimals manually
         let callResult = try await contract
             .createReadOperation("decimals" )!
-            .call()
+            .callContractMethod()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -175,7 +175,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
         transactionOptions.callOnBlock = .latest
         let result = try await contract
             .createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data() )!
-            .call()
+            .callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -220,15 +220,15 @@ extension ERC20BaseProperties {
         let transactionOptions = transactionOptionsVAR
         async let namePromise = contract
             .createReadOperation("name", parameters: [AnyObject](), extraData: Data() )?
-            .decodedData()
+            .callContractMethod()
 
         async let symbolPromise = try await contract
             .createReadOperation("symbol", parameters: [AnyObject](), extraData: Data() )?
-            .decodedData()
+            .callContractMethod()
 
         async let decimalPromise = try await contract
             .createReadOperation("decimals", parameters: [AnyObject](), extraData: Data() )?
-            .decodedData()
+            .callContractMethod()
 
         let resolvedPromises = try await ["name":namePromise, "symbol":symbolPromise, "decimals":decimalPromise]
 

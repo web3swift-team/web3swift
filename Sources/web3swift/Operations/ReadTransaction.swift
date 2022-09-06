@@ -32,24 +32,8 @@ public class ReadOperation {
         }
     }
 
-    // FIXME: Update all properties of transaction relating gon contract specifics.
-    public func prepareTransaction() {
-
-    }
-
-    public func execute() async throws -> Data {
-        let data: Data = try await self.web3.eth.callTransaction(transaction)
-        return data
-    }
-
-
-    // FIXME: This is wrong naming, because this method doesn't decode,
-    // it's merging Transactions Oprions sending request (Transaction with appropriate binary data) to contract, get's Data response
-    // and only then it decodes it.
-    // It should be splitted in this way up to three (merge, send, decode)
     // TODO: Remove type erasing here, some broad wide protocol should be added instead
-    // FIXME: Rewrite this to CodableTransaction
-    public func decodedData() async throws -> [String: Any] {
+    public func callContractMethod() async throws -> [String: Any] {
         // MARK: Read data from ABI flow
         // FIXME: This should be dropped, and after `execute()` call, just to decode raw data.
         let data: Data = try await self.web3.eth.callTransaction(transaction)
@@ -61,11 +45,5 @@ public class ReadOperation {
             throw Web3Error.processingError(desc: "Can not decode returned parameters")
         }
         return decodedData
-    }
-
-    // FIXME: Rewrite this to CodableTransaction
-    // FIXME: Useless wrapper, delete me
-    public func call() async throws -> [String: Any] {
-        return try await self.decodedData()
     }
 }

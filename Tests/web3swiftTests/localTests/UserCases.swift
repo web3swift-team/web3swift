@@ -24,7 +24,7 @@ class UserCases: XCTestCase {
         let contract = web3.contract(abiString, at: receipt.contractAddress!)!
         let readTransaction = contract.createReadOperation("balanceOf", parameters:[account] as [AnyObject])!
         readTransaction.transaction.from = account
-        let response = try await readTransaction.decodedData()
+        let response = try await readTransaction.callContractMethod()
         let balance = response["0"] as? BigUInt
         print(balance!.description)
     }
@@ -80,7 +80,7 @@ class UserCases: XCTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
-        let result = try await deployTx.send(password: "web3swift")
+        let result = try await deployTx.writeToChain(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
 

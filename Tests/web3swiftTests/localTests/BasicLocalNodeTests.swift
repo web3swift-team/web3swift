@@ -27,7 +27,7 @@ class BasicLocalNodeTests: LocalTestCase {
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
 
-        let result = try await deployTx.send(password: "web3swift")
+        let result = try await deployTx.writeToChain(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
 
@@ -65,7 +65,7 @@ class BasicLocalNodeTests: LocalTestCase {
         print("Balance before to: " + balanceBeforeTo.description)
         print("Balance before from: " + balanceBeforeFrom.description)
 
-        let result = try await sendTx.send(password: "web3swift")
+        let result = try await sendTx.writeToChain(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
 

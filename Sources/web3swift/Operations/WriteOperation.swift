@@ -11,7 +11,7 @@ import Core
 public class WriteOperation: ReadOperation {
 
     // FIXME: Rewrite this to CodableTransaction
-    public func send(password: String) async throws -> TransactionSendingResult {
+    public func writeToChain(password: String) async throws -> TransactionSendingResult {
         if let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager {
             do {
                 try Web3Signer.signTX(transaction: &transaction,

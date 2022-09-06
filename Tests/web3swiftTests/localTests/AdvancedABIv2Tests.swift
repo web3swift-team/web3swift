@@ -25,7 +25,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
         // MARK: Sending Data flow
-        let result = try await deployTx.send(password: "web3swift")
+        let result = try await deployTx.writeToChain(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
 
@@ -45,7 +45,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testSingle")
-        let testSingle = try await tx!.decodedData()
+        let testSingle = try await tx!.callContractMethod()
         print(testSingle.description)
     }
 
@@ -62,7 +62,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
-        let result = try await deployTx.send(password: "web3swift")
+        let result = try await deployTx.writeToChain(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
 
@@ -82,7 +82,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testStaticArray")
-        let testStaticArray = try await tx!.decodedData()
+        let testStaticArray = try await tx!.callContractMethod()
         print(testStaticArray.description)
     }
 
@@ -99,7 +99,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
-        let result = try await deployTx.send(password: "web3swift")
+        let result = try await deployTx.writeToChain(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
 
@@ -118,7 +118,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
 
         let tx = contract.createReadOperation("testDynArray")
-        let testDynArray = try await tx!.decodedData()
+        let testDynArray = try await tx!.callContractMethod()
         print(testDynArray.description)
     }
 
@@ -135,7 +135,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
-        let result = try await deployTx.send(password: "web3swift")
+        let result = try await deployTx.writeToChain(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
 
@@ -155,7 +155,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testDynOfDyn")
-        let testDynOfDyn = try await tx!.decodedData()
+        let testDynOfDyn = try await tx!.callContractMethod()
         print(testDynOfDyn.description)
     }
 
@@ -172,7 +172,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
-        let result = try await deployTx.send(password: "web3swift")
+        let result = try await deployTx.writeToChain(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
 
@@ -192,7 +192,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testStOfDyn")
-        let testStOfDyn = try await tx!.decodedData()
+        let testStOfDyn = try await tx!.callContractMethod()
         print(testStOfDyn.description)
     }
 
@@ -206,7 +206,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: - Encoding ABI Data flow
         let tx = contract?.createReadOperation("empty")
         XCTAssertNotNil(tx)
-        let _ = try await tx!.decodedData()
+        let _ = try await tx!.callContractMethod()
     }
 
     func testUserCase() async throws {
@@ -219,7 +219,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: - Encoding ABI Data flow
         let tx = contract?.createReadOperation("getFlagData")
         XCTAssertNotNil(tx)
-        let _ = try await tx!.decodedData()
+        let _ = try await tx!.callContractMethod()
     }
 
 }

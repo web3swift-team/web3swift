@@ -32,7 +32,7 @@ class TestHelpers {
                                        parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
-        let result = try await deployTx.send(password: "web3swift")
+        let result = try await deployTx.writeToChain(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
