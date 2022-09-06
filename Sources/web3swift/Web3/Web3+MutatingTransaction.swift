@@ -180,13 +180,25 @@ public class WriteTransaction: ReadTransaction {
 
     // FIXME: Rewrite this to CodableTransaction
     public func send(password: String = "web3swift", transactionOptions: CodableTransaction? = nil) async throws -> TransactionSendingResult {
-        let transaction = try await assembleTransaction(transactionOptions: transactionOptions)
+        var assembledTransaction = try await assembleTransaction(transactionOptions: transactionOptions)
         let mergedOptions = self.transactionOptions.merge(transactionOptions)
         var cleanedOptions = CodableTransaction.emptyTransaction
         cleanedOptions.from = mergedOptions.from
         cleanedOptions.to = mergedOptions.to
+
+        if let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager {
+            guard let from = mergedOptions.from else {
+                throw Web3Error.inputError(desc: "No 'from' field provided")
+            }
+            do {
+                try Web3Signer.signTX(transaction: &assembledTransaction, keystore: attachedKeystoreManager, account: from, password: password)
+            } catch {
+                throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
+            }
+            return try await self.web3.eth.send(raw: assembledTransaction)
+        }
         // MARK: Sending Data flow
-        return try await web3.eth.send(transaction, transactionOptions: cleanedOptions, password: password)
+        return try await web3.eth.send(assembledTransaction)
     }
 
     // FIXME: Rewrite this to CodableTransaction
