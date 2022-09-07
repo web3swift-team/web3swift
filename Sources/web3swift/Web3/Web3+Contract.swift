@@ -57,15 +57,20 @@ extension web3 {
                            extraData: Data? = nil,
                            transactionOptions: CodableTransaction? = nil) -> WriteOperation? {
             // MARK: Writing Data flow
-            guard var tx = self.contract.deploy(bytecode: bytecode,
+            guard let data = self.contract.deploy(bytecode: bytecode,
                                                 constructor: constructor,
                                                 parameters: parameters,
                                                 extraData: extraData)
             else { return nil }
 
             if let network = self.web3.provider.network {
-                tx.chainID = network.chainID
+                transaction.chainID = network.chainID
             }
+
+            transaction.value = 0
+            transaction.data = data
+            transaction.to = .contractDeploymentAddress()
+
             return WriteOperation(transaction: self.transaction,
                                   web3: self.web3,
                                   contract: self.contract)

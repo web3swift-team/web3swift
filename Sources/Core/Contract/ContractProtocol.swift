@@ -110,7 +110,7 @@ public protocol ContractProtocol {
     /// new Solidity keywords, types etc. that are not yet supported, etc.
     init(_ abiString: String, at: EthereumAddress?) throws
 
-    /// Creates a smart contract deployment transaction.
+    /// Prepare transaction data for smart contract deployment transaction.
     ///
     /// - Parameters:
     ///   - bytecode: bytecode to deploy.
@@ -118,12 +118,11 @@ public protocol ContractProtocol {
     ///   - parameters: parameters for `constructor`.
     ///   - extraData: any extra data. It can be encoded input arguments for a constuctor but then you should set `constructor` and
     ///   `parameters` to be `nil`.
-    /// - Returns: transaction if given `parameters` were successfully encoded in a `constructor`. If any or both are `nil`
-    /// then no encoding will take place and a transaction with `bytecode + extraData`  will be returned.
+    /// - Returns: Encoded data for a given parameters, which is should be assigned to ``CodableTransaction.data`` property
     func deploy(bytecode: Data,
                 constructor: ABI.Element.Constructor?,
                 parameters: [AnyObject]?,
-                extraData: Data?) -> CodableTransaction?
+                extraData: Data?) -> Data?
 
     /// Creates function call transaction with data set as `method` encoded with given `parameters`.
     /// The `method` must be part of the ABI used to init this contract.
@@ -187,7 +186,7 @@ extension ContractProtocol {
     func deploy(_ bytecode: Data,
                 constructor: ABI.Element.Constructor? = nil,
                 parameters: [AnyObject]? = nil,
-                extraData: Data? = nil) -> CodableTransaction? {
+                extraData: Data? = nil) -> Data? {
         deploy(bytecode: bytecode,
                constructor: constructor,
                parameters: parameters,
@@ -200,7 +199,7 @@ extension ContractProtocol {
     /// See ``ContractProtocol/method(_:parameters:extraData:)`` for details.
     func method(_ method: String = "fallback",
                 parameters: [AnyObject]? = nil,
-                extraData: Data? = nil) -> CodableTransaction? {
+                extraData: Data? = nil) -> Data? {
         self.method(method, parameters: parameters ?? [], extraData: extraData)
     }
 
@@ -219,15 +218,14 @@ extension DefaultContractProtocol {
     public func deploy(bytecode: Data,
                        constructor: ABI.Element.Constructor?,
                        parameters: [AnyObject]?,
-                       extraData: Data?) -> CodableTransaction? {
+                       extraData: Data?) -> Data? {
         var fullData = bytecode
 
         if let constructor = constructor,
            let parameters = parameters,
            !parameters.isEmpty {
             guard constructor.inputs.count == parameters.count,
-                  let encodedData = constructor.encodeParameters(parameters)
-            else {
+                  let encodedData = constructor.encodeParameters(parameters) else {
                 NSLog("Constructor encoding will fail as the number of input arguments doesn't match the number of given arguments.")
                 return nil
             }
@@ -239,12 +237,7 @@ extension DefaultContractProtocol {
         }
 
         // MARK: Writing Data flow
-        return CodableTransaction(to: .contractDeploymentAddress(),
-                                   value: BigUInt(0),
-                                   data: fullData
-                                   // FIXME: Return parameters
-//                                   parameters: CodableTransaction()
-        )
+        return fullData
     }
 
     /// Call given contract method with given parameters
