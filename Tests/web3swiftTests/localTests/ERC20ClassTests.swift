@@ -26,9 +26,9 @@ class ERC20ClassTests: LocalTestCase {
         // MARK: - Duplicated call readProperties
         // MARK: No data used in call
         let decimals = try await erc20token.decimals()
-        XCTAssert(symbol == "w3s")
-        XCTAssert(name == "web3swift")
-        XCTAssert(decimals == 18)
+        XCTAssertEqual(symbol, "w3s")
+        XCTAssertEqual(name, "web3swift")
+        XCTAssertEqual(decimals, 18)
     }
 
     func testERC20tokenBalanceAndAllowance() async throws {
