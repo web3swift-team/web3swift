@@ -215,9 +215,6 @@ extension ERC20BaseProperties {
         }
         let contract = self.contract
         guard contract.contract.address != nil else {return}
-        var transactionOptionsVAR = CodableTransaction.emptyTransaction
-        transactionOptionsVAR.callOnBlock = .latest
-        let transactionOptions = transactionOptionsVAR
         async let namePromise = contract
             .createReadOperation("name", parameters: [AnyObject](), extraData: Data() )?
             .callContractMethod()
@@ -233,10 +230,12 @@ extension ERC20BaseProperties {
         let resolvedPromises = try await ["name":namePromise, "symbol":symbolPromise, "decimals":decimalPromise]
 
         if let nameResult = resolvedPromises["name"], let name = nameResult?["0"] as? String {
+            print(name)
             _name = name
         }
 
         if let symbolResult = resolvedPromises["symbol"], let symbol = symbolResult?["0"] as? String {
+            print(symbol)
             _symbol = symbol
         }
 

@@ -54,8 +54,7 @@ extension web3 {
         public func deploy(bytecode: Data,
                            constructor: ABI.Element.Constructor? = nil,
                            parameters: [AnyObject]? = nil,
-                           extraData: Data? = nil,
-                           transactionOptions: CodableTransaction? = nil) -> WriteOperation? {
+                           extraData: Data? = nil) -> WriteOperation? {
             // MARK: Writing Data flow
             guard let data = self.contract.deploy(bytecode: bytecode,
                                                 constructor: constructor,

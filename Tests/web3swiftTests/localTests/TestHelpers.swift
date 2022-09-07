@@ -21,6 +21,7 @@ class TestHelpers {
         let allAddresses = try await web3.eth.ownedAccounts()
         let contract = web3.contract(abiString, at: nil, abiVersion: 2)!
         
+        // FIXME: This should be zipped, because Arrays don't guarantee it's elements order
         let parameters = [
             "web3swift",
             "w3s",

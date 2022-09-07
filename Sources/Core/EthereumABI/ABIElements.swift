@@ -194,6 +194,7 @@ extension ABI.Element {
 extension ABI.Element.Constructor {
     public func encodeParameters(_ parameters: [AnyObject]) -> Data? {
         guard parameters.count == inputs.count else { return nil }
+        // FIXME: This should be zipped, because Arrays don't guarantee it's elements order
         return ABIEncoder.encode(types: inputs, values: parameters)
     }
 }
