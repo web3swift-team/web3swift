@@ -189,14 +189,18 @@ public struct CodableTransaction {
     }
 
     public mutating func resolve(provider: Web3Provider) async {
-        // type cannot be changed here, and is ignored
-        // FIXME: This is resolves nothing yet.
         // FIXME: Delete force try
-        self.nonce = try! await self.resolveNonce(provider: provider)
-        self.gasPrice = try! await self.resolveGasPrice(provider: provider)
         self.gasLimit = try! await self.resolveGasLimit(provider: provider)
-        self.maxFeePerGas = try! await self.resolveMaxFeePerGas(provider: provider)
-        self.maxPriorityFeePerGas = try! await self.resolveMaxPriorityFeePerGas(provider: provider)
+
+        if from != nil || sender != nil {
+            self.nonce = try! await self.resolveNonce(provider: provider)
+        }
+        if case .eip1559 = type {
+            self.maxFeePerGas = try! await self.resolveMaxFeePerGas(provider: provider)
+            self.maxPriorityFeePerGas = try! await self.resolveMaxPriorityFeePerGas(provider: provider)
+        } else {
+            self.gasPrice = try! await self.resolveGasPrice(provider: provider)
+        }
     }
 
     public var noncePolicy: NoncePolicy
@@ -246,7 +250,6 @@ extension CodableTransaction: Codable {
         // FIXME: There's a huge mess here, please take a look here at code review if any.
         var containier = encoder.container(keyedBy: CodingKeys.self)
         try containier.encode(nonce.hexString, forKey: .nonce)
-        try containier.encode(accessList, forKey: .accessList)
         try containier.encode(data.toHexString().addHexPrefix(), forKey: .data)
         try containier.encode(value.hexString, forKey: .value)
 
@@ -258,7 +261,10 @@ extension CodableTransaction: Codable {
                 try containier.encode(chainID.hexString, forKey: .chainID)
             }
         }
-
+        if let accessList = accessList, !accessList.isEmpty {
+            try containier.encode(accessList, forKey: .accessList)
+        }
+        
         if !gasLimit.isZero {
             try containier.encode(gasLimit.hexString, forKey: .gasLimit)
         }
@@ -310,7 +316,7 @@ extension CodableTransaction {
         switch noncePolicy {
         case .pending, .latest, .earliest:
             guard let address = from ?? sender else { throw Web3Error.valueError }
-            let request: APIRequest = .getTransactionCount(address.address , callOnBlock ?? .latest)
+            let request: APIRequest = .getTransactionCount(address.address, callOnBlock ?? .latest)
             let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)
             return response.result
         case .exact(let value):
