@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -118,16 +117,16 @@ class UncategorizedTests: XCTestCase {
         XCTAssert(contract != nil)
         let allMethods = contract!.contract.allMethods
         let userDeviceCount = try await contract!
-            .read("userDeviceCount", parameters: [addr as AnyObject])?
-            .decodedData()
+            .createReadOperation("userDeviceCount", parameters: [addr as AnyObject])?
+            .callContractMethod()
         print(userDeviceCount!)
         let totalUsers = try await contract!
-            .read("totalUsers", parameters: [])?
-            .decodedData()
+            .createReadOperation("totalUsers", parameters: [])?
+            .callContractMethod()
         print(totalUsers!)
         let user = try await contract!
-            .read("users", parameters: [0 as AnyObject])?
-            .decodedData()
+            .createReadOperation("users", parameters: [0 as AnyObject])?
+            .callContractMethod()
         print(user!)
         print(allMethods)
     }

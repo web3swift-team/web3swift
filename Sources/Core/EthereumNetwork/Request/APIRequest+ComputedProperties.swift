@@ -23,11 +23,11 @@ extension APIRequest {
 
     var parameters: [RequestParameter] {
         switch self {
-        case .gasPrice, .blockNumber, .getNetwork, .getAccounts, .getTxPoolStatus, .getTxPoolContent, .getTxPoolInspect:
+        case .gasPrice, .blockNumber, .getNetwork, .getAccounts, .getTxPoolStatus, .getTxPoolContent:
             return [RequestParameter]()
 
         case .estimateGas(let transactionParameters, let blockNumber):
-            return [.transaction(transactionParameters), .string(blockNumber.stringValue)]
+            return [.transaction(transactionParameters), .string(blockNumber.description)]
 
         case let .sendRawTransaction(hash):
             return [.string(hash)]
@@ -48,28 +48,28 @@ extension APIRequest {
             return [.string(address), .string(string)]
 
         case .call(let transactionParameters, let blockNumber):
-            return [.transaction(transactionParameters), .string(blockNumber.stringValue)]
+            return [.transaction(transactionParameters), .string(blockNumber.description)]
 
         case .getTransactionCount(let address, let blockNumber):
-            return [.string(address), .string(blockNumber.stringValue)]
+            return [.string(address), .string(blockNumber.description)]
 
         case .getBalance(let address, let blockNumber):
-            return [.string(address), .string(blockNumber.stringValue)]
+            return [.string(address), .string(blockNumber.description)]
 
         case .getStorageAt(let address, let bigUInt, let blockNumber):
-            return [.string(address), .string(bigUInt.hexString), .string(blockNumber.stringValue)]
+            return [.string(address), .string(bigUInt.hexString), .string(blockNumber.description)]
 
         case .getCode(let address, let blockNumber):
-            return [.string(address), .string(blockNumber.stringValue)]
+            return [.string(address), .string(blockNumber.description)]
 
         case .getBlockByHash(let hash, let bool):
             return [.string(hash), .bool(bool)]
 
         case .getBlockByNumber(let block, let bool):
-            return [.string(block.stringValue), .bool(bool)]
+            return [.string(block.description), .bool(bool)]
 
         case .feeHistory(let uInt, let blockNumber, let array):
-            return [.string(uInt.hexString), .string(blockNumber.stringValue), .doubleArray(array)]
+            return [.string(uInt.hexString), .string(blockNumber.description), .doubleArray(array)]
 
         case .createAccount(let string):
             return [.string(string)]
@@ -105,7 +105,6 @@ extension APIRequest {
         case .createAccount: return "personal_createAccount"
         case .getTxPoolStatus: return "txpool_status"
         case .getTxPoolContent: return "txpool_content"
-        case .getTxPoolInspect: return "txpool_inspect"
         }
     }
 }

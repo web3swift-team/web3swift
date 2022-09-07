@@ -109,8 +109,8 @@ web3.addKeystoreManager(KeysService().keystoreManager())
 guard let ethAddressFrom = EthereumAddress(selectedKey) else {return}
 guard let contract = web3.contract(Web3.Utils.coldWalletABI, at: destinationEthAddress, abiVersion: 2) else {return}
 guard let writeTX = contract.write("fallback") else {return}
-writeTX.transactionOptions.from = ethAddressFrom
-writeTX.transactionOptions.value = value
+writeTX.transaction.from = ethAddressFrom
+writeTX.transaction.value = value
 return writeTX
 ```
 
@@ -152,8 +152,8 @@ web3.addKeystoreManager(KeysService().keystoreManager())
 guard let ethAddressFrom = EthereumAddress(selectedKey) else {return}
 guard let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2) else {return}
 guard let writeTX = contract.write("transfer") else {return}
-writeTX.transactionOptions.from = ethAddressFrom
-writeTX.transactionOptions.value = value
+writeTX.transaction.from = ethAddressFrom
+writeTX.transaction.value = value
 return writeTX
 ```
 
@@ -195,8 +195,8 @@ guard let writeTX = contract.write(method,
                                    parameters: parameters,
                                    extraData: data,
                                    transactionOptions: predefinedOptions) else {return}
-writeTX.transactionOptions.from = ethAddressFrom
-writeTX.transactionOptions.value = value
+writeTX.transaction.from = ethAddressFrom
+writeTX.transaction.value = value
 return writeTX
 ```
 
@@ -218,7 +218,7 @@ return value
 let options = options ?? transaction.transactionOptions
 guard let result = password == nil ?
     try? transaction.send() :
-    try? transaction.send(password: <your password>, transactionOptions: options) else {return}
+    try? transaction.send(password: <your password> ) else {return}
 return result
 ```
 
@@ -234,7 +234,7 @@ return value
 
 // web3swift 2.0
 let options = options ?? transaction.transactionOptions
-guard let result = try? transaction.call(transactionOptions: options) else {return}
+guard let result = try? transaction.decodedData(with: options) else {return}
 return result
 ```
 
@@ -273,7 +273,7 @@ let contractAddress = EthereumAddress("<Contract address>")! // w3s token on Eth
 let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress, abiVersion: 2) // utilize precompiled ERC20 ABI for your concenience
 let userAddress = EthereumAddress("<address>")!
 guard let readTX = contract?.read("balanceOf", parameters: [addressOfUser] as [AnyObject]) else {return}
-readTX.transactionOptions.from = EthereumAddress("<address>")!
+readTX.transaction.from = EthereumAddress("<address>")!
 let tokenBalance = try readTX.callPromise()
 guard let balance = tokenBalance["0"] as? BigUInt else {return}
 ```

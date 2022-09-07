@@ -27,8 +27,11 @@ public struct LegacyEnvelope: AbstractEnvelope {
     public var s: BigUInt
 
     // legacy specific parameters
-    public var gasPrice: BigUInt = 0
+    public var gasPrice: BigUInt? = 0
     public var gasLimit: BigUInt = 0
+
+    var maxFeePerGas: BigUInt? = nil
+    var maxPriorityFeePerGas: BigUInt? = nil
 
     // legacy chainID Mechanism
     private var explicitChainID: BigUInt? // set directly or via options
@@ -44,7 +47,7 @@ public struct LegacyEnvelope: AbstractEnvelope {
         var toReturn = ""
         toReturn += "Type: " + String(describing: self.type) + "\n"
         toReturn += "Nonce: " + String(describing: self.nonce) + "\n"
-        toReturn += "Gas price: " + String(self.gasPrice) + "\n"
+        toReturn += "Gas price: " + String(self.gasPrice ?? 0) + "\n"
         toReturn += "Gas limit: " + String(describing: self.gasLimit) + "\n"
         toReturn += "To: " + self.to.address + "\n"
         toReturn += "Value: " + String(describing: self.value) + "\n"
@@ -57,31 +60,6 @@ public struct LegacyEnvelope: AbstractEnvelope {
         toReturn += "s: " + String(self.s) + "\n"
         return toReturn
     }
-
-    public var parameters: EthereumParameters {
-        get {
-            return EthereumParameters(
-                type: type,
-                to: to,
-                nonce: nonce,
-                chainID: chainID,
-                value: value,
-                data: data,
-                gasLimit: gasLimit,
-                gasPrice: gasPrice
-            )
-        }
-        set(val) {
-            nonce = val.nonce ?? nonce
-            explicitChainID = val.chainID ?? explicitChainID
-            to = val.to ?? to
-            value = val.value ?? value
-            data = val.data ?? data
-            gasLimit = val.gasLimit ?? gasLimit
-            gasPrice = val.gasPrice ?? gasPrice
-        }
-    }
-
 }
 
 extension LegacyEnvelope {
@@ -185,21 +163,6 @@ extension LegacyEnvelope {
         self.s = BigUInt(sData)
     }
 
-    public init(to: EthereumAddress, nonce: BigUInt? = nil,
-                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,
-                parameters: EthereumParameters? = nil) {
-        self.to = to
-        self.nonce = nonce ?? parameters?.nonce ?? 0
-        self.explicitChainID = parameters?.chainID // Legacy can have a nil ChainID
-        self.value = parameters?.value ?? 0
-        self.data = parameters?.data ?? Data()
-        self.v = v
-        self.r = r
-        self.s = s
-        self.gasPrice = parameters?.gasPrice ?? 0
-        self.gasLimit = parameters?.gasLimit ?? 0
-    }
-
     // memberwise
     public init(to: EthereumAddress, nonce: BigUInt = 0,
                 chainID: BigUInt? = nil, value: BigUInt = 0, data: Data,
@@ -217,16 +180,16 @@ extension LegacyEnvelope {
         self.s = s
     }
 
-    public mutating func applyOptions(_ options: TransactionOptions) {
-        // type cannot be changed here, and is ignored
-        self.nonce = options.resolveNonce(self.nonce)
-        self.gasPrice = options.resolveGasPrice(self.gasPrice)
-        self.gasLimit = options.resolveGasLimit(self.gasLimit)
-        // swiftlint:disable force_unwrapping
-        if options.value != nil { self.value = options.value! }
-        if options.to != nil { self.to = options.to! }
-        // swiftlint:enable force_unwrapping
-    }
+//    public mutating func applyTransaction(_ transaction: CodableTransaction) {
+//        // type cannot be changed here, and is ignored
+//        self.nonce = transaction.resolveNonce(self.nonce)
+//        self.gasPrice = transaction.resolveGasPrice(self.gasPrice)
+//        self.gasLimitPolicy = transaction.resolveGasLimit(self.gasLimit)
+//        // swiftlint:disable force_unwrapping
+//        if transaction.value != nil { self.value = transaction.value! }
+//        if transaction.to != nil { self.to = transaction.to! }
+//        // swiftlint:enable force_unwrapping
+//    }
 
     public func encode(for type: EncodeType = .transaction) -> Data? {
         let fields: [AnyObject]
@@ -242,24 +205,6 @@ extension LegacyEnvelope {
         return RLP.encode(fields)
     }
 
-    public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? {
-        var toString: String?
-        switch self.to.type {
-        case .normal:
-            toString = self.to.address.lowercased()
-        case .contractDeployment:
-            break
-        }
-        var params = TransactionParameters(from: from?.address.lowercased(), to: toString)
-        let gasEncoding = gasLimit > 21100 ? self.gasLimit.abiEncode(bits: 256) : nil
-        params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let gasPriceEncoding = gasPrice > 10000000 ? self.gasPrice.abiEncode(bits: 256) : nil
-        params.gasPrice = gasPriceEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let valueEncoding = self.value.abiEncode(bits: 256)
-        params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        params.data = self.data.toHexString().addHexPrefix()
-        return params
-    }
 
     public func getUnmarshalledSignatureData() -> SECP256K1.UnmarshaledSignature? {
         if self.r == 0 && self.s == 0 { return nil }

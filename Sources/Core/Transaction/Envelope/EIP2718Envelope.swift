@@ -9,7 +9,7 @@ import BigInt
 // EIP-2718 is an abstract envelope type
 // All typed transactions should inherit from this type and not AbstractEnvelope
 // This is just a convenience handle so we can extend with default implementations for EIP-2718 type transactions (currently EIP-2930 and EIP-1559)
-public protocol EIP2718Envelope: AbstractEnvelope {
+protocol EIP2718Envelope: AbstractEnvelope {
     // type: -- Technically 'type' should be here, but it was promoted up to AbstractEnvelope, so we could wrap a LegacyTransaction as well
 }
 

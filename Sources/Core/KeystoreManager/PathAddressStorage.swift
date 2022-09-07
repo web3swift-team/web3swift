@@ -1,6 +1,5 @@
 //
 //  PathAddressStorage.swift
-//  web3swift
 //
 //  Created by Andrew Podkovyrin on 08.08.2020.
 //  Copyright © 2020 Matter Labs. All rights reserved.

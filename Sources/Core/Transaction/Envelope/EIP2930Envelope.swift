@@ -12,7 +12,8 @@ public struct EIP2930Envelope: EIP2718Envelope {
 
     // common parameters for any transaction
     public var nonce: BigUInt = 0
-    public var chainID: BigUInt
+    public var chainID: BigUInt?
+    public var from: EthereumAddress?
     public var to: EthereumAddress
     public var value: BigUInt
     public var data: Data
@@ -21,9 +22,13 @@ public struct EIP2930Envelope: EIP2718Envelope {
     public var s: BigUInt
 
     // EIP-2930 specific parameters
-    public var gasPrice: BigUInt = 0
+    public var gasPrice: BigUInt? = 0
     public var gasLimit: BigUInt = 0
     public var accessList: [AccessListEntry] = []
+    public var publicKey: Data?
+
+    var maxFeePerGas: BigUInt? = nil
+    var maxPriorityFeePerGas: BigUInt? = nil
 
     // for CustomStringConvertible
     public var description: String {
@@ -31,7 +36,7 @@ public struct EIP2930Envelope: EIP2718Envelope {
         toReturn += "Type: " + String(describing: self.type) + "\n"
         toReturn += "chainID: " + String(describing: self.chainID) + "\n"
         toReturn += "Nonce: " + String(describing: self.nonce) + "\n"
-        toReturn += "Gas price: " + String(self.gasPrice) + "\n"
+        toReturn += "Gas price: " + String(self.gasPrice ?? 0) + "\n"
         toReturn += "Gas limit: " + String(describing: self.gasLimit) + "\n"
         toReturn += "To: " + self.to.address + "\n"
         toReturn += "Value: " + String(describing: self.value) + "\n"
@@ -42,33 +47,6 @@ public struct EIP2930Envelope: EIP2718Envelope {
         toReturn += "s: " + String(self.s) + "\n"
         return toReturn
     }
-
-    public var parameters: EthereumParameters {
-        get {
-            return EthereumParameters(
-                type: type,
-                to: to,
-                nonce: nonce,
-                chainID: chainID,
-                value: value,
-                data: data,
-                gasLimit: gasLimit,
-                gasPrice: gasPrice,
-                accessList: accessList
-            )
-        }
-        set(val) {
-            nonce = val.nonce ?? nonce
-            chainID = val.chainID ?? chainID
-            to = val.to ?? to
-            value = val.value ?? value
-            data = val.data ?? data
-            gasLimit = val.gasLimit ?? gasLimit
-            gasPrice = val.gasPrice ?? gasPrice
-            accessList = val.accessList ?? accessList
-        }
-    }
-
 }
 
 extension EIP2930Envelope {
@@ -209,22 +187,6 @@ extension EIP2930Envelope {
         }
     }
 
-    public init(to: EthereumAddress, nonce: BigUInt? = nil,
-                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,
-                parameters: EthereumParameters? = nil) {
-        self.to = to
-        self.nonce = nonce ?? parameters?.nonce ?? 0
-        self.chainID = parameters?.chainID ?? 0
-        self.value = parameters?.value ?? 0
-        self.data = parameters?.data ?? Data()
-        self.v = v
-        self.r = r
-        self.s = s
-        self.gasPrice = parameters?.gasPrice ?? 0
-        self.gasLimit = parameters?.gasLimit ?? 0
-        self.accessList = parameters?.accessList ?? []
-    }
-
     // memberwise
     public init(to: EthereumAddress, nonce: BigUInt = 0,
                 chainID: BigUInt = 0, value: BigUInt = 0, data: Data,
@@ -243,18 +205,6 @@ extension EIP2930Envelope {
         self.s = s
     }
 
-    public mutating func applyOptions(_ options: TransactionOptions) {
-        // type cannot be changed here, and is ignored
-        self.nonce = options.resolveNonce(self.nonce)
-        self.gasPrice = options.resolveGasPrice(self.gasPrice)
-        self.gasLimit = options.resolveGasLimit(self.gasLimit)
-        // swiftlint:disable force_unwrapping
-        if options.value != nil { self.value = options.value! }
-        if options.to != nil { self.to = options.to! }
-        if options.accessList != nil { self.accessList = options.accessList! }
-        // swiftlint:enable force_unwrapping
-    }
-
     public func encode(for type: EncodeType = .transaction) -> Data? {
         let fields: [AnyObject]
         let list = accessList.map { $0.encodeAsList() as AnyObject }
@@ -267,38 +217,9 @@ extension EIP2930Envelope {
         result.insert(UInt8(self.type.rawValue), at: 0)
         return result
     }
-
-    public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? {
-        var toString: String?
-        switch self.to.type {
-        case .normal:
-            toString = self.to.address.lowercased()
-        case .contractDeployment:
-            break
-        }
-        var params = TransactionParameters(from: from?.address.lowercased(), to: toString)
-        let typeEncoding = String(UInt8(self.type.rawValue), radix: 16).addHexPrefix()
-        params.type = typeEncoding
-        let chainEncoding = self.chainID.abiEncode(bits: 256)
-        params.chainID = chainEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        var accessEncoding: [TransactionParameters.AccessListEntry] = []
-        for listEntry in self.accessList {
-            guard let encoded = listEntry.encodeAsDictionary() else { return nil }
-            accessEncoding.append(encoded)
-        }
-        params.accessList = accessEncoding
-        let gasEncoding = gasLimit > 21100 ? self.gasLimit.abiEncode(bits: 256) : nil
-        params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let gasPriceEncoding = gasPrice > 10000000 ? self.gasPrice.abiEncode(bits: 256) : nil
-        params.gasPrice = gasPriceEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let valueEncoding = self.value.abiEncode(bits: 256)
-        params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        params.data = self.data.toHexString().addHexPrefix()
-        return params
-    }
 }
 
-public struct AccessListEntry: CustomStringConvertible, Decodable {
+public struct AccessListEntry: CustomStringConvertible, Codable {
     var address: EthereumAddress
     var storageKeys: [BigUInt]
 
@@ -398,20 +319,22 @@ public struct AccessListEntry: CustomStringConvertible, Decodable {
         return [address.address as AnyObject, storage as AnyObject]
     }
 
-    public func encodeAsDictionary() -> TransactionParameters.AccessListEntry? {
-        var addrString: String
-        switch self.address.type {
-        case .normal:
-            addrString = self.address.address.lowercased()
-        case .contractDeployment:
-            return nil
-        }
+    // FIXME: THIS NOT WORKING!!!
 
-        var keyStrings: [String] = []
-        for key in storageKeys {
-            guard let keyString = key.abiEncode(bits: 256) else { return nil }
-            keyStrings.append(keyString.toHexString().addHexPrefix())
-        }
-        return TransactionParameters.AccessListEntry(address: addrString, storageKeys: keyStrings)
-    }
+//    public func encodeAsDictionary() -> AccessListEntry? {
+//        var addrString: String
+//        switch self.address.type {
+//        case .normal:
+//            addrString = self.address.address.lowercased()
+//        case .contractDeployment:
+//            return nil
+//        }
+//
+//        var keyStrings: [String] = []
+//        for key in storageKeys {
+//            guard let keyString = key.abiEncode(bits: 256) else { return nil }
+//            keyStrings.append(keyString.toHexString().addHexPrefix())
+//        }
+//        return AccessListEntry(address: addrString, storageKeys: keyStrings)
+//    }
 }

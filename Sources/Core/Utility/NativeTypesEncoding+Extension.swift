@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -7,7 +6,7 @@
 import Foundation
 import BigInt
 
-public extension Data {
+extension Data {
     func setLengthLeft(_ toBytes: UInt64, isNegative: Bool = false) -> Data? {
         let existingLength = UInt64(self.count)
         if (existingLength == toBytes) {
@@ -43,7 +42,7 @@ public extension Data {
     }
 }
 
-public extension BigInt {
+extension BigInt {
     func toTwosComplement() -> Data {
         if (self.sign == BigInt.Sign.plus) {
             return self.magnitude.serialize()
@@ -56,7 +55,7 @@ public extension BigInt {
     }
 }
 
-public extension BigUInt {
+extension BigUInt {
     func abiEncode(bits: UInt64) -> Data? {
         let data = self.serialize()
         let paddedLength = UInt64(ceil((Double(bits)/8.0)))
@@ -65,7 +64,7 @@ public extension BigUInt {
     }
 }
 
-public extension BigInt {
+extension BigInt {
     func abiEncode(bits: UInt64) -> Data? {
         let isNegative = self < (BigInt(0))
         let data = self.toTwosComplement()
@@ -75,7 +74,7 @@ public extension BigInt {
     }
 }
 
-public extension BigInt {
+extension BigInt {
     static func fromTwosComplement(data: Data) -> BigInt {
         let isPositive = ((data[0] & 128) >> 7) == 0
         if (isPositive) {

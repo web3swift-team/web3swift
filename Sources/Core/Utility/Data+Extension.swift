@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -6,8 +5,7 @@
 
 import Foundation
 
-public extension Data {
-
+extension Data {
     init<T>(fromArray values: [T]) {
         let values = values
         let ptrUB = values.withUnsafeBufferPointer { (ptr: UnsafeBufferPointer) in return ptr }
@@ -35,14 +33,14 @@ public extension Data {
         return difference == UInt8(0x00)
     }
 
-    static func zero(_ data: inout Data) {
+    public static func zero(_ data: inout Data) {
         let count = data.count
         data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) in
             body.baseAddress?.assumingMemoryBound(to: UInt8.self).initialize(repeating: 0, count: count)
         }
     }
 
-    static func randomBytes(length: Int) -> Data? {
+    public static func randomBytes(length: Int) -> Data? {
         for _ in 0...1024 {
             var data = Data(repeating: 0, count: length)
             let result = data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) -> Int32? in
@@ -60,7 +58,7 @@ public extension Data {
         return nil
     }
     
-    func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public
+    public func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public
         if startingBit + length / 8 > self.count, length > 64, startingBit > 0, length >= 1 {return nil}
         let bytes = self[(startingBit/8) ..< (startingBit+length+7)/8]
         let padding = Data(repeating: 0, count: 8 - bytes.count)

@@ -154,7 +154,7 @@ let parameters: [AnyObject] = <PARAMETERS>
 let extraData: Data = <DATA>
 let transactionOptions: TransactionOptions = <OPTIONS>
 
-let transaction = contract.read(method, parameters: parameters, extraData: extraData, transactionOptions: transactionOptions)
+let transaction = contract.read(method, parameters: parameters, extraData: extraData )
 ```
 
 Here is the example how you should send transaction to some contract method:
@@ -164,7 +164,7 @@ let method: String = <CONTRACT METHOD NAME>
 let parameters: [AnyObject] = <PARAMETERS>
 let extraData: Data = <DATA>
 let transactionOptions: TransactionOptions = <OPTIONS>
-let transaction = contract.write(method, parameters: parameters, extraData: extraData, transactionOptions: transactionOptions)
+let transaction = contract.write(method, parameters: parameters, extraData: extraData )
 ```
 
 > How to test on a local node?

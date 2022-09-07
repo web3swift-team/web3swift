@@ -21,6 +21,7 @@ class TestHelpers {
         let allAddresses = try await web3.eth.ownedAccounts()
         let contract = web3.contract(abiString, at: nil, abiVersion: 2)!
         
+        // FIXME: This should be zipped, because Arrays don't guarantee it's elements order
         let parameters = [
             "web3swift",
             "w3s",
@@ -30,15 +31,15 @@ class TestHelpers {
         let deployTx = contract.deploy(bytecode: bytecode,
                                        constructor: contract.contract.constructor,
                                        parameters: parameters)!
-        deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let result = try await deployTx.send()
+        deployTx.transaction.from = allAddresses[0]
+        deployTx.transaction.gasLimitPolicy = .manual(3000000)
+        let result = try await deployTx.writeToChain(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
         
         Thread.sleep(forTimeInterval: 1.0)
         
-        let receipt = try await web3.eth.transactionReceipt(txHash)
+        let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
         print(receipt)
         
         switch receipt.status {

@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -7,6 +6,7 @@
 import Foundation
 import BigInt
 
+// FIXME: Make me work or delete
 /// Protocol for generic Ethereum event parsing results
 public protocol EventParserResultProtocol {
     var eventName: String {get}
@@ -35,11 +35,11 @@ public struct EventParserResult: EventParserResultProtocol {
 
 /// Protocol for generic Ethereum event parser
 public protocol EventParserProtocol {
-    func parseTransaction(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol]
+    func parseTransaction(_ transaction: CodableTransaction) async throws -> [EventParserResultProtocol]
     func parseTransactionByHash(_ hash: Data) async throws -> [EventParserResultProtocol]
     func parseBlock(_ block: Block) async throws -> [EventParserResultProtocol]
     func parseBlockByNumber(_ blockNumber: BigUInt) async throws -> [EventParserResultProtocol]
-    func parseTransactionPromise(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol]
+    func parseTransactionPromise(_ transaction: CodableTransaction) async throws -> [EventParserResultProtocol]
     func parseTransactionByHashPromise(_ hash: Data) async throws -> [EventParserResultProtocol]
     func parseBlockByNumberPromise(_ blockNumber: BigUInt) async throws -> [EventParserResultProtocol]
     func parseBlockPromise(_ block: Block) async throws -> [EventParserResultProtocol]

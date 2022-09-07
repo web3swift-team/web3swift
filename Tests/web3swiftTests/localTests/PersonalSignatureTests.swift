@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -41,15 +40,15 @@ class PersonalSignatureTests: XCTestCase {
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
         let deployTx = contract.deploy(bytecode: bytecode)!
         let allAddresses = try await web3.eth.ownedAccounts()
-        deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let deployResult = try await deployTx.send()
+        deployTx.transaction.from = allAddresses[0]
+        deployTx.transaction.gasLimitPolicy = .manual(3000000)
+        let deployResult = try await deployTx.writeToChain(password: "web3swift")
         let txHash = deployResult.hash
         print("Transaction with hash " + txHash)
         
         Thread.sleep(forTimeInterval: 1.0)
         
-        let receipt = try await web3.eth.transactionReceipt(txHash)
+        let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
         print(receipt)
         
         switch receipt.status {
@@ -75,15 +74,15 @@ class PersonalSignatureTests: XCTestCase {
         
         // Calling contract
         contract = web3.contract(abiString, at: receipt.contractAddress!)!
-        var tx = contract.read("hashPersonalMessage", parameters: [message as AnyObject])
-        tx?.transactionOptions.from = expectedAddress
-        var result = try await tx!.call()
+        var tx = contract.createReadOperation("hashPersonalMessage", parameters: [message as AnyObject])
+        tx?.transaction.from = expectedAddress
+        var result = try await tx!.callContractMethod()
         guard let hash = result["hash"]! as? Data else {return XCTFail()}
         XCTAssert(Utilities.hashPersonalMessage(message.data(using: .utf8)!)! == hash)
         
-        tx = contract.read("recoverSigner", parameters: [message, unmarshalledSignature.v, Data(unmarshalledSignature.r), Data(unmarshalledSignature.s)] as [AnyObject])
-        tx?.transactionOptions.from = expectedAddress
-        result = try await tx!.call()
+        tx = contract.createReadOperation("recoverSigner", parameters: [message, unmarshalledSignature.v, Data(unmarshalledSignature.r), Data(unmarshalledSignature.s)] as [AnyObject])
+        tx?.transaction.from = expectedAddress
+        result = try await tx!.callContractMethod()
         guard let signer = result["signer"]! as? EthereumAddress else {return XCTFail()}
         XCTAssert(signer == expectedAddress)
     }

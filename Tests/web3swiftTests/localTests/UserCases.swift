@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -23,9 +22,9 @@ class UserCases: XCTestCase {
         let (web3, _, receipt, abiString) = try await TestHelpers.localDeployERC20()
         let account = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let contract = web3.contract(abiString, at: receipt.contractAddress!)!
-        let readTransaction = contract.read("balanceOf", parameters:[account] as [AnyObject])!
-        readTransaction.transactionOptions.from = account
-        let response = try await readTransaction.decodedData()
+        let readTransaction = contract.createReadOperation("balanceOf", parameters:[account] as [AnyObject])!
+        readTransaction.transaction.from = account
+        let response = try await readTransaction.callContractMethod()
         let balance = response["0"] as? BigUInt
         print(balance!.description)
     }
@@ -42,10 +41,10 @@ class UserCases: XCTestCase {
     //        let gasPrice = try await web3.eth.gasPrice()
     //        let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
     //        guard let writeTX = web3.eth.sendETH(to: sendToAddress, amount: "0.001") else {return XCTFail()}
-    //        writeTX.transactionOptions.from = allAddresses[0]
-    //        writeTX.transactionOptions.gasPrice = .manual(gasPrice)
+    //        writeTX.transaction.from = allAddresses[0]
+    //        writeTX.transaction.gasPricePolicy = .manual(gasPrice)
     //        let gasEstimate = try await writeTX.estimateGas(with: nil)
-    //        writeTX.transactionOptions.gasLimit = .manual(gasEstimate + 1234)
+    //        writeTX.transaction.gasLimitPolicy = .manual(gasEstimate + 1234)
     //        let assembled = try await writeTX.assembleTransaction()
     //        XCTAssert(assembled.gasLimit == gasEstimate + 1234)
     //    }
@@ -58,10 +57,10 @@ class UserCases: XCTestCase {
     //        guard let writeTX = web3.eth.sendETH(to: sendToAddress, amount: "0.001") else {
     //            return XCTFail()
     //        }
-    //        writeTX.transactionOptions.from = allAddresses[0]
-    //        writeTX.transactionOptions.gasPrice = .manual(gasPrice * 2)
+    //        writeTX.transaction.from = allAddresses[0]
+    //        writeTX.transaction.gasPricePolicy = .manual(gasPrice * 2)
     //        let gasEstimate = try await writeTX.estimateGas(with: nil)
-    //        writeTX.transactionOptions.gasLimit = .manual(gasEstimate + 1234)
+    //        writeTX.transaction.gasLimitPolicy = .manual(gasEstimate + 1234)
     //        let assembled = try await writeTX.assembleTransaction()
     //        let txnGasLimit = assembled.parameters.gasLimit
     //        let txnGasPrice = assembled.parameters.gasPrice
@@ -79,15 +78,15 @@ class UserCases: XCTestCase {
 
         let parameters = [] as [AnyObject]
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
-        deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimit = .manual(3000000)
-        let result = try await deployTx.send()
+        deployTx.transaction.from = allAddresses[0]
+        deployTx.transaction.gasLimitPolicy = .manual(3000000)
+        let result = try await deployTx.writeToChain(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
 
         Thread.sleep(forTimeInterval: 1.0)
 
-        let receipt = try await web3.eth.transactionReceipt(txHash)
+        let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
         print(receipt)
         XCTAssert(receipt.contractAddress != nil)
 
@@ -98,7 +97,7 @@ class UserCases: XCTestCase {
             break
         }
 
-        let details = try await web3.eth.transactionDetails(txHash)
+        let details = try await web3.eth.transactionDetails(txHash.data(using: .utf8)!)
         print(details)
         XCTAssert(details.transaction.to == .contractDeploymentAddress())
     }

@@ -79,7 +79,7 @@ extension KeyedDecodingContainer {
     }
 }
 
-public extension UnkeyedDecodingContainer {
+extension UnkeyedDecodingContainer {
     /// Decodes a unkeyed value from hex to `[DecodableFromHex]`
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `EthereumAddress`

@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -8,11 +7,10 @@ import Foundation
 import BigInt
 import Core
 
-
+// FIXME: Rewrite this to CodableTransaction
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
     public var provider: Web3Provider
-    public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
 
     /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
     public init(provider prov: Web3Provider) {
@@ -36,13 +34,12 @@ public class web3 {
         return self.ethInstance!
     }
 
-    public class Eth: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class Eth {
         var provider: Web3Provider
         //  weak var web3: web3?
         var web3: web3
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
+
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -60,13 +57,11 @@ public class web3 {
         return self.personalInstance!
     }
 
-    public class Personal: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class Personal {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -84,13 +79,11 @@ public class web3 {
         return self.txPoolInstance!
     }
 
-    public class TxPool: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class TxPool {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -129,13 +122,11 @@ public class web3 {
         return self.browserFunctionsInstance!
     }
 
-    public class BrowserFunctions: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class BrowserFunctions {
         var provider: Web3Provider
         //        weak var web3: web3?
         public var web3: web3
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -153,21 +144,16 @@ public class web3 {
         return self.eventLoopInstance!
     }
 
-    public class Eventloop: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class Eventloop {
 
         public typealias EventLoopCall = (web3) async -> Void
-        public typealias EventLoopContractCall = (web3contract) -> Void
+        public typealias EventLoopContractCall = (Contract) -> Void
 
         public struct MonitoredProperty {
             public var name: String
             public var calledFunction: EventLoopCall
         }
-
-        //  public struct MonitoredContract {
-        //      public var name: String
-        //      public var queue: DispatchQueue
-        //      public var calledFunction: EventLoopContractCall
-        //  }
 
         var provider: Web3Provider
         //        weak var web3: web3?
@@ -177,19 +163,15 @@ public class web3 {
         public var monitoredProperties: [MonitoredProperty] = [MonitoredProperty]()
         //  public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
         public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
-
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
         }
     }
 
-    public typealias AssemblyHookFunction = ((EthereumTransaction, EthereumContract, TransactionOptions)) -> (EthereumTransaction, EthereumContract, TransactionOptions, Bool)
+    public typealias AssemblyHookFunction = ((CodableTransaction, EthereumContract, CodableTransaction)) -> (CodableTransaction, EthereumContract, CodableTransaction, Bool)
 
-    public typealias SubmissionHookFunction = ((EthereumTransaction, TransactionOptions)) -> (EthereumTransaction, TransactionOptions, Bool)
+    public typealias SubmissionHookFunction = ((CodableTransaction, CodableTransaction)) -> (CodableTransaction, CodableTransaction, Bool)
 
     public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> ()
 

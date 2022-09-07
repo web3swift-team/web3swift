@@ -8,9 +8,64 @@
 
 import Foundation
 import BigInt
-import Core
 
 /// Standard representation of a smart contract.
+///
+/// ## How to
+/// To create a smart contract deployment transaction there is only one requirement - `bytecode`.
+/// That is the compiled smart contract that is ready to be executed by EVM, or eWASM if that is a Serenity.
+/// Creating a transaction is as simple as:
+///
+/// ```swift
+/// contractInstance.deploy(bytecode: smartContractBytecode)
+/// ```
+///
+/// One of the default implementations of `ContractProtocol` is ``EthereumContract``.
+/// ```swift
+/// let contract = EthereumContract(abi: [])
+/// contract.deploy(bytecode: smartContractBytecode)
+/// ```
+///
+/// ### Setting constructor arguments
+/// Some smart contracts expect input arguments for a constructor that is called on contract deployment.
+/// To set these input arguments you must provide `constructor` and `parameters`.
+/// Constructor can be statically created if you know upfront what are the input arguments and their exact order:
+///
+/// ```swift
+/// let inputArgsTypes: [ABI.Element.InOut] = [.init(name: "firstArgument", type: ABI.Element.ParameterType.string),
+///                                            .init(name: "secondArgument", type: ABI.Element.ParameterType.uint(bits: 256))]
+/// let constructor = ABI.Element.Constructor(inputs: inputArgsTypes, constant: false, payable: payable)
+/// let constructorArguments = ["This is the array of constructor arguments", 10_000] as [AnyObject]
+///
+/// contract.deploy(bytecode: smartContractBytecode,
+///                 constructor: constructor,
+///                 parameters: constructorArguments)
+/// ```
+///
+/// Alternatively, if you have ABI string that holds meta data about the constructor you can use it instead of creating constructor manually.
+/// But you must make sure the arguments for constructor call are of expected type in and correct order.
+/// Example of ABI string can be found in ``Web3/Utils/erc20ABI``.
+///
+/// ```swift
+/// let contract = EthereumContract(abiString)
+/// let constructorArguments = ["This is the array of constructor arguments", 10_000] as [AnyObject]
+///
+/// contract.deploy(bytecode: smartContractBytecode,
+///                 constructor: contract.constructor,
+///                 parameters: constructorArguments)
+/// ```
+///
+/// ⚠️ If you pass in only constructor or only parameters - it will have no effect on the final transaction object.
+/// Also, you have an option to set any extra bytes at the end of ``CodableTransaction/data``  attribute.
+/// Alternatively you can encode constructor parameters outside of the deploy function and only set `extraData` to pass in these
+/// parameters:
+///
+/// ```swift
+/// // `encodeParameters` call returns `Data?`. Check it for nullability before calling `deploy`
+/// // function to create `CodableTransaction`.
+/// let encodedConstructorArguments = someConstructor.encodeParameters(arrayOfInputArguments)
+/// constructor.deploy(bytecode: smartContractBytecode, extraData: encodedConstructorArguments)
+/// ```
 public protocol ContractProtocol {
     /// Address of the referenced smart contract. Can be set later, e.g. if the contract is deploying and address is not yet known.
     var address: EthereumAddress? {get set}
@@ -55,63 +110,7 @@ public protocol ContractProtocol {
     /// new Solidity keywords, types etc. that are not yet supported, etc.
     init(_ abiString: String, at: EthereumAddress?) throws
 
-    /// Creates a smart contract deployment transaction.
-    ///
-    /// ## How to
-    /// To create a smart contract deployment transaction there is only one requirement - `bytecode`.
-    /// That is the compiled smart contract that is ready to be executed by EVM, or eWASM if that is a Serenity.
-    /// Creating a transaction is as simple as:
-    ///
-    /// ```swift
-    /// contractInstance.deploy(bytecode: smartContractBytecode)
-    /// ```
-    ///
-    /// One of the default implementations of `ContractProtocol` is ``EthereumContract``.
-    /// ```swift
-    /// let contract = EthereumContract(abi: [])
-    /// contract.deploy(bytecode: smartContractBytecode)
-    /// ```
-    ///
-    /// ### Setting constructor arguments
-    /// Some smart contracts expect input arguments for a constructor that is called on contract deployment.
-    /// To set these input arguments you must provide `constructor` and `parameters`.
-    /// Constructor can be statically created if you know upfront what are the input arguments and their exact order:
-    ///
-    /// ```swift
-    /// let inputArgsTypes: [ABI.Element.InOut] = [.init(name: "firstArgument", type: ABI.Element.ParameterType.string),
-    ///                                            .init(name: "secondArgument", type: ABI.Element.ParameterType.uint(bits: 256))]
-    /// let constructor = ABI.Element.Constructor(inputs: inputArgsTypes, constant: false, payable: payable)
-    /// let constructorArguments = ["This is the array of constructor arguments", 10_000] as [AnyObject]
-    ///
-    /// contract.deploy(bytecode: smartContractBytecode,
-    ///                 constructor: constructor,
-    ///                 parameters: constructorArguments)
-    /// ```
-    ///
-    /// Alternatively, if you have ABI string that holds meta data about the constructor you can use it instead of creating constructor manually.
-    /// But you must make sure the arguments for constructor call are of expected type in and correct order.
-    /// Example of ABI string can be found in ``Web3/Utils/erc20ABI``.
-    /// 
-    /// ```swift
-    /// let contract = EthereumContract(abiString)
-    /// let constructorArguments = ["This is the array of constructor arguments", 10_000] as [AnyObject]
-    ///
-    /// contract.deploy(bytecode: smartContractBytecode,
-    ///                 constructor: contract.constructor,
-    ///                 parameters: constructorArguments)
-    /// ```
-    ///
-    /// ⚠️ If you pass in only constructor or only parameters - it will have no effect on the final transaction object.
-    /// Also, you have an option to set any extra bytes at the end of ``EthereumTransaction/data``  attribute.
-    /// Alternatively you can encode constructor parameters outside of the deploy function and only set `extraData` to pass in these
-    /// parameters:
-    ///
-    /// ```swift
-    /// // `encodeParameters` call returns `Data?`. Check it for nullability before calling `deploy`
-    /// // function to create `EthereumTransaction`.
-    /// let encodedConstructorArguments = someConstructor.encodeParameters(arrayOfInputArguments)
-    /// constructor.deploy(bytecode: smartContractBytecode, extraData: encodedConstructorArguments)
-    /// ```
+    /// Prepare transaction data for smart contract deployment transaction.
     ///
     /// - Parameters:
     ///   - bytecode: bytecode to deploy.
@@ -119,12 +118,11 @@ public protocol ContractProtocol {
     ///   - parameters: parameters for `constructor`.
     ///   - extraData: any extra data. It can be encoded input arguments for a constuctor but then you should set `constructor` and
     ///   `parameters` to be `nil`.
-    /// - Returns: transaction if given `parameters` were successfully encoded in a `constructor`. If any or both are `nil`
-    /// then no encoding will take place and a transaction with `bytecode + extraData`  will be returned.
+    /// - Returns: Encoded data for a given parameters, which is should be assigned to ``CodableTransaction.data`` property
     func deploy(bytecode: Data,
                 constructor: ABI.Element.Constructor?,
                 parameters: [AnyObject]?,
-                extraData: Data?) -> EthereumTransaction?
+                extraData: Data?) -> Data?
 
     /// Creates function call transaction with data set as `method` encoded with given `parameters`.
     /// The `method` must be part of the ABI used to init this contract.
@@ -136,7 +134,7 @@ public protocol ContractProtocol {
     ///   - parameters: method input arguments;
     ///   - extraData: additional data to append at the end of `transaction.data` field;
     /// - Returns: transaction object if `method` was found and `parameters` were successfully encoded.
-    func method(_ method: String, parameters: [AnyObject], extraData: Data?) -> EthereumTransaction?
+    func method(_ method: String, parameters: [AnyObject], extraData: Data?) -> Data?
 
     /// Decode output data of a function.
     /// - Parameters:
@@ -188,7 +186,7 @@ extension ContractProtocol {
     func deploy(_ bytecode: Data,
                 constructor: ABI.Element.Constructor? = nil,
                 parameters: [AnyObject]? = nil,
-                extraData: Data? = nil) -> EthereumTransaction? {
+                extraData: Data? = nil) -> Data? {
         deploy(bytecode: bytecode,
                constructor: constructor,
                parameters: parameters,
@@ -201,7 +199,7 @@ extension ContractProtocol {
     /// See ``ContractProtocol/method(_:parameters:extraData:)`` for details.
     func method(_ method: String = "fallback",
                 parameters: [AnyObject]? = nil,
-                extraData: Data? = nil) -> EthereumTransaction? {
+                extraData: Data? = nil) -> Data? {
         self.method(method, parameters: parameters ?? [], extraData: extraData)
     }
 
@@ -220,15 +218,15 @@ extension DefaultContractProtocol {
     public func deploy(bytecode: Data,
                        constructor: ABI.Element.Constructor?,
                        parameters: [AnyObject]?,
-                       extraData: Data?) -> EthereumTransaction? {
+                       extraData: Data?) -> Data? {
         var fullData = bytecode
 
         if let constructor = constructor,
            let parameters = parameters,
            !parameters.isEmpty {
             guard constructor.inputs.count == parameters.count,
-                  let encodedData = constructor.encodeParameters(parameters)
-            else {
+                  // FIXME: This should be zipped, because Arrays don't guarantee it's elements order
+                  let encodedData = constructor.encodeParameters(parameters) else {
                 NSLog("Constructor encoding will fail as the number of input arguments doesn't match the number of given arguments.")
                 return nil
             }
@@ -240,10 +238,7 @@ extension DefaultContractProtocol {
         }
 
         // MARK: Writing Data flow
-        return EthereumTransaction(to: .contractDeploymentAddress(),
-                                   value: BigUInt(0),
-                                   data: fullData,
-                                   parameters: .init(gasLimit: BigUInt(0), gasPrice: BigUInt(0)))
+        return fullData
     }
 
     /// Call given contract method with given parameters
@@ -251,7 +246,7 @@ extension DefaultContractProtocol {
     ///   - method: Method to call
     ///   - parameters: Parameters to pass to method call
     ///   - extraData: Any additional data that needs to be encoded
-    /// - Returns: preset EthereumTransaction with filled date
+    /// - Returns: preset CodableTransaction with filled date
     ///
     /// Returned transaction have filled following priperties:
     ///   - to: contractAddress
@@ -260,14 +255,10 @@ extension DefaultContractProtocol {
     ///   - params: EthereumParameters with no contract method call encoded data.
     public func method(_ method: String,
                        parameters: [AnyObject],
-                       extraData: Data?) -> EthereumTransaction? {
-        guard let to = self.address else { return nil }
-
-        let params = EthereumParameters(gasLimit: BigUInt(0), gasPrice: BigUInt(0))
-
+                       extraData: Data?) -> Data? {
         // MARK: - Encoding ABI Data flow
         if method == "fallback" {
-            return EthereumTransaction(to: to, value: BigUInt(0), data: extraData ?? Data(), parameters: params)
+            return extraData ?? Data()
         }
 
         let method = Data.fromHex(method) == nil ? method : method.addHexPrefix().lowercased()
@@ -282,9 +273,7 @@ extension DefaultContractProtocol {
         }
 
         // MARK: - Encoding ABI Data flow
-        // return filled EthereumTransaction, which is could be sent iterate with a contract.
-        // But no gas related data here yet.
-        return EthereumTransaction(to: to, value: BigUInt(0), data: encodedData, parameters: params)
+        return encodedData
     }
 
     public func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?) {

@@ -114,7 +114,7 @@ public struct RLP {
     }
 
     // FIXME: Make encode generic to avoid casting it's argument to [AnyObject]
-    public static func encode(_ elements: Array<AnyObject>) -> Data? {
+    internal static func encode(_ elements: Array<AnyObject>) -> Data? {
         var encodedData = Data()
         for e in elements {
             if let encoded = encode(e) {
@@ -132,12 +132,12 @@ public struct RLP {
         return encodedLength
     }
 
-    public static func decode(_ raw: String) -> RLPItem? {
+    internal static func decode(_ raw: String) -> RLPItem? {
         guard let rawData = Data.fromHex(raw) else {return nil}
         return decode(rawData)
     }
 
-    public static func decode(_ raw: Data) -> RLPItem? {
+    internal static func decode(_ raw: Data) -> RLPItem? {
         if raw.count == 0 {
             return RLPItem.noItem
         }

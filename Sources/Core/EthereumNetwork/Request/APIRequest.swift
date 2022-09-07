@@ -1,6 +1,5 @@
 //
 //  APIRequest.swift
-//  Web3swift
 //
 //  Created by Yaroslav on 24.05.2022.
 //
@@ -97,7 +96,7 @@ public enum APIRequest {
     /// - Parameters:
     ///     - TransactionParameters: parameters of planned transaction
     ///     - BlockNumber: block where it should be evalueated
-    case estimateGas(TransactionParameters, BlockNumber)
+    case estimateGas(CodableTransaction, BlockNumber)
     
     /// Send raw transaction
     /// - Parameters:
@@ -107,7 +106,7 @@ public enum APIRequest {
     /// Send transaction object
     /// - Parameters:
     ///     - TransactionParameters: transaction to be sent into chain
-    case sendTransaction(TransactionParameters)
+    case sendTransaction(CodableTransaction)
    
     /// Get transaction by hash
     /// - Parameters:
@@ -136,7 +135,7 @@ public enum APIRequest {
     /// - Parameters:
     ///     - TransactionParameters: transaction to be sent into chain
     ///     - BlockNumber: block where it should be evalueated
-    case call(TransactionParameters, BlockNumber)
+    case call(CodableTransaction, BlockNumber)
     
     /// Get a transaction counts on a given block
     ///
@@ -224,5 +223,4 @@ public enum APIRequest {
     // tx Namespace - https://geth.ethereum.org/docs/rpc/ns-txpool
     case getTxPoolStatus // No in Eth API
     case getTxPoolContent // No in Eth API
-    case getTxPoolInspect // No in Eth API
 }

@@ -12,7 +12,13 @@ public struct EIP1559Envelope: EIP2718Envelope {
 
     // common parameters for any transaction
     public var nonce: BigUInt = 0
-    public var chainID: BigUInt
+    public var chainID: BigUInt?
+
+    public var from: EthereumAddress? {
+        guard let publicKey = publicKey else { return nil }
+        return Utilities.publicToAddress(publicKey)
+    }
+
     public var to: EthereumAddress
     public var value: BigUInt
     public var data: Data
@@ -22,10 +28,13 @@ public struct EIP1559Envelope: EIP2718Envelope {
 
     // EIP-1559 specific parameters
     public var gasLimit: BigUInt
+
+    var gasPrice: BigUInt? = nil
+
     /// Value of the tip to the miner for transaction processing.
     ///
     /// Full amount of this variable goes to a miner.
-    public var maxPriorityFeePerGas: BigUInt
+    public var maxPriorityFeePerGas: BigUInt?
     /// Value of the fee for one gas unit
     ///
     /// This value should be greater than sum of:
@@ -38,7 +47,7 @@ public struct EIP1559Envelope: EIP2718Envelope {
     /// If amount of this will be **lower** than sum of `Block.baseFeePerGas` and `maxPriorityFeePerGas`
     /// miner will recieve amount calculated by the following equation: `maxFeePerGas - Block.baseFeePerGas`
     /// where 'Block' is the block that the transaction will be included.
-    public var maxFeePerGas: BigUInt
+    public var maxFeePerGas: BigUInt?
     public var accessList: [AccessListEntry] // from EIP-2930
 
     // for CustomStringConvertible
@@ -59,35 +68,6 @@ public struct EIP1559Envelope: EIP2718Envelope {
         toReturn += "s: " + String(self.s) + "\n"
         return toReturn
     }
-
-    public var parameters: EthereumParameters {
-        get {
-            return EthereumParameters(
-                type: type,
-                to: to,
-                nonce: nonce,
-                chainID: chainID,
-                value: value,
-                data: data,
-                gasLimit: gasLimit,
-                maxFeePerGas: maxFeePerGas,
-                maxPriorityFeePerGas: maxPriorityFeePerGas,
-                accessList: accessList
-            )
-        }
-        set(val) {
-            nonce = val.nonce ?? nonce
-            chainID = val.chainID ?? chainID
-            to = val.to ?? to
-            value = val.value ?? value
-            data = val.data ?? data
-            gasLimit = val.gasLimit ?? gasLimit
-            maxFeePerGas = val.maxFeePerGas ?? maxFeePerGas
-            maxPriorityFeePerGas = val.maxPriorityFeePerGas ?? maxPriorityFeePerGas
-            accessList = val.accessList ?? accessList
-        }
-    }
-
 }
 
 extension EIP1559Envelope {
@@ -233,23 +213,6 @@ extension EIP1559Envelope {
         }
     }
 
-    public init(to: EthereumAddress, nonce: BigUInt? = nil,
-                v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0,
-                parameters: EthereumParameters? = nil) {
-        self.to = to
-        self.nonce = nonce ?? parameters?.nonce ?? 0
-        self.chainID = parameters?.chainID ?? 0
-        self.value = parameters?.value ?? 0
-        self.data =  parameters?.data ?? Data()
-        self.v = v
-        self.r = r
-        self.s = s
-        self.maxPriorityFeePerGas = parameters?.maxPriorityFeePerGas ?? 0
-        self.maxFeePerGas = parameters?.maxFeePerGas ?? 0
-        self.gasLimit = parameters?.gasLimit ?? 0
-        self.accessList = parameters?.accessList ?? []
-    }
-
     // memberwise
     public init(to: EthereumAddress, nonce: BigUInt = 0,
                 chainID: BigUInt = 0, value: BigUInt = 0, data: Data,
@@ -270,16 +233,16 @@ extension EIP1559Envelope {
         self.s = s
     }
 
-    public mutating func applyOptions(_ options: TransactionOptions) {
-        // type cannot be changed here, and is ignored
-        self.nonce = options.resolveNonce(self.nonce)
-        self.maxPriorityFeePerGas = options.resolveMaxPriorityFeePerGas(self.maxPriorityFeePerGas)
-        self.maxFeePerGas = options.resolveMaxFeePerGas(self.maxFeePerGas)
-        self.gasLimit = options.resolveGasLimit(self.gasLimit)
-        self.value = options.value ?? self.value
-        self.to = options.to ?? self.to
-        self.accessList = options.accessList ?? self.accessList
-    }
+//    public mutating func applyTransaction(_ transaction: CodableTransaction) {
+//        // type cannot be changed here, and is ignored
+//        self.nonce = transaction.resolveNonce(self.nonce)
+//        self.maxPriorityFeePerGas = transaction.resolveMaxPriorityFeePerGas(self.maxPriorityFeePerGas)
+//        self.maxFeePerGas = transaction.resolveMaxFeePerGas(self.maxFeePerGas)
+//        self.gasLimitPolicy = transaction.resolveGasLimit(self.gasLimit)
+//        self.value = transaction.value ?? self.value
+//        self.to = transaction.to ?? self.to
+//        self.accessList = transaction.accessList ?? self.accessList
+//    }
 
     public func encode(for type: EncodeType = .transaction) -> Data? {
         let fields: [AnyObject]
@@ -292,36 +255,5 @@ extension EIP1559Envelope {
         guard var result = RLP.encode(fields) else { return nil }
         result.insert(UInt8(self.type.rawValue), at: 0)
         return result
-    }
-
-    public func encodeAsDictionary(from: EthereumAddress? = nil) -> TransactionParameters? {
-        var toString: String?
-        switch self.to.type {
-        case .normal:
-            toString = self.to.address.lowercased()
-        case .contractDeployment:
-            break
-        }
-        var params = TransactionParameters(from: from?.address.lowercased(), to: toString)
-        let typeEncoding = String(UInt8(self.type.rawValue), radix: 16).addHexPrefix()
-        params.type = typeEncoding
-        let chainEncoding = self.chainID.abiEncode(bits: 256)
-        params.chainID = chainEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        var accessEncoding: [TransactionParameters.AccessListEntry] = []
-        for listEntry in self.accessList {
-            guard let encoded = listEntry.encodeAsDictionary() else { return nil }
-            accessEncoding.append(encoded)
-        }
-        params.accessList = accessEncoding
-        let gasEncoding = gasLimit > 21100 ? self.gasLimit.abiEncode(bits: 256) : nil
-        params.gas = gasEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let maxFeeEncoding = self.maxFeePerGas.abiEncode(bits: 256)
-        params.maxFeePerGas = maxFeeEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let maxPriorityEncoding = self.maxPriorityFeePerGas.abiEncode(bits: 256)
-        params.maxPriorityFeePerGas = maxPriorityEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        let valueEncoding = self.value.abiEncode(bits: 256)
-        params.value = valueEncoding?.toHexString().addHexPrefix().stripLeadingZeroes()
-        params.data = self.data.toHexString().addHexPrefix()
-        return params
     }
 }

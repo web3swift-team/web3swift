@@ -18,7 +18,7 @@ import BigInt
     Adding a new transaction type in the future should be as straight forward as adding to the TransactionType enum here
     then creating a new struct that implements to `EIP2718Envelope`, and implementing the required elements for the type
     Finally adding the type specific inits to the factory routines in `EnvelopeFactory` so that objectts of the new type 
-    will get generated when `EthereumTransaction` is being created with data for the new type
+    will get generated when `CodableTransaction` is being created with data for the new type
 */
 
 /// Enumeration for supported transaction types
@@ -47,6 +47,8 @@ public enum TransactionType: UInt, CustomStringConvertible, CaseIterable {
     }
 }
 
+extension TransactionType: Codable { }
+
 /// Encoding selector for transaction transmission/hashing or signing
 public enum EncodeType {
 
@@ -58,10 +60,10 @@ public enum EncodeType {
 }
 
 /// Protocol definition for all transaction envelope types
-/// All envelopes must conform to this protocol to work with `EthereumTransaction`
+/// All envelopes must conform to this protocol to work with `CodableTransaction`
 /// each implememtation holds all the type specific data
 /// and implments the type specific encoding/decoding
-public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
+protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
 
     /// The type of transaction this envelope represents
     var type: TransactionType { get }
@@ -70,14 +72,29 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     /// the nonce value for the transaction
     var nonce: BigUInt { get set }
 
+    var sender: EthereumAddress? { get }
+
+    var chainID: BigUInt? { get set }
+
     /// On chain address that this transaction is being sent to
     var to: EthereumAddress { get set }
 
-    // /// The native value of the transaction in Wei
-    // var value: BigUInt { get set }
+    /// The native value of the transaction in Wei
+    var value: BigUInt { get set }
 
-    // /// Any encoded data accompanying the transaction
-    // var data: Data { get set }
+    var gasLimit: BigUInt { get set }
+
+    var gasPrice: BigUInt? { get set }
+
+    /// the max base fee per gas unit (EIP-1559 only)
+    /// this value must be >= baseFee + maxPriorityFeePerGas
+    var maxFeePerGas: BigUInt? { get set }
+
+    /// the maximum tip to pay the miner (EIP-1559 only)
+    var maxPriorityFeePerGas: BigUInt? { get set }
+    
+    /// Any encoded data accompanying the transaction
+    var data: Data { get set }
 
     // Signature data should not be set directly
     /// signature V compoonent
@@ -89,45 +106,26 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     /// signature S compoonent
     var s: BigUInt { get set }
 
-    /// Transaction Parameters object
-    /// used to provide external access to the otherwise
-    /// protected parameters of the object
-    var parameters: EthereumParameters { get set }
+    /// - Returns: the public key decoded from the signature data
+    var publicKey: Data? { get }
+    
+    /// - Returns: a hash of the transaction suitable for signing
+    var signatureHash: Data? { get }
 
     // required initializers
     // for Decodable support
-    /// initializer for creating an `EthereumTransaction` with the Decodable protocol
-    /// will return an new `EthereumTransaction` object on success
+    /// initializer for creating an `CodableTransaction` with the Decodable protocol
+    /// will return an new `CodableTransaction` object on success
     /// thows a `Web3.dataError` if an error occurs while trying to decode a value
     /// returns nil if a required field is not found in the decoder stream
     init?(from decoder: Decoder) throws // Decodable Protocol
 
     // initializes from a raw stream of bytes
     // can fail if input stream is not of the right size/cannot be decoded
-    /// initializer for creating an `EthereumTransaction` with raw bytestream data
-    /// will return an new `EthereumTransaction` object on success
+    /// initializer for creating an `CodableTransaction` with raw bytestream data
+    /// will return an new `CodableTransaction` object on success
     /// returns nil if a required field is not found in the decoder stream, or can't be decoded
     init?(rawValue: Data) // Decode from Ethereum Data
-
-    // pseudo memberwise initializer
-    // accepts all common parameters (full description with default implementation below)
-    // Note the `nil` parameters, even though non-optional in the struct, are there to allow
-    // fallback to pulling the value from `options`. If options also does not have a value, a suitable default is used
-    // precedence is as follows: direct parameter > options value > default value
-    /// Default memberwse initializer that all envelopes must support
-    /// - Parameters:
-    ///   - to: EthereumAddress of destination
-    ///   - nonce: nonce for the transaction
-    ///   - v: Signature V component
-    ///   - r: Signature R component
-    ///   - s: Signature S component
-    ///   - parameters: EthereumParameters struct containing any other required parameters
-    init(to: EthereumAddress, nonce: BigUInt?, v: BigUInt, r: BigUInt, s: BigUInt, parameters: EthereumParameters?)
-
-    /// Applies the passed options to the transaction envelope
-    ///   - Parameters:
-    ///     - {default}: TransactionOptions struct
-    mutating func applyOptions(_ options: TransactionOptions)
 
     /// Transaction encoder for transmission or signing
     ///  - Parameters:
@@ -136,10 +134,6 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     ///     - when type is .transaction the thransaction is encoded for hashing or transmission to the blockchain
     /// - Returns: a raw encoding stream representing the transaction, encoded according to it's type
     func encode(for type: EncodeType) -> Data?
-
-    /// Encodes the transaction as a set of strings for JSON transmission
-    /// - Returns: A TransactionParameters object containg all the parameters for the transaction
-    func encodeAsDictionary(from: EthereumAddress?) -> TransactionParameters?
 
     /// used by the signing algorithm to set the v, r, s parameters
     /// - Parameters:
@@ -154,10 +148,38 @@ public protocol AbstractEnvelope: CustomStringConvertible { // possibly add Coda
     mutating func clearSignatureData()
 }
 
-public extension AbstractEnvelope {
+extension AbstractEnvelope {
+    
+    var sender: EthereumAddress? {
+        guard let publicKey = publicKey else { return nil }
+        return Utilities.publicToAddress(publicKey)
+    }
+    
     mutating func clearSignatureData() {
         self.v = 1
         self.r = 0
         self.s = 0
     }
+    
+    /// - Returns: a hash of the transaction suitable for signing
+    var signatureHash: Data? {
+        guard let encoded = self.encode(for: .signature) else { return nil }
+        let hash = encoded.sha3(.keccak256)
+        return hash
+    }
+    
+    /// - Returns: the public key decoded from the signature data
+    var publicKey: Data? {
+        guard let sigData = self.getUnmarshalledSignatureData() else { return nil }
+        guard let vData = BigUInt(sigData.v).serialize().setLengthLeft(1) else { return nil }
+        let rData = sigData.r
+        let sData = sigData.s
+
+        guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else { return nil }
+        guard let hash = signatureHash else { return nil }
+
+        guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else { return nil }
+        return publicKey
+    }
 }
+

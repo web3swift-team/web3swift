@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -49,7 +48,8 @@ extension Web3.Utils {
 
         }
 
-        func preAssemblyFunction(tx: EthereumTransaction, contract: EthereumContract, transactionOptions: TransactionOptions) -> (EthereumTransaction, EthereumContract, TransactionOptions, Bool) {
+        // FIXME: Rewrite this to CodableTransaction
+        func preAssemblyFunction(tx: CodableTransaction, contract: EthereumContract, transactionOptions: CodableTransaction) -> (CodableTransaction, EthereumContract, CodableTransaction, Bool) {
             guard let from = transactionOptions.from else {
                 // do nothing
                 return (tx, contract, transactionOptions, true)
@@ -66,7 +66,7 @@ extension Web3.Utils {
             //            var modifiedTX = tx
             //            modifiedTX.nonce = newNonce
             var newOptions = transactionOptions
-            newOptions.nonce = .manual(newNonce)
+            newOptions.noncePolicy = .exact(newNonce)
             return (tx, contract, newOptions, true)
         }
 

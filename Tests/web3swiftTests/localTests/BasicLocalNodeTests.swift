@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -25,16 +24,16 @@ class BasicLocalNodeTests: LocalTestCase {
         let parameters = [] as [AnyObject]
         // MARK: Writing Data flow
         let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
-        deployTx.transactionOptions.from = allAddresses[0]
-        deployTx.transactionOptions.gasLimit = .manual(3000000)
+        deployTx.transaction.from = allAddresses[0]
+        deployTx.transaction.gasLimitPolicy = .manual(3000000)
 
-        let result = try await deployTx.send()
+        let result = try await deployTx.writeToChain(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
 
         Thread.sleep(forTimeInterval: 1.0)
 
-        let receipt = try await web3.eth.transactionReceipt(txHash)
+        let receipt = try await web3.eth.transactionReceipt(txHash.stripHexPrefix().data(using: .utf8)!)
         print(receipt)
 
         switch receipt.status {
@@ -44,7 +43,7 @@ class BasicLocalNodeTests: LocalTestCase {
             break
         }
 
-        let details = try await web3.eth.transactionDetails(txHash)
+        let details = try await web3.eth.transactionDetails(txHash.stripHexPrefix().data(using: .utf8)!)
         print(details)
     }
 
@@ -55,24 +54,24 @@ class BasicLocalNodeTests: LocalTestCase {
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)!
 
         let parameters = [] as [AnyObject]
-        let sendTx = contract.method("fallback", parameters: parameters)!
+        let sendTx = contract.createWriteOperation("fallback", parameters: parameters)!
 
-        let valueToSend = Utilities.parseToBigUInt("1.0", units: .eth)
-        sendTx.transactionOptions.value = valueToSend
-        sendTx.transactionOptions.from = allAddresses[0]
+        let valueToSend = Utilities.parseToBigUInt("1.0", units: .eth)!
+        sendTx.transaction.value = valueToSend
+        sendTx.transaction.from = allAddresses[0]
 
         let balanceBeforeTo = try await web3.eth.getBalance(for: sendToAddress)
         let balanceBeforeFrom = try await web3.eth.getBalance(for: allAddresses[0])
         print("Balance before to: " + balanceBeforeTo.description)
         print("Balance before from: " + balanceBeforeFrom.description)
 
-        let result = try await sendTx.send()
+        let result = try await sendTx.writeToChain(password: "web3swift")
         let txHash = result.hash
         print("Transaction with hash " + txHash)
 
         Thread.sleep(forTimeInterval: 1.0)
 
-        let receipt = try await web3.eth.transactionReceipt(txHash)
+        let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
         print(receipt)
 
         switch receipt.status {
@@ -82,7 +81,7 @@ class BasicLocalNodeTests: LocalTestCase {
             break
         }
 
-        let details = try await web3.eth.transactionDetails(txHash)
+        let details = try await web3.eth.transactionDetails(txHash.data(using: .utf8)!)
         print(details)
 
 
@@ -91,8 +90,8 @@ class BasicLocalNodeTests: LocalTestCase {
         print("Balance after to: " + balanceAfterTo.description)
         print("Balance after from: " + balanceAfterFrom.description)
 
-        XCTAssert(balanceAfterTo - balanceBeforeTo == valueToSend)
-        let txnGasPrice = details.transaction.parameters.gasPrice ?? 0
-        XCTAssert(balanceBeforeFrom - (balanceAfterFrom + receipt.gasUsed * txnGasPrice) == valueToSend)
+        XCTAssertEqual(balanceAfterTo - balanceBeforeTo, valueToSend)
+        let txnGasPrice = details.transaction.meta?.gasPrice ?? 0
+        XCTAssertEqual(balanceBeforeFrom - (balanceAfterFrom + receipt.gasUsed * txnGasPrice), valueToSend)
     }
 }
