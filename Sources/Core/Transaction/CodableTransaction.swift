@@ -19,7 +19,7 @@ public struct CodableTransaction {
 
     /// storage container for additional metadata returned by the node
     /// when a transaction is decoded form a JSON stream
-    public var meta: EthereumMetadata?
+    public var meta: TransactionMetadata?
 
     // MARK: - Properties that always sends to a Node
 
@@ -243,7 +243,7 @@ extension CodableTransaction: Codable {
         maxPriorityFeePerGasPolicy = .automatic
 
         // capture any metadata that might be present
-        self.meta = try EthereumMetadata(from: decoder)
+        self.meta = try TransactionMetadata(from: decoder)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -312,7 +312,7 @@ extension CodableTransaction {
         case manual(BigUInt)
     }
 
-    public func resolveNonce(provider: Web3Provider) async throws -> BigUInt {
+    func resolveNonce(provider: Web3Provider) async throws -> BigUInt {
         switch noncePolicy {
         case .pending, .latest, .earliest:
             guard let address = from ?? sender else { throw Web3Error.valueError }
@@ -324,7 +324,7 @@ extension CodableTransaction {
         }
     }
 
-    public func resolveGasPrice(provider: Web3Provider) async throws -> BigUInt {
+    func resolveGasPrice(provider: Web3Provider) async throws -> BigUInt {
         let oracle = Oracle(provider)
         switch gasPricePolicy {
         case .automatic, .withMargin:
@@ -334,7 +334,7 @@ extension CodableTransaction {
         }
     }
 
-    public func resolveGasLimit(provider: Web3Provider) async throws -> BigUInt {
+    func resolveGasLimit(provider: Web3Provider) async throws -> BigUInt {
         let request: APIRequest = .estimateGas(self, self.callOnBlock ?? .latest)
         let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)
         switch gasLimitPolicy {
@@ -351,7 +351,7 @@ extension CodableTransaction {
         }
     }
 
-    public func resolveMaxFeePerGas(provider: Web3Provider) async throws -> BigUInt {
+    func resolveMaxFeePerGas(provider: Web3Provider) async throws -> BigUInt {
         let oracle = Oracle(provider)
         switch maxFeePerGasPolicy {
         case .automatic:
@@ -361,7 +361,7 @@ extension CodableTransaction {
         }
     }
 
-    public func resolveMaxPriorityFeePerGas(provider: Web3Provider) async throws -> BigUInt {
+    func resolveMaxPriorityFeePerGas(provider: Web3Provider) async throws -> BigUInt {
         let oracle = Oracle(provider)
         switch maxPriorityFeePerGasPolicy {
         case .automatic:

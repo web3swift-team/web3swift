@@ -11,7 +11,7 @@ import BigInt
 /// returned by nodes when reading a transaction
 /// from the blockchain. The data here is not 
 /// part of the transaction itself
-public struct EthereumMetadata {
+public struct TransactionMetadata {
 
     /// hash for the block that contains this transaction on chain
     public var blockHash: Data?
@@ -34,7 +34,7 @@ public struct EthereumMetadata {
     public var gasPrice: BigUInt?
 }
 
-public extension EthereumMetadata {
+public extension TransactionMetadata {
     private enum CodingKeys: String, CodingKey {
         case blockHash
         case blockNumber

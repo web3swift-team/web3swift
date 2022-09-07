@@ -21,7 +21,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
         // MARK: Writing Data flow
-        let deployTx = contract.deploy(bytecode: bytecode)!
+        let deployTx = contract.prepareDeploy(bytecode: bytecode)!
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
         // MARK: Sending Data flow
@@ -59,7 +59,7 @@ class AdvancedABIv2Tests: LocalTestCase {
 
         let parameters = [] as [AnyObject]
         // MARK: Writing Data flow
-        let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
+        let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
         let result = try await deployTx.writeToChain(password: "web3swift")
@@ -96,7 +96,7 @@ class AdvancedABIv2Tests: LocalTestCase {
 
         let parameters = [] as [AnyObject]
         // MARK: Writing Data flow
-        let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
+        let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
         let result = try await deployTx.writeToChain(password: "web3swift")
@@ -132,7 +132,7 @@ class AdvancedABIv2Tests: LocalTestCase {
 
         let parameters = [] as [AnyObject]
         // MARK: Writing Data flow
-        let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
+        let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
         let result = try await deployTx.writeToChain(password: "web3swift")
@@ -169,7 +169,7 @@ class AdvancedABIv2Tests: LocalTestCase {
 
         let parameters = [] as [AnyObject]
         // MARK: Writing Data flow
-        let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
+        let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
         let result = try await deployTx.writeToChain(password: "web3swift")

@@ -51,7 +51,7 @@ extension web3 {
         /// If extraData is supplied it is appended to encoded bytecode and constructor parameters.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func deploy(bytecode: Data,
+        public func prepareDeploy(bytecode: Data,
                            constructor: ABI.Element.Constructor? = nil,
                            parameters: [AnyObject]? = nil,
                            extraData: Data? = nil) -> WriteOperation? {

@@ -23,7 +23,7 @@ class BasicLocalNodeTests: LocalTestCase {
 
         let parameters = [] as [AnyObject]
         // MARK: Writing Data flow
-        let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
+        let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
 

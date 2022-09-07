@@ -28,7 +28,7 @@ class TestHelpers {
             EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!,
             1024
         ] as [AnyObject]
-        let deployTx = contract.deploy(bytecode: bytecode,
+        let deployTx = contract.prepareDeploy(bytecode: bytecode,
                                        constructor: contract.contract.constructor,
                                        parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
