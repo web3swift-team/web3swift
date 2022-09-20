@@ -68,27 +68,27 @@ extension Web3.Utils {
             return (tx, contract, true)
         }
 
-        func postSubmissionFunction(result: TransactionSendingResult) {
-            guard let from = result.transaction.sender else {
-                // do nothing
-                return
-            }
-
-            let newNonce = result.transaction.nonce
-
-            if let knownNonce = self.nonceLookups[from] {
-                if knownNonce != newNonce {
-                    self.queue.async {
-                        self.nonceLookups[from] = newNonce
-                    }
-                }
-                return
-            }
-            self.queue.async {
-                self.nonceLookups[from] = newNonce
-            }
-            return
-        }
+//        func postSubmissionFunction(result: TransactionSendingResult) {
+//            guard let from = result.transaction.sender else {
+//                // do nothing
+//                return
+//            }
+//
+//            let newNonce = result.transaction.nonceRe
+//
+//            if let knownNonce = self.nonceLookups[from] {
+//                if knownNonce != newNonce {
+//                    self.queue.async {
+//                        self.nonceLookups[from] = newNonce
+//                    }
+//                }
+//                return
+//            }
+//            self.queue.async {
+//                self.nonceLookups[from] = newNonce
+//            }
+//            return
+//        }
 
 //        public func attach(_ web3: web3) {
 //            self.web3 = web3

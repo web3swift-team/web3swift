@@ -23,6 +23,7 @@ class ST20AndSecurityTokenTests: XCTestCase {
         let symbol = try await st20token.symbol()
         let name = try await st20token.name()
         let decimals = try await st20token.decimals()
+        // FIXME Reading sometimes messes values.
         XCTAssertEqual(symbol, "MIMI")
         XCTAssertEqual(name, "Mimi")
         XCTAssertEqual(decimals, 18)

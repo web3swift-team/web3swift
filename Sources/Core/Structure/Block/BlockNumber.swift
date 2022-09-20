@@ -39,3 +39,18 @@ extension BlockNumber: APIRequestParameterType {
         try container.encode(description)
     }
 }
+
+extension BlockNumber: Policyable {
+    public func resolve(provider: Web3Provider, transaction: CodableTransaction?) async throws -> BigUInt {
+        guard let transaction = transaction else { throw Web3Error.valueError }
+        switch self {
+        case .pending, .latest, .earliest:
+            guard let address = transaction.from ?? transaction.sender else { throw Web3Error.valueError }
+            let request: APIRequest = .getTransactionCount(address.address, transaction.callOnBlock ?? .latest)
+            let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)
+            return response.result
+        case .exact(let value):
+            return value
+        }
+    }
+}
