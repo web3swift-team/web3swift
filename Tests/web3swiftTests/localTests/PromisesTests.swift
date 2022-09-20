@@ -82,7 +82,7 @@
 //        guard let tx1 = contract.write("test",
 //                                       parameters: [amount1] as [AnyObject],
 //                                       extraData: Data(),
-//                                       transactionOptions: options) else {
+//                                       transaction: options) else {
 //            return
 //        }
 //        // MARK: Writing Data flow
@@ -95,7 +95,7 @@
 //        guard let tx2 = contract.write("test",
 //                                       parameters: [amount2] as [AnyObject],
 //                                       extraData: Data(),
-//                                       transactionOptions: options) else {
+//                                       transaction: options) else {
 //            return
 //        }
 //        // MARK: Writing Data flow

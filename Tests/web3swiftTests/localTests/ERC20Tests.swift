@@ -54,6 +54,6 @@ class ERC20Tests: LocalTestCase {
 //          method,
 //          parameters: [toAddress, amount] as [AnyObject],
 //          extraData: Data(),
-//          transactionOptions: options)!
+//          transaction: options)!
 //    }
 }

@@ -73,7 +73,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
     internal var _decimals: UInt8? = nil
     internal var _hasReadProperties: Bool = false
 
-    public var transactionOptions: CodableTransaction
+    public var transaction: CodableTransaction
     public var web3: web3
     public var provider: Web3Provider
     public var address: EthereumAddress
@@ -89,15 +89,14 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         self.web3 = web3
         self.provider = provider
         self.address = address
-        self.transactionOptions = transaction
-        self.transactionOptions.to = address
+        self.transaction = transaction
+        self.transaction.to = address
         self.abi = abi
     }
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("balanceOf", parameters: [account] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -105,8 +104,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -114,10 +112,9 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -136,10 +133,9 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -159,10 +155,9 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -182,10 +177,9 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -205,8 +199,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     public func totalSupply() async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -214,10 +207,9 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func approve(from: EthereumAddress, spender: EthereumAddress, expectedValue: String, newValue: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -240,10 +232,9 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func increaseAllowance(from: EthereumAddress, spender: EthereumAddress, value: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -263,10 +254,9 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func decreaseAllowance(from: EthereumAddress, spender: EthereumAddress, value: String, strict: Bool) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -286,9 +276,8 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func setERC20ApproveChecking(from: EthereumAddress, approveChecking: Bool) throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
+        self.transaction.from = from
+        self.transaction.to = self.address
 
         let tx = contract.createWriteOperation("setERC20ApproveChecking", parameters: [approveChecking] as [AnyObject] )!
         return tx
@@ -296,8 +285,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func spendableAllowance(owner: EthereumAddress, spender: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("spendableAllowance", parameters: [owner, spender] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -305,10 +293,9 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func transfer(from: EthereumAddress, data: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -327,10 +314,9 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func transferAndCall(from: EthereumAddress, to: EthereumAddress, value: String, data: [UInt8]) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -349,8 +335,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func nonceOf(owner: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("nonceOf", parameters: [owner] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -358,10 +343,9 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func increaseNonce(from: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         let tx = contract.createWriteOperation("increaseNonce", parameters: [] as [AnyObject] )!
         return tx
@@ -369,10 +353,9 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func delegateTransferAndCall(from: EthereumAddress, nonce: BigUInt, fee: BigUInt, gasAmount: BigUInt, to: EthereumAddress, value: String, data: [UInt8], mode: IERC1376DelegateMode, v: UInt8, r: Data, s: Data) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -394,8 +377,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func directDebit(debtor: EthereumAddress, receiver: EthereumAddress) async throws -> DirectDebit {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("directDebit", parameters: [debtor, receiver] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? DirectDebit else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -403,9 +385,8 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func setupDirectDebit(from: EthereumAddress, receiver: EthereumAddress, info: DirectDebitInfo) throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
+        self.transaction.from = from
+        self.transaction.to = self.address
 
         let tx = contract.createWriteOperation("setupDirectDebit", parameters: [receiver, info] as [AnyObject] )!
         return tx
@@ -413,9 +394,8 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func terminateDirectDebit(from: EthereumAddress, receiver: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
+        self.transaction.from = from
+        self.transaction.to = self.address
 
         let tx = contract.createWriteOperation("terminateDirectDebit", parameters: [receiver] as [AnyObject] )!
         return tx
@@ -423,9 +403,8 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func withdrawDirectDebit(from: EthereumAddress, debtor: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
+        self.transaction.from = from
+        self.transaction.to = self.address
 
         let tx = contract.createWriteOperation("withdrawDirectDebit", parameters: [debtor] as [AnyObject] )!
         return tx
@@ -433,9 +412,8 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
     func withdrawDirectDebit(from: EthereumAddress, debtors: [EthereumAddress], strict: Bool) throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
+        self.transaction.from = from
+        self.transaction.to = self.address
 
         let tx = contract.createWriteOperation("withdrawDirectDebit", parameters: [debtors, strict] as [AnyObject] )!
         return tx

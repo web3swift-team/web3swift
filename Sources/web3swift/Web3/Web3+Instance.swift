@@ -169,28 +169,28 @@ public class web3 {
         }
     }
 
-    public typealias AssemblyHookFunction = ((CodableTransaction, EthereumContract, CodableTransaction)) -> (CodableTransaction, EthereumContract, CodableTransaction, Bool)
-
-    public typealias SubmissionHookFunction = ((CodableTransaction, CodableTransaction)) -> (CodableTransaction, CodableTransaction, Bool)
+//    public typealias AssemblyHookFunction = ((inout CodableTransaction, EthereumContract)) -> Bool
+//
+//    public typealias SubmissionHookFunction = (inout CodableTransaction) -> Bool
 
     public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> ()
 
-    public struct AssemblyHook {
-        public var function: AssemblyHookFunction
-    }
+//    public struct AssemblyHook {
+//        public var function: AssemblyHookFunction
+//    }
 
-    public struct SubmissionHook {
-        public var function: SubmissionHookFunction
-    }
+//    public struct SubmissionHook {
+//        public var function: SubmissionHookFunction
+//    }
 
     public struct SubmissionResultHook {
         public var function: SubmissionResultHookFunction
     }
 
-    public var preAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
-    public var postAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
-
-    public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
+//    public var preAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
+//    public var postAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
+//
+//    public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
     public var postSubmissionHooks: [SubmissionResultHook] = [SubmissionResultHook]()
 
 }

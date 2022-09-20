@@ -70,7 +70,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     internal var _hasReadProperties: Bool = false
 
-    public var transactionOptions: CodableTransaction
+    public var transaction: CodableTransaction
     public var web3: web3
     public var provider: Web3Provider
     public var address: EthereumAddress
@@ -86,8 +86,8 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         self.web3 = web3
         self.provider = provider
         self.address = address
-        self.transactionOptions = transaction
-        self.transactionOptions.to = address
+        self.transaction = transaction
+        self.transaction.to = address
         self.abi = abi
     }
 
@@ -102,8 +102,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     func tokenDetails() async throws -> [UInt32] {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("tokenDetails", parameters: [] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? [UInt32] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -111,10 +110,10 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     func verifyTransfer(from: EthereumAddress, originalOwner: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -134,10 +133,10 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     func mint(from: EthereumAddress, investor: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -157,10 +156,10 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func burn(from: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -179,8 +178,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("balanceOf", parameters: [account] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -188,8 +186,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -197,10 +194,10 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -219,10 +216,10 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -242,10 +239,10 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -265,10 +262,10 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -288,8 +285,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func totalSupply() async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -297,10 +293,10 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func renounceOwnership(from: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         let tx = contract.createWriteOperation("renounceOwnership", parameters: [AnyObject]() )!
         return tx
@@ -308,10 +304,10 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func transferOwnership(from: EthereumAddress, newOwner: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         let tx = contract.createWriteOperation("transferOwnership", parameters: [newOwner] as [AnyObject] )!
         return tx
@@ -319,8 +315,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func currentCheckpointId() async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("currentCheckpointId", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -328,8 +323,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func getGranularity() async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("granularity", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -337,8 +331,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func investorCount() async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("investorCount", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -346,8 +339,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func investors() async throws -> [EthereumAddress] {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("investors", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? [EthereumAddress] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -355,8 +347,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func checkPermission(delegate: EthereumAddress, module: EthereumAddress, perm: [UInt32]) async throws -> Bool {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("checkPermission", parameters: [delegate, module, perm] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -364,8 +355,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func getModule(moduleType: UInt8, moduleIndex: UInt8) async throws -> ([UInt32], EthereumAddress) {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("getModule", parameters: [moduleType, moduleIndex] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let moduleList = result["0"] as? [UInt32] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         guard let moduleAddress = result["1"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
@@ -374,8 +364,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func getModuleByName(moduleType: UInt8, name: [UInt32]) async throws -> ([UInt32], EthereumAddress) {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("getModuleByName", parameters: [moduleType, name] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let moduleList = result["0"] as? [UInt32] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         guard let moduleAddress = result["1"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
@@ -384,8 +373,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func totalSupplyAt(checkpointId: BigUInt) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("totalSupplyAt", parameters: [checkpointId] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -393,8 +381,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func balanceOfAt(investor: EthereumAddress, checkpointId: BigUInt) async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("balanceOfAt", parameters: [investor, checkpointId] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -402,10 +389,10 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func createCheckpoint(from: EthereumAddress) throws -> WriteOperation {
         let contract = self.contract
-        var basicOptions = CodableTransaction.emptyTransaction
-        basicOptions.from = from
-        basicOptions.to = self.address
-        basicOptions.callOnBlock = .latest
+
+        self.transaction.from = from
+        self.transaction.to = self.address
+        self.transaction.callOnBlock = .latest
 
         let tx = contract.createWriteOperation("createCheckpoint", parameters: [AnyObject]() )!
         return tx
@@ -413,8 +400,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     public func getInvestorsLength() async throws -> BigUInt {
         let contract = self.contract
-        var transactionOptions = CodableTransaction.emptyTransaction
-        transactionOptions.callOnBlock = .latest
+        self.transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("getInvestorsLength", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res

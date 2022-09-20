@@ -75,12 +75,12 @@ extension web3.BrowserFunctions {
 //          let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
 //          let transaction: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 //          let options: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
-//          var transactionOptions = CodableTransaction.emptyTransaction
-//          transactionOptions.from = options.from
-//          transactionOptions.to = options.to
-//          transactionOptions.value = options.value ?? 0
-//          transactionOptions.gasLimitPolicy = options.gasLimitPolicy ?? .automatic
-//          transactionOptions.gasPricePolicy = options.gasPricePolicy ?? .automatic
+//          var transaction = CodableTransaction.emptyTransaction
+//          transaction.from = options.from
+//          transaction.to = options.to
+//          transaction.value = options.value ?? 0
+//          transaction.gasLimitPolicy = options.gasLimitPolicy ?? .automatic
+//          transaction.gasPricePolicy = options.gasPricePolicy ?? .automatic
 //            return await self.sendTransaction(transaction , password: password)
 //        } catch { return nil }
 //    }
@@ -90,12 +90,12 @@ extension web3.BrowserFunctions {
 //            let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
 //            let transaction: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
 //            let options: CodableTransaction = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
-//            var transactionOptions = CodableTransaction.emptyTransaction
-//            transactionOptions.from = options.from
-//            transactionOptions.to = options.to
-//            transactionOptions.value = options.value ?? 0
-//            transactionOptions.gasLimitPolicy = .automatic
-//            transactionOptions.gasPricePolicy = options.gasPricePolicy ?? .automatic
+//            var transaction = CodableTransaction.emptyTransaction
+//            transaction.from = options.from
+//            transaction.to = options.to
+//            transaction.value = options.value ?? 0
+//            transaction.gasLimitPolicy = .automatic
+//            transaction.gasPricePolicy = options.gasPricePolicy ?? .automatic
 //            return await self.estimateGas(transaction )
 //        } catch { return nil }
 //    }
@@ -148,30 +148,30 @@ extension web3.BrowserFunctions {
 //            let jsonData: Data = try JSONSerialization.data(withJSONObject: transactionJSON, options: [])
 //            let transaction: EthereumTransaction = try JSONDecoder().decode(EthereumTransaction.self, from: jsonData)
 //            let options: CodableTransaction = try JSONDecoder().decode(TransactionOptions.self, from: jsonData)
-//            var transactionOptions = TransactionOptions.emptyTransaction
-//            transactionOptions.from = options.from
-//            transactionOptions.to = options.to
-//            transactionOptions.value = options.value ?? 0
-//            transactionOptions.gasLimitPolicy = options.gasLimit ?? .automatic
-//            transactionOptions.gasPricePolicy = options.gasPrice ?? .automatic
+//            var transaction = TransactionOptions.emptyTransaction
+//            transaction.from = options.from
+//            transaction.to = options.to
+//            transaction.value = options.value ?? 0
+//            transaction.gasLimitPolicy = options.gasLimit ?? .automatic
+//            transaction.gasPricePolicy = options.gasPrice ?? .automatic
 //            if let nonceString = transactionJSON["nonce"] as? String, let nonce = BigUInt(nonceString.stripHexPrefix(), radix: 16) {
-//                transactionOptions.nonce = .manual(nonce)
+//                transaction.nonce = .manual(nonce)
 //            } else {
-//                transactionOptions.nonce = .pending
+//                transaction.nonce = .pending
 //            }
 //            return await self.signTransaction(transaction , password: password)
 //        } catch { return nil }
 //    }
 
     // FIXME: Rewrite this to EthereumTransaction
-//    public func signTransaction(_ trans: EthereumTransaction, transactionOptions: TransactionOptions, password: String ) async -> String? {
+//    public func signTransaction(_ trans: EthereumTransaction, transaction: TransactionOptions, password: String ) async -> String? {
 //        do {
 //            var transaction = trans
-//            guard let from = transactionOptions.from else {return nil}
+//            guard let from = transaction.from else {return nil}
 //            guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {return nil}
-//            guard let gasPricePolicy = transactionOptions.gasPrice else {return nil}
-//            guard let gasLimitPolicy = transactionOptions.gasLimit else {return nil}
-//            guard let noncePolicy = transactionOptions.nonce else {return nil}
+//            guard let gasPricePolicy = transaction.gasPrice else {return nil}
+//            guard let gasLimitPolicy = transaction.gasLimit else {return nil}
+//            guard let noncePolicy = transaction.nonce else {return nil}
 //            switch gasPricePolicy {
 //            case .manual(let gasPrice):
 //                transaction.parameters.gasPrice = gasPrice
