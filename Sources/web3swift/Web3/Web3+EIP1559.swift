@@ -7,7 +7,7 @@
 
 import Foundation
 import BigInt
-
+import Core
 
 /// EIP-1559 Base fee extension
 ///
@@ -177,3 +177,8 @@ public extension Web3 {
 extension Web3.MainChainVersion: Comparable {
     public static func < (lhs: Web3.MainChainVersion, rhs: Web3.MainChainVersion) -> Bool { return lhs.mainNetFisrtBlockNumber < rhs.mainNetFisrtBlockNumber }
  }
+
+extension Block {
+    /// Returns chain version of mainnet block with such number
+    var mainChainVersion: Web3.MainChainVersion { Web3.getChainVersion(of: number) }
+}
