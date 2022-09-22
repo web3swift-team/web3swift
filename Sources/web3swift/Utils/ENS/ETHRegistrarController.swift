@@ -11,10 +11,10 @@ import Core
 
 public extension ENS {
     class ETHRegistrarController {
-        public let web3: web3
+        public let web3: Web3
         public let address: EthereumAddress
 
-        lazy var contract: web3.Contract = {
+        lazy var contract: Web3.Contract = {
             let contract = self.web3.contract(Web3.Utils.ethRegistrarControllerABI, at: self.address, abiVersion: 2)
             precondition(contract != nil)
             return contract!
@@ -25,7 +25,7 @@ public extension ENS {
             return CodableTransaction.emptyTransaction
         }()
 
-        public init(web3: web3, address: EthereumAddress) {
+        public init(web3: Web3, address: EthereumAddress) {
             self.web3 = web3
             self.address = address
         }

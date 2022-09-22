@@ -8,7 +8,7 @@ import BigInt
 import Core
 
 
-extension web3.Personal {
+extension Web3.Personal {
     public func unlock(account: EthereumAddress, password: String, seconds: UInt = 300) async throws -> Bool {
         try await unlock(account: account.address, password: password, seconds: seconds)
     }

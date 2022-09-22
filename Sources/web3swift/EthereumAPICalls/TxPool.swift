@@ -7,7 +7,7 @@ import Foundation
 import BigInt
 import Core
 
-extension web3.TxPool {
+extension Web3.TxPool {
     public func txPoolStatus() async throws -> TxPoolStatus {
         let response: APIResponse<TxPoolStatus> = try await APIRequest.sendRequest(with: provider, for: .getTxPoolStatus)
         return response.result

@@ -8,7 +8,7 @@ import BigInt
 import Core
 
 
-extension web3.Eth {
+extension Web3.Eth {
     public func block(by hash: Hash, fullTransactions: Bool = false) async throws -> Block {
         let requestCall: APIRequest = .getBlockByHash(hash, fullTransactions)
         let response: APIResponse<Block> = try await APIRequest.sendRequest(with: self.provider, for: requestCall)

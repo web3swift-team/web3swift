@@ -7,7 +7,7 @@ import Foundation
 import BigInt
 import Core
 
-extension web3.Personal {
+extension Web3.Personal {
     public func createAccount(password: String ) async throws -> EthereumAddress {
         guard self.web3.provider.attachedKeystoreManager == nil else {
             throw Web3Error.inputError(desc: "Creating account in a local keystore with this method is not supported")

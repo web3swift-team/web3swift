@@ -7,7 +7,7 @@ import Foundation
 import Core
 
 
-extension web3.Eth {
+extension Web3.Eth {
     public func send(raw data: Data) async throws -> TransactionSendingResult {
         guard let hexString = String(data: data, encoding: .utf8)?.addHexPrefix() else { throw Web3Error.dataError }
         let request: APIRequest = .sendRawTransaction(hexString)

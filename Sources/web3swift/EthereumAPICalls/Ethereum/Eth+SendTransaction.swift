@@ -9,7 +9,7 @@ import BigInt
 import Core
 
 
-extension web3.Eth {
+extension Web3.Eth {
 
     public func send(_ transaction: CodableTransaction) async throws -> TransactionSendingResult {
         // MARK: Sending Data flow

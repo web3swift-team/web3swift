@@ -8,7 +8,7 @@ import BigInt
 import Core
 
 
-extension web3.Personal {
+extension Web3.Personal {
 
     public func signPersonal(message: Data, from: EthereumAddress, password: String) async throws -> Data {
         guard let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager else {

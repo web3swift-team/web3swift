@@ -13,7 +13,7 @@ extension Web3.Utils {
 //    fileprivate typealias SubmissionResultHook = web3.SubmissionResultHook
 
     public class NonceMiddleware: EventLoopRunnableProtocol {
-        var web3: web3?
+        var web3: Web3?
         var nonceLookups: [EthereumAddress: BigUInt] = [EthereumAddress: BigUInt]()
         public var name: String = "Nonce lookup middleware"
         public let queue: DispatchQueue = DispatchQueue(label: "Nonce middleware queue")

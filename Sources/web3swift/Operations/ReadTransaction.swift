@@ -16,11 +16,11 @@ public class ReadOperation {
     public var method: String
     public private (set) var data: Data?
 
-    var web3: web3
+    var web3: Web3
 
     // FIXME: Rewrite this to CodableTransaction
     public init(transaction: CodableTransaction = CodableTransaction.emptyTransaction,
-                web3 web3Instance: web3,
+                web3 web3Instance: Web3,
                 contract: EthereumContract,
                 method: String = "fallback") {
         self.transaction = transaction

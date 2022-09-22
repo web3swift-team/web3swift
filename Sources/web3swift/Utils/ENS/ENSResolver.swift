@@ -9,7 +9,7 @@ import Core
 
 public extension ENS {
     class Resolver {
-        public let web3: web3
+        public let web3: Web3
         public let resolverContractAddress: EthereumAddress
 
         public enum ContentType: BigUInt {
@@ -45,7 +45,7 @@ public extension ENS {
             }
         }
 
-        lazy var resolverContract: web3.Contract = {
+        lazy var resolverContract: Web3.Contract = {
             let contract = self.web3.contract(Web3.Utils.resolverABI, at: self.resolverContractAddress, abiVersion: 2)
             precondition(contract != nil)
             return contract!
@@ -56,7 +56,7 @@ public extension ENS {
             return CodableTransaction.emptyTransaction
         }()
 
-        public init(web3: web3, resolverContractAddress: EthereumAddress) {
+        public init(web3: Web3, resolverContractAddress: EthereumAddress) {
             self.web3 = web3
             self.resolverContractAddress = resolverContractAddress
         }
