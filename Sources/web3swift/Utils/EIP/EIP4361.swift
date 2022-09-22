@@ -24,7 +24,7 @@ public final class EIP4361 {
     private static let uri = "\\nURI: (?<uri>(\(uriPattern))?)"
     private static let version = "\\nVersion: (?<version>1)"
     private static let chainId = "\\nChain ID: (?<chainId>[0-9a-fA-F]+)"
-    private static let nonce = "\\nNonce: (?<nonce>[0-9a-fA-F]{8,})"
+    private static let nonce = "\\nNonce: (?<nonce>[a-zA-Z0-9]{8,})"
     private static let issuedAt = "\\nIssued At: (?<issuedAt>(\(datetimePattern)))"
     private static let expirationTime = "(\\nExpiration Time: (?<expirationTime>(\(datetimePattern))))?"
     private static let notBefore = "(\\nNot Before: (?<notBefore>(\(datetimePattern))))?"
@@ -48,7 +48,7 @@ public final class EIP4361 {
     /// `chain-id` is the EIP-155 Chain ID to which the session is bound, and the network where Contract Accounts MUST be resolved.
     public let chainId: BigUInt
     /// `nonce` is a randomized token typically chosen by the relying party and used to prevent replay attacks, at least 8 alphanumeric characters.
-    public let nonce: BigUInt
+    public let nonce: String
     /// `issued-at` is the ISO 8601 datetime string of the current time.
     public let issuedAt: Date
     /// `expiration-time` (optional) is the ISO 8601 datetime string that, if present, indicates when the signed authentication message is no longer valid.
@@ -75,8 +75,7 @@ public final class EIP4361 {
               let version = BigUInt(rawVersion, radix: 10) ?? BigUInt(rawVersion, radix: 16),
               let rawChainId = groups["chainId"],
               let chainId = BigUInt(rawChainId, radix: 10) ?? BigUInt(rawChainId, radix: 16),
-              let rawNonce = groups["nonce"],
-              let nonce = BigUInt(rawNonce, radix: 10) ?? BigUInt(rawNonce, radix: 16),
+              let nonce = groups["nonce"],
               let rawIssuedAt = groups["issuedAt"],
               let issuedAt = dateFormatter.date(from: rawIssuedAt)
         else {
@@ -111,7 +110,7 @@ public final class EIP4361 {
         descriptionParts.append("\n\nURI: \(uri)")
         descriptionParts.append("\nVersion: \(version.description)")
         descriptionParts.append("\nChain ID: \(chainId.description)")
-        descriptionParts.append("\nNonce: \(nonce.description)")
+        descriptionParts.append("\nNonce: \(nonce)")
         let dateFormatter = ISO8601DateFormatter()
         descriptionParts.append("\nIssued At: \(dateFormatter.string(from: issuedAt))")
         if let expirationTime = expirationTime {
