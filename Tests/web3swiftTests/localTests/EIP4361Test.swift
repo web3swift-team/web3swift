@@ -27,7 +27,7 @@ class EIP4361Test: XCTestCase {
         XCTAssertEqual(siweMessage.uri, URL(string: "https://service.invalid/login")!)
         XCTAssertEqual(siweMessage.version, 1)
         XCTAssertEqual(siweMessage.chainId, 1)
-        XCTAssertEqual(siweMessage.nonce, 32891756)
+        XCTAssertEqual(siweMessage.nonce, "32891756")
         XCTAssertEqual(siweMessage.issuedAt, dateFormatter.date(from: "2021-09-30T16:25:24Z")!)
         XCTAssertEqual(siweMessage.expirationTime, dateFormatter.date(from: "2021-09-29T15:25:24Z")!)
         XCTAssertEqual(siweMessage.notBefore, dateFormatter.date(from: "2021-10-28T14:25:24Z")!)
