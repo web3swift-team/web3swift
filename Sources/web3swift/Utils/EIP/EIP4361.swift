@@ -15,6 +15,7 @@ fileprivate let uriPattern = "(([^:?#]+):)?(([^?#]*))?([^?#]*)(\\?([^#]*))?(#(.*
 
 /// Sign-In with Ethereum protocol and parser implementation.
 /// [EIP-4361](https://eips.ethereum.org/EIPS/eip-4361)
+/// Thanks to spruceid for SIWE implementation that was rewritten here in Swift: https://github.com/spruceid/siwe/blob/main/packages/siwe-parser/lib/regex.ts
 public final class EIP4361 {
 
     private static let domain = "(?<domain>([^?#]*)) wants you to sign in with your Ethereum account:"
