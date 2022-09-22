@@ -360,7 +360,7 @@ extension Web3 {
                     nativeValue = ethereumAddress as AnyObject
                 case .ensAddress(let ens):
                     do {
-                        let web = await web3(provider: InfuraProvider(Networks.fromInt(UInt(chainID)) ?? Networks.Mainnet)!)
+                        let web = await Web3(provider: InfuraProvider(Networks.fromInt(UInt(chainID)) ?? Networks.Mainnet)!)
                         let ensModel = ENS(web3: web)
                         try await ensModel?.setENSResolver(withDomain: ens)
                         let address = try await ensModel?.getAddress(forNode: ens)

@@ -7,7 +7,7 @@ import Foundation
 import BigInt
 import Core
 
-extension web3.Personal {
+extension Web3.Personal {
 
     /**
      *Locally or remotely sign a message (arbitrary data) with the private key. To avoid potential signing of a transaction the message is first prepended by a special header and then hashed.*

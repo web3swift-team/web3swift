@@ -7,7 +7,7 @@ import Foundation
 import BigInt
 import Core
 
-extension web3 {
+extension Web3 {
 
     /// The contract instance. Initialized in runtime from ABI string (that is a JSON array). In addition an existing contract address can be supplied to provide the default "to" address in all the following requests. ABI version is 2 by default and should not be changed.
     public func contract(_ abiString: String, at: EthereumAddress? = nil, abiVersion: Int = 2) -> Contract? {
@@ -18,14 +18,14 @@ extension web3 {
     /// Web3 instance bound contract instance.
     public class Contract {
         public let contract: EthereumContract
-        public let web3: web3
+        public let web3: Web3
         public var transaction = CodableTransaction.emptyTransaction
 
         // FIXME: Rewrite this to CodableTransaction
         /// Initialize the bound contract instance by supplying the Web3 provider bound object, ABI, Ethereum address and some default
         /// options for further function calls. By default the contract inherits options from the web3 object. Additionally supplied "options"
         /// do override inherited ones.
-        public init?(web3 web3Instance: web3, abiString: String, at: EthereumAddress? = nil, transaction: CodableTransaction = .emptyTransaction, abiVersion: Int = 2) {
+        public init?(web3 web3Instance: Web3, abiString: String, at: EthereumAddress? = nil, transaction: CodableTransaction = .emptyTransaction, abiVersion: Int = 2) {
             self.web3 = web3Instance
             self.transaction = transaction
             switch abiVersion {

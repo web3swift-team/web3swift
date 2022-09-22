@@ -30,17 +30,17 @@ public class ERC20: IERC20, ERC20BaseProperties {
     var _hasReadProperties: Bool = false
 
     public var transaction: CodableTransaction
-    public var web3: web3
+    public var web3: Web3
     public var provider: Web3Provider
     public var address: EthereumAddress
 
-    lazy var contract: web3.Contract = {
+    lazy var contract: Web3.Contract = {
         let contract = self.web3.contract(Web3.Utils.erc20ABI, at: self.address, abiVersion: 2)
         precondition(contract != nil)
         return contract!
     }()
 
-    public init(web3: web3, provider: Web3Provider, address: EthereumAddress, transaction: CodableTransaction = .emptyTransaction) {
+    public init(web3: Web3, provider: Web3Provider, address: EthereumAddress, transaction: CodableTransaction = .emptyTransaction) {
         self.web3 = web3
         self.provider = provider
         self.address = address
@@ -175,7 +175,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 }
 
 protocol ERC20BaseProperties: AnyObject {
-    var contract: web3.Contract { get }
+    var contract: Web3.Contract { get }
     var _name: String? { get set }
     var _symbol: String? { get set }
     var _decimals: UInt8? { get set }

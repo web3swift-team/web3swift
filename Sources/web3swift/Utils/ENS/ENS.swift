@@ -9,14 +9,14 @@ import Core
 
 public class ENS {
 
-    public let web3: web3
+    public let web3: Web3
     public var registry: Registry
     public var resolver: Resolver? = nil
     public var baseRegistrar: BaseRegistrar? = nil
     public var registrarController: ETHRegistrarController? = nil
     public var reverseRegistrar: ReverseRegistrar? = nil
 
-    public init?(web3: web3) {
+    public init?(web3: Web3) {
         self.web3 = web3
         guard let registry = Registry(web3: web3) else {
             return nil

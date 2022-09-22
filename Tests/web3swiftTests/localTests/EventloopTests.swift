@@ -13,7 +13,7 @@ class EventloopTests: XCTestCase {
     func testBasicEventLoop() async throws {
         var ticksToWait = 5
         let expectation = self.expectation(description: "Waiting")
-        func getBlockNumber(_ web3: web3) async {
+        func getBlockNumber(_ web3: Web3) async {
             do {
                 let blockNumber = try await web3.eth.blockNumber()
                 print("Block number = " + String(blockNumber))
@@ -27,8 +27,8 @@ class EventloopTests: XCTestCase {
         }
 
         let web3main = try await Web3.new(LocalTestCase.url)
-        let functionToCall: web3.Eventloop.EventLoopCall = getBlockNumber
-        let monitoredProperty = web3.Eventloop.MonitoredProperty.init(name: "onNewBlock", calledFunction: functionToCall)
+        let functionToCall: Web3.Eventloop.EventLoopCall = getBlockNumber
+        let monitoredProperty = Web3.Eventloop.MonitoredProperty.init(name: "onNewBlock", calledFunction: functionToCall)
         web3main.eventLoop.monitoredProperties.append(monitoredProperty)
         web3main.eventLoop.start(5)
 
