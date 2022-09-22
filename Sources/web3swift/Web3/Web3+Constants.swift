@@ -1,6 +1,5 @@
 //
 //  Web3+Constants.swift
-//  web3swift
 //
 //  Created by Anton on 24/06/2019.
 //  Copyright © 2019 Matter Labs. All rights reserved.

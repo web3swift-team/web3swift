@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -6,28 +5,16 @@
 
 import Foundation
 import BigInt
-import PromiseKit
+import Core
 
+// FIXME: Rewrite this to CodableTransaction
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
 public class web3 {
     public var provider: Web3Provider
-    public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
-    public var defaultBlock = "latest"
-    public var requestDispatcher: JSONRPCrequestDispatcher
-
-    /// Add a provider request to the dispatch queue.
-    public func dispatch(_ request: JSONRPCrequest) -> Promise<JSONRPCresponse> {
-        return self.requestDispatcher.addToQueue(request: request)
-    }
 
     /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
-    public init(provider prov: Web3Provider, queue: OperationQueue? = nil, requestDispatcher: JSONRPCrequestDispatcher? = nil) {
+    public init(provider prov: Web3Provider) {
         provider = prov
-        if requestDispatcher == nil {
-            self.requestDispatcher = JSONRPCrequestDispatcher(provider: provider, queue: DispatchQueue.global(qos: .userInteractive), policy: .Batch(32))
-        } else {
-            self.requestDispatcher = requestDispatcher!
-        }
     }
 
     /// Keystore manager can be bound to Web3 instance. If some manager is bound all further account related functions, such
@@ -47,13 +34,12 @@ public class web3 {
         return self.ethInstance!
     }
 
-    public class Eth: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class Eth {
         var provider: Web3Provider
         //  weak var web3: web3?
         var web3: web3
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
+
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -71,13 +57,11 @@ public class web3 {
         return self.personalInstance!
     }
 
-    public class Personal: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class Personal {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -95,13 +79,11 @@ public class web3 {
         return self.txPoolInstance!
     }
 
-    public class TxPool: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class TxPool {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: web3
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -140,13 +122,11 @@ public class web3 {
         return self.browserFunctionsInstance!
     }
 
-    public class BrowserFunctions: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class BrowserFunctions {
         var provider: Web3Provider
         //        weak var web3: web3?
-        var web3: web3
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
+        public var web3: web3
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
@@ -164,22 +144,16 @@ public class web3 {
         return self.eventLoopInstance!
     }
 
-    public class Eventloop: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class Eventloop {
 
-        public typealias EventLoopCall = (web3) -> Void
-        public typealias EventLoopContractCall = (web3contract) -> Void
+        public typealias EventLoopCall = (web3) async -> Void
+        public typealias EventLoopContractCall = (Contract) -> Void
 
         public struct MonitoredProperty {
             public var name: String
-            public var queue: DispatchQueue
             public var calledFunction: EventLoopCall
         }
-
-        //  public struct MonitoredContract {
-        //      public var name: String
-        //      public var queue: DispatchQueue
-        //      public var calledFunction: EventLoopContractCall
-        //  }
 
         var provider: Web3Provider
         //        weak var web3: web3?
@@ -189,41 +163,34 @@ public class web3 {
         public var monitoredProperties: [MonitoredProperty] = [MonitoredProperty]()
         //  public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
         public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
-
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
         public init(provider prov: Web3Provider, web3 web3instance: web3) {
             provider = prov
             web3 = web3instance
         }
     }
 
-    public typealias AssemblyHookFunction = ((EthereumTransaction, EthereumContract, TransactionOptions)) -> (EthereumTransaction, EthereumContract, TransactionOptions, Bool)
-
-    public typealias SubmissionHookFunction = ((EthereumTransaction, TransactionOptions)) -> (EthereumTransaction, TransactionOptions, Bool)
+//    public typealias AssemblyHookFunction = ((inout CodableTransaction, EthereumContract)) -> Bool
+//
+//    public typealias SubmissionHookFunction = (inout CodableTransaction) -> Bool
 
     public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> ()
 
-    public struct AssemblyHook {
-        public var queue: DispatchQueue
-        public var function: AssemblyHookFunction
-    }
+//    public struct AssemblyHook {
+//        public var function: AssemblyHookFunction
+//    }
 
-    public struct SubmissionHook {
-        public var queue: DispatchQueue
-        public var function: SubmissionHookFunction
-    }
+//    public struct SubmissionHook {
+//        public var function: SubmissionHookFunction
+//    }
 
     public struct SubmissionResultHook {
-        public var queue: DispatchQueue
         public var function: SubmissionResultHookFunction
     }
 
-    public var preAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
-    public var postAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
-
-    public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
+//    public var preAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
+//    public var postAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
+//
+//    public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
     public var postSubmissionHooks: [SubmissionResultHook] = [SubmissionResultHook]()
 
 }
