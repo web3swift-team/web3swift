@@ -31,7 +31,7 @@ public struct Web3Signer {
         return compressedSignature
     }
 
-    public static func signEIP712(safeTx: SafeTx,
+    public static func signEIP712(_ eip712Hashable: EIP712Hashable,
                                   keystore: BIP32Keystore,
                                   verifyingContract: EthereumAddress,
                                   account: EthereumAddress,
@@ -41,7 +41,7 @@ public struct Web3Signer {
         let domainSeparator: EIP712DomainHashable = EIP712Domain(chainId: chainId, verifyingContract: verifyingContract)
 
         let password = password ?? ""
-        let hash = try eip712encode(domainSeparator: domainSeparator, message: safeTx)
+        let hash = try eip712encode(domainSeparator: domainSeparator, message: eip712Hashable)
 
         guard let signature = try Web3Signer.signPersonalMessage(hash, keystore: keystore, account: account, password: password) else {
             throw Web3Error.dataError
