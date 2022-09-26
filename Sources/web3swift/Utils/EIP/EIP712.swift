@@ -39,10 +39,9 @@ public extension EIP712Hashable {
     }
 
     private func dependencies() -> [EIP712Hashable] {
-        let dependencies = Mirror(reflecting: self).children
+        Mirror(reflecting: self).children
             .compactMap { $0.value as? EIP712Hashable }
             .flatMap { [$0] + $0.dependencies() }
-        return dependencies
     }
 
     private func encodePrimaryType() -> String {
