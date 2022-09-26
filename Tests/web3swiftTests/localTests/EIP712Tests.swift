@@ -27,7 +27,7 @@ class EIP712Tests: LocalTestCase {
         let gasToken = EthereumAddress("0x0000000000000000000000000000000000000000")!
         let refundReceiver = EthereumAddress("0x7c07D32e18D6495eFDC487A32F8D20daFBa53A5e")!
         let nonce: EIP712.UInt256 = .init(6)
-        let safeTX = SafeTx(
+        let safeTX = GnosisSafeTx(
             to: to,
             value: value,
             data: safeTxData,
@@ -78,7 +78,7 @@ class EIP712Tests: LocalTestCase {
         let gasToken = EthereumAddress("0x0000000000000000000000000000000000000000")!
         let refundReceiver = EthereumAddress("0x7c07D32e18D6495eFDC487A32F8D20daFBa53A5e")!
         let nonce: EIP712.UInt256 = .init(0)
-        let safeTX = SafeTx(
+        let safeTX = GnosisSafeTx(
             to: to,
             value: value,
             data: safeTxData,

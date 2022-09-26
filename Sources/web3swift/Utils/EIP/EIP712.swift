@@ -31,60 +31,8 @@ public extension EIP712.Address {
     }
 }
 
+// MARK: - Default implementation for EIP712Hashable
 public extension EIP712Hashable {
-    private var name: String {
-        let fullName = "\(Self.self)"
-        let name = fullName.components(separatedBy: ".").last ?? fullName
-        return name
-    }
-
-    private func dependencies() -> [EIP712Hashable] {
-        Mirror(reflecting: self).children
-            .compactMap { $0.value as? EIP712Hashable }
-            .flatMap { [$0] + $0.dependencies() }
-    }
-
-    private func encodePrimaryType() -> String {
-        let parametrs: [String] = Mirror(reflecting: self).children.compactMap { key, value in
-            guard let key = key else { return nil }
-
-            func checkIfValueIsNil(value: Any) -> Bool {
-                let mirror = Mirror(reflecting: value)
-                if mirror.displayStyle == .optional {
-                    if mirror.children.count == 0 {
-                        return true
-                    }
-                }
-
-                return false
-            }
-
-            guard !checkIfValueIsNil(value: value) else { return nil }
-
-            let typeName: String
-            switch value {
-            case is EIP712.UInt8: typeName = "uint8"
-            case is EIP712.UInt256: typeName = "uint256"
-            case is EIP712.Address: typeName = "address"
-            case is EIP712.Bytes: typeName = "bytes"
-            case let hashable as EIP712Hashable: typeName = hashable.name
-            default: typeName = "\(type(of: value))".lowercased()
-            }
-            return typeName + " " + key
-        }
-        return self.name + "(" + parametrs.joined(separator: ",") + ")"
-    }
-
-    func encodeType() -> String {
-        let dependencies = self.dependencies().map { $0.encodePrimaryType() }
-        let selfPrimaryType = self.encodePrimaryType()
-
-        let result = Set(dependencies).filter { $0 != selfPrimaryType }
-        return selfPrimaryType + result.sorted().joined()
-    }
-
-    // MARK: - Default implementation
-
     var typehash: Data {
         Data(encodeType().bytes).sha3(.keccak256)
     }
@@ -126,11 +74,74 @@ public func eip712encode(domainSeparator: EIP712Hashable, message: EIP712Hashabl
     return data.sha3(.keccak256)
 }
 
+// MARK: - Additional private and public extensions with support members
+
+public extension EIP712Hashable {
+    func encodeType() -> String {
+        let dependencies = dependencies().map { $0.encodePrimaryType() }
+        let selfPrimaryType = encodePrimaryType()
+
+        let result = Set(dependencies).filter { $0 != selfPrimaryType }
+        return selfPrimaryType + result.sorted().joined()
+    }
+}
+
+fileprivate extension EIP712Hashable {
+    var name: String {
+        let fullName = "\(Self.self)"
+        let name = fullName.components(separatedBy: ".").last ?? fullName
+        return name
+    }
+
+    func dependencies() -> [EIP712Hashable] {
+        Mirror(reflecting: self).children
+            .compactMap { $0.value as? EIP712Hashable }
+            .flatMap { [$0] + $0.dependencies() }
+    }
+
+    func encodePrimaryType() -> String {
+        let parametrs: [String] = Mirror(reflecting: self).children.compactMap { key, value in
+            guard let key = key else { return nil }
+
+            func checkIfValueIsNil(value: Any) -> Bool {
+                let mirror = Mirror(reflecting: value)
+                if mirror.displayStyle == .optional {
+                    if mirror.children.count == 0 {
+                        return true
+                    }
+                }
+
+                return false
+            }
+
+            guard !checkIfValueIsNil(value: value) else { return nil }
+
+            let typeName: String
+            switch value {
+            case is EIP712.UInt8: typeName = "uint8"
+            case is EIP712.UInt256: typeName = "uint256"
+            case is EIP712.Address: typeName = "address"
+            case is EIP712.Bytes: typeName = "bytes"
+            case let hashable as EIP712Hashable: typeName = hashable.name
+            default: typeName = "\(type(of: value))".lowercased()
+            }
+            return typeName + " " + key
+        }
+        return self.name + "(" + parametrs.joined(separator: ",") + ")"
+    }
+}
+
 // MARK: - Gnosis Safe Transaction model
 
 /// Gnosis Safe Transaction.
 /// https://docs.gnosis-safe.io/tutorials/tutorial_tx_service_initiate_sign
-public struct SafeTx: EIP712Hashable {
+///
+/// Note for web3swift developers: **DO NOT CHANGE THE ORDER OF VARIABLES**.
+///
+/// Changing the order will result in a different hash.
+/// Order must match the implementation of hash calculation in
+/// [`GnosisSafe.sol`](https://github.com/safe-global/safe-contracts/blob/main/contracts/GnosisSafe.sol#L126).
+public struct GnosisSafeTx: EIP712Hashable {
     /// Checksummed address
     let to:             EIP712.Address
     /// Value in wei
@@ -139,20 +150,29 @@ public struct SafeTx: EIP712Hashable {
     let data:           EIP712.Bytes
     /// `0` CALL, `1` DELEGATE_CALL
     let operation:      EIP712.UInt8
-    /// Token address, **must be checksummed**, (held by the Safe) to be used as a refund to the sender, if `null` is Ether
-    let gasToken:       EIP712.Address
     /// Max gas to use in the transaction
     let safeTxGas:      EIP712.UInt256
     /// Gast costs not related to the transaction execution (signature check, refund payment...)
     let baseGas:        EIP712.UInt256
     /// Gas price used for the refund calculation
     let gasPrice:       EIP712.UInt256
+    /// Token address, **must be checksummed**, (held by the Safe) to be used as a refund to the sender, if `null` is Ether
+    let gasToken:       EIP712.Address
     /// Checksummed address of receiver of gas payment (or `null` if tx.origin)
     let refundReceiver: EIP712.Address
     /// Nonce of the Safe, transaction cannot be executed until Safe's nonce is not equal to this nonce
     let nonce:          EIP712.UInt256
 
-    public init(to: EIP712.Address, value: EIP712.UInt256, data: EIP712.Bytes, operation: EIP712.UInt8, safeTxGas: EIP712.UInt256, baseGas: EIP712.UInt256, gasPrice: EIP712.UInt256, gasToken: EIP712.Address, refundReceiver: EIP712.Address, nonce: EIP712.UInt256) {
+    public init(to: EIP712.Address,
+                value: EIP712.UInt256,
+                data: EIP712.Bytes,
+                operation: EIP712.UInt8,
+                safeTxGas: EIP712.UInt256,
+                baseGas: EIP712.UInt256,
+                gasPrice: EIP712.UInt256,
+                gasToken: EIP712.Address,
+                refundReceiver: EIP712.Address,
+                nonce: EIP712.UInt256) {
         self.to = to
         self.value = value
         self.data = data
