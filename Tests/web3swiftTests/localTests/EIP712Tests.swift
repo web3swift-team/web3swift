@@ -51,7 +51,7 @@ class EIP712Tests: LocalTestCase {
             account: account!,
             password: password,
             chainId: chainId)
-        XCTAssertEqual(signature.toHexString(), "bf3182a3f52e65b416f86e76851c8e7d5602aef28af694f31359705b039d8d1931d53f3d5088ac7195944e8a9188d161ba3757877d08105885304f65282228c71c")
+        XCTAssertEqual(signature.toHexString(), "c0567b120d3de6b3042ae3de1aa346e167454c675e1eaf40ea2f9de89e6a95c2783c1aa6c96aa1e0aaead4ae8901052fa9fd7abe4acb331adafd61610e93c3f01c")
     }
 
     func testWithChainId() throws {
@@ -102,6 +102,6 @@ class EIP712Tests: LocalTestCase {
             account: account!,
             password: password,
             chainId: chainId)
-        XCTAssertEqual(signature.toHexString(), "f1f423cb23efad5035d4fb95c19cfcd46d4091f2bd924680b88c4f9edfa1fb3a4ce5fc5d169f354e3b464f45a425ed3f6203af06afbacdc5c8224a300ce9e6b21b")
+        XCTAssertEqual(signature.toHexString(), "9ee2aadf14739e1cafc3bc1a0b48457c12419d5b480a8ffa86eb7df538c82d0753ca2a6f8024dea576b383cbcbe5e2b181b087e489298674bf6512756cabc5b01b")
     }
 }

@@ -127,7 +127,7 @@ fileprivate extension EIP712Hashable {
             }
             return typeName + " " + key
         }
-        return self.name + "(" + parametrs.joined(separator: ",") + ")"
+        return name + "(" + parametrs.joined(separator: ",") + ")"
     }
 }
 
