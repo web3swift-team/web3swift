@@ -17,7 +17,7 @@ class InfuraTests: XCTestCase {
             let address = EthereumAddress("0xd61b5ca425F8C8775882d4defefC68A6979DBbce")!
             let balance = try await web3.eth.getBalance(for: address)
             let balString = Utilities.formatToPrecision(balance, numberDecimals: Utilities.Units.eth.decimals, formattingDecimals: 3)
-            print(balString!)
+            XCTAssertNotNil(balString)
         } catch {
             XCTFail()
         }
@@ -26,45 +26,33 @@ class InfuraTests: XCTestCase {
     func testGetBlockByHash() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let result = try await web3.eth.block(by: "0x6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695", fullTransactions: false)
-
-        print(result)
     }
     
     func testGetBlockByNumber1() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let result = try await web3.eth.block(by: .latest, fullTransactions: false)
-        print(result)
+        let _ = try await web3.eth.block(by: .latest, fullTransactions: false)
     }
     
     func testGetBlockByNumber2() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let result = try await web3.eth.block(by: .exact(5184323), fullTransactions: true)
-        print(result)
-        let transactions = result.transactions
-        for transaction in transactions {
-            switch transaction {
-            case .transaction(let tx):
-                print(String(describing: tx))
-            default:
-                break
-            }
-        }
+        let _ = try await web3.eth.block(by: .exact(5184323), fullTransactions: true)
     }
     
-    func testGetBlockByNumber3() async throws {
+    func testGetBlockByNumber3() async {
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         do {
-            let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-            let _ = try await web3.eth.block(by: .exact(1000000000), fullTransactions: true)
-            XCTFail()
+            let _ = try await web3.eth.block(by: .exact(10000000000000), fullTransactions: true)
+            XCTFail("The expression above must throw DecodingError.")
         } catch {
-            
+            // DecodingError is throws as a block for the given block number is
+            // 
+            XCTAssert(error is DecodingError)
         }
     }
     
     func testGasPrice() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let response = try await web3.eth.gasPrice()
-        print(response)
+        let _ = try await web3.eth.gasPrice()
     }
     
 //    func testGetIndexedEventsPromise() async throws {

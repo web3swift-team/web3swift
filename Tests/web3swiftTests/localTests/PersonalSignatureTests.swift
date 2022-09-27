@@ -44,7 +44,6 @@ class PersonalSignatureTests: XCTestCase {
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
         let deployResult = try await deployTx.writeToChain(password: "web3swift")
         let txHash = deployResult.hash
-        print("Transaction with hash " + txHash)
         
         Thread.sleep(forTimeInterval: 1.0)
         
