@@ -56,15 +56,6 @@ public class ST20: IST20, ERC20BaseProperties {
         self.abi = abi
     }
 
-    // Must be 18!
-    public func decimals() async throws -> UInt8 {
-        try await self.readProperties()
-        if self._decimals != nil {
-            return self._decimals!
-        }
-        return 18
-    }
-
     func tokenDetails() async throws -> [UInt32] {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
