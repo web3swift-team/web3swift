@@ -68,7 +68,7 @@ public final class EIP4361 {
         let eip4361Regex = try! NSRegularExpression(pattern: EIP4361.eip4361Pattern)
         let groups = eip4361Regex.captureGroups(string: message)
         let dateFormatter = ISO8601DateFormatter()
-
+        dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         guard let domain = groups["domain"],
               let rawAddress = groups["address"],
               let address = EthereumAddress(rawAddress),
@@ -115,6 +115,7 @@ public final class EIP4361 {
         descriptionParts.append("\nChain ID: \(chainId.description)")
         descriptionParts.append("\nNonce: \(nonce)")
         let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         descriptionParts.append("\nIssued At: \(dateFormatter.string(from: issuedAt))")
         if let expirationTime = expirationTime {
             descriptionParts.append("\nExpiration Time: \(dateFormatter.string(from: expirationTime))")
