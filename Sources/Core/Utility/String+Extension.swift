@@ -84,16 +84,22 @@ extension String {
         return self
     }
 
-    func stripLeadingZeroes() -> String? {
-        let hex = self.addHexPrefix()
-        guard let matcher = try? NSRegularExpression(pattern: "^(?<prefix>0x)0*(?<end>[0-9a-fA-F]*)$", options: NSRegularExpression.Options.dotMatchesLineSeparators) else {return nil}
-        let match = matcher.captureGroups(string: hex, options: NSRegularExpression.MatchingOptions.anchored)
-        guard let prefix = match["prefix"] else {return nil}
-        guard let end = match["end"] else {return nil}
-        if (end != "") {
-            return prefix + end
+    /// Strips leading zeroes from a HEX string.
+    /// ONLY HEX string format is supported.
+    /// - Returns: string with stripped leading zeroes (and 0x prefix) or unchaged string.
+    func stripLeadingZeroes() -> String {
+        let hex = addHexPrefix()
+        guard let matcher = try? NSRegularExpression(pattern: "^(?<prefix>0x)(?<leadingZeroes>0+)(?<end>[0-9a-fA-F]*)$",
+                                                     options: .dotMatchesLineSeparators)
+        else {
+            NSLog("stripLeadingZeroes(): failed to parse regex pattern.")
+            return self
         }
-        return "0x0"
+        let match = matcher.captureGroups(string: hex, options: .anchored)
+        guard match["leadingZeroes"] != nil,
+              let prefix = match["prefix"],
+              let end = match["end"] else { return self }
+        return end != "" ? prefix + end : "0x0"
     }
 
     func matchingStrings(regex: String) -> [[String]] {
