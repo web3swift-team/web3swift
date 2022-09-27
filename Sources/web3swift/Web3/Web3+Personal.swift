@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -8,7 +7,7 @@ import Foundation
 import BigInt
 import Core
 
-extension web3.Personal {
+extension Web3.Personal {
 
     /**
      *Locally or remotely sign a message (arbitrary data) with the private key. To avoid potential signing of a transaction the message is first prepended by a special header and then hashed.*
@@ -24,7 +23,7 @@ extension web3.Personal {
      - important: This call is synchronous
 
      */
-    public func signPersonalMessage(message: Data, from: EthereumAddress, password: String = "web3swift") async throws -> Data {
+    public func signPersonalMessage(message: Data, from: EthereumAddress, password: String) async throws -> Data {
         let result = try await self.signPersonal(message: message, from: from, password: password)
         return result
     }
@@ -43,8 +42,8 @@ extension web3.Personal {
      - important: This call is synchronous. Does nothing if private keys are stored locally.
 
      */
-    public func unlockAccount(account: EthereumAddress, password: String = "web3swift", seconds: UInt = 300) async throws -> Bool {
-        let result = try await self.unlock(account: account)
+    public func unlockAccount(account: EthereumAddress, password: String, seconds: UInt = 300) async throws -> Bool {
+        let result = try await self.unlock(account: account, password: password)
         return result
     }
 

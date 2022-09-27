@@ -1,6 +1,5 @@
 //
 //  RIPEMD160_SO.swift
-//  web3swift
 //
 //  Created by Alexander Vlasov on 10.01.2018.
 //
@@ -393,9 +392,9 @@ public struct RIPEMD160 {
     }
 }
 
-public extension RIPEMD160 {
+extension RIPEMD160 {
 
-    static func hash(message: Data) throws -> Data {
+    public static func hash(message: Data) throws -> Data {
         var md = RIPEMD160()
         try md.update(data: message)
         return try md.finalize()
@@ -408,7 +407,7 @@ public extension RIPEMD160 {
     }
 }
 
-public extension RIPEMD160 {
+extension RIPEMD160 {
 
     static func hmac(key: Data, message: Data) throws -> Data {
 

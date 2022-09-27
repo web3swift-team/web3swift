@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -89,7 +88,7 @@ public class BIP32Keystore: AbstractKeystore {
         rootPrefix = keystoreParams!.rootPath!
     }
 
-    public convenience init?(mnemonics: String, password: String = "web3swift", mnemonicsPassword: String = "", language: BIP39Language = BIP39Language.english, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
+    public convenience init?(mnemonics: String, password: String, mnemonicsPassword: String = "", language: BIP39Language = BIP39Language.english, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
         guard var seed = BIP39.seedFromMmemonics(mnemonics, password: mnemonicsPassword, language: language) else {
             throw AbstractKeystoreError.noEntropyError
         }
@@ -99,7 +98,7 @@ public class BIP32Keystore: AbstractKeystore {
         try self.init(seed: seed, password: password, prefixPath: prefixPath, aesMode: aesMode)
     }
 
-    public init? (seed: Data, password: String = "web3swift", prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
+    public init? (seed: Data, password: String, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
         addressStorage = PathAddressStorage()
         guard let rootNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else {return nil}
         self.rootPrefix = prefixPath
@@ -110,7 +109,7 @@ public class BIP32Keystore: AbstractKeystore {
         try encryptDataToStorage(password, data: serializedRootNode, aesMode: aesMode)
     }
 
-    public func createNewChildAccount(password: String = "web3swift") throws {
+    public func createNewChildAccount(password: String) throws {
         guard let decryptedRootNode = try? self.getPrefixNodeData(password) else {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
@@ -128,7 +127,7 @@ public class BIP32Keystore: AbstractKeystore {
         try encryptDataToStorage(password, data: serializedRootNode, aesMode: self.keystoreParams!.crypto.cipher)
     }
 
-    func createNewAccount(parentNode: HDNode, password: String = "web3swift") throws {
+    func createNewAccount(parentNode: HDNode, password: String ) throws {
         var newIndex = UInt32(0)
         for p in addressStorage.paths {
             guard let idx = UInt32(p.components(separatedBy: "/").last!) else {continue}
@@ -152,7 +151,7 @@ public class BIP32Keystore: AbstractKeystore {
         addressStorage.add(address: newAddress, for: newPath)
     }
 
-    public func createNewCustomChildAccount(password: String = "web3swift", path: String) throws {guard let decryptedRootNode = try? self.getPrefixNodeData(password) else {
+    public func createNewCustomChildAccount(password: String, path: String) throws {guard let decryptedRootNode = try? self.getPrefixNodeData(password) else {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
         guard let rootNode = HDNode(decryptedRootNode) else {
@@ -370,7 +369,7 @@ public class BIP32Keystore: AbstractKeystore {
         return data
     }
 
-    public func serializeRootNodeToString(password: String = "web3swift") throws -> String {
+    public func serializeRootNodeToString(password: String ) throws -> String {
         guard let decryptedRootNode = try? self.getPrefixNodeData(password) else {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }

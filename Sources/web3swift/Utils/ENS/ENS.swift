@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -10,14 +9,14 @@ import Core
 
 public class ENS {
 
-    public let web3: web3
+    public let web3: Web3
     public var registry: Registry
     public var resolver: Resolver? = nil
     public var baseRegistrar: BaseRegistrar? = nil
     public var registrarController: ETHRegistrarController? = nil
     public var reverseRegistrar: ReverseRegistrar? = nil
 
-    public init?(web3: web3) {
+    public init?(web3: Web3) {
         self.web3 = web3
         guard let registry = Registry(web3: web3) else {
             return nil
@@ -75,8 +74,9 @@ public class ENS {
         self.reverseRegistrar = reverseRegistrar
     }
 
-    lazy var defaultOptions: TransactionOptions = {
-        return TransactionOptions.defaultOptions
+    // FIXME: Rewrite this to CodableTransaction
+    lazy var defaultOptions: CodableTransaction = {
+        return CodableTransaction.emptyTransaction
     }()
 
     // MARK: - Convenience public resolver methods
@@ -96,7 +96,8 @@ public class ENS {
         return addr
     }
 
-    public func setAddress(forNode node: String, address: EthereumAddress, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
+    // FIXME: Rewrite this to CodableTransaction
+    public func setAddress(forNode node: String, address: EthereumAddress, options: CodableTransaction? = nil, password: String? = nil) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
@@ -130,7 +131,8 @@ public class ENS {
         return name
     }
 
-    public func setName(forNode node: String, name: String, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
+    // FIXME: Rewrite this to CodableTransaction
+    public func setName(forNode node: String, name: String, options: CodableTransaction? = nil, password: String? = nil) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
@@ -148,6 +150,7 @@ public class ENS {
         return result
     }
 
+    // FIXME: Rewrite this to CodableTransaction
     public func getContent(forNode node: String) async throws -> Data {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
@@ -164,7 +167,8 @@ public class ENS {
         return content
     }
 
-    public func setContent(forNode node: String, hash: String, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
+    // FIXME: Rewrite this to CodableTransaction
+    public func setContent(forNode node: String, hash: String, options: CodableTransaction? = nil, password: String? = nil) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
@@ -198,7 +202,8 @@ public class ENS {
         return abi
     }
 
-    public func setABI(forNode node: String, contentType: ENS.Resolver.ContentType, data: Data, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
+    // FIXME: Rewrite this to CodableTransaction
+    public func setABI(forNode node: String, contentType: ENS.Resolver.ContentType, data: Data, options: CodableTransaction? = nil, password: String? = nil) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
@@ -232,7 +237,8 @@ public class ENS {
         return pk
     }
 
-    public func setPublicKey(forNode node: String, publicKey: PublicKey, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
+    // FIXME: Rewrite this to CodableTransaction
+    public func setPublicKey(forNode node: String, publicKey: PublicKey, options: CodableTransaction? = nil, password: String? = nil) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
@@ -266,7 +272,8 @@ public class ENS {
         return text
     }
 
-    public func setText(forNode node: String, key: String, value: String, options: TransactionOptions? = nil, password: String? = nil) async throws -> TransactionSendingResult {
+    // FIXME: Rewrite this to CodableTransaction
+    public func setText(forNode node: String, key: String, value: String, options: CodableTransaction? = nil, password: String? = nil) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }

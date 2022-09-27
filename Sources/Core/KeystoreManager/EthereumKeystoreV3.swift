@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -70,7 +69,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         }
     }
 
-    public init?(password: String = "web3swift", aesMode: String = "aes-128-cbc") throws {
+    public init?(password: String, aesMode: String = "aes-128-cbc") throws {
         guard var newPrivateKey = SECP256K1.generatePrivateKey() else {
             return nil
         }
@@ -80,7 +79,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         try encryptDataToStorage(password, keyData: newPrivateKey, aesMode: aesMode)
     }
 
-    public init?(privateKey: Data, password: String = "web3swift", aesMode: String = "aes-128-cbc") throws {
+    public init?(privateKey: Data, password: String, aesMode: String = "aes-128-cbc") throws {
         guard privateKey.count == 32 else {
             return nil
         }

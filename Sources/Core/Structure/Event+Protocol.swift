@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -7,6 +6,7 @@
 import Foundation
 import BigInt
 
+// FIXME: Make me work or delete
 /// Protocol for generic Ethereum event parsing results
 public protocol EventParserResultProtocol {
     var eventName: String {get}
@@ -35,11 +35,11 @@ public struct EventParserResult: EventParserResultProtocol {
 
 /// Protocol for generic Ethereum event parser
 public protocol EventParserProtocol {
-    func parseTransaction(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol]
+    func parseTransaction(_ transaction: CodableTransaction) async throws -> [EventParserResultProtocol]
     func parseTransactionByHash(_ hash: Data) async throws -> [EventParserResultProtocol]
     func parseBlock(_ block: Block) async throws -> [EventParserResultProtocol]
     func parseBlockByNumber(_ blockNumber: BigUInt) async throws -> [EventParserResultProtocol]
-    func parseTransactionPromise(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol]
+    func parseTransactionPromise(_ transaction: CodableTransaction) async throws -> [EventParserResultProtocol]
     func parseTransactionByHashPromise(_ hash: Data) async throws -> [EventParserResultProtocol]
     func parseBlockByNumberPromise(_ blockNumber: BigUInt) async throws -> [EventParserResultProtocol]
     func parseBlockPromise(_ block: Block) async throws -> [EventParserResultProtocol]
@@ -47,6 +47,7 @@ public protocol EventParserProtocol {
 
 /// Enum for the most-used Ethereum networks. Network ID is crucial for EIP155 support
 public enum Networks {
+    case Goerli
     case Rinkeby
     case Mainnet
     case Ropsten
@@ -55,6 +56,7 @@ public enum Networks {
 
     public var name: String {
         switch self {
+        case .Goerli: return "goerli"
         case .Rinkeby: return "rinkeby"
         case .Ropsten: return "ropsten"
         case .Mainnet: return "mainnet"
@@ -69,6 +71,7 @@ public enum Networks {
         case .Mainnet: return BigUInt(1)
         case .Ropsten: return BigUInt(3)
         case .Rinkeby: return BigUInt(4)
+        case .Goerli: return BigUInt(5)
         case .Kovan: return BigUInt(42)
         }
     }
@@ -83,6 +86,8 @@ public enum Networks {
             return Networks.Ropsten
         case 4:
             return Networks.Rinkeby
+        case 5:
+            return Networks.Goerli
         case 42:
             return Networks.Kovan
         default:

@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -8,11 +7,10 @@ import Foundation
 import BigInt
 import Core
 
-
+// FIXME: Rewrite this to CodableTransaction
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
-public class web3 {
+public class Web3 {
     public var provider: Web3Provider
-    public var transactionOptions: TransactionOptions = TransactionOptions.defaultOptions
 
     /// Raw initializer using a Web3Provider protocol object, dispatch queue and request dispatcher.
     public init(provider prov: Web3Provider) {
@@ -25,190 +23,174 @@ public class web3 {
         self.provider.attachedKeystoreManager = manager
     }
 
-    var ethInstance: web3.Eth?
+    var ethInstance: Web3.Eth?
 
     /// Public web3.eth.* namespace.
-    public var eth: web3.Eth {
+    public var eth: Web3.Eth {
         if (self.ethInstance != nil) {
             return self.ethInstance!
         }
-        self.ethInstance = web3.Eth(provider: self.provider, web3: self)
+        self.ethInstance = Web3.Eth(provider: self.provider, web3: self)
         return self.ethInstance!
     }
 
-    public class Eth: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class Eth {
         var provider: Web3Provider
         //  weak var web3: web3?
-        var web3: web3
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
-        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+        var web3: Web3
+
+        public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
             web3 = web3instance
         }
     }
 
-    var personalInstance: web3.Personal?
+    var personalInstance: Web3.Personal?
 
     /// Public web3.personal.* namespace.
-    public var personal: web3.Personal {
+    public var personal: Web3.Personal {
         if (self.personalInstance != nil) {
             return self.personalInstance!
         }
-        self.personalInstance = web3.Personal(provider: self.provider, web3: self)
+        self.personalInstance = Web3.Personal(provider: self.provider, web3: self)
         return self.personalInstance!
     }
 
-    public class Personal: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class Personal {
         var provider: Web3Provider
         //        weak var web3: web3?
-        var web3: web3
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
-        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+        var web3: Web3
+        public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
             web3 = web3instance
         }
     }
 
-    var txPoolInstance: web3.TxPool?
+    var txPoolInstance: Web3.TxPool?
 
     /// Public web3.personal.* namespace.
-    public var txPool: web3.TxPool {
+    public var txPool: Web3.TxPool {
         if (self.txPoolInstance != nil) {
             return self.txPoolInstance!
         }
-        self.txPoolInstance = web3.TxPool(provider: self.provider, web3: self)
+        self.txPoolInstance = Web3.TxPool(provider: self.provider, web3: self)
         return self.txPoolInstance!
     }
 
-    public class TxPool: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class TxPool {
         var provider: Web3Provider
         //        weak var web3: web3?
-        var web3: web3
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
-        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+        var web3: Web3
+        public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
             web3 = web3instance
         }
     }
 
-    var walletInstance: web3.Web3Wallet?
+    var walletInstance: Web3.Web3Wallet?
 
     /// Public web3.wallet.* namespace.
-    public var wallet: web3.Web3Wallet {
+    public var wallet: Web3.Web3Wallet {
         if (self.walletInstance != nil) {
             return self.walletInstance!
         }
-        self.walletInstance = web3.Web3Wallet(provider: self.provider, web3: self)
+        self.walletInstance = Web3.Web3Wallet(provider: self.provider, web3: self)
         return self.walletInstance!
     }
 
     public class Web3Wallet {
         var provider: Web3Provider
         //  weak var web3: web3?
-        var web3: web3
-        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+        var web3: Web3
+        public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
             web3 = web3instance
         }
     }
 
-    var browserFunctionsInstance: web3.BrowserFunctions?
+    var browserFunctionsInstance: Web3.BrowserFunctions?
 
     /// Public web3.browserFunctions.* namespace.
-    public var browserFunctions: web3.BrowserFunctions {
+    public var browserFunctions: Web3.BrowserFunctions {
         if (self.browserFunctionsInstance != nil) {
             return self.browserFunctionsInstance!
         }
-        self.browserFunctionsInstance = web3.BrowserFunctions(provider: self.provider, web3: self)
+        self.browserFunctionsInstance = Web3.BrowserFunctions(provider: self.provider, web3: self)
         return self.browserFunctionsInstance!
     }
 
-    public class BrowserFunctions: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class BrowserFunctions {
         var provider: Web3Provider
         //        weak var web3: web3?
-        public var web3: web3
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
-        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+        public var web3: Web3
+        public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
             web3 = web3instance
         }
     }
 
-    var eventLoopInstance: web3.Eventloop?
+    var eventLoopInstance: Web3.Eventloop?
 
     /// Public web3.browserFunctions.* namespace.
-    public var eventLoop: web3.Eventloop {
+    public var eventLoop: Web3.Eventloop {
         if (self.eventLoopInstance != nil) {
             return self.eventLoopInstance!
         }
-        self.eventLoopInstance = web3.Eventloop(provider: self.provider, web3: self)
+        self.eventLoopInstance = Web3.Eventloop(provider: self.provider, web3: self)
         return self.eventLoopInstance!
     }
 
-    public class Eventloop: TransactionOptionsInheritable {
+    // FIXME: Rewrite this to CodableTransaction
+    public class Eventloop {
 
-        public typealias EventLoopCall = (web3) async -> Void
-        public typealias EventLoopContractCall = (web3contract) -> Void
+        public typealias EventLoopCall = (Web3) async -> Void
+        public typealias EventLoopContractCall = (Contract) -> Void
 
         public struct MonitoredProperty {
             public var name: String
             public var calledFunction: EventLoopCall
         }
 
-        //  public struct MonitoredContract {
-        //      public var name: String
-        //      public var queue: DispatchQueue
-        //      public var calledFunction: EventLoopContractCall
-        //  }
-
         var provider: Web3Provider
         //        weak var web3: web3?
-        var web3: web3
+        var web3: Web3
         var timer: RepeatingTimer? = nil
 
         public var monitoredProperties: [MonitoredProperty] = [MonitoredProperty]()
         //  public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
         public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
-
-        public var transactionOptions: TransactionOptions {
-            return self.web3.transactionOptions
-        }
-        public init(provider prov: Web3Provider, web3 web3instance: web3) {
+        public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
             web3 = web3instance
         }
     }
 
-    public typealias AssemblyHookFunction = ((EthereumTransaction, EthereumContract, TransactionOptions)) -> (EthereumTransaction, EthereumContract, TransactionOptions, Bool)
-
-    public typealias SubmissionHookFunction = ((EthereumTransaction, TransactionOptions)) -> (EthereumTransaction, TransactionOptions, Bool)
+//    public typealias AssemblyHookFunction = ((inout CodableTransaction, EthereumContract)) -> Bool
+//
+//    public typealias SubmissionHookFunction = (inout CodableTransaction) -> Bool
 
     public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> ()
 
-    public struct AssemblyHook {
-        public var function: AssemblyHookFunction
-    }
+//    public struct AssemblyHook {
+//        public var function: AssemblyHookFunction
+//    }
 
-    public struct SubmissionHook {
-        public var function: SubmissionHookFunction
-    }
+//    public struct SubmissionHook {
+//        public var function: SubmissionHookFunction
+//    }
 
     public struct SubmissionResultHook {
         public var function: SubmissionResultHookFunction
     }
 
-    public var preAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
-    public var postAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
-
-    public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
+//    public var preAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
+//    public var postAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
+//
+//    public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
     public var postSubmissionHooks: [SubmissionResultHook] = [SubmissionResultHook]()
 
 }

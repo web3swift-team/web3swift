@@ -21,7 +21,6 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/attaswift/BigInt.git", from: "5.3.0"),
-        .package(url: "https://github.com/daltoniam/Starscream.git", from: "4.0.4"),
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.5.1")
     ],
     targets: [
@@ -32,7 +31,7 @@ let package = Package(
         ),
         .target(
             name: "web3swift",
-            dependencies: ["Core", "BigInt", "secp256k1", "Starscream"],
+            dependencies: ["Core", "BigInt", "secp256k1"],
             exclude: excludeFiles,
             resources: [
                 .copy("./Browser/browser.js"),

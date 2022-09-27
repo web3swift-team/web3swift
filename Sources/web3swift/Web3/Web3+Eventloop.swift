@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -6,7 +5,7 @@
 
 import Foundation
 
-extension web3.Eventloop {
+extension Web3.Eventloop {
 
     // @available(iOS 10.0, *)
     public func start(_ timeInterval: TimeInterval) {

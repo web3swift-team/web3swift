@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -10,11 +9,11 @@ import Core
 
 extension Web3.Utils {
 
-    fileprivate typealias AssemblyHook = web3.AssemblyHook
-    fileprivate typealias SubmissionResultHook = web3.SubmissionResultHook
+//    fileprivate typealias AssemblyHook = web3.AssemblyHook
+//    fileprivate typealias SubmissionResultHook = web3.SubmissionResultHook
 
     public class NonceMiddleware: EventLoopRunnableProtocol {
-        var web3: web3?
+        var web3: Web3?
         var nonceLookups: [EthereumAddress: BigUInt] = [EthereumAddress: BigUInt]()
         public var name: String = "Nonce lookup middleware"
         public let queue: DispatchQueue = DispatchQueue(label: "Nonce middleware queue")
@@ -49,13 +48,14 @@ extension Web3.Utils {
 
         }
 
-        func preAssemblyFunction(tx: EthereumTransaction, contract: EthereumContract, transactionOptions: TransactionOptions) -> (EthereumTransaction, EthereumContract, TransactionOptions, Bool) {
-            guard let from = transactionOptions.from else {
+        // FIXME: Rewrite this to CodableTransaction
+        func preAssemblyFunction(tx: inout CodableTransaction, contract: EthereumContract) -> (CodableTransaction, EthereumContract, Bool) {
+            guard let from = tx.from else {
                 // do nothing
-                return (tx, contract, transactionOptions, true)
+                return (tx, contract, true)
             }
             guard let knownNonce = self.nonceLookups[from] else {
-                return (tx, contract, transactionOptions, true)
+                return (tx, contract, true)
             }
 
             let newNonce = knownNonce + 1
@@ -63,43 +63,41 @@ extension Web3.Utils {
             self.queue.async {
                 self.nonceLookups[from] = newNonce
             }
-            //            var modifiedTX = tx
-            //            modifiedTX.nonce = newNonce
-            var newOptions = transactionOptions
-            newOptions.nonce = .manual(newNonce)
-            return (tx, contract, newOptions, true)
+
+            tx.noncePolicy = .exact(newNonce)
+            return (tx, contract, true)
         }
 
-        func postSubmissionFunction(result: TransactionSendingResult) {
-            guard let from = result.transaction.sender else {
-                // do nothing
-                return
-            }
+//        func postSubmissionFunction(result: TransactionSendingResult) {
+//            guard let from = result.transaction.sender else {
+//                // do nothing
+//                return
+//            }
+//
+//            let newNonce = result.transaction.nonceRe
+//
+//            if let knownNonce = self.nonceLookups[from] {
+//                if knownNonce != newNonce {
+//                    self.queue.async {
+//                        self.nonceLookups[from] = newNonce
+//                    }
+//                }
+//                return
+//            }
+//            self.queue.async {
+//                self.nonceLookups[from] = newNonce
+//            }
+//            return
+//        }
 
-            let newNonce = result.transaction.nonce
-
-            if let knownNonce = self.nonceLookups[from] {
-                if knownNonce != newNonce {
-                    self.queue.async {
-                        self.nonceLookups[from] = newNonce
-                    }
-                }
-                return
-            }
-            self.queue.async {
-                self.nonceLookups[from] = newNonce
-            }
-            return
-        }
-
-        public func attach(_ web3: web3) {
-            self.web3 = web3
-            web3.eventLoop.monitoredUserFunctions.append(self)
-            let preHook = AssemblyHook(function: self.preAssemblyFunction)
-            web3.preAssemblyHooks.append(preHook)
-            let postHook = SubmissionResultHook(function: self.postSubmissionFunction)
-            web3.postSubmissionHooks.append(postHook)
-        }
+//        public func attach(_ web3: web3) {
+//            self.web3 = web3
+//            web3.eventLoop.monitoredUserFunctions.append(self)
+//            let preHook = AssemblyHook(function: self.preAssemblyFunction)
+//            web3.preAssemblyHooks.append(preHook)
+//            let postHook = SubmissionResultHook(function: self.postSubmissionFunction)
+//            web3.postSubmissionHooks.append(postHook)
+//        }
 
     }
 }

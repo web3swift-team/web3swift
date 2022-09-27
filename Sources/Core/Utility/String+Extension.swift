@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -6,12 +5,12 @@
 
 import Foundation
 
-public extension String {
+extension String {
     var fullRange: Range<Index> {
         return startIndex..<endIndex
     }
 
-    var fullNSRange: NSRange {
+    public var fullNSRange: NSRange {
         return NSRange(fullRange, in: self)
     }
 
@@ -33,19 +32,19 @@ public extension String {
         return output
     }
 
-    subscript (bounds: CountableClosedRange<Int>) -> String {
+    public subscript (bounds: CountableClosedRange<Int>) -> String {
         let start = index(self.startIndex, offsetBy: bounds.lowerBound)
         let end = index(self.startIndex, offsetBy: bounds.upperBound)
         return String(self[start...end])
     }
 
-    subscript (bounds: CountableRange<Int>) -> String {
+    public subscript (bounds: CountableRange<Int>) -> String {
         let start = index(self.startIndex, offsetBy: bounds.lowerBound)
         let end = index(self.startIndex, offsetBy: bounds.upperBound)
         return String(self[start..<end])
     }
 
-    subscript (bounds: CountablePartialRangeFrom<Int>) -> String {
+    public subscript (bounds: CountablePartialRangeFrom<Int>) -> String {
         let start = index(self.startIndex, offsetBy: bounds.lowerBound)
         let end = self.endIndex
         return String(self[start..<end])
@@ -66,11 +65,11 @@ public extension String {
         return Data(byteArray)
     }
 
-    func hasHexPrefix() -> Bool {
+    public func hasHexPrefix() -> Bool {
         return self.hasPrefix("0x")
     }
 
-    func stripHexPrefix() -> String {
+    public func stripHexPrefix() -> String {
         if self.hasPrefix("0x") {
             let indexStart = self.index(self.startIndex, offsetBy: 2)
             return String(self[indexStart...])
@@ -78,7 +77,7 @@ public extension String {
         return self
     }
 
-    func addHexPrefix() -> String {
+    public func addHexPrefix() -> String {
         if !self.hasPrefix("0x") {
             return "0x" + self
         }

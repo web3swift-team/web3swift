@@ -1,22 +1,16 @@
-//  web3swift
 //
-//  Created by Alex Vlasov.
-//  Copyright © 2018 Alex Vlasov. All rights reserved.
+//  Created by Yaroslav Yashin.
+//  Copyright © 2022 Yaroslav Yashin. All rights reserved.
 //
 
 import Foundation
 import BigInt
 import Core
 
-extension TransactionDetails: APIResultType { }
-
-extension web3.Eth {
+extension Web3.Eth {
     public func transactionDetails(_ txhash: Data) async throws -> TransactionDetails {
-        try await self.transactionDetails(txhash.toHexString().addHexPrefix())
-    }
-
-    public func transactionDetails(_ txhash: Hash) async throws -> TransactionDetails {
-        let requestCall: APIRequest = .getTransactionByHash(txhash)
+        guard let hexString = String(data: txhash, encoding: .utf8)?.addHexPrefix() else { throw Web3Error.dataError }
+        let requestCall: APIRequest = .getTransactionByHash(hexString)
         let response: APIResponse<TransactionDetails> = try await APIRequest.sendRequest(with: self.provider, for: requestCall)
         return response.result
     }

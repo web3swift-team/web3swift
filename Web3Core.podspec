@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name         = 'Web3Core'
-    spec.version      = '3.0.0-RC3'
+    spec.version      = '3.0.0'
     spec.module_name  = 'Core'
     spec.ios.deployment_target = "13.0"
     spec.osx.deployment_target = "10.15"
