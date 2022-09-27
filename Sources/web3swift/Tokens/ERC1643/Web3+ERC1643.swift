@@ -29,18 +29,18 @@ public class ERC1643: IERC1643, ERC20BaseProperties {
     internal var _hasReadProperties: Bool = false
 
     public var transaction: CodableTransaction
-    public var web3: web3
+    public var web3: Web3
     public var provider: Web3Provider
     public var address: EthereumAddress
     public var abi: String
 
-    lazy var contract: web3.Contract = {
+    lazy var contract: Web3.Contract = {
         let contract = self.web3.contract(self.abi, at: self.address, abiVersion: 2)
         precondition(contract != nil)
         return contract!
     }()
 
-    public init(web3: web3, provider: Web3Provider, address: EthereumAddress, abi: String = Web3.Utils.erc1643ABI, transaction: CodableTransaction = .emptyTransaction) {
+    public init(web3: Web3, provider: Web3Provider, address: EthereumAddress, abi: String = Web3.Utils.erc1643ABI, transaction: CodableTransaction = .emptyTransaction) {
         self.web3 = web3
         self.provider = provider
         self.address = address
