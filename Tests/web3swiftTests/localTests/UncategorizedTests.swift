@@ -7,8 +7,8 @@
 import XCTest
 import CryptoSwift
 import BigInt
-import Core
 
+@testable import Core
 @testable import web3swift
 
 class UncategorizedTests: XCTestCase {
@@ -130,6 +130,17 @@ class UncategorizedTests: XCTestCase {
         print(user!)
         print(allMethods)
     }
-    
+
+    func testBloomFilterPerformance() throws {
+        var uuids = [Data]()
+        for _ in 0..<4000 {
+            uuids.append(UUID().uuidString.data(using: .utf8)!)
+        }
+        measure {
+            for bytes in uuids {
+                let _ = EthereumBloomFilter.bloom9(bytes)
+            }
+        }
+    }
 }
 
