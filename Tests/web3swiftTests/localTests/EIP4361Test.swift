@@ -78,10 +78,10 @@ class EIP4361Test: XCTestCase {
         }
 
         XCTAssertNotNil(validationResponse.eip4361)
-        XCTAssertNil(validationResponse.parsedFields[.expirationTime])
-        XCTAssertNil(validationResponse.parsedFields[.notBefore])
-        XCTAssertNil(validationResponse.parsedFields[.requestId])
-        XCTAssertNil(validationResponse.parsedFields[.resources])
+        XCTAssertNil(validationResponse.capturedFields[.expirationTime])
+        XCTAssertNil(validationResponse.capturedFields[.notBefore])
+        XCTAssertNil(validationResponse.capturedFields[.requestId])
+        XCTAssertNil(validationResponse.capturedFields[.resources])
     }
 
     func test_invalidEIP4361_missingAddress() {
@@ -93,7 +93,7 @@ class EIP4361Test: XCTestCase {
             return
         }
 
-        XCTAssertNil(validationResponse.parsedFields[.address])
+        XCTAssertNil(validationResponse.capturedFields[.address])
     }
 
     func test_invalidEIP4361_missingUri() {
@@ -105,7 +105,7 @@ class EIP4361Test: XCTestCase {
             return
         }
 
-        XCTAssertNil(validationResponse.parsedFields[.uri])
+        XCTAssertNil(validationResponse.capturedFields[.uri])
     }
 
     func test_invalidEIP4361_missingVersion() {
@@ -117,7 +117,7 @@ class EIP4361Test: XCTestCase {
             return
         }
 
-        XCTAssertNil(validationResponse.parsedFields[.version])
+        XCTAssertNil(validationResponse.capturedFields[.version])
     }
 
     func test_invalidEIP4361_missingChainId() {
@@ -129,7 +129,7 @@ class EIP4361Test: XCTestCase {
             return
         }
 
-        XCTAssertNil(validationResponse.parsedFields[.chainId])
+        XCTAssertNil(validationResponse.capturedFields[.chainId])
     }
 
     func test_invalidEIP4361_missingNonce() {
@@ -141,7 +141,7 @@ class EIP4361Test: XCTestCase {
             return
         }
 
-        XCTAssertNil(validationResponse.parsedFields[.nonce])
+        XCTAssertNil(validationResponse.capturedFields[.nonce])
     }
 
     func test_invalidEIP4361_missingIssuedAt() {
@@ -153,7 +153,7 @@ class EIP4361Test: XCTestCase {
             return
         }
 
-        XCTAssertNil(validationResponse.parsedFields[.issuedAt])
+        XCTAssertNil(validationResponse.capturedFields[.issuedAt])
     }
 
     func test_invalidEIP4361_wrongVersionNumber() {
@@ -165,6 +165,6 @@ class EIP4361Test: XCTestCase {
             return
         }
 
-        XCTAssertEqual(validationResponse.parsedFields[.version], "123")
+        XCTAssertEqual(validationResponse.capturedFields[.version], "123")
     }
 }

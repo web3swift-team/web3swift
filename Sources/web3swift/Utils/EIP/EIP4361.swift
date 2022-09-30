@@ -84,17 +84,17 @@ public final class EIP4361 {
     public static func validate(_ message: String) -> EIP4361ValidationResponse {
         let siweConstantMessageRegex = try! NSRegularExpression(pattern: "^\(domain)")
         guard siweConstantMessageRegex.firstMatch(in: message, range: message.fullNSRange) != nil else {
-            return EIP4361ValidationResponse(isEIP4361: false, eip4361: nil, parsedFields: [:])
+            return EIP4361ValidationResponse(isEIP4361: false, eip4361: nil, capturedFields: [:])
         }
 
         let eip4361Regex = try! NSRegularExpression(pattern: eip4361OptionalPattern)
-        var parsedFields: [EIP4361Field: String] = [:]
+        var capturedFields: [EIP4361Field: String] = [:]
         for (key, value) in eip4361Regex.captureGroups(string: message) {
-            parsedFields[.init(rawValue: key)!] = value
+            capturedFields[.init(rawValue: key)!] = value
         }
         return EIP4361ValidationResponse(isEIP4361: true,
                                   eip4361: EIP4361(message),
-                                  parsedFields: parsedFields)
+                                         capturedFields: capturedFields)
     }
 
     /// `domain` is the RFC 3986 authority that is requesting the signing.
@@ -200,7 +200,7 @@ public final class EIP4361 {
 public struct EIP4361ValidationResponse {
     public let isEIP4361: Bool
     public let eip4361: EIP4361?
-    public let parsedFields: [EIP4361.EIP4361Field: String]
+    public let capturedFields: [EIP4361.EIP4361Field: String]
 
     public var isValid: Bool {
         eip4361 != nil
