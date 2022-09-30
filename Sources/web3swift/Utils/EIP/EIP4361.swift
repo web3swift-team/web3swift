@@ -82,7 +82,7 @@ public final class EIP4361 {
     }
 
     public static func validate(_ message: String) -> EIP4361ValidationResponse {
-        let siweConstantMessageRegex = try! NSRegularExpression(pattern: "^\(domain)")
+        let siweConstantMessageRegex = try! NSRegularExpression(pattern: "^\(domain)\\n")
         guard siweConstantMessageRegex.firstMatch(in: message, range: message.fullNSRange) != nil else {
             return EIP4361ValidationResponse(isEIP4361: false, eip4361: nil, capturedFields: [:])
         }
