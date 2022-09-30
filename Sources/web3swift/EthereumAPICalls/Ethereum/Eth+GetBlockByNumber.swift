@@ -11,13 +11,11 @@ import Core
 extension Web3.Eth {
     public func block(by hash: Hash, fullTransactions: Bool = false) async throws -> Block {
         let requestCall: APIRequest = .getBlockByHash(hash, fullTransactions)
-        let response: APIResponse<Block> = try await APIRequest.sendRequest(with: self.provider, for: requestCall)
-        return response.result
+        return try await APIRequest.sendRequest(with: self.provider, for: requestCall).result
     }
 
     public func block(by number: BlockNumber, fullTransactions: Bool = false) async throws -> Block {
         let requestCall: APIRequest = .getBlockByNumber(number, fullTransactions)
-        let response: APIResponse<Block> = try await APIRequest.sendRequest(with: self.provider, for: requestCall)
-        return response.result
+        return try await APIRequest.sendRequest(with: self.provider, for: requestCall).result
     }
 }

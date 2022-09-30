@@ -12,9 +12,7 @@ extension Web3.Eth {
         guard let hexString = String(data: data, encoding: .utf8)?.addHexPrefix() else { throw Web3Error.dataError }
         let request: APIRequest = .sendRawTransaction(hexString)
         let response: APIResponse<Hash> = try await APIRequest.sendRequest(with: self.provider, for: request)
-
-        let result = try TransactionSendingResult(data: data, hash: response.result)
-        return result
+        return try TransactionSendingResult(data: data, hash: response.result)
     }
 }
 
