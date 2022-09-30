@@ -11,31 +11,90 @@ import Core
 public typealias SIWE = EIP4361
 
 fileprivate let datetimePattern = "[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[Tt]([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(.[0-9]+)?(([Zz])|([+|-]([01][0-9]|2[0-3]):[0-5][0-9]))"
-fileprivate let uriPattern = "(([^:?#]+):)?(([^?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?"
+fileprivate let uriPattern = "(([^:?#\\s]+):)?(([^?#\\s]*))?([^?#\\s]*)(\\?([^#\\s]*))?(#(.*))?"
 
 /// Sign-In with Ethereum protocol and parser implementation.
-/// EIP-4361: 
+///
+/// EIP-4361:
 ///    - https://eips.ethereum.org/EIPS/eip-4361
 ///    - https://github.com/ethereum/EIPs/blob/master/EIPS/eip-4361.md
 ///
 /// Thanks to spruceid for SIWE implementation that was rewritten here in Swift: https://github.com/spruceid/siwe/blob/main/packages/siwe-parser/lib/regex.ts
+///
+/// ## How to use?
+///
+/// The best approach on how to get an instance of `EIP4361` is by calling the function ``EIP4361/validate(_:)``
+/// which in return gives you all the information you need for checking which SIWE attributes are missing or invalid,
+/// and parsed `EIP4361` object itself if the raw message indeed was a SIWE message.
+///
+/// ```swift
+/// let validationResponse = EIP4361.validate(rawStringMessage)
+/// guard validationResponse.isEIP4361 else { return }
+///
+/// if validationResponse.isValid {
+///    // Safe to force unwrap the `eip4361`
+///    validationResponse.eip4361!
+///    ...
+/// } else {
+///     // e.g. present user with an error message ...
+///     // or
+///     // use `validationResponse.parsedFields` to check which fields are missing or invalid
+///     let isAddressValid = EthereumAddress(validationResponse[.address] ?? "") != nil
+///     ...
+/// }
+/// ```
 public final class EIP4361 {
 
-    private static let domain = "(?<domain>([^?#]*)) wants you to sign in with your Ethereum account:"
-    private static let address = "\\n(?<address>0x[a-zA-Z0-9]{40})\\n\\n"
-    private static let statementParagraph = "((?<statement>[^\\n]+)\\n)?"
-    private static let uri = "\\nURI: (?<uri>(\(uriPattern))?)"
-    private static let version = "\\nVersion: (?<version>1)"
-    private static let chainId = "\\nChain ID: (?<chainId>[0-9a-fA-F]+)"
-    private static let nonce = "\\nNonce: (?<nonce>[a-zA-Z0-9]{8,})"
-    private static let issuedAt = "\\nIssued At: (?<issuedAt>(\(datetimePattern)))"
-    private static let expirationTime = "(\\nExpiration Time: (?<expirationTime>(\(datetimePattern))))?"
-    private static let notBefore = "(\\nNot Before: (?<notBefore>(\(datetimePattern))))?"
-    private static let requestId = "(\\nRequest ID: (?<requestId>[-._~!$&'()*+,;=:@%a-zA-Z0-9]*))?"
-    private static let resourcesParagraph = "(\\nResources:(?<resources>(\\n- (\(uriPattern))?)+))?"
+    public enum EIP4361Field: String {
+        case domain = "domain"
+        case address = "address"
+        case statement = "statement"
+        case uri = "uri"
+        case version = "version"
+        case chainId = "chainId"
+        case nonce = "nonce"
+        case issuedAt = "issuedAt"
+        case expirationTime = "expirationTime"
+        case notBefore = "notBefore"
+        case requestId = "requestId"
+        case resources = "resources"
+    }
+
+    private static let domain = "(?<\(EIP4361Field.domain.rawValue)>([^?#]*)) wants you to sign in with your Ethereum account:"
+    private static let address = "\\n(?<\(EIP4361Field.address.rawValue)>0x[a-zA-Z0-9]{40})\\n\\n"
+    private static let statementParagraph = "((?<\(EIP4361Field.statement.rawValue)>[^\\n]+)\\n)?"
+    private static let uri = "\\nURI: (?<\(EIP4361Field.uri.rawValue)>(\(uriPattern))?)"
+    private static let version = "\\nVersion: (?<\(EIP4361Field.version.rawValue)>[0-9]+)"
+    private static let chainId = "\\nChain ID: (?<\(EIP4361Field.chainId.rawValue)>[0-9a-fA-F]+)"
+    private static let nonce = "\\nNonce: (?<\(EIP4361Field.nonce.rawValue)>[a-zA-Z0-9]{8,})"
+    private static let issuedAt = "\\nIssued At: (?<\(EIP4361Field.issuedAt.rawValue)>(\(datetimePattern)))"
+    private static let expirationTime = "(\\nExpiration Time: (?<\(EIP4361Field.expirationTime.rawValue)>(\(datetimePattern))))?"
+    private static let notBefore = "(\\nNot Before: (?<\(EIP4361Field.notBefore.rawValue)>(\(datetimePattern))))?"
+    private static let requestId = "(\\nRequest ID: (?<\(EIP4361Field.requestId.rawValue)>[-._~!$&'()*+,;=:@%a-zA-Z0-9]*))?"
+    private static let resourcesParagraph = "(\\nResources:(?<\(EIP4361Field.resources.rawValue)>(\\n- (\(uriPattern))?)+))?"
 
     private static var eip4361Pattern: String {
         "^\(domain)\(address)\(statementParagraph)\(uri)\(version)\(chainId)\(nonce)\(issuedAt)\(expirationTime)\(notBefore)\(requestId)\(resourcesParagraph)$"
+    }
+
+    private static var eip4361OptionalPattern: String {
+        "^\(domain)(\(address))?\(statementParagraph)(\(uri))?(\(version))?(\(chainId))?(\(nonce))?(\(issuedAt))?\(expirationTime)\(notBefore)\(requestId)\(resourcesParagraph)$"
+    }
+
+    public static func validate(_ message: String) -> EIP4361ValidationResponse {
+        let siweConstantMessageRegex = try! NSRegularExpression(pattern: "^\(domain)")
+        guard siweConstantMessageRegex.firstMatch(in: message, range: message.fullNSRange) != nil else {
+            return EIP4361ValidationResponse(isEIP4361: false, eip4361: nil, parsedFields: [:])
+        }
+
+        let eip4361Regex = try! NSRegularExpression(pattern: eip4361OptionalPattern)
+        var parsedFields: [EIP4361Field: String] = [:]
+        for (key, value) in eip4361Regex.captureGroups(string: message) {
+            parsedFields[.init(rawValue: key)!] = value
+        }
+        return EIP4361ValidationResponse(isEIP4361: true,
+                                  eip4361: EIP4361(message),
+                                  parsedFields: parsedFields)
     }
 
     /// `domain` is the RFC 3986 authority that is requesting the signing.
@@ -76,6 +135,7 @@ public final class EIP4361 {
               let uri = URL(string: rawUri),
               let rawVersion = groups["version"],
               let version = BigUInt(rawVersion, radix: 10) ?? BigUInt(rawVersion, radix: 16),
+              version == 1,
               let rawChainId = groups["chainId"],
               let chainId = BigUInt(rawChainId, radix: 10) ?? BigUInt(rawChainId, radix: 16),
               let nonce = groups["nonce"],
@@ -134,3 +194,15 @@ public final class EIP4361 {
     }
 }
 
+/// A structure that holds the information about Sign In With Ethereum message and allows you to check
+/// if the raw message is indeed a SIWE message, if it's a valid SIWE, which fields are present in the message
+/// and if it's a valid message holds a reference to fully parsed ``EIP4361`` object.
+public struct EIP4361ValidationResponse {
+    public let isEIP4361: Bool
+    public let eip4361: EIP4361?
+    public let parsedFields: [EIP4361.EIP4361Field: String]
+
+    public var isValid: Bool {
+        eip4361 != nil
+    }
+}
