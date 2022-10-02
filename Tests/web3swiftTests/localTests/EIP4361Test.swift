@@ -167,4 +167,27 @@ class EIP4361Test: XCTestCase {
 
         XCTAssertEqual(validationResponse.capturedFields[.version], "123")
     }
+
+    func test_validEIP4361_allRequiredFieldsContainWrongData() {
+        let rawSiweMessage = "service.invalid wants you to sign in with your Ethereum account:\nnot-a-hex-1234567890qwertyuiop1234567890qwertyuiop\n\nTHESTATEMENT123102938102938: aURIisSupposedToBeHEre\n\nURI: ANOTHER_URIisSupposedToBeHEre\nVersion: dsfjlsdafhjalsdfjh\nChain ID: not-a-chain-id\nNonce: not a nonce\nIssued At: this-is-not-a-date\nExpiration Time: expiration-time-not-a-date\nNot Before: not-before-not-a-date\nRequest ID: random-request-id_STRING!@$%%&\nResources:noURLSreallyHERE"
+
+        let validationResponse = EIP4361.validate(rawSiweMessage)
+        guard validationResponse.isEIP4361 && !validationResponse.isValid else {
+            XCTFail("Must not be able to parse this SIWE message.")
+            return
+        }
+
+        XCTAssertEqual(validationResponse.capturedFields[.domain], "service.invalid")
+        XCTAssertEqual(validationResponse.capturedFields[.address], "not-a-hex-1234567890qwertyuiop1234567890qwertyuiop")
+        XCTAssertEqual(validationResponse.capturedFields[.statement], "THESTATEMENT123102938102938: aURIisSupposedToBeHEre")
+        XCTAssertEqual(validationResponse.capturedFields[.uri], "ANOTHER_URIisSupposedToBeHEre")
+        XCTAssertEqual(validationResponse.capturedFields[.version], "dsfjlsdafhjalsdfjh")
+        XCTAssertEqual(validationResponse.capturedFields[.chainId], "not-a-chain-id")
+        XCTAssertEqual(validationResponse.capturedFields[.nonce], "not a nonce")
+        XCTAssertEqual(validationResponse.capturedFields[.issuedAt], "this-is-not-a-date")
+        XCTAssertEqual(validationResponse.capturedFields[.expirationTime], "expiration-time-not-a-date")
+        XCTAssertEqual(validationResponse.capturedFields[.notBefore], "not-before-not-a-date")
+        XCTAssertEqual(validationResponse.capturedFields[.requestId], "random-request-id_STRING!@$%%&")
+        XCTAssertEqual(validationResponse.capturedFields[.resources], "noURLSreallyHERE")
+    }
 }
