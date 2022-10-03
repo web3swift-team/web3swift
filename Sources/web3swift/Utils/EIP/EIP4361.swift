@@ -77,8 +77,37 @@ public final class EIP4361 {
         "^\(domain)\(address)\(statementParagraph)\(uri)\(version)\(chainId)\(nonce)\(issuedAt)\(expirationTime)\(notBefore)\(requestId)\(resourcesParagraph)$"
     }
 
+    private static var _eip4361OptionalPattern: String!
     private static var eip4361OptionalPattern: String {
-        "^\(domain)(\(address))?\(statementParagraph)(\(uri))?(\(version))?(\(chainId))?(\(nonce))?(\(issuedAt))?\(expirationTime)\(notBefore)\(requestId)\(resourcesParagraph)$"
+        guard _eip4361OptionalPattern == nil else { return _eip4361OptionalPattern! }
+
+        let domain = "(?<\(EIP4361Field.domain.rawValue)>(.*)) wants you to sign in with your Ethereum account:"
+        let address = "\\n(?<\(EIP4361Field.address.rawValue)>.*)\\n\\n"
+        let uri = "\\nURI: (?<\(EIP4361Field.uri.rawValue)>(.*)?)"
+        let version = "\\nVersion: (?<\(EIP4361Field.version.rawValue)>.*)"
+        let chainId = "\\nChain ID: (?<\(EIP4361Field.chainId.rawValue)>.*)"
+        let nonce = "\\nNonce: (?<\(EIP4361Field.nonce.rawValue)>.*)"
+        let issuedAt = "\\nIssued At: (?<\(EIP4361Field.issuedAt.rawValue)>(.*))"
+        let expirationTime = "(\\nExpiration Time: (?<\(EIP4361Field.expirationTime.rawValue)>(.*)))?"
+        let notBefore = "(\\nNot Before: (?<\(EIP4361Field.notBefore.rawValue)>(.*)))?"
+        let requestId = "(\\nRequest ID: (?<\(EIP4361Field.requestId.rawValue)>.*))?"
+        let resourcesParagraph = "(\\nResources:(?<\(EIP4361Field.resources.rawValue)>(.|\n)*))?"
+
+        let patternParts: [String] = ["^\(domain)",
+                                      "(\(address))?",
+                                      "\(statementParagraph)",
+                                      "(\(uri))?",
+                                      "(\(version))?",
+                                      "(\(chainId))?",
+                                      "(\(nonce))?",
+                                      "(\(issuedAt))?",
+                                      "\(expirationTime)",
+                                      "\(notBefore)",
+                                      "\(requestId)",
+                                      "\(resourcesParagraph)$"]
+
+        _eip4361OptionalPattern = patternParts.joined()
+        return _eip4361OptionalPattern!
     }
 
     public static func validate(_ message: String) -> EIP4361ValidationResponse {
