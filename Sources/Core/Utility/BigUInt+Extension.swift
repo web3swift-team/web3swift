@@ -13,3 +13,16 @@ public extension BigUInt {
         self = value
     }
 }
+
+#if COCOAPODS
+extension BigUInt {
+    var isZero: Bool {
+        switch kind {
+        case .inline(0, 0): return true
+        case .array: return storage.isEmpty
+        default:
+            return false
+        }
+    }
+}
+#endif

@@ -1,4 +1,6 @@
 Pod::Spec.new do |spec|
+    spec.compiler_flags = '-DCOCOAPODS'
+
     spec.name         = 'Web3Core'
     spec.version      = '3.0.0'
     spec.module_name  = 'Core'
@@ -12,7 +14,7 @@ Pod::Spec.new do |spec|
     spec.swift_version = '5.5'
 
     spec.dependency 'secp256k1.c', '~> 0.1'
-    spec.dependency 'BigInt', '~> 5.2.0'
+    spec.dependency 'BigInt', '~> 5.2.0' # no newer version in pods.
     spec.dependency 'CryptoSwift', '~> 1.5.1'
     spec.source_files = "Sources/Core/**/*.swift"
 end
