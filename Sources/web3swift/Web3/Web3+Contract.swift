@@ -85,7 +85,7 @@ extension Web3 {
         /// Returns a "Transaction intermediate" object.
         public func createReadOperation(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data()) -> ReadOperation? {
             // MARK: - Encoding ABI Data flow
-            guard var data = self.contract.method(method, parameters: parameters, extraData: extraData) else { return nil }
+            guard let data = self.contract.method(method, parameters: parameters, extraData: extraData) else { return nil }
 
             transaction.data = data
 
@@ -94,8 +94,7 @@ extension Web3 {
             }
 
             // MARK: Read data from ABI flow
-            let writeTX = ReadOperation.init(transaction: transaction, web3: web3, contract: contract, method: method)
-            return writeTX
+            return .init(transaction: transaction, web3: web3, contract: contract, method: method)
         }
 
         // FIXME: Rewrite this to CodableTransaction
@@ -111,8 +110,7 @@ extension Web3 {
             if let network = self.web3.provider.network {
                 transaction.chainID = network.chainID
             }
-            let writeTX = WriteOperation.init(transaction: transaction, web3: self.web3, contract: self.contract, method: method)
-            return writeTX
+            return .init(transaction: transaction, web3: self.web3, contract: self.contract, method: method)
         }
     }
 }

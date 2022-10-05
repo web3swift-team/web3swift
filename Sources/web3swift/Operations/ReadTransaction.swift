@@ -14,7 +14,7 @@ public class ReadOperation {
     public var transaction: CodableTransaction
     public var contract: EthereumContract
     public var method: String
-    public private (set) var data: Data?
+    public var data: Data? { transaction.data }
 
     var web3: Web3
 

@@ -91,15 +91,12 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         @available(*, message: "Available for only owner")
-        public func setAddress(forNode node: String, address: EthereumAddress, options: CodableTransaction? = nil, password: String? = nil) async throws -> TransactionSendingResult {
+        public func setAddress(forNode node: String, address: EthereumAddress, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.createWriteOperation("setAddr", parameters: [nameHash, address] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
-            guard let result = await password == nil
-                    ? try? transaction.writeToChain(password: "web3swift")
-                    : try? transaction.writeToChain(password: password!)
-            else {throw Web3Error.processingError(desc: "Can't send transaction")}
+            guard let result = try? await transaction.writeToChain(password: password) else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
 
@@ -113,15 +110,12 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         @available(*, message: "Available for only owner")
-        func setCanonicalName(forNode node: String, name: String, options: CodableTransaction? = nil, password: String? = nil) async throws -> TransactionSendingResult {
+        func setCanonicalName(forNode node: String, name: String, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.createWriteOperation("setName", parameters: [nameHash, name] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
-            guard let result = await password == nil
-                    ? try? transaction.writeToChain(password: "web3swift")
-                    : try? transaction.writeToChain(password: password!)
-            else {throw Web3Error.processingError(desc: "Can't send transaction")}
+            guard let result = try? await transaction.writeToChain(password: password) else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
 
@@ -135,14 +129,12 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         @available(*, message: "Available for only owner")
-        func setContentHash(forNode node: String, hash: String, options: CodableTransaction? = nil, password: String? = nil) async throws -> TransactionSendingResult {
+        func setContentHash(forNode node: String, hash: String, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.createWriteOperation("setContenthash", parameters: [nameHash, hash] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
-            guard let result = await password == nil
-                    ? try? transaction.writeToChain(password: "web3swift")
-                    : try? transaction.writeToChain(password: password!)
+            guard let result = try? await transaction.writeToChain(password: password)
             else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
@@ -158,15 +150,12 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         @available(*, message: "Available for only owner")
-        func setContractABI(forNode node: String, contentType: ENS.Resolver.ContentType, data: Data, options: CodableTransaction? = nil, password: String? = nil) async throws -> TransactionSendingResult {
+        func setContractABI(forNode node: String, contentType: ENS.Resolver.ContentType, data: Data, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.createWriteOperation("setABI", parameters: [nameHash, contentType.rawValue, data] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
-            guard let result = await password == nil
-                    ? try? transaction.writeToChain(password: "web3swift")
-                    : try? transaction.writeToChain(password: password!)
-            else {throw Web3Error.processingError(desc: "Can't send transaction")}
+            guard let result = try? await transaction.writeToChain(password: password) else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
 
@@ -182,16 +171,13 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         @available(*, message: "Available for only owner")
-        public func setPublicKey(forNode node: String, publicKey: PublicKey, options: CodableTransaction? = nil, password: String? = nil) async throws -> TransactionSendingResult {
+        public func setPublicKey(forNode node: String, publicKey: PublicKey, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
             options.to = self.resolverContractAddress
             let pubkeyWithoutPrefix = publicKey.getComponentsWithoutPrefix()
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.createWriteOperation("setPubkey", parameters: [nameHash, pubkeyWithoutPrefix.x, pubkeyWithoutPrefix.y] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
-            guard let result = await password == nil
-                    ? try? transaction.writeToChain(password: "web3swift")
-                    : try? transaction.writeToChain(password: password!)
-            else {throw Web3Error.processingError(desc: "Can't send transaction")}
+            guard let result = try? await transaction.writeToChain(password: password) else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
 
@@ -205,15 +191,12 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         @available(*, message: "Available for only owner")
-        public func setTextData(forNode node: String, key: String, value: String, options: CodableTransaction? = nil, password: String? = nil) async throws -> TransactionSendingResult {
+        public func setTextData(forNode node: String, key: String, value: String, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
             var options = options ?? defaultOptions
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.createWriteOperation("setText", parameters: [nameHash, key, value] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
-            guard let result = await password == nil
-                    ? try? transaction.writeToChain(password: "web3swift")
-                    : try? transaction.writeToChain(password: password!)
-            else {throw Web3Error.processingError(desc: "Can't send transaction")}
+            guard let result = try? await transaction.writeToChain(password: password) else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
     }

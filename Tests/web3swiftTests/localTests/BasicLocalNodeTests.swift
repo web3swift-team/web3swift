@@ -29,7 +29,6 @@ class BasicLocalNodeTests: LocalTestCase {
 
         let result = try await deployTx.writeToChain(password: "web3swift")
         let txHash = result.hash
-        print("Transaction with hash " + txHash)
 
         Thread.sleep(forTimeInterval: 1.0)
 
@@ -67,7 +66,6 @@ class BasicLocalNodeTests: LocalTestCase {
 
         let result = try await sendTx.writeToChain(password: "web3swift")
         let txHash = result.hash
-        print("Transaction with hash " + txHash)
 
         Thread.sleep(forTimeInterval: 1.0)
 
