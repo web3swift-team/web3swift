@@ -43,11 +43,11 @@ class PersonalSignatureTests: XCTestCase {
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
         let deployResult = try await deployTx.writeToChain(password: "web3swift")
-        let txHash = deployResult.hash
+        let txHash = Data.fromHex(deployResult.hash.stripHexPrefix())!
         
         Thread.sleep(forTimeInterval: 1.0)
         
-        let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
+        let receipt = try await web3.eth.transactionReceipt(txHash)
         print(receipt)
         
         switch receipt.status {
@@ -76,13 +76,13 @@ class PersonalSignatureTests: XCTestCase {
         var tx = contract.createReadOperation("hashPersonalMessage", parameters: [message as AnyObject])
         tx?.transaction.from = expectedAddress
         var result = try await tx!.callContractMethod()
-        guard let hash = result["hash"]! as? Data else {return XCTFail()}
+        guard let hash = result["hash"]! as? Data else { return XCTFail() }
         XCTAssert(Utilities.hashPersonalMessage(message.data(using: .utf8)!)! == hash)
         
         tx = contract.createReadOperation("recoverSigner", parameters: [message, unmarshalledSignature.v, Data(unmarshalledSignature.r), Data(unmarshalledSignature.s)] as [AnyObject])
         tx?.transaction.from = expectedAddress
         result = try await tx!.callContractMethod()
-        guard let signer = result["signer"]! as? EthereumAddress else {return XCTFail()}
+        guard let signer = result["signer"]! as? EthereumAddress else { return XCTFail() }
         XCTAssert(signer == expectedAddress)
     }
     

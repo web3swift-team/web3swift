@@ -28,11 +28,11 @@ class BasicLocalNodeTests: LocalTestCase {
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
 
         let result = try await deployTx.writeToChain(password: "web3swift")
-        let txHash = result.hash
+        let txHash = result.hash.stripHexPrefix()
 
         Thread.sleep(forTimeInterval: 1.0)
 
-        let receipt = try await web3.eth.transactionReceipt(txHash.stripHexPrefix().data(using: .utf8)!)
+        let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
         print(receipt)
 
         switch receipt.status {
@@ -42,12 +42,13 @@ class BasicLocalNodeTests: LocalTestCase {
             break
         }
 
-        let details = try await web3.eth.transactionDetails(txHash.stripHexPrefix().data(using: .utf8)!)
+        let details = try await web3.eth.transactionDetails(Data.fromHex(txHash)!)
         print(details)
     }
 
     func testEthSendExampleWithRemoteSigning() async throws {
         let web3 = try await Web3.new(LocalTestCase.url)
+        web3.addKeystoreManager(LocalTestCase.keyStoreManager)
         let allAddresses = try await web3.eth.ownedAccounts()
         let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)!
@@ -64,12 +65,12 @@ class BasicLocalNodeTests: LocalTestCase {
         print("Balance before to: " + balanceBeforeTo.description)
         print("Balance before from: " + balanceBeforeFrom.description)
 
-        let result = try await sendTx.writeToChain(password: "web3swift")
+        let result = try! await sendTx.writeToChain(password: "web3swift")
         let txHash = result.hash
 
         Thread.sleep(forTimeInterval: 1.0)
 
-        let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
+        let receipt = try await web3.eth.transactionReceipt(txHash)
         print(receipt)
 
         switch receipt.status {
@@ -79,7 +80,7 @@ class BasicLocalNodeTests: LocalTestCase {
             break
         }
 
-        let details = try await web3.eth.transactionDetails(txHash.data(using: .utf8)!)
+        let details = try await web3.eth.transactionDetails(txHash)
         print(details)
 
 

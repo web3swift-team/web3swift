@@ -639,12 +639,12 @@ class TransactionsTests: XCTestCase {
             writeTX.transaction.value = value!
             writeTX.transaction.gasLimitPolicy = .manual(78423)
             let result = try await writeTX.writeToChain(password: "")
-            let txHash = result.hash
-            print("Transaction with hash " + txHash)
+            let txHash = Data.fromHex(result.hash.stripHexPrefix())!
+            print("Transaction with hash " + result.hash)
 
             Thread.sleep(forTimeInterval: 1.0)
 
-            let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
+            let receipt = try await web3.eth.transactionReceipt(txHash)
             print(receipt)
             XCTAssert(receipt.status == .ok)
 
@@ -655,7 +655,7 @@ class TransactionsTests: XCTestCase {
                 break
             }
 
-            let details = try await web3.eth.transactionDetails(txHash.data(using: .utf8)!)
+            let details = try await web3.eth.transactionDetails(txHash)
             print(details)
             // FIXME: Reenable this test.
 //            XCTAssertEqual(details.transaction.gasLimit, BigUInt(78423))

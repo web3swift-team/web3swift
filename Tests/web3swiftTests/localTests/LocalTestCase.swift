@@ -10,6 +10,7 @@ import web3swift
 class LocalTestCase: XCTestCase {
 
     static let url = URL(string: "http://127.0.0.1:8545")!
+    static let keyStoreManager: KeystoreManager = KeystoreManager([try! EthereumKeystoreV3(password: "web3swift")!])
 
     override func setUp() async throws {
         let web3 = try! await Web3.new(LocalTestCase.url)

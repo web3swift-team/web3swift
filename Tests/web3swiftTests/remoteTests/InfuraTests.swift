@@ -27,6 +27,12 @@ class InfuraTests: XCTestCase {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let result = try await web3.eth.block(by: "0x6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695", fullTransactions: false)
     }
+
+    func testGetBlockByHash_hashAsData() async throws {
+        let blockHash = Data.fromHex("6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695")!
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let result = try await web3.eth.block(by: blockHash, fullTransactions: false)
+    }
     
     func testGetBlockByNumber1() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
