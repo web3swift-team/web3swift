@@ -16,6 +16,7 @@ import Core
 class ST20AndSecurityTokenTests: XCTestCase {
 
     // FIXME: Enable me back again
+    // Test fails because there's no such wallet on goerli chain as well as token.
 //    func testERC20TokenCreation() async throws {
 //        let web3 = await Web3.InfuraGoerliWeb3(accessToken: Constants.infuraToken)
 //        let w3sTokenAddress = EthereumAddress("0x2dD33957C90880bE4Ee9fd5F703110BDA2E579EC")!
@@ -33,7 +34,7 @@ class ST20AndSecurityTokenTests: XCTestCase {
         let userAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let balance = try await st20token.getBalance(account: userAddress)
         let allowance = try await st20token.getAllowance(originalOwner: userAddress, delegate: userAddress)
-        XCTAssertEqual(String(balance), "0")
+        XCTAssertEqual(balance, 0)
         XCTAssertEqual(allowance, 0)
     }
 
@@ -42,11 +43,11 @@ class ST20AndSecurityTokenTests: XCTestCase {
         let w3sTokenAddress = EthereumAddress("0x2dD33957C90880bE4Ee9fd5F703110BDA2E579EC")!
         let stoken = SecurityToken.init(web3: web3, provider: web3.provider, address: w3sTokenAddress)
         let investorsCount = try await stoken.investorCount()
-        let stringInvestorsCount = String(investorsCount)
-        XCTAssertEqual(stringInvestorsCount, "0")
+        XCTAssertEqual(investorsCount, 0)
     }
 
     // FIXME: Enable me back again
+    // Test fails because there's no such wallet on goerli chain as well as token.
 //    func testSecurityTokenGranularity() async throws {
 //        let web3 = await Web3.InfuraGoerliWeb3(accessToken: Constants.infuraToken)
 //        let w3sTokenAddress = EthereumAddress("0x2dD33957C90880bE4Ee9fd5F703110BDA2E579EC")!
