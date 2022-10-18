@@ -127,7 +127,7 @@ fileprivate enum JsonRpcErrorCode {
         case -32603:
             return .internalError
         default:
-            if (-32000)...(-32099) ~= code {
+            if (-32099)...(-32000) ~= code {
                 return .serverError(code)
             }
             return nil
