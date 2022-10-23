@@ -16,13 +16,6 @@ public extension BigUInt {
 
 #if COCOAPODS
 extension BigUInt {
-    var isZero: Bool {
-        switch kind {
-        case .inline(0, 0): return true
-        case .array: return storage.isEmpty
-        default:
-            return false
-        }
-    }
+    var isZero: Bool { self == 0 }
 }
 #endif
