@@ -21,6 +21,7 @@ class EIP67Tests: LocalTestCase {
         print(encoding)
     }
 
+    #if !os(Linux)
     func testEIP67codeGeneration() throws {
         var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!)
         eip67Data.gasLimit = BigUInt(21000)
@@ -29,6 +30,7 @@ class EIP67Tests: LocalTestCase {
         let encoding = eip67Data.toImage(scale: 5.0)
         XCTAssert(encoding != CIImage())
     }
+    #endif
 
     func testEIP67decoding() throws {
         var eip67Data = Web3.EIP67Code.init(address: EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!)
