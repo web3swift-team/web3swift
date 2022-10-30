@@ -336,6 +336,9 @@ extension SECP256K1 {
     }
 
     internal static func randomBytes(length: Int) -> Data? {
+        #if os(Linux)
+        sk = [UInt8].random(count: Constants.SecretKeyLength)
+        #else
         for _ in 0...1024 {
             var data = Data(repeating: 0, count: length)
             let result = data.withUnsafeMutableBytes { (mutableRBBytes) -> Int32? in
@@ -353,6 +356,7 @@ extension SECP256K1 {
             }
         }
         return nil
+        #endif
     }
 
     internal static func toByteArray<T>(_ value: T) -> [UInt8] {

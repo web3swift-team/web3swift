@@ -41,6 +41,9 @@ extension Data {
     }
 
     public static func randomBytes(length: Int) -> Data? {
+        #if os(Linux)
+        sk = [UInt8].random(count: Constants.SecretKeyLength)
+        #else
         for _ in 0...1024 {
             var data = Data(repeating: 0, count: length)
             let result = data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) -> Int32? in
@@ -56,6 +59,7 @@ extension Data {
             }
         }
         return nil
+        #endif
     }
     
     public func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public
