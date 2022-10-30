@@ -8,6 +8,9 @@
 
 import Foundation
 import secp256k1
+#if canImport(Vapor)
+import Vapor
+#endif
 
 public struct SECP256K1 {
     public struct UnmarshaledSignature{
@@ -336,7 +339,7 @@ extension SECP256K1 {
     }
 
     internal static func randomBytes(length: Int) -> Data? {
-        #if os(Linux)
+        #if canImport(Vapor)
         return [UInt8].random(count: length)
         #else
         for _ in 0...1024 {

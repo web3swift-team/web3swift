@@ -4,6 +4,9 @@
 //
 
 import Foundation
+#if canImport(Vapor)
+import Vapor
+#endif
 
 extension Data {
     init<T>(fromArray values: [T]) {
@@ -41,7 +44,7 @@ extension Data {
     }
 
     public static func randomBytes(length: Int) -> Data? {
-        #if os(Linux)
+        #if canImport(Vapor)
         return [UInt8].random(count: length)
         #else
         for _ in 0...1024 {
