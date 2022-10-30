@@ -337,7 +337,7 @@ extension SECP256K1 {
 
     internal static func randomBytes(length: Int) -> Data? {
         #if os(Linux)
-        return Data([UInt8].randomData(count: length))
+        return Data(URandom().bytes(count: length))        
         #else
         for _ in 0...1024 {
             var data = Data(repeating: 0, count: length)
