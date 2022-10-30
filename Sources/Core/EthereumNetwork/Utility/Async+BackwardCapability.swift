@@ -5,10 +5,10 @@
 //  Created by Yaroslav Yashin on 05.06.2022.
 //
 
-import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
+import Foundation
 
 @available(iOS, obsoleted: 15.0, message: "Use the built-in API instead")
 @available(macOS, obsoleted: 12.0, message: "Use the built-in API instead")
