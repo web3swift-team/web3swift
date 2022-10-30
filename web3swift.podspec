@@ -1,4 +1,4 @@
-WEB3CORE_VERSION ||= '3.0.0'
+WEB3CORE_VERSION ||= '3.0.4'
 
 Pod::Spec.new do |spec|
     spec.name         = 'web3swift'
@@ -13,7 +13,7 @@ Pod::Spec.new do |spec|
     spec.swift_version = '5.5'
 
     # Make this line same as Web3Core sources
-    spec.source_files =  "Sources/web3swift/{Contract,Convenience,EthereumABI,HookedFunctions,EthereumAPICalls,Web3}/*.swift", "Sources/web3swift/{EthereumAPICalls,Tokens,Utils}/**/*.swift"
+    spec.source_files =  "Sources/web3swift/**/*.swift"
     spec.ios.source_files   = 'Sources/web3swift/Browser/*.swift'
     spec.resource_bundle = { "Browser" => "Sources/web3swift/Browser/*.js" }
     spec.frameworks = 'CoreImage'
