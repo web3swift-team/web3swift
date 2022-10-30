@@ -42,7 +42,7 @@ extension Data {
 
     public static func randomBytes(length: Int) -> Data? {
         #if os(Linux)
-        sk = [UInt8].random(count: Constants.SecretKeyLength)
+        return [UInt8].random(count: Constants.SecretKeyLength)
         #else
         for _ in 0...1024 {
             var data = Data(repeating: 0, count: length)
