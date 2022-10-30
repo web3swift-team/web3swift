@@ -6,6 +6,9 @@
 import Foundation
 import BigInt
 import Core
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// The default http provider.
 public class Web3HttpProvider: Web3Provider {
