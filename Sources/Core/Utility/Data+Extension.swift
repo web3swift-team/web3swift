@@ -43,7 +43,8 @@ extension Data {
 
     public static func randomBytes(length: Int) -> Data? {
         #if os(Linux)
-        return Data(URandom().bytes(count: length))
+//        return Data(URandom().bytes(count: length))
+        return Data.random(length: length)
         #else
         for _ in 0...1024 {
             var data = Data(repeating: 0, count: length)
