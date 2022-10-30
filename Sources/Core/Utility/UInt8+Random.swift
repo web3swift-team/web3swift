@@ -10,20 +10,20 @@ import Foundation
 #if os(Linux)
 extension FixedWidthInteger {
     public static func randomData() -> Self {
-        return Self.random(in: .min ... .max)
+        return Self.randomData(in: .min ... .max)
     }
 
     public static func randomData<T>(using generator: inout T) -> Self
         where T : RandomNumberGenerator
     {
-        return Self.random(in: .min ... .max, using: &generator)
+        return Self.randomData(in: .min ... .max, using: &generator)
     }
 }
 
 extension Array where Element: FixedWidthInteger {
     public static func randomData(count: Int) -> [Element] {
         var array: [Element] = .init(repeating: 0, count: count)
-        (0..<count).forEach { array[$0] = Element.random() }
+        (0..<count).forEach { array[$0] = Element.randomData() }
         return array
     }
 
@@ -31,7 +31,7 @@ extension Array where Element: FixedWidthInteger {
         where T: RandomNumberGenerator
     {
         var array: [Element] = .init(repeating: 0, count: count)
-        (0..<count).forEach { array[$0] = Element.random() }
+        (0..<count).forEach { array[$0] = Element.randomData() }
         return array
     }
 }
