@@ -21,6 +21,8 @@ jobs:
       run: swift package resolve 
     - name: Build
       run: swift build
+    - name: Install ganache
+      run: npm install ganache --global
     - name: Start ganache in background
       run: ganache &
     - name: Wait till ganache starts
