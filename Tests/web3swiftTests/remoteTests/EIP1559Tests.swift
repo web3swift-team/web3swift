@@ -25,7 +25,7 @@ final class EIP1559Tests: XCTestCase {
         tx.from = EthereumAddress("0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B")!
         // Should fail if there would be something wrong with the tx
         let res = try await web3.eth.estimateGas(for: tx)
-        XCTAssertTrue(res > 0)
+        XCTAssertGreaterThan(res, 0)
     }
 
     func testEIP1159GoerliTransaction() async throws {
@@ -41,7 +41,7 @@ final class EIP1559Tests: XCTestCase {
         tx.from = EthereumAddress("0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B")!
         // Should fail if there would be something wrong with the tx
         let res = try await web3.eth.estimateGas(for: tx)
-        XCTAssertTrue(res > 0)
+        XCTAssertGreaterThan(res, 0)
     }
 
 }
