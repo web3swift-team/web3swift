@@ -62,32 +62,32 @@ public struct CodableTransaction {
     // MARK: - Properties transaction type related either sends to a node if exist
 
     /// the nonce for the transaction
-    internal var nonce: BigUInt {
+    public var nonce: BigUInt {
         get { return envelope.nonce }
         set { envelope.nonce = newValue }
     }
 
     /// the max number of gas units allowed to process this transaction
-    internal var gasLimit: BigUInt {
+    public var gasLimit: BigUInt {
         get { return envelope.gasLimit }
         set { return envelope.gasLimit = newValue }
     }
 
     /// the price per gas unit for the tranaction (Legacy and EIP-2930 only)
-    internal var gasPrice: BigUInt? {
+    public var gasPrice: BigUInt? {
         get { return envelope.gasPrice }
         set { return envelope.gasPrice = newValue }
     }
 
     /// the max base fee per gas unit (EIP-1559 only)
     /// this value must be >= baseFee + maxPriorityFeePerGas
-    internal var maxFeePerGas: BigUInt? {
+    public var maxFeePerGas: BigUInt? {
         get { return envelope.maxFeePerGas }
         set { return envelope.maxFeePerGas = newValue }
     }
 
     /// the maximum tip to pay the miner (EIP-1559 only)
-    internal var maxPriorityFeePerGas: BigUInt? {
+    public var maxPriorityFeePerGas: BigUInt? {
         get { return envelope.maxPriorityFeePerGas }
         set { return envelope.maxPriorityFeePerGas = newValue }
     }
