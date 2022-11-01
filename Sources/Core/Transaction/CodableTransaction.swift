@@ -188,18 +188,17 @@ public struct CodableTransaction {
         return self.envelope.encode(for: type)
     }
 
-    public mutating func resolve(provider: Web3Provider) async {
-        // FIXME: Delete force try
-        self.gasLimit = try! await self.gasLimitPolicy.resolve(provider: provider, transaction: self)
+    public mutating func resolve(provider: Web3Provider) async throws {
+        self.gasLimit = try await self.gasLimitPolicy.resolve(provider: provider, transaction: self)
 
         if from != nil || sender != nil {
-            self.nonce = try! await self.resolveNonce(provider: provider)
+            self.nonce = try await self.resolveNonce(provider: provider)
         }
         if case .eip1559 = type {
-            self.maxFeePerGas = try! await self.maxFeePerGasPolicy.resolve(provider: provider)
-            self.maxPriorityFeePerGas = try! await self.maxPriorityFeePerGasPolicy.resolve(provider: provider)
+            self.maxFeePerGas = try await self.maxFeePerGasPolicy.resolve(provider: provider)
+            self.maxPriorityFeePerGas = try await self.maxPriorityFeePerGasPolicy.resolve(provider: provider)
         } else {
-            self.gasPrice = try! await self.gasPricePolicy.resolve(provider: provider)
+            self.gasPrice = try await self.gasPricePolicy.resolve(provider: provider)
         }
     }
 

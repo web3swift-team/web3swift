@@ -12,7 +12,7 @@ public class WriteOperation: ReadOperation {
 
     // FIXME: Rewrite this to CodableTransaction
     public func writeToChain(password: String) async throws -> TransactionSendingResult {
-        await transaction.resolve(provider: web3.provider)
+        try await transaction.resolve(provider: web3.provider)
         if let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager {
             do {
                 try Web3Signer.signTX(transaction: &transaction,
