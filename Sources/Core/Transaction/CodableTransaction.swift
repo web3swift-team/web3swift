@@ -292,10 +292,6 @@ extension CodableTransaction: Codable {
 
 }
 
-public protocol Policyable {
-    func resolve(provider: Web3Provider, transaction: CodableTransaction?) async throws -> BigUInt
-}
-
 extension CodableTransaction {
     public enum GasLimitPolicy {
         case automatic
