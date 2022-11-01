@@ -187,6 +187,7 @@ public struct CodableTransaction {
         return self.envelope.encode(for: type)
     }
 
+    @available(*, deprecated, message: "Please use PolicyResolver instead")
     public mutating func resolve(provider: Web3Provider) async {
         // FIXME: Delete force try
         self.gasLimit = try! await self.gasLimitPolicy.resolve(provider: provider, transaction: self)
@@ -299,6 +300,7 @@ extension CodableTransaction {
         case limited(BigUInt)
         case withMargin(Double)
 
+        @available(*, deprecated, message: "Please use PolicyResolver instead")
         func resolve(provider: Web3Provider, transaction: CodableTransaction?) async throws -> BigUInt {
             guard let transaction = transaction else { throw Web3Error.valueError }
             let request: APIRequest = .estimateGas(transaction, transaction.callOnBlock ?? .latest)
@@ -323,6 +325,7 @@ extension CodableTransaction {
         case manual(BigUInt)
         case withMargin(Double)
 
+        @available(*, deprecated, message: "Please use PolicyResolver instead")
         func resolve(provider: Web3Provider, transaction: CodableTransaction? = nil) async throws -> BigUInt {
             let oracle = Oracle(provider)
             switch self {
@@ -338,6 +341,7 @@ extension CodableTransaction {
         case automatic
         case manual(BigUInt)
 
+        @available(*, deprecated, message: "Please use PolicyResolver instead")
         public func resolve(provider: Web3Provider, transaction: CodableTransaction? = nil) async throws -> BigUInt {
             let oracle = Oracle(provider)
             switch self {
@@ -353,6 +357,7 @@ extension CodableTransaction {
         case automatic
         case manual(BigUInt)
 
+        @available(*, deprecated, message: "Please use PolicyResolver instead")
         public func resolve(provider: Web3Provider, transaction: CodableTransaction? = nil) async throws -> BigUInt {
             let oracle = Oracle(provider)
             switch self {
@@ -364,6 +369,7 @@ extension CodableTransaction {
         }
     }
 
+    @available(*, deprecated, message: "Please use PolicyResolver instead")
     func resolveNonce(provider: Web3Provider) async throws -> BigUInt {
         switch noncePolicy {
         case .pending, .latest, .earliest:
