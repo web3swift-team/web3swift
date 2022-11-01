@@ -34,9 +34,9 @@ jobs:
       run: apt-get update && apt-get install -y netcat
     - name: Ping
       run: nc -vz 127.0.01 8545
-    # - name: Run tests
-      # run: swift test
-#    - name: Run local tests
-#      run: swift test --skip-build -c debug --filter localTests
-    - name: Run remote tests
-      run: swift test --skip-build -c debug --filter remoteTests
+    - name: Run tests
+      run: swift test
+    # - name: Run local tests
+      # run: swift test --skip-build -c debug --filter localTests
+    # - name: Run remote tests
+      # run: swift test --skip-build -c debug --filter remoteTests
