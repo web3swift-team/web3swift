@@ -30,8 +30,10 @@ jobs:
       run: ganache &
     - name: Wait till ganache starts
       run: sleep 1
-    - name: Run tests
-      run: swift test
+    - name: Ping
+      run: nc -vz 127.0.01 8545
+    # - name: Run tests
+      # run: swift test
 #    - name: Run local tests
 #      run: swift test --skip-build -c debug --filter localTests
 #    - name: Run remote tests
