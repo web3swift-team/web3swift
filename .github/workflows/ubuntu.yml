@@ -33,7 +33,7 @@ jobs:
     - name: install nc
       run: apt-get update && apt-get install -y netcat
     - name: Ping
-      run: nc -vz 127.0.01 8545
+      run: nc -vz 127.0.0.1 8545
     - name: Run tests
       run: swift test
     # - name: Run local tests
