@@ -13,3 +13,9 @@ public extension BigUInt {
         self = value
     }
 }
+
+#if COCOAPODS
+extension BigUInt {
+    var isZero: Bool { self == 0 }
+}
+#endif
