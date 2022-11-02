@@ -9,7 +9,7 @@ import Foundation
 import BigInt
 
 public enum BlockNumber: CustomStringConvertible {
-    
+
     case pending
     /// Latest block of a chain
     case latest

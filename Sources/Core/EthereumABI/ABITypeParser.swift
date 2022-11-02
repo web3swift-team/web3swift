@@ -77,7 +77,7 @@ public struct ABITypeParser {
             type = baseType
         }
         tail = string.replacingCharacters(in: string.range(of: baseTypeString)!, with: "")
-        if (tail == "") {
+        if tail == "" {
             return (type, nil)
         }
         return recursiveParseArray(baseType: type!, string: tail)
@@ -102,7 +102,7 @@ public struct ABITypeParser {
             type = baseType
         }
         tail = string.replacingCharacters(in: string.range(of: baseArrayString)!, with: "")
-        if (tail == "") {
+        if tail == "" {
             return (type, nil)
         }
         return recursiveParseArray(baseType: type!, string: tail)

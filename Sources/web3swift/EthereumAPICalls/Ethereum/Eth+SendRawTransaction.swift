@@ -6,7 +6,6 @@
 import Foundation
 import Core
 
-
 extension Web3.Eth {
     public func send(raw data: Data) async throws -> TransactionSendingResult {
         let request = APIRequest.sendRawTransaction(data.toHexString().addHexPrefix())

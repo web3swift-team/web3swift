@@ -625,7 +625,7 @@ class TransactionsTests: XCTestCase {
             XCTFail()
         }
     }
-    
+
     func testEthSendExampleAndGetTransactionReceiptAndDetails() async {
         do {
             let web3 = try await Web3.new(LocalTestCase.url)

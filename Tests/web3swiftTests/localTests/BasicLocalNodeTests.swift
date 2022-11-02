@@ -80,7 +80,6 @@ class BasicLocalNodeTests: LocalTestCase {
         let details = try await web3.eth.transactionDetails(txHash)
         print(details)
 
-
         let balanceAfterTo = try await web3.eth.getBalance(for: sendToAddress)
         let balanceAfterFrom = try await web3.eth.getBalance(for: allAddresses[0])
         print("Balance after to: " + balanceAfterTo.description)

@@ -9,7 +9,6 @@ import Foundation
 import BigInt
 import Core
 
-
 // Multi Token Standard
 // FIXME: Rewrite this to CodableTransaction
 protocol IERC1155: IERC165 {
@@ -32,7 +31,7 @@ protocol IERC1155Metadata {
 
 public class ERC1155: IERC1155 {
 
-    private var _tokenId: BigUInt? = nil
+    private var _tokenId: BigUInt?
     private var _hasReadProperties: Bool = false
 
     public var transaction: CodableTransaction

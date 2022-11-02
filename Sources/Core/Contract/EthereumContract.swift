@@ -10,7 +10,7 @@ import BigInt
 /// constructor, errors and optional ``EthereumAddress`` that could be set later.
 public class EthereumContract: DefaultContractProtocol {
 
-    public var address: EthereumAddress? = nil
+    public var address: EthereumAddress?
 
     public let abi: [ABI.Element]
     public let methods: [String: [ABI.Element.Function]]
@@ -40,7 +40,7 @@ public class EthereumContract: DefaultContractProtocol {
     public convenience required init(_ abiString: String, at: EthereumAddress? = nil) throws {
         let jsonData = abiString.data(using: .utf8)
         let abi = try JSONDecoder().decode([ABI.Record].self, from: jsonData!)
-        let abiNative = try abi.map({ (record) -> ABI.Element in
+        let abiNative = try abi.map({ record -> ABI.Element in
             return try record.parse()
         })
         try self.init(abi: abiNative, at: at)
