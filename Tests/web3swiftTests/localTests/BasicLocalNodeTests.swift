@@ -48,7 +48,6 @@ class BasicLocalNodeTests: LocalTestCase {
 
     func testEthSendExampleWithRemoteSigning() async throws {
         let web3 = try await Web3.new(LocalTestCase.url)
-        web3.addKeystoreManager(LocalTestCase.keyStoreManager)
         let allAddresses = try await web3.eth.ownedAccounts()
         let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)!
