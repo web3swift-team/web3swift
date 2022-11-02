@@ -33,7 +33,7 @@ public class PolicyResolver {
         }
     }
 
-    public func resolveGasBaseFee(for policy: CodableTransaction.FeePerGasPolicy) async -> BigUInt {
+    public func resolveGasBaseFee(for policy: FeePerGasPolicy) async -> BigUInt {
         let oracle = Oracle(provider)
         switch policy {
         case .automatic:
@@ -59,7 +59,7 @@ public class PolicyResolver {
         }
     }
 
-    public func resolveGasPrice(for policy: CodableTransaction.GasPricePolicy) async -> BigUInt {
+    public func resolveGasPrice(for policy: GasPricePolicy) async -> BigUInt {
         let oracle = Oracle(provider)
         switch policy {
         case .automatic, .withMargin:
@@ -69,7 +69,7 @@ public class PolicyResolver {
         }
     }
 
-    public func resolveGasPriorityFee(for policy: CodableTransaction.PriorityFeePerGasPolicy) async -> BigUInt {
+    public func resolveGasPriorityFee(for policy: PriorityFeePerGasPolicy) async -> BigUInt {
         let oracle = Oracle(provider)
         switch policy {
         case .automatic:
