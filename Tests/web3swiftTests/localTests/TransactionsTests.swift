@@ -625,7 +625,7 @@ class TransactionsTests: XCTestCase {
             XCTFail()
         }
     }
-
+    
     func testEthSendExampleAndGetTransactionReceiptAndDetails() async {
         do {
             let web3 = try await Web3.new(LocalTestCase.url)
@@ -637,14 +637,14 @@ class TransactionsTests: XCTestCase {
             let writeTX = contract!.createWriteOperation("fallback")!
             writeTX.transaction.from = from
             writeTX.transaction.value = value!
-            writeTX.transaction.gasLimitPolicy = .manual(78423)
-            let result = try await writeTX.writeToChain(password: "")
-            let txHash = Data.fromHex(result.hash.stripHexPrefix())!
-            print("Transaction with hash " + result.hash)
+            let policies = Policies(gasLimitPolicy: .manual(78423))
+            let result = try await writeTX.writeToChain(password: "", policies: policies)
+            let txHash = result.hash
+            print("Transaction with hash " + txHash)
 
             Thread.sleep(forTimeInterval: 1.0)
 
-            let receipt = try await web3.eth.transactionReceipt(txHash)
+            let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
             print(receipt)
             XCTAssert(receipt.status == .ok)
 
@@ -655,7 +655,7 @@ class TransactionsTests: XCTestCase {
                 break
             }
 
-            let details = try await web3.eth.transactionDetails(txHash)
+            let details = try await web3.eth.transactionDetails(txHash.data(using: .utf8)!)
             print(details)
             // FIXME: Reenable this test.
 //            XCTAssertEqual(details.transaction.gasLimit, BigUInt(78423))

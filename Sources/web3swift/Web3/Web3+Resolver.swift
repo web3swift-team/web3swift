@@ -16,20 +16,20 @@ public class PolicyResolver {
         self.provider = provider
     }
 
-    public func resolveAll(for tx: inout CodableTransaction) async throws {
+    public func resolveAll(for tx: inout CodableTransaction, with policies: Policies = .auto) async throws {
         if tx.from != nil || tx.sender != nil {
             // Nonce should be resolved first - as this might be needed for some
             // tx's gas estimation
-            tx.nonce = try await resolveNonce(for: tx)
+            tx.nonce = try await resolveNonce(for: tx, with: policies.noncePolicy)
         }
 
-        tx.gasLimit = try await resolveGasEstimate(for: tx)
+        tx.gasLimit = try await resolveGasEstimate(for: tx, with: policies.gasLimitPolicy)
 
         if case .eip1559 = tx.type {
-            tx.maxFeePerGas = await resolveGasBaseFee(for: tx.maxFeePerGasPolicy)
-            tx.maxPriorityFeePerGas = await resolveGasPriorityFee(for: tx.maxPriorityFeePerGasPolicy)
+            tx.maxFeePerGas = await resolveGasBaseFee(for: policies.maxFeePerGasPolicy)
+            tx.maxPriorityFeePerGas = await resolveGasPriorityFee(for: policies.maxPriorityFeePerGasPolicy)
         } else {
-            tx.gasPrice = await resolveGasPrice(for: tx.gasPricePolicy)
+            tx.gasPrice = await resolveGasPrice(for: policies.gasPricePolicy)
         }
     }
 
@@ -43,8 +43,8 @@ public class PolicyResolver {
         }
     }
 
-    public func resolveGasEstimate(for transaction: CodableTransaction) async throws -> BigUInt {
-        switch transaction.gasLimitPolicy {
+    public func resolveGasEstimate(for transaction: CodableTransaction, with policy: GasLimitPolicy) async throws -> BigUInt {
+        switch policy {
         case .automatic, .withMargin:
             return try await estimateGas(for: transaction)
         case .manual(let value):
@@ -79,8 +79,8 @@ public class PolicyResolver {
         }
     }
 
-    public func resolveNonce(for tx: CodableTransaction) async throws -> BigUInt {
-        switch tx.noncePolicy {
+    public func resolveNonce(for tx: CodableTransaction, with policy: NoncePolicy) async throws -> BigUInt {
+        switch policy {
         case .pending, .latest, .earliest:
             guard let address = tx.from ?? tx.sender else { throw Web3Error.valueError }
             let request: APIRequest = .getTransactionCount(address.address, tx.callOnBlock ?? .latest)

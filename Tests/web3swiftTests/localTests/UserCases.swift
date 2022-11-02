@@ -22,7 +22,7 @@ class UserCases: XCTestCase {
         let (web3, _, receipt, abiString) = try await TestHelpers.localDeployERC20()
         let account = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let contract = web3.contract(abiString, at: receipt.contractAddress!)!
-        let readTransaction = contract.createReadOperation("balanceOf", parameters: [account] as [AnyObject])!
+        let readTransaction = contract.createReadOperation("balanceOf", parameters:[account] as [AnyObject])!
         readTransaction.transaction.from = account
         let response = try await readTransaction.callContractMethod()
         let balance = response["0"] as? BigUInt
@@ -79,13 +79,13 @@ class UserCases: XCTestCase {
         let parameters = [] as [AnyObject]
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
-        deployTx.transaction.gasLimitPolicy = .manual(3000000)
-        let result = try await deployTx.writeToChain(password: "web3swift")
-        let txHash = Data.fromHex(result.hash.stripHexPrefix())!
+        let policies = Policies(gasLimitPolicy: .manual(3000000))
+        let result = try await deployTx.writeToChain(password: "web3swift", policies: policies)
+        let txHash = result.hash
 
         Thread.sleep(forTimeInterval: 1.0)
 
-        let receipt = try await web3.eth.transactionReceipt(txHash)
+        let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
         print(receipt)
         XCTAssert(receipt.contractAddress != nil)
 
@@ -96,7 +96,7 @@ class UserCases: XCTestCase {
             break
         }
 
-        let details = try await web3.eth.transactionDetails(txHash)
+        let details = try await web3.eth.transactionDetails(txHash.data(using: .utf8)!)
         print(details)
         XCTAssert(details.transaction.to == .contractDeploymentAddress())
     }

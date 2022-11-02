@@ -11,7 +11,7 @@ import Core
 public class WriteOperation: ReadOperation {
 
     // FIXME: Rewrite this to CodableTransaction
-    public func writeToChain(password: String) async throws -> TransactionSendingResult {
+    public func writeToChain(password: String, policies: Policies = .auto) async throws -> TransactionSendingResult {
         // TODO: might change to be dependency
         let resolver = PolicyResolver(provider: web3.provider)
         try await resolver.resolveAll(for: &transaction)

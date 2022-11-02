@@ -12,7 +12,6 @@ import BigInt
 ///  while all fields in this struct are optional, they are not necessarily
 ///  optional for the type of transaction they apply to.
 public struct CodableTransaction {
-    public typealias NoncePolicy = BlockNumber
     /// internal acccess only. The transaction envelope object itself that contains all the transaction data
     /// and type specific implementation
     internal var envelope: AbstractEnvelope
@@ -176,23 +175,12 @@ public struct CodableTransaction {
         self.envelope = env
         // FIXME: This is duplication and should be fixed.
         data = Data()
-        noncePolicy = .latest
-        gasLimitPolicy = .automatic
-        gasPricePolicy = .automatic
-        maxFeePerGasPolicy = .automatic
-        maxPriorityFeePerGasPolicy = .automatic
     }
 
     /// - Returns: a raw bytestream of the transaction, encoded according to the transactionType
     public func encode(for type: EncodeType = .transaction) -> Data? {
         return self.envelope.encode(for: type)
     }
-
-    public var noncePolicy: NoncePolicy
-    public var maxFeePerGasPolicy: FeePerGasPolicy
-    public var maxPriorityFeePerGasPolicy: PriorityFeePerGasPolicy
-    public var gasPricePolicy: GasPricePolicy
-    public var gasLimitPolicy: GasLimitPolicy
 
     public static var emptyTransaction = CodableTransaction(to: EthereumAddress.contractDeploymentAddress())
 }
@@ -220,12 +208,6 @@ extension CodableTransaction: Codable {
         self.envelope = env
         // FIXME: This is duplication and should be fixed.
         data = Data()
-
-        noncePolicy = .latest
-        gasLimitPolicy = .automatic
-        gasPricePolicy = .automatic
-        maxFeePerGasPolicy = .automatic
-        maxPriorityFeePerGasPolicy = .automatic
 
         // capture any metadata that might be present
         self.meta = try TransactionMetadata(from: decoder)
@@ -312,11 +294,6 @@ extension CodableTransaction {
         // FIXME: This is duplication and should be fixed.
         self.data = data
         self.accessList = accessList
-        self.gasLimitPolicy = .automatic
-        self.noncePolicy = .pending
-        self.gasPricePolicy = .automatic
-        self.maxFeePerGasPolicy = .automatic
-        self.maxPriorityFeePerGasPolicy = .automatic
         self.callOnBlock = .latest
 
         self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, chainID: chainID, value: value, data: data, gasLimit: gasLimit, maxFeePerGas: maxFeePerGas, maxPriorityFeePerGas: maxPriorityFeePerGas, gasPrice: gasPrice, accessList: accessList, v: v, r: r, s: s)

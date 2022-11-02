@@ -25,7 +25,8 @@ final class PolicyResolverTests: XCTestCase {
         )
         // Vitalik's address
         tx.from = EthereumAddress("0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B")!
-        try await resolver.resolveAll(for: &tx)
+        let policies = Policies(gasLimitPolicy: .manual(21_000))
+        try await resolver.resolveAll(for: &tx, with: policies)
         print(tx.gasLimit)
         print(tx.nonce)
         XCTAssertGreaterThan(tx.gasLimit, 0)
@@ -46,7 +47,8 @@ final class PolicyResolverTests: XCTestCase {
         )
         // Vitalik's address
         tx.from = EthereumAddress("0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B")!
-        try await resolver.resolveAll(for: &tx)
+        let policies = Policies(gasLimitPolicy: .manual(21_000))
+        try await resolver.resolveAll(for: &tx, with: policies)
         print(tx.gasLimit)
         print(tx.nonce)
         XCTAssertGreaterThan(tx.gasLimit, 0)
@@ -70,11 +72,13 @@ final class PolicyResolverTests: XCTestCase {
         )
         // Vitalik's address
         tx.from = EthereumAddress("0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B")!
-        tx.gasLimitPolicy = .manual(expectedGasLimit)
-        tx.maxFeePerGasPolicy = .manual(expectedBaseFee)
-        tx.maxPriorityFeePerGasPolicy = .manual(expectedPriorityFee)
-        tx.noncePolicy = .exact(expectedNonce)
-        try await resolver.resolveAll(for: &tx)
+        let policies = Policies(
+            noncePolicy: .exact(expectedNonce),
+            gasLimitPolicy: .manual(expectedGasLimit),
+            maxFeePerGasPolicy: .manual(expectedBaseFee),
+            maxPriorityFeePerGasPolicy: .manual(expectedPriorityFee)
+        )
+        try await resolver.resolveAll(for: &tx, with: policies)
         XCTAssertEqual(tx.gasLimit, expectedGasLimit)
         XCTAssertEqual(tx.maxFeePerGas, expectedBaseFee)
         XCTAssertEqual(tx.maxPriorityFeePerGas, expectedPriorityFee)
