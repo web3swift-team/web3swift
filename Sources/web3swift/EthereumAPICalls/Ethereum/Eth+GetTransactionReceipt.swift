@@ -9,7 +9,7 @@ import Core
 
 extension Web3.Eth {
     public func transactionReceipt(_ txHash: Data) async throws -> TransactionReceipt {
-        try await APIRequest.sendRequest(with: self.provider,
-                                         for: .getTransactionReceipt(txHash.toHexString().addHexPrefix())).result
+        let request = APIRequest.getTransactionReceipt(txHash.toHexString().addHexPrefix())
+        return try await APIRequest.sendRequest(with: provider, for: request).result
     }
 }
