@@ -22,7 +22,7 @@ class BasicLocalNodeTests: LocalTestCase {
         let contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
         let parameters = [] as [AnyObject]
-        // MARK: Writing Data flow
+
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
@@ -30,20 +30,18 @@ class BasicLocalNodeTests: LocalTestCase {
         let result = try await deployTx.writeToChain(password: "web3swift")
         let txHash = result.hash.stripHexPrefix()
 
-        Thread.sleep(forTimeInterval: 1.0)
-
-        let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
-        print(receipt)
-
-        switch receipt.status {
-        case .notYetProcessed:
-            return
-        default:
-            break
+        while true {
+            let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
+            switch receipt.status {
+            case .notYetProcessed:
+                continue
+            case .failed:
+                XCTFail("Failed to deploy a contract!")
+            case .ok:
+                XCTAssertNotNil(receipt.contractAddress)
+                return
+            }
         }
-
-        let details = try await web3.eth.transactionDetails(Data.fromHex(txHash)!)
-        print(details)
     }
 
     func testEthSendExampleWithRemoteSigning() async throws {
