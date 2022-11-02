@@ -62,7 +62,7 @@ class BasicLocalNodeTests: LocalTestCase {
         print("Balance before to: " + balanceBeforeTo.description)
         print("Balance before from: " + balanceBeforeFrom.description)
 
-        let result = try! await sendTx.writeToChain(password: "web3swift")
+        let result = try await sendTx.writeToChain(password: "web3swift")
         let txHash = Data.fromHex(result.hash.stripHexPrefix())!
 
         Thread.sleep(forTimeInterval: 1.0)
