@@ -225,7 +225,6 @@ extension DefaultContractProtocol {
            let parameters = parameters,
            !parameters.isEmpty {
             guard constructor.inputs.count == parameters.count,
-                  // FIXME: This should be zipped, because Arrays don't guarantee it's elements order
                   let encodedData = constructor.encodeParameters(parameters) else {
                 NSLog("Constructor encoding will fail as the number of input arguments doesn't match the number of given arguments.")
                 return nil
