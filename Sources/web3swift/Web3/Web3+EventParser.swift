@@ -7,7 +7,7 @@ import Foundation
 import BigInt
 import Core
 
-//extension web3.web3contract {
+// extension web3.web3contract {
 //    /// An event parser to fetch events produced by smart-contract related transactions. Should not be constructed manually, but rather by calling the corresponding function on the web3contract object.
 //    public struct EventParser: EventParserProtocol {
 //
@@ -92,9 +92,9 @@ import Core
 //            return result
 //        }
 //    }
-//}
+// }
 //
-////extension web3.web3contract.EventParser {
+//// extension web3.web3contract.EventParser {
 ////    public func parseTransactionPromise(_ transaction: EthereumTransaction) async throws -> [EventParserResultProtocol] {
 ////        guard let hash = transaction.hash else {
 ////            throw Web3Error.processingError(desc: "Failed to get transaction hash")
@@ -171,9 +171,9 @@ import Core
 //        }
 //    }
 //
-//}
+// }
 //
-//extension web3.web3contract {
+// extension web3.web3contract {
 //    /**
 //     *Fetches events by doing a lookup on "indexed" parameters of the event. Smart-contract developer can make some of event values "indexed" for such fast queries.*
 //
@@ -237,4 +237,4 @@ import Core
 //            return collected
 //        }
 //    }
-//}
+// }

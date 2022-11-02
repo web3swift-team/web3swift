@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 /*
     AbstractEnvelope is the main protocol definition to enable support for different transaction types.
     it defines the basic parameters and methods required by all transaction types.
@@ -92,7 +91,7 @@ protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
 
     /// the maximum tip to pay the miner (EIP-1559 only)
     var maxPriorityFeePerGas: BigUInt? { get set }
-    
+
     /// Any encoded data accompanying the transaction
     var data: Data { get set }
 
@@ -108,7 +107,7 @@ protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
 
     /// - Returns: the public key decoded from the signature data
     var publicKey: Data? { get }
-    
+
     /// - Returns: a hash of the transaction suitable for signing
     var signatureHash: Data? { get }
 
@@ -149,25 +148,25 @@ protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
 }
 
 extension AbstractEnvelope {
-    
+
     var sender: EthereumAddress? {
         guard let publicKey = publicKey else { return nil }
         return Utilities.publicToAddress(publicKey)
     }
-    
+
     mutating func clearSignatureData() {
         self.v = 1
         self.r = 0
         self.s = 0
     }
-    
+
     /// - Returns: a hash of the transaction suitable for signing
     var signatureHash: Data? {
         guard let encoded = self.encode(for: .signature) else { return nil }
         let hash = encoded.sha3(.keccak256)
         return hash
     }
-    
+
     /// - Returns: the public key decoded from the signature data
     var publicKey: Data? {
         guard let sigData = self.getUnmarshalledSignatureData() else { return nil }
@@ -182,4 +181,3 @@ extension AbstractEnvelope {
         return publicKey
     }
 }
-

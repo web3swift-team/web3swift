@@ -7,7 +7,6 @@ import Foundation
 import BigInt
 import Core
 
-
 extension Web3.Eth {
     public func block(by hash: Hash, fullTransactions: Bool = false) async throws -> Block {
         let request = APIRequest.getBlockByHash(hash, fullTransactions)

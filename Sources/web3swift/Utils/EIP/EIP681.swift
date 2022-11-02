@@ -166,7 +166,7 @@ extension Web3 {
                 }
                 return nil
             case let .bytes(length):
-                var data: Data? = nil
+                var data: Data?
                 if let bytes = rawValue as? Data {
                     data = bytes
                 } else if let bytes = rawValue as? [UInt8] {
@@ -221,7 +221,7 @@ extension Web3 {
                     }
                 }
                 return nil
-            case .tuple(_):
+            case .tuple:
                 // TODO: implement!
                 return nil
             default: return nil
@@ -248,9 +248,9 @@ extension Web3 {
             let match = matcher.matches(in: encoding, options: NSRegularExpression.MatchingOptions.anchored, range: encoding.fullNSRange)
             guard match.count == 1 else {return nil}
             guard match[0].numberOfRanges == 5 else {return nil}
-            var addressString: String? = nil
-            var chainIDString: String? = nil
-            var tail: String? = nil
+            var addressString: String?
+            var chainIDString: String?
+            var tail: String?
             //  if let payModifierRange = Range(match[0].range(at: 1), in: encoding) {
             //      let payModifierString = String(encoding[payModifierRange])
             //      print(payModifierString)
@@ -351,7 +351,7 @@ extension Web3 {
                                                   _ rawValue: String,
                                                   chainID: BigUInt,
                                                   inputNumber: Int) async -> FunctionArgument? {
-            var nativeValue: AnyObject? = nil
+            var nativeValue: AnyObject?
             switch inputType {
             case .address:
                 let val = EIP681Code.TargetAddress(rawValue)
@@ -410,7 +410,7 @@ extension Web3 {
                     guard let internalArrays = splitArrayOfArrays(rawValue),
                           (length == 0 || UInt64(internalArrays.count) == length) else { return nil }
                     rawValues = internalArrays
-                } else if case .tuple(_) = type {
+                } else if case .tuple = type {
                     // TODO: implement!
                 } else if case .string = type {
                     guard let strings = splitArrayOfStrings(rawValue),
@@ -438,7 +438,7 @@ extension Web3 {
 
                 guard nativeValueArray.count == rawValues.count &&
                         (length == 0 || UInt64(rawValues.count) == length) else { return nil }
-            case .tuple(_):
+            case .tuple:
                 // TODO: implement!
                 return nil
             default: return nil
@@ -460,9 +460,9 @@ extension Web3 {
             /// Dropping first and last square brackets.
             /// That modifies the upper bound value of the first match of `squareBracketRegex`.
             let rawValue = String(rawValue.dropFirst().dropLast())
-            
+
             // TODO: try replacing this manual parsing with JSONDecoder and RawRepresentable
-            
+
             let squareBracketRegex = try! NSRegularExpression(pattern: "(\\[*)")
             let match = squareBracketRegex.firstMatch(in: rawValue, range: rawValue.fullNSRange)
 
@@ -505,9 +505,9 @@ extension Web3 {
         private static func splitArrayOfStrings(_ rawValue: String) -> [String]? {
             /// Dropping first and last square brackets to exclude them from the first and the last separated element.
             let rawValue = String(rawValue.dropFirst().dropLast())
-            
+
             // TODO: try replacing this manual parsing with JSONDecoder and RawRepresentable
-            
+
             let elementsBoundary = try! NSRegularExpression(pattern: "\",\"")
             var indices = Array(elementsBoundary
                 .matches(in: rawValue, range: rawValue.fullNSRange)
@@ -540,7 +540,7 @@ extension Web3 {
     }
 }
 
-fileprivate class FunctionArgument {
+private class FunctionArgument {
     let argType: ABI.Element.InOut
     let parameter: Web3.EIP681Code.EIP681Parameter
 

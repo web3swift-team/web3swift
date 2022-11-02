@@ -6,7 +6,6 @@
 import Foundation
 import Core
 
-
 extension Web3.Eth {
     public func callTransaction(_ transaction: CodableTransaction) async throws -> Data {
         let request = APIRequest.call(transaction, transaction.callOnBlock ?? .latest)

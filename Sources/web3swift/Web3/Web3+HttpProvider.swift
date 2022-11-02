@@ -11,7 +11,7 @@ import Core
 public class Web3HttpProvider: Web3Provider {
     public var url: URL
     public var network: Networks?
-    public var attachedKeystoreManager: KeystoreManager? = nil
+    public var attachedKeystoreManager: KeystoreManager?
     public var session: URLSession = {() -> URLSession in
         let config = URLSessionConfiguration.default
         let urlSession = URLSession(configuration: config)

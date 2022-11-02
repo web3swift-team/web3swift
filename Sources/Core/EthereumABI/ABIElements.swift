@@ -156,11 +156,11 @@ public extension ABI {
         public struct EthError {
             public let name: String
             public let inputs: [Input]
-            
+
             public struct Input {
                 public let name: String
                 public let type: ParameterType
-                
+
                 public init(name: String, type: ParameterType) {
                     self.name = name
                     self.type = type
@@ -177,15 +177,15 @@ extension ABI.Element {
         switch self {
         case .constructor(let constructor):
             return constructor.encodeParameters(parameters)
-        case .event(_):
+        case .event:
             return nil
-        case .fallback(_):
+        case .fallback:
             return nil
         case .function(let function):
             return function.encodeParameters(parameters)
-        case .receive(_):
+        case .receive:
             return nil
-        case .error(_):
+        case .error:
             return nil
         }
     }
@@ -224,17 +224,17 @@ extension ABI.Element.Event {
 extension ABI.Element {
     public func decodeReturnData(_ data: Data) -> [String: Any]? {
         switch self {
-        case .constructor(_):
+        case .constructor:
             return nil
-        case .event(_):
+        case .event:
             return nil
-        case .fallback(_):
+        case .fallback:
             return nil
         case .function(let function):
             return function.decodeReturnData(data)
-        case .receive(_):
+        case .receive:
             return nil
-        case .error(_):
+        case .error:
             return nil
         }
     }
@@ -245,15 +245,15 @@ extension ABI.Element {
         switch self {
         case .constructor(let constructor):
             return constructor.decodeInputData(data)
-        case .event(_):
+        case .event:
             return nil
-        case .fallback(_):
+        case .fallback:
             return nil
         case .function(let function):
             return function.decodeInputData(data)
-        case .receive(_):
+        case .receive:
             return nil
-        case .error(_):
+        case .error:
             return nil
         }
     }
@@ -347,7 +347,7 @@ extension ABI.Element.Constructor {
 ///   - inputs: expected input types. Order must be the same as in function declaration.
 /// - Returns: decoded dictionary of input arguments mapped to their indices and arguments' names if these are not empty.
 /// If decoding of at least one argument fails, `rawData` size is invalid or `methodEncoding` doesn't match - `nil` is returned.
-fileprivate func decodeInputData(_ rawData: Data,
+private func decodeInputData(_ rawData: Data,
                                  methodEncoding: Data? = nil,
                                  inputs: [ABI.Element.InOut]) -> [String: Any]? {
     let data: Data

@@ -8,7 +8,6 @@ import Foundation
 import BigInt
 import Core
 
-
 // A New Advanced Token Standard
 protocol IERC777: IERC20, IERC820 {
     func getDefaultOperators() async throws -> [EthereumAddress]
@@ -32,9 +31,9 @@ protocol IERC777: IERC20, IERC820 {
 // FIXME: Rewrite this to CodableTransaction
 public class ERC777: IERC777, ERC20BaseProperties {
 
-    internal var _name: String? = nil
-    internal var _symbol: String? = nil
-    internal var _decimals: UInt8? = nil
+    internal var _name: String?
+    internal var _symbol: String?
+    internal var _decimals: UInt8?
 
     internal var _hasReadProperties: Bool = false
 
@@ -58,7 +57,6 @@ public class ERC777: IERC777, ERC20BaseProperties {
         self.transaction.to = address
         self.abi = abi
     }
-
 
     // Must be 18!
     public func decimals() async throws -> UInt8 {
