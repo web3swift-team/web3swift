@@ -4,25 +4,25 @@
 name: Ubuntu
 
 on:
-push:
-  branches:
-    - master
-    - develop
-    - hotfix
-    - unstable
-  paths:
-    - Packag*.swift
-    - web3swift.podspec
-    - Cartfile
-    - Sources/**
-    - 'Tests/**'
-    - 'web3swift*/**'
-    - '.github/workflows/**'
-pull_request:
-  branches:
-    - master
-    - develop
-    - unstable
+  push:
+    branches:
+      - master
+      - develop
+      - hotfix
+      - unstable
+    paths:
+      - Packag*.swift
+      - web3swift.podspec
+      - Cartfile
+      - Sources/**
+      - 'Tests/**'
+      - 'web3swift*/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches:
+      - master
+      - develop
+      - unstable
 
 jobs:
   build:
