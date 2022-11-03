@@ -9,6 +9,7 @@ import BigInt
 
 extension Web3.Eth { 
     public func code(for address: EthereumAddress, onBlock: BlockNumber = .latest) async throws -> Hash {
-        try await APIRequest.sendRequest(with: self.provider, for: .getCode(address.address, onBlock)).result
+        let request = APIRequest.getCode(address.address, onBlock)
+        return try await APIRequest.sendRequest(with: provider, for: request).result
     }
 }

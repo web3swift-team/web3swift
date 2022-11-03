@@ -34,11 +34,11 @@ class TestHelpers {
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
         let result = try await deployTx.writeToChain(password: "web3swift")
-        let txHash = result.hash
+        let txHash = Data.fromHex(result.hash.stripHexPrefix())!
         
         Thread.sleep(forTimeInterval: 1.0)
         
-        let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
+        let receipt = try await web3.eth.transactionReceipt(txHash)
         print(receipt)
         
         switch receipt.status {

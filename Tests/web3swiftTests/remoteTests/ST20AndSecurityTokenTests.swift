@@ -14,12 +14,12 @@ import Core
 
 // MARK: Works only with network connection
 class ST20AndSecurityTokenTests: XCTestCase {
-
+    
     // FIXME: Enable me back again
     // Test fails because there's no such wallet on goerli chain as well as token.
 //    func testERC20TokenCreation() async throws {
 //        let web3 = await Web3.InfuraGoerliWeb3(accessToken: Constants.infuraToken)
-//        let w3sTokenAddress = EthereumAddress("0x2dD33957C90880bE4Ee9fd5F703110BDA2E579EC")!
+//        let w3sTokenAddress = EthereumAddress("0x33d191db2486e0d245b44fde3fae5ed667d5694b")!
 //        let st20token = ST20.init(web3: web3, provider: web3.provider, address: w3sTokenAddress)
 //        try await st20token.readProperties()
 //        XCTAssertEqual(st20token.symbol(), "MIMI")

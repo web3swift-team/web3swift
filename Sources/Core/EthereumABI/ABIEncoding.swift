@@ -137,7 +137,6 @@ extension ABIEncoder {
     ///   - values: Contract values of a given element to encode
     /// - Returns: Encoded data
     public static func encode(types: [ABI.Element.InOut], values: [AnyObject]) -> Data? {
-        // FIXME: This should be zipped, because Arrays don't guarantee it's elements order
         guard types.count == values.count else {return nil}
         let params = types.compactMap { (el) -> ABI.Element.ParameterType in
             return el.type
@@ -152,7 +151,6 @@ extension ABIEncoder {
     ///   - values: Contract values of a given element to encode
     /// - Returns: Encoded data
     public static func encode(types: [ABI.Element.ParameterType], values: [AnyObject]) -> Data? {
-        // FIXME: This should be zipped, because Arrays don't guarantee it's elements order
         guard types.count == values.count else {return nil}
         var tails = [Data]()
         var heads = [Data]()

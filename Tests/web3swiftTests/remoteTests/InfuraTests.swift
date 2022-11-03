@@ -12,20 +12,24 @@ import Core
 class InfuraTests: XCTestCase {
     
     func testGetBalance() async throws {
-        do {
-            let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-            let address = EthereumAddress("0xd61b5ca425F8C8775882d4defefC68A6979DBbce")!
-            let balance = try await web3.eth.getBalance(for: address)
-            let balString = Utilities.formatToPrecision(balance, numberDecimals: Utilities.Units.eth.decimals, formattingDecimals: 3)
-            XCTAssertNotNil(balString)
-        } catch {
-            XCTFail()
-        }
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let address = EthereumAddress("0xd61b5ca425F8C8775882d4defefC68A6979DBbce")!
+        let balance = try await web3.eth.getBalance(for: address)
+        let balString = Utilities.formatToPrecision(balance, numberDecimals: Utilities.Units.eth.decimals, formattingDecimals: 3)
+        XCTAssertNotNil(balString)
     }
     
     func testGetBlockByHash() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let result = try await web3.eth.block(by: "0x6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695", fullTransactions: false)
+        XCTAssertEqual(result.number, 5184323)
+    }
+
+    func testGetBlockByHash_hashAsData() async throws {
+        let blockHash = Data.fromHex("6d05ba24da6b7a1af22dc6cc2a1fe42f58b2a5ea4c406b19c8cf672ed8ec0695")!
+        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let result = try await web3.eth.block(by: blockHash, fullTransactions: false)
+        XCTAssertEqual(result.number, 5184323)
     }
     
     func testGetBlockByNumber1() async throws {
@@ -44,8 +48,7 @@ class InfuraTests: XCTestCase {
             let _ = try await web3.eth.block(by: .exact(10000000000000), fullTransactions: true)
             XCTFail("The expression above must throw DecodingError.")
         } catch {
-            // DecodingError is throws as a block for the given block number is
-            // 
+            // DecodingError is thrown as a block for the given block number does not exist
             XCTAssert(error is DecodingError)
         }
     }
