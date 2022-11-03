@@ -4,10 +4,25 @@
 name: Ubuntu
 
 on:
-  push:
-    branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
+push:
+  branches:
+    - master
+    - develop
+    - hotfix
+    - unstable
+  paths:
+    - Packag*.swift
+    - web3swift.podspec
+    - Cartfile
+    - Sources/**
+    - 'Tests/**'
+    - 'web3swift*/**'
+    - '.github/workflows/**'
+pull_request:
+  branches:
+    - master
+    - develop
+    - unstable
 
 jobs:
   build:
@@ -36,7 +51,3 @@ jobs:
       run: nc -vz 127.0.0.1 8545
     - name: Run tests
       run: swift test
-    # - name: Run local tests
-      # run: swift test --skip-build -c debug --filter localTests
-    # - name: Run remote tests
-      # run: swift test --skip-build -c debug --filter remoteTests
