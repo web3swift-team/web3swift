@@ -231,7 +231,7 @@ extension CodableTransaction: Codable {
         if let accessList = accessList, !accessList.isEmpty {
             try containier.encode(accessList, forKey: .accessList)
         }
-        
+
         if !gasLimit.isZero {
             try containier.encode(gasLimit.hexString, forKey: .gasLimit)
         }

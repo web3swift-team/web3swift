@@ -27,22 +27,20 @@ class BasicLocalNodeTests: LocalTestCase {
         deployTx.transaction.from = allAddresses[0]
         let policies = Policies(gasLimitPolicy: .manual(3000000))
         let result = try await deployTx.writeToChain(password: "web3swift", policies: policies)
-        let txHash = result.hash
+        let txHash = result.hash.stripHexPrefix()
 
-        Thread.sleep(forTimeInterval: 1.0)
-
-        let receipt = try await web3.eth.transactionReceipt(txHash.stripHexPrefix().data(using: .utf8)!)
-        print(receipt)
-
-        switch receipt.status {
-        case .notYetProcessed:
-            return
-        default:
-            break
+        while true {
+            let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
+            switch receipt.status {
+            case .notYetProcessed:
+                continue
+            case .failed:
+                XCTFail("Failed to deploy a contract!")
+            case .ok:
+                XCTAssertNotNil(receipt.contractAddress)
+                return
+            }
         }
-
-        let details = try await web3.eth.transactionDetails(txHash.stripHexPrefix().data(using: .utf8)!)
-        print(details)
     }
 
     func testEthSendExampleWithRemoteSigning() async throws {
@@ -64,11 +62,11 @@ class BasicLocalNodeTests: LocalTestCase {
         print("Balance before from: " + balanceBeforeFrom.description)
 
         let result = try await sendTx.writeToChain(password: "web3swift")
-        let txHash = result.hash
+        let txHash = Data.fromHex(result.hash.stripHexPrefix())!
 
         Thread.sleep(forTimeInterval: 1.0)
 
-        let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
+        let receipt = try await web3.eth.transactionReceipt(txHash)
         print(receipt)
 
         switch receipt.status {
@@ -78,9 +76,8 @@ class BasicLocalNodeTests: LocalTestCase {
             break
         }
 
-        let details = try await web3.eth.transactionDetails(txHash.data(using: .utf8)!)
+        let details = try await web3.eth.transactionDetails(txHash)
         print(details)
-
 
         let balanceAfterTo = try await web3.eth.getBalance(for: sendToAddress)
         let balanceAfterFrom = try await web3.eth.getBalance(for: allAddresses[0])
