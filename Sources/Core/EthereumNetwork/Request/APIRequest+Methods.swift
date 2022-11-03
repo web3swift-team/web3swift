@@ -22,7 +22,7 @@ extension APIRequest {
         urlRequest.httpBody = call.encodedBody
         return urlRequest
     }
-    
+
     public static func send<Result>(uRLRequest: URLRequest, with session: URLSession) async throws -> APIResponse<Result> {
         let (data, response) = try await session.data(for: uRLRequest)
 
@@ -63,7 +63,7 @@ extension APIRequest {
 }
 
 /// JSON RPC Error object. See official specification https://www.jsonrpc.org/specification#error_object
-fileprivate struct JsonRpcErrorObject: Decodable {
+private struct JsonRpcErrorObject: Decodable {
     public let error: RpcError?
 
     class RpcError: Decodable {
@@ -77,7 +77,7 @@ fileprivate struct JsonRpcErrorObject: Decodable {
 
 /// For error codes specification see chapter `5.1 Error object`
 /// https://www.jsonrpc.org/specification#error_object
-fileprivate enum JsonRpcErrorCode {
+private enum JsonRpcErrorCode {
     /// -32700
     /// Invalid JSON was received by the server. An error occurred on the server while parsing the JSON
     case parseError
@@ -109,7 +109,7 @@ fileprivate enum JsonRpcErrorCode {
             return "Invalid parameters"
         case .internalError:
             return "Internal error"
-        case .serverError(_):
+        case .serverError:
             return "Server error"
         }
     }

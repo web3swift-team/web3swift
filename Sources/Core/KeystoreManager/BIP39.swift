@@ -70,7 +70,7 @@ public enum BIP39Language {
 
 public class BIP39 {
 
-    static public func generateMnemonicsFromEntropy(entropy: Data, language: BIP39Language = BIP39Language.english) -> String?  {
+    static public func generateMnemonicsFromEntropy(entropy: Data, language: BIP39Language = BIP39Language.english) -> String? {
         guard entropy.count >= 16, entropy.count & 4 == 0 else {return nil}
         let checksum = entropy.sha256()
         let checksumBits = entropy.count*8/32
@@ -108,7 +108,7 @@ public class BIP39 {
         var bitString = ""
         for word in wordList {
             let idx = language.words.firstIndex(of: word)
-            if (idx == nil) {
+            if idx == nil {
                 return nil
             }
             let idxAsInt = language.words.startIndex.distance(to: idx!)
@@ -133,7 +133,7 @@ public class BIP39 {
 
     static public func seedFromMmemonics(_ mnemonics: String, password: String = "", language: BIP39Language = BIP39Language.english) -> Data? {
         let valid = BIP39.mnemonicsToEntropy(mnemonics, language: language) != nil
-        if (!valid) {
+        if !valid {
             return nil
         }
         guard let mnemData = mnemonics.decomposedStringWithCompatibilityMapping.data(using: .utf8) else {return nil}

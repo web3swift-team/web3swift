@@ -29,7 +29,7 @@ public struct EIP1559Envelope: EIP2718Envelope {
     // EIP-1559 specific parameters
     public var gasLimit: BigUInt
 
-    var gasPrice: BigUInt? = nil
+    var gasPrice: BigUInt?
 
     /// Value of the tip to the miner for transaction processing.
     ///

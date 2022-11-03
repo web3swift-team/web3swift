@@ -23,7 +23,7 @@ extension UInt32 {
 }
 
 public class HDNode {
-    public struct HDversion{
+    public struct HDversion {
         public var privatePrefix: Data = Data.fromHex("0x0488ADE4")!
         public var publicPrefix: Data = Data.fromHex("0x0488B21E")!
         public init() {
@@ -31,7 +31,7 @@ public class HDNode {
         }
     }
     public var path: String? = "m"
-    public var privateKey: Data? = nil
+    public var privateKey: Data?
     public var publicKey: Data
     public var chaincode: Data
     public var depth: UInt8
@@ -123,7 +123,7 @@ extension HDNode {
     public func derive (index: UInt32, derivePrivateKey: Bool, hardened: Bool = false) -> HDNode? {
         if derivePrivateKey {
             if self.hasPrivate { // derive private key when is itself extended private key
-                var entropy: Array<UInt8>
+                var entropy: [UInt8]
                 var trueIndex: UInt32
                 if index >= (UInt32(1) << 31) || hardened {
                     trueIndex = index
@@ -193,7 +193,7 @@ extension HDNode {
                 return nil // derive private key when is itself extended public key (impossible)
             }
         } else { // deriving only the public key
-            var entropy: Array<UInt8> // derive public key when is itself public key
+            var entropy: [UInt8] // derive public key when is itself public key
             if index >= (UInt32(1) << 31) || hardened {
                 return nil // no derivation of hardened public key from extended public key
             } else {
@@ -270,7 +270,7 @@ extension HDNode {
 
     public func serialize(serializePublic: Bool = true, version: HDversion = HDversion()) -> Data? {
         var data = Data()
-        if (!serializePublic && !self.hasPrivate) {return nil}
+        if !serializePublic && !self.hasPrivate {return nil}
         if serializePublic {
             data.append(version.publicPrefix)
         } else {

@@ -53,7 +53,6 @@ class ABIEncoderTest: XCTestCase {
         hex = try ABIEncoder.soliditySha3(EthereumAddress("0x407D73d8a49eeb85D32Cf465507dd71d507100c1")!).toHexString().addHexPrefix()
         assert(hex == "0x4e8ebbefa452077428f93c9520d3edd60594ff452a29ac7d2ccc11d47f3ab95b")
 
-
         hex = try ABIEncoder.soliditySha3("Hello!%").toHexString().addHexPrefix()
         assert(hex == "0x661136a4267dba9ccdf6bfddb7c00e714de936674c4bdb065a531cf1cb15c7fc")
 
@@ -82,7 +81,7 @@ class ABIEncoderTest: XCTestCase {
     func test_soliditySha3Fail_1() throws {
         var didFail = false
         do {
-            let _ = try ABIEncoder.soliditySha3([""] as [AnyObject])
+            _ = try ABIEncoder.soliditySha3([""] as [AnyObject])
         } catch {
             didFail = true
         }
@@ -95,7 +94,7 @@ class ABIEncoderTest: XCTestCase {
     func test_soliditySha3Fail_2() throws {
         var didFail = false
         do {
-            let _ = try ABIEncoder.soliditySha3("" as AnyObject)
+            _ = try ABIEncoder.soliditySha3("" as AnyObject)
         } catch {
             didFail = true
         }

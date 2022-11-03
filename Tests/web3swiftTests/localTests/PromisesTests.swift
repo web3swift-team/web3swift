@@ -3,13 +3,13 @@
 ////  Copyright © 2018 Alex Vlasov. All rights reserved.
 ////
 //
-//import XCTest
-//import Core
-//import BigInt
+// import XCTest
+// import Core
+// import BigInt
 //
-//@testable import web3swift
+// @testable import web3swift
 //
-//class web3swiftPromisesTests: XCTestCase {
+// class web3swiftPromisesTests: XCTestCase {
 //    var urlSession : URLSession?
 //
 //    func testGetBalancePromise() async throws {
@@ -126,4 +126,4 @@
 //        guard let bal = tokenBalance["0"] as? BigUInt else {return XCTFail()}
 //        print(String(bal))
 //    }
-//}
+// }

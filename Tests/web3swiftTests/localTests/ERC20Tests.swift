@@ -8,7 +8,7 @@ import Core
 
 @testable import web3swift
 
-//TODO: refactor me
+// TODO: refactor me
 class ERC20Tests: LocalTestCase {
 
     func testERC20name() async throws {

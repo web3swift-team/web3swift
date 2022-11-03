@@ -27,7 +27,7 @@ public class Web3 {
 
     /// Public web3.eth.* namespace.
     public var eth: Web3.Eth {
-        if (self.ethInstance != nil) {
+        if self.ethInstance != nil {
             return self.ethInstance!
         }
         self.ethInstance = Web3.Eth(provider: self.provider, web3: self)
@@ -50,7 +50,7 @@ public class Web3 {
 
     /// Public web3.personal.* namespace.
     public var personal: Web3.Personal {
-        if (self.personalInstance != nil) {
+        if self.personalInstance != nil {
             return self.personalInstance!
         }
         self.personalInstance = Web3.Personal(provider: self.provider, web3: self)
@@ -72,7 +72,7 @@ public class Web3 {
 
     /// Public web3.personal.* namespace.
     public var txPool: Web3.TxPool {
-        if (self.txPoolInstance != nil) {
+        if self.txPoolInstance != nil {
             return self.txPoolInstance!
         }
         self.txPoolInstance = Web3.TxPool(provider: self.provider, web3: self)
@@ -94,7 +94,7 @@ public class Web3 {
 
     /// Public web3.wallet.* namespace.
     public var wallet: Web3.Web3Wallet {
-        if (self.walletInstance != nil) {
+        if self.walletInstance != nil {
             return self.walletInstance!
         }
         self.walletInstance = Web3.Web3Wallet(provider: self.provider, web3: self)
@@ -115,7 +115,7 @@ public class Web3 {
 
     /// Public web3.browserFunctions.* namespace.
     public var browserFunctions: Web3.BrowserFunctions {
-        if (self.browserFunctionsInstance != nil) {
+        if self.browserFunctionsInstance != nil {
             return self.browserFunctionsInstance!
         }
         self.browserFunctionsInstance = Web3.BrowserFunctions(provider: self.provider, web3: self)
@@ -137,7 +137,7 @@ public class Web3 {
 
     /// Public web3.browserFunctions.* namespace.
     public var eventLoop: Web3.Eventloop {
-        if (self.eventLoopInstance != nil) {
+        if self.eventLoopInstance != nil {
             return self.eventLoopInstance!
         }
         self.eventLoopInstance = Web3.Eventloop(provider: self.provider, web3: self)
@@ -158,7 +158,7 @@ public class Web3 {
         var provider: Web3Provider
         //        weak var web3: web3?
         var web3: Web3
-        var timer: RepeatingTimer? = nil
+        var timer: RepeatingTimer?
 
         public var monitoredProperties: [MonitoredProperty] = [MonitoredProperty]()
         //  public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
@@ -173,7 +173,7 @@ public class Web3 {
 //
 //    public typealias SubmissionHookFunction = (inout CodableTransaction) -> Bool
 
-    public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> ()
+    public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> Void
 
 //    public struct AssemblyHook {
 //        public var function: AssemblyHookFunction

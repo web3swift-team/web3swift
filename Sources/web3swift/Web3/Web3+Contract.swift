@@ -105,7 +105,7 @@ extension Web3 {
         ///
         /// Returns a "Transaction intermediate" object.
         public func createWriteOperation(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data()) -> WriteOperation? {
-            guard var data = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
+            guard let data = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
             transaction.data = data
             if let network = self.web3.provider.network {
                 transaction.chainID = network.chainID
