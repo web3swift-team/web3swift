@@ -33,7 +33,7 @@ class LocalTestCase: XCTestCase {
         writeTX.transaction.gasPricePolicy = .manual(20000000000)
 
         for _ in block..<25 {
-            let _ = try! await writeTX.writeToChain(password: "")
+            _ = try! await writeTX.writeToChain(password: "")
         }
     }
 }

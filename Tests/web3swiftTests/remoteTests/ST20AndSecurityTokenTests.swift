@@ -14,7 +14,7 @@ import Core
 
 // MARK: Works only with network connection
 class ST20AndSecurityTokenTests: XCTestCase {
-    
+
     // FIXME: Enable me back again
     // Test fails because there's no such wallet on goerli chain as well as token.
 //    func testERC20TokenCreation() async throws {

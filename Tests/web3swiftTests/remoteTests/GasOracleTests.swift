@@ -93,7 +93,6 @@ class GasOracleTests: XCTestCase {
 //        XCTAssert(nullTransactions.isEmpty, "This amount transaction fails to decode: \(nullTransactions.count)")
 //    }
 
-
     // FIXME: Move it to external test suit.
 //    func testBlockNumber() async throws {
 //        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)

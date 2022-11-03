@@ -52,7 +52,6 @@ final public class Oracle {
         self.cacheTimeout = cacheTimeout
     }
 
-
     /// Returning one dimensional array from two dimensional array
     ///
     /// We've got `[[min],[middle],[max]]` 2 dimensional array
@@ -105,7 +104,7 @@ final public class Oracle {
         /// reaarange `[[min, middle, max]]` to `[[min], [middle], [max]]`
         try await suggestGasValues().reward
             .forEach { percentiles in
-                percentiles.enumerated().forEach { (index, percentile) in
+                percentiles.enumerated().forEach { index, percentile in
                     /// if `rearrengedArray` have not that enough items
                     /// as `percentiles` current item index
                     if rearrengedArray.endIndex <= index {
@@ -176,7 +175,6 @@ final public class Oracle {
         return calculatePercentiles(for: lastNthBlockGasPrice)
     }
 }
-
 
 public extension Oracle {
     // MARK: - Base Fee

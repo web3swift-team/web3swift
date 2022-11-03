@@ -28,7 +28,7 @@ public struct IBAN {
     }
 
     public var asset: String {
-        if (self.isIndirect) {
+        if self.isIndirect {
             return self.iban[4..<7]
         } else {
             return ""
@@ -36,7 +36,7 @@ public struct IBAN {
     }
 
     public var institution: String {
-        if (self.isIndirect) {
+        if self.isIndirect {
             return self.iban[7..<11]
         } else {
             return ""
@@ -78,7 +78,7 @@ public struct IBAN {
                 arrayOfInts.append(code - 48)
             }
         }
-        let joinedString = arrayOfInts.map({ (intCh) -> String in
+        let joinedString = arrayOfInts.map({ intCh -> String in
             return String(intCh)
         }).joined()
         return joinedString
@@ -101,7 +101,7 @@ public struct IBAN {
         guard match.count == 1 else {
             return false
         }
-        if (iban.hasPrefix("XE") && !noValidityCheck) {
+        if iban.hasPrefix("XE") && !noValidityCheck {
             let remainder = calculateChecksumMod97(decodeToInts(iban))
             return remainder == 1
         } else {

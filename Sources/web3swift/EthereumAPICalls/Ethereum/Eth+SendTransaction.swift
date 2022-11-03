@@ -8,7 +8,6 @@ import Foundation
 import BigInt
 import Core
 
-
 extension Web3.Eth {
     public func send(_ transaction: CodableTransaction) async throws -> TransactionSendingResult {
         let request = APIRequest.sendTransaction(transaction)

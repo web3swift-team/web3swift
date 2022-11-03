@@ -27,8 +27,8 @@ public struct EIP2930Envelope: EIP2718Envelope {
     public var accessList: [AccessListEntry] = []
     public var publicKey: Data?
 
-    var maxFeePerGas: BigUInt? = nil
-    var maxPriorityFeePerGas: BigUInt? = nil
+    var maxFeePerGas: BigUInt?
+    var maxPriorityFeePerGas: BigUInt?
 
     // for CustomStringConvertible
     public var description: String {
