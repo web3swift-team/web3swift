@@ -22,7 +22,6 @@ class BasicLocalNodeTests: LocalTestCase {
         let contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
         let parameters = [] as [AnyObject]
-        // MARK: Writing Data flow
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         let policies = Policies(gasLimitPolicy: .manual(3000000))

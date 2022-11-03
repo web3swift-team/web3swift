@@ -7,7 +7,6 @@
 import Foundation
 import BigInt
 
-
 ///  Structure capable of carying the parameters for any transaction type.
 ///  while all fields in this struct are optional, they are not necessarily
 ///  optional for the type of transaction they apply to.
@@ -289,7 +288,7 @@ extension CodableTransaction {
     ///   - parameters: EthereumParameters object containing additional parametrs for the transaction like gas
     public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
                 chainID: BigUInt = 0, value: BigUInt = 0, data: Data = Data(),
-                gasLimit: BigUInt = 0, maxFeePerGas: BigUInt? = nil, maxPriorityFeePerGas: BigUInt? = nil,  gasPrice: BigUInt? = nil,
+                gasLimit: BigUInt = 0, maxFeePerGas: BigUInt? = nil, maxPriorityFeePerGas: BigUInt? = nil, gasPrice: BigUInt? = nil,
                 accessList: [AccessListEntry]? = nil, v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
         // FIXME: This is duplication and should be fixed.
         self.data = data
