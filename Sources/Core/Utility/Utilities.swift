@@ -9,7 +9,7 @@ import Foundation
 import BigInt
 
 public struct Utilities {
-        
+
     /// Convert a public key to the corresponding EthereumAddress. Accepts public keys in compressed (33 bytes), non-compressed (65 bytes)
     /// or raw concat(X, Y) (64 bytes) format.
     ///
@@ -20,20 +20,20 @@ public struct Utilities {
             return publicToAddressData(decompressedKey)
         }
         var stipped = publicKey
-        if (stipped.count == 65) {
-            if (stipped[0] != 4) {
+        if stipped.count == 65 {
+            if stipped[0] != 4 {
                 return nil
             }
             stipped = stipped[1...64]
         }
-        if (stipped.count != 64) {
+        if stipped.count != 64 {
             return nil
         }
         let sha3 = stipped.sha3(.keccak256)
         let addressData = sha3[12...31]
         return addressData
     }
-    
+
     /// Convert a public key to the corresponding EthereumAddress. Accepts public keys in compressed (33 bytes), non-compressed (65 bytes)
     /// or raw concat(X, Y) (64 bytes) format.
     ///
@@ -43,14 +43,12 @@ public struct Utilities {
         let address = addressData.toHexString().addHexPrefix().lowercased()
         return EthereumAddress(address)
     }
-    
-    
+
     /// Convert the private key (32 bytes of Data) to compressed (33 bytes) or non-compressed (65 bytes) public key.
     public static func privateToPublic(_ privateKey: Data, compressed: Bool = false) -> Data? {
-        guard let publicKey = SECP256K1.privateToPublic(privateKey:  privateKey, compressed: compressed) else {return nil}
+        guard let publicKey = SECP256K1.privateToPublic(privateKey: privateKey, compressed: compressed) else {return nil}
         return publicKey
     }
-    
 
     /// Convert a public key to the corresponding EthereumAddress. Accepts public keys in compressed (33 bytes), non-compressed (65 bytes)
     /// or raw concat(X, Y) (64 bytes) format.
@@ -104,7 +102,7 @@ public struct Utilities {
         let unitDecimals = decimals
         guard let beforeDecPoint = BigUInt(components[0], radix: 10) else {return nil}
         var mainPart = beforeDecPoint*BigUInt(10).power(unitDecimals)
-        if (components.count == 2) {
+        if components.count == 2 {
             let numDigits = components[1].count
             guard numDigits <= unitDecimals else {return nil}
             guard let afterDecPoint = BigUInt(components[1], radix: 10) else {return nil}
@@ -178,7 +176,7 @@ public struct Utilities {
             } else if fallbackToScientific {
                 var firstDigit = 0
                 for char in fullPaddedRemainder {
-                    if (char == "0") {
+                    if char == "0" {
                         firstDigit = firstDigit + 1
                     } else {
                         let firstDecimalUnit = String(fullPaddedRemainder[firstDigit ..< firstDigit+1])
@@ -204,7 +202,7 @@ public struct Utilities {
                 return fullRemainder + "e-" + String(firstDigit)
             }
         }
-        if (toDecimals == 0) {
+        if toDecimals == 0 {
             return String(quotient)
         }
         return String(quotient) + decimalSeparator + remainderPadded
@@ -242,7 +240,6 @@ public struct Utilities {
         guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else {return nil}
         return Utilities.publicToAddress(publicKey)
     }
-
 
     /// Recover the Ethereum address from recoverable secp256k1 signature.
     /// Takes a hash of some message. What message is hashed should be checked by user separately.
@@ -285,7 +282,7 @@ public struct Utilities {
 
     /// Unmarshals a 65 byte recoverable EC signature into internal structure.
     static func unmarshalSignature(signatureData: Data) -> SECP256K1.UnmarshaledSignature? {
-        if (signatureData.count != 65) {return nil}
+        if signatureData.count != 65 {return nil}
         let bytes = signatureData.bytes
         let r = Array(bytes[0..<32])
         let s = Array(bytes[32..<64])

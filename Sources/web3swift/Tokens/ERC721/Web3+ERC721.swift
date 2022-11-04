@@ -54,7 +54,7 @@ protocol IERC721Enumerable {
 // can be imperatively read and saved
 public class ERC721: IERC721 {
 
-    private var _tokenId: BigUInt? = nil
+    private var _tokenId: BigUInt?
     private var _hasReadProperties: Bool = false
 
     public var transaction: CodableTransaction
@@ -98,7 +98,6 @@ public class ERC721: IERC721 {
         guard let tokenIdResult = try await tokenIdPromise else {return}
         guard let tokenId = tokenIdResult["0"] as? BigUInt else {return}
         self._tokenId = tokenId
-
 
         self._hasReadProperties = true
 
@@ -257,4 +256,3 @@ extension ERC721: IERC721Metadata {
     }
 
 }
-

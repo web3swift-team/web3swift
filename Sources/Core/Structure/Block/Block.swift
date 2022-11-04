@@ -18,11 +18,11 @@ public struct Block {
     public var parentHash: Data
     public var nonce: Data? // MARK: This is optional in web3js but required in Ethereum JSON-RPC
     public var sha3Uncles: Data
-    public var logsBloom: EthereumBloomFilter? = nil // MARK: This is optional in web3js but required in Ethereum JSON-RPC
+    public var logsBloom: EthereumBloomFilter? // MARK: This is optional in web3js but required in Ethereum JSON-RPC
     public var transactionsRoot: Data
     public var stateRoot: Data
     public var receiptsRoot: Data
-    public var miner: EthereumAddress? = nil // MARK: This is NOT optional in web3js
+    public var miner: EthereumAddress? // MARK: This is NOT optional in web3js
     public var difficulty: BigUInt
     public var totalDifficulty: BigUInt
     public var extraData: Data

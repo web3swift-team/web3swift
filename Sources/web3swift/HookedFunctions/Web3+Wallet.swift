@@ -51,8 +51,7 @@ extension Web3.Web3Wallet {
 
     public func signPersonalMessage(_ personalMessage: Data, account: EthereumAddress, password: String ) throws -> Data {
         do {
-            guard let keystoreManager = self.web3.provider.attachedKeystoreManager else
-            {
+            guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {
                 throw Web3Error.walletError
             }
             guard let data = try Web3Signer.signPersonalMessage(personalMessage, keystore: keystoreManager, account: account, password: password) else {

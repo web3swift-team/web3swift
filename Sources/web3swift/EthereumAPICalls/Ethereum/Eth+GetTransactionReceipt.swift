@@ -8,9 +8,8 @@ import BigInt
 import Core
 
 extension Web3.Eth {
-    public func transactionReceipt(_ txhash: Data) async throws -> TransactionReceipt {
-        guard let hexString = String(data: txhash, encoding: .utf8)?.addHexPrefix() else { throw Web3Error.dataError }
-        let requestCall: APIRequest = .getTransactionReceipt(hexString)
-        return try await APIRequest.sendRequest(with: self.provider, for: requestCall).result
+    public func transactionReceipt(_ txHash: Data) async throws -> TransactionReceipt {
+        let request = APIRequest.getTransactionReceipt(txHash.toHexString().addHexPrefix())
+        return try await APIRequest.sendRequest(with: provider, for: request).result
     }
 }

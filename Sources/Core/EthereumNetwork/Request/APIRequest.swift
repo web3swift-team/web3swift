@@ -82,53 +82,53 @@ public enum APIRequest {
 
     /// Gas price request
     case gasPrice
-   
+
     /// Get last block number
     case blockNumber
-    
+
     /// Get current network
     case getNetwork
-    
+
     /// Get accounts
     case getAccounts
-    
+
     /// Estimate required gas amount for transaction
     /// - Parameters:
     ///     - TransactionParameters: parameters of planned transaction
     ///     - BlockNumber: block where it should be evalueated
     case estimateGas(CodableTransaction, BlockNumber)
-    
+
     /// Send raw transaction
     /// - Parameters:
     ///     - Hash: String representation of a transaction data
     case sendRawTransaction(Hash)
-   
+
     /// Send transaction object
     /// - Parameters:
     ///     - TransactionParameters: transaction to be sent into chain
     case sendTransaction(CodableTransaction)
-   
+
     /// Get transaction by hash
     /// - Parameters:
     ///     - Hash: transaction hash ID
     case getTransactionByHash(Hash)
-   
+
     /// Get transaction receipt
     /// - Paramters:
     ///     - Hash: transaction hash ID
     case getTransactionReceipt(Hash)
-   
+
     /// Get logs
     /// - Parameters:
     ///     - EventFilterParameters: event filter parameters for interaction with node
     case getLogs(EventFilterParameters)
-    
+
     /// Sign given string by users private key
     /// - Parameters:
     ///     - Address: address where to sign
     ///     - String: custom string to be signed
     case personalSign(Address, String)
-   
+
     /// Call a given contract
     ///
     /// Mostly could be used for intreacting with a contracts, but also could be used for simple transaction sending
@@ -136,7 +136,7 @@ public enum APIRequest {
     ///     - TransactionParameters: transaction to be sent into chain
     ///     - BlockNumber: block where it should be evalueated
     case call(CodableTransaction, BlockNumber)
-    
+
     /// Get a transaction counts on a given block
     ///
     /// Consider that there's no out of the box way to get counts of all transactions sent by the address
@@ -146,7 +146,7 @@ public enum APIRequest {
     ///     - Address: address which is engaged in transaction
     ///     - BlockNumber: block to check
     case getTransactionCount(Address, BlockNumber)
-    
+
     /// Get a balance of a given address
     /// - Parameters:
     ///     - Address: address which balance would be recieved
@@ -166,13 +166,13 @@ public enum APIRequest {
     ///     - Address: address what code to get
     ///     - BlockNumber: block to check
     case getCode(Address, BlockNumber)
-    
+
     /// Get block object by hash
     /// - Parameters:
     ///     - Hash: Hash of the block to reach
     ///     - Bool: Transaction included in block could be received as just array of their hashes or as Transaction objects, set true for latter.
     case getBlockByHash(Hash, Bool)
-    
+
     /// Get block object by its number
     /// - Parameters:
     ///     - Hash: Number of the block to reach
@@ -195,7 +195,7 @@ public enum APIRequest {
 
     // MARK: - Personal Ethereum API
     // personal Namespace - https://geth.ethereum.org/docs/rpc/ns-personal
-    
+
     /// Creates new account.
     ///
     /// Note: it becomes the new current unlocked account. There can only be one unlocked account at a time.

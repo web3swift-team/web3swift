@@ -11,7 +11,7 @@ import Core
 @testable import web3swift
 
 class PersonalSignatureTests: XCTestCase {
-    
+
     func testPersonalSignature() async throws {
         let web3 = try await Web3.new(LocalTestCase.url)
         let tempKeystore = try! EthereumKeystoreV3(password: "")
@@ -29,7 +29,7 @@ class PersonalSignatureTests: XCTestCase {
         let signer = try web3.personal.ecrecover(personalMessage: message.data(using: .utf8)!, signature: signature)
         XCTAssert(expectedAddress == signer, "Failed to sign personal message")
     }
-    
+
     // TODO: - write contract
     func testPersonalSignatureOnContract() async throws {
         let web3 = try await Web3.new(LocalTestCase.url)
@@ -43,20 +43,20 @@ class PersonalSignatureTests: XCTestCase {
         deployTx.transaction.from = allAddresses[0]
         deployTx.transaction.gasLimitPolicy = .manual(3000000)
         let deployResult = try await deployTx.writeToChain(password: "web3swift")
-        let txHash = deployResult.hash
-        
+        let txHash = Data.fromHex(deployResult.hash.stripHexPrefix())!
+
         Thread.sleep(forTimeInterval: 1.0)
-        
-        let receipt = try await web3.eth.transactionReceipt(txHash.data(using: .utf8)!)
+
+        let receipt = try await web3.eth.transactionReceipt(txHash)
         print(receipt)
-        
+
         switch receipt.status {
         case .notYetProcessed:
             return
         default:
             break
         }
-        
+
         // Signing
         let tempKeystore = try! EthereumKeystoreV3(password: "")
         let keystoreManager = KeystoreManager([tempKeystore!])
@@ -70,20 +70,20 @@ class PersonalSignatureTests: XCTestCase {
         print("R = " + Data(unmarshalledSignature.r).toHexString())
         print("S = " + Data(unmarshalledSignature.s).toHexString())
         print("Personal hash = " + Utilities.hashPersonalMessage(message.data(using: .utf8)!)!.toHexString())
-        
+
         // Calling contract
         contract = web3.contract(abiString, at: receipt.contractAddress!)!
         var tx = contract.createReadOperation("hashPersonalMessage", parameters: [message as AnyObject])
         tx?.transaction.from = expectedAddress
         var result = try await tx!.callContractMethod()
-        guard let hash = result["hash"]! as? Data else {return XCTFail()}
+        guard let hash = result["hash"]! as? Data else { return XCTFail() }
         XCTAssert(Utilities.hashPersonalMessage(message.data(using: .utf8)!)! == hash)
-        
+
         tx = contract.createReadOperation("recoverSigner", parameters: [message, unmarshalledSignature.v, Data(unmarshalledSignature.r), Data(unmarshalledSignature.s)] as [AnyObject])
         tx?.transaction.from = expectedAddress
         result = try await tx!.callContractMethod()
-        guard let signer = result["signer"]! as? EthereumAddress else {return XCTFail()}
+        guard let signer = result["signer"]! as? EthereumAddress else { return XCTFail() }
         XCTAssert(signer == expectedAddress)
     }
-    
+
 }
