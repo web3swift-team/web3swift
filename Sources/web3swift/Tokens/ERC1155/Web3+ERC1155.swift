@@ -136,9 +136,6 @@ public class ERC1155: IERC1155 {
     public func supportsInterface(interfaceID: String) async throws -> Bool {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        // FIXME: check if this still works
-        self.transaction.gasLimit = 300000
-//        self.transaction.gasLimitPolicy = .manual(30000)
         let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
