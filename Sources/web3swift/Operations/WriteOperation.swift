@@ -11,10 +11,13 @@ import Core
 public class WriteOperation: ReadOperation {
 
     // FIXME: Rewrite this to CodableTransaction
-    public func writeToChain(password: String, policies: Policies = .auto) async throws -> TransactionSendingResult {
-        // TODO: might change to be dependency
-        let resolver = PolicyResolver(provider: web3.provider)
-        try await resolver.resolveAll(for: &transaction)
+    /// Sends (raw) transaction for write operation.
+    /// - Parameters:
+    ///   - password: Password for private key.
+    ///   - policies: Custom policies for how to resolve (optional). Default are policies on Web3Provider instance.
+    public func writeToChain(password: String, policies: Policies? = nil) async throws -> TransactionSendingResult {
+        let policiesOrUserDefaults = policies ?? web3.provider.policies
+        try await resolver.resolveAll(for: &transaction, with: policiesOrUserDefaults)
         if let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager {
             do {
                 try Web3Signer.signTX(transaction: &transaction,

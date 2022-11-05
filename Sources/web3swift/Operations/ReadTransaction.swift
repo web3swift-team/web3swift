@@ -16,6 +16,7 @@ public class ReadOperation {
     public var method: String
     public var data: Data? { transaction.data }
 
+    var resolver: PolicyResolver
     var web3: Web3
 
     // FIXME: Rewrite this to CodableTransaction
@@ -30,12 +31,11 @@ public class ReadOperation {
         if let network = self.web3.provider.network {
             self.transaction.chainID = network.chainID
         }
+        self.resolver = PolicyResolver(provider: web3.provider)
     }
 
     // TODO: Remove type erasing here, some broad wide protocol should be added instead
     public func callContractMethod() async throws -> [String: Any] {
-        // TODO: might change to be dependency
-        let resolver = PolicyResolver(provider: web3.provider)
         try await resolver.resolveAll(for: &transaction)
         // MARK: Read data from ABI flow
         // FIXME: This should be dropped, and after `execute()` call, just to decode raw data.
