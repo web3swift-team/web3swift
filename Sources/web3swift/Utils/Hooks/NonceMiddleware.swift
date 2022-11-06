@@ -49,24 +49,25 @@ extension Web3.Utils {
         }
 
         // FIXME: Rewrite this to CodableTransaction
-        func preAssemblyFunction(tx: inout CodableTransaction, contract: EthereumContract) -> (CodableTransaction, EthereumContract, Bool) {
-            guard let from = tx.from else {
-                // do nothing
-                return (tx, contract, true)
-            }
-            guard let knownNonce = self.nonceLookups[from] else {
-                return (tx, contract, true)
-            }
-
-            let newNonce = knownNonce + 1
-
-            self.queue.async {
-                self.nonceLookups[from] = newNonce
-            }
-
-            tx.noncePolicy = .exact(newNonce)
-            return (tx, contract, true)
-        }
+//        func preAssemblyFunction(tx: inout CodableTransaction, contract: EthereumContract) -> (CodableTransaction, EthereumContract, Bool) {
+//            guard let from = tx.from else {
+//                // do nothing
+//                return (tx, contract, true)
+//            }
+//            guard let knownNonce = self.nonceLookups[from] else {
+//                return (tx, contract, true)
+//            }
+//
+//            let newNonce = knownNonce + 1
+//
+//            self.queue.async {
+//                self.nonceLookups[from] = newNonce
+//            }
+//
+//            // FIXME:
+//            tx.noncePolicy = .exact(newNonce)
+//            return (tx, contract, true)
+//        }
 
 //        func postSubmissionFunction(result: TransactionSendingResult) {
 //            guard let from = result.transaction.sender else {

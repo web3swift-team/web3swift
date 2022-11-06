@@ -192,7 +192,6 @@ public class ERC721: IERC721 {
     public func supportsInterface(interfaceID: String) async throws -> Bool {
         let contract = self.contract
         transaction.callOnBlock = .latest
-        transaction.gasLimitPolicy = .manual(30000)
         let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res

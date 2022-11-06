@@ -11,8 +11,12 @@ import Core
 public class WriteOperation: ReadOperation {
 
     // FIXME: Rewrite this to CodableTransaction
-    public func writeToChain(password: String) async throws -> TransactionSendingResult {
-        await transaction.resolve(provider: web3.provider)
+    /// Sends (raw) transaction for write operation.
+    /// - Parameters:
+    ///   - password: Password for private key.
+    ///   - policies: Custom policies for how to resolve (optional). Default is auto.
+    public func writeToChain(password: String, policies: Policies = .auto) async throws -> TransactionSendingResult {
+        try await resolver.resolveAll(for: &transaction, with: policies)
         if let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager {
             do {
                 try Web3Signer.signTX(transaction: &transaction,
@@ -27,19 +31,5 @@ public class WriteOperation: ReadOperation {
         }
         // MARK: Sending Data flow
         return try await web3.eth.send(transaction)
-    }
-
-    // FIXME: Rewrite this to CodableTransaction
-    func nonce(for policy: CodableTransaction.NoncePolicy, from: EthereumAddress) async throws -> BigUInt {
-        switch policy {
-        case .latest:
-            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .latest)
-        case .pending:
-            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .pending)
-        case .earliest:
-            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .earliest)
-        case .exact(let nonce):
-            return nonce
-        }
     }
 }

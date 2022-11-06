@@ -22,12 +22,10 @@ class BasicLocalNodeTests: LocalTestCase {
         let contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
         let parameters = [] as [AnyObject]
-
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
-        deployTx.transaction.gasLimitPolicy = .manual(3000000)
-
-        let result = try await deployTx.writeToChain(password: "web3swift")
+        let policies = Policies(gasLimitPolicy: .manual(3000000))
+        let result = try await deployTx.writeToChain(password: "web3swift", policies: policies)
         let txHash = result.hash.stripHexPrefix()
 
         while true {
