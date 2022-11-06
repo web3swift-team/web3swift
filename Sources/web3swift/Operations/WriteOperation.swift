@@ -15,9 +15,8 @@ public class WriteOperation: ReadOperation {
     /// - Parameters:
     ///   - password: Password for private key.
     ///   - policies: Custom policies for how to resolve (optional). Default are policies on Web3Provider instance.
-    public func writeToChain(password: String, policies: Policies? = nil) async throws -> TransactionSendingResult {
-        let policiesOrUserDefaults = policies ?? web3.provider.policies
-        try await resolver.resolveAll(for: &transaction, with: policiesOrUserDefaults)
+    public func writeToChain(password: String, policies: Policies = super.policies) async throws -> TransactionSendingResult {
+        try await resolver.resolveAll(for: &transaction, with: policies)
         if let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager {
             do {
                 try Web3Signer.signTX(transaction: &transaction,
