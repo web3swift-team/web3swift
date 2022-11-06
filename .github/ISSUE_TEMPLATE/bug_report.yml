@@ -38,7 +38,7 @@ body:
     attributes:
       label: What is the error thrown?
       description: Please provide the exact error thrown.
-      placeholder: "Web3Error.invalidData("Exact error message")"
+      placeholder: Web3Error.invalidData("Exact error message")
     validations:
       required: true
   - type: textarea
@@ -46,6 +46,6 @@ body:
     attributes:
       label: What's the stack trace said?
       description: Please provide the exact source path.
-      placeholder: "Sources/Core/Transaction/CodableTransaction.swift:129 func recoverPublicKey()"
+      placeholder: Sources/Core/Transaction/CodableTransaction.swift:129 func recoverPublicKey()
     validations:
       required: true
