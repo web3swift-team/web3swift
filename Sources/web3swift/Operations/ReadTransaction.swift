@@ -15,7 +15,6 @@ public class ReadOperation {
     public var contract: EthereumContract
     public var method: String
     public var data: Data? { transaction.data }
-    public var policies: Policies { web3.provider.policies }
 
     var resolver: PolicyResolver
     var web3: Web3

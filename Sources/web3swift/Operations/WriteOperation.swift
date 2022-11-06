@@ -14,8 +14,8 @@ public class WriteOperation: ReadOperation {
     /// Sends (raw) transaction for write operation.
     /// - Parameters:
     ///   - password: Password for private key.
-    ///   - policies: Custom policies for how to resolve (optional). Default are policies on Web3Provider instance.
-    public func writeToChain(password: String, policies: Policies = super.policies) async throws -> TransactionSendingResult {
+    ///   - policies: Custom policies for how to resolve (optional). Default is auto.
+    public func writeToChain(password: String, policies: Policies = .auto) async throws -> TransactionSendingResult {
         try await resolver.resolveAll(for: &transaction, with: policies)
         if let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager {
             do {
