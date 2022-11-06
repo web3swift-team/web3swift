@@ -7,9 +7,9 @@
 import Foundation
 import BigInt
 
-///  Structure capable of carying the parameters for any transaction type.
-///  while all fields in this struct are optional, they are not necessarily
-///  optional for the type of transaction they apply to.
+/// Structure capable of carying the parameters for any transaction type.
+/// While most fields in this struct are optional, they are not necessarily
+/// optional for the type of transaction they apply to.
 public struct CodableTransaction {
     /// internal acccess only. The transaction envelope object itself that contains all the transaction data
     /// and type specific implementation
