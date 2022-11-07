@@ -22,11 +22,11 @@ on:
       - unstable
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_13.3.1.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_14.1.app/Contents/Developer
 
 jobs:
   spm:
-    name: Swift Package Manager 5.5
+    name: Swift Package Manager 5.7
     runs-on: macOS-12
     concurrency: 
       group: spm-${{ github.run_id }}
