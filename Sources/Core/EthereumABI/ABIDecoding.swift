@@ -85,7 +85,7 @@ extension ABIDecoder {
             let length = UInt64(BigUInt(dataSlice))
             guard elementItself.count >= 32+length else {break}
             dataSlice = elementItself[32 ..< 32 + length]
-            return (dataSlice as AnyObject, type.memoryUsage)
+            return (dataSlice as AnyObject, nextElementPointer)
         case .array(type: let subType, length: let length):
             switch type.arraySize {
             case .dynamicSize:
