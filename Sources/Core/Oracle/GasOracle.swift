@@ -137,7 +137,7 @@ final public class Oracle {
             latestBlockNumber = block
         case let .exact(number): latestBlockNumber = number
             // Error throws since pending and erliest are unable to be used in this method.
-        default: throw Web3Error.valueError
+        default: throw Web3Error.valueError()
         }
 
         /// checking if latest block number is greather than number of blocks to take in account

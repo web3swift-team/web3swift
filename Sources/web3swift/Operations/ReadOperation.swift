@@ -19,8 +19,6 @@ public class ReadOperation {
     var policyResolver: PolicyResolver
     var web3: Web3
 
-    public var provider: Web3Provider { web3.provider }
-
     // FIXME: Rewrite this to CodableTransaction
     public init(transaction: CodableTransaction = CodableTransaction.emptyTransaction,
                 web3 web3Instance: Web3,

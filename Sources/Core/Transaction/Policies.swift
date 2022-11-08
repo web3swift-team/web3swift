@@ -54,12 +54,6 @@ public struct Policies {
         }
 
     public static var auto: Policies {
-        Policies(
-            noncePolicy: .latest,
-            gasLimitPolicy: .automatic,
-            gasPricePolicy: .automatic,
-            maxFeePerGasPolicy: .automatic,
-            maxPriorityFeePerGasPolicy: .automatic
-        )
+        Policies()
     }
 }

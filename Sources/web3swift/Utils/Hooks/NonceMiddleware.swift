@@ -16,6 +16,8 @@ extension Web3.Utils {
         public var synchronizationPeriod: TimeInterval = 300.0 // 5 minutes
         var lastSyncTime: Date = Date()
 
+        public init() { }
+
         public func functionToRun() async {
             guard let w3 = self.web3 else { return }
             let knownKeys = Array(nonceLookups.keys)
@@ -35,6 +37,5 @@ extension Web3.Utils {
             }
         }
 
-        public init() { }
     }
 }

@@ -13,7 +13,7 @@ public enum Web3Error: Error {
 
     case dataError
     case typeError
-    case valueError
+    case valueError(desc: String? = nil)
     case serverError(code: Int)
     case clientError(code: Int)
 

@@ -22,6 +22,8 @@ public class PolicyResolver {
             // Nonce should be resolved first - as this might be needed for some
             // tx's gas estimation
             tx.nonce = try await resolveNonce(for: tx, with: policies.noncePolicy)
+        } else {
+            throw Web3Error.valueError(desc: "Could not be resolved with both from and sender are nil")
         }
 
         tx.gasLimit = try await resolveGasEstimate(for: tx, with: policies.gasLimitPolicy)
@@ -83,7 +85,7 @@ public class PolicyResolver {
     public func resolveNonce(for tx: CodableTransaction, with policy: NoncePolicy) async throws -> BigUInt {
         switch policy {
         case .pending, .latest, .earliest:
-            guard let address = tx.from ?? tx.sender else { throw Web3Error.valueError }
+            guard let address = tx.from ?? tx.sender else { throw Web3Error.valueError() }
             let request: APIRequest = .getTransactionCount(address.address, tx.callOnBlock ?? .latest)
             let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)
             return response.result
