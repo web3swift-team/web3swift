@@ -54,7 +54,7 @@ public struct Policies {
         }
 
     public static var auto: Policies {
-        return Policies(
+        Policies(
             noncePolicy: .latest,
             gasLimitPolicy: .automatic,
             gasPricePolicy: .automatic,
