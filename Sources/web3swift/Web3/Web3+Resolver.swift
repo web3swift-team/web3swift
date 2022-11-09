@@ -17,7 +17,6 @@ public class PolicyResolver {
     }
 
     public func resolveAll(for tx: inout CodableTransaction, with policies: Policies = .auto) async throws {
-        // FIXME: This should throw an appropriate error, since this condition is critical to whole function tast
         if tx.from != nil || tx.sender != nil {
             // Nonce should be resolved first - as this might be needed for some
             // tx's gas estimation
