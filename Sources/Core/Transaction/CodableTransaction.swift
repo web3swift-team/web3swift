@@ -407,7 +407,7 @@ extension CodableTransaction {
     ///   - nonce: nonce for this transaction (default 0)
     ///   - chainID: chainId the transaction belongs to (default: type specific)
     ///   - value: Native value for the transaction (default 0)
-    ///   - data: Payload data for the transaction (required)
+    ///   - data: Payload data for the transaction (default 0 bytes)
     ///   - v: signature v parameter (default 1) - will get set properly once signed
     ///   - r: signature r parameter (default 0) - will get set properly once signed
     ///   - s: signature s parameter (default 0) - will get set properly once signed
@@ -417,14 +417,14 @@ extension CodableTransaction {
                 gasLimit: BigUInt = 0, maxFeePerGas: BigUInt? = nil, maxPriorityFeePerGas: BigUInt? = nil,  gasPrice: BigUInt? = nil,
                 accessList: [AccessListEntry]? = nil, v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
         self.accessList = accessList
-        self.gasLimitPolicy = .automatic
-        self.noncePolicy = .pending
-        self.gasPricePolicy = .automatic
-        self.maxFeePerGasPolicy = .automatic
-        self.maxPriorityFeePerGasPolicy = .automatic
-        self.callOnBlock = .latest
+        gasLimitPolicy = .automatic
+        noncePolicy = .pending
+        gasPricePolicy = .automatic
+        maxFeePerGasPolicy = .automatic
+        maxPriorityFeePerGasPolicy = .automatic
+        callOnBlock = .latest
 
-        self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, chainID: chainID, value: value, data: data, gasLimit: gasLimit, maxFeePerGas: maxFeePerGas, maxPriorityFeePerGas: maxPriorityFeePerGas, gasPrice: gasPrice, accessList: accessList, v: v, r: r, s: s)
+        envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, chainID: chainID, value: value, data: data, gasLimit: gasLimit, maxFeePerGas: maxFeePerGas, maxPriorityFeePerGas: maxPriorityFeePerGas, gasPrice: gasPrice, accessList: accessList, v: v, r: r, s: s)
     }
 }
 
