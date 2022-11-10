@@ -10,42 +10,31 @@ import BigInt
 
 public typealias NoncePolicy = BlockNumber
 
-public enum GasLimitPolicy {
+/// Policies for resolving values like:
+/// - gas required for transaction execution
+/// - gas price
+/// - maximum fee per gas
+/// - maximum priority fee per gas
+public enum ValueResolutionPolicy {
+    /// What ever value will be resolved is the one to be applied
     case automatic
-    case manual(BigUInt)
-    case limited(BigUInt)
-    case withMargin(Double)
-}
-
-public enum GasPricePolicy {
-    case automatic
-    case manual(BigUInt)
-    case withMargin(Double)
-}
-
-public enum FeePerGasPolicy {
-    case automatic
-    case manual(BigUInt)
-}
-
-public enum PriorityFeePerGasPolicy {
-    case automatic
+    /// Specific value to be applied
     case manual(BigUInt)
 }
 
 public struct Policies {
     public let noncePolicy: NoncePolicy
-    public let gasLimitPolicy: GasLimitPolicy
-    public let gasPricePolicy: GasPricePolicy
-    public let maxFeePerGasPolicy: FeePerGasPolicy
-    public let maxPriorityFeePerGasPolicy: PriorityFeePerGasPolicy
+    public let gasLimitPolicy: ValueResolutionPolicy
+    public let gasPricePolicy: ValueResolutionPolicy
+    public let maxFeePerGasPolicy: ValueResolutionPolicy
+    public let maxPriorityFeePerGasPolicy: ValueResolutionPolicy
 
     public init(
         noncePolicy: NoncePolicy = .latest,
-        gasLimitPolicy: GasLimitPolicy = .automatic,
-        gasPricePolicy: GasPricePolicy = .automatic,
-        maxFeePerGasPolicy: FeePerGasPolicy = .automatic,
-        maxPriorityFeePerGasPolicy: PriorityFeePerGasPolicy = .automatic) {
+        gasLimitPolicy: ValueResolutionPolicy = .automatic,
+        gasPricePolicy: ValueResolutionPolicy = .automatic,
+        maxFeePerGasPolicy: ValueResolutionPolicy = .automatic,
+        maxPriorityFeePerGasPolicy: ValueResolutionPolicy = .automatic) {
             self.noncePolicy = noncePolicy
             self.gasLimitPolicy = gasLimitPolicy
             self.gasPricePolicy = gasPricePolicy

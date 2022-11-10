@@ -35,7 +35,7 @@ public class PolicyResolver {
         }
     }
 
-    public func resolveGasBaseFee(for policy: FeePerGasPolicy) async -> BigUInt {
+    public func resolveGasBaseFee(for policy: ValueResolutionPolicy) async -> BigUInt {
         switch policy {
         case .automatic:
             return await Oracle(provider).baseFeePercentiles().max() ?? 0
@@ -44,32 +44,25 @@ public class PolicyResolver {
         }
     }
 
-    public func resolveGasEstimate(for transaction: CodableTransaction, with policy: GasLimitPolicy) async throws -> BigUInt {
+    public func resolveGasEstimate(for transaction: CodableTransaction, with policy: ValueResolutionPolicy) async throws -> BigUInt {
         switch policy {
-        case .automatic, .withMargin:
+        case .automatic:
             return try await estimateGas(for: transaction)
         case .manual(let value):
             return value
-        case .limited(let limit):
-            let result = try await estimateGas(for: transaction)
-            if limit <= result {
-                return result
-            } else {
-                return limit
-            }
         }
     }
 
-    public func resolveGasPrice(for policy: GasPricePolicy) async -> BigUInt {
+    public func resolveGasPrice(for policy: ValueResolutionPolicy) async -> BigUInt {
         switch policy {
-        case .automatic, .withMargin:
+        case .automatic:
             return await Oracle(provider).gasPriceLegacyPercentiles().max() ?? 0
         case .manual(let value):
             return value
         }
     }
 
-    public func resolveGasPriorityFee(for policy: PriorityFeePerGasPolicy) async -> BigUInt {
+    public func resolveGasPriorityFee(for policy: ValueResolutionPolicy) async -> BigUInt {
         switch policy {
         case .automatic:
             return await Oracle(provider).tipFeePercentiles().max() ?? 0
