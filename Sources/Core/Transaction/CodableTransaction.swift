@@ -54,9 +54,10 @@ public struct CodableTransaction {
         set { envelope.value = newValue }
     }
 
-    // MARK: - Ruins signing and decoding tests if tied to envelop
-    /// any additional data for the transaction
-    public var data: Data
+    public var data: Data  {
+        get { return envelope.data }
+        set { envelope.data = newValue }
+    }
 
     // MARK: - Properties transaction type related either sends to a node if exist
 
@@ -94,7 +95,15 @@ public struct CodableTransaction {
     public var callOnBlock: BlockNumber?
 
     /// access list for contract execution (EIP-2930 and EIP-1559 only)
-    public var accessList: [AccessListEntry]?
+    public var accessList: [AccessListEntry]? {
+        get {
+            (envelope as? EIP2930Compatible)?.accessList
+        }
+        set {
+            var eip2930Compatible = (envelope as? EIP2930Compatible)
+            eip2930Compatible?.accessList = newValue ?? []
+        }
+    }
 
     // MARK: - Properties to contract encode/sign data only
 
@@ -172,8 +181,6 @@ public struct CodableTransaction {
     public init?(rawValue: Data) {
         guard let env = EnvelopeFactory.createEnvelope(rawValue: rawValue) else { return nil }
         self.envelope = env
-        // FIXME: This is duplication and should be fixed.
-        data = Data()
     }
 
     /// - Returns: a raw bytestream of the transaction, encoded according to the transactionType
@@ -205,8 +212,6 @@ extension CodableTransaction: Codable {
     public init(from decoder: Decoder) throws {
         guard let env = try EnvelopeFactory.createEnvelope(from: decoder) else { throw Web3Error.dataError }
         self.envelope = env
-        // FIXME: This is duplication and should be fixed.
-        data = Data()
 
         // capture any metadata that might be present
         self.meta = try TransactionMetadata(from: decoder)
@@ -281,7 +286,7 @@ extension CodableTransaction {
     ///   - nonce: nonce for this transaction (default 0)
     ///   - chainID: chainId the transaction belongs to (default: type specific)
     ///   - value: Native value for the transaction (default 0)
-    ///   - data: Payload data for the transaction (required)
+    ///   - data: Payload data for the transaction (default 0 bytes)
     ///   - v: signature v parameter (default 1) - will get set properly once signed
     ///   - r: signature r parameter (default 0) - will get set properly once signed
     ///   - s: signature s parameter (default 0) - will get set properly once signed
@@ -290,12 +295,9 @@ extension CodableTransaction {
                 chainID: BigUInt = 0, value: BigUInt = 0, data: Data = Data(),
                 gasLimit: BigUInt = 0, maxFeePerGas: BigUInt? = nil, maxPriorityFeePerGas: BigUInt? = nil, gasPrice: BigUInt? = nil,
                 accessList: [AccessListEntry]? = nil, v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
-        // FIXME: This is duplication and should be fixed.
-        self.data = data
-        self.accessList = accessList
-        self.callOnBlock = .latest
+        callOnBlock = .latest
 
-        self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, chainID: chainID, value: value, data: data, gasLimit: gasLimit, maxFeePerGas: maxFeePerGas, maxPriorityFeePerGas: maxPriorityFeePerGas, gasPrice: gasPrice, accessList: accessList, v: v, r: r, s: s)
+        envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, chainID: chainID, value: value, data: data, gasLimit: gasLimit, maxFeePerGas: maxFeePerGas, maxPriorityFeePerGas: maxPriorityFeePerGas, gasPrice: gasPrice, accessList: accessList, v: v, r: r, s: s)
     }
 }
 
