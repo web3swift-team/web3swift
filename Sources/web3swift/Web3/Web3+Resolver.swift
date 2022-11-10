@@ -36,10 +36,9 @@ public class PolicyResolver {
     }
 
     public func resolveGasBaseFee(for policy: FeePerGasPolicy) async -> BigUInt {
-        let oracle = Oracle(provider)
         switch policy {
         case .automatic:
-            return await oracle.baseFeePercentiles().max() ?? 0
+            return await Oracle(provider).baseFeePercentiles().max() ?? 0
         case .manual(let value):
             return value
         }
@@ -62,20 +61,18 @@ public class PolicyResolver {
     }
 
     public func resolveGasPrice(for policy: GasPricePolicy) async -> BigUInt {
-        let oracle = Oracle(provider)
         switch policy {
         case .automatic, .withMargin:
-            return await oracle.gasPriceLegacyPercentiles().max() ?? 0
+            return await Oracle(provider).gasPriceLegacyPercentiles().max() ?? 0
         case .manual(let value):
             return value
         }
     }
 
     public func resolveGasPriorityFee(for policy: PriorityFeePerGasPolicy) async -> BigUInt {
-        let oracle = Oracle(provider)
         switch policy {
         case .automatic:
-            return await oracle.tipFeePercentiles().max() ?? 0
+            return await Oracle(provider).tipFeePercentiles().max() ?? 0
         case .manual(let value):
             return value
         }

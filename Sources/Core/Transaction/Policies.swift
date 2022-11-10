@@ -53,5 +53,5 @@ public struct Policies {
             self.maxPriorityFeePerGasPolicy = maxPriorityFeePerGasPolicy
         }
 
-    public private(set) static var auto = Policies()
+    public static let auto = Policies()
 }
