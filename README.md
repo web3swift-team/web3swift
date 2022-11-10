@@ -85,7 +85,6 @@ target '<Your Target Name>' do
     use_frameworks!
     pod 'web3swift'
 end
-
 ```
 
 Then, run the following command:
@@ -185,10 +184,10 @@ $ npm install ganache --global
 
 // To run
 $ ganache
-
 ```
 
 This will create a local blockchain and also some test accounts that are used throughout our tests.
+Make sure that `ganache` is running on its default port `8546`. To change the port in test cases locate `LocalTestCase.swift` and modify the static `url` variable.
 
 ## Contribute
 Want to improve? It's awesome:
