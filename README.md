@@ -2,7 +2,7 @@
 **web3swift** is an iOS toolbelt for interaction with the Ethereum network.
 
 ## Social medias
-[Join our discord](https://discord.gg/8bHCNmhS7x) or [Telegram](https://t.me/web3swift) if you need a support or want to contribute to web3swift development!
+[Join our discord](https://discord.gg/8bHCNmhS7x) or [Telegram](https://t.me/web3swift) if you need support or want to contribute to web3swift development!
 
 ![matter-github-swift](https://github.com/skywinder/web3swift/blob/develop/web3swift-logo.png)
 [![Web3swift CI](https://github.com/skywinder/web3swift/actions/workflows/ci.yml/badge.svg)](https://github.com/skywinder/web3swift/actions/workflows/ci.yml)
@@ -49,13 +49,13 @@
 - [x] :thought_balloon: Interaction with remote node via **JSON RPC** 
 - [x] 🔐 Local **keystore management** (`geth` compatible)
 - [x] 🤖 Smart-contract **ABI parsing** 
-- [x] 🔓**ABI deconding** (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
+- [x] 🔓**ABI decoding** (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
 - [x] 🕸Ethereum Name Service **(ENS) support** - a secure & decentralised way to address resources both on and off the blockchain using simple, human-readable names
 - [x] :arrows_counterclockwise: **Smart contracts interactions** (read/write) 
 - [x]  ⛩ **Infura support**
 - [x] ⚒  **Parsing TxPool** content into native values (ethereum addresses and transactions) - easy to get pending transactions
 - [x] 🖇 **Event loops** functionality
-- [x] 🕵️‍♂️ Possibility to **add or remove "middleware" that intercepts**, modifies and even **cancel transaction** workflow on stages "before assembly", "after assembly"and "before submission"
+- [x] 🕵️‍♂️ Possibility to **add or remove "middleware" that intercepts**, modifies and even **cancel transaction** workflow on stages "before assembly", "after assembly" and "before submission"
 - [x] ✅**Literally following the standards** (BIP, EIP, etc):
     - [x] **[BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) (HD Wallets), [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases), [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)**
 - [x] **[EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)** (Standart interface for tokens - ERC-20), **[EIP-67](https://github.com/ethereum/EIPs/issues/67)** (Standard URI scheme), **[EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md)** (Replay attacks protection), **[EIP-2718](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2718.md)** (Typed Transaction Envelope), **[EIP-1559](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md)** (Gas Fee market change)
@@ -114,7 +114,7 @@ import Core
 ### Send Ether
 ```swift
 let transaction: CodableTransaction = .emptyTransaction
-transaction.from = from ?? transaction.sender // `sender` one is if you have private key of your wallet address, so public key e.g. your wallet address could be infereted
+transaction.from = from ?? transaction.sender // `sender` one is if you have private key of your wallet address, so public key e.g. your wallet address could be interpreted
 transaction.value = value
 transaction.gasLimitPolicy = .manual(78423)
 transaction.gasPricePolicy = .manual(20000000000)
@@ -166,11 +166,11 @@ swift build
 Documentation is under construction👷🏻👷🏼‍♀️. We’re trying our best to comment all public API as detailed as we can, but the end it still far to come. But in one of the nearest minor updates we’ll bring DocC support of already done amount of docs. And your PR in such are more than welcome.
 
 ## Projects that are using web3swift
-Please take a look at [Our costumers](https://github.com/skywinder/web3swift/wiki/Our-Customers) wiki page.
+Please take a look at [Our customers](https://github.com/skywinder/web3swift/wiki/Our-Customers) wiki page.
 
 ## Support
 
-**[Join our discord](https://discord.gg/8bHCNmhS7x) and [Telegram](https://t.me/web3swift) if you need a support or want to contribute to web3swift development!**
+**[Join our discord](https://discord.gg/8bHCNmhS7x) and [Telegram](https://t.me/web3swift) if you need support or want to contribute to web3swift development!**
 
 - If you **need help**, please take a look at our [FAQ](https://github.com/skywinder/web3swift/wiki/FAQ "") or [open an issue](https://github.com/skywinder/web3swift/issues).
 - If you'd like to **see web3swift best practices**, check [Projects that using web3swift](https://github.com/skywinder/web3swift/wiki/Our-Customers).
@@ -216,8 +216,8 @@ We want to continue to do everything we can to move the needle forward.
 ## Credits
 
 - Alex Vlasov, [@shamatar](https://github.com/shamatar) - for the initial implementation
-- Petr Korolev, [@skywinder](https://github.com/skywinder) - botstrap and continous support
-- Anton Grigorev, [@baldyash](https://github.com/BaldyAsh) - core contributor, who use it and making a lot of ipmprovments
+- Petr Korolev, [@skywinder](https://github.com/skywinder) - bootstrap and continuous support
+- Anton Grigorev, [@baldyash](https://github.com/BaldyAsh) - core contributor, who use it and making a lot of improvements
 - Yaroslav Yashin [@yaroslavyaroslav](https://github.com/yaroslavyaroslav) - core contributor of 3.0.0 and later releases.
 - Thanks to [web3swift's growing list of contributors](https://github.com/skywinder/web3swift/graphs/contributors).
 
