@@ -17,8 +17,8 @@ public class EIP712 {
 }
 
 public struct EIP712Domain: EIP712Hashable {
-    public let chainId:            EIP712.UInt256?
-    public let verifyingContract:  EIP712.Address
+    public let chainId: EIP712.UInt256?
+    public let verifyingContract: EIP712.Address
     public init(chainId: EIP712.UInt256?, verifyingContract: EIP712.Address) {
         self.chainId = chainId
         self.verifyingContract = verifyingContract
@@ -143,25 +143,25 @@ fileprivate extension EIP712Hashable {
 /// [`GnosisSafe.sol`](https://github.com/safe-global/safe-contracts/blob/main/contracts/GnosisSafe.sol#L126).
 public struct GnosisSafeTx: EIP712Hashable {
     /// Checksummed address
-    let to:             EIP712.Address
+    let to: EIP712.Address
     /// Value in wei
-    let value:          EIP712.UInt256
+    let value: EIP712.UInt256
     /// 0x prefixed hex string
-    let data:           EIP712.Bytes
+    let data: EIP712.Bytes
     /// `0` CALL, `1` DELEGATE_CALL
-    let operation:      EIP712.UInt8
+    let operation: EIP712.UInt8
     /// Max gas to use in the transaction
-    let safeTxGas:      EIP712.UInt256
+    let safeTxGas: EIP712.UInt256
     /// Gast costs not related to the transaction execution (signature check, refund payment...)
-    let baseGas:        EIP712.UInt256
+    let baseGas: EIP712.UInt256
     /// Gas price used for the refund calculation
-    let gasPrice:       EIP712.UInt256
+    let gasPrice: EIP712.UInt256
     /// Token address, **must be checksummed**, (held by the Safe) to be used as a refund to the sender, if `null` is Ether
-    let gasToken:       EIP712.Address
+    let gasToken: EIP712.Address
     /// Checksummed address of receiver of gas payment (or `null` if tx.origin)
     let refundReceiver: EIP712.Address
     /// Nonce of the Safe, transaction cannot be executed until Safe's nonce is not equal to this nonce
-    let nonce:          EIP712.UInt256
+    let nonce: EIP712.UInt256
 
     public init(to: EIP712.Address,
                 value: EIP712.UInt256,

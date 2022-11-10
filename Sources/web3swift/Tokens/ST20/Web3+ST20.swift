@@ -29,9 +29,9 @@ protocol IST20: IERC20 {
 // FIXME: Rewrite this to CodableTransaction
 public class ST20: IST20, ERC20BaseProperties {
 
-    internal var _name: String? = nil
-    internal var _symbol: String? = nil
-    internal var _decimals: UInt8? = nil
+    internal var _name: String?
+    internal var _symbol: String?
+    internal var _decimals: UInt8?
 
     internal var _hasReadProperties: Bool = false
 
@@ -54,15 +54,6 @@ public class ST20: IST20, ERC20BaseProperties {
         self.transaction = transaction
         self.transaction.to = address
         self.abi = abi
-    }
-
-    // Must be 18!
-    public func decimals() async throws -> UInt8 {
-        try await self.readProperties()
-        if self._decimals != nil {
-            return self._decimals!
-        }
-        return 18
     }
 
     func tokenDetails() async throws -> [UInt32] {

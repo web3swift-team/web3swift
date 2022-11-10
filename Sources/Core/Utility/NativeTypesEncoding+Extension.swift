@@ -9,13 +9,13 @@ import BigInt
 extension Data {
     func setLengthLeft(_ toBytes: UInt64, isNegative: Bool = false) -> Data? {
         let existingLength = UInt64(self.count)
-        if (existingLength == toBytes) {
+        if existingLength == toBytes {
             return Data(self)
-        } else if (existingLength > toBytes) {
+        } else if existingLength > toBytes {
             return nil
         }
         var data: Data
-        if (isNegative) {
+        if isNegative {
             data = Data(repeating: UInt8(255), count: Int(toBytes - existingLength))
         } else {
             data = Data(repeating: UInt8(0), count: Int(toBytes - existingLength))
@@ -26,14 +26,14 @@ extension Data {
 
     func setLengthRight(_ toBytes: UInt64, isNegative: Bool = false) -> Data? {
         let existingLength = UInt64(self.count)
-        if (existingLength == toBytes) {
+        if existingLength == toBytes {
             return Data(self)
-        } else if (existingLength > toBytes) {
+        } else if existingLength > toBytes {
             return nil
         }
         var data: Data = Data()
         data.append(self)
-        if (isNegative) {
+        if isNegative {
             data.append(Data(repeating: UInt8(255), count: Int(toBytes - existingLength)))
         } else {
             data.append(Data(repeating: UInt8(0), count: Int(toBytes - existingLength)))
@@ -44,7 +44,7 @@ extension Data {
 
 extension BigInt {
     func toTwosComplement() -> Data {
-        if (self.sign == BigInt.Sign.plus) {
+        if self.sign == BigInt.Sign.plus {
             return self.magnitude.serialize()
         } else {
             let serializedLength = self.magnitude.serialize().count
@@ -77,7 +77,7 @@ extension BigInt {
 extension BigInt {
     static func fromTwosComplement(data: Data) -> BigInt {
         let isPositive = ((data[0] & 128) >> 7) == 0
-        if (isPositive) {
+        if isPositive {
             let magnitude = BigUInt(data)
             return BigInt(magnitude)
         } else {

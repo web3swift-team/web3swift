@@ -10,14 +10,13 @@ public struct ABIDecoder { }
 
 extension ABIDecoder {
     public static func decode(types: [ABI.Element.InOut], data: Data) -> [AnyObject]? {
-        let params = types.compactMap { (el) -> ABI.Element.ParameterType in
+        let params = types.compactMap { el -> ABI.Element.ParameterType in
             return el.type
         }
         return decode(types: params, data: data)
     }
 
     public static func decode(types: [ABI.Element.ParameterType], data: Data) -> [AnyObject]? {
-        //        print("Full data: \n" + data.toHexString())
         var toReturn = [AnyObject]()
         var consumed: UInt64 = 0
         for i in 0 ..< types.count {
@@ -37,34 +36,26 @@ extension ABIDecoder {
         }
         switch type {
         case .uint(let bits):
-            //            print("Uint256 element itself: \n" + elementItself.toHexString())
             guard elementItself.count >= 32 else {break}
             let mod = BigUInt(1) << bits
             let dataSlice = elementItself[0 ..< 32]
             let v = BigUInt(dataSlice) % mod
-            //            print("Uint256 element is: \n" + String(v))
             return (v as AnyObject, type.memoryUsage)
         case .int(let bits):
-            //            print("Int256 element itself: \n" + elementItself.toHexString())
             guard elementItself.count >= 32 else {break}
             let mod = BigInt(1) << bits
             let dataSlice = elementItself[0 ..< 32]
             let v = BigInt.fromTwosComplement(data: dataSlice) % mod
-            //            print("Int256 element is: \n" + String(v))
             return (v as AnyObject, type.memoryUsage)
         case .address:
-            //            print("Address element itself: \n" + elementItself.toHexString())
             guard elementItself.count >= 32 else {break}
             let dataSlice = elementItself[12 ..< 32]
             let address = EthereumAddress(dataSlice)
-            //            print("Address element is: \n" + String(address.address))
             return (address as AnyObject, type.memoryUsage)
         case .bool:
-            //            print("Bool element itself: \n" + elementItself.toHexString())
             guard elementItself.count >= 32 else {break}
             let dataSlice = elementItself[0 ..< 32]
             let v = BigUInt(dataSlice)
-            //            print("Address element is: \n" + String(v))
             if v == BigUInt(36) ||
                 v == BigUInt(32) ||
                 v == BigUInt(28) ||
@@ -77,34 +68,27 @@ extension ABIDecoder {
                 return (false as AnyObject, type.memoryUsage)
             }
         case .bytes(let length):
-            //            print("Bytes32 element itself: \n" + elementItself.toHexString())
             guard elementItself.count >= 32 else {break}
             let dataSlice = elementItself[0 ..< length]
-            //            print("Bytes32 element is: \n" + String(dataSlice.toHexString()))
             return (dataSlice as AnyObject, type.memoryUsage)
         case .string:
-            //            print("String element itself: \n" + elementItself.toHexString())
             guard elementItself.count >= 32 else {break}
             var dataSlice = elementItself[0 ..< 32]
             let length = UInt64(BigUInt(dataSlice))
             guard elementItself.count >= 32+length else {break}
             dataSlice = elementItself[32 ..< 32 + length]
             guard let string = String(data: dataSlice, encoding: .utf8) else {break}
-            //            print("String element is: \n" + String(string))
             return (string as AnyObject, type.memoryUsage)
         case .dynamicBytes:
-            //            print("Bytes element itself: \n" + elementItself.toHexString())
             guard elementItself.count >= 32 else {break}
             var dataSlice = elementItself[0 ..< 32]
             let length = UInt64(BigUInt(dataSlice))
             guard elementItself.count >= 32+length else {break}
             dataSlice = elementItself[32 ..< 32 + length]
-            //            print("Bytes element is: \n" + String(dataSlice.toHexString()))
-            return (dataSlice as AnyObject, type.memoryUsage)
+            return (dataSlice as AnyObject, nextElementPointer)
         case .array(type: let subType, length: let length):
             switch type.arraySize {
             case .dynamicSize:
-                //                print("Dynamic array element itself: \n" + elementItself.toHexString())
                 if subType.isStatic {
                     // uint[] like, expect length and elements
                     guard elementItself.count >= 32 else {break}
@@ -130,22 +114,19 @@ extension ABIDecoder {
                     dataSlice = Data(elementItself[32 ..< elementItself.count])
                     var subpointer: UInt64 = 0
                     var toReturn = [AnyObject]()
-                    //                    print("Dynamic array sub element itself: \n" + dataSlice.toHexString())
                     for _ in 0 ..< length {
                         let (v, c) = decodeSingleType(type: subType, data: dataSlice, pointer: subpointer)
                         guard let valueUnwrapped = v, let consumedUnwrapped = c else {break}
                         toReturn.append(valueUnwrapped)
-                        if (subType.isStatic) {
+                        if subType.isStatic {
                             subpointer = subpointer + consumedUnwrapped
-                        }
-                        else {
+                        } else {
                             subpointer = consumedUnwrapped // need to go by nextElementPointer
                         }
                     }
                     return (toReturn as AnyObject, nextElementPointer)
                 }
             case .staticSize(let staticLength):
-                //                print("Static array element itself: \n" + elementItself.toHexString())
                 guard length == staticLength else {break}
                 var toReturn = [AnyObject]()
                 var consumed: UInt64 = 0
@@ -164,16 +145,16 @@ extension ABIDecoder {
                 break
             }
         case .tuple(types: let subTypes):
-            //            print("Tuple element itself: \n" + elementItself.toHexString())
             var toReturn = [AnyObject]()
             var consumed: UInt64 = 0
             for i in 0 ..< subTypes.count {
                 let (v, c) = decodeSingleType(type: subTypes[i], data: elementItself, pointer: consumed)
                 guard let valueUnwrapped = v, let consumedUnwrapped = c else {return (nil, nil)}
                 toReturn.append(valueUnwrapped)
-                /*
-                 When decoding a tuple that is not static or an array with a subtype that is not static, the second value in the tuple returned by decodeSignleType is a pointer to the next element, NOT the length of the consumed element. So when decoding such an element, consumed should be set to consumedUnwrapped, NOT incremented by consumedUnwrapped.
-                 */
+                // When decoding a tuple that is not static or an array with a subtype that is not static,
+                // the second value in the tuple returned by decodeSignleType is a pointer to the next element,
+                // NOT the length of the consumed element. So when decoding such an element, consumed should
+                // be set to consumedUnwrapped, NOT incremented by consumedUnwrapped.
                 switch subTypes[i] {
                 case .array(type: let subType, length: _):
                     if !subType.isStatic {
@@ -191,31 +172,24 @@ extension ABIDecoder {
                     consumed = consumed + consumedUnwrapped
                 }
             }
-            //            print("Tuple element is: \n" + String(describing: toReturn))
             if type.isStatic {
                 return (toReturn as AnyObject, consumed)
             } else {
                 return (toReturn as AnyObject, nextElementPointer)
             }
         case .function:
-            //            print("Function element itself: \n" + elementItself.toHexString())
             guard elementItself.count >= 32 else {break}
             let dataSlice = elementItself[8 ..< 32]
-            //            print("Function element is: \n" + String(dataSlice.toHexString()))
             return (dataSlice as AnyObject, type.memoryUsage)
         }
         return (nil, nil)
     }
 
     fileprivate static func followTheData(type: ABI.Element.ParameterType, data: Data, pointer: UInt64 = 0) -> (elementEncoding: Data?, nextElementPointer: UInt64?) {
-        //        print("Follow the data: \n" + data.toHexString())
-        //        print("At pointer: \n" + String(pointer))
         if type.isStatic {
             guard data.count >= pointer + type.memoryUsage else {return (nil, nil)}
             let elementItself = data[pointer ..< pointer + type.memoryUsage]
             let nextElement = pointer + type.memoryUsage
-            //            print("Got element itself: \n" + elementItself.toHexString())
-            //            print("Next element pointer: \n" + String(nextElement))
             return (Data(elementItself), nextElement)
         } else {
             guard data.count >= pointer + type.memoryUsage else {return (nil, nil)}
@@ -237,8 +211,6 @@ extension ABIDecoder {
             let elementPointer = UInt64(bn)
             let elementItself = data[elementPointer ..< UInt64(data.count)]
             let nextElement = pointer + type.memoryUsage
-            //            print("Got element itself: \n" + elementItself.toHexString())
-            //            print("Next element pointer: \n" + String(nextElement))
             return (Data(elementItself), nextElement)
         }
     }
@@ -251,16 +223,16 @@ extension ABIDecoder {
         eventContent["name"]=event.name
         let logs = eventLogTopics
         let dataForProcessing = eventLogData
-        let indexedInputs = event.inputs.filter { (inp) -> Bool in
+        let indexedInputs = event.inputs.filter { inp -> Bool in
             return inp.indexed
         }
-        if (logs.count == 1 && indexedInputs.count > 0) {
+        if logs.count == 1 && indexedInputs.count > 0 {
             return nil
         }
-        let nonIndexedInputs = event.inputs.filter { (inp) -> Bool in
+        let nonIndexedInputs = event.inputs.filter { inp -> Bool in
             return !inp.indexed
         }
-        let nonIndexedTypes = nonIndexedInputs.compactMap { (inp) -> ABI.Element.ParameterType in
+        let nonIndexedTypes = nonIndexedInputs.compactMap { inp -> ABI.Element.ParameterType in
             return inp.type
         }
         guard logs.count == indexedInputs.count + 1 else {return nil}

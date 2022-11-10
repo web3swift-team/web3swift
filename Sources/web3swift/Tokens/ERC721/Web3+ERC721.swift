@@ -54,7 +54,7 @@ protocol IERC721Enumerable {
 // can be imperatively read and saved
 public class ERC721: IERC721 {
 
-    private var _tokenId: BigUInt? = nil
+    private var _tokenId: BigUInt?
     private var _hasReadProperties: Bool = false
 
     public var transaction: CodableTransaction
@@ -98,7 +98,6 @@ public class ERC721: IERC721 {
         guard let tokenIdResult = try await tokenIdPromise else {return}
         guard let tokenId = tokenIdResult["0"] as? BigUInt else {return}
         self._tokenId = tokenId
-
 
         self._hasReadProperties = true
 
@@ -193,7 +192,6 @@ public class ERC721: IERC721 {
     public func supportsInterface(interfaceID: String) async throws -> Bool {
         let contract = self.contract
         transaction.callOnBlock = .latest
-        transaction.gasLimitPolicy = .manual(30000)
         let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -257,4 +255,3 @@ extension ERC721: IERC721Metadata {
     }
 
 }
-

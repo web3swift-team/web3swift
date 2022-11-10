@@ -54,7 +54,7 @@ class EIP1559BlockTests: LocalTestCase {
             (40_000_000, 12_965_000, 40_039_061, true),  // Upper limit
             (40_000_000, 12_965_000, 40_039_062, false), // Upper limit +1
             (40_000_000, 12_965_000, 39_960_939, true),  // lower limit
-            (40_000_000, 12_965_000, 39_960_938, false), // Lower limit -1
+            (40_000_000, 12_965_000, 39_960_938, false) // Lower limit -1
         ]
 
         headerArray.forEach { (touple: (parentGasLimit: BigUInt, parentNumber: BigUInt, currentGasLimit: BigUInt, is1559: Bool)) in
@@ -121,7 +121,7 @@ class EIP1559BlockTests: LocalTestCase {
             (Web3.InitialBaseFee, 12_964_999, 20000000, 10000000, Web3.InitialBaseFee),     // parent is not London
             (Web3.InitialBaseFee, 12_965_000, 20000000, 10000000, Web3.InitialBaseFee),     // current == target
             (Web3.InitialBaseFee, 12_965_000, 20000000, 9000000, 987500000),                // current below target
-            (Web3.InitialBaseFee, 12_965_000, 20000000, 11000000, 1012500000),              // current above target
+            (Web3.InitialBaseFee, 12_965_000, 20000000, 11000000, 1012500000)              // current above target
         ]
 
         headerArray.forEach { (touple: (parentBaseFee: BigUInt, parentNumber: BigUInt, parentGasLimit: BigUInt, parentGasUsed: BigUInt, expectedBaseFee: BigUInt)) in

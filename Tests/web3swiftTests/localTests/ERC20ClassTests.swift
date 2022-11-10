@@ -11,25 +11,32 @@ import Core
 
 class ERC20ClassTests: LocalTestCase {
 
-//    func testERC20TokenCreation() async throws {
-//        let (web3, _, receipt, _) = try await TestHelpers.localDeployERC20()
-//        let erc20token = ERC20.init(web3: web3, provider: web3.provider, address: receipt.contractAddress!)
-//        // MARK: No data used in call
-//        try await erc20token.readProperties()
-//
-//        // MARK: - Duplicated call readProperties
-//        // MARK: No data used in call
-//        let symbol = try await erc20token.symbol()
-//        // MARK: - Duplicated call readProperties
-//        // MARK: No data used in call
-//        let name = try await erc20token.name()
-//        // MARK: - Duplicated call readProperties
-//        // MARK: No data used in call
-//        let decimals = try await erc20token.decimals()
-//        XCTAssertEqual(symbol, "w3s")
-//        XCTAssertEqual(name, "web3swift")
-//        XCTAssertEqual(decimals, 18)
-//    }
+    func testERC20TokenCreation() async throws {
+        let (web3, _, receipt, _) = try await TestHelpers.localDeployERC20()
+        func testRun() async throws {
+            let erc20token = ERC20(web3: web3, provider: web3.provider, address: receipt.contractAddress!)
+            // All async reads happen in readProperties
+            try await erc20token.readProperties()
+            XCTAssertEqual(erc20token.symbol(), "w3s")
+            XCTAssertEqual(erc20token.name(), "web3swift")
+            XCTAssertEqual(erc20token.decimals(), 18)
+        }
+        /// We had an issue with multiple async reads performed at the same point in time
+        /// sometimes returning wrong values (actually values of each other).
+        /// The issue is most likely related to async/await feautre of Swift.
+        /// Due to that was decided to add a loop to execute the same async calls that checks the same ERC20 properties
+        /// multiple times. All calls must succeed.
+        /// Each run executes 3 async read operations.
+        /// DO NOT REMOVE THE LOOP!
+        for _ in 0...100 {
+            do {
+                try await testRun()
+            } catch {
+                XCTFail("Failed to validate ERC20 fields due to an error: \(error.localizedDescription)")
+                break
+            }
+        }
+    }
 
     func testERC20tokenBalanceAndAllowance() async throws {
         let (web3, _, receipt, _) = try await TestHelpers.localDeployERC20()

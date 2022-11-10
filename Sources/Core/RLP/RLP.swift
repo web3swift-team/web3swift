@@ -24,8 +24,7 @@ public struct RLP {
 
         } else if let data = element as? Data {
             return encode(data)
-        }
-        else if let biguint = element as? BigUInt {
+        } else if let biguint = element as? BigUInt {
             return encode(biguint)
         }
         return nil
@@ -56,7 +55,7 @@ public struct RLP {
     }
 
     internal static func encode(_ data: Data) -> Data? {
-        if (data.count == 1 && data.bytes[0] < UInt8(0x80)) {
+        if data.count == 1 && data.bytes[0] < UInt8(0x80) {
             return data
         } else {
             guard let length = encodeLength(data.count, offset: UInt8(0x80)) else {return nil}
@@ -68,7 +67,7 @@ public struct RLP {
     }
 
     internal static func encodeLength(_ length: Int, offset: UInt8) -> Data? {
-        if (length < 0) {
+        if length < 0 {
             return nil
         }
         let bigintLength = BigUInt(UInt(length))
@@ -76,11 +75,11 @@ public struct RLP {
     }
 
     internal static func encodeLength(_ length: BigUInt, offset: UInt8) -> Data? {
-        if (length < length56) {
+        if length < length56 {
             let encodedLength = length + BigUInt(UInt(offset))
-            guard (encodedLength.bitWidth <= 8) else {return nil}
+            guard encodedLength.bitWidth <= 8 else {return nil}
             return encodedLength.serialize()
-        } else if (length < lengthMax) {
+        } else if length < lengthMax {
             let encodedLength = length.serialize()
             let len = BigUInt(UInt(encodedLength.count))
             guard let prefix = lengthToBinary(len) else {return nil}
@@ -93,7 +92,7 @@ public struct RLP {
     }
 
     internal static func lengthToBinary(_ length: BigUInt) -> UInt8? {
-        if (length == 0) {
+        if length == 0 {
             return UInt8(0)
         }
         let divisor = BigUInt(256)
@@ -102,7 +101,7 @@ public struct RLP {
         let suffix = length % divisor
 
         var prefixData = Data([prefix])
-        if (prefix == UInt8(0)) {
+        if prefix == UInt8(0) {
             prefixData = Data()
         }
         let suffixData = suffix.serialize()
@@ -114,19 +113,19 @@ public struct RLP {
     }
 
     // FIXME: Make encode generic to avoid casting it's argument to [AnyObject]
-    internal static func encode(_ elements: Array<AnyObject>) -> Data? {
+    internal static func encode(_ elements: [AnyObject]) -> Data? {
         var encodedData = Data()
         for e in elements {
             if let encoded = encode(e) {
                 encodedData.append(encoded)
             } else {
-                guard let asArray = e as? Array<AnyObject> else {return nil}
+                guard let asArray = e as? [AnyObject] else {return nil}
                 guard let encoded = encode(asArray) else {return nil}
                 encodedData.append(encoded)
             }
         }
         guard var encodedLength = encodeLength(encodedData.count, offset: UInt8(0xc0)) else {return nil}
-        if (encodedLength != Data()) {
+        if encodedLength != Data() {
             encodedLength.append(encodedData)
         }
         return encodedLength
@@ -158,7 +157,7 @@ public struct RLP {
                 guard let slice = try? slice(data: bytesToParse, offset: offset, length: dataLength) else {return nil}
                 guard let inside = decode(Data(slice)) else {return nil}
                 switch inside.content {
-                case .data(_):
+                case .data:
                     return nil
                 default:
                     outputArray.append(inside)
@@ -190,9 +189,9 @@ public struct RLP {
             switch self.content {
             case .noItem:
                 return false
-            case .data(_):
+            case .data:
                 return true
-            case .list(_, _, _):
+            case .list:
                 return false
             }
         }
@@ -201,9 +200,9 @@ public struct RLP {
             switch self.content {
             case .noItem:
                 return false
-            case .data(_):
+            case .data:
                 return false
-            case .list(_, _, _):
+            case .list:
                 return true
             }
         }
@@ -211,7 +210,7 @@ public struct RLP {
             switch self.content {
             case .noItem:
                 return nil
-            case .data(_):
+            case .data:
                 return nil
             case .list(let list, _, _):
                 return list.count
@@ -247,7 +246,7 @@ public struct RLP {
     internal static func decodeLength(_ input: Data) -> (offset: BigUInt?, length: BigUInt?, type: RLPItem.UnderlyingType?) {
         do {
             let length = BigUInt(input.count)
-            if (length == BigUInt(0)) {
+            if length == BigUInt(0) {
                 return (0, 0, .empty)
             }
             let prefixByte = input[0]
@@ -301,7 +300,7 @@ public struct RLP {
 
 fileprivate extension Data {
 
-    var bytes: Array<UInt8> {
+    var bytes: [UInt8] {
         return Array(self)
     }
 }
