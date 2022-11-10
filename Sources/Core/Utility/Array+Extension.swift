@@ -92,7 +92,6 @@ extension Array where Element: BinaryInteger {
         return BigUInt(self.reduce(0, +)) / BigUInt(self.count)
     }
 
-
     /// Calculates percentile of dataset on which get called.
     /// - Parameter value: Percentile value.
     /// - Returns: Item from dataset that is belongs to given percentile, nil if dataset is empty.

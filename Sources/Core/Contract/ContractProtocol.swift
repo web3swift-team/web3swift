@@ -69,7 +69,7 @@ import BigInt
 public protocol ContractProtocol {
     /// Address of the referenced smart contract. Can be set later, e.g. if the contract is deploying and address is not yet known.
     var address: EthereumAddress? {get set}
-    
+
     /// All ABI elements like: events, functions, constructors and errors.
     var abi: [ABI.Element] {get}
 
@@ -81,13 +81,13 @@ public protocol ContractProtocol {
     /// - and 4 bytes signature `0xffffffff` (expected to be lowercased).
     /// The mapping by name (e.g. `getData`) is the one most likely expected to return arrays with
     /// more than one entry due to the fact that solidity allows method overloading.
-    var methods: [String:[ABI.Element.Function]] {get}
+    var methods: [String: [ABI.Element.Function]] {get}
 
     /// All values from ``methods``.
     var allMethods: [ABI.Element.Function] {get}
 
     /// Events filtered from ``abi`` and mapped to their unchanged ``ABI/Element/Event/name``.
-    var events: [String:ABI.Element.Event] {get}
+    var events: [String: ABI.Element.Event] {get}
 
     /// All values from ``events``.
     var allEvents: [ABI.Element.Event] {get}
@@ -225,7 +225,6 @@ extension DefaultContractProtocol {
            let parameters = parameters,
            !parameters.isEmpty {
             guard constructor.inputs.count == parameters.count,
-                  // FIXME: This should be zipped, because Arrays don't guarantee it's elements order
                   let encodedData = constructor.encodeParameters(parameters) else {
                 NSLog("Constructor encoding will fail as the number of input arguments doesn't match the number of given arguments.")
                 return nil
@@ -278,11 +277,10 @@ extension DefaultContractProtocol {
 
     public func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?) {
         for (eName, ev) in self.events {
-            if (!ev.anonymous) {
+            if !ev.anonymous {
                 if eventLog.topics[0] != ev.topic {
                     continue
-                }
-                else {
+                } else {
                     let logTopics = eventLog.topics
                     let logData = eventLog.data
                     let parsed = ev.decodeReturnedLogs(eventLogTopics: logTopics, eventLogData: logData)

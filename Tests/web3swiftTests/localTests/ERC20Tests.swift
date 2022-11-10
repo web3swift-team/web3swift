@@ -8,15 +8,13 @@ import Core
 
 @testable import web3swift
 
-//TODO: refactor me
+// TODO: refactor me
 class ERC20Tests: LocalTestCase {
 
     func testERC20name() async throws {
         let (web3, _, receipt, _) = try await TestHelpers.localDeployERC20()
-
-        let parameters = [] as [AnyObject]
         let contract = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress!)!
-        let readTX = contract.createReadOperation("name", parameters:parameters)!
+        let readTX = contract.createReadOperation("name")!
         readTX.transaction.from = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")
         let response = try await readTX.callContractMethod()
         let name = response["0"] as? String

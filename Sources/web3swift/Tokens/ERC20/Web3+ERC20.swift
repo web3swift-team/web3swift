@@ -7,7 +7,6 @@ import Foundation
 import BigInt
 import Core
 
-
 // Token Standard
 protocol IERC20 {
     func getBalance(account: EthereumAddress) async throws -> BigUInt
@@ -181,60 +180,39 @@ protocol ERC20BaseProperties: AnyObject {
     var _decimals: UInt8? { get set }
     var _hasReadProperties: Bool { get set }
     func readProperties() async throws
-    func name() async throws -> String
-    func symbol() async throws -> String
-    func decimals() async throws -> UInt8
+    func name() -> String?
+    func symbol() -> String?
+    func decimals() -> UInt8?
 }
+
 extension ERC20BaseProperties {
-    public func name() async throws -> String {
-        try await self.readProperties()
-        return self._name ?? ""
+    public func name() -> String? {
+        _name
     }
 
-    public func symbol() async throws -> String {
-        try await self.readProperties()
-        return self._symbol ?? ""
+    public func symbol() -> String? {
+        _symbol
     }
 
-    public func decimals() async throws -> UInt8 {
-        try await self.readProperties()
-        return self._decimals ?? 255
+    public func decimals() -> UInt8? {
+        _decimals
     }
 
-    func readProperties() async throws {
-        if self._hasReadProperties {
-            return
-        }
-        let contract = self.contract
+    public func readProperties() async throws {
+        guard !_hasReadProperties else { return }
         guard contract.contract.address != nil else {return}
-        async let namePromise = contract
-            .createReadOperation("name", parameters: [AnyObject](), extraData: Data() )?
-            .callContractMethod()
+        _name = try await contract
+            .createReadOperation("name")?
+            .callContractMethod()["0"] as? String
 
-        async let symbolPromise = try await contract
-            .createReadOperation("symbol", parameters: [AnyObject](), extraData: Data() )?
-            .callContractMethod()
+        _symbol = try await contract
+            .createReadOperation("symbol")?
+            .callContractMethod()["0"] as? String
 
-        async let decimalPromise = try await contract
-            .createReadOperation("decimals", parameters: [AnyObject](), extraData: Data() )?
-            .callContractMethod()
-
-        let resolvedPromises = try await ["name":namePromise, "symbol":symbolPromise, "decimals":decimalPromise]
-
-        if let nameResult = resolvedPromises["name"], let name = nameResult?["0"] as? String {
-            print(name)
-            _name = name
-        }
-
-        if let symbolResult = resolvedPromises["symbol"], let symbol = symbolResult?["0"] as? String {
-            print(symbol)
-            _symbol = symbol
-        }
-
-        if let decimalsResult = resolvedPromises["decimals"], let decimals = decimalsResult?["0"] as? BigUInt {
-            _decimals = UInt8(decimals)
-        }
-
-        self._hasReadProperties = true
+        let decimals = try await contract
+            .createReadOperation("decimals")?
+            .callContractMethod()["0"] as? BigUInt
+        _decimals = decimals != nil ? UInt8(decimals!) : nil
+        _hasReadProperties = true
     }
 }

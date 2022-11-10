@@ -205,7 +205,6 @@ class KeystoresTests: LocalTestCase {
 //        XCTAssert(Data(dataArray!).toHexString().addHexPrefix().lowercased() == "0x594256B0BD4D6C9F21A87F7BA5772A791A10E6110694F44365CD94670E57F1AECD797EF1D1001938719044C7F018026697845EB9AD97D97DE36AB8786AAB5096E7".lowercased())
 //    }
 
-
     func testRIPEMD() throws {
         let data = "message digest".data(using: .ascii)
         let hash = try! RIPEMD160.hash(message: data!)
@@ -272,13 +271,13 @@ class KeystoresTests: LocalTestCase {
         measure {
             let ks = try! EthereumKeystoreV3(privateKey: privateKey, password: "TEST")!
             let account = ks.addresses!.first!
-            let _ = try! ks.UNSAFE_getPrivateKeyData(password: "TEST", account: account)
+            _ = try! ks.UNSAFE_getPrivateKeyData(password: "TEST", account: account)
         }
     }
 
     func testSingleScryptDerivation() throws {
         let privateKey = Data.randomBytes(length: 32)!
-        let _ = try! EthereumKeystoreV3(privateKey: privateKey, password: "TEST")!
+        _ = try! EthereumKeystoreV3(privateKey: privateKey, password: "TEST")!
     }
 
 }
