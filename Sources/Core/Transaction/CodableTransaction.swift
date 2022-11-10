@@ -95,7 +95,15 @@ public struct CodableTransaction {
     public var callOnBlock: BlockNumber?
 
     /// access list for contract execution (EIP-2930 and EIP-1559 only)
-    public var accessList: [AccessListEntry]?
+    public var accessList: [AccessListEntry]? {
+        get {
+            (envelope as? EIP2930Compatible)?.accessList
+        }
+        set {
+            var eip2930Compatible = (envelope as? EIP2930Compatible)
+            eip2930Compatible?.accessList = newValue ?? []
+        }
+    }
 
     // MARK: - Properties to contract encode/sign data only
 
@@ -287,8 +295,6 @@ extension CodableTransaction {
                 chainID: BigUInt = 0, value: BigUInt = 0, data: Data = Data(),
                 gasLimit: BigUInt = 0, maxFeePerGas: BigUInt? = nil, maxPriorityFeePerGas: BigUInt? = nil, gasPrice: BigUInt? = nil,
                 accessList: [AccessListEntry]? = nil, v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
-        // TODO: accessList must be returned from envelope and not stored as a separate variable in CodableTransaction
-        self.accessList = accessList
         callOnBlock = .latest
 
         envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, chainID: chainID, value: value, data: data, gasLimit: gasLimit, maxFeePerGas: maxFeePerGas, maxPriorityFeePerGas: maxPriorityFeePerGas, gasPrice: gasPrice, accessList: accessList, v: v, r: r, s: s)
