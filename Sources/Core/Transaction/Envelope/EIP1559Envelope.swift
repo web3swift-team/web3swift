@@ -7,7 +7,7 @@
 import Foundation
 import BigInt
 
-public struct EIP1559Envelope: EIP2718Envelope {
+public struct EIP1559Envelope: EIP2718Envelope, EIP2930Compatible {
     public let type: TransactionType = .eip1559
 
     // common parameters for any transaction

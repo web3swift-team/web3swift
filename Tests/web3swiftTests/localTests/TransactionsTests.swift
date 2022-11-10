@@ -637,10 +637,10 @@ class TransactionsTests: XCTestCase {
             let writeTX = contract!.createWriteOperation("fallback")!
             writeTX.transaction.from = from
             writeTX.transaction.value = value!
-            writeTX.transaction.gasLimitPolicy = .manual(78423)
-            let result = try await writeTX.writeToChain(password: "")
+            let policies = Policies(gasLimitPolicy: .manual(78423))
+            let result = try await writeTX.writeToChain(password: "", policies: policies)
             let txHash = Data.fromHex(result.hash.stripHexPrefix())!
-            print("Transaction with hash " + result.hash)
+            print("Transaction with hash ", txHash)
 
             Thread.sleep(forTimeInterval: 1.0)
 

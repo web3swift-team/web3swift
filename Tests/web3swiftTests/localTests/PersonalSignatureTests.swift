@@ -41,8 +41,8 @@ class PersonalSignatureTests: XCTestCase {
         let deployTx = contract.prepareDeploy(bytecode: bytecode)!
         let allAddresses = try await web3.eth.ownedAccounts()
         deployTx.transaction.from = allAddresses[0]
-        deployTx.transaction.gasLimitPolicy = .manual(3000000)
-        let deployResult = try await deployTx.writeToChain(password: "web3swift")
+        let policies = Policies(gasLimitPolicy: .manual(3000000))
+        let deployResult = try await deployTx.writeToChain(password: "web3swift", policies: policies)
         let txHash = Data.fromHex(deployResult.hash.stripHexPrefix())!
 
         Thread.sleep(forTimeInterval: 1.0)
