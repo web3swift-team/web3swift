@@ -176,6 +176,20 @@ Please take a look at [Our costumers](https://github.com/skywinder/web3swift/wik
 - If you'd like to **see web3swift best practices**, check [Projects that using web3swift](https://github.com/skywinder/web3swift/wiki/Our-Customers).
 - If you **found a bug**, [open an issue](https://github.com/skywinder/web3swift/issues).
 
+## Development
+To do local development and run the local tests, we recommend to use [ganache](https://github.com/trufflesuite/ganache) which is also used by CI when running github actions.
+
+```cli
+// To install
+$ npm install ganache --global
+
+// To run
+$ ganache
+
+```
+
+This will create a local blockchain and also some test accounts that are used throughout our tests.
+
 ## Contribute
 Want to improve? It's awesome:
 Then good news for you: **We are ready to pay for your contribution via [@gitcoin bot](https://gitcoin.co/grants/358/web3swift)!**
