@@ -136,8 +136,7 @@ final public class Oracle {
             let block: BigUInt = try await combineRequest(request: .blockNumber)
             latestBlockNumber = block
         case let .exact(number): latestBlockNumber = number
-            // Error throws since pending and erliest are unable to be used in this method.
-        default: throw Web3Error.valueError
+        default: throw Web3Error.valueError(desc: "Unable to use '\(block)' policy to resolve block number to calculate gas fee suggestion.")
         }
 
         /// checking if latest block number is greather than number of blocks to take in account
