@@ -10,7 +10,7 @@ import Foundation
 
 class Web3ErrorTests: XCTestCase {
 
-    func test_web3ErrorReturnsExpectedDescription() {
+    func testWeb3ErrorReturnsExpectedDescription() {
         let emojis = ["🚀", "👋", "🥇", "☑️"]
         let message = "This is a custom description for test case! web3swift \(emojis.randomElement()!)"
 
