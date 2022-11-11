@@ -19,30 +19,13 @@ public extension ENS {
             case URI = 8
         }
 
-        public enum InterfaceName {
-            case addr
-            case name
-            case content
-            case ABI
-            case pubkey
-            case text
-
-            func hash() -> String {
-                switch self {
-                case .addr:
-                    return "0x3b3b57de"
-                case .name:
-                    return "0x691f3431"
-                case .content:
-                    return "0xbc1c58d1"
-                case .ABI:
-                    return "0x2203ab56"
-                case .pubkey:
-                    return "0xc8690233"
-                case .text:
-                    return "0x59d1d43c"
-                }
-            }
+        public enum InterfaceName: String {
+            case addr = "0x3b3b57de"
+            case name = "0x691f3431"
+            case content = "0xbc1c58d1"
+            case ABI = "0x2203ab56"
+            case pubkey = "0xc8690233"
+            case text = "0x59d1d43c"
         }
 
         lazy var resolverContract: Web3.Contract = {

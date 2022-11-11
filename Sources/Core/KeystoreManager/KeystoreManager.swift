@@ -42,9 +42,11 @@ public class KeystoreManager: AbstractKeystore {
     }
 
     public func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data {
-        guard let keystore = self.walletForAddress(account) else {throw AbstractKeystoreError.invalidAccountError}
-                    return try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
-                }
+        guard let keystore = walletForAddress(account) else {
+            throw AbstractKeystoreError.invalidAccountError
+        }
+        return try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
+    }
 
     public static var allManagers = [KeystoreManager]()
     public static var defaultManager: KeystoreManager? {
