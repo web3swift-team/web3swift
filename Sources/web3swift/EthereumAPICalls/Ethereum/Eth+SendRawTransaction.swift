@@ -9,7 +9,8 @@ import Core
 
 extension Web3.Eth {
     public func send(raw data: Data) async throws -> TransactionSendingResult {
-        guard let hexString = String(data: data, encoding: .utf8)?.addHexPrefix() else { throw Web3Error.dataError }
+        let hexString = data.toHexString().addHexPrefix()
+
         let request: APIRequest = .sendRawTransaction(hexString)
         let response: APIResponse<Hash> = try await APIRequest.sendRequest(with: self.provider, for: request)
         return try TransactionSendingResult(data: data, hash: response.result)
