@@ -8,7 +8,7 @@ let excludeFiles = [
     "./Browser/BrowserViewController.swift" // Because of inheriting iOS only class failed to build on macOS.
 ]
 #else
-let excludeFiles: String = []
+let excludeFiles: [String] = []
 #endif
 
 let package = Package(
