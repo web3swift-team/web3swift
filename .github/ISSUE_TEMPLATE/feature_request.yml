@@ -26,4 +26,5 @@ body:
     id: context
     attributes:
       label: Any additional context?
-      description: Here's the pictures of house that i'd wanted to be able to bough after i've got rich and the my future cars list as well.
+      description: If there's some specs either standard for such feature invented already here's the good place to provide those.
+      placeholder: Here's the pictures of house that i'd wanted to be able to bough after i've got rich and the my future cars list as well.
