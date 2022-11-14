@@ -117,8 +117,7 @@ public struct Utilities {
     ///
     /// Returns nil of formatting is not possible to satisfy.
     static func formatToEthereumUnits(_ bigNumber: BigInt, toUnits: Utilities.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".") -> String? {
-        let magnitude = BigInt(bigNumber.magnitude)
-        guard let formatted = formatToEthereumUnits(magnitude, toUnits: toUnits, decimals: decimals, decimalSeparator: decimalSeparator) else {return nil}
+        guard let formatted = formatToPrecision(bigNumber, numberDecimals: toUnits.decimals, formattingDecimals: decimals, decimalSeparator: decimalSeparator, fallbackToScientific: false) else { return nil }
         switch bigNumber.sign {
         case .plus:
             return formatted
