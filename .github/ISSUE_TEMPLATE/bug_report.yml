@@ -49,3 +49,19 @@ body:
       placeholder: Sources/Core/Transaction/CodableTransaction.swift:129 func recoverPublicKey()
     validations:
       required: true
+  - type: textarea
+    id: os-version
+    attributes:
+      label: OS version
+      description: Please specify what platform and os version you are using?
+      placeholder: macOS 13.0.1 (22A400)
+    validations:
+      required: true
+  - type: textarea
+    id: lib-version
+    attributes:
+      label: Library version
+      description: Please specify what library version you are using?
+      placeholder: 3.0.6 or "ef06fbfc735ab687ebf89c937a9d1ffe6d81d37f" commit.
+    validations:
+      required: true
