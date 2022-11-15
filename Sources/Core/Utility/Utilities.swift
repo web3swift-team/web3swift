@@ -114,20 +114,6 @@ public struct Utilities {
 
     /// Formats a BigInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
     /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
-    ///
-    /// Returns nil of formatting is not possible to satisfy.
-    static func formatToEthereumUnits(_ bigNumber: BigInt, toUnits: Utilities.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".") -> String? {
-        guard let formatted = formatToPrecision(bigNumber, numberDecimals: toUnits.decimals, formattingDecimals: decimals, decimalSeparator: decimalSeparator, fallbackToScientific: false) else { return nil }
-        switch bigNumber.sign {
-        case .plus:
-            return formatted
-        case .minus:
-            return "-" + formatted
-        }
-    }
-
-    /// Formats a BigInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
-    /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
     /// Fallbacks to scientific format if higher precision is required.
     ///
     /// Returns nil of formatting is not possible to satisfy.
@@ -141,14 +127,6 @@ public struct Utilities {
             return "-" + formatted
         }
     }
-
-//    /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
-//    /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
-//    ///
-//    /// Returns nil of formatting is not possible to satisfy.
-//    static func formatToEthereumUnits(_ bigNumber: BigUInt, toUnits: Utilities.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
-//        return formatToPrecision(bigNumber, numberDecimals: toUnits.decimals, formattingDecimals: decimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific)
-//    }
 
     /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "numberDecimals",
     /// then limits the decimal part to "formattingDecimals" symbols and uses a "decimalSeparator" as a separator.
