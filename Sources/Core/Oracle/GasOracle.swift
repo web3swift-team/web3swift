@@ -52,7 +52,6 @@ final public class Oracle {
         self.cacheTimeout = cacheTimeout
     }
 
-
     /// Returning one dimensional array from two dimensional array
     ///
     /// We've got `[[min],[middle],[max]]` 2 dimensional array
@@ -105,7 +104,7 @@ final public class Oracle {
         /// reaarange `[[min, middle, max]]` to `[[min], [middle], [max]]`
         try await suggestGasValues().reward
             .forEach { percentiles in
-                percentiles.enumerated().forEach { (index, percentile) in
+                percentiles.enumerated().forEach { index, percentile in
                     /// if `rearrengedArray` have not that enough items
                     /// as `percentiles` current item index
                     if rearrengedArray.endIndex <= index {
@@ -137,8 +136,7 @@ final public class Oracle {
             let block: BigUInt = try await combineRequest(request: .blockNumber)
             latestBlockNumber = block
         case let .exact(number): latestBlockNumber = number
-            // Error throws since pending and erliest are unable to be used in this method.
-        default: throw Web3Error.valueError
+        default: throw Web3Error.valueError(desc: "Unable to use '\(block)' policy to resolve block number to calculate gas fee suggestion.")
         }
 
         /// checking if latest block number is greather than number of blocks to take in account
@@ -176,7 +174,6 @@ final public class Oracle {
         return calculatePercentiles(for: lastNthBlockGasPrice)
     }
 }
-
 
 public extension Oracle {
     // MARK: - Base Fee

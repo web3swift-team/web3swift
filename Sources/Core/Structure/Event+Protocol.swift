@@ -21,9 +21,9 @@ public struct EventParserResult: EventParserResultProtocol {
     public var transactionReceipt: TransactionReceipt?
     public var contractAddress: EthereumAddress
     public var decodedResult: [String: Any]
-    public var eventLog: EventLog? = nil
-    
-    public init(eventName: String, transactionReceipt: TransactionReceipt? = nil, contractAddress: EthereumAddress, decodedResult: [String : Any], eventLog: EventLog? = nil) {
+    public var eventLog: EventLog?
+
+    public init(eventName: String, transactionReceipt: TransactionReceipt? = nil, contractAddress: EthereumAddress, decodedResult: [String: Any], eventLog: EventLog? = nil) {
         self.eventName = eventName
         self.transactionReceipt = transactionReceipt
         self.contractAddress = contractAddress
@@ -31,7 +31,6 @@ public struct EventParserResult: EventParserResultProtocol {
         self.eventLog = eventLog
     }
 }
-
 
 /// Protocol for generic Ethereum event parser
 public protocol EventParserProtocol {

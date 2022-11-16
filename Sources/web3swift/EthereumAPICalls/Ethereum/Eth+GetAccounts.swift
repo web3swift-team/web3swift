@@ -9,8 +9,8 @@ import Core
 
 extension Web3.Eth {
     public func ownedAccounts() async throws -> [EthereumAddress] {
-        guard self.web3.provider.attachedKeystoreManager == nil else {
-            return try self.web3.wallet.getAccounts()
+        guard web3.provider.attachedKeystoreManager == nil else {
+            return try web3.wallet.getAccounts()
         }
         return try await APIRequest.sendRequest(with: web3.provider, for: .getAccounts).result
     }

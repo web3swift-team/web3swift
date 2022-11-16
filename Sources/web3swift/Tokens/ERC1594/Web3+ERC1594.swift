@@ -33,9 +33,9 @@ protocol IERC1594: IERC20 {
 // FIXME: Rewrite this to CodableTransaction
 public class ERC1594: IERC1594, ERC20BaseProperties {
 
-    internal var _name: String? = nil
-    internal var _symbol: String? = nil
-    internal var _decimals: UInt8? = nil
+    internal var _name: String?
+    internal var _symbol: String?
+    internal var _decimals: UInt8?
     internal var _hasReadProperties: Bool = false
 
     public var transaction: CodableTransaction

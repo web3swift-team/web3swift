@@ -19,7 +19,7 @@ class EIP681Tests: XCTestCase {
         switch eip681Code.targetAddress {
         case .ethereumAddress(let address):
             XCTAssertEqual(address.address.lowercased(), testAddress)
-        case .ensAddress(_):
+        case .ensAddress:
             fatalError("Returned target address cannot be ENS address. It must be EthereumAddress.")
         }
 
@@ -34,7 +34,7 @@ class EIP681Tests: XCTestCase {
         switch eip681Code.targetAddress {
         case .ethereumAddress(let address):
             XCTAssertEqual(address.address.lowercased(), testAddress)
-        case .ensAddress(_):
+        case .ensAddress:
             fatalError("Returned target address cannot be ENS address. It must be EthereumAddress.")
         }
         XCTAssertEqual(eip681Code.amount, BigUInt(2014000000000000000))
@@ -48,7 +48,7 @@ class EIP681Tests: XCTestCase {
         switch eip681Code.targetAddress {
         case .ethereumAddress(let address):
             XCTAssertEqual(address.address, testAddress)
-        case .ensAddress(_):
+        case .ensAddress:
             fatalError("Returned target address cannot be ENS address. It must be EthereumAddress.")
         }
 
@@ -69,7 +69,7 @@ class EIP681Tests: XCTestCase {
         switch eip681Code.targetAddress {
         case .ethereumAddress(let address):
             XCTAssertEqual(address.address, testAddress)
-        case .ensAddress(_):
+        case .ensAddress:
             fatalError("Returned target address cannot be ENS address. It must be EthereumAddress.")
         }
 
@@ -87,7 +87,7 @@ class EIP681Tests: XCTestCase {
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
-        case .ethereumAddress(_):
+        case .ethereumAddress:
             fatalError("Returned target address cannot be EthereumAddress. It must be ENS address.")
         case .ensAddress(let address):
             XCTAssertEqual(address, testAddress)
@@ -109,7 +109,7 @@ class EIP681Tests: XCTestCase {
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
-        case .ethereumAddress(_):
+        case .ethereumAddress:
             fatalError("Returned target address cannot be EthereumAddress. It must be ENS address.")
         case .ensAddress(let address):
             XCTAssertEqual(address, testAddress)
@@ -134,7 +134,7 @@ class EIP681Tests: XCTestCase {
         switch eip681Code.targetAddress {
         case .ethereumAddress(let address):
             XCTAssertEqual(address.address, testAddress)
-        case .ensAddress(_):
+        case .ensAddress:
             fatalError("Returned target address cannot be ENS address. It must be EthereumAddress.")
         }
 
@@ -164,7 +164,7 @@ class EIP681Tests: XCTestCase {
         switch eip681Code.targetAddress {
         case .ethereumAddress(let address):
             XCTAssertEqual(address.address, testAddress)
-        case .ensAddress(_):
+        case .ensAddress:
             fatalError("Returned target address cannot be ENS address. It must be EthereumAddress.")
         }
 
@@ -194,7 +194,7 @@ class EIP681Tests: XCTestCase {
         switch eip681Code.targetAddress {
         case .ethereumAddress(let address):
             XCTAssertEqual(address.address, testAddress)
-        case .ensAddress(_):
+        case .ensAddress:
             fatalError("Returned target address cannot be ENS address. It must be EthereumAddress.")
         }
 
@@ -204,7 +204,7 @@ class EIP681Tests: XCTestCase {
 
         XCTAssertEqual(eip681Code.parameters[0].type, .array(type: .int(bits: 256), length: 0))
         let data = eip681Code.parameters[0].value as? [BigInt]
-        XCTAssertEqual(data, Array<BigInt>(arrayLiteral: 1, 2, 5000, 3, 4, 10000))
+        XCTAssertEqual(data, [BigInt](arrayLiteral: 1, 2, 5000, 3, 4, 10000))
     }
 
     func testParsingOfArrayOfIntOfFixedLengthAsParameter() async throws {
@@ -216,7 +216,7 @@ class EIP681Tests: XCTestCase {
         switch eip681Code.targetAddress {
         case .ethereumAddress(let address):
             XCTAssertEqual(address.address, testAddress)
-        case .ensAddress(_):
+        case .ensAddress:
             fatalError("Returned target address cannot be ENS address. It must be EthereumAddress.")
         }
 
@@ -226,7 +226,7 @@ class EIP681Tests: XCTestCase {
 
         XCTAssertEqual(eip681Code.parameters[0].type, .array(type: .int(bits: 256), length: 3))
         let data = eip681Code.parameters[0].value as? [BigInt]
-        XCTAssertEqual(data, Array<BigInt>(arrayLiteral: 1, 2, 5000))
+        XCTAssertEqual(data, [BigInt](arrayLiteral: 1, 2, 5000))
     }
 
     func testParsingQueryParameterFixedLengthArray() async throws {
@@ -247,7 +247,7 @@ class EIP681Tests: XCTestCase {
 
         XCTAssertEqual(eip681Code!.parameters[0].type, .array(type: .string, length: 0))
         var data = eip681Code!.parameters[0].value as? [String]
-        XCTAssertEqual(data, ["123","2,5000","wwweer2-=!"])
+        XCTAssertEqual(data, ["123", "2,5000", "wwweer2-=!"])
 
         eip681Code = await Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?string[]=[123,2,5000,wwweer2-=!]")
         XCTAssert(eip681Code != nil)
@@ -255,7 +255,7 @@ class EIP681Tests: XCTestCase {
 
         XCTAssertEqual(eip681Code!.parameters[0].type, .array(type: .string, length: 0))
         data = eip681Code!.parameters[0].value as? [String]
-        XCTAssertEqual(data, ["123","2","5000","wwweer2-=!"])
+        XCTAssertEqual(data, ["123", "2", "5000", "wwweer2-=!"])
     }
 
     func testParsingQueryParameterArrayOfStringsArrays() async throws {
@@ -265,8 +265,8 @@ class EIP681Tests: XCTestCase {
 
         XCTAssertEqual(eip681Code!.parameters[0].type, .array(type: .array(type: .string, length: 0), length: 0))
         var data = eip681Code!.parameters[0].value as? [[String]]
-        XCTAssertEqual(data?[0], ["123","2,5000","wwweer2-=!"])
-        XCTAssertEqual(data?[1], ["test1","demo"])
+        XCTAssertEqual(data?[0], ["123", "2,5000", "wwweer2-=!"])
+        XCTAssertEqual(data?[1], ["test1", "demo"])
 
         eip681Code = await Web3.EIP681CodeParser.parse("ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc@2828/functionName123?string[][]=[[123,2,5000,wwweer2-=!],[test1,demo]]")
         XCTAssert(eip681Code != nil)
@@ -274,8 +274,8 @@ class EIP681Tests: XCTestCase {
 
         XCTAssertEqual(eip681Code!.parameters[0].type, .array(type: .array(type: .string, length: 0), length: 0))
         data = eip681Code!.parameters[0].value as? [[String]]
-        XCTAssertEqual(data?[0], ["123","2","5000","wwweer2-=!"])
-        XCTAssertEqual(data?[1], ["test1","demo"])
+        XCTAssertEqual(data?[0], ["123", "2", "5000", "wwweer2-=!"])
+        XCTAssertEqual(data?[1], ["test1", "demo"])
     }
 
     func testMakeEIP681Link() async throws {

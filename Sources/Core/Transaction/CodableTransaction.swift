@@ -7,12 +7,10 @@
 import Foundation
 import BigInt
 
-
-///  Structure capable of carying the parameters for any transaction type.
-///  while all fields in this struct are optional, they are not necessarily
-///  optional for the type of transaction they apply to.
+/// Structure capable of carying the parameters for any transaction type.
+/// While most fields in this struct are optional, they are not necessarily
+/// optional for the type of transaction they apply to.
 public struct CodableTransaction {
-    public typealias NoncePolicy = BlockNumber
     /// internal acccess only. The transaction envelope object itself that contains all the transaction data
     /// and type specific implementation
     internal var envelope: AbstractEnvelope
@@ -56,39 +54,40 @@ public struct CodableTransaction {
         set { envelope.value = newValue }
     }
 
-    // MARK: - Ruins signing and decoding tests if tied to envelop
-    /// any additional data for the transaction
-    public var data: Data
+    public var data: Data  {
+        get { return envelope.data }
+        set { envelope.data = newValue }
+    }
 
     // MARK: - Properties transaction type related either sends to a node if exist
 
     /// the nonce for the transaction
-    internal var nonce: BigUInt {
+    public var nonce: BigUInt {
         get { return envelope.nonce }
         set { envelope.nonce = newValue }
     }
 
     /// the max number of gas units allowed to process this transaction
-    internal var gasLimit: BigUInt {
+    public var gasLimit: BigUInt {
         get { return envelope.gasLimit }
         set { return envelope.gasLimit = newValue }
     }
 
     /// the price per gas unit for the tranaction (Legacy and EIP-2930 only)
-    internal var gasPrice: BigUInt? {
+    public var gasPrice: BigUInt? {
         get { return envelope.gasPrice }
         set { return envelope.gasPrice = newValue }
     }
 
     /// the max base fee per gas unit (EIP-1559 only)
     /// this value must be >= baseFee + maxPriorityFeePerGas
-    internal var maxFeePerGas: BigUInt? {
+    public var maxFeePerGas: BigUInt? {
         get { return envelope.maxFeePerGas }
         set { return envelope.maxFeePerGas = newValue }
     }
 
     /// the maximum tip to pay the miner (EIP-1559 only)
-    internal var maxPriorityFeePerGas: BigUInt? {
+    public var maxPriorityFeePerGas: BigUInt? {
         get { return envelope.maxPriorityFeePerGas }
         set { return envelope.maxPriorityFeePerGas = newValue }
     }
@@ -96,7 +95,15 @@ public struct CodableTransaction {
     public var callOnBlock: BlockNumber?
 
     /// access list for contract execution (EIP-2930 and EIP-1559 only)
-    public var accessList: [AccessListEntry]?
+    public var accessList: [AccessListEntry]? {
+        get {
+            (envelope as? EIP2930Compatible)?.accessList
+        }
+        set {
+            var eip2930Compatible = (envelope as? EIP2930Compatible)
+            eip2930Compatible?.accessList = newValue ?? []
+        }
+    }
 
     // MARK: - Properties to contract encode/sign data only
 
@@ -174,13 +181,6 @@ public struct CodableTransaction {
     public init?(rawValue: Data) {
         guard let env = EnvelopeFactory.createEnvelope(rawValue: rawValue) else { return nil }
         self.envelope = env
-        // FIXME: This is duplication and should be fixed.
-        data = Data()
-        noncePolicy = .latest
-        gasLimitPolicy = .automatic
-        gasPricePolicy = .automatic
-        maxFeePerGasPolicy = .automatic
-        maxPriorityFeePerGasPolicy = .automatic
     }
 
     /// - Returns: a raw bytestream of the transaction, encoded according to the transactionType
@@ -233,14 +233,6 @@ extension CodableTransaction: Codable {
     public init(from decoder: Decoder) throws {
         guard let env = try EnvelopeFactory.createEnvelope(from: decoder) else { throw Web3Error.dataError }
         self.envelope = env
-        // FIXME: This is duplication and should be fixed.
-        data = Data()
-
-        noncePolicy = .latest
-        gasLimitPolicy = .automatic
-        gasPricePolicy = .automatic
-        maxFeePerGasPolicy = .automatic
-        maxPriorityFeePerGasPolicy = .automatic
 
         // capture any metadata that might be present
         self.meta = try TransactionMetadata(from: decoder)
@@ -264,7 +256,7 @@ extension CodableTransaction: Codable {
         if let accessList = accessList, !accessList.isEmpty {
             try containier.encode(accessList, forKey: .accessList)
         }
-        
+
         if !gasLimit.isZero {
             try containier.encode(gasLimit.hexString, forKey: .gasLimit)
         }
@@ -382,7 +374,6 @@ extension CodableTransaction {
     }
 }
 
-
 extension CodableTransaction: CustomStringConvertible {
     /// required by CustomString convertable
     /// returns a string description for the transaction and its data
@@ -405,26 +396,18 @@ extension CodableTransaction {
     ///   - nonce: nonce for this transaction (default 0)
     ///   - chainID: chainId the transaction belongs to (default: type specific)
     ///   - value: Native value for the transaction (default 0)
-    ///   - data: Payload data for the transaction (required)
+    ///   - data: Payload data for the transaction (default 0 bytes)
     ///   - v: signature v parameter (default 1) - will get set properly once signed
     ///   - r: signature r parameter (default 0) - will get set properly once signed
     ///   - s: signature s parameter (default 0) - will get set properly once signed
     ///   - parameters: EthereumParameters object containing additional parametrs for the transaction like gas
     public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
                 chainID: BigUInt = 0, value: BigUInt = 0, data: Data = Data(),
-                gasLimit: BigUInt = 0, maxFeePerGas: BigUInt? = nil, maxPriorityFeePerGas: BigUInt? = nil,  gasPrice: BigUInt? = nil,
+                gasLimit: BigUInt = 0, maxFeePerGas: BigUInt? = nil, maxPriorityFeePerGas: BigUInt? = nil, gasPrice: BigUInt? = nil,
                 accessList: [AccessListEntry]? = nil, v: BigUInt = 1, r: BigUInt = 0, s: BigUInt = 0) {
-        // FIXME: This is duplication and should be fixed.
-        self.data = data
-        self.accessList = accessList
-        self.gasLimitPolicy = .automatic
-        self.noncePolicy = .pending
-        self.gasPricePolicy = .automatic
-        self.maxFeePerGasPolicy = .automatic
-        self.maxPriorityFeePerGasPolicy = .automatic
-        self.callOnBlock = .latest
+        callOnBlock = .latest
 
-        self.envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, chainID: chainID, value: value, data: data, gasLimit: gasLimit, maxFeePerGas: maxFeePerGas, maxPriorityFeePerGas: maxPriorityFeePerGas, gasPrice: gasPrice, accessList: accessList, v: v, r: r, s: s)
+        envelope = EnvelopeFactory.createEnvelope(type: type, to: to, nonce: nonce, chainID: chainID, value: value, data: data, gasLimit: gasLimit, maxFeePerGas: maxFeePerGas, maxPriorityFeePerGas: maxPriorityFeePerGas, gasPrice: gasPrice, accessList: accessList, v: v, r: r, s: s)
     }
 }
 

@@ -52,7 +52,6 @@ extension UnkeyedEncodingContainer {
     }
 }
 
-
 public protocol EncodableToHex: Encodable {
     var hexString: String { get }
 }

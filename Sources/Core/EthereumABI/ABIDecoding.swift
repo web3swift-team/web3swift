@@ -10,7 +10,7 @@ public struct ABIDecoder { }
 
 extension ABIDecoder {
     public static func decode(types: [ABI.Element.InOut], data: Data) -> [AnyObject]? {
-        let params = types.compactMap { (el) -> ABI.Element.ParameterType in
+        let params = types.compactMap { el -> ABI.Element.ParameterType in
             return el.type
         }
         return decode(types: params, data: data)
@@ -85,7 +85,7 @@ extension ABIDecoder {
             let length = UInt64(BigUInt(dataSlice))
             guard elementItself.count >= 32+length else {break}
             dataSlice = elementItself[32 ..< 32 + length]
-            return (dataSlice as AnyObject, type.memoryUsage)
+            return (dataSlice as AnyObject, nextElementPointer)
         case .array(type: let subType, length: let length):
             switch type.arraySize {
             case .dynamicSize:
@@ -118,10 +118,9 @@ extension ABIDecoder {
                         let (v, c) = decodeSingleType(type: subType, data: dataSlice, pointer: subpointer)
                         guard let valueUnwrapped = v, let consumedUnwrapped = c else {break}
                         toReturn.append(valueUnwrapped)
-                        if (subType.isStatic) {
+                        if subType.isStatic {
                             subpointer = subpointer + consumedUnwrapped
-                        }
-                        else {
+                        } else {
                             subpointer = consumedUnwrapped // need to go by nextElementPointer
                         }
                     }
@@ -224,16 +223,16 @@ extension ABIDecoder {
         eventContent["name"]=event.name
         let logs = eventLogTopics
         let dataForProcessing = eventLogData
-        let indexedInputs = event.inputs.filter { (inp) -> Bool in
+        let indexedInputs = event.inputs.filter { inp -> Bool in
             return inp.indexed
         }
-        if (logs.count == 1 && indexedInputs.count > 0) {
+        if logs.count == 1 && indexedInputs.count > 0 {
             return nil
         }
-        let nonIndexedInputs = event.inputs.filter { (inp) -> Bool in
+        let nonIndexedInputs = event.inputs.filter { inp -> Bool in
             return !inp.indexed
         }
-        let nonIndexedTypes = nonIndexedInputs.compactMap { (inp) -> ABI.Element.ParameterType in
+        let nonIndexedTypes = nonIndexedInputs.compactMap { inp -> ABI.Element.ParameterType in
             return inp.type
         }
         guard logs.count == indexedInputs.count + 1 else {return nil}

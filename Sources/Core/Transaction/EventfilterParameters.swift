@@ -29,7 +29,7 @@ public struct EventFilterParameters: Encodable {
     public var toBlock: BlockNumber
     public var address: [EthereumAddress]
     public var topics: [Topic?]
-    
+
     public init(fromBlock: BlockNumber = .latest, toBlock: BlockNumber = .latest, address: [EthereumAddress] = [], topics: [Topic?] = []) {
         self.fromBlock = fromBlock
         self.toBlock = toBlock
@@ -94,7 +94,7 @@ extension EventFilterParameters {
      ]
      ```
      */
-    public enum Topic:  Encodable {
+    public enum Topic: Encodable {
         case string(String?)
         case strings([Topic?]?)
 
