@@ -63,16 +63,16 @@ public class WriteOperation: ReadOperation {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    func nonce(for policy: CodableTransaction.NoncePolicy, from: EthereumAddress) async throws -> BigUInt {
-        switch policy {
-        case .latest:
-            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .latest)
-        case .pending:
-            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .pending)
-        case .earliest:
-            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .earliest)
-        case .exact(let nonce):
-            return nonce
-        }
-    }
+//    func nonce(for policy: CodableTransaction.NoncePolicy, from: EthereumAddress) async throws -> BigUInt {
+//        switch policy {
+//        case .latest:
+//            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .latest)
+//        case .pending:
+//            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .pending)
+//        case .earliest:
+//            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .earliest)
+//        case .exact(let nonce):
+//            return nonce
+//        }
+//    }
 }
