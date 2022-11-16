@@ -12,7 +12,7 @@ public class WriteOperation: ReadOperation {
 
     // FIXME: Rewrite this to CodableTransaction
     public func writeToChain(password: String) async throws -> TransactionSendingResult {
-        await transaction.resolve(provider: web3.provider)
+        try await transaction.resolve(provider: web3.provider)
         if let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager {
             do {
                 try Web3Signer.signTX(transaction: &transaction,
@@ -27,6 +27,34 @@ public class WriteOperation: ReadOperation {
         }
         // MARK: Sending Data flow
         return try await web3.eth.send(transaction)
+    }
+    
+    public func depploy(password: String) async throws -> TransactionSendingResult {
+        //TODO: optimize/cleanup
+        try await transaction.resolve(provider: web3.provider)
+
+        guard let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager else {
+            throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
+        }
+
+        do {
+            //TODO: optimize/cleanup
+//            transaction.unsign()
+            let account = transaction.from ?? transaction.sender ?? EthereumAddress.contractDeploymentAddress()
+            var privateKey = try attachedKeystoreManager.UNSAFE_getPrivateKeyData(password: password, account: account)
+            defer { Data.zero(&privateKey) }
+            try transaction.sign(privateKey: privateKey, useExtraEntropy: false)
+        } catch {
+            throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
+        }
+
+        //TODO: optimize/cleanup
+        guard let transactionData = transaction.encode(for: .transaction) else { throw Web3Error.dataError }
+//        let vectorHash = transaction.hash!.toHexString().addHexPrefix()
+//        print(vectorHash)
+
+        //TODO: optimize/cleanup
+        return try await web3.eth.send(raw: transactionData)
     }
 
     // FIXME: Rewrite this to CodableTransaction
