@@ -73,126 +73,225 @@ class KeystoresTests: LocalTestCase {
     func testHMAC() throws {
         let seed = Data.fromHex("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b")!
         let data = Data.fromHex("4869205468657265")!
-        let hmac = try! HMAC.init(key: seed.bytes, variant: HMAC.Variant.sha2(.sha512)).authenticate(data.bytes)
+        guard let hmac = try? HMAC.init(key: seed.bytes, variant: HMAC.Variant.sha2(.sha512)).authenticate(data.bytes) else {
+            XCTFail()
+            return
+        }
         XCTAssert(Data(hmac).toHexString() == "87aa7cdea5ef619d4ff0b4241a1d6cb02379f4e2ce4ec2787ad0b30545e17cdedaa833b7d6b8a702038b274eaea3f4e4be9d914eeb61f1702e696c203a126854")
     }
 
     func testV3keystoreExportPrivateKey() throws {
-        let keystore = try! EthereumKeystoreV3(password: "")
+        guard let keystore = try? EthereumKeystoreV3(password: "") else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(keystore)
-        let account = keystore!.addresses![0]
+        let account = keystore.addresses![0]
         print(account)
-        let data = try! keystore!.serialize()
-        print(try! JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions(rawValue: 0)))
-        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        guard let data = try? keystore.serialize() else {
+            XCTFail()
+            return
+        }
+        print(try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions(rawValue: 0)))
+        guard let key = try? keystore.UNSAFE_getPrivateKeyData(password: "", account: account) else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(key)
     }
 
     func testV3keystoreSerialization() throws {
-        let keystore = try! EthereumKeystoreV3(password: "")
+        guard let keystore = try? EthereumKeystoreV3(password: "") else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(keystore)
-        let account = keystore!.addresses![0]
-        let data = try! keystore!.serialize()
-        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        let account = keystore.addresses![0]
+        guard let data = try? keystore.serialize() else {
+            XCTFail()
+            return
+        }
+        guard let key = try? keystore.UNSAFE_getPrivateKeyData(password: "", account: account) else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(key)
 
-        let restored = EthereumKeystoreV3(data!)
+        let restored = EthereumKeystoreV3(data)
         XCTAssertNotNil(restored)
-        XCTAssertEqual(keystore!.addresses!.first!, restored!.addresses!.first!)
-        let restoredKey = try! restored!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        XCTAssertEqual(keystore.addresses!.first!, restored!.addresses!.first!)
+        guard let restoredKey = try? restored!.UNSAFE_getPrivateKeyData(password: "", account: account) else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(restoredKey)
         XCTAssertEqual(key, restoredKey)
     }
 
     func testNewBIP32keystore() throws {
-        let mnemonic = try! BIP39.generateMnemonics(bitsOfEntropy: 256)!
-        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
+        guard let mnemonic = BIP39.generateMnemonics(bitsOfEntropy: 256) else {
+            XCTFail()
+            return
+        }
+        let keystore = try? BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
         XCTAssert(keystore != nil)
     }
 
     func testSameAddressesFromTheSameMnemonics() throws {
-        let mnemonic = try! BIP39.generateMnemonics(bitsOfEntropy: 256)!
-        let keystore1 = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
-        let keystore2 = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
-        XCTAssert(keystore1?.addresses?.first == keystore2?.addresses?.first)
+        guard let mnemonic = BIP39.generateMnemonics(bitsOfEntropy: 256) else {
+            XCTFail()
+            return
+        }
+        guard let keystore1 = try? BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "") else {
+            XCTFail()
+            return
+        }
+        guard let keystore2 = try? BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "") else {
+            XCTFail()
+            return
+        }
+        XCTAssert(keystore1.addresses?.first == keystore2.addresses?.first)
     }
 
     func testBIP32keystoreExportPrivateKey() throws {
         let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
-        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
+        guard let keystore = try? BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "") else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(keystore)
-        let account = keystore!.addresses![0]
-        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        let account = keystore.addresses![0]
+        guard let key = try? keystore.UNSAFE_getPrivateKeyData(password: "", account: account) else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(key)
     }
 
     func testBIP32keystoreMatching() throws {
-        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana")
+        guard let keystore = try? BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana") else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(keystore)
-        let account = keystore!.addresses![0]
-        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        let account = keystore.addresses![0]
+        guard let key = try? keystore.UNSAFE_getPrivateKeyData(password: "", account: account) else {
+            XCTFail()
+            return
+        }
         let pubKey = Utilities.privateToPublic(key, compressed: true)
         XCTAssert(pubKey?.toHexString() == "027160bd3a4d938cac609ff3a11fe9233de7b76c22a80d2b575e202cbf26631659")
     }
 
     func testBIP32keystoreMatchingRootNode() throws {
-        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana")
+        guard let keystore = try? BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana") else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(keystore)
-        let rootNode = try! keystore!.serializeRootNodeToString(password: "")
+        guard let rootNode = try? keystore.serializeRootNodeToString(password: "") else {
+            XCTFail()
+            return
+        }
         XCTAssert(rootNode == "xprvA2KM71v838kPwE8Lfr12m9DL939TZmPStMnhoFcZkr1nBwDXSG7c3pjYbMM9SaqcofK154zNSCp7W7b4boEVstZu1J3pniLQJJq7uvodfCV")
     }
 
     func testBIP32keystoreCustomPathMatching() throws {
-        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana", prefixPath: "m/44'/60'/0'/0")
+        guard let keystore = try? BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana", prefixPath: "m/44'/60'/0'/0") else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(keystore)
-        let account = keystore!.addresses![0]
-        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        let account = keystore.addresses![0]
+        guard let key = try? keystore.UNSAFE_getPrivateKeyData(password: "", account: account) else {
+            XCTFail()
+            return
+        }
         let pubKey = Utilities.privateToPublic(key, compressed: true)
         XCTAssert(pubKey?.toHexString() == "027160bd3a4d938cac609ff3a11fe9233de7b76c22a80d2b575e202cbf26631659")
     }
 
     func testByBIP32keystoreCreateChildAccount() throws {
         let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
-        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
+        guard let keystore = try? BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "") else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(keystore)
-        XCTAssertEqual(keystore!.addresses?.count, 1)
-        try! keystore?.createNewChildAccount(password: "")
-        XCTAssertEqual(keystore?.addresses?.count, 2)
-        let account = keystore!.addresses![0]
-        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        XCTAssertEqual(keystore.addresses?.count, 1)
+        try? keystore.createNewChildAccount(password: "")
+        XCTAssertEqual(keystore.addresses?.count, 2)
+        let account = keystore.addresses![0]
+        guard let key = try? keystore.UNSAFE_getPrivateKeyData(password: "", account: account) else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(key)
     }
 
     func testByBIP32keystoreCreateCustomChildAccount() throws {
         let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
-        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
+        guard let keystore = try? BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "") else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(keystore)
-        XCTAssertEqual(keystore!.addresses?.count, 1)
-        try! keystore?.createNewCustomChildAccount(password: "", path: "/42/1")
-        XCTAssertEqual(keystore?.addresses?.count, 2)
-        let account = keystore!.addresses![1]
-        let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
+        XCTAssertEqual(keystore.addresses?.count, 1)
+        try? keystore.createNewCustomChildAccount(password: "", path: "/42/1")
+        XCTAssertEqual(keystore.addresses?.count, 2)
+        guard keystore.addresses?.count ?? 0 > 1 else {
+            XCTFail()
+            return
+        }
+        guard let account = keystore.addresses?[1] else {
+            XCTFail()
+            return
+        }
+        guard let key = try? keystore.UNSAFE_getPrivateKeyData(password: "", account: account) else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(key)
-        print(keystore!.addressStorage.paths)
+        print(keystore.addressStorage.paths)
     }
 
     func testByBIP32keystoreSaveAndDeriva() throws {
         let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
-        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "", prefixPath: "m/44'/60'/0'")
+        guard let keystore = try? BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "", prefixPath: "m/44'/60'/0'") else {
+            XCTFail()
+            return
+        }
         XCTAssertNotNil(keystore)
-        XCTAssertEqual(keystore!.addresses?.count, 1)
-        try! keystore?.createNewCustomChildAccount(password: "", path: "/0/1")
-        XCTAssertEqual(keystore?.addresses?.count, 2)
-        let data = try! keystore?.serialize()
-        let recreatedStore = BIP32Keystore.init(data!)
-        XCTAssert(keystore?.addresses?.count == recreatedStore?.addresses?.count)
-        XCTAssert(keystore?.rootPrefix == recreatedStore?.rootPrefix)
-        print(keystore!.addresses![0].address)
-        print(keystore!.addresses![1].address)
-        print(recreatedStore!.addresses![0].address)
+        XCTAssertEqual(keystore.addresses?.count, 1)
+        try? keystore.createNewCustomChildAccount(password: "", path: "/0/1")
+        XCTAssertEqual(keystore.addresses?.count, 2)
+        guard let data = try? keystore.serialize() else {
+            XCTFail()
+            return
+        }
+        let recreatedStore = BIP32Keystore.init(data)
+        XCTAssert(keystore.addresses?.count == recreatedStore?.addresses?.count)
+        XCTAssert(keystore.rootPrefix == recreatedStore?.rootPrefix)
+        guard let firstAddress = keystore.addresses?.first else {
+            XCTFail()
+            return
+        }
+        guard let recreatedFirstAddress = recreatedStore?.addresses?.first else {
+            XCTFail()
+            return
+        }
+        print(firstAddress.address)
+        print(recreatedFirstAddress.address)
+        XCTAssert(firstAddress == recreatedFirstAddress)
+
+        guard keystore.addresses?.count ?? 0 > 1 && recreatedStore?.addresses?.count ?? 0 > 1 else {
+            XCTFail()
+            return
+        }
+
+        print(keystore.addresses![1].address)
         print(recreatedStore!.addresses![1].address)
-        XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![0])
-        XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![1])
+        XCTAssert(keystore.addresses![1] == recreatedStore?.addresses![1])
     }
 
     // FIXME: Failed on async with 10_000 iterations
@@ -207,7 +306,10 @@ class KeystoresTests: LocalTestCase {
 
     func testRIPEMD() throws {
         let data = "message digest".data(using: .ascii)
-        let hash = try! RIPEMD160.hash(message: data!)
+        guard let hash = try? RIPEMD160.hash(message: data!) else {
+            XCTFail()
+            return
+        }
         XCTAssert(hash.toHexString() == "5d0689ef49d2fae572b881b123a85ffa21595f36")
     }
 
@@ -269,15 +371,21 @@ class KeystoresTests: LocalTestCase {
     func testKeystoreDerivationTime() throws {
         let privateKey = Data.randomBytes(length: 32)!
         measure {
-            let ks = try! EthereumKeystoreV3(privateKey: privateKey, password: "TEST")!
+            guard let ks = try? EthereumKeystoreV3(privateKey: privateKey, password: "TEST") else {
+                XCTFail()
+                return
+            }
             let account = ks.addresses!.first!
-            _ = try! ks.UNSAFE_getPrivateKeyData(password: "TEST", account: account)
+            _ = try? ks.UNSAFE_getPrivateKeyData(password: "TEST", account: account)
         }
     }
 
     func testSingleScryptDerivation() throws {
-        let privateKey = Data.randomBytes(length: 32)!
-        _ = try! EthereumKeystoreV3(privateKey: privateKey, password: "TEST")!
+        guard let privateKey = Data.randomBytes(length: 32) else {
+            XCTFail()
+            return
+        }
+        _ = try? EthereumKeystoreV3(privateKey: privateKey, password: "TEST")
     }
 
 }
