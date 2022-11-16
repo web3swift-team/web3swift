@@ -10,18 +10,18 @@ import Core
 
 // MARK: Works only with network connection
 class ENSTests: XCTestCase {
-    
+
     func testDomainNormalization() throws {
         let normalizedString = NameHash.normalizeDomainName("example.ens")
         print(normalizedString!)
     }
-    
+
     func testNameHash() throws {
         XCTAssertEqual(NameHash.nameHash(""), Data.fromHex("0x0000000000000000000000000000000000000000000000000000000000000000"))
         XCTAssertEqual(NameHash.nameHash("eth"), Data.fromHex("0x93cdeb708b7545dc668eb9280176169d1c33cfd8ed6f04690a0bcc88a93fc4ae"))
         XCTAssertEqual(NameHash.nameHash("foo.eth"), Data.fromHex("0xde9b09fd7c5f901e23a3f19fecc54828e9c848539801e86591bd9801b019f84f"))
     }
-    
+
     func testResolverAddress() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let ens = ENS(web3: web3)
@@ -44,10 +44,10 @@ class ENSTests: XCTestCase {
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try await ens?.registry.getResolver(forDomain: domain)
-        let isAddrSupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.addr.hash())
-        let isNameSupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.name.hash())
-        let isABIsupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.ABI.hash())
-        let isPubkeySupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.pubkey.hash())
+        let isAddrSupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.addr.rawValue)
+        let isNameSupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.name.rawValue)
+        let isABIsupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.ABI.rawValue)
+        let isPubkeySupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.pubkey.rawValue)
         XCTAssertEqual(isAddrSupports, true)
         XCTAssertEqual(isNameSupports, true)
         XCTAssertEqual(isABIsupports, true)
@@ -59,7 +59,7 @@ class ENSTests: XCTestCase {
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try await ens?.registry.getResolver(forDomain: domain)
-        if let isABIsupported = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.ABI.hash()),
+        if let isABIsupported = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.ABI.rawValue),
             isABIsupported {
             let res = try await resolver?.getContractABI(forNode: domain, contentType: .zlibCompressedJSON)
             XCTAssert(res?.0 == 0)

@@ -30,8 +30,8 @@ public struct LegacyEnvelope: AbstractEnvelope {
     public var gasPrice: BigUInt? = 0
     public var gasLimit: BigUInt = 0
 
-    var maxFeePerGas: BigUInt? = nil
-    var maxPriorityFeePerGas: BigUInt? = nil
+    var maxFeePerGas: BigUInt?
+    var maxPriorityFeePerGas: BigUInt?
 
     // legacy chainID Mechanism
     private var explicitChainID: BigUInt? // set directly or via options
@@ -205,7 +205,6 @@ extension LegacyEnvelope {
         }
         return RLP.encode(fields)
     }
-
 
     public func getUnmarshalledSignatureData() -> SECP256K1.UnmarshaledSignature? {
         if self.r == 0 && self.s == 0 { return nil }

@@ -16,7 +16,7 @@ public extension Sequence where Element == ABI.Element {
     /// Functions with ``ABI/Element/Function/name`` value being `nil` will be skipped.
     /// - Returns: dictionary of mapped functions.
     /// Throws an error if there are two functions in the sequence with exactly the same name and input parameters.
-    func getFunctions() throws -> [String:[ABI.Element.Function]]{
+    func getFunctions() throws -> [String: [ABI.Element.Function]] {
         var functions = [String: [ABI.Element.Function]]()
 
         func appendFunction(_ key: String, _ value: ABI.Element.Function) {

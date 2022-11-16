@@ -3,14 +3,6 @@
 
 import PackageDescription
 
-#if os(macOS)
-let excludeFiles = [
-    "./Browser/BrowserViewController.swift" // Because of inheriting iOS only class failed to build on macOS.
-]
-#elseif os(iOS)
-let excludeFiles: String = []
-#endif
-
 let package = Package(
     name: "Web3swift",
     platforms: [
@@ -32,7 +24,6 @@ let package = Package(
         .target(
             name: "web3swift",
             dependencies: ["Core", "BigInt", "secp256k1"],
-            exclude: excludeFiles,
             resources: [
                 .copy("./Browser/browser.js"),
                 .copy("./Browser/browser.min.js"),

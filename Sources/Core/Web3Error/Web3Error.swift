@@ -7,13 +7,13 @@
 
 import Foundation
 
-public enum Web3Error: Error {
+public enum Web3Error: LocalizedError {
     case transactionSerializationError
     case connectionError
 
     case dataError
     case typeError
-    case valueError
+    case valueError(desc: String? = nil)
     case serverError(code: Int)
     case clientError(code: Int)
 
@@ -25,8 +25,7 @@ public enum Web3Error: Error {
     case generalError(err: Error)
     case unknownError
 
-
-    public var errorDescription: String {
+    public var errorDescription: String? {
         switch self {
 
         case .transactionSerializationError:

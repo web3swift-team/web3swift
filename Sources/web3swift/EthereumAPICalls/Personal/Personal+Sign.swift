@@ -7,7 +7,6 @@ import Foundation
 import BigInt
 import Core
 
-
 extension Web3.Personal {
 
     public func signPersonal(message: Data, from: EthereumAddress, password: String) async throws -> Data {

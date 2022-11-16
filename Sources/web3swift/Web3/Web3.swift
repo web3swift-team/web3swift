@@ -25,7 +25,7 @@ extension Web3 {
         let infura = await InfuraProvider(Networks.Mainnet, accessToken: accessToken)!
         return Web3(provider: infura)
     }
-    
+
     /// Initialized Web3 instance bound to Infura's goerli provider.
     public static func InfuraGoerliWeb3(accessToken: String? = nil) async -> Web3 {
         let infura = await InfuraProvider(Networks.Goerli, accessToken: accessToken)!

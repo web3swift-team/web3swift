@@ -70,7 +70,6 @@ public enum BIP39Language {
 }
 
 public class BIP39 {
-
     static public func generateMnemonicsFromEntropy(entropy: Data, language: BIP39Language = BIP39Language.english) -> String?  {
         let wordList = generateMnemonicsFrom(entropy: entropy)
         let separator = language.separator
