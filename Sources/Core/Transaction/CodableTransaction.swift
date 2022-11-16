@@ -188,6 +188,27 @@ public struct CodableTransaction {
         return self.envelope.encode(for: type)
     }
 
+    public mutating func resolve(provider: Web3Provider) async throws {
+        // FIXME: Delete force try
+        self.gasLimit = try await self.gasLimitPolicy.resolve(provider: provider, transaction: self)
+
+        if from != nil || sender != nil {
+            self.nonce = try await self.resolveNonce(provider: provider)
+        }
+        if case .eip1559 = type {
+            self.maxFeePerGas = try await self.maxFeePerGasPolicy.resolve(provider: provider)
+            self.maxPriorityFeePerGas = try await self.maxPriorityFeePerGasPolicy.resolve(provider: provider)
+        } else {
+            self.gasPrice = try await self.gasPricePolicy.resolve(provider: provider)
+        }
+    }
+
+    public var noncePolicy: NoncePolicy
+    public var maxFeePerGasPolicy: FeePerGasPolicy
+    public var maxPriorityFeePerGasPolicy: PriorityFeePerGasPolicy
+    public var gasPricePolicy: GasPricePolicy
+    public var gasLimitPolicy: GasLimitPolicy
+
     public static var emptyTransaction = CodableTransaction(to: EthereumAddress.contractDeploymentAddress())
 }
 
@@ -262,6 +283,95 @@ extension CodableTransaction: Codable {
         }
     }
 
+}
+
+public protocol Policyable {
+    func resolve(provider: Web3Provider, transaction: CodableTransaction?) async throws -> BigUInt
+}
+
+extension CodableTransaction {
+    public enum GasLimitPolicy {
+        case automatic
+        case manual(BigUInt)
+        case limited(BigUInt)
+        case withMargin(Double)
+
+        func resolve(provider: Web3Provider, transaction: CodableTransaction?) async throws -> BigUInt {
+            guard let transaction = transaction else { throw Web3Error.valueError }
+            let request: APIRequest = .estimateGas(transaction, transaction.callOnBlock ?? .latest)
+            let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)
+            switch self {
+            case .automatic, .withMargin:
+                return response.result
+            case .manual(let value):
+                return value
+            case .limited(let limit):
+                if limit <= response.result {
+                    return response.result
+                } else {
+                    return limit
+                }
+            }
+        }
+    }
+
+    public enum GasPricePolicy {
+        case automatic
+        case manual(BigUInt)
+        case withMargin(Double)
+
+        func resolve(provider: Web3Provider, transaction: CodableTransaction? = nil) async throws -> BigUInt {
+            let oracle = Oracle(provider)
+            switch self {
+            case .automatic, .withMargin:
+                return await oracle.gasPriceLegacyPercentiles().max() ?? 0
+            case .manual(let value):
+                return value
+            }
+        }
+    }
+
+    public enum PriorityFeePerGasPolicy: Policyable {
+        case automatic
+        case manual(BigUInt)
+
+        public func resolve(provider: Web3Provider, transaction: CodableTransaction? = nil) async throws -> BigUInt {
+            let oracle = Oracle(provider)
+            switch self {
+            case .automatic:
+                return await oracle.tipFeePercentiles().max() ?? 0
+            case .manual(let value):
+                return value
+            }
+        }
+    }
+
+    public enum FeePerGasPolicy: Policyable {
+        case automatic
+        case manual(BigUInt)
+
+        public func resolve(provider: Web3Provider, transaction: CodableTransaction? = nil) async throws -> BigUInt {
+            let oracle = Oracle(provider)
+            switch self {
+            case .automatic:
+                return await oracle.baseFeePercentiles().max() ?? 0
+            case .manual(let value):
+                return value
+            }
+        }
+    }
+
+    func resolveNonce(provider: Web3Provider) async throws -> BigUInt {
+        switch noncePolicy {
+        case .pending, .latest, .earliest:
+            guard let address = from ?? sender else { throw Web3Error.valueError }
+            let request: APIRequest = .getTransactionCount(address.address, callOnBlock ?? .latest)
+            let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)
+            return response.result
+        case .exact(let value):
+            return value
+        }
+    }
 }
 
 extension CodableTransaction: CustomStringConvertible {

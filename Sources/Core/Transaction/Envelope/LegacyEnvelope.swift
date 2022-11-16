@@ -194,7 +194,8 @@ extension LegacyEnvelope {
     public func encode(for type: EncodeType = .transaction) -> Data? {
         let fields: [AnyObject]
         switch type {
-        case .transaction: fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, v, r, s] as [AnyObject]
+        case .transaction:
+            fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, v, r, s] as [AnyObject]
         case .signature:
             if let chainID = self.chainID, chainID != 0 {
                 fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, chainID, BigUInt(0), BigUInt(0)] as [AnyObject]

@@ -1,3 +1,4 @@
+//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -69,7 +70,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         }
     }
 
-    public init?(password: String, aesMode: String = "aes-128-cbc") throws {
+    public init?(password: String = "web3swift", aesMode: String = "aes-128-cbc") throws {
         guard var newPrivateKey = SECP256K1.generatePrivateKey() else {
             return nil
         }
@@ -79,7 +80,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         try encryptDataToStorage(password, keyData: newPrivateKey, aesMode: aesMode)
     }
 
-    public init?(privateKey: Data, password: String, aesMode: String = "aes-128-cbc") throws {
+    public init?(privateKey: Data, password: String = "web3swift", aesMode: String = "aes-128-cbc") throws {
         guard privateKey.count == 32 else {
             return nil
         }
@@ -93,18 +94,14 @@ public class EthereumKeystoreV3: AbstractKeystore {
         if keyData == nil {
             throw AbstractKeystoreError.encryptionError("Encryption without key data")
         }
-        let saltLen = 32
-        guard let saltData = Data.randomBytes(length: saltLen) else {
-            throw AbstractKeystoreError.noEntropyError
-        }
+        let saltLen = 32;
+        let saltData = Data.randomBytes(length: saltLen)!
         guard let derivedKey = scrypt(password: password, salt: saltData, length: dkLen, N: N, R: R, P: P) else {
             throw AbstractKeystoreError.keyDerivationError
         }
         let last16bytes = Data(derivedKey[(derivedKey.count - 16)...(derivedKey.count - 1)])
         let encryptionKey = Data(derivedKey[0...15])
-        guard let IV = Data.randomBytes(length: 16) else {
-            throw AbstractKeystoreError.noEntropyError
-        }
+        let IV = Data.randomBytes(length: 16)!
         var aesCipher: AES?
         switch aesMode {
         case "aes-128-cbc":
