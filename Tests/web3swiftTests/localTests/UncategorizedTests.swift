@@ -69,7 +69,7 @@ class UncategorizedTests: XCTestCase {
             bloom.add(BigUInt(data))
             let newBytes = bloom.bytes
             if newBytes != oldBytes {
-                print("Added new bits")
+                
             }
         }
         for str in positive {
@@ -118,16 +118,16 @@ class UncategorizedTests: XCTestCase {
         let userDeviceCount = try await contract!
             .createReadOperation("userDeviceCount", parameters: [addr as AnyObject])?
             .callContractMethod()
-        print(userDeviceCount!)
+        
         let totalUsers = try await contract!
             .createReadOperation("totalUsers", parameters: [])?
             .callContractMethod()
-        print(totalUsers!)
+        
         let user = try await contract!
             .createReadOperation("users", parameters: [0 as AnyObject])?
             .callContractMethod()
-        print(user!)
-        print(allMethods)
+        
+        
     }
 
     func testBloomFilterPerformance() throws {

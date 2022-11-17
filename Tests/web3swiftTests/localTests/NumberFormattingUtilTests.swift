@@ -14,7 +14,7 @@ class NumberFormattingUtilTests: LocalTestCase {
 
     func testNumberFormattingUtil() throws {
         let balance = BigInt("-1000000000000000000")
-        print("this is print")
+        
         let formatted = Utilities.formatToPrecision(balance, numberDecimals: 18, formattingDecimals: 4, decimalSeparator: ",")
         XCTAssert(formatted == "-1")
     }
