@@ -117,15 +117,13 @@ public class HDNode {
 }
 
 extension HDNode {
-    public func derive(index: UInt32, derivePrivateKey: Bool, hardened: Bool = false) -> HDNode? {
-        if derivePrivateKey {
-            return derivePrivaeKey(index: index, hardened: hardened)
-        } else { // deriving only the public key
-            return deriveNoPrivateKey(index: index, hardened: hardened)
-        }
+    public func derive(index: UInt32, derivePrivateKey:Bool, hardened: Bool = false) -> HDNode? {
+        derivePrivateKey ?
+            deriveAlongPrivateKey(index: index, hardened: hardened)
+        :
+            deriveWithoutPrivateKey(index: index, hardened: hardened)
     }
-
-    public func derivePrivaeKey(index: UInt32, hardened: Bool = false) -> HDNode? {
+    public func deriveAlongPrivateKey(index: UInt32, hardened: Bool = false) -> HDNode? {
         guard let privateKey else {
             return nil
         }// derive private key when is itself extended private key
@@ -174,7 +172,7 @@ extension HDNode {
         guard let privKeyCandidate = newPK.serialize().setLengthLeft(32) else {return nil}
         guard SECP256K1.verifyPrivateKey(privateKey: privKeyCandidate) else {return nil }
         guard let pubKeyCandidate = SECP256K1.privateToPublic(privateKey: privKeyCandidate, compressed: true) else {return nil}
-        guard pubKeyCandidate.bytes[0] == 0x02 || pubKeyCandidate.bytes[0] == 0x03 else {return nil}
+        guard pubKeyCandidate.bytes.first == 0x02 || pubKeyCandidate.bytes.first == 0x03 else {return nil}
         guard self.depth < UInt8.max else {return nil}
         let newNode = HDNode()
         newNode.chaincode = cc
@@ -186,40 +184,33 @@ extension HDNode {
             return nil
         }
         newNode.parentFingerprint = fprint
-        var newPath = String()
-        if newNode.isHardened {
-            newPath = self.path! + "/"
-            newPath += String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
-        } else {
-            newPath = self.path! + "/" + String(newNode.index)
-        }
-        newNode.path = newPath
+        newNode.path = (self.path ?? "") + "/" + (newNode.isHardened ? String(newNode.index % HDNode.hardenedIndexPrefix) + "'" : String(newNode.index))
         return newNode
     }
 
-    public func deriveNoPrivateKey(index: UInt32, hardened: Bool = false) -> HDNode? {
-        var entropy: [UInt8] // derive public key when is itself public key
-        if index >= (UInt32(1) << 31) || hardened {
+    public func deriveWithoutPrivateKey(index: UInt32, hardened: Bool = false) -> HDNode? {
+        // derive public key when is itself public key
+        guard !(index >= (UInt32(1) << 31) || hardened) else {
             return nil // no derivation of hardened public key from extended public key
-        } else {
-            let hmac: Authenticator = HMAC(key: self.chaincode.bytes, variant: .sha2(.sha512))
-            var inputForHMAC = Data()
-            inputForHMAC.append(self.publicKey)
-            inputForHMAC.append(index.serialize32())
-            guard let ent = try? hmac.authenticate(inputForHMAC.bytes) else {return nil }
-            guard ent.count == 64 else { return nil }
-            entropy = ent
         }
+
+        let hmac: Authenticator = HMAC(key: self.chaincode.bytes, variant: .sha2(.sha512))
+        var inputForHMAC = Data()
+        inputForHMAC.append(self.publicKey)
+        inputForHMAC.append(index.serialize32())
+        guard let entropy = try? hmac.authenticate(inputForHMAC.bytes) else {return nil }
+        guard entropy.count == 64 else { return nil }
+
         let I_L = entropy[0..<32]
         let I_R = entropy[32..<64]
         let cc = Data(I_R)
         let bn = BigUInt(Data(I_L))
-        if bn > HDNode.curveOrder {
-            if index < UInt32.max {
-                return self.derive(index: index+1, derivePrivateKey: false, hardened: hardened)
-            }
-            return nil
+        guard !(bn > HDNode.curveOrder) else {
+            return index < UInt32.max ?
+            self.derive(index: index+1, derivePrivateKey: false, hardened: hardened) :
+            nil
         }
+
         guard let tempKey = bn.serialize().setLengthLeft(32) else {return nil}
         guard SECP256K1.verifyPrivateKey(privateKey: tempKey) else {return nil }
         guard let pubKeyCandidate = SECP256K1.privateToPublic(privateKey: tempKey, compressed: true) else {return nil}
@@ -236,14 +227,7 @@ extension HDNode {
             return nil
         }
         newNode.parentFingerprint = fprint
-        var newPath = String()
-        if newNode.isHardened {
-            newPath = (self.path ?? "") + "/"
-            newPath += String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
-        } else {
-            newPath = (self.path ?? "") + "/" + String(newNode.index)
-        }
-        newNode.path = newPath
+        newNode.path = (self.path ?? "") + "/" + (newNode.isHardened ? String(newNode.index % HDNode.hardenedIndexPrefix) + "'" : String(newNode.index))
         return newNode
     }
 
