@@ -19,13 +19,30 @@ public extension ENS {
             case URI = 8
         }
 
-        public enum InterfaceName: String {
-            case addr = "0x3b3b57de"
-            case name = "0x691f3431"
-            case content = "0xbc1c58d1"
-            case ABI = "0x2203ab56"
-            case pubkey = "0xc8690233"
-            case text = "0x59d1d43c"
+        public enum InterfaceName {
+            case addr
+            case name
+            case content
+            case ABI
+            case pubkey
+            case text
+            var hash: String {
+                switch self {
+                case .addr:
+                    return "0x3b3b57de"
+                case .name:
+                    return "0x691f3431"
+                case .content:
+                    return "0xbc1c58d1"
+                case .ABI:
+                    return "0x2203ab56"
+                case .pubkey:
+                    return "0xc8690233"
+                case .text:
+                    return "0x59d1d43c"
+                }
+            }
+
         }
 
         lazy var resolverContract: Web3.Contract = {
@@ -46,6 +63,11 @@ public extension ENS {
 
         public func supportsInterface(interfaceID: Data) async throws -> Bool {
             guard let supports = try? await supportsInterface(interfaceID: interfaceID.toHexString()) else {throw Web3Error.processingError(desc: "Can't get answer")}
+            return supports
+        }
+
+        public func supportsInterface(interfaceID: InterfaceName) async throws -> Bool {
+            guard let supports = try? await supportsInterface(interfaceID: interfaceID.hash) else {throw Web3Error.processingError(desc: "Can't get answer")}
             return supports
         }
 
