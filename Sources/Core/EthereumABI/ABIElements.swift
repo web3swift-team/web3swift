@@ -278,8 +278,6 @@ extension ABI.Element.Function {
 
                 let message = String(bytes: data.bytes[68..<(68+len)], encoding: .utf8)!
 
-                print("read function aborted by require statement: \(message)")
-
                 var returnArray = [String: Any]()
 
                 // set infomation

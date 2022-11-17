@@ -267,7 +267,6 @@ extension SECP256K1 {
             }
         }
         guard let res = result, res != 0 else {
-            print("Failed to sign!")
             return nil
         }
         return recoverableSignature

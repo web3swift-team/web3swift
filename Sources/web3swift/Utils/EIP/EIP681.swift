@@ -343,7 +343,6 @@ extension Web3 {
                 code.function = functionEncoding
             }
 
-            print(code)
             return code
         }
 
