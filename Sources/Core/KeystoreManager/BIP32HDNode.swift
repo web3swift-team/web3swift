@@ -117,127 +117,134 @@ public class HDNode {
 }
 
 extension HDNode {
-    public func derive (index: UInt32, derivePrivateKey: Bool, hardened: Bool = false) -> HDNode? {
+    public func derive(index: UInt32, derivePrivateKey: Bool, hardened: Bool = false) -> HDNode? {
         if derivePrivateKey {
-            if let privateKey { // derive private key when is itself extended private key
-                var entropy: [UInt8]
-                var trueIndex: UInt32
-                if index >= (UInt32(1) << 31) || hardened {
-                    trueIndex = index
-                    if trueIndex < (UInt32(1) << 31) {
-                        trueIndex = trueIndex + (UInt32(1) << 31)
-                    }
-                    let hmac: Authenticator = HMAC(key: self.chaincode.bytes, variant: .sha2(.sha512))
-                    var inputForHMAC = Data()
-                    inputForHMAC.append(Data([UInt8(0x00)]))
-                    inputForHMAC.append(self.privateKey!)
-                    inputForHMAC.append(trueIndex.serialize32())
-                    guard let ent = try? hmac.authenticate(inputForHMAC.bytes) else {return nil }
-                    guard ent.count == 64 else { return nil }
-                    entropy = ent
-                } else {
-                    trueIndex = index
-                    let hmac: Authenticator = HMAC(key: self.chaincode.bytes, variant: .sha2(.sha512))
-                    var inputForHMAC = Data()
-                    inputForHMAC.append(self.publicKey)
-                    inputForHMAC.append(trueIndex.serialize32())
-                    guard let ent = try? hmac.authenticate(inputForHMAC.bytes) else {return nil }
-                    guard ent.count == 64 else { return nil }
-                    entropy = ent
-                }
-                let I_L = entropy[0..<32]
-                let I_R = entropy[32..<64]
-                let cc = Data(I_R)
-                let bn = BigUInt(Data(I_L))
-                if bn > HDNode.curveOrder {
-                    if trueIndex < UInt32.max {
-                        return self.derive(index: index+1, derivePrivateKey: derivePrivateKey, hardened: hardened)
-                    }
-                    return nil
-                }
-                let newPK = (bn + BigUInt(self.privateKey!)) % HDNode.curveOrder
-                if newPK == BigUInt(0) {
-                    if trueIndex < UInt32.max {
-                        return self.derive(index: index+1, derivePrivateKey: derivePrivateKey, hardened: hardened)
-                    }
-                    return nil
-                }
-                guard let privKeyCandidate = newPK.serialize().setLengthLeft(32) else {return nil}
-                guard SECP256K1.verifyPrivateKey(privateKey: privKeyCandidate) else {return nil }
-                guard let pubKeyCandidate = SECP256K1.privateToPublic(privateKey: privKeyCandidate, compressed: true) else {return nil}
-                guard pubKeyCandidate.bytes[0] == 0x02 || pubKeyCandidate.bytes[0] == 0x03 else {return nil}
-                guard self.depth < UInt8.max else {return nil}
-                let newNode = HDNode()
-                newNode.chaincode = cc
-                newNode.depth = self.depth + 1
-                newNode.publicKey = pubKeyCandidate
-                newNode.privateKey = privKeyCandidate
-                newNode.childNumber = trueIndex
-                guard let fprint = try? RIPEMD160.hash(message: self.publicKey.sha256())[0..<4] else {
-                    return nil
-                }
-                newNode.parentFingerprint = fprint
-                var newPath = String()
-                if newNode.isHardened {
-                    newPath = self.path! + "/"
-                    newPath += String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
-                } else {
-                    newPath = self.path! + "/" + String(newNode.index)
-                }
-                newNode.path = newPath
-                return newNode
-            } else {
-                return nil // derive private key when is itself extended public key (impossible)
-            }
+            return derivePrivaeKey(index: index, hardened: hardened)
         } else { // deriving only the public key
-            var entropy: [UInt8] // derive public key when is itself public key
-            if index >= (UInt32(1) << 31) || hardened {
-                return nil // no derivation of hardened public key from extended public key
-            } else {
-                let hmac: Authenticator = HMAC(key: self.chaincode.bytes, variant: .sha2(.sha512))
-                var inputForHMAC = Data()
-                inputForHMAC.append(self.publicKey)
-                inputForHMAC.append(index.serialize32())
-                guard let ent = try? hmac.authenticate(inputForHMAC.bytes) else {return nil }
-                guard ent.count == 64 else { return nil }
-                entropy = ent
-            }
-            let I_L = entropy[0..<32]
-            let I_R = entropy[32..<64]
-            let cc = Data(I_R)
-            let bn = BigUInt(Data(I_L))
-            if bn > HDNode.curveOrder {
-                if index < UInt32.max {
-                    return self.derive(index: index+1, derivePrivateKey: derivePrivateKey, hardened: hardened)
-                }
-                return nil
-            }
-            guard let tempKey = bn.serialize().setLengthLeft(32) else {return nil}
-            guard SECP256K1.verifyPrivateKey(privateKey: tempKey) else {return nil }
-            guard let pubKeyCandidate = SECP256K1.privateToPublic(privateKey: tempKey, compressed: true) else {return nil}
-            guard pubKeyCandidate.bytes.first == 0x02 || pubKeyCandidate.bytes.first == 0x03 else {return nil}
-            guard let newPublicKey = SECP256K1.combineSerializedPublicKeys(keys: [self.publicKey, pubKeyCandidate], outputCompressed: true) else {return nil}
-            guard newPublicKey.bytes.first == 0x02 || newPublicKey.bytes.first == 0x03 else {return nil}
-            guard self.depth < UInt8.max else {return nil}
-            let newNode = HDNode()
-            newNode.chaincode = cc
-            newNode.depth = self.depth + 1
-            newNode.publicKey = newPublicKey
-            newNode.childNumber = index
-            guard let fprint = try? RIPEMD160.hash(message: self.publicKey.sha256())[0..<4] else {
-                return nil
-            }
-            newNode.parentFingerprint = fprint
-            var newPath = String()
-            if newNode.isHardened {
-                newPath = (self.path ?? "") + "/"
-                newPath += String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
-            } else {
-                newPath = (self.path ?? "") + "/" + String(newNode.index)
-            }
-            newNode.path = newPath
-            return newNode
+            return deriveNoPrivateKey(index: index, hardened: hardened)
         }
+    }
+
+    public func derivePrivaeKey(index: UInt32, hardened: Bool = false) -> HDNode? {
+        guard let privateKey else {
+            return nil
+        }// derive private key when is itself extended private key
+        var entropy: [UInt8]
+        var trueIndex: UInt32
+        if index >= (UInt32(1) << 31) || hardened {
+            trueIndex = index
+            if trueIndex < (UInt32(1) << 31) {
+                trueIndex = trueIndex + (UInt32(1) << 31)
+            }
+            let hmac: Authenticator = HMAC(key: self.chaincode.bytes, variant: .sha2(.sha512))
+            var inputForHMAC = Data()
+            inputForHMAC.append(Data([UInt8(0x00)]))
+            inputForHMAC.append(privateKey)
+            inputForHMAC.append(trueIndex.serialize32())
+            guard let ent = try? hmac.authenticate(inputForHMAC.bytes) else {return nil }
+            guard ent.count == 64 else { return nil }
+            entropy = ent
+        } else {
+            trueIndex = index
+            let hmac: Authenticator = HMAC(key: self.chaincode.bytes, variant: .sha2(.sha512))
+            var inputForHMAC = Data()
+            inputForHMAC.append(self.publicKey)
+            inputForHMAC.append(trueIndex.serialize32())
+            guard let ent = try? hmac.authenticate(inputForHMAC.bytes) else {return nil }
+            guard ent.count == 64 else { return nil }
+            entropy = ent
+        }
+        let I_L = entropy[0..<32]
+        let I_R = entropy[32..<64]
+        let cc = Data(I_R)
+        let bn = BigUInt(Data(I_L))
+        if bn > HDNode.curveOrder {
+            if trueIndex < UInt32.max {
+                return self.derive(index: index+1, derivePrivateKey: true, hardened: hardened)
+            }
+            return nil
+        }
+        let newPK = (bn + BigUInt(privateKey)) % HDNode.curveOrder
+        if newPK == BigUInt(0) {
+            if trueIndex < UInt32.max {
+                return self.derive(index: index+1, derivePrivateKey: true, hardened: hardened)
+            }
+            return nil
+        }
+        guard let privKeyCandidate = newPK.serialize().setLengthLeft(32) else {return nil}
+        guard SECP256K1.verifyPrivateKey(privateKey: privKeyCandidate) else {return nil }
+        guard let pubKeyCandidate = SECP256K1.privateToPublic(privateKey: privKeyCandidate, compressed: true) else {return nil}
+        guard pubKeyCandidate.bytes[0] == 0x02 || pubKeyCandidate.bytes[0] == 0x03 else {return nil}
+        guard self.depth < UInt8.max else {return nil}
+        let newNode = HDNode()
+        newNode.chaincode = cc
+        newNode.depth = self.depth + 1
+        newNode.publicKey = pubKeyCandidate
+        newNode.privateKey = privKeyCandidate
+        newNode.childNumber = trueIndex
+        guard let fprint = try? RIPEMD160.hash(message: self.publicKey.sha256())[0..<4] else {
+            return nil
+        }
+        newNode.parentFingerprint = fprint
+        var newPath = String()
+        if newNode.isHardened {
+            newPath = self.path! + "/"
+            newPath += String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
+        } else {
+            newPath = self.path! + "/" + String(newNode.index)
+        }
+        newNode.path = newPath
+        return newNode
+    }
+
+    public func deriveNoPrivateKey(index: UInt32, hardened: Bool = false) -> HDNode? {
+        var entropy: [UInt8] // derive public key when is itself public key
+        if index >= (UInt32(1) << 31) || hardened {
+            return nil // no derivation of hardened public key from extended public key
+        } else {
+            let hmac: Authenticator = HMAC(key: self.chaincode.bytes, variant: .sha2(.sha512))
+            var inputForHMAC = Data()
+            inputForHMAC.append(self.publicKey)
+            inputForHMAC.append(index.serialize32())
+            guard let ent = try? hmac.authenticate(inputForHMAC.bytes) else {return nil }
+            guard ent.count == 64 else { return nil }
+            entropy = ent
+        }
+        let I_L = entropy[0..<32]
+        let I_R = entropy[32..<64]
+        let cc = Data(I_R)
+        let bn = BigUInt(Data(I_L))
+        if bn > HDNode.curveOrder {
+            if index < UInt32.max {
+                return self.derive(index: index+1, derivePrivateKey: false, hardened: hardened)
+            }
+            return nil
+        }
+        guard let tempKey = bn.serialize().setLengthLeft(32) else {return nil}
+        guard SECP256K1.verifyPrivateKey(privateKey: tempKey) else {return nil }
+        guard let pubKeyCandidate = SECP256K1.privateToPublic(privateKey: tempKey, compressed: true) else {return nil}
+        guard pubKeyCandidate.bytes.first == 0x02 || pubKeyCandidate.bytes.first == 0x03 else {return nil}
+        guard let newPublicKey = SECP256K1.combineSerializedPublicKeys(keys: [self.publicKey, pubKeyCandidate], outputCompressed: true) else {return nil}
+        guard newPublicKey.bytes.first == 0x02 || newPublicKey.bytes.first == 0x03 else {return nil}
+        guard self.depth < UInt8.max else {return nil}
+        let newNode = HDNode()
+        newNode.chaincode = cc
+        newNode.depth = self.depth + 1
+        newNode.publicKey = newPublicKey
+        newNode.childNumber = index
+        guard let fprint = try? RIPEMD160.hash(message: self.publicKey.sha256())[0..<4] else {
+            return nil
+        }
+        newNode.parentFingerprint = fprint
+        var newPath = String()
+        if newNode.isHardened {
+            newPath = (self.path ?? "") + "/"
+            newPath += String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
+        } else {
+            newPath = (self.path ?? "") + "/" + String(newNode.index)
+        }
+        newNode.path = newPath
+        return newNode
     }
 
     public func derive(path: String, derivePrivateKey: Bool = true) -> HDNode? {
