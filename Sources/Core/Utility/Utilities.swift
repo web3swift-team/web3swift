@@ -286,7 +286,7 @@ public struct Utilities {
 
 extension Utilities {
     /// Various units used in Ethereum ecosystem
-    public enum Units: Int {
+    public enum Units {
         case wei
         case kwei
         case babbage
@@ -310,31 +310,34 @@ extension Utilities {
         case mether
         case gether
         case tether
+        case custom(Int)
 
         public var decimals: Int {
             switch self {
-                case .wei:
-                    return 0
-                case .kwei, .babbage, .femtoether:
-                    return 3
-                case .mwei, .lovelace, .picoether:
-                    return 6
-                case .gwei, .shannon, .nanoether, .nano:
-                    return 9
-                case .microether, .szabo, .micro:
-                    return 12
-                case .finney, .milliether, .milli:
-                    return 15
-                case .ether:
-                    return 18
-                case .kether, .grand:
-                    return 21
-                case .mether:
-                    return 24
-                case .gether:
-                    return 27
-                case .tether:
-                    return 30
+            case .wei:
+                return 0
+            case .kwei, .babbage, .femtoether:
+                return 3
+            case .mwei, .lovelace, .picoether:
+                return 6
+            case .gwei, .shannon, .nanoether, .nano:
+                return 9
+            case .microether, .szabo, .micro:
+                return 12
+            case .finney, .milliether, .milli:
+                return 15
+            case .ether:
+                return 18
+            case .kether, .grand:
+                return 21
+            case .mether:
+                return 24
+            case .gether:
+                return 27
+            case .tether:
+                return 30
+            case .custom(let decimals):
+                return max(0, decimals)
             }
         }
     }
