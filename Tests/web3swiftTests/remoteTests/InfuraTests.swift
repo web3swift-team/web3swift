@@ -15,7 +15,7 @@ class InfuraTests: XCTestCase {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let address = EthereumAddress("0xd61b5ca425F8C8775882d4defefC68A6979DBbce")!
         let balance = try await web3.eth.getBalance(for: address)
-        let balString = Utilities.formatToPrecision(balance, numberDecimals: Utilities.Units.eth.decimals, formattingDecimals: 3)
+        let balString = Utilities.formatToPrecision(balance, units: .ether, formattingDecimals: 3)
         XCTAssertNotNil(balString)
     }
 

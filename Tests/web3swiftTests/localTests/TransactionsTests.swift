@@ -632,7 +632,7 @@ class TransactionsTests: XCTestCase {
             let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
             let allAddresses = try await web3.eth.ownedAccounts()
             let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
-            let value = Utilities.parseToBigUInt("1.0", units: .eth)
+            let value = Utilities.parseToBigUInt("1.0", units: .ether)
             let from = allAddresses[0]
             let writeTX = contract!.createWriteOperation("fallback")!
             writeTX.transaction.from = from

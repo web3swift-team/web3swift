@@ -87,7 +87,7 @@ public struct Utilities {
     /// Parse a user-supplied string using the number of decimals for particular Ethereum unit.
     /// If input is non-numeric or precision is not sufficient - returns nil.
     /// Allowed decimal separators are ".", ",".
-    public static func parseToBigUInt(_ amount: String, units: Utilities.Units = .eth) -> BigUInt? {
+    public static func parseToBigUInt(_ amount: String, units: Utilities.Units = .ether) -> BigUInt? {
         let unitDecimals = units.decimals
         return parseToBigUInt(amount, decimals: unitDecimals)
     }
@@ -112,29 +112,14 @@ public struct Utilities {
         return mainPart
     }
 
-    /// Formats a BigInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
-    /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
-    ///
-    /// Returns nil of formatting is not possible to satisfy.
-    static func formatToEthereumUnits(_ bigNumber: BigInt, toUnits: Utilities.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".") -> String? {
-        let magnitude = BigInt(bigNumber.magnitude)
-        guard let formatted = formatToEthereumUnits(magnitude, toUnits: toUnits, decimals: decimals, decimalSeparator: decimalSeparator) else {return nil}
-        switch bigNumber.sign {
-        case .plus:
-            return formatted
-        case .minus:
-            return "-" + formatted
-        }
-    }
-
-    /// Formats a BigInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
+    /// Formats a BigInt object to String. The supplied number is first divided into integer and decimal part based on "units",
     /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
     /// Fallbacks to scientific format if higher precision is required.
     ///
     /// Returns nil of formatting is not possible to satisfy.
-    public static func formatToPrecision(_ bigNumber: BigInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+    public static func formatToPrecision(_ bigNumber: BigInt, units: Utilities.Units = .ether, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String {
         let magnitude = bigNumber.magnitude
-        guard let formatted = formatToPrecision(magnitude, numberDecimals: numberDecimals, formattingDecimals: formattingDecimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific) else {return nil}
+        let formatted = formatToPrecision(magnitude, units: units, formattingDecimals: formattingDecimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific)
         switch bigNumber.sign {
         case .plus:
             return formatted
@@ -143,24 +128,16 @@ public struct Utilities {
         }
     }
 
-//    /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "toUnits",
-//    /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
-//    ///
-//    /// Returns nil of formatting is not possible to satisfy.
-//    static func formatToEthereumUnits(_ bigNumber: BigUInt, toUnits: Utilities.Units = .eth, decimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
-//        return formatToPrecision(bigNumber, numberDecimals: toUnits.decimals, formattingDecimals: decimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific)
-//    }
-
-    /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "numberDecimals",
+    /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "units",
     /// then limits the decimal part to "formattingDecimals" symbols and uses a "decimalSeparator" as a separator.
     /// Fallbacks to scientific format if higher precision is required.
     ///
     /// Returns nil of formatting is not possible to satisfy.
-    public static func formatToPrecision(_ bigNumber: BigUInt, numberDecimals: Int = 18, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String? {
+    public static func formatToPrecision(_ bigNumber: BigUInt, units: Utilities.Units = .ether, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String {
         if bigNumber == 0 {
             return "0"
         }
-        let unitDecimals = numberDecimals
+        let unitDecimals = units.decimals
         var toDecimals = formattingDecimals
         if unitDecimals < toDecimals {
             toDecimals = unitDecimals
@@ -310,32 +287,57 @@ public struct Utilities {
 extension Utilities {
     /// Various units used in Ethereum ecosystem
     public enum Units {
-        case eth
         case wei
-        case Kwei
-        case Mwei
-        case Gwei
-        case Microether
-        case Finney
+        case kwei
+        case babbage
+        case femtoether
+        case mwei
+        case lovelace
+        case picoether
+        case gwei
+        case shannon
+        case nanoether
+        case nano
+        case microether
+        case szabo
+        case micro
+        case finney
+        case milliether
+        case milli
+        case ether
+        case kether
+        case grand
+        case mether
+        case gether
+        case tether
+        case custom(Int)
 
         public var decimals: Int {
-            get {
-                switch self {
-                case .eth:
-                    return 18
-                case .wei:
-                    return 0
-                case .Kwei:
-                    return 3
-                case .Mwei:
-                    return 6
-                case .Gwei:
-                    return 9
-                case .Microether:
-                    return 12
-                case .Finney:
-                    return 15
-                }
+            switch self {
+            case .wei:
+                return 0
+            case .kwei, .babbage, .femtoether:
+                return 3
+            case .mwei, .lovelace, .picoether:
+                return 6
+            case .gwei, .shannon, .nanoether, .nano:
+                return 9
+            case .microether, .szabo, .micro:
+                return 12
+            case .finney, .milliether, .milli:
+                return 15
+            case .ether:
+                return 18
+            case .kether, .grand:
+                return 21
+            case .mether:
+                return 24
+            case .gether:
+                return 27
+            case .tether:
+                return 30
+            case .custom(let decimals):
+                return max(0, decimals)
             }
         }
     }
