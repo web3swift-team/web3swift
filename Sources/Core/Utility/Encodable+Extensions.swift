@@ -63,5 +63,3 @@ public extension EncodableToHex where Self: BinaryInteger {
 extension BigUInt: EncodableToHex { }
 
 extension UInt: EncodableToHex { }
-
-extension Int: EncodableToHex { }
