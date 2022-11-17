@@ -1,3 +1,4 @@
+//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -23,12 +24,11 @@ extension UInt32 {
 }
 
 public class HDNode {
-    public struct HDversion {
-        public var privatePrefix: Data = Data.fromHex("0x0488ADE4")!
-        public var publicPrefix: Data = Data.fromHex("0x0488B21E")!
-        public init() {
 
-        }
+    private struct HDversion{
+        public static var privatePrefix: Data? = Data.fromHex("0x0488ADE4")
+        public static var publicPrefix: Data? = Data.fromHex("0x0488B21E")
+
     }
     public var path: String? = "m"
     public var privateKey: Data?
@@ -51,11 +51,6 @@ public class HDNode {
             }
         }
     }
-    public var hasPrivate: Bool {
-        get {
-            return privateKey != nil
-        }
-    }
 
     init() {
         publicKey = Data()
@@ -72,7 +67,7 @@ public class HDNode {
         guard data.count == 82 else {return nil}
         let header = data[0..<4]
         var serializePrivate = false
-        if header == HDNode.HDversion().privatePrefix {
+        if header == HDversion.privatePrefix {
             serializePrivate = true
         }
         depth = data[4..<5].bytes[0]
@@ -94,8 +89,10 @@ public class HDNode {
 
     public init?(seed: Data) {
         guard seed.count >= 16 else {return nil}
-        let hmacKey = "Bitcoin seed".data(using: .ascii)!
-        let hmac: Authenticator = HMAC(key: hmacKey.bytes, variant: HMAC.Variant.sha2(.sha512))
+
+        guard let hmacKey = "Bitcoin seed".data(using: .ascii) else {return nil}
+        let hmac:Authenticator = HMAC(key: hmacKey.bytes, variant: HMAC.Variant.sha2(.sha512))
+
         guard let entropy = try? hmac.authenticate(seed.bytes) else {return nil}
         guard entropy.count == 64 else { return nil}
         let I_L = entropy[0..<32]
@@ -104,7 +101,7 @@ public class HDNode {
         let privKeyCandidate = Data(I_L)
         guard SECP256K1.verifyPrivateKey(privateKey: privKeyCandidate) else {return nil}
         guard let pubKeyCandidate = SECP256K1.privateToPublic(privateKey: privKeyCandidate, compressed: true) else {return nil}
-        guard pubKeyCandidate.bytes[0] == 0x02 || pubKeyCandidate.bytes[0] == 0x03 else {return nil}
+        guard pubKeyCandidate.bytes.first == 0x02 || pubKeyCandidate.bytes.first == 0x03 else {return nil}
         publicKey = pubKeyCandidate
         privateKey = privKeyCandidate
         depth = 0x00
@@ -122,7 +119,7 @@ public class HDNode {
 extension HDNode {
     public func derive (index: UInt32, derivePrivateKey: Bool, hardened: Bool = false) -> HDNode? {
         if derivePrivateKey {
-            if self.hasPrivate { // derive private key when is itself extended private key
+            if let privateKey { // derive private key when is itself extended private key
                 var entropy: [UInt8]
                 var trueIndex: UInt32
                 if index >= (UInt32(1) << 31) || hardened {
@@ -218,9 +215,9 @@ extension HDNode {
             guard let tempKey = bn.serialize().setLengthLeft(32) else {return nil}
             guard SECP256K1.verifyPrivateKey(privateKey: tempKey) else {return nil }
             guard let pubKeyCandidate = SECP256K1.privateToPublic(privateKey: tempKey, compressed: true) else {return nil}
-            guard pubKeyCandidate.bytes[0] == 0x02 || pubKeyCandidate.bytes[0] == 0x03 else {return nil}
+            guard pubKeyCandidate.bytes.first == 0x02 || pubKeyCandidate.bytes.first == 0x03 else {return nil}
             guard let newPublicKey = SECP256K1.combineSerializedPublicKeys(keys: [self.publicKey, pubKeyCandidate], outputCompressed: true) else {return nil}
-            guard newPublicKey.bytes[0] == 0x02 || newPublicKey.bytes[0] == 0x03 else {return nil}
+            guard newPublicKey.bytes.first == 0x02 || newPublicKey.bytes.first == 0x03 else {return nil}
             guard self.depth < UInt8.max else {return nil}
             let newNode = HDNode()
             newNode.chaincode = cc
@@ -233,17 +230,18 @@ extension HDNode {
             newNode.parentFingerprint = fprint
             var newPath = String()
             if newNode.isHardened {
-                newPath = self.path! + "/"
+                newPath = (self.path ?? "") + "/"
                 newPath += String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
             } else {
-                newPath = self.path! + "/" + String(newNode.index)
+                newPath = (self.path ?? "") + "/" + String(newNode.index)
             }
             newNode.path = newPath
             return newNode
         }
     }
 
-    public func derive (path: String, derivePrivateKey: Bool = true) -> HDNode? {
+    public func derive(path: String, derivePrivateKey: Bool = true) -> HDNode? {
+
         let components = path.components(separatedBy: "/")
         var currentNode: HDNode = self
         var firstComponent = 0
@@ -262,19 +260,24 @@ extension HDNode {
         return currentNode
     }
 
-    public func serializeToString(serializePublic: Bool = true, version: HDversion = HDversion()) -> String? {
-        guard let data = self.serialize(serializePublic: serializePublic, version: version) else {return nil}
+    public func serializeToString(serializePublic: Bool = true) -> String? {
+        guard let data = self.serialize(serializePublic: serializePublic) else {return nil}
         let encoded = Base58.base58FromBytes(data.bytes)
         return encoded
     }
 
-    public func serialize(serializePublic: Bool = true, version: HDversion = HDversion()) -> Data? {
+    public func serialize(serializePublic: Bool = true) -> Data? {
+
         var data = Data()
-        if !serializePublic && !self.hasPrivate {return nil}
+
+        guard serializePublic || privateKey != nil else {
+            return nil
+        }
+
         if serializePublic {
-            data.append(version.publicPrefix)
+            data.append(HDversion.publicPrefix!)
         } else {
-            data.append(version.privatePrefix)
+            data.append(HDversion.privatePrefix!)
         }
         data.append(contentsOf: [self.depth])
         data.append(self.parentFingerprint)
