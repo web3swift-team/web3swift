@@ -13,7 +13,7 @@ class KeystoresTests: XCTestCase {
 
     let mnemonic = "fruit wave dwarf banana earth journey tattoo true farm silk olive fence"
 
-    func testBIP39 () throws {
+    func testBIP39() throws {
         var entropy = Data.fromHex("00000000000000000000000000000000")!
         var phrase = BIP39.generateMnemonicsFromEntropy(entropy: entropy)
         XCTAssert( phrase == "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about")
@@ -24,6 +24,19 @@ class KeystoresTests: XCTestCase {
         XCTAssert( phrase == "hamster diagram private dutch cause delay private meat slide toddler razor book happy fancy gospel tennis maple dilemma loan word shrug inflict delay length")
         seed = BIP39.seedFromMmemonics(phrase!, password: "TREZOR")
         XCTAssert(seed?.toHexString() == "64c87cde7e12ecf6704ab95bb1408bef047c22db4cc7491c4271d170a1b213d20b385bc1588d9c7b38f1b39d415665b8a9030c9ec653d75e65f847d8fc1fc440")
+    }
+
+    func testBIP39Array() throws {
+        var entropy = Data.fromHex("00000000000000000000000000000000")!
+        var phrase = BIP39.generateMnemonicsFrom(entropy: entropy)
+        XCTAssert( phrase == ["abandon","abandon","abandon","abandon","abandon","abandon","abandon","abandon","abandon","abandon","abandon","about"])
+        var seed = BIP39.seedFromMmemonics(phrase, password: "TREZOR")
+        XCTAssert(seed?.toHexString() == "5eb00bbddcf069084889a8ab9155568165f5c453ccb85e70811aaed6f6da5fc19a5ac40b389cd370d086206dec8aa6c43daea6690f20ad3d8d48b2d2ce9e38e4", "\(seed?.toHexString())")
+        entropy = Data.fromHex("68a79eaca2324873eacc50cb9c6eca8cc68ea5d936f98787c60c7ebc74e6ce7c")!
+        phrase = BIP39.generateMnemonicsFrom(entropy: entropy)
+        XCTAssert( phrase == ["hamster","diagram","private","dutch","cause","delay","private","meat","slide","toddler","razor","book","happy","fancy","gospel","tennis","maple","dilemma","loan","word","shrug","inflict","delay","length"])
+        seed = BIP39.seedFromMmemonics(phrase, password: "TREZOR")
+        XCTAssert(seed?.toHexString() == "17e4b5661796eeff8904550f8572289317ece7c1cc1316469f8f4c986c1ffd7b9f4c3aeac3e1713ffc21fa33707d09d57a2ece358d72111ef7c7658e7b33f2d5", "\(seed?.toHexString())")
     }
 
     func testBIP39SeedAndMnemConversions() throws {

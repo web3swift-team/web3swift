@@ -160,22 +160,26 @@ public class BIP39 {
     }
 
     static public func seedFromMmemonics(_ mnemonics: String, password: String = "", language: BIP39Language = BIP39Language.english) -> Data? {
-        let valid = BIP39.mnemonicsToEntropy(mnemonics, language: language) != nil
-        if !valid {
+        guard mnemonicsToEntropy(mnemonics, language: language) != nil else {
             return nil
         }
         guard let mnemData = mnemonics.decomposedStringWithCompatibilityMapping.data(using: .utf8) else {return nil}
         let salt = "mnemonic" + password
         guard let saltData = salt.decomposedStringWithCompatibilityMapping.data(using: .utf8) else {return nil}
         guard let seedArray = try? PKCS5.PBKDF2(password: mnemData.bytes, salt: saltData.bytes, iterations: 2048, keyLength: 64, variant: HMAC.Variant.sha2(.sha512)).calculate() else {return nil}
-        let seed = Data(seedArray)
-        return seed
+        return Data(seedArray)
+    }
+
+    static public func seedFromMmemonics(_ mnemonics: [String], password: String = "", language: BIP39Language = BIP39Language.english) -> Data? {
+        if mnemonicsToEntropy(mnemonics, language: language) == nil {
+            return nil
+        }
+        let mnemData = mnemonics.joined(separator: language.separator)
+        return seedFromMmemonics(mnemData)
     }
 
     static public func seedFromEntropy(_ entropy: Data, password: String = "", language: BIP39Language = BIP39Language.english) -> Data? {
-        guard let mnemonics = generateMnemonicsFromEntropy(entropy: entropy, language: language) else {
-            return nil
-        }
+        let mnemonics = generateMnemonicsFrom(entropy: entropy, language: language)
         return seedFromMmemonics(mnemonics, password: password, language: language)
     }
 }
