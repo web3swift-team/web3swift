@@ -62,19 +62,29 @@ public extension ENS {
         }
 
         public func supportsInterface(interfaceID: Data) async throws -> Bool {
-            guard let supports = try? await supportsInterface(interfaceID: interfaceID.toHexString()) else {throw Web3Error.processingError(desc: "Can't get answer")}
+            guard let supports = try? await supportsInterface(interfaceID: interfaceID.toHexString()) else {
+                throw Web3Error.processingError(desc: "Can't get answer")
+            }
             return supports
         }
 
         public func supportsInterface(interfaceID: InterfaceName) async throws -> Bool {
-            guard let supports = try? await supportsInterface(interfaceID: interfaceID.hash) else {throw Web3Error.processingError(desc: "Can't get answer")}
+            guard let supports = try? await supportsInterface(interfaceID: interfaceID.hash) else {
+                throw Web3Error.processingError(desc: "Can't get answer")
+            }
             return supports
         }
 
         public func supportsInterface(interfaceID: String) async throws -> Bool {
-            guard let transaction = self.resolverContract.createReadOperation("supportsInterface", parameters: [interfaceID as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
-            guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
-            guard let supports = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Can't get answer")}
+            guard let transaction = self.resolverContract.createReadOperation("supportsInterface", parameters: [interfaceID as AnyObject], extraData: Data() ) else {
+                throw Web3Error.transactionSerializationError
+            }
+            guard let result = try? await transaction.callContractMethod() else {
+                throw Web3Error.processingError(desc: "Can't call transaction")
+            }
+            guard let supports = result["0"] as? Bool else {
+                throw Web3Error.processingError(desc: "Can't get answer")
+            }
             return supports
         }
 
