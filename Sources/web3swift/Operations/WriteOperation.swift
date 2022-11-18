@@ -15,7 +15,7 @@ public class WriteOperation: ReadOperation {
     /// - Parameters:
     ///   - password: Password for private key.
     ///   - policies: Custom policies for how to resolve (optional). Default is auto.
-    public func writeToChain(password: String, policies: Policies = .auto, sendRaw: Bool = true) async throws -> TransactionSendingResult {
+    public func writeToChain(password: String, policies: Policies = .auto, sendRaw: Bool = false) async throws -> TransactionSendingResult {
         try await policyResolver.resolveAll(for: &transaction, with: policies)
 
         guard sendRaw else {
