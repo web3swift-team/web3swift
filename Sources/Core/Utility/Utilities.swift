@@ -1,6 +1,6 @@
 //
 //  Utilities.swift
-//  
+//
 //
 //  Created by Yaroslav Yashin on 11.07.2022.
 //
@@ -137,15 +137,15 @@ public struct Utilities {
         if bigNumber == 0 {
             return "0"
         }
-
+        let unitDecimals = units.decimals
         var toDecimals = formattingDecimals
-        if numberDecimals < toDecimals {
-            toDecimals = numberDecimals
+        if unitDecimals < toDecimals {
+            toDecimals = unitDecimals
         }
-        let divisor = BigUInt(10).power(numberDecimals)
+        let divisor = BigUInt(10).power(unitDecimals)
         let (quotient, remainder) = bigNumber.quotientAndRemainder(dividingBy: divisor)
         var fullRemainder = "\(remainder)"
-        let fullPaddedRemainder = fullRemainder.leftPadding(toLength: numberDecimals, withPad: "0")
+        let fullPaddedRemainder = fullRemainder.leftPadding(toLength: unitDecimals, withPad: "0")
         let remainderPadded = fullPaddedRemainder[0..<toDecimals]
         if remainderPadded == String(repeating: "0", count: toDecimals) {
             if quotient != 0 {
