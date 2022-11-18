@@ -15,42 +15,26 @@ public class WriteOperation: ReadOperation {
     /// - Parameters:
     ///   - password: Password for private key.
     ///   - policies: Custom policies for how to resolve (optional). Default is auto.
-    public func writeToChain(password: String, policies: Policies = .auto) async throws -> TransactionSendingResult {
+    public func writeToChain(password: String, policies: Policies = .auto, sendRaw: Bool = true) async throws -> TransactionSendingResult {
         try await policyResolver.resolveAll(for: &transaction, with: policies)
-        if let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager {
-            do {
-                try Web3Signer.signTX(transaction: &transaction,
-                                      keystore: attachedKeystoreManager,
-                                      account: transaction.from ?? transaction.sender ?? EthereumAddress.contractDeploymentAddress(),
-                                      password: password)
-            } catch {
-                throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
-            }
-            guard let transactionData = transaction.encode(for: .transaction) else { throw Web3Error.dataError }
-            return try await web3.eth.send(raw: transactionData)
+
+        guard sendRaw else {
+            return try await web3.eth.send(transaction)
         }
-        // MARK: Sending Data flow
-        return try await web3.eth.send(transaction)
+
+        guard let attachedKeystoreManager = web3.provider.attachedKeystoreManager else {
+            throw Web3Error.inputError(desc: "Failed to locally sign a transaction. Web3 provider doesn't have keystore attached.")
+        }
+
+        do {
+            try Web3Signer.signTX(transaction: &transaction,
+                                  keystore: attachedKeystoreManager,
+                                  account: transaction.from ?? transaction.sender ?? EthereumAddress.contractDeploymentAddress(),
+                                  password: password)
+        } catch {
+            throw Web3Error.inputError(desc: "Failed to locally sign a transaction. \(error.localizedDescription)")
+        }
+        guard let transactionData = transaction.encode(for: .transaction) else { throw Web3Error.dataError }
+        return try await web3.eth.send(raw: transactionData)
     }
-
-    public func depploy(password: String, policies: Policies = .auto) async throws -> TransactionSendingResult {
-   //        try await transaction.resolve(provider: web3.provider)
-           try await policyResolver.resolveAll(for: &transaction, with: policies)
-
-           guard let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager else {
-               throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
-           }
-
-           do {
-               let account = transaction.from ?? transaction.sender ?? EthereumAddress.contractDeploymentAddress()
-               var privateKey = try attachedKeystoreManager.UNSAFE_getPrivateKeyData(password: password, account: account)
-               defer { Data.zero(&privateKey) }
-               try transaction.sign(privateKey: privateKey, useExtraEntropy: false)
-           } catch {
-               throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
-           }
-
-           guard let transactionData = transaction.encode(for: .transaction) else { throw Web3Error.dataError }
-           return try await web3.eth.send(raw: transactionData)
-       }
 }
