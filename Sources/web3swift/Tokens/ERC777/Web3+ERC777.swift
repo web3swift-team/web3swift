@@ -29,21 +29,15 @@ protocol IERC777: IERC20, IERC820 {
 // This namespace contains functions to work with ERC777 tokens.
 // can be imperatively read and saved
 // FIXME: Rewrite this to CodableTransaction
-public class ERC777: IERC777, ERC20BaseProperties {
-
-    internal var _name: String?
-    internal var _symbol: String?
-    internal var _decimals: UInt8?
-
-    internal var _hasReadProperties: Bool = false
-
+public class ERC777: IERC777, ERCBaseProperties {
+    public var basePropertiesProvder: ERCBasePropertiesProvider
     public var transaction: CodableTransaction
     public var web3: Web3
     public var provider: Web3Provider
     public var address: EthereumAddress
     public var abi: String
 
-    lazy var contract: Web3.Contract = {
+    public lazy var contract: Web3.Contract = {
         let contract = self.web3.contract(self.abi, at: self.address, abiVersion: 2)
         precondition(contract != nil)
         return contract!
@@ -56,13 +50,16 @@ public class ERC777: IERC777, ERC20BaseProperties {
         self.transaction = transaction
         self.transaction.to = address
         self.abi = abi
+        // Forced because this should fail if contract is wrongly configured
+        let contract = web3.contract(Web3.Utils.erc20ABI, at: address)!
+        self.basePropertiesProvder = ERCBasePropertiesProvider(contract: contract)
     }
 
     // Must be 18!
     public func decimals() async throws -> UInt8 {
         try await self.readProperties()
-        if self._decimals != nil {
-            return self._decimals!
+        if self.decimals != nil {
+            return self.decimals!
         }
         return 18
     }

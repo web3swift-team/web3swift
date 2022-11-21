@@ -16,20 +16,15 @@ protocol IERC888 {
 }
 
 // FIXME: Rewrite this to CodableTransaction
-public class ERC888: IERC888, ERC20BaseProperties {
-
-    internal var _name: String?
-    internal var _symbol: String?
-    internal var _decimals: UInt8?
-    internal var _hasReadProperties: Bool = false
-
+public class ERC888: IERC888, ERCBaseProperties {
+    public var basePropertiesProvder: ERCBasePropertiesProvider
     public var transaction: CodableTransaction
     public var web3: Web3
     public var provider: Web3Provider
     public var address: EthereumAddress
     public var abi: String
 
-    lazy var contract: Web3.Contract = {
+    public lazy var contract: Web3.Contract = {
         let contract = self.web3.contract(self.abi, at: self.address, abiVersion: 2)
         precondition(contract != nil)
         return contract!
@@ -42,6 +37,9 @@ public class ERC888: IERC888, ERC20BaseProperties {
         self.transaction = transaction
         self.transaction.to = address
         self.abi = abi
+        // Forced because this should fail if contract is wrongly configured
+        let contract = web3.contract(Web3.Utils.erc20ABI, at: address)!
+        self.basePropertiesProvder = ERCBasePropertiesProvider(contract: contract)
     }
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
