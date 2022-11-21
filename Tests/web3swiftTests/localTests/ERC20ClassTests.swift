@@ -48,16 +48,4 @@ class ERC20ClassTests: LocalTestCase {
         XCTAssert(String(balance) == "1024")
         XCTAssert(allowance == 0)
     }
-
-    func testERC20ReadProperties() async throws {
-        let (web3, _, receipt, _) = try await TestHelpers.localDeployERC20()
-        let erc20token = ERC20.init(web3: web3, provider: web3.provider, address: receipt.contractAddress!)
-        try await erc20token.readProperties()
-        let decimals = erc20token.decimals()
-        let name = erc20token.name()
-        let symbol = erc20token.symbol()
-        XCTAssertEqual(decimals, 18)
-        XCTAssertEqual(name, "web3swift")
-        XCTAssertEqual(symbol, "w3s")
-    }
 }
