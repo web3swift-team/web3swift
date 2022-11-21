@@ -11,7 +11,7 @@ import Core
 public class WriteOperation: ReadOperation {
 
     // FIXME: Rewrite this to CodableTransaction
-    /// Sends raw transaction for write operation.
+    /// Sends signed or unsigned transaction for write operation.
     /// - Parameters:
     ///   - password: Password for the private key in the keystore manager attached to the provider 
     ///   you set to `web3` passed in the initializer.
