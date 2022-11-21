@@ -1,6 +1,6 @@
 //
 //  Utilities.swift
-//  
+//
 //
 //  Created by Yaroslav Yashin on 11.07.2022.
 //
@@ -144,12 +144,12 @@ public struct Utilities {
         }
         let divisor = BigUInt(10).power(unitDecimals)
         let (quotient, remainder) = bigNumber.quotientAndRemainder(dividingBy: divisor)
-        var fullRemainder = String(remainder)
+        var fullRemainder = "\(remainder)"
         let fullPaddedRemainder = fullRemainder.leftPadding(toLength: unitDecimals, withPad: "0")
         let remainderPadded = fullPaddedRemainder[0..<toDecimals]
         if remainderPadded == String(repeating: "0", count: toDecimals) {
             if quotient != 0 {
-                return String(quotient)
+                return "\(quotient)"
             } else if fallbackToScientific {
                 var firstDigit = 0
                 for char in fullPaddedRemainder {
@@ -180,9 +180,9 @@ public struct Utilities {
             }
         }
         if toDecimals == 0 {
-            return String(quotient)
+            return "\(quotient)"
         }
-        return String(quotient) + decimalSeparator + remainderPadded
+        return "\(quotient)" + decimalSeparator + remainderPadded
     }
 
     /// Recover the Ethereum address from recoverable secp256k1 signature. Message is first hashed using the "personal hash" protocol.

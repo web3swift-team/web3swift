@@ -9,13 +9,11 @@ import Foundation
 
 extension APIRequest {
     var method: REST {
-        switch self {
-        default: return .POST
-        }
+         .POST
     }
 
    public var encodedBody: Data {
-        let request = RequestBody(method: self.call, params: self.parameters)
+        let request = RequestBody(method: call, params: parameters)
         // this is safe to force try this here
         // Because request must failed to compile if it not conformable with `Encodable` protocol
         return try! JSONEncoder().encode(request)

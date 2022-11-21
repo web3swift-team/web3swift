@@ -15,8 +15,8 @@ class LocalTestCase: XCTestCase {
     override func setUp() async throws {
         let web3 = try! await Web3.new(LocalTestCase.url)
 
-        let block = try! await web3.eth.blockNumber()
-        if block >= 25 { return }
+        let block = try await web3.eth.blockNumber()
+        guard block < 25 else { return }
 
         print("\n ****** Preloading Ganache (\(25 - block) blocks) *****\n")
 
