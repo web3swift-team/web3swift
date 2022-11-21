@@ -27,7 +27,7 @@ public extension ENS {
             case pubkey
             case text
 
-            func hash() -> String {
+            var hash: String {
                 switch self {
                 case .addr:
                     return "0x3b3b57de"
@@ -63,6 +63,13 @@ public extension ENS {
 
         public func supportsInterface(interfaceID: Data) async throws -> Bool {
             guard let supports = try? await supportsInterface(interfaceID: interfaceID.toHexString()) else {throw Web3Error.processingError(desc: "Can't get answer")}
+            return supports
+        }
+
+        public func supportsInterface(interfaceID: InterfaceName) async throws -> Bool {
+            guard let supports = try? await supportsInterface(interfaceID: interfaceID.hash) else {
+                throw Web3Error.processingError(desc: "Can't get answer")
+            }
             return supports
         }
 
