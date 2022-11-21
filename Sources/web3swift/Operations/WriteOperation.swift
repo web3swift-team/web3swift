@@ -13,8 +13,13 @@ public class WriteOperation: ReadOperation {
     // FIXME: Rewrite this to CodableTransaction
     /// Sends raw transaction for write operation.
     /// - Parameters:
-    ///   - password: Password for private key.
-    ///   - policies: Custom policies for how to resolve (optional). Default is auto.
+    ///   - password: Password for the private key in the keystore manager attached to the provider 
+    ///   you set to `web3` passed in the initializer.
+    ///   - policies: Determining the behaviour of how transaction attributes like gas limit and 
+    ///   nonce are resolved. Default value is ``Policies/auto``.
+    ///   - sendRaw: If set to `true` transaction will be signed and sent using `eth_sendRawTransaction`.
+    ///   Otherwise, no signing attempts will take place and the `eth_sendTransaction` RPC will be used instead.
+    ///   Default value is `false`.
     public func writeToChain(password: String, policies: Policies = .auto, sendRaw: Bool = false) async throws -> TransactionSendingResult {
         try await policyResolver.resolveAll(for: &transaction, with: policies)
 
