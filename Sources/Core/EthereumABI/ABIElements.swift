@@ -202,7 +202,7 @@ extension ABI.Element.Function {
 
     /// Encode parameters of a given contract method
     /// - Parameter parameters: Parameters to pass to Ethereum contract
-    /// - Returns: Encoded data 
+    /// - Returns: Encoded data
     public func encodeParameters(_ parameters: [AnyObject]) -> Data? {
         guard parameters.count == inputs.count,
               let data = ABIEncoder.encode(types: inputs, values: parameters) else { return nil }
@@ -325,7 +325,7 @@ extension ABI.Element.Function {
             // set a flag to detect the request succeeded
         }
 
-        if returnArray.isEmpty {
+        if returnArray.isEmpty && !outputs.isEmpty {
             return nil
         }
 
