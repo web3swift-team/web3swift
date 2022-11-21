@@ -26,8 +26,7 @@ public extension ENS {
             case ABI
             case pubkey
             case text
-
-            func hash() -> String {
+            var hash: String {
                 switch self {
                 case .addr:
                     return "0x3b3b57de"
@@ -43,6 +42,7 @@ public extension ENS {
                     return "0x59d1d43c"
                 }
             }
+
         }
 
         lazy var resolverContract: Web3.Contract = {
@@ -62,20 +62,35 @@ public extension ENS {
         }
 
         public func supportsInterface(interfaceID: Data) async throws -> Bool {
-            guard let supports = try? await supportsInterface(interfaceID: interfaceID.toHexString()) else {throw Web3Error.processingError(desc: "Can't get answer")}
+            guard let supports = try? await supportsInterface(interfaceID: interfaceID.toHexString()) else {
+                throw Web3Error.processingError(desc: "Can't get answer")
+            }
+            return supports
+        }
+
+        public func supportsInterface(interfaceID: InterfaceName) async throws -> Bool {
+            guard let supports = try? await supportsInterface(interfaceID: interfaceID.hash) else {
+                throw Web3Error.processingError(desc: "Can't get answer")
+            }
             return supports
         }
 
         public func supportsInterface(interfaceID: String) async throws -> Bool {
-            guard let transaction = self.resolverContract.createReadOperation("supportsInterface", parameters: [interfaceID as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
-            guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
-            guard let supports = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Can't get answer")}
+            guard let transaction = self.resolverContract.createReadOperation("supportsInterface", parameters: [interfaceID as AnyObject]) else {
+                throw Web3Error.transactionSerializationError
+            }
+            guard let result = try? await transaction.callContractMethod() else {
+                throw Web3Error.processingError(desc: "Can't call transaction")
+            }
+            guard let supports = result["0"] as? Bool else {
+                throw Web3Error.processingError(desc: "Can't get answer")
+            }
             return supports
         }
 
         public func interfaceImplementer(forNode node: String, interfaceID: String) async throws -> EthereumAddress {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.resolverContract.createReadOperation("interfaceImplementer", parameters: [nameHash, interfaceID] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.resolverContract.createReadOperation("interfaceImplementer", parameters: [nameHash, interfaceID] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let address = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Can't get address")}
             return address
@@ -83,7 +98,7 @@ public extension ENS {
 
         public func getAddress(forNode node: String) async throws -> EthereumAddress {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.resolverContract.createReadOperation("addr", parameters: [nameHash as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.resolverContract.createReadOperation("addr", parameters: [nameHash as AnyObject]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let address = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Can't get address")}
             return address
@@ -95,14 +110,14 @@ public extension ENS {
             var options = options ?? defaultOptions
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.resolverContract.createWriteOperation("setAddr", parameters: [nameHash, address] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.resolverContract.createWriteOperation("setAddr", parameters: [nameHash, address] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.writeToChain(password: password) else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
 
         public func getCanonicalName(forNode node: String) async throws -> String {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.resolverContract.createReadOperation("name", parameters: [nameHash as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.resolverContract.createReadOperation("name", parameters: [nameHash as AnyObject]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let name = result["0"] as? String else {throw Web3Error.processingError(desc: "Can't get name")}
             return name
@@ -114,14 +129,14 @@ public extension ENS {
             var options = options ?? defaultOptions
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.resolverContract.createWriteOperation("setName", parameters: [nameHash, name] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.resolverContract.createWriteOperation("setName", parameters: [nameHash, name] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.writeToChain(password: password) else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
 
         func getContentHash(forNode node: String) async throws -> Data {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.resolverContract.createReadOperation("contenthash", parameters: [nameHash] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.resolverContract.createReadOperation("contenthash", parameters: [nameHash] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let content = result["0"] as? Data else {throw Web3Error.processingError(desc: "Can't get content")}
             return content
@@ -133,7 +148,7 @@ public extension ENS {
             var options = options ?? defaultOptions
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.resolverContract.createWriteOperation("setContenthash", parameters: [nameHash, hash] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.resolverContract.createWriteOperation("setContenthash", parameters: [nameHash, hash] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.writeToChain(password: password)
             else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
@@ -141,7 +156,7 @@ public extension ENS {
 
         public func getContractABI(forNode node: String, contentType: ENS.Resolver.ContentType) async throws -> (BigUInt, Data) {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.resolverContract.createReadOperation("ABI", parameters: [nameHash, contentType.rawValue] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.resolverContract.createReadOperation("ABI", parameters: [nameHash, contentType.rawValue] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let encoding = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Can't get encoding")}
             guard let data = result["1"] as? Data else {throw Web3Error.processingError(desc: "Can't get data")}
@@ -154,14 +169,14 @@ public extension ENS {
             var options = options ?? defaultOptions
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.resolverContract.createWriteOperation("setABI", parameters: [nameHash, contentType.rawValue, data] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.resolverContract.createWriteOperation("setABI", parameters: [nameHash, contentType.rawValue, data] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.writeToChain(password: password) else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
 
         public func getPublicKey(forNode node: String) async throws -> PublicKey {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.resolverContract.createReadOperation("pubkey", parameters: [nameHash as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.resolverContract.createReadOperation("pubkey", parameters: [nameHash as AnyObject]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let x = result["x"] as? Data else {throw Web3Error.processingError(desc: "Can't get x")}
             guard let y = result["y"] as? Data else {throw Web3Error.processingError(desc: "Can't get y")}
@@ -176,14 +191,14 @@ public extension ENS {
             options.to = self.resolverContractAddress
             let pubkeyWithoutPrefix = publicKey.getComponentsWithoutPrefix()
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.resolverContract.createWriteOperation("setPubkey", parameters: [nameHash, pubkeyWithoutPrefix.x, pubkeyWithoutPrefix.y] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.resolverContract.createWriteOperation("setPubkey", parameters: [nameHash, pubkeyWithoutPrefix.x, pubkeyWithoutPrefix.y] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.writeToChain(password: password) else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
 
         public func getTextData(forNode node: String, key: String) async throws -> String {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.resolverContract.createReadOperation("text", parameters: [nameHash, key] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.resolverContract.createReadOperation("text", parameters: [nameHash, key] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let text = result["0"] as? String else {throw Web3Error.processingError(desc: "Can't get text")}
             return text
@@ -195,7 +210,7 @@ public extension ENS {
             var options = options ?? defaultOptions
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
-            guard let transaction = self.resolverContract.createWriteOperation("setText", parameters: [nameHash, key, value] as [AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.resolverContract.createWriteOperation("setText", parameters: [nameHash, key, value] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.writeToChain(password: password) else {throw Web3Error.processingError(desc: "Can't send transaction")}
             return result
         }
