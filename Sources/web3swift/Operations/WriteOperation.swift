@@ -20,7 +20,7 @@ public class WriteOperation: ReadOperation {
     ///   - sendRaw: If set to `true` transaction will be signed and sent using `eth_sendRawTransaction`.
     ///   Otherwise, no signing attempts will take place and the `eth_sendTransaction` RPC will be used instead.
     ///   Default value is `false`.
-    public func writeToChain(password: String, policies: Policies = .auto, sendRaw: Bool = false) async throws -> TransactionSendingResult {
+    public func writeToChain(password: String, policies: Policies = .auto, sendRaw: Bool = true) async throws -> TransactionSendingResult {
         try await policyResolver.resolveAll(for: &transaction, with: policies)
 
         guard sendRaw else {
