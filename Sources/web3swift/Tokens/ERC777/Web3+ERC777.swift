@@ -51,13 +51,9 @@ public class ERC777: IERC777, ERC20BaseProperties {
         basePropertiesProvider = ERC20BasePropertiesProvider(contract: contract)
     }
 
-    // Must be 18!
     public func decimals() async throws -> UInt8 {
-        try await self.readProperties()
-        if self.decimals != nil {
-            return self.decimals!
-        }
-        return 18
+        try await readProperties()
+        return decimals ?? 18
     }
 
     public func getGranularity() async throws -> BigUInt {
