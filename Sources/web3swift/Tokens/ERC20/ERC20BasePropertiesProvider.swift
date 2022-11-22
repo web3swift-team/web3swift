@@ -8,6 +8,7 @@
 import BigInt
 import Foundation
 
+/// The default implementation of access of common [ERC-20](https://eips.ethereum.org/EIPS/eip-20#methods) properties `name`, `symbol` and `decimals`. 
 public final class ERC20BasePropertiesProvider {
     var name: String?
     var symbol: String?
