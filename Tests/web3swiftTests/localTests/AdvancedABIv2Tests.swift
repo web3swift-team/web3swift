@@ -132,7 +132,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         let policies = Policies(gasLimitPolicy: .manual(3000000))
-        let result = try await deployTx.writeToChain(password: "web3swift", policies: policies, sendRaw: false)
+        let result = try await deployTx.writeToChain(password: "web3swift", policies: policies)
         let txHash = result.hash.stripHexPrefix()
 
         Thread.sleep(forTimeInterval: 1.0)
