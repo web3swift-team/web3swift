@@ -1,5 +1,5 @@
 //
-//  ERCBasePropertiesProvider.swift
+//  ERC20BasePropertiesProvider.swift
 //  
 //
 //  Created by Jann Driessen on 21.11.22.
@@ -8,7 +8,7 @@
 import BigInt
 import Foundation
 
-public final class ERCBasePropertiesProvider {
+public final class ERC20BasePropertiesProvider {
     var name: String?
     var symbol: String?
     var decimals: UInt8?

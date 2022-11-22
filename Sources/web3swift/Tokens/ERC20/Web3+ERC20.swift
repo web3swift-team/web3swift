@@ -22,18 +22,14 @@ protocol IERC20 {
 // variables are lazyly evaluated or global token information (name, ticker, total supply)
 // can be imperatively read and saved
 // FIXME: Rewrite this to CodableTransaction
-public class ERC20: IERC20, ERCBaseProperties {
-    public var basePropertiesProvder: ERCBasePropertiesProvider
+public class ERC20: IERC20, ERC20BaseProperties {
+    public private(set) var basePropertiesProvider: ERC20BasePropertiesProvider
     public var transaction: CodableTransaction
     public var web3: Web3
     public var provider: Web3Provider
     public var address: EthereumAddress
 
-    public lazy var contract: Web3.Contract = {
-        let contract = self.web3.contract(Web3.Utils.erc20ABI, at: self.address, abiVersion: 2)
-        precondition(contract != nil)
-        return contract!
-    }()
+    public let contract: Web3.Contract
 
     public init(web3: Web3, provider: Web3Provider, address: EthereumAddress, transaction: CodableTransaction = .emptyTransaction) {
         self.web3 = web3
@@ -41,8 +37,8 @@ public class ERC20: IERC20, ERCBaseProperties {
         self.address = address
         self.transaction = transaction
         // Forced because this should fail if contract is wrongly configured
-        let contract = web3.contract(Web3.Utils.erc20ABI, at: address)!
-        self.basePropertiesProvder = ERCBasePropertiesProvider(contract: contract)
+        contract = web3.contract(Web3.Utils.erc20ABI, at: address)!
+        basePropertiesProvider = ERC20BasePropertiesProvider(contract: contract)
     }
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
