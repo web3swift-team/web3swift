@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// Declares common properties of an [ERC-20](https://eips.ethereum.org/EIPS/eip-20) complient smart contract.
+/// Default implementation of access to these properties is declared in the extension of this protocol.
 public protocol ERC20BaseProperties: AnyObject {
     var basePropertiesProvider: ERC20BasePropertiesProvider { get }
     var contract: Web3.Contract { get }
