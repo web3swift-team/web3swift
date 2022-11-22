@@ -33,7 +33,7 @@ public class ERC888: IERC888, ERC20BaseProperties {
         self.transaction = transaction
         self.transaction.to = address
         self.abi = abi
-        // Forced because this should fail if contract is wrongly configured
+        // TODO: Make `init` and `web3.contract.init` throwing. Forced because this should fail if ABI is wrongly configured
         contract = web3.contract(abi, at: address)!
         basePropertiesProvider = ERC20BasePropertiesProvider(contract: contract)
     }
