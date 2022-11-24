@@ -638,7 +638,7 @@ class TransactionsTests: XCTestCase {
             writeTX.transaction.from = from
             writeTX.transaction.value = value!
             let policies = Policies(gasLimitPolicy: .manual(78423))
-            let result = try await writeTX.writeToChain(password: "", policies: policies)
+            let result = try await writeTX.writeToChain(password: "", policies: policies, sendRaw: false)
             let txHash = Data.fromHex(result.hash.stripHexPrefix())!
             print("Transaction with hash ", txHash)
 
