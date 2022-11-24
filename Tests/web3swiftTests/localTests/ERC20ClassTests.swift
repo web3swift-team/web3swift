@@ -40,7 +40,7 @@ class ERC20ClassTests: LocalTestCase {
 
     func testERC20tokenBalanceAndAllowance() async throws {
         let (web3, _, receipt, _) = try await TestHelpers.localDeployERC20()
-        let erc20token = ERC20.init(web3: web3, provider: web3.provider, address: receipt.contractAddress!)
+        let erc20token = ERC20(web3: web3, provider: web3.provider, address: receipt.contractAddress!)
 
         let userAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
 
