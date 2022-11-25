@@ -5,6 +5,7 @@
 
 @testable import Core
 import XCTest
+import BigInt
 
 final class ArrayExtensionTests: XCTestCase {
     func testToAnyObjectEmpty() {
@@ -20,11 +21,23 @@ final class ArrayExtensionTests: XCTestCase {
     }
     
     func testToAnyObjectNilAndNonNils() throws {
-        let result = [1, nil, "", NSNull()].toAnyObject()
-        XCTAssertEqual(result.count, 4)
+        let result = [1,
+                      nil,
+                      "2",
+                      NSNull(),
+                      Data(hex: "FA"),
+                      BigInt(3),
+                      BigUInt(4),
+                      EthereumAddress(Data(count: 20))
+        ].toAnyObject()
+        XCTAssertEqual(result.count, 8)
         XCTAssertEqual(result.first as? Int, 1)
-        XCTAssertTrue(result.dropFirst().first is NSNull)
-        XCTAssertNil(result.dropFirst().first as? String, "2")
-        XCTAssertTrue(result.dropFirst().first is NSNull)
+        XCTAssertTrue(result.dropFirst(1).first is NSNull)
+        XCTAssertEqual(result.dropFirst(2).first as? String, "2")
+        XCTAssertTrue(result.dropFirst(3).first is NSNull)
+        XCTAssertEqual(result.dropFirst(4).first as? Data, Data(hex: "FA"))
+        XCTAssertEqual(result.dropFirst(5).first as? BigInt, BigInt(3))
+        XCTAssertEqual(result.dropFirst(6).first as? BigUInt, BigUInt(4))
+        XCTAssertEqual(result.dropFirst(7).first as? EthereumAddress, EthereumAddress(Data(count: 20)))
     }
 }

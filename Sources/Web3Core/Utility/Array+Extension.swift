@@ -107,9 +107,9 @@ extension Array where Element: BinaryInteger {
     }
 }
 
-//MARK: - Conversion
+// MARK: - Conversion
 
-/// Transforms an Array of Any? into an Array of AnyObject
+/// Transforms `[Any?]` into `[AnyObject]`
 extension Array where Element == Any? {
     func toAnyObject() -> [AnyObject] {
         self.map{ $0 as AnyObject }
