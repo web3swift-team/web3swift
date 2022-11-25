@@ -325,7 +325,7 @@ extension ABI.Element.Function {
             // set a flag to detect the request succeeded
         }
 
-        if returnArray.isEmpty && !outputs.isEmpty && data.isEmpty{
+        if returnArray.isEmpty && !outputs.isEmpty && data.isEmpty {
             return nil
         }
 
