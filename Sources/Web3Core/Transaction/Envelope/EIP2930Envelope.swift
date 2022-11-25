@@ -211,9 +211,9 @@ extension EIP2930Envelope {
 
         switch type {
         case .transaction:
-            fields = [chainID, nonce, gasPrice, gasLimit, to.addressData, value, data, list, v, r, s] as [AnyObject]
+            fields = [chainID, nonce, gasPrice, gasLimit, to.addressData, value, data, list, v, r, s].toAnyObject()
         case .signature:
-            fields = [chainID, nonce, gasPrice, gasLimit, to.addressData, value, data, list] as [AnyObject]
+            fields = [chainID, nonce, gasPrice, gasLimit, to.addressData, value, data, list].toAnyObject()
         }
         guard var result = RLP.encode(fields) else { return nil }
         result.insert(UInt8(self.type.rawValue), at: 0)
