@@ -15,9 +15,7 @@ class LocalTestCase: XCTestCase {
     override func setUp() async throws {
         let web3 = try! await Web3.new(LocalTestCase.url)
 
-        guard let block = try? await web3.eth.blockNumber() else {
-            return
-        }
+        let block = try await web3.eth.blockNumber()
         guard block < 25 else { return }
 
         print("\n ****** Preloading Ganache (\(25 - block) blocks) *****\n")
@@ -25,7 +23,7 @@ class LocalTestCase: XCTestCase {
         let allAddresses = try! await web3.eth.ownedAccounts()
         let sendToAddress = allAddresses[0]
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
-        let value = Utilities.parseToBigUInt("1.0", units: .eth)!
+        let value = try XCTUnwrap(Utilities.parseToBigUInt("1.0", units: .ether))
         let from = allAddresses[0]
         let writeTX = contract!.createWriteOperation("fallback")!
         writeTX.transaction.from = from

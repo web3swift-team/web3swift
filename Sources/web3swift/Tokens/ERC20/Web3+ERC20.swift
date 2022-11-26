@@ -23,27 +23,22 @@ protocol IERC20 {
 // can be imperatively read and saved
 // FIXME: Rewrite this to CodableTransaction
 public class ERC20: IERC20, ERC20BaseProperties {
-    var _name: String?
-    var _symbol: String?
-    var _decimals: UInt8?
-    var _hasReadProperties: Bool = false
-
+    public private(set) var basePropertiesProvider: ERC20BasePropertiesProvider
     public var transaction: CodableTransaction
     public var web3: Web3
     public var provider: Web3Provider
     public var address: EthereumAddress
 
-    lazy var contract: Web3.Contract = {
-        let contract = self.web3.contract(Web3.Utils.erc20ABI, at: self.address, abiVersion: 2)
-        precondition(contract != nil)
-        return contract!
-    }()
+    public let contract: Web3.Contract
 
     public init(web3: Web3, provider: Web3Provider, address: EthereumAddress, transaction: CodableTransaction = .emptyTransaction) {
         self.web3 = web3
         self.provider = provider
         self.address = address
         self.transaction = transaction
+        // TODO: Make `init` and `web3.contract.init` throwing. Forced because this should fail if ABI is wrongly configured
+        contract = web3.contract(Web3.Utils.erc20ABI, at: address)!
+        basePropertiesProvider = ERC20BasePropertiesProvider(contract: contract)
     }
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
@@ -171,48 +166,4 @@ public class ERC20: IERC20, ERC20BaseProperties {
         return res
     }
 
-}
-
-protocol ERC20BaseProperties: AnyObject {
-    var contract: Web3.Contract { get }
-    var _name: String? { get set }
-    var _symbol: String? { get set }
-    var _decimals: UInt8? { get set }
-    var _hasReadProperties: Bool { get set }
-    func readProperties() async throws
-    func name() -> String?
-    func symbol() -> String?
-    func decimals() -> UInt8?
-}
-
-extension ERC20BaseProperties {
-    public func name() -> String? {
-        _name
-    }
-
-    public func symbol() -> String? {
-        _symbol
-    }
-
-    public func decimals() -> UInt8? {
-        _decimals
-    }
-
-    public func readProperties() async throws {
-        guard !_hasReadProperties else { return }
-        guard contract.contract.address != nil else {return}
-        _name = try await contract
-            .createReadOperation("name")?
-            .callContractMethod()["0"] as? String
-
-        _symbol = try await contract
-            .createReadOperation("symbol")?
-            .callContractMethod()["0"] as? String
-
-        let decimals = try await contract
-            .createReadOperation("decimals")?
-            .callContractMethod()["0"] as? BigUInt
-        _decimals = decimals != nil ? UInt8(decimals!) : nil
-        _hasReadProperties = true
-    }
 }

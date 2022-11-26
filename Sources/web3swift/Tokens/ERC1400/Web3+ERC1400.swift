@@ -64,23 +64,14 @@ protocol IERC1400: IERC20 {
 // can be imperatively read and saved
 // FIXME: Rewrite this to CodableTransaction
 public class ERC1400: IERC1400, ERC20BaseProperties {
-
-    internal var _name: String?
-    internal var _symbol: String?
-    internal var _decimals: UInt8?
-    internal var _hasReadProperties: Bool = false
-
+    public private(set) var basePropertiesProvider: ERC20BasePropertiesProvider
     public var transaction: CodableTransaction
     public var web3: Web3
     public var provider: Web3Provider
     public var address: EthereumAddress
     public var abi: String
 
-    lazy var contract: Web3.Contract = {
-        let contract = self.web3.contract(self.abi, at: self.address, abiVersion: 2)
-        precondition(contract != nil)
-        return contract!
-    }()
+    public let contract: Web3.Contract
 
     public init(web3: Web3, provider: Web3Provider, address: EthereumAddress, abi: String = Web3.Utils.erc1400ABI, transaction: CodableTransaction = .emptyTransaction) {
         self.web3 = web3
@@ -89,6 +80,9 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         self.transaction = transaction
         self.transaction.to = address
         self.abi = abi
+        // TODO: Make `init` and `web3.contract.init` throwing. Forced because this should fail if ABI is wrongly configured
+        contract = web3.contract(abi, at: address)!
+        basePropertiesProvider = ERC20BasePropertiesProvider(contract: contract)
     }
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
