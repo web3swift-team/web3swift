@@ -1,6 +1,6 @@
 //
 //  PolicyResolverTests.swift
-//  
+//
 //
 //  Created by Jann Driessen on 01.11.22.
 //
@@ -20,7 +20,7 @@ final class PolicyResolverTests: XCTestCase {
             type: .eip1559,
             to: EthereumAddress("0xb47292B7bBedA4447564B8336E4eD1f93735e7C7")!,
             chainID: web3.provider.network!.chainID,
-            value: Utilities.parseToBigUInt("0.1", units: .eth)!,
+            value: try XCTUnwrap(Utilities.parseToBigUInt("0.1", units: .ether)),
             gasLimit: 21_000
         )
         // Vitalik's address
@@ -42,7 +42,7 @@ final class PolicyResolverTests: XCTestCase {
             type: .legacy,
             to: EthereumAddress("0xb47292B7bBedA4447564B8336E4eD1f93735e7C7")!,
             chainID: web3.provider.network!.chainID,
-            value: Utilities.parseToBigUInt("0.1", units: .eth)!,
+            value: try XCTUnwrap(Utilities.parseToBigUInt("0.1", units: .ether)),
             gasLimit: 21_000
         )
         // Vitalik's address
@@ -67,7 +67,7 @@ final class PolicyResolverTests: XCTestCase {
             type: .eip1559,
             to: EthereumAddress("0xb47292B7bBedA4447564B8336E4eD1f93735e7C7")!,
             chainID: web3.provider.network!.chainID,
-            value: Utilities.parseToBigUInt("0.1", units: .eth)!,
+            value: try XCTUnwrap(Utilities.parseToBigUInt("0.1", units: .ether)),
             gasLimit: 21_000
         )
         // Vitalik's address
