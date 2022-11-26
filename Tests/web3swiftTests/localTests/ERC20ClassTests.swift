@@ -4,7 +4,6 @@
 //
 
 import XCTest
-import BigInt
 import Core
 
 @testable import web3swift
@@ -17,9 +16,9 @@ class ERC20ClassTests: LocalTestCase {
             let erc20token = ERC20(web3: web3, provider: web3.provider, address: receipt.contractAddress!)
             // All async reads happen in readProperties
             try await erc20token.readProperties()
-            XCTAssertEqual(erc20token.symbol(), "w3s")
-            XCTAssertEqual(erc20token.name(), "web3swift")
-            XCTAssertEqual(erc20token.decimals(), 18)
+            XCTAssertEqual(erc20token.symbol, "w3s")
+            XCTAssertEqual(erc20token.name, "web3swift")
+            XCTAssertEqual(erc20token.decimals, 18)
         }
         /// We had an issue with multiple async reads performed at the same point in time
         /// sometimes returning wrong values (actually values of each other).
