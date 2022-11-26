@@ -195,12 +195,12 @@ extension LegacyEnvelope {
         let fields: [AnyObject]
         switch type {
         case .transaction:
-            fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, v, r, s] as [AnyObject]
+            fields = [nonce, gasPrice, gasLimit, to.addressData, value, data, v, r, s] as [AnyObject]
         case .signature:
-            if let chainID = self.chainID, chainID != 0 {
-                fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data, chainID, BigUInt(0), BigUInt(0)] as [AnyObject]
+            if let chainID = chainID, chainID != 0 {
+                fields = [nonce, gasPrice, gasLimit, to.addressData, value, data, chainID, BigUInt(0), BigUInt(0)] as [AnyObject]
             } else {
-                fields = [self.nonce, self.gasPrice, self.gasLimit, self.to.addressData, self.value, self.data] as [AnyObject]
+                fields = [nonce, gasPrice, gasLimit, to.addressData, value, data] as [AnyObject]
             }
         }
         return RLP.encode(fields)
