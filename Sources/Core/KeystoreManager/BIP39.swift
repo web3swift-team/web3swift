@@ -89,17 +89,34 @@ public class BIP39 {
         return wordList.joined(separator: separator)
     }
 
+    static func bitarray(from data: Data) -> String {
+        data.map {
+            let binary = String($0, radix: 2)
+            let padding = String(repeating: "0", count: 8 - binary.count)
+            return padding + binary
+        }.joined()
+    }
+    static func generateChecksum(entropyBytes inputData: Data, checksumLength: Int) -> String? {
+        guard let checksumData = inputData.sha256().bitsInRange(0, checksumLength) else {
+            return nil
+        }
+        let checksum = String(checksumData, radix: 2).leftPadding(toLength: checksumLength, withPad: "0")
+        return checksum
+    }
+
+    /**
+    Initializes a new mnemonics set with the provided bitsOfEntropy.
+     **/
+
     /// Initializes a new mnemonics set with the provided bitsOfEntropy.
     /// - Parameters:
     ///   - bitsOfEntropy: 128 - 12 words, 192 - 18 words , 256 - 24 words in output.
     ///   - language: words language, default english
     /// - Returns: random 12-24 words, that represent new Mnemonic phrase.
-    static public func generateMnemonics(bitsOfEntropy: Int, language: BIP39Language = BIP39Language.english) throws -> String? {
+    static public func generateMnemonics(bitsOfEntropy: Int, language: BIP39Language = .english) throws -> String? {
         guard bitsOfEntropy >= 128 && bitsOfEntropy <= 256 && bitsOfEntropy.isMultiple(of: 32) else {return nil}
         guard let entropy = Data.randomBytes(length: bitsOfEntropy/8) else {throw AbstractKeystoreError.noEntropyError}
-        return BIP39.generateMnemonicsFromEntropy(entropy: entropy, language:
-        language)
-
+        return generateMnemonicsFromEntropy(entropy: entropy, language: language)
     }
 
     static public func mnemonicsToEntropy(_ mnemonics: String, language: BIP39Language = BIP39Language.english) -> Data? {
@@ -148,6 +165,6 @@ public class BIP39 {
         guard let mnemonics = BIP39.generateMnemonicsFromEntropy(entropy: entropy, language: language) else {
             return nil
         }
-        return BIP39.seedFromMmemonics(mnemonics, password: password, language: language)
+        return seedFromMmemonics(mnemonics, password: password, language: language)
     }
 }
