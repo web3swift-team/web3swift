@@ -264,72 +264,75 @@ extension ABI.Element.Function {
         return Core.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
     }
 
-    public func decodeReturnData(_ data: Data) -> [String: Any]? {
-        // the response size greater than equal 100 bytes, when read function aborted by "require" statement.
-        // if "require" statement has no message argument, the response is empty (0 byte).
-        if data.bytes.count >= 100 {
-            let check00_31 = BigUInt("08C379A000000000000000000000000000000000000000000000000000000000", radix: 16)!
-            let check32_63 = BigUInt("0000002000000000000000000000000000000000000000000000000000000000", radix: 16)!
+    /// Decodes data returned by a function call. Able to decode `revert("...")` calls.
+    /// - Parameter data: bytes returned by a function call.
+    /// - Returns: a dictionary containing returned data mappend to indices and names of returned values if these are not `nil`.
+    /// Return cases:
+    ///     - when no `outputs` declared: returning `["_success": true]`;
+    ///     - when `outputs` declared and decoding completed successfully: returning `["_success": true, "0": value_1, "1": value_2, ...]`.
+    ///     Additionally this dictionary will have mappings to output names if these names are specified in the ABI.
+    ///     - function call was aborted using `require(some_string_error_message)`: returning `["_success": false, "_abortedByRequire": true, "_errorMessageFromRequire": error_message]`.
+    ///     - in case of any error: returning `["_success": false, "_failureReason": String]`;
+    ///         Error reasons include:
+    ///            -  `outputs` declared but at least one value failed to be decoded;
+    ///            - `data.count` is less than `outputs.count * 32`;
+    ///            - `outputs` defined and `data` is empty;
+    ///            - `data` represent reverted transaction
+    public func decodeReturnData(_ data: Data) -> [String: Any] {
+        guard !outputs.isEmpty else {
+            NSLog("Function doesn't have any output types to decode given data.")
+            return ["_success": true]
+        }
 
-            // check data[00-31] and data[32-63]
-            if check00_31 == BigUInt(data[0...31]) && check32_63 == BigUInt(data[32...63]) {
-                // data.bytes[64-67] contains the length of require message
-                let len = (Int(data.bytes[64])<<24) | (Int(data.bytes[65])<<16) | (Int(data.bytes[66])<<8) | Int(data.bytes[67])
+        /// If data is empty and outputs are expected it is treated as a `requite(expression)` call with no message.
+        /// In solidity `require(expression)` call, if `expresison` returns `false`, results in an empty response.
+        if data.count == 0 && !outputs.isEmpty {
+            return ["_success": false, "_failureReason": "Cannot decode empty data. \(outputs.count) outputs are expected: \(outputs.map { $0.type.abiRepresentation }). Was this a result of en empty `require(expression)` call?"]
+        }
 
-                let message = String(bytes: data.bytes[68..<(68+len)], encoding: .utf8)!
+        guard outputs.count * 32 <= data.count else {
+            return ["_success": false, "_failureReason": "Bytes count must be at least \(outputs.count * 32). Given \(data.count). Decoding will fail."]
+        }
 
-                print("read function aborted by require statement: \(message)")
+        /// How `require(expression, string)` return value is decomposed:
+        ///  - `08C379A0` function selector for Error(string);
+        ///  - next 32 bytes are the data offset;
+        ///  - next 32 bytes are the error message length;
+        ///  - the next N bytes, where N is the int value
+        ///
+        /// Data offset must be present. Hexadecimal value of `0000...0020` is 32 in decimal. Reasoning for `BigInt(...) == 32`.
+        if data[0..<4] == Data.fromHex("08C379A0"),
+           data.bytes.count >= 100,
+           BigInt(data[4..<36]) == 32,
+           let messageLength = Int(Data(data[36..<68]).toHexString(), radix: 16),
+           let message = String(bytes: data.bytes[68..<(68+messageLength)], encoding: .utf8) {
+            var returnArray: [String: Any] = ["_success": false,
+                                              "_failureReason": "`require` was executed.",
+                                              "_abortedByRequire": true,
+                                              "_errorMessageFromRequire": message]
 
-                var returnArray = [String: Any]()
-
-                // set infomation
-                returnArray["_abortedByRequire"] = true
-                returnArray["_errorMessageFromRequire"] = message
-
-                // set empty values
-                for i in 0 ..< outputs.count {
-                    let name = "\(i)"
-                    returnArray[name] = outputs[i].type.emptyValue
-                    if outputs[i].name != "" {
-                        returnArray[outputs[i].name] = outputs[i].type.emptyValue
-                    }
+            // set empty values
+            for i in outputs.indices {
+                returnArray["\(i)"] = outputs[i].type.emptyValue
+                if !outputs[i].name.isEmpty {
+                    returnArray[outputs[i].name] = outputs[i].type.emptyValue
                 }
-
-                return returnArray
             }
+
+            return returnArray
         }
 
-        var returnArray = [String: Any]()
-
-        // the "require" statement with no message argument will be caught here
-        if data.count == 0 && outputs.count == 1 {
-            let name = "0"
-            let value = outputs[0].type.emptyValue
-            returnArray[name] = value
-            if outputs[0].name != "" {
-                returnArray[outputs[0].name] = value
-            }
-        } else {
-            guard outputs.count * 32 <= data.count else { return nil }
-
-            var i = 0
-            guard let values = ABIDecoder.decode(types: outputs, data: data) else { return nil }
-            for output in outputs {
-                let name = "\(i)"
-                returnArray[name] = values[i]
-                if output.name != "" {
-                    returnArray[output.name] = values[i]
-                }
-                i = i + 1
-            }
-            // set a flag to detect the request succeeded
+        // TODO: need improvement - we should be able to tell which value failed to be decoded
+        guard let values = ABIDecoder.decode(types: outputs, data: data) else {
+            return ["_success": false, "_failureReason": "Failed to decode at least one value."]
         }
-
-        if returnArray.isEmpty && !outputs.isEmpty {
-            return nil
+        var returnArray: [String: Any] = ["_success": true]
+        for i in outputs.indices {
+            returnArray["\(i)"] = values[i]
+            if !outputs[i].name.isEmpty {
+                returnArray[outputs[i].name] = values[i]
+            }
         }
-
-        returnArray["_success"] = true
         return returnArray
     }
 }
