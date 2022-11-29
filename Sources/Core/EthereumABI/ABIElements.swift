@@ -264,7 +264,7 @@ extension ABI.Element.Function {
         return Core.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
     }
 
-    /// Decodes data returned by a function call. Able to decode `revert("...")` calls.
+    /// Decodes data returned by a function call. Able to decode `revert(message)`, `revert CustomError(...)` and `require(expression, message)` calls.
     /// - Parameter data: bytes returned by a function call.
     /// - Returns: a dictionary containing returned data mappend to indices and names of returned values if these are not `nil`.
     /// Return cases:
@@ -279,21 +279,6 @@ extension ABI.Element.Function {
     ///            - `outputs` defined and `data` is empty;
     ///            - `data` represent reverted transaction
     public func decodeReturnData(_ data: Data) -> [String: Any] {
-        guard !outputs.isEmpty else {
-            NSLog("Function doesn't have any output types to decode given data.")
-            return ["_success": true]
-        }
-
-        /// If data is empty and outputs are expected it is treated as a `requite(expression)` call with no message.
-        /// In solidity `require(expression)` call, if `expresison` returns `false`, results in an empty response.
-        if data.count == 0 && !outputs.isEmpty {
-            return ["_success": false, "_failureReason": "Cannot decode empty data. \(outputs.count) outputs are expected: \(outputs.map { $0.type.abiRepresentation }). Was this a result of en empty `require(expression)` call?"]
-        }
-
-        guard outputs.count * 32 <= data.count else {
-            return ["_success": false, "_failureReason": "Bytes count must be at least \(outputs.count * 32). Given \(data.count). Decoding will fail."]
-        }
-
         /// How `require(expression, string)` return value is decomposed:
         ///  - `08C379A0` function selector for Error(string);
         ///  - next 32 bytes are the data offset;
@@ -301,8 +286,8 @@ extension ABI.Element.Function {
         ///  - the next N bytes, where N is the int value
         ///
         /// Data offset must be present. Hexadecimal value of `0000...0020` is 32 in decimal. Reasoning for `BigInt(...) == 32`.
-        if data[0..<4] == Data.fromHex("08C379A0"),
-           data.bytes.count >= 100,
+        if data.bytes.count >= 100,
+           data[0..<4] == Data.fromHex("08C379A0"),
            BigInt(data[4..<36]) == 32,
            let messageLength = Int(Data(data[36..<68]).toHexString(), radix: 16),
            let message = String(bytes: data.bytes[68..<(68+messageLength)], encoding: .utf8) {
@@ -320,6 +305,21 @@ extension ABI.Element.Function {
             }
 
             return returnArray
+        }
+
+        guard !outputs.isEmpty else {
+            NSLog("Function doesn't have any output types to decode given data.")
+            return ["_success": true]
+        }
+
+        /// If data is empty and outputs are expected it is treated as a `requite(expression)` call with no message.
+        /// In solidity `require(expression)` call, if `expresison` returns `false`, results in an empty response.
+        if data.count == 0 && !outputs.isEmpty {
+            return ["_success": false, "_failureReason": "Cannot decode empty data. \(outputs.count) outputs are expected: \(outputs.map { $0.type.abiRepresentation }). Was this a result of en empty `require(expression)` call?"]
+        }
+
+        guard outputs.count * 32 <= data.count else {
+            return ["_success": false, "_failureReason": "Bytes count must be at least \(outputs.count * 32). Given \(data.count). Decoding will fail."]
         }
 
         // TODO: need improvement - we should be able to tell which value failed to be decoded
