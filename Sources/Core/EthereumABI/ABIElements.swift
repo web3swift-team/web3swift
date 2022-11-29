@@ -77,7 +77,7 @@ public extension ABI {
             public let type: ParameterType
 
             public init(name: String, type: ParameterType) {
-                self.name = name
+                self.name = name.trim()
                 self.type = type
             }
         }
@@ -91,7 +91,7 @@ public extension ABI {
             public let payable: Bool
 
             public init(name: String?, inputs: [InOut], outputs: [InOut], constant: Bool, payable: Bool) {
-                self.name = name
+                self.name = name?.trim()
                 self.inputs = inputs
                 self.outputs = outputs
                 self.constant = constant
@@ -103,6 +103,7 @@ public extension ABI {
             public let inputs: [InOut]
             public let constant: Bool
             public let payable: Bool
+
             public init(inputs: [InOut], constant: Bool, payable: Bool) {
                 self.inputs = inputs
                 self.constant = constant
@@ -126,7 +127,7 @@ public extension ABI {
             public let anonymous: Bool
 
             public init(name: String, inputs: [Input], anonymous: Bool) {
-                self.name = name
+                self.name = name.trim()
                 self.inputs = inputs
                 self.anonymous = anonymous
             }
@@ -137,7 +138,7 @@ public extension ABI {
                 public let indexed: Bool
 
                 public init(name: String, type: ParameterType, indexed: Bool) {
-                    self.name = name
+                    self.name = name.trim()
                     self.type = type
                     self.indexed = indexed
                 }
