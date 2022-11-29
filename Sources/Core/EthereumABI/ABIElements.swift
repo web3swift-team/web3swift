@@ -156,16 +156,16 @@ public extension ABI {
         /// Custom structured error type available since solidity 0.8.4
         public struct EthError {
             public let name: String
-            public let inputs: [Input]
+            public let inputs: [InOut]
 
-            public struct Input {
-                public let name: String
-                public let type: ParameterType
+            /// e.g. `CustomError(uint32, address sender)`
+            public var errorDeclaration: String {
+                "\(name)(\(inputs.map { "\($0.type.abiRepresentation) \($0.name)".trim() }.joined(separator: ",")))"
+            }
 
-                public init(name: String, type: ParameterType) {
-                    self.name = name
-                    self.type = type
-                }
+            public init(name: String, inputs: [InOut]) {
+                self.name = name.trim()
+                self.inputs = inputs
             }
         }
     }
