@@ -26,6 +26,22 @@ env:
   DEVELOPER_DIR: /Applications/Xcode_14.1.app/Contents/Developer
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Resolve dependencies
+      run: swift package resolve
+    - name: GitHub Action for SwiftLint
+      uses: norio-nomura/action-swiftlint@3.2.1
+    - name: GitHub Action for SwiftLint with --strict
+      uses: norio-nomura/action-swiftlint@3.2.1
+      with:
+          args: --strict
+    - name: GitHub Action for SwiftLint (Only files changed in the PR)
+      uses: norio-nomura/action-swiftlint@3.2.1
+      env:
+        DIFF_BASE: ${{ github.base_ref }}
   spm:
     name: Swift Package Manager 5.7
     runs-on: macOS-12
