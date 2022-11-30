@@ -15,6 +15,7 @@ on:
       - 'Tests/**'
       - 'web3swift*/**'
       - '.github/workflows/**'
+      - '.swiftlint.yml'
   pull_request:
     branches:
       - master
@@ -35,6 +36,16 @@ jobs:
       - uses: actions/checkout@v2
       - name: Resolve dependencies
         run: swift package resolve
+      - name: GitHub Action for SwiftLint
+        uses: norio-nomura/action-swiftlint@3.2.1
+      - name: GitHub Action for SwiftLint with --strict
+        uses: norio-nomura/action-swiftlint@3.2.1
+        with:
+          args: --strict
+      - name: GitHub Action for SwiftLint (Only files changed in the PR)
+        uses: norio-nomura/action-swiftlint@3.2.1
+        env:
+          DIFF_BASE: ${{ github.base_ref }}
       - name: Build
         run: swift build --build-tests
       - name: Install ganache
