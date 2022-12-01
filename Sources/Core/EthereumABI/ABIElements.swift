@@ -265,58 +265,63 @@ extension ABI.Element.Function {
         return Core.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
     }
 
-    /// Decodes data returned by a function call. Able to decode `revert(message)`, `revert CustomError(...)` and `require(expression, message)` calls.
-    /// - Parameter data: bytes returned by a function call.
-    /// - Returns: a dictionary containing returned data mappend to indices and names of returned values if these are not `nil`.
+    /// Decodes data returned by a function call. Able to decode `revert(string)`, `revert CustomError(...)` and `require(expression, string)` calls.
+    /// - Parameters:
+    ///  - data: bytes returned by a function call;
+    ///  - errors: optional dictionary of known errors that could be returned by the function you called. Used to decode the error information.
+    /// - Returns: a dictionary containing decoded data mappend to indices and names of returned values if these are not `nil`.
+    /// If `data` is an error response returns dictionary containing all available information about that specific error. Read more for details.
+    ///
     /// Return cases:
-    ///     - when no `outputs` declared: returning `["_success": true]`;
-    ///     - when `outputs` declared and decoding completed successfully: returning `["_success": true, "0": value_1, "1": value_2, ...]`.
-    ///     Additionally this dictionary will have mappings to output names if these names are specified in the ABI.
-    ///     - function call was aborted using `require(some_string_error_message)`: returning `["_success": false, "_abortedByRequire": true, "_errorMessageFromRequire": error_message]`.
-    ///     - in case of any error: returning `["_success": false, "_failureReason": String]`;
-    ///         Error reasons include:
-    ///            -  `outputs` declared but at least one value failed to be decoded;
-    ///            - `data.count` is less than `outputs.count * 32`;
-    ///            - `outputs` defined and `data` is empty;
-    ///            - `data` represent reverted transaction
-    public func decodeReturnData(_ data: Data) -> [String: Any] {
-        /// How `require(expression, string)` return value is decomposed:
-        ///  - `08C379A0` function selector for Error(string);
-        ///  - next 32 bytes are the data offset;
-        ///  - next 32 bytes are the error message length;
-        ///  - the next N bytes, where N is the int value
-        ///
-        /// Data offset must be present. Hexadecimal value of `0000...0020` is 32 in decimal. Reasoning for `BigInt(...) == 32`.
-        if data.bytes.count >= 100,
-           data[0..<4] == Data.fromHex("08C379A0"),
-           BigInt(data[4..<36]) == 32,
-           let messageLength = Int(Data(data[36..<68]).toHexString(), radix: 16),
-           let message = String(bytes: data.bytes[68..<(68+messageLength)], encoding: .utf8) {
-            var returnArray: [String: Any] = ["_success": false,
-                                              "_failureReason": "`require` was executed.",
-                                              "_abortedByRequire": true,
-                                              "_errorMessageFromRequire": message]
-
-            // set empty values
-            for i in outputs.indices {
-                returnArray["\(i)"] = outputs[i].type.emptyValue
-                if !outputs[i].name.isEmpty {
-                    returnArray[outputs[i].name] = outputs[i].type.emptyValue
-                }
-            }
-
-            return returnArray
+    /// - when no `outputs` declared and `data` is not an error response:
+    ///```swift
+    ///["_success": true]
+    ///```
+    /// - when `outputs` declared and decoding completed successfully:
+    ///```swift
+    ///["_success": true, "0": value_1, "1": value_2, ...]
+    ///```
+    ///Additionally this dictionary will have mappings to output names if these names are specified in the ABI;
+    /// - function call was aborted using `revert(message)` or `require(expression, message)`:
+    ///```swift
+    ///["_success": false, "_abortedByRevertOrRequire": true, "_errorMessage": message]`
+    ///```
+    /// - function call was aborted using `revert CustomMessage()` and `errors` argument contains the ABI of that custom error type:
+    ///```swift
+    ///["_success": false,
+    ///"_abortedByRevertOrRequire": true,
+    ///"_error": error_name_and_types, // e.g. `MyCustomError(uint256, address senderAddress)`
+    ///"0": error_arg1,
+    ///"1": error_arg2,
+    ///...,
+    ///"error_arg1_name": error_arg1, // Only named arguments will be mapped to their names, e.g. `"senderAddress": EthereumAddress`
+    ///"error_arg2_name": error_arg2, // Otherwise, you can query them by position index.
+    ///...]
+    ///```
+    ///- in case of any error:
+    ///```swift
+    ///["_success": false, "_failureReason": String]
+    ///```
+    ///Error reasons include:
+    /// -  `outputs` declared but at least one value failed to be decoded;
+    /// - `data.count` is less than `outputs.count * 32`;
+    /// - `outputs` defined and `data` is empty;
+    /// - `data` represent reverted transaction
+    ///
+    /// How `revert(string)` and `require(expression, string)` return value is decomposed:
+    ///  - `08C379A0` function selector for `Error(string)`;
+    ///  - next 32 bytes are the data offset;
+    ///  - next 32 bytes are the error message length;
+    ///  - the next N bytes, where N >= 32, are the message bytes
+    ///  - the rest are 0 bytes padding.
+    public func decodeReturnData(_ data: Data, errors: [String: ABI.Element.EthError]? = nil) -> [String: Any] {
+        if let decodedError = decodeErrorResponse(data, errors: errors) {
+            return decodedError
         }
 
         guard !outputs.isEmpty else {
             NSLog("Function doesn't have any output types to decode given data.")
             return ["_success": true]
-        }
-
-        /// If data is empty and outputs are expected it is treated as a `requite(expression)` call with no message.
-        /// In solidity `require(expression)` call, if `expresison` returns `false`, results in an empty response.
-        if data.count == 0 && !outputs.isEmpty {
-            return ["_success": false, "_failureReason": "Cannot decode empty data. \(outputs.count) outputs are expected: \(outputs.map { $0.type.abiRepresentation }). Was this a result of en empty `require(expression)` call?"]
         }
 
         guard outputs.count * 32 <= data.count else {
@@ -335,6 +340,93 @@ extension ABI.Element.Function {
             }
         }
         return returnArray
+    }
+
+    /// Decodes `revert(string)`, `revert CustomError(...)` and `require(expression, string)` calls.
+    /// If `data` is empty and `outputs` are not empty it's considered that data is a result of `revert()` or `require(false)`.
+    /// - Parameters:
+    ///   - data: returned function call data to decode;
+    ///   - errors: optional known errors that could be thrown by the function you called.
+    /// - Returns: dictionary containing information about the error thrown by the function call.
+    ///
+    /// What could be returned:
+    /// - `nil` if data doesn't represent an error or it failed to be mapped to any of the `errors` or `Error(string)` types;
+    /// - `nil` is `data.isEmpty` and `outputs.isEmpty`;
+    /// - `data.isEmpty` and `!outputs.isEmpty`:
+    /// ```swift
+    /// ["_success": false,
+    /// "_failureReason": "Cannot decode empty data. X outputs are expected: [outputs_types]. Was this a result of en empty `require(false)` or `revert()` call?"]
+    /// ```
+    /// - function call was aborted using `revert(message)` or `require(expression, message)`:
+    /// ```swift
+    /// ["_success": false, "_abortedByRevertOrRequire": true, "_errorMessage": message]`
+    /// ```
+    /// - function call was aborted using `revert CustomMessage()` and `errors` argument contains the ABI of that custom error type:
+    /// ```swift
+    /// ["_success": false,
+    /// "_abortedByRevertOrRequire": true,
+    /// "_error": error_name_and_types, // e.g. `MyCustomError(uint256, address senderAddress)`
+    /// "0": error_arg1,
+    /// "1": error_arg2,
+    /// ...,
+    /// "error_arg1_name": error_arg1, // Only named arguments will be mapped to their names, e.g. `"senderAddress": EthereumAddress`
+    /// "error_arg2_name": error_arg2, // Otherwise, you can query them by position index.
+    /// ...]
+    ///
+    /// /// or if custo error found but decoding failed
+    /// ["_success": false,
+    /// "_abortedByRevertOrRequire": true,
+    /// // "_error" can contain value like `MyCustomError(uint256, address senderAddress)`
+    /// "_error": error_name_and_types,
+    /// // "_parsingError" is optional and is present only if decoding of custom error arguments failed
+    /// "_parsingError": "Data matches MyCustomError(uint256, address senderAddress) but failed to be decoded."]
+    /// ```
+    public func decodeErrorResponse(_ data: Data, errors: [String: ABI.Element.EthError]? = nil) -> [String: Any]? {
+        /// If data is empty and outputs are expected it is treated as a `require(expression)` or `revert()` call with no message.
+        /// In solidity `require(false)` and `revert()` calls return empty error response.
+        if data.isEmpty && !outputs.isEmpty {
+            return ["_success": false, "_failureReason": "Cannot decode empty data. \(outputs.count) outputs are expected: \(outputs.map { $0.type.abiRepresentation }). Was this a result of en empty `require(false)` or `revert()` call?"]
+        }
+
+        /// Explanation of this condition:
+        /// When `revert(string)` or `require(false, string)` are called in soliditiy they produce
+        /// an error, specifically an instance of default `Error(string)` type.
+        /// 1) The total number of bytes returned are at least 100.
+        /// 2) The function selector for `Error(string)` is `08C379A0`;
+        /// 3) Data offset must be present. Hexadecimal value of `0000...0020` is 32 in decimal. Reasoning for `BigInt(...) == 32`.
+        /// 4) `messageLength` is used to determine where message bytes end to decode string correctly.
+        /// 5) The rest of the `data` must be 0 bytes or empty.
+        if data.bytes.count >= 100,
+           Data(data[0..<4]) == Data.fromHex("08C379A0"),
+           BigInt(data[4..<36]) == 32,
+           let messageLength = Int(Data(data[36..<68]).toHexString(), radix: 16),
+           let message = String(bytes: data.bytes[68..<(68+messageLength)], encoding: .utf8),
+           (68+messageLength == data.count || data.bytes[68+messageLength..<data.count].reduce(0) { $0 + $1 } == 0) {
+            return ["_success": false,
+                    "_failureReason": "`revert(string)` or `require(expression, string)` was executed.",
+                    "_abortedByRevertOrRequire": true,
+                    "_errorMessage": message]
+        }
+
+        if data.count >= 4,
+           let errors = errors,
+           let customError = errors[data[0..<4].toHexString().stripHexPrefix()] {
+            var errorResponse: [String: Any] = ["_success": false, "_abortedByRevertOrRequire": true, "_error": customError.errorDeclaration]
+
+            if (data.count > 32 && !customError.inputs.isEmpty),
+               let decodedInputs = ABIDecoder.decode(types: customError.inputs, data: Data(data[4..<data.count])) {
+                for idx in decodedInputs.indices {
+                    errorResponse["\(idx)"] = decodedInputs[idx]
+                    if !customError.inputs[idx].name.isEmpty {
+                        errorResponse[customError.inputs[idx].name] = decodedInputs[idx]
+                    }
+                }
+            } else if !customError.inputs.isEmpty {
+                errorResponse["_parsingError"] = "Data matches \(customError.errorDeclaration) but failed to be decoded."
+            }
+            return errorResponse
+        }
+        return nil
     }
 }
 
