@@ -163,7 +163,7 @@ public extension ABI {
                 "\(name)(\(inputs.map { "\($0.type.abiRepresentation) \($0.name)".trim() }.joined(separator: ",")))"
             }
 
-            public init(name: String, inputs: [InOut]) {
+            public init(name: String, inputs: [InOut] = []) {
                 self.name = name.trim()
                 self.inputs = inputs
             }
