@@ -7,7 +7,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 // FIXME: Rewrite this to CodableTransaction
 public extension ENS {

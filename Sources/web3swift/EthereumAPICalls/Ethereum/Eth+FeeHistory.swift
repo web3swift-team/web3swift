@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 extension Web3.Eth {
     func feeHistory(blockCount: BigUInt, block: BlockNumber, percentiles: [Double]) async throws -> Oracle.FeeHistory {

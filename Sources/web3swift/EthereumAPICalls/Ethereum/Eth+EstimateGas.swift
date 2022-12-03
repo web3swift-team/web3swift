@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 extension Web3.Eth {
     public func estimateGas(for transaction: CodableTransaction, onBlock: BlockNumber = .latest) async throws -> BigUInt {

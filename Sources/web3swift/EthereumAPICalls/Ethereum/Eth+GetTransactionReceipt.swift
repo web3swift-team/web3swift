@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 extension Web3.Eth {
     public func transactionReceipt(_ txHash: Data) async throws -> TransactionReceipt {

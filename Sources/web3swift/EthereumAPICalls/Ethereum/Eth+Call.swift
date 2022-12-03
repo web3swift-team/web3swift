@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import Core
+import Web3Core
 
 extension Web3.Eth {
     public func callTransaction(_ transaction: CodableTransaction) async throws -> Data {

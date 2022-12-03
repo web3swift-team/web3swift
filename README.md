@@ -107,7 +107,7 @@ In the imports section:
 
 ```swift
 import web3swift
-import Core
+import Web3Core
 ```
 
 ### Send Ether

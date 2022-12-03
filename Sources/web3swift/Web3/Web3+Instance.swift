@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 // FIXME: Rewrite this to CodableTransaction
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.

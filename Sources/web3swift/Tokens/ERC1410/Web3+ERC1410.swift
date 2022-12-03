@@ -7,7 +7,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 // Partially Fungible Token Standard
 protocol IERC1410: IERC20 {
