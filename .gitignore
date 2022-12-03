@@ -71,3 +71,6 @@ fastlane/test_output
 API_keys.plist
 
 .DS_Store
+
+# Sourcetree app
+icon.png
