@@ -54,8 +54,8 @@ public enum Web3Error: LocalizedError {
             return "Server error: \(code)"
         case let .clientError(code: code):
             return "Client error: \(code)"
-        case .valueError:
-            return "You're passing value that doesn't supported by this method."
+        case .valueError(let errorDescription):
+            return (errorDescription?.isEmpty ?? true) ? "You're passing value that isn't supported by this method" : errorDescription!
         }
     }
 }
