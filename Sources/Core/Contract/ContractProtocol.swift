@@ -173,6 +173,11 @@ public protocol ContractProtocol {
     /// - Returns: `true` if event is possibly present, `false` if definitely not present and `nil` if event with given name
     /// is not part of the ``EthereumContract/abi``.
     func testBloomForEventPresence(eventName: String, bloom: EthereumBloomFilter) -> Bool?
+
+    /// Given the transaction data searches for a match in ``ContractProtocol/methods``.
+    /// - Parameter data: encoded function call used in transaction data field. Must be at least 4 bytes long.
+    /// - Returns: function decoded from the ABI of this contract or `nil` if nothing was found.
+    func getFunctionCalled(_ data: Data) -> ABI.Element.Function?
 }
 
 // MARK: - Overloaded ContractProtocol's functions
@@ -332,5 +337,10 @@ extension DefaultContractProtocol {
 
         guard let function = methods[methodSignature]?.first else { return nil }
         return function.decodeInputData(Data(data[4 ..< data.count]))
+    }
+
+    public func getFunctionCalled(_ data: Data) -> ABI.Element.Function? {
+        guard data.count >= 4 else { return nil }
+        return methods[data[0..<4].toHexString().addHexPrefix()]?.first
     }
 }
