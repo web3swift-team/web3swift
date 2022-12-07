@@ -1,13 +1,11 @@
 //
-//  web3swift_ST20_Tests.swift
-//  web3swift-iOS_Tests
+//  ST20AndSecurityTokenTests.swift
 //
-//  Created by Anton on 15/03/2019.
-//  Copyright © 2019 The Matter Inc. All rights reserved.
+//  Created by JeneaVranceanu on 07.12.2022.
 //
+
 import XCTest
 import BigInt
-import web3swift
 import Core
 
 @testable import web3swift
@@ -21,7 +19,7 @@ class ST20AndSecurityTokenTests: XCTestCase {
 
     override func setUp() async throws {
         web3 = await Web3.InfuraGoerliWeb3(accessToken: Constants.infuraToken)
-        ethMock = Web3EthMock(provider: web3.provider, web3: web3)
+        ethMock = Web3EthMock(provider: web3.provider)
         web3.ethInstance = ethMock
         st20token = ST20.init(web3: web3, provider: web3.provider, address: .contractDeploymentAddress())
         securityToken = SecurityToken.init(web3: web3, provider: web3.provider, address: .contractDeploymentAddress())

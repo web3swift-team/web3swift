@@ -8,10 +8,10 @@ import Foundation
 @testable import web3swift
 @testable import Core
 
-class Web3EthMock: Web3.Eth {
+class Web3EthMock: IEth {
     var onCallTransaction: ((CodableTransaction) -> Data)?
 
-    override func callTransaction(_ transaction: CodableTransaction) async throws -> Data {
+    func callTransaction(_ transaction: CodableTransaction) async throws -> Data {
         onCallTransaction?(transaction) ?? Data()
     }
 }
