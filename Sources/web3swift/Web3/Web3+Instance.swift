@@ -20,34 +20,26 @@ public class Web3 {
     /// Keystore manager can be bound to Web3 instance. If some manager is bound all further account related functions, such
     /// as account listing, transaction signing, etc. are done locally using private keys and accounts found in a manager.
     public func addKeystoreManager(_ manager: KeystoreManager?) {
-        self.provider.attachedKeystoreManager = manager
+        provider.attachedKeystoreManager = manager
     }
 
-    var ethInstance: Web3.Eth?
+    var ethInstance: IEth?
 
     /// Public web3.eth.* namespace.
-    public var eth: Web3.Eth {
-        if self.ethInstance != nil {
-            return self.ethInstance!
+    public var eth: IEth {
+        if ethInstance != nil {
+            return ethInstance!
         }
-        self.ethInstance = Web3.Eth(provider: self.provider, web3: self)
-        return self.ethInstance!
+        ethInstance = Web3.Eth(provider: provider)
+        return ethInstance!
     }
 
     // FIXME: Rewrite this to CodableTransaction
     public class Eth: IEth {
         public var provider: Web3Provider
-        // FIXME: web3 must be weak
-        var web3: Web3
 
-        public init(provider prov: Web3Provider, web3 web3instance: Web3) {
+        public init(provider prov: Web3Provider) {
             provider = prov
-            web3 = web3instance
-        }
-
-        public func callTransaction(_ transaction: CodableTransaction) async throws -> Data {
-            let request = APIRequest.call(transaction, transaction.callOnBlock ?? .latest)
-            return try await APIRequest.sendRequest(with: provider, for: request).result
         }
     }
 
