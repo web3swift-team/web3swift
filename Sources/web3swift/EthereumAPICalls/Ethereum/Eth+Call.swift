@@ -6,8 +6,13 @@
 import Foundation
 import Core
 
-extension Web3.Eth {
-    public func callTransaction(_ transaction: CodableTransaction) async throws -> Data {
+public protocol IEth {
+    var provider: Web3Provider { get }
+    func callTransaction(_ transaction: CodableTransaction) async throws -> Data
+}
+
+public extension IEth {
+    func callTransaction(_ transaction: CodableTransaction) async throws -> Data {
         let request = APIRequest.call(transaction, transaction.callOnBlock ?? .latest)
         return try await APIRequest.sendRequest(with: provider, for: request).result
     }

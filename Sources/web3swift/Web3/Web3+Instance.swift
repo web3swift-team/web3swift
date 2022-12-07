@@ -35,14 +35,19 @@ public class Web3 {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public class Eth {
-        var provider: Web3Provider
-        //  weak var web3: web3?
+    public class Eth: IEth {
+        public var provider: Web3Provider
+        // FIXME: web3 must be weak
         var web3: Web3
 
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
             web3 = web3instance
+        }
+
+        public func callTransaction(_ transaction: CodableTransaction) async throws -> Data {
+            let request = APIRequest.call(transaction, transaction.callOnBlock ?? .latest)
+            return try await APIRequest.sendRequest(with: provider, for: request).result
         }
     }
 
@@ -60,7 +65,7 @@ public class Web3 {
     // FIXME: Rewrite this to CodableTransaction
     public class Personal {
         var provider: Web3Provider
-        //        weak var web3: web3?
+        // FIXME: web3 must be weak
         var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -82,7 +87,7 @@ public class Web3 {
     // FIXME: Rewrite this to CodableTransaction
     public class TxPool {
         var provider: Web3Provider
-        //        weak var web3: web3?
+        // FIXME: web3 must be weak
         var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -103,7 +108,7 @@ public class Web3 {
 
     public class Web3Wallet {
         var provider: Web3Provider
-        //  weak var web3: web3?
+        // FIXME: web3 must be weak
         var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
