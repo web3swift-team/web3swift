@@ -91,7 +91,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
 
     func tokenDetails() async throws -> [UInt32] {
         transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("tokenDetails", parameters: [] as [AnyObject])!.callContractMethod()
+        let result = try await contract.createReadOperation("tokenDetails")!.callContractMethod()
         guard let res = result["0"] as? [UInt32] else { throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node") }
         return res
     }
