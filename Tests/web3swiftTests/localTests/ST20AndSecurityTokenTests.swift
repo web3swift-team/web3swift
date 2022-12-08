@@ -92,29 +92,21 @@ class ST20AndSecurityTokenTests: XCTestCase {
 
     func testSecurityTokenInvestors() async throws {
         let expectedNumberOfInvestors = BigUInt.randomInteger(lessThan: BigUInt(10000000000))
-//        let expectedInvestors = [EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!,EthereumAddress("0x2dD33957C90880bE4Ee9fd5F703110BDA2E579EC")!]
-
         ethMock.onCallTransaction = { transaction in
             guard let function = self.securityToken.contract.contract.getFunctionCalled(transaction.data) else {
                 XCTFail("Failed to decode function call to determine what shall be returned")
                 return Data()
             }
-            switch function.name {
-            case "investorCount":
+            if function.name == "investorCount" {
                 return ABIEncoder.encode(types: [.uint(bits: 256)], values: [expectedNumberOfInvestors] as [AnyObject])!
-//            case "investors":
-//                return ABIEncoder.encode(types: [.array(type: .address, length: 0)],
-//                                         values: [expectedInvestors] as [AnyObject])!
-            default:
-                // Unexpected function called
-                XCTFail("Called function '\(String(describing: function.name))' which wasn't supposed to be called.")
-                return Data()
             }
+            // Unexpected function called
+            XCTFail("Called function '\(String(describing: function.name))' which wasn't supposed to be called.")
+            return Data()
         }
 
         let investorsCount = try await securityToken.investorCount()
         XCTAssertEqual(investorsCount, expectedNumberOfInvestors)
-//        XCTAssertEqual(investors, expectedInvestors)
     }
 
     func testSecurityTokenGranularity() async throws {
