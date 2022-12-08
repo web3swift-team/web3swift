@@ -57,7 +57,7 @@ public class Web3 {
     // FIXME: Rewrite this to CodableTransaction
     public class Personal {
         var provider: Web3Provider
-        // FIXME: web3 must be weak
+        // FIXME: remove dependency on web3 instance!!
         var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -79,7 +79,7 @@ public class Web3 {
     // FIXME: Rewrite this to CodableTransaction
     public class TxPool {
         var provider: Web3Provider
-        // FIXME: web3 must be weak
+        // FIXME: remove dependency on web3 instance!!
         var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -100,7 +100,7 @@ public class Web3 {
 
     public class Web3Wallet {
         var provider: Web3Provider
-        // FIXME: web3 must be weak
+        // FIXME: remove dependency on web3 instance!!
         var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -122,7 +122,7 @@ public class Web3 {
     // FIXME: Rewrite this to CodableTransaction
     public class BrowserFunctions {
         var provider: Web3Provider
-        //        weak var web3: web3?
+        // FIXME: remove dependency on web3 instance!!
         public var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -153,7 +153,7 @@ public class Web3 {
         }
 
         var provider: Web3Provider
-        //        weak var web3: web3?
+        // FIXME: remove dependency on web3 instance!!
         var web3: Web3
         var timer: RepeatingTimer?
 
