@@ -28,8 +28,8 @@ protocol ISecurityToken: IST20, IOwnable {
     /// Total number of non-zero token holders
     func investorCount() async throws -> BigUInt
 
-    /// List of token holders
-    func investors() async throws -> [EthereumAddress]
+    /// List of token holders at specified index
+    func investors(index: UInt) async throws -> [EthereumAddress]
 
     /// Permissions this to a Permission module, which has a key of 1
     /// If no Permission return false - note that IModule withPerm will allow ST owner all permissions anyway
@@ -326,10 +326,9 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         return res
     }
 
-    public func investors() async throws -> [EthereumAddress] {
-        let contract = self.contract
-        self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("investors", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
+    public func investors(index: UInt) async throws -> [EthereumAddress] {
+        transaction.callOnBlock = .latest
+        let result = try await contract.createReadOperation("investors", parameters: [index] as [AnyObject])!.callContractMethod()
         guard let res = result["0"] as? [EthereumAddress] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
