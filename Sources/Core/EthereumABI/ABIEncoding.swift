@@ -495,6 +495,6 @@ public extension ABIEncoder {
         } else if let data = ABIEncoder.convertToData(value as AnyObject) {
             return data
         }
-        throw Web3Error.inputError(desc: "SoliditySha3: `abiEncode` accepts an Int/UInt (any of 8, 16, 32, 64 bits long), decimal or HEX string, Bool, Data, [UInt8], EthereumAddress, [IntegerLiteralType], BigInt or BigUInt instance. Given value is of type \(type(of: value)).")
+        throw Web3Error.inputError(desc: "SoliditySha3: `abiEncode` accepts an Int/UInt (any of 8, 16, 32, 64 bits long), decimal or hexadecimal string, Bool, Data, [UInt8], EthereumAddress, [IntegerLiteralType], BigInt or BigUInt instance. Given value is of type \(type(of: value)).")
     }
 }
