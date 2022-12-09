@@ -6,9 +6,12 @@
 import Foundation
 import BigInt
 
-public struct ABIEncoder { }
-
-extension ABIEncoder {
+public struct ABIEncoder {
+    /// Attempts to convert given value to `BigUInt`.
+    /// Supported types are `BigUInt`, `BigInt`, `String` as hex and decimal, `UInt[8-64]`, `Int[8-64]` and `Data`.
+    /// All negative values will return `nil`.
+    /// - Parameter value: an arbitrary object.
+    /// - Returns: converted value or `nil` if types is not support or initialization failed.
     public static func convertToBigUInt(_ value: AnyObject) -> BigUInt? {
         switch value {
         case let v as BigUInt:
@@ -21,15 +24,11 @@ extension ABIEncoder {
                 return v.magnitude
             }
         case let v as String:
-            let base10 = BigUInt(v, radix: 10)
-            if base10 != nil {
-                return base10!
+            let v = v.trimmingCharacters(in: .whitespacesAndNewlines)
+            if v.starts(with: "-") {
+                return nil
             }
-            let base16 = BigUInt(v.stripHexPrefix(), radix: 16)
-            if base16 != nil {
-                return base16!
-            }
-            break
+            return BigUInt(v, radix: 10) ?? BigUInt(v.stripHexPrefix(), radix: 16)
         case let v as UInt:
             return BigUInt(v)
         case let v as UInt8:
@@ -41,21 +40,26 @@ extension ABIEncoder {
         case let v as UInt64:
             return BigUInt(v)
         case let v as Int:
-            return BigUInt(v)
+            return v < 0 ? nil : BigUInt(v)
         case let v as Int8:
-            return BigUInt(v)
+            return v < 0 ? nil : BigUInt(v)
         case let v as Int16:
-            return BigUInt(v)
+            return v < 0 ? nil : BigUInt(v)
         case let v as Int32:
-            return BigUInt(v)
+            return v < 0 ? nil : BigUInt(v)
         case let v as Int64:
+            return v < 0 ? nil : BigUInt(v)
+        case let v as Data:
             return BigUInt(v)
         default:
             return nil
         }
-        return nil
     }
 
+    /// Attempts to convert given value to `BigInt`.
+    /// Supported types are `BigUInt`, `BigInt`, `String` as hex and decimal, `UInt[8-64]`, `Int[8-64]` and `Data`.
+    /// - Parameter value: an arbitrary object.
+    /// - Returns: converted value or `nil` if types is not support or initialization failed.
     public static func convertToBigInt(_ value: AnyObject) -> BigInt? {
         switch value {
         case let v as BigUInt:
@@ -63,15 +67,8 @@ extension ABIEncoder {
         case let v as BigInt:
             return v
         case let v as String:
-            let base10 = BigInt(v, radix: 10)
-            if base10 != nil {
-                return base10
-            }
-            let base16 = BigInt(v.stripHexPrefix(), radix: 16)
-            if base16 != nil {
-                return base16
-            }
-            break
+            let v = v.trimmingCharacters(in: .whitespacesAndNewlines)
+            return BigInt(v, radix: 10) ?? BigInt(v.stripHexPrefix(), radix: 16)
         case let v as UInt:
             return BigInt(v)
         case let v as UInt8:
@@ -92,27 +89,29 @@ extension ABIEncoder {
             return BigInt(v)
         case let v as Int64:
             return BigInt(v)
+        case let v as Data:
+            return BigInt(v)
         default:
             return nil
         }
-        return nil
     }
 
+    /// Attempts to convert given object into `Data`.
+    /// Used as a part of ABI encoding process.
+    /// Supported types are `Data`, `String`, `[UInt8]`, ``EthereumAddress`` and `[IntegerLiteralType]`.
+    /// Note: if `String` has `0x` prefix an attempt to interpret it as a hexadecimal number will take place. Otherwise, UTF-8 bytes are returned.
+    /// - Parameter value: any object.
+    /// - Returns: `Data` representation of an object ready for ABI encoding.
     public static func convertToData(_ value: AnyObject) -> Data? {
         switch value {
         case let d as Data:
             return d
         case let d as String:
-            if d.hasHexPrefix() {
-                let hex = Data.fromHex(d)
-                if hex != nil {
-                    return hex
-                }
+            if d.hasHexPrefix(),
+               let hex = Data.fromHex(d) {
+                return hex
             }
-            let str = d.data(using: .utf8)
-            if str != nil {
-                return str
-            }
+            return d.data(using: .utf8)
         case let d as [UInt8]:
             return Data(d)
         case let d as EthereumAddress:
@@ -127,14 +126,17 @@ extension ABIEncoder {
         default:
             return nil
         }
-        return nil
     }
 
-    /// Encode Elements In Out
+    /// Performs ABI encoding conforming to [the documentation of encoding](https://docs.soliditylang.org/en/develop/abi-spec.html#basic-design) in Solidity.
+    /// Overloading to support `ABI.Element.InOut` as the type of the `types` array.
+    /// Identical to use of `web3.eth.abi.encodeParameters` in web3.js.
     /// - Parameters:
-    ///   - types: Contract element InOut to encode
-    ///   - values: Contract values of a given element to encode
-    /// - Returns: Encoded data
+    ///   - types: an array of values' ABI types. Must be declared in the same order as entries in `values` or encoding will fail;
+    ///   - values: an array of values to encode. Must be declared in the same order as entries in `types` or encoding will fail;
+    /// - Returns: ABI encoded data, e.g. function call parameters. Returns `nil` if:
+    ///     - `types.count != values.count`;
+    ///     - encoding of at least one value has failed (e.g. type mismatch).
     public static func encode(types: [ABI.Element.InOut], values: [AnyObject]) -> Data? {
         guard types.count == values.count else {return nil}
         let params = types.compactMap { el -> ABI.Element.ParameterType in
@@ -143,11 +145,14 @@ extension ABIEncoder {
         return encode(types: params, values: values)
     }
 
-    /// Encode Elements Prarmeter Type
+    /// Performs ABI encoding conforming to [the documentation of encoding](https://docs.soliditylang.org/en/develop/abi-spec.html#basic-design) in Solidity.
+    /// Identical to use of `web3.eth.abi.encodeParameters` in web3.js.
     /// - Parameters:
-    ///   - types: Contract parameters type to encode
-    ///   - values: Contract values of a given element to encode
-    /// - Returns: Encoded data
+    ///   - types: an array of values' ABI types. Must be declared in the same order as entries in `values` or encoding will fail;
+    ///   - values: an array of values to encode. Must be declared in the same order as entries in `types` or encoding will fail;
+    /// - Returns: ABI encoded data, e.g. function call parameters. Returns `nil` if:
+    ///     - `types.count != values.count`;
+    ///     - encoding of at least one value has failed (e.g. type mismatch).
     public static func encode(types: [ABI.Element.ParameterType], values: [AnyObject]) -> Data? {
         guard types.count == values.count else {return nil}
         var tails = [Data]()
@@ -186,6 +191,29 @@ extension ABIEncoder {
         return headsConcatenated + tailsConcatenated
     }
 
+    /// Performs ABI encoding conforming to [the documentation of encoding](https://docs.soliditylang.org/en/develop/abi-spec.html#basic-design) in Solidity
+    /// but **it does not add the data offset for dynamic types!!** To return single value **with data offset** use the following instead:
+    /// ```
+    /// ABIEncoder.encode(types: [type], values: [value] as [AnyObject])
+    /// ```
+    /// Almost identical to use of `web3.eth.abi.encodeParameter` in web3.js.
+    /// Calling `web3.eth.abi.encodeParameter('string','test')` in web3.js will return the following:
+    /// ```
+    /// 0x0000000000000000000000000000000000000000000000000000000000000020
+    /// 0000000000000000000000000000000000000000000000000000000000000004
+    /// 7465737400000000000000000000000000000000000000000000000000000000
+    /// ```
+    /// but calling `ABIEncoder.encodeSingleType(type: .string, value: "test" as AnyObject)` will return:
+    /// ```
+    /// 0x0000000000000000000000000000000000000000000000000000000000000004
+    /// 7465737400000000000000000000000000000000000000000000000000000000
+    /// ```
+    /// - Parameters:
+    ///   - type: ABI type of the `value`;
+    ///   - value: value to encode.
+    /// - Returns: ABI encoded data, e.g. function call parameters. Returns `nil` if:
+    ///     - `types.count != values.count`;
+    ///     - encoding has failed (e.g. type mismatch).
     public static func encodeSingleType(type: ABI.Element.ParameterType, value: AnyObject) -> Data? {
         switch type {
         case .uint:
@@ -395,14 +423,21 @@ extension ABIEncoder {
 // MARK: - SoliditySHA3 implementation based on web3js
 
 public extension ABIEncoder {
-    /**
-     A convenience implementation of web3js [soliditySha3](https://web3js.readthedocs.io/en/v1.2.11/web3-utils.html?highlight=soliditySha3#soliditysha3)
-     that is based on web3swift [`ABIEncoder`](https://github.com/skywinder/web3swift/blob/develop/Sources/web3swift/EthereumABI/ABIEncoding.swift ).
-     */
+
+    /// A convenience implementation of web3js [soliditySha3](https://web3js.readthedocs.io/en/v1.2.11/web3-utils.html?highlight=soliditySha3#soliditysha3)
+    /// that is based on web3swift [`ABIEncoder`](https://github.com/skywinder/web3swift/blob/develop/Sources/web3swift/EthereumABI/ABIEncoding.swift ).
+    /// - Parameter values: an array of values to hash. Supported types are: `Int/UInt` (any of 8, 16, 32, 64 bits long),
+    /// decimal or hexadecimal `String`, `Bool`, `Data`, `[UInt8]`, `EthereumAddress`, `[IntegerLiteralType]`, `BigInt` or `BigUInt`.
+    /// - Returns: solidity SHA3, `nil` if hashing failed or throws if type is not supported.
     static func soliditySha3(_ values: [Any]) throws -> Data {
         try abiEncode(values).sha3(.keccak256)
     }
 
+    /// A convenience implementation of web3js [soliditySha3](https://web3js.readthedocs.io/en/v1.2.11/web3-utils.html?highlight=soliditySha3#soliditysha3)
+    /// that is based on web3swift [`ABIEncoder`](https://github.com/skywinder/web3swift/blob/develop/Sources/web3swift/EthereumABI/ABIEncoding.swift ).
+    /// - Parameter value: a value to hash. Supported types are: `Int/UInt` (any of 8, 16, 32, 64 bits long),
+    /// decimal or hexadecimal `String`, `Bool`, `Data`, `[UInt8]`, `EthereumAddress`, `[IntegerLiteralType]`, `BigInt` or `BigUInt`.
+    /// - Returns: solidity SHA3, `nil` if hashing failed or throws if type is not supported.
     static func soliditySha3(_ value: Any) throws -> Data {
         if let values = value as? [Any] {
             return try abiEncode(values).sha3(.keccak256)
@@ -460,6 +495,6 @@ public extension ABIEncoder {
         } else if let data = ABIEncoder.convertToData(value as AnyObject) {
             return data
         }
-        throw Web3Error.inputError(desc: "SoliditySha3: `abiEncode` accepts an Int/UInt (any of 8, 16, 32, 64 bits long), HEX string, Bool, Data, BigInt or BigUInt instance. Given value is of type \(type(of: value)).")
+        throw Web3Error.inputError(desc: "SoliditySha3: `abiEncode` accepts an Int/UInt (any of 8, 16, 32, 64 bits long), decimal or HEX string, Bool, Data, [UInt8], EthereumAddress, [IntegerLiteralType], BigInt or BigUInt instance. Given value is of type \(type(of: value)).")
     }
 }
