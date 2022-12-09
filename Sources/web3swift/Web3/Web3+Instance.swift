@@ -20,29 +20,26 @@ public class Web3 {
     /// Keystore manager can be bound to Web3 instance. If some manager is bound all further account related functions, such
     /// as account listing, transaction signing, etc. are done locally using private keys and accounts found in a manager.
     public func addKeystoreManager(_ manager: KeystoreManager?) {
-        self.provider.attachedKeystoreManager = manager
+        provider.attachedKeystoreManager = manager
     }
 
-    var ethInstance: Web3.Eth?
+    var ethInstance: IEth?
 
     /// Public web3.eth.* namespace.
-    public var eth: Web3.Eth {
-        if self.ethInstance != nil {
-            return self.ethInstance!
+    public var eth: IEth {
+        if ethInstance != nil {
+            return ethInstance!
         }
-        self.ethInstance = Web3.Eth(provider: self.provider, web3: self)
-        return self.ethInstance!
+        ethInstance = Web3.Eth(provider: provider)
+        return ethInstance!
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public class Eth {
-        var provider: Web3Provider
-        //  weak var web3: web3?
-        var web3: Web3
+    public class Eth: IEth {
+        public var provider: Web3Provider
 
-        public init(provider prov: Web3Provider, web3 web3instance: Web3) {
+        public init(provider prov: Web3Provider) {
             provider = prov
-            web3 = web3instance
         }
     }
 
@@ -60,7 +57,7 @@ public class Web3 {
     // FIXME: Rewrite this to CodableTransaction
     public class Personal {
         var provider: Web3Provider
-        //        weak var web3: web3?
+        // FIXME: remove dependency on web3 instance!!
         var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -82,7 +79,7 @@ public class Web3 {
     // FIXME: Rewrite this to CodableTransaction
     public class TxPool {
         var provider: Web3Provider
-        //        weak var web3: web3?
+        // FIXME: remove dependency on web3 instance!!
         var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -103,7 +100,7 @@ public class Web3 {
 
     public class Web3Wallet {
         var provider: Web3Provider
-        //  weak var web3: web3?
+        // FIXME: remove dependency on web3 instance!!
         var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -125,7 +122,7 @@ public class Web3 {
     // FIXME: Rewrite this to CodableTransaction
     public class BrowserFunctions {
         var provider: Web3Provider
-        //        weak var web3: web3?
+        // FIXME: remove dependency on web3 instance!!
         public var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -156,7 +153,7 @@ public class Web3 {
         }
 
         var provider: Web3Provider
-        //        weak var web3: web3?
+        // FIXME: remove dependency on web3 instance!!
         var web3: Web3
         var timer: RepeatingTimer?
 
