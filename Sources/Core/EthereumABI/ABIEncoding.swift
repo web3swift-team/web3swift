@@ -132,7 +132,7 @@ public struct ABIEncoder {
     /// Overloading to support `ABI.Element.InOut` as the type of the `types` array.
     /// Identical to use of `web3.eth.abi.encodeParameters` in web3.js.
     /// - Parameters:
-    ///   - types: an array of values' ABI types. Must be declared in the same order as entries in `values` or encoding will fail;
+    ///   - types: an array of values' Solidity types. Must be declared in the same order as entries in `values` or encoding will fail;
     ///   - values: an array of values to encode. Must be declared in the same order as entries in `types` or encoding will fail;
     /// - Returns: ABI encoded data, e.g. function call parameters. Returns `nil` if:
     ///     - `types.count != values.count`;
@@ -148,7 +148,7 @@ public struct ABIEncoder {
     /// Performs ABI encoding conforming to [the documentation of encoding](https://docs.soliditylang.org/en/develop/abi-spec.html#basic-design) in Solidity.
     /// Identical to use of `web3.eth.abi.encodeParameters` in web3.js.
     /// - Parameters:
-    ///   - types: an array of values' ABI types. Must be declared in the same order as entries in `values` or encoding will fail;
+    ///   - types: an array of values' Solidity types. Must be declared in the same order as entries in `values` or encoding will fail;
     ///   - values: an array of values to encode. Must be declared in the same order as entries in `types` or encoding will fail;
     /// - Returns: ABI encoded data, e.g. function call parameters. Returns `nil` if:
     ///     - `types.count != values.count`;
@@ -209,7 +209,7 @@ public struct ABIEncoder {
     /// 7465737400000000000000000000000000000000000000000000000000000000
     /// ```
     /// - Parameters:
-    ///   - type: ABI type of the `value`;
+    ///   - type: Solidity type of the `value`;
     ///   - value: value to encode.
     /// - Returns: ABI encoded data, e.g. function call parameters. Returns `nil` if:
     ///     - `types.count != values.count`;
