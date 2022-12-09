@@ -149,8 +149,8 @@ class ABIEncoderTest: XCTestCase {
     }
 
     func testConvertToBigUInt() {
-        /// When negative value is serialized the first byte represents sign with decoded as a signed number
-        /// but for unsigned numbers the first byte represents just one byte of a number, not a sign.
+        /// When negative value is serialized the first byte represents sign when decoding as a signed number.
+        /// Unsigned numbers treat the first byte as just another byte of a number, not a sign.
         XCTAssertEqual(ABIEncoder.convertToBigUInt(BigInt(-29390909).serialize() as AnyObject), 4324358205)
         XCTAssertEqual(ABIEncoder.convertToBigUInt(Data.fromHex("00FF")! as AnyObject), 255)
         XCTAssertEqual(ABIEncoder.convertToBigUInt(BigInt(-29390909) as AnyObject), nil)
