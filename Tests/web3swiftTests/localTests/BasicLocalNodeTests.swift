@@ -25,7 +25,7 @@ class BasicLocalNodeTests: LocalTestCase {
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         let policies = Policies(gasLimitPolicy: .manual(3000000))
-        let result = try await deployTx.writeToChain(password: "web3swift", policies: policies)
+        let result = try await deployTx.writeToChain(password: "web3swift", policies: policies, sendRaw: false)
         let txHash = result.hash.stripHexPrefix()
 
         while true {
@@ -60,7 +60,7 @@ class BasicLocalNodeTests: LocalTestCase {
         print("Balance before to: " + balanceBeforeTo.description)
         print("Balance before from: " + balanceBeforeFrom.description)
 
-        let result = try await sendTx.writeToChain(password: "web3swift")
+        let result = try await sendTx.writeToChain(password: "web3swift", sendRaw: false)
         let txHash = Data.fromHex(result.hash.stripHexPrefix())!
 
         Thread.sleep(forTimeInterval: 1.0)

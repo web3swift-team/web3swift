@@ -30,7 +30,7 @@ class LocalTestCase: XCTestCase {
         writeTX.transaction.value = value
         let policies = Policies(gasLimitPolicy: .manual(78423), gasPricePolicy: .manual(20000000000))
         for _ in block..<25 {
-            _ = try! await writeTX.writeToChain(password: "", policies: policies)
+            _ = try! await writeTX.writeToChain(password: "", policies: policies, sendRaw: false)
         }
     }
 }

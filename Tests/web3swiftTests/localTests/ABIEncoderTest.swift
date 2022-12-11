@@ -13,7 +13,7 @@ import Web3Core
 
 class ABIEncoderTest: XCTestCase {
 
-    func test_soliditySha3() throws {
+    func testSoliditySha3() throws {
         var hex = try ABIEncoder.soliditySha3(true).toHexString().addHexPrefix()
         assert(hex == "0x5fe7f977e71dba2ea1a68e21057beebb9be2ac30c6410aa38d4f3fbe41dcffd2")
         hex = try ABIEncoder.soliditySha3(-10).toHexString().addHexPrefix()
@@ -66,7 +66,7 @@ class ABIEncoderTest: XCTestCase {
         assert(hex == "0xa13b31627c1ed7aaded5aecec71baf02fe123797fffd45e662eac8e06fbe4955")
     }
 
-    func test_soliditySha3Fail_FloatDouble() throws {
+    func testSoliditySha3FailFloatDouble() throws {
         assert((try? ABIEncoder.soliditySha3(Float(1))) == nil)
         assert((try? ABIEncoder.soliditySha3(Double(1))) == nil)
         assert((try? ABIEncoder.soliditySha3(CGFloat(1))) == nil)
@@ -78,7 +78,7 @@ class ABIEncoderTest: XCTestCase {
     /// `[AnyObject]` is not allowed to be used directly as input for `solidtySha3`.
     /// `AnyObject` erases type data making it impossible to encode some types correctly,
     /// e.g.: Bool can be treated as Int (8/16/32/64) and 0/1 numbers can be treated as Bool.
-    func test_soliditySha3Fail_1() throws {
+    func testSoliditySha3Fail_1() throws {
         var didFail = false
         do {
             _ = try ABIEncoder.soliditySha3([""] as [AnyObject])
@@ -91,7 +91,7 @@ class ABIEncoderTest: XCTestCase {
     /// `AnyObject` is not allowed to be used directly as input for `solidtySha3`.
     /// `AnyObject` erases type data making it impossible to encode some types correctly,
     /// e.g.: Bool can be treated as Int (8/16/32/64) and 0/1 numbers can be treated as Bool.
-    func test_soliditySha3Fail_2() throws {
+    func testSoliditySha3Fail_2() throws {
         var didFail = false
         do {
             _ = try ABIEncoder.soliditySha3("" as AnyObject)
@@ -101,7 +101,7 @@ class ABIEncoderTest: XCTestCase {
         XCTAssertTrue(didFail)
     }
 
-    func test_abiEncoding_emptyValues() {
+    func testAbiEncodingEmptyValues() {
         let zeroBytes = ABIEncoder.encode(types: [ABI.Element.InOut](), values: [AnyObject]())!
         XCTAssert(zeroBytes.count == 0)
 
@@ -113,5 +113,25 @@ class ABIEncoderTest: XCTestCase {
         let encodedFunction = functionWithNoInput.encodeParameters([])
         XCTAssertTrue(functionWithNoInput.methodEncoding == encodedFunction)
         XCTAssertTrue("0xe16b4a9b" == encodedFunction?.toHexString().addHexPrefix().lowercased())
+    }
+
+    func testAbiEncodingDynamicTypes() {
+        var encodedValue = ABIEncoder.encode(types: [.dynamicBytes], values: [Data.fromHex("6761766f66796f726b")!] as [AnyObject])!.toHexString()
+        XCTAssertEqual(encodedValue, "000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000096761766f66796f726b0000000000000000000000000000000000000000000000")
+
+        encodedValue = ABIEncoder.encode(types: [.dynamicBytes], values: [Data.fromHex("731a3afc00d1b1e3461b955e53fc866dcf303b3eb9f4c16f89e388930f48134b")!] as [AnyObject])!.toHexString()
+        XCTAssertEqual(encodedValue, "00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000020731a3afc00d1b1e3461b955e53fc866dcf303b3eb9f4c16f89e388930f48134b")
+
+        encodedValue = ABIEncoder.encode(types: [.dynamicBytes], values: [Data.fromHex("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1")!] as [AnyObject])!.toHexString()
+        XCTAssertEqual(encodedValue, "0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000009ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff100")
+        
+        encodedValue = ABIEncoder.encode(types: [.dynamicBytes], values: [Data.fromHex("c3a40000c3a4")!] as [AnyObject])!.toHexString()
+        XCTAssertEqual(encodedValue, "00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000006c3a40000c3a40000000000000000000000000000000000000000000000000000")
+
+        encodedValue = ABIEncoder.encode(types: [.string], values: ["gavofyork"] as [AnyObject])!.toHexString()
+        XCTAssertEqual(encodedValue, "000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000096761766f66796f726b0000000000000000000000000000000000000000000000")
+
+        encodedValue = ABIEncoder.encode(types: [.string], values: ["Heeäööä👅D34ɝɣ24Єͽ-.,äü+#/"] as [AnyObject])!.toHexString()
+        XCTAssertEqual(encodedValue, "00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000026486565c3a4c3b6c3b6c3a4f09f9185443334c99dc9a33234d084cdbd2d2e2cc3a4c3bc2b232f0000000000000000000000000000000000000000000000000000")
     }
 }
