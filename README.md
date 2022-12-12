@@ -4,8 +4,8 @@
 ## Social medias
 [Join our discord](https://discord.gg/8bHCNmhS7x) or [Telegram](https://t.me/web3swift) if you need support or want to contribute to web3swift development!
 
-![matter-github-swift](https://github.com/skywinder/web3swift/blob/develop/web3swift-logo.png)
-[![Web3swift CI](https://github.com/skywinder/web3swift/actions/workflows/ci.yml/badge.svg)](https://github.com/skywinder/web3swift/actions/workflows/ci.yml)
+![matter-github-swift](https://github.com/web3swift-team/web3swift/blob/develop/web3swift-logo.png)
+[![Web3swift CI](https://github.com/web3swift-team/web3swift/actions/workflows/ci.yml/badge.svg)](https://github.com/web3swift-team/web3swift/actions/workflows/ci.yml)
 [![Swift](https://img.shields.io/badge/Swift-5.4-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/web3.swift.pod.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
@@ -193,8 +193,8 @@ Make sure that `ganache` is running on its default port `8546`. To change the po
 Want to improve? It's awesome:
 Then good news for you: **We are ready to pay for your contribution via [@gitcoin bot](https://gitcoin.co/grants/358/web3swift)!**
 
-- If you **have a feature request**, [open an issue](https://github.com/skywinder/web3swift/issues).
-- If you **want to contribute**, [submit a pull request](https://github.com/skywinder/web3swift/pulls).
+- If you **have a feature request**, [open an issue](https://github.com/web3swift-team/web3swift/issues).
+- If you **want to contribute**, [submit a pull request](https://github.com/web3swift-team/web3swift/pulls).
 
 ### Contribution
 1. You are more than welcome to participate and get bounty by contributing! **Your contribution will be paid via  [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift).**
