@@ -130,6 +130,11 @@ extension String {
             return Int(s[s.startIndex].value)
         }
     }
+
+    /// Strips whitespaces and newlines on both ends.
+    func trim() -> String {
+        trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 }
 
 extension Character {

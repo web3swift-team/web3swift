@@ -33,7 +33,7 @@ class TestHelpers {
                                        parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         let policies = Policies(gasLimitPolicy: .manual(3000000))
-        let result = try await deployTx.writeToChain(password: "web3swift", policies: policies)
+        let result = try await deployTx.writeToChain(password: "web3swift", policies: policies, sendRaw: false)
         let txHash = Data.fromHex(result.hash.stripHexPrefix())!
 
         Thread.sleep(forTimeInterval: 1.0)

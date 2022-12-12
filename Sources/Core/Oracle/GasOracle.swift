@@ -226,11 +226,11 @@ public extension Oracle {
 
 extension Oracle {
     public struct FeeHistory {
-        let timestamp = Date()
-        let baseFeePerGas: [BigUInt]
-        let gasUsedRatio: [Double]
-        let oldestBlock: BigUInt
-        let reward: [[BigUInt]]
+        public let timestamp = Date()
+        public let baseFeePerGas: [BigUInt]
+        public let gasUsedRatio: [Double]
+        public let oldestBlock: BigUInt
+        public let reward: [[BigUInt]]
     }
 }
 

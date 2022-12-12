@@ -16,12 +16,12 @@ class KeystoresTests: LocalTestCase {
     func testBIP39 () throws {
         var entropy = Data.fromHex("00000000000000000000000000000000")!
         var phrase = BIP39.generateMnemonicsFromEntropy(entropy: entropy)
-        XCTAssert( phrase == "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about")
+        XCTAssert(phrase == "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about")
         var seed = BIP39.seedFromMmemonics(phrase!, password: "TREZOR")
         XCTAssert(seed?.toHexString() == "c55257c360c07c72029aebc1b53c05ed0362ada38ead3e3e9efa3708e53495531f09a6987599d18264c1e1c92f2cf141630c7a3c4ab7c81b2f001698e7463b04")
         entropy = Data.fromHex("68a79eaca2324873eacc50cb9c6eca8cc68ea5d936f98787c60c7ebc74e6ce7c")!
         phrase = BIP39.generateMnemonicsFromEntropy(entropy: entropy)
-        XCTAssert( phrase == "hamster diagram private dutch cause delay private meat slide toddler razor book happy fancy gospel tennis maple dilemma loan word shrug inflict delay length")
+        XCTAssert(phrase == "hamster diagram private dutch cause delay private meat slide toddler razor book happy fancy gospel tennis maple dilemma loan word shrug inflict delay length")
         seed = BIP39.seedFromMmemonics(phrase!, password: "TREZOR")
         XCTAssert(seed?.toHexString() == "64c87cde7e12ecf6704ab95bb1408bef047c22db4cc7491c4271d170a1b213d20b385bc1588d9c7b38f1b39d415665b8a9030c9ec653d75e65f847d8fc1fc440")
     }

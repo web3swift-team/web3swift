@@ -129,11 +129,9 @@ private func parseReceive(abiRecord: ABI.Record) throws -> ABI.Element.Receive {
 }
 
 private func parseError(abiRecord: ABI.Record) throws -> ABI.Element.EthError {
-    let inputs = try abiRecord.inputs?.map({ (input: ABI.Input) throws -> ABI.Element.EthError.Input in
-        let nativeInput = try input.parseForError()
-        return nativeInput
-    })
-    let abiInputs = inputs ?? []
+    let abiInputs = try abiRecord.inputs?.map({ input throws -> ABI.Element.InOut in
+        try input.parse()
+    }) ?? []
     let name = abiRecord.name ?? ""
     return ABI.Element.EthError(name: name, inputs: abiInputs)
 }
@@ -171,12 +169,6 @@ extension ABI.Input {
         let parameterType = try ABITypeParser.parseTypeString(self.type)
         let indexed = self.indexed == true
         return ABI.Element.Event.Input(name: name, type: parameterType, indexed: indexed)
-    }
-
-    func parseForError() throws -> ABI.Element.EthError.Input {
-        let name = self.name ?? ""
-        let parameterType = try ABITypeParser.parseTypeString(self.type)
-        return ABI.Element.EthError.Input(name: name, type: parameterType)
     }
 }
 
