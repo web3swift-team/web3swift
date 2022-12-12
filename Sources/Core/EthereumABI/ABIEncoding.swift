@@ -191,9 +191,11 @@ public struct ABIEncoder {
         return headsConcatenated + tailsConcatenated
     }
 
-    /// Performs ABI encoding conforming to [the documentation of encoding](https://docs.soliditylang.org/en/develop/abi-spec.html#basic-design) in Solidity
-    /// but **it does not add the data offset for dynamic types!!** To return single value **with data offset** use the following instead:
-    /// ```
+    /// Performs ABI encoding conforming to [the documentation of encoding](https://docs.soliditylang.org/en/develop/abi-spec.html#basic-design) in Solidity.
+    ///
+    /// **It does not add the data offset for dynamic types!!** To return single value **with data offset** use the following instead:
+    /// 
+    /// ```swift
     /// ABIEncoder.encode(types: [type], values: [value] as [AnyObject])
     /// ```
     /// Almost identical to use of `web3.eth.abi.encodeParameter` in web3.js.
