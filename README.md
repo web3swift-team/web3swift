@@ -59,7 +59,7 @@
 - [x] ✅**Literally following the standards** (BIP, EIP, etc):
     - [x] **[BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) (HD Wallets), [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases), [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)**
 - [x] **[EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)** (Standart interface for tokens - ERC-20), **[EIP-67](https://github.com/ethereum/EIPs/issues/67)** (Standard URI scheme), **[EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md)** (Replay attacks protection), **[EIP-2718](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2718.md)** (Typed Transaction Envelope), **[EIP-1559](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md)** (Gas Fee market change)
-    - [x] **And many others** *(For details about this EIP's look at [Documentation page](https://github.com/skywinder/web3swift/blob/master/Documentation/))*: EIP-681, EIP-721, EIP-165, EIP-777, EIP-820, EIP-888, EIP-1400, EIP-1410, EIP-1594, EIP-1643, EIP-1644, EIP-1633, EIP-721, EIP-1155, EIP-1376, ST-20
+    - [x] **And many others** *(For details about this EIP's look at [Documentation page](https://github.com/web3swift-team/web3swift/blob/master/Documentation/))*: EIP-681, EIP-721, EIP-165, EIP-777, EIP-820, EIP-888, EIP-1400, EIP-1410, EIP-1594, EIP-1643, EIP-1644, EIP-1633, EIP-721, EIP-1155, EIP-1376, ST-20
 - [x] **RLP encoding**
 - [x] Base58 encoding scheme
 - [x] Formatting to and from Ethereum Units
@@ -98,7 +98,7 @@ The [Swift Package Manager](https://swift.org/package-manager/ "") is a tool for
 Once you have your Swift package set up, adding Alamofire as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
 ```swift
 dependencies: [
-    .package(url: "https://github.com/skywinder/web3swift.git", .upToNextMajor(from: "3.0.0"))
+    .package(url: "https://github.com/web3swift-team/web3swift.git", .upToNextMajor(from: "3.0.0"))
 ]
 ```
 
@@ -151,7 +151,7 @@ func feeHistory(blockCount: UInt, block: BlockNumber, percentiles:[Double]) asyn
 ## Build from source
 ### SPM
 ```bash
-git clone https://github.com/skywinder/web3swift.git
+git clone https://github.com/web3swift-team/web3swift.git
 cd web3swift
 swift build
 ```
@@ -165,15 +165,15 @@ swift build
 Documentation is under construction👷🏻👷🏼‍♀️. We’re trying our best to comment all public API as detailed as we can, but the end it still far to come. But in one of the nearest minor updates we’ll bring DocC support of already done amount of docs. And your PR in such are more than welcome.
 
 ## Projects that are using web3swift
-Please take a look at [Our customers](https://github.com/skywinder/web3swift/wiki/Our-Customers) wiki page.
+Please take a look at [Our customers](https://github.com/web3swift-team/web3swift/wiki/Our-Customers) wiki page.
 
 ## Support
 
 **[Join our discord](https://discord.gg/8bHCNmhS7x) and [Telegram](https://t.me/web3swift) if you need support or want to contribute to web3swift development!**
 
-- If you **need help**, please take a look at our [FAQ](https://github.com/skywinder/web3swift/wiki/FAQ "") or [open an issue](https://github.com/skywinder/web3swift/issues).
-- If you'd like to **see web3swift best practices**, check [Projects that using web3swift](https://github.com/skywinder/web3swift/wiki/Our-Customers).
-- If you **found a bug**, [open an issue](https://github.com/skywinder/web3swift/issues).
+- If you **need help**, please take a look at our [FAQ](https://github.com/web3swift-team/web3swift/wiki/FAQ "") or [open an issue](https://github.com/web3swift-team/web3swift/issues).
+- If you'd like to **see web3swift best practices**, check [Projects that using web3swift](https://github.com/web3swift-team/web3swift/wiki/Our-Customers).
+- If you **found a bug**, [open an issue](https://github.com/web3swift-team/web3swift/issues).
 
 ## Development
 To do local development and run the local tests, we recommend to use [ganache](https://github.com/trufflesuite/ganache) which is also used by CI when running github actions.
@@ -198,10 +198,10 @@ Then good news for you: **We are ready to pay for your contribution via [@gitcoi
 
 ### Contribution
 1. You are more than welcome to participate and get bounty by contributing! **Your contribution will be paid via  [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift).**
-2. Find or create an [issue](https://github.com/skywinder/web3swift/issues)
+2. Find or create an [issue](https://github.com/web3swift-team/web3swift/issues)
 3. You can find open bounties in [Gitcoin Bounties](https://gitcoin.co/explorer?applicants=ALL&keywords=web3swift&order_by=-web3_created) list
 4. Commita fix or a new feature in branch, push your changes
-5. [Submit a pull request to **develop** branch](https://github.com/skywinder/web3swift/pulls)
+5. [Submit a pull request to **develop** branch](https://github.com/web3swift-team/web3swift/pulls)
 	1. Please, provide detailed description to it to help us proceed it faster.
 
 [@skywinder](https://github.com/skywinder) are charged with open-sourсe and do not require money for using web3swift library.
@@ -218,7 +218,7 @@ We want to continue to do everything we can to move the needle forward.
 - Petr Korolev, [@skywinder](https://github.com/skywinder) - bootstrap and continuous support
 - Anton Grigorev, [@baldyash](https://github.com/BaldyAsh) - core contributor, who use it and making a lot of improvements
 - Yaroslav Yashin [@yaroslavyaroslav](https://github.com/yaroslavyaroslav) - core contributor of 3.0.0 and later releases.
-- Thanks to [web3swift's growing list of contributors](https://github.com/skywinder/web3swift/graphs/contributors).
+- Thanks to [web3swift's growing list of contributors](https://github.com/web3swift-team/web3swift/graphs/contributors).
 
 ## Security Disclosure
 
@@ -226,4 +226,4 @@ If you believe you have identified a security vulnerability with web3swift, you 
 
 ## License
 
-web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/skywinder/web3swift/blob/master/LICENSE) for details.
+web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/web3swift-team/web3swift/blob/master/LICENSE) for details.
