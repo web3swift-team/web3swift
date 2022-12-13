@@ -7,10 +7,10 @@
 ![matter-github-swift](https://github.com/web3swift-team/web3swift/blob/develop/web3swift-logo.png)
 [![Web3swift CI](https://github.com/web3swift-team/web3swift/actions/workflows/macOS-12.yml/badge.svg)](https://github.com/web3swift-team/web3swift/actions/workflows/macOS-12.yml)
 [![Swift](https://img.shields.io/badge/Swift-5.4-orange.svg?style=flat)](https://developer.apple.com/swift/)
-[![Platform](https://img.shields.io/cocoapods/p/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/web3.swift.pod.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
+[![Platform](https://img.shields.io/cocoapods/p/web3swift?style=flat)](http://cocoapods.org/pods/web3swift)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/web3swift?style=flat)](http://cocoapods.org/pods/web3swift)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3.swift.pod)
+[![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](http://cocoapods.org/pods/web3swift)
 [![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0xe22b8979739d724343bd002f9f432f5990879901)
 [![Stackoverflow](https://img.shields.io/badge/stackoverflow-ask-blue.svg)](https://stackoverflow.com/questions/tagged/web3swift)
 
