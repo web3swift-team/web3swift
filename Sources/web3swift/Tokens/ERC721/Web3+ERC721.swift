@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 // Non-Fungible Token Standard
 protocol IERC721: IERC165 {

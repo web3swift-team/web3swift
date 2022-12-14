@@ -8,7 +8,7 @@
 
 import XCTest
 import web3swift
-import Core
+import Web3Core
 
 /// Since solidity 0.8.4 a new type was introduced called `error`.
 /// Contracts' ABI with this type were not decodable.

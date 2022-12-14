@@ -6,7 +6,7 @@
 import XCTest
 import CryptoSwift
 import BigInt
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -38,7 +38,7 @@ class PersonalSignatureTests: XCTestCase {
         let allAddresses = try await web3.eth.ownedAccounts()
         deployTx.transaction.from = allAddresses[0]
         let policies = Policies(gasLimitPolicy: .manual(3000000))
-        let deployResult = try await deployTx.writeToChain(password: "web3swift", policies: policies)
+        let deployResult = try await deployTx.writeToChain(password: "web3swift", policies: policies, sendRaw: false)
         let txHash = Data.fromHex(deployResult.hash.stripHexPrefix())!
 
         Thread.sleep(forTimeInterval: 1.0)

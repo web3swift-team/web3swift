@@ -5,7 +5,7 @@
 
 import XCTest
 import BigInt
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -76,11 +76,11 @@ class UserCases: XCTestCase {
         let allAddresses = try await web3.eth.ownedAccounts()
         let contract = web3.contract(Web3.Utils.estimateGasTestABI, at: nil, abiVersion: 2)!
 
-        let parameters = [] as [AnyObject]
+        let parameters = [AnyObject]()
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         let policies = Policies(gasLimitPolicy: .manual(3000000))
-        let result = try await deployTx.writeToChain(password: "web3swift", policies: policies)
+        let result = try await deployTx.writeToChain(password: "web3swift", policies: policies, sendRaw: false)
         let txHash = Data.fromHex(result.hash.stripHexPrefix())!
 
         Thread.sleep(forTimeInterval: 1.0)

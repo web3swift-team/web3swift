@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 public class ENS {
 
@@ -84,7 +84,7 @@ public class ENS {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isAddrSupports = try? await resolver.supportsInterface(interfaceID: Resolver.InterfaceName.addr.hash()) else {
+        guard let isAddrSupports = try? await resolver.supportsInterface(interfaceID: .addr) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isAddrSupports else {
@@ -101,7 +101,7 @@ public class ENS {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isAddrSupports = try? await resolver.supportsInterface(interfaceID: Resolver.InterfaceName.addr.hash()) else {
+        guard let isAddrSupports = try? await resolver.supportsInterface(interfaceID: .addr) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isAddrSupports else {
@@ -119,7 +119,7 @@ public class ENS {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isNameSupports = try? await resolver.supportsInterface(interfaceID: Resolver.InterfaceName.name.hash()) else {
+        guard let isNameSupports = try? await resolver.supportsInterface(interfaceID: .name) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isNameSupports else {
@@ -136,7 +136,7 @@ public class ENS {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isNameSupports = try? await resolver.supportsInterface(interfaceID: Resolver.InterfaceName.name.hash()) else {
+        guard let isNameSupports = try? await resolver.supportsInterface(interfaceID: .name) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isNameSupports else {
@@ -155,7 +155,7 @@ public class ENS {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isContentSupports = try? await resolver.supportsInterface(interfaceID: Resolver.InterfaceName.content.hash()) else {
+        guard let isContentSupports = try? await resolver.supportsInterface(interfaceID: .content) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isContentSupports else {
@@ -172,7 +172,7 @@ public class ENS {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isContentSupports = try? await resolver.supportsInterface(interfaceID: Resolver.InterfaceName.content.hash()) else {
+        guard let isContentSupports = try? await resolver.supportsInterface(interfaceID: .content) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isContentSupports else {
@@ -190,7 +190,7 @@ public class ENS {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isABISupports = try? await resolver.supportsInterface(interfaceID: Resolver.InterfaceName.ABI.hash()) else {
+        guard let isABISupports = try? await resolver.supportsInterface(interfaceID: .ABI) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isABISupports else {
@@ -207,7 +207,7 @@ public class ENS {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isABISupports = try? await resolver.supportsInterface(interfaceID: Resolver.InterfaceName.ABI.hash()) else {
+        guard let isABISupports = try? await resolver.supportsInterface(interfaceID: .ABI) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isABISupports else {
@@ -225,7 +225,7 @@ public class ENS {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isPKSupports = try? await resolver.supportsInterface(interfaceID: Resolver.InterfaceName.pubkey.hash()) else {
+        guard let isPKSupports = try? await resolver.supportsInterface(interfaceID: .pubkey) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isPKSupports else {
@@ -242,7 +242,7 @@ public class ENS {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isPKSupports = try? await resolver.supportsInterface(interfaceID: Resolver.InterfaceName.pubkey.hash()) else {
+        guard let isPKSupports = try? await resolver.supportsInterface(interfaceID: .pubkey) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isPKSupports else {
@@ -260,7 +260,7 @@ public class ENS {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isTextSupports = try? await resolver.supportsInterface(interfaceID: Resolver.InterfaceName.text.hash()) else {
+        guard let isTextSupports = try? await resolver.supportsInterface(interfaceID: .text) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isTextSupports else {
@@ -277,7 +277,7 @@ public class ENS {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
-        guard let isTextSupports = try? await resolver.supportsInterface(interfaceID: Resolver.InterfaceName.text.hash()) else {
+        guard let isTextSupports = try? await resolver.supportsInterface(interfaceID: .text) else {
             throw Web3Error.processingError(desc: "Resolver don't support interface with this ID")
         }
         guard isTextSupports else {
