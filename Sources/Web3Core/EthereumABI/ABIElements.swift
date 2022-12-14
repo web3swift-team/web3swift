@@ -262,7 +262,7 @@ extension ABI.Element {
 
 extension ABI.Element.Function {
     public func decodeInputData(_ rawData: Data) -> [String: Any]? {
-        return Core.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
+        return Web3Core.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
     }
 
     /// Decodes data returned by a function call. Able to decode `revert(string)`, `revert CustomError(...)` and `require(expression, string)` calls.
@@ -432,7 +432,7 @@ extension ABI.Element.Function {
 
 extension ABI.Element.Constructor {
     public func decodeInputData(_ rawData: Data) -> [String: Any]? {
-        return Core.decodeInputData(rawData, inputs: inputs)
+        return Web3Core.decodeInputData(rawData, inputs: inputs)
     }
 }
 

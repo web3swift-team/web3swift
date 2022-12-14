@@ -7,7 +7,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 // Core Security Token Standard
 protocol IERC1594: IERC20 {

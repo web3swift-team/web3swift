@@ -7,9 +7,9 @@
 //
 
 import Foundation
+import Web3Core
 import XCTest
 import BigInt
-import Core
 @testable import web3swift
 
 class ABIEncoderTest: XCTestCase {

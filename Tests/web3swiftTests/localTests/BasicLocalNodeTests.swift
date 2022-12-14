@@ -6,7 +6,7 @@
 import XCTest
 import CryptoSwift
 import BigInt
-import Core
+import Web3Core
 
 @testable import web3swift
 

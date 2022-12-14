@@ -6,7 +6,7 @@
 //
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 // A New Advanced Token Standard
 protocol IERC777: IERC20, IERC820 {

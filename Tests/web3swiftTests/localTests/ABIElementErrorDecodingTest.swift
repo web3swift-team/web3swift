@@ -6,7 +6,7 @@
 
 import Foundation
 import XCTest
-import Core
+import Web3Core
 
 class ABIElementErrorDecodingTest: XCTestCase {
     typealias EthError = ABI.Element.EthError
