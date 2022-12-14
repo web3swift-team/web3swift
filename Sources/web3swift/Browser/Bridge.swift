@@ -148,9 +148,6 @@ extension Bridge: WKScriptMessageHandler {
         guard let body = message.body as? [String: Any], let name = body[MessageKey.action] as? String else {
             return
         }
-        if (body[MessageKey.printable] as? NSNumber)?.boolValue ?? printScriptMessageAutomatically {
-            print(body)
-        }
         guard let handler = handlers[name] else {
             guard let defaultHandler = self.defaultHandler else {
                 return

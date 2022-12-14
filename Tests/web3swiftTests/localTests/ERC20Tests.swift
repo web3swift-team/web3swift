@@ -30,7 +30,6 @@ class ERC20Tests: LocalTestCase {
         readTX.transaction.from = addressOfUser
         let tokenBalance = try await readTX.callContractMethod()
         guard let bal = tokenBalance["0"] as? BigUInt else {return XCTFail()}
-        print(String(bal))
     }
 
     // FIXME: Make me work
