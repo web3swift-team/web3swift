@@ -53,14 +53,14 @@ extension Web3 {
         ///
         /// Returns a "Transaction intermediate" object.
         public func prepareDeploy(bytecode: Data,
-                           constructor: ABI.Element.Constructor? = nil,
-                           parameters: [AnyObject]? = nil,
-                           extraData: Data? = nil) -> WriteOperation? {
+                                  constructor: ABI.Element.Constructor? = nil,
+                                  parameters: [AnyObject]? = nil,
+                                  extraData: Data? = nil) -> WriteOperation? {
             // MARK: Writing Data flow
             guard let data = self.contract.deploy(bytecode: bytecode,
-                                                constructor: constructor,
-                                                parameters: parameters,
-                                                extraData: extraData)
+                                                  constructor: constructor,
+                                                  parameters: parameters,
+                                                  extraData: extraData)
             else { return nil }
 
             if let network = self.web3.provider.network {
@@ -71,9 +71,9 @@ extension Web3 {
             transaction.data = data
             transaction.to = .contractDeploymentAddress()
 
-            return WriteOperation(transaction: self.transaction,
-                                  web3: self.web3,
-                                  contract: self.contract)
+            return WriteOperation(transaction: transaction,
+                                  web3: web3,
+                                  contract: contract)
         }
 
         // FIXME: Actually this is not rading contract or smth, this is about composing appropriate binary data to iterate with it later.
@@ -86,11 +86,11 @@ extension Web3 {
         /// Returns a "Transaction intermediate" object.
         public func createReadOperation(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data()) -> ReadOperation? {
             // MARK: - Encoding ABI Data flow
-            guard let data = self.contract.method(method, parameters: parameters, extraData: extraData) else { return nil }
+            guard let data = contract.method(method, parameters: parameters, extraData: extraData) else { return nil }
 
             transaction.data = data
 
-            if let network = self.web3.provider.network {
+            if let network = web3.provider.network {
                 transaction.chainID = network.chainID
             }
 
@@ -106,12 +106,12 @@ extension Web3 {
         ///
         /// Returns a "Transaction intermediate" object.
         public func createWriteOperation(_ method: String = "fallback", parameters: [AnyObject] = [AnyObject](), extraData: Data = Data()) -> WriteOperation? {
-            guard let data = self.contract.method(method, parameters: parameters, extraData: extraData) else {return nil}
+            guard let data = contract.method(method, parameters: parameters, extraData: extraData) else { return nil }
             transaction.data = data
-            if let network = self.web3.provider.network {
+            if let network = web3.provider.network {
                 transaction.chainID = network.chainID
             }
-            return .init(transaction: transaction, web3: self.web3, contract: self.contract, method: method)
+            return .init(transaction: transaction, web3: web3, contract: contract, method: method)
         }
     }
 }

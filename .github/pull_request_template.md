@@ -1,13 +1,8 @@
 ## **Summary of Changes**
 
-
 Fixes # _(if applicable - add the number of issue this PR addresses)_
 
-&nbsp;
-
 ## **Test Data or Screenshots**
-
-&nbsp;
 
 ###### _By submitting this pull request, you are confirming the following:_
 
