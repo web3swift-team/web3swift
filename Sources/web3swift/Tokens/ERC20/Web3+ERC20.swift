@@ -62,7 +62,6 @@ public class ERC20: IERC20, ERC20BaseProperties {
     }
 
     public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation {
-        let contract = self.contract
         self.transaction.from = from
         self.transaction.to = self.address
         self.transaction.callOnBlock = .latest
@@ -80,12 +79,12 @@ public class ERC20: IERC20, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
+        contract.transaction = transaction
         let tx = contract.createWriteOperation("transfer", parameters: [to, value] as [AnyObject] )!
         return tx
     }
 
     public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteOperation {
-        let contract = self.contract
         self.transaction.from = from
         self.transaction.to = self.address
         self.transaction.callOnBlock = .latest
@@ -103,7 +102,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-
+        contract.transaction = transaction
         let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value] as [AnyObject] )!
         return tx
     }
@@ -133,7 +132,6 @@ public class ERC20: IERC20, ERC20BaseProperties {
     }
 
     public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteOperation {
-        let contract = self.contract
         self.transaction.from = from
         self.transaction.to = self.address
         self.transaction.callOnBlock = .latest
@@ -151,7 +149,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-
+        contract.transaction = transaction
         let tx = contract.createWriteOperation("approve", parameters: [spender, value] as [AnyObject] )!
         return tx
     }
