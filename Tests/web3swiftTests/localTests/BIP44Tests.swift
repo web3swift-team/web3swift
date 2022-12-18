@@ -7,7 +7,7 @@ import XCTest
 import Web3Core
 @testable import web3swift
 
-final class BIP44Tests: XCTestCase {
+final class BIP44Tests: LocalTestCase {
     
     private let mnemonic = "fruit wave dwarf banana earth journey tattoo true farm silk olive fence"
 

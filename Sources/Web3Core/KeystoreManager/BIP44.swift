@@ -25,10 +25,48 @@ public enum BIP44Error: Equatable {
 extension HDNode: BIP44 {
     public func derive(path: String, warns: Bool = true) async throws -> HDNode? {
         if warns {
-            // https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#account-discovery
+            if let externalPath = path.externalChangePath {
+                
+            }
             return nil
         } else {
             return derive(path: path, derivePrivateKey: true)
         }
     }
 }
+
+extension String {
+    /// Returns a new BIP32 path that uses an external change, if the path is invalid returns nil
+    var externalChangePath: String? {
+        do {
+            guard isBip44Path else {
+                return nil
+            }
+            let changePathPattern = "'/[0-1]/"
+            let regex = try NSRegularExpression(pattern: changePathPattern, options: [.caseInsensitive])
+            let range = NSRange(location: 0, length: utf16.count)
+            let matches = regex.numberOfMatches(in: self, range: range)
+            if matches == 1 {
+                let result = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: "'/0/")
+                return result
+            } else {
+                return nil
+            }
+        } catch {
+            return nil
+        }
+    }
+    
+    /// Verifies if matches BIP44 path standard
+    var isBip44Path: Bool {
+        do {
+            let pattern = "^m/44'/\\d+'/\\d+'/[0-1]/\\d+$"
+            let regex = try NSRegularExpression(pattern: pattern, options: [.caseInsensitive])
+            let matches = regex.numberOfMatches(in: self, range: NSRange(location: 0, length: utf16.count))
+            return matches == 1
+        } catch {
+            return false
+        }
+    }
+}
+
