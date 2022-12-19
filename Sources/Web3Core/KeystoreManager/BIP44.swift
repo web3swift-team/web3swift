@@ -25,9 +25,11 @@ public enum BIP44Error: Equatable {
 extension HDNode: BIP44 {
     public func derive(path: String, warns: Bool = true) async throws -> HDNode? {
         if warns {
-            if let externalPath = path.externalChangePath {
-                
+            var accountIndex = 0
+            guard let account = path.accountFromPath else {
+                return nil
             }
+            
             return nil
         } else {
             return derive(path: path, derivePrivateKey: true)
@@ -36,6 +38,20 @@ extension HDNode: BIP44 {
 }
 
 extension String {
+    /// Returns the account from the path if the string contains a well formed BIP44 path
+    var accountFromPath: Int? {
+        guard isBip44Path else {
+            return nil
+        }
+        let components = components(separatedBy: "/")
+        let accountIndex = 3
+        let rawAccount = components[accountIndex].trimmingCharacters(in: CharacterSet(charactersIn: "'"))
+        guard let account = Int(rawAccount) else {
+            return nil
+        }
+        return account
+    }
+    
     /// Returns a new BIP32 path that uses an external change, if the path is invalid returns nil
     var externalChangePath: String? {
         do {
