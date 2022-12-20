@@ -10,7 +10,7 @@ import Web3Core
 /// The default http provider.
 public class Web3HttpProvider: Web3Provider {
     public var url: URL
-    public var network: Networks
+    public var network: Networks?
     public var policies: Policies = .auto
     public var keystoreManager: KeystoreManager?
 

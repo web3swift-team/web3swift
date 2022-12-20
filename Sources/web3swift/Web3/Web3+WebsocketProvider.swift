@@ -84,11 +84,11 @@ public protocol Web3SocketClient {
 
 /// The default websocket provider.
 public class Web3SocketProvider: Web3SubscriptionProvider, Web3SocketDelegate {
-
+    
     public var url: URL {
         web3SocketClient.url
     }
-    public var network: Networks?
+    public private(set) var network: Networks?
     public var policies: Policies = .auto
     public var keystoreManager: KeystoreManager?
     // TODO: Consider removing `public var session: URLSession` completely
