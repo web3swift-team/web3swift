@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 extension Web3 {
 
@@ -30,7 +30,6 @@ extension Web3 {
             self.transaction = transaction
             switch abiVersion {
             case 1:
-                print("ABIv1 bound contract is now deprecated")
                 return nil
             case 2:
                 // TODO: should throw

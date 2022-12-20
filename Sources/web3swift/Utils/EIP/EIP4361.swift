@@ -6,7 +6,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 public typealias SIWE = EIP4361
 

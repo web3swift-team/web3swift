@@ -4,7 +4,7 @@
 //
 
 import XCTest
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -16,13 +16,12 @@ class EventloopTests: XCTestCase {
         func getBlockNumber(_ eth: IEth) async {
             do {
                 let blockNumber = try await eth.blockNumber()
-                print("Block number = " + String(blockNumber))
                 ticksToWait = ticksToWait - 1
                 if ticksToWait == 0 {
                     expectation.fulfill()
                 }
             } catch {
-                print(error)
+                XCTFail("Failed to get block number: \(error.localizedDescription)")
             }
         }
 

@@ -44,8 +44,6 @@ public struct NameHash {
         hashData.append(remainderHash)
         hashData.append(labelData.sha3(.keccak256))
         let hash = hashData.sha3(.keccak256)
-        print(name)
-        print(hash.toHexString())
         return hash
     }
 }

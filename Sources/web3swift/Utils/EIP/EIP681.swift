@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 extension Web3 {
 
@@ -343,7 +343,6 @@ extension Web3 {
                 code.function = functionEncoding
             }
 
-            print(code)
             return code
         }
 

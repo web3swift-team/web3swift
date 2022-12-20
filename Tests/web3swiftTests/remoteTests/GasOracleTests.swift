@@ -6,7 +6,7 @@
 
 import XCTest
 import BigInt
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -97,12 +97,12 @@ class GasOracleTests: XCTestCase {
 //    func testBlockNumber() async throws {
 //        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
 //        let latestBlockNumber = try await web3.eth.getBlockNumber()
-//        print(latestBlockNumber)
+//        
 //    }
 //
 //    func testgetAccounts() async throws {
 //        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
 //        let accounts = try await web3.eth.getAccounts()
-//        print(accounts)
+//        
 //    }
 }

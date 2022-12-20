@@ -7,7 +7,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 // NPolymath Token Standard
 protocol IST20: IERC20 {

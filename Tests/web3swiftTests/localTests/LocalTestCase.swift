@@ -1,7 +1,7 @@
 import Foundation
 import XCTest
 import BigInt
-import Core
+import Web3Core
 
 import web3swift
 
@@ -17,8 +17,6 @@ class LocalTestCase: XCTestCase {
 
         let block = try await web3.eth.blockNumber()
         guard block < 25 else { return }
-
-        print("\n ****** Preloading Ganache (\(25 - block) blocks) *****\n")
 
         let allAddresses = try! await web3.eth.ownedAccounts()
         let sendToAddress = allAddresses[0]

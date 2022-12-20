@@ -5,7 +5,7 @@
 
 import XCTest
 import CryptoSwift
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -81,9 +81,8 @@ class KeystoresTests: LocalTestCase {
         let keystore = try! EthereumKeystoreV3(password: "")
         XCTAssertNotNil(keystore)
         let account = keystore!.addresses![0]
-        print(account)
+        
         let data = try! keystore!.serialize()
-        print(try! JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions(rawValue: 0)))
         let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
         XCTAssertNotNil(key)
     }
@@ -173,7 +172,7 @@ class KeystoresTests: LocalTestCase {
         let account = keystore!.addresses![1]
         let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
         XCTAssertNotNil(key)
-        print(keystore!.addressStorage.paths)
+        
     }
 
     func testByBIP32keystoreSaveAndDeriva() throws {
@@ -187,10 +186,10 @@ class KeystoresTests: LocalTestCase {
         let recreatedStore = BIP32Keystore.init(data!)
         XCTAssert(keystore?.addresses?.count == recreatedStore?.addresses?.count)
         XCTAssert(keystore?.rootPrefix == recreatedStore?.rootPrefix)
-        print(keystore!.addresses![0].address)
-        print(keystore!.addresses![1].address)
-        print(recreatedStore!.addresses![0].address)
-        print(recreatedStore!.addresses![1].address)
+        
+        
+        
+        
         XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![0])
         XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![1])
     }

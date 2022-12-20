@@ -7,7 +7,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 // Multi Token Standard
 // FIXME: Rewrite this to CodableTransaction

@@ -7,7 +7,7 @@
 
 import XCTest
 import BigInt
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -27,8 +27,8 @@ final class PolicyResolverTests: XCTestCase {
         tx.from = EthereumAddress("0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B")!
         let policies = Policies(gasLimitPolicy: .manual(21_000))
         try await resolver.resolveAll(for: &tx, with: policies)
-        print(tx.gasLimit)
-        print(tx.nonce)
+        
+        
         XCTAssertGreaterThan(tx.gasLimit, 0)
         XCTAssertGreaterThan(tx.maxFeePerGas ?? 0, 0)
         XCTAssertGreaterThan(tx.maxPriorityFeePerGas ?? 0, 0)
@@ -49,8 +49,8 @@ final class PolicyResolverTests: XCTestCase {
         tx.from = EthereumAddress("0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B")!
         let policies = Policies(gasLimitPolicy: .manual(21_000))
         try await resolver.resolveAll(for: &tx, with: policies)
-        print(tx.gasLimit)
-        print(tx.nonce)
+        
+        
         XCTAssertGreaterThan(tx.gasLimit, 0)
         XCTAssertGreaterThan(tx.gasPrice ?? 0, 0)
         XCTAssertGreaterThan(tx.nonce, 0)

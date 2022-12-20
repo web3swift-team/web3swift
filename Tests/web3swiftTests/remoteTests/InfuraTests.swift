@@ -4,7 +4,7 @@
 //
 
 import XCTest
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -69,7 +69,7 @@ class InfuraTests: XCTestCase {
 //        filter.topics = [EventFilterParameters.Topic.strings([EventFilterParameters.Topic.string("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5"), EventFilterParameters.Topic.string(nil)])]
 //        // need
 //        let eventParserResult = try await contract!.getIndexedEvents(eventName: "Transfer", filter: filter, joinWithReceipts: true)
-//        print(eventParserResult)
+//        
 //        XCTAssert(eventParserResult.count == 2)
 //        XCTAssert(eventParserResult.first?.transactionReceipt != nil)
 //        XCTAssert(eventParserResult.first?.eventLog != nil)
@@ -84,7 +84,7 @@ class InfuraTests: XCTestCase {
 //        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")!] as [EventFilterable])]
 //        guard let eventParser = contract?.createEventParser("Transfer", filter: filter) else {return XCTFail()}
 //        let present = try eventParser.parseBlockByNumberPromise(UInt64(5200120)).wait()
-//        print(present)
+//        
 //        XCTAssert(present.count == 1)
 //    }
 //    

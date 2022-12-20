@@ -4,7 +4,7 @@
 //
 
 import XCTest
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -13,7 +13,7 @@ class ENSTests: XCTestCase {
 
     func testDomainNormalization() throws {
         let normalizedString = NameHash.normalizeDomainName("example.ens")
-        print(normalizedString!)
+        
     }
 
     func testNameHash() throws {
@@ -27,7 +27,7 @@ class ENSTests: XCTestCase {
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let address = try await ens?.registry.getResolver(forDomain: domain).resolverContractAddress
-        print(address as Any)
+        
         XCTAssertEqual(address?.address.lowercased(), "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41")
     }
 
@@ -82,7 +82,7 @@ class ENSTests: XCTestCase {
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let ttl = try await ens?.registry.getTTL(node: domain)
-        print(ttl!.description)
+        
     }
 
     func testGetAddress() async throws {

@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 public protocol IEth {
     var provider: Web3Provider { get }

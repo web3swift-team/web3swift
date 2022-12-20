@@ -6,7 +6,7 @@
 import XCTest
 import CryptoSwift
 import BigInt
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -19,13 +19,9 @@ class PersonalSignatureTests: XCTestCase {
         web3.setKeystoreManager(keystoreManager)
         let message = "Hello World"
         let expectedAddress = keystoreManager.addresses![0]
-        print(expectedAddress)
+        
         let signature = try await web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
         let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: signature)!
-        print("V = " + String(unmarshalledSignature.v))
-        print("R = " + Data(unmarshalledSignature.r).toHexString())
-        print("S = " + Data(unmarshalledSignature.s).toHexString())
-        print("Personal hash = " + Utilities.hashPersonalMessage(message.data(using: .utf8)!)!.toHexString())
         let signer = try web3.personal.ecrecover(personalMessage: message.data(using: .utf8)!, signature: signature)
         XCTAssert(expectedAddress == signer, "Failed to sign personal message")
     }
@@ -48,7 +44,7 @@ class PersonalSignatureTests: XCTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(txHash)
-        print(receipt)
+        
 
         switch receipt.status {
         case .notYetProcessed:
@@ -63,13 +59,9 @@ class PersonalSignatureTests: XCTestCase {
         web3.setKeystoreManager(keystoreManager)
         let message = "Hello World"
         let expectedAddress = keystoreManager.addresses![0]
-        print(expectedAddress)
+        
         let signature = try await web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
         let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: signature)!
-        print("V = " + String(unmarshalledSignature.v))
-        print("R = " + Data(unmarshalledSignature.r).toHexString())
-        print("S = " + Data(unmarshalledSignature.s).toHexString())
-        print("Personal hash = " + Utilities.hashPersonalMessage(message.data(using: .utf8)!)!.toHexString())
 
         // Calling contract
         contract = web3.contract(abiString, at: receipt.contractAddress!)!

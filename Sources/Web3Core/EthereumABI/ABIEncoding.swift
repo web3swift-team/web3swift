@@ -326,7 +326,6 @@ public struct ABIEncoder {
                         }
                     }
                     let total =  lengthEncoding + headsConcatenated + tailsConcatenated
-                    //                    print("Dynamic array of dynamic types encoding :\n" + String(total.toHexString()))
                     return total
                 }
             case .staticSize(let staticLength):
@@ -341,7 +340,6 @@ public struct ABIEncoder {
                         guard let encoding = enc else {break}
                         toReturn.append(encoding)
                     }
-                    //                    print("Static array of static types encoding :\n" + String(toReturn.toHexString()))
                     let total = toReturn
                     return total
                 } else {
@@ -369,7 +367,6 @@ public struct ABIEncoder {
                         tailsPointer = tailsPointer + BigUInt(tail.count)
                     }
                     let total = headsConcatenated + tailsConcatenated
-                    //                    print("Static array of dynamic types encoding :\n" + String(total.toHexString()))
                     return total
                 }
             case .notArray:

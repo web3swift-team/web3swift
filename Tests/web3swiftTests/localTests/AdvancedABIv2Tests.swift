@@ -6,7 +6,7 @@
 import XCTest
 import CryptoSwift
 import BigInt
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -31,7 +31,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
-        print(receipt)
+        
 
         switch receipt.status {
         case .notYetProcessed:
@@ -45,7 +45,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testSingle")
         let testSingle = try await tx!.callContractMethod()
-        print(testSingle.description)
+        
     }
 
     func testAdvancedABIv2staticArray() async throws {
@@ -67,7 +67,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
-        print(receipt)
+        
 
         switch receipt.status {
         case .notYetProcessed:
@@ -81,7 +81,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testStaticArray")
         let testStaticArray = try await tx!.callContractMethod()
-        print(testStaticArray.description)
+        
     }
 
     func testAdvancedABIv2dynamicArray() async throws {
@@ -103,7 +103,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
-        print(receipt)
+        
 
         switch receipt.status {
         case .notYetProcessed:
@@ -116,7 +116,7 @@ class AdvancedABIv2Tests: LocalTestCase {
 
         let tx = contract.createReadOperation("testDynArray")
         let testDynArray = try await tx!.callContractMethod()
-        print(testDynArray.description)
+        
     }
 
     func testAdvancedABIv2dynamicArrayOfStrings() async throws {
@@ -138,7 +138,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
-        print(receipt)
+        
 
         switch receipt.status {
         case .notYetProcessed:
@@ -152,7 +152,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testDynOfDyn")
         let testDynOfDyn = try await tx!.callContractMethod()
-        print(testDynOfDyn.description)
+        
     }
 
     func testAdvancedABIv2staticArrayOfStrings() async throws {
@@ -174,7 +174,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
-        print(receipt)
+        
 
         switch receipt.status {
         case .notYetProcessed:
@@ -188,7 +188,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testStOfDyn")
         let testStOfDyn = try await tx!.callContractMethod()
-        print(testStOfDyn.description)
+        
     }
 
     func testEmptyArrayDecoding() async throws {
