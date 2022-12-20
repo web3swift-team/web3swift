@@ -1,0 +1,30 @@
+name: Feature Request
+description: Suggest an idea for this project
+labels: ['enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature request!
+  - type: textarea
+    id: problem
+    attributes:
+      label: What context is your feature request related to?
+      description: Short context name, please do not overcomplicate neither over fractionize it.
+      placeholder: Transaction pipeline enhancement, supported platform list extending, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: What solution would you like?
+      description: A clear and concise description of what you want to happen.
+      placeholder: I would like that your lib has a magic "give me money" button, that provides me to just to build it, be uploaded to the AppStore and to get rich.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Any additional context?
+      description: If there's some specs either standard for such feature invented already here's the good place to provide those.
+      placeholder: Here's the pictures of house that i'd wanted to be able to bough after i've got rich and the my future cars list as well.

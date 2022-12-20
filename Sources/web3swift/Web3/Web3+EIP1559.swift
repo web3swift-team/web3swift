@@ -7,7 +7,7 @@
 
 import Foundation
 import BigInt
-
+import Core
 
 /// EIP-1559 Base fee extension
 ///
@@ -79,7 +79,7 @@ public extension Web3 {
             let expectedBaseFeePerGas = parentBaseFee + baseFeePerGasDelta
 
             return expectedBaseFeePerGas
-        } else if parent.gasUsed < parentGasTarget  {
+        } else if parent.gasUsed < parentGasTarget {
             // Otherwise if the parent block used less gas than its target, the baseFee should decrease.
             let gasUsedDelta = parentGasTarget - parent.gasUsed
             let baseFeePerGasDelta = parentBaseFee * gasUsedDelta / parentGasTarget / Web3.BaseFeeChangeDenominator
@@ -176,4 +176,9 @@ public extension Web3 {
 
 extension Web3.MainChainVersion: Comparable {
     public static func < (lhs: Web3.MainChainVersion, rhs: Web3.MainChainVersion) -> Bool { return lhs.mainNetFisrtBlockNumber < rhs.mainNetFisrtBlockNumber }
- }
+}
+
+extension Block {
+    /// Returns chain version of mainnet block with such number
+    var mainChainVersion: Web3.MainChainVersion { Web3.getChainVersion(of: number) }
+}

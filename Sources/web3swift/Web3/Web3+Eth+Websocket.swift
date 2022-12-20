@@ -5,23 +5,18 @@
 //  Created by Anton on 03/04/2019.
 //  Copyright © 2019 The Matter Inc. All rights reserved.
 //
+
 import Foundation
 import BigInt
-import PromiseKit
-import Starscream
+import Core
 
-public struct SubscribeOnLogsParams: Encodable {
-    public let address: [String]?
-    public let topics: [String]?
-}
-
-extension web3.Eth {
+extension Web3.Eth {
     private func _subscribe<R>(filter: SubscribeEventFilter,
-                              listener: @escaping Web3SubscriptionListener<R>) throws -> Subscription {
+                               listener: @escaping Web3SubscriptionListener<R>) throws -> Subscription {
         guard let provider = provider as? Web3SubscriptionProvider else {
             throw Web3Error.processingError(desc: "Provider is not subscribable")
         }
-        return provider.subscribe(filter: filter, queue: web3.requestDispatcher.queue, listener: listener)
+        return provider.subscribe(filter: filter, listener: listener)
     }
 
     public func subscribeOnNewHeads(listener: @escaping Web3SubscriptionListener<BlockHeader>) throws -> Subscription {

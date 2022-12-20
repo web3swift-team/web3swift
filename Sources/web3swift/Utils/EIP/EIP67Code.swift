@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -7,6 +6,7 @@
 import Foundation
 import CoreImage
 import BigInt
+import Core
 
 extension Web3 {
 
@@ -25,7 +25,7 @@ extension Web3 {
             public var parameters: [(ABI.Element.ParameterType, AnyObject)]
 
             public func toString() -> String? {
-                let encoding = method + "(" + parameters.map({ (el) -> String in
+                let encoding = method + "(" + parameters.map({ el -> String in
                     if let string = el.1 as? String {
                         return el.0.abiRepresentation + " " + string
                     } else if let number = el.1 as? BigUInt {
