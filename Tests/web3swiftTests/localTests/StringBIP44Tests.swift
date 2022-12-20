@@ -68,28 +68,6 @@ final class StringBIP44Tests: XCTestCase {
         }
     }
     
-    // MARK: - externalChangePath
-    
-    func testInvalidChangesReturnNil() throws {
-        let invalidPaths = ["m/44'/60'/0'/-1/0",
-                            "m/44'/60'/0'/2/0"]
-        invalidPaths.forEach { invalidPath in
-            XCTAssertNil(invalidPath.externalChangePath)
-        }
-    }
-    
-    func testInternalChangeReturnsExternalChangePath() throws {
-        let path = "m/44'/60'/0'/1/0"
-        let result = path.externalChangePath
-        XCTAssertEqual(result, "m/44'/60'/0'/0/0")
-    }
-    
-    func testExternalChangeReturnsExternalChangePath() throws {
-        let path = "m/44'/60'/0'/0/0"
-        let result = path.externalChangePath
-        XCTAssertEqual(result, path)
-    }
-    
     // MARK: - isBip44Path
     
     func testVerifyBip44Paths() {
@@ -107,6 +85,30 @@ final class StringBIP44Tests: XCTestCase {
         invalidPaths.forEach { invalidPath in
             XCTAssertFalse(invalidPath.isBip44Path)
         }
+    }
+    
+    // MARK: - newPath
+    
+    func testNotBip44PathNewPathReturnsNil() {
+        invalidPaths.forEach { invalidPath in
+            XCTAssertNil(invalidPath.newPath(account: Int.random(in: 0...Int.max), addressIndex: Int.random(in: 0...Int.max)))
+        }
+    }
+    
+    func testNewPathGeneratesExternalChainAsZero() {
+        let path = "m/44'/60'/0'/1/0"
+        
+        let result = path.newPath(account: 0, addressIndex: 0)
+        
+        XCTAssertEqual(result, "m/44'/60'/0'/0/0")
+    }
+    
+    func testNewPathGeneratesNewAccountAndAddressIndex() {
+        let path = "m/44'/60'/1'/0/2"
+        
+        let result = path.newPath(account: 4, addressIndex: 3)
+        
+        XCTAssertEqual(result, "m/44'/60'/4'/0/3")
     }
 }
 

@@ -40,6 +40,18 @@ extension HDNode: BIP44 {
 }
 
 extension String {
+    /// Verifies if current value matches BIP44 path standard
+    var isBip44Path: Bool {
+        do {
+            let pattern = "^m/44'/\\d+'/\\d+'/[0-1]/\\d+$"
+            let regex = try NSRegularExpression(pattern: pattern, options: [.caseInsensitive])
+            let matches = regex.numberOfMatches(in: self, range: NSRange(location: 0, length: utf16.count))
+            return matches == 1
+        } catch {
+            return false
+        }
+    }
+    
     /// Returns the account from the path if the string contains a well formed BIP44 path
     var accountFromPath: Int? {
         guard isBip44Path else {
@@ -54,37 +66,25 @@ extension String {
         return account
     }
     
-    /// Returns a new BIP32 path that uses an external change, if the path is invalid returns nil
-    var externalChangePath: String? {
-        do {
-            guard isBip44Path else {
-                return nil
-            }
-            let changePathPattern = "'/[0-1]/"
-            let regex = try NSRegularExpression(pattern: changePathPattern, options: [.caseInsensitive])
-            let range = NSRange(location: 0, length: utf16.count)
-            let matches = regex.numberOfMatches(in: self, range: range)
-            if matches == 1 {
-                let result = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: "'/0/")
-                return result
-            } else {
-                return nil
-            }
-        } catch {
+    /**
+     Transforms a bip44 path into a new one changing `account` & `index`. The resulting one will have the change value equal to `0` to represent external chain. Format `m/44'/coin_type'/account'/change/address_index`
+     - Parameter account: the new `account` to use
+     - Parameter addressIndex: the new `addressIndex` to use
+     - Returns: a valid bip44 path or nil otherwise
+    */
+    func newPath(account: Int, addressIndex: Int) -> String? {
+        guard isBip44Path else {
             return nil
         }
-    }
-    
-    /// Verifies if matches BIP44 path standard
-    var isBip44Path: Bool {
-        do {
-            let pattern = "^m/44'/\\d+'/\\d+'/[0-1]/\\d+$"
-            let regex = try NSRegularExpression(pattern: pattern, options: [.caseInsensitive])
-            let matches = regex.numberOfMatches(in: self, range: NSRange(location: 0, length: utf16.count))
-            return matches == 1
-        } catch {
-            return false
-        }
+        var components = components(separatedBy: "/")
+        let accountPosition = 3
+        components[accountPosition] = "\(account)'"
+        let changePosition = 4
+        components[changePosition] = "0"
+        let addressIndexPosition = 5
+        components[addressIndexPosition] = "\(addressIndex)"
+        let result = components.joined(separator: "/")
+        return result
     }
 }
 
