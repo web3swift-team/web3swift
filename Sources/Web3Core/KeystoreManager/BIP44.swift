@@ -25,11 +25,13 @@ public enum BIP44Error: Equatable {
 extension HDNode: BIP44 {
     public func derive(path: String, warns: Bool = true) async throws -> HDNode? {
         if warns {
-            var accountIndex = 0
             guard let account = path.accountFromPath else {
                 return nil
             }
-            
+            if account == 0 {
+                return derive(path: path, derivePrivateKey: true)
+            }
+            var accountIndex = 0
             return nil
         } else {
             return derive(path: path, derivePrivateKey: true)
