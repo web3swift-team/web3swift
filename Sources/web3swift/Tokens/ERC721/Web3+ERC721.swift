@@ -89,7 +89,7 @@ public class ERC721: IERC721 {
             return
         }
         guard contract.contract.address != nil else {return}
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         async let tokenIdPromise = contract.createReadOperation("tokenId", parameters: [AnyObject](), extraData: Data())?.callContractMethod()
 

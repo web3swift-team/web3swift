@@ -65,7 +65,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("balanceOf", parameters: [account] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -73,7 +73,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
     public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -84,7 +84,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
         self.transaction.from = from
         self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -106,7 +106,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
         self.transaction.from = from
         self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -129,7 +129,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
         self.transaction.from = from
         self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -150,7 +150,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
     public func totalSupply() async throws -> BigUInt {
         let contract = self.contract
 
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -161,7 +161,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
         self.transaction.from = from
         self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -183,7 +183,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
     public func balanceOfByPartition(partition: Data, tokenHolder: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
 
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("balanceOfByPartition", parameters: [partition, tokenHolder] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -191,7 +191,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
     public func partitionsOf(tokenHolder: EthereumAddress) async throws -> [Data] {
         let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("partitionsOf", parameters: [tokenHolder] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? [Data] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -202,7 +202,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
         self.transaction.from = from
         self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -225,7 +225,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
         self.transaction.from = from
         self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -245,7 +245,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
     public func canTransferByPartition(originalOwner: EthereumAddress, to: EthereumAddress, partition: Data, amount: String, data: [UInt8]) async throws -> ([UInt8], Data, Data) {
         let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -266,7 +266,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
     public func isOperator(operator user: EthereumAddress, tokenHolder: EthereumAddress) async throws -> Bool {
         let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("isOperator", parameters: [user, tokenHolder] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -274,7 +274,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
     public func isOperatorForPartition(partition: Data, operator user: EthereumAddress, tokenHolder: EthereumAddress) async throws -> Bool {
         let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("isOperatorForPartition", parameters: [partition, user, tokenHolder] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -325,7 +325,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
         self.transaction.from = from
         self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -348,7 +348,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
         self.transaction.from = from
         self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -371,7 +371,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 
         self.transaction.from = from
         self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -393,7 +393,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
 extension ERC1410: IERC777 {
     public func canImplementInterfaceForAddress(interfaceHash: Data, addr: EthereumAddress) async throws -> Data {
         let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("canImplementInterfaceForAddress", parameters: [interfaceHash, addr] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? Data else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -401,7 +401,7 @@ extension ERC1410: IERC777 {
 
     public func getInterfaceImplementer(addr: EthereumAddress, interfaceHash: Data) async throws -> EthereumAddress {
         let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("getInterfaceImplementer", parameters: [addr, interfaceHash] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -427,7 +427,7 @@ extension ERC1410: IERC777 {
 
     public func interfaceHash(interfaceName: String) async throws -> Data {
         let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("interfaceHash", parameters: [interfaceName] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? Data else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -444,7 +444,7 @@ extension ERC1410: IERC777 {
 
     public func supportsInterface(interfaceID: String) async throws -> Bool {
         let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -454,7 +454,7 @@ extension ERC1410: IERC777 {
         let contract = self.contract
 
         self.transaction.from = from
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         let tx = contract.createWriteOperation("authorizeOperator", parameters: [user] as [AnyObject])!
         return tx
@@ -464,7 +464,7 @@ extension ERC1410: IERC777 {
         let contract = self.contract
 
         self.transaction.from = from
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         let tx = contract.createWriteOperation("revokeOperator", parameters: [user] as [AnyObject])!
         return tx
@@ -472,7 +472,7 @@ extension ERC1410: IERC777 {
 
     public func isOperatorFor(operator user: EthereumAddress, tokenHolder: EthereumAddress) async throws -> Bool {
         let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("isOperatorFor", parameters: [user, tokenHolder] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -483,7 +483,7 @@ extension ERC1410: IERC777 {
 
         self.transaction.from = from
         self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -505,7 +505,7 @@ extension ERC1410: IERC777 {
 
         self.transaction.from = from
         self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -527,7 +527,7 @@ extension ERC1410: IERC777 {
 
         self.transaction.from = from
         self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -549,7 +549,7 @@ extension ERC1410: IERC777 {
 
         self.transaction.from = from
         self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
 
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
@@ -568,7 +568,7 @@ extension ERC1410: IERC777 {
 
     public func getGranularity() async throws -> BigUInt {
         let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("granularity", parameters: [] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -576,7 +576,7 @@ extension ERC1410: IERC777 {
 
     public func getDefaultOperators() async throws -> [EthereumAddress] {
         let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("defaultOperators", parameters: [] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? [EthereumAddress] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
