@@ -100,7 +100,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -119,7 +119,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -138,7 +138,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -171,7 +171,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -190,7 +190,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -209,7 +209,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -228,7 +228,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -254,6 +254,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
+        contract.transaction = transaction
         return contract.createWriteOperation("renounceOwnership", parameters: [AnyObject]() )!
     }
 
@@ -261,6 +262,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
+        contract.transaction = transaction
         return contract.createWriteOperation("transferOwnership", parameters: [newOwner] as [AnyObject])!
     }
 
@@ -333,6 +335,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
+        contract.transaction = transaction
         return contract.createWriteOperation("createCheckpoint", parameters: [AnyObject]() )!
     }
 
