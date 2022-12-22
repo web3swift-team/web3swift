@@ -58,28 +58,28 @@ public class ERC777: IERC777, ERC20BaseProperties {
 
     public func getGranularity() async throws -> BigUInt {
         transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("granularity", parameters: [] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("granularity", parameters: [] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func getDefaultOperators() async throws -> [EthereumAddress] {
         transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("defaultOperators", parameters: [] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("defaultOperators", parameters: [] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? [EthereumAddress] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
         transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("balanceOf", parameters: [account] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("balanceOf", parameters: [account] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt {
         transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -142,7 +142,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
 
     public func totalSupply() async throws -> BigUInt {
         transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -164,7 +164,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
 
     public func isOperatorFor(operator user: EthereumAddress, tokenHolder: EthereumAddress) async throws -> Bool {
         transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("isOperatorFor", parameters: [user, tokenHolder] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("isOperatorFor", parameters: [user, tokenHolder] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -201,7 +201,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("operatorSend", parameters: [originalOwner, to, value, data, operatorData] as [AnyObject] )!
+        let tx = contract.createWriteOperation("operatorSend", parameters: [originalOwner, to, value, data, operatorData] as [AnyObject])!
         return tx
     }
 
@@ -243,14 +243,14 @@ public class ERC777: IERC777, ERC20BaseProperties {
 
     public func canImplementInterfaceForAddress(interfaceHash: Data, addr: EthereumAddress) async throws -> Data {
         transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("canImplementInterfaceForAddress", parameters: [interfaceHash, addr] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("canImplementInterfaceForAddress", parameters: [interfaceHash, addr] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? Data else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func getInterfaceImplementer(addr: EthereumAddress, interfaceHash: Data) async throws -> EthereumAddress {
         transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("getInterfaceImplementer", parameters: [addr, interfaceHash] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("getInterfaceImplementer", parameters: [addr, interfaceHash] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -269,7 +269,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
 
     public func interfaceHash(interfaceName: String) async throws -> Data {
         transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("interfaceHash", parameters: [interfaceName] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("interfaceHash", parameters: [interfaceName] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? Data else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -302,7 +302,7 @@ public class ERC777: IERC777, ERC20BaseProperties {
 
     public func supportsInterface(interfaceID: String) async throws -> Bool {
         transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }

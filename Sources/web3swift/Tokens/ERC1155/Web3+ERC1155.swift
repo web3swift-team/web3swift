@@ -98,7 +98,7 @@ public class ERC1155: IERC1155 {
             .callContractMethod()
         /*
          let result = try await contract
-             .prepareToRead("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data() )!
+             .prepareToRead("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data())!
              .execute()
              .decodeData()
 

@@ -289,13 +289,13 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
         guard let amount = Utilities.parseToBigUInt(value, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("transferAndCall", parameters: [to, amount, data] as [AnyObject] )!
+        let tx = contract.createWriteOperation("transferAndCall", parameters: [to, amount, data] as [AnyObject])!
         return tx
     }
 
     func nonceOf(owner: EthereumAddress) async throws -> BigUInt {
         transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("nonceOf", parameters: [owner] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("nonceOf", parameters: [owner] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -303,7 +303,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
     func increaseNonce(from: EthereumAddress) throws -> WriteOperation {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
-        let tx = contract.createWriteOperation("increaseNonce", parameters: [] as [AnyObject] )!
+        let tx = contract.createWriteOperation("increaseNonce", parameters: [] as [AnyObject])!
         return tx
     }
 
@@ -324,7 +324,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
 
         let modeValue = mode.rawValue
 
-        let tx = contract.createWriteOperation("delegateTransferAndCall", parameters: [nonce, fee, gasAmount, to, amount, data, modeValue, v, r, s] as [AnyObject] )!
+        let tx = contract.createWriteOperation("delegateTransferAndCall", parameters: [nonce, fee, gasAmount, to, amount, data, modeValue, v, r, s] as [AnyObject])!
         return tx
     }
 
