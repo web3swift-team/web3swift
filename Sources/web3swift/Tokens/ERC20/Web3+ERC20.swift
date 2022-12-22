@@ -108,7 +108,6 @@ public class ERC20: IERC20, ERC20BaseProperties {
     }
 
     public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteOperation {
-        let contract = self.contract
         self.transaction.from = from
         self.transaction.to = self.address
         self.transaction.callOnBlock = .latest
@@ -126,7 +125,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(newAmount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-
+        contract.transaction = transaction
         let tx = contract.createWriteOperation("setAllowance", parameters: [to, value] as [AnyObject] )!
         return tx
     }
@@ -155,7 +154,6 @@ public class ERC20: IERC20, ERC20BaseProperties {
     }
 
     public func totalSupply() async throws -> BigUInt {
-        let contract = self.contract
         self.transaction.callOnBlock = .latest
         let result = try await contract
             .createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data() )!
