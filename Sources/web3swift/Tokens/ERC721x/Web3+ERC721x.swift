@@ -110,55 +110,37 @@ public class ERC721x: IERC721x {
     }
 
     public func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId] as [AnyObject] )!
         return tx
     }
 
     public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId] as [AnyObject] )!
         return tx
     }
 
     public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId] as [AnyObject] )!
         return tx
     }
 
     public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, data: [UInt8]) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, data] as [AnyObject] )!
         return tx
     }
 
     public func approve(from: EthereumAddress, approved: EthereumAddress, tokenId: BigUInt) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract.createWriteOperation("approve", parameters: [approved, tokenId] as [AnyObject] )!
         return tx
     }
 
     public func setApprovalForAll(from: EthereumAddress, operator user: EthereumAddress, approved: Bool) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved] as [AnyObject] )!
         return tx
     }
@@ -252,47 +234,44 @@ public class ERC721x: IERC721x {
     }
 
     func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId, quantity] as [AnyObject] )!
         return tx
     }
 
     func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, quantity: BigUInt) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId, quantity] as [AnyObject] )!
         return tx
     }
 
     func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, amount] as [AnyObject] )!
         return tx
     }
 
     func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, amount: BigUInt, data: [UInt8]) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, amount, data] as [AnyObject] )!
         return tx
     }
 
     func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenIds: [BigUInt], amounts: [BigUInt], data: [UInt8]) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenIds, amounts, data] as [AnyObject] )!
         return tx
     }
+}
+
+// MARK: - Private
+
+extension ERC721x {
+
+    private func updateTransactionAndContract(from: EthereumAddress) {
+        transaction.from = from
+        transaction.to = address
+        contract.transaction = transaction
+    }
+
 }
