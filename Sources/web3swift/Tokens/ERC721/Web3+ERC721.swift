@@ -85,7 +85,6 @@ public class ERC721: IERC721 {
     }
 
     public func readProperties() async throws {
-
         if self._hasReadProperties {
             return
         }
@@ -128,56 +127,38 @@ public class ERC721: IERC721 {
     }
 
     public func transfer(from: EthereumAddress, to: EthereumAddress, tokenId: BigUInt) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
-        let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId] as [AnyObject] )!
+        updateTransactionAndContract(from: from)
+        let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId] as [AnyObject])!
         return tx
     }
 
     public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
-        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId] as [AnyObject] )!
+        updateTransactionAndContract(from: from)
+        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId] as [AnyObject])!
         return tx
     }
 
     public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId] as [AnyObject] )!
+        updateTransactionAndContract(from: from)
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId] as [AnyObject])!
         return tx
     }
 
     public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, tokenId: BigUInt, data: [UInt8]) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, data] as [AnyObject] )!
+        updateTransactionAndContract(from: from)
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, data] as [AnyObject])!
         return tx
     }
 
     public func approve(from: EthereumAddress, approved: EthereumAddress, tokenId: BigUInt) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
-        let tx = contract.createWriteOperation("approve", parameters: [approved, tokenId] as [AnyObject] )!
+        updateTransactionAndContract(from: from)
+        let tx = contract.createWriteOperation("approve", parameters: [approved, tokenId] as [AnyObject])!
         return tx
     }
 
     public func setApprovalForAll(from: EthereumAddress, operator user: EthereumAddress, approved: Bool) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
-        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved] as [AnyObject] )!
+        updateTransactionAndContract(from: from)
+        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved] as [AnyObject])!
         return tx
     }
 
@@ -198,6 +179,20 @@ public class ERC721: IERC721 {
     }
 
 }
+
+// MARK: - Private
+
+extension ERC721 {
+
+    private func updateTransactionAndContract(from: EthereumAddress) {
+        transaction.from = from
+        transaction.to = address
+        contract.transaction = transaction
+    }
+
+}
+
+// MARK: - IERC721Enumerable
 
 extension ERC721: IERC721Enumerable {
 
@@ -226,6 +221,8 @@ extension ERC721: IERC721Enumerable {
     }
 
 }
+
+// MARK: - IERC721Metadata
 
 // FIXME: Rewrite this to CodableTransaction
 extension ERC721: IERC721Metadata {
