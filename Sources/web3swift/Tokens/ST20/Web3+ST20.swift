@@ -50,20 +50,15 @@ public class ST20: IST20, ERC20BaseProperties {
     }
 
     func tokenDetails() async throws -> [UInt32] {
-        let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("tokenDetails", parameters: [] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? [UInt32] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     func verifyTransfer(from: EthereumAddress, originalOwner: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation {
-        let contract = self.contract
-
-        self.transaction.from = from
-        self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
-
+        transaction.callOnBlock = .latest
+        updateTransactionAndContract(from: from)
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
         var decimals = BigUInt(0)
@@ -81,12 +76,8 @@ public class ST20: IST20, ERC20BaseProperties {
     }
 
     func mint(from: EthereumAddress, investor: EthereumAddress, amount: String) async throws -> WriteOperation {
-        let contract = self.contract
-
-        self.transaction.from = from
-        self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
-
+        transaction.callOnBlock = .latest
+        updateTransactionAndContract(from: from)
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
         var decimals = BigUInt(0)
@@ -104,12 +95,8 @@ public class ST20: IST20, ERC20BaseProperties {
     }
 
     public func burn(from: EthereumAddress, amount: String) async throws -> WriteOperation {
-        let contract = self.contract
-
-        self.transaction.from = from
-        self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
-
+        transaction.callOnBlock = .latest
+        updateTransactionAndContract(from: from)
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
         var decimals = BigUInt(0)
@@ -126,28 +113,22 @@ public class ST20: IST20, ERC20BaseProperties {
     }
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
-        let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("balanceOf", parameters: [account] as [AnyObject], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt {
-        let contract = self.contract
-        self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data() )!.callContractMethod()
+        transaction.callOnBlock = .latest
+        let result = try await contract.createReadOperation("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func transfer(from: EthereumAddress, to: EthereumAddress, amount: String) async throws -> WriteOperation {
-        let contract = self.contract
-
-        self.transaction.from = from
-        self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
-
+        transaction.callOnBlock = .latest
+        updateTransactionAndContract(from: from)
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
         var decimals = BigUInt(0)
@@ -164,12 +145,8 @@ public class ST20: IST20, ERC20BaseProperties {
     }
 
     public func transferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, amount: String) async throws -> WriteOperation {
-        let contract = self.contract
-
-        self.transaction.from = from
-        self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
-
+        transaction.callOnBlock = .latest
+        updateTransactionAndContract(from: from)
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
         var decimals = BigUInt(0)
@@ -187,12 +164,8 @@ public class ST20: IST20, ERC20BaseProperties {
     }
 
     public func setAllowance(from: EthereumAddress, to: EthereumAddress, newAmount: String) async throws -> WriteOperation {
-        let contract = self.contract
-
-        self.transaction.from = from
-        self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
-
+        transaction.callOnBlock = .latest
+        updateTransactionAndContract(from: from)
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
         var decimals = BigUInt(0)
@@ -210,12 +183,8 @@ public class ST20: IST20, ERC20BaseProperties {
     }
 
     public func approve(from: EthereumAddress, spender: EthereumAddress, amount: String) async throws -> WriteOperation {
-        let contract = self.contract
-
-        self.transaction.from = from
-        self.transaction.to = self.address
-        self.transaction.callOnBlock = .latest
-
+        transaction.callOnBlock = .latest
+        updateTransactionAndContract(from: from)
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals" )!.callContractMethod()
         var decimals = BigUInt(0)
@@ -233,11 +202,24 @@ public class ST20: IST20, ERC20BaseProperties {
     }
 
     public func totalSupply() async throws -> BigUInt {
-        let contract = self.contract
-        self.transaction.callOnBlock = .latest
+        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
 }
+
+// MARK: - Private
+
+extension ST20 {
+
+    private func updateTransactionAndContract(from: EthereumAddress) {
+        transaction.from = from
+        transaction.to = address
+        contract.transaction = transaction
+    }
+
+}
+
+
