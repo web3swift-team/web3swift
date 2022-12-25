@@ -41,12 +41,12 @@ public class Web3HttpProvider: Web3Provider {
     }
     
     public init(
-        _ httpProviderURL: URL,
-        network net: Networks,
-        keystoreManager manager: KeystoreManager? = nil
+        url: URL,
+        network: Networks,
+        keystoreManager: KeystoreManager? = nil
     ) {
-        url = httpProviderURL
-        network = net
-        attachedKeystoreManager = manager
+        self.url = url
+        self.network = network
+        self.attachedKeystoreManager = keystoreManager
     }
 }
