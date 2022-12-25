@@ -14,25 +14,53 @@ public protocol BIP44 {
     - Throws: `BIP44Error.warning` if the child key shouldn't be used according to BIP44 standard.
     - Returns: an HDNode child key for the provided `path` if it can be created, otherwise nil
      */
-    func derive(path: String, warns: Bool) async throws -> HDNode?
+    func derive(path: String, warns: Bool, transactionChecker: TransactionChecker) async throws -> HDNode?
 }
 
-public enum BIP44Error: Equatable {
+public enum BIP44Error: Error, Equatable {
     /// The selected path doesn't fulfill BIP44 standard, you can derive the root key anyway
     case warning
 }
 
+public protocol TransactionChecker {
+    /**
+    It verifies if the provided `address` has at least one transaction
+     
+     - Parameter address: to be queried
+     - Throws: any error related to query the blockchain provider
+     - Returns: true if the `address` has at least one transaction, false otherwise
+     */
+    func hasTransactions(address: String) async throws -> Bool
+}
+
 extension HDNode: BIP44 {
-    public func derive(path: String, warns: Bool = true) async throws -> HDNode? {
+    public func derive(path: String, warns: Bool = true, transactionChecker: TransactionChecker) async throws -> HDNode? {
         if warns {
             guard let account = path.accountFromPath else {
                 return nil
             }
             if account == 0 {
                 return derive(path: path, derivePrivateKey: true)
+            } else {
+                for searchAccount in 0..<account {
+                    let maxUnusedAddressIndexes = 20
+                    var hasTransactions = false
+                    for searchAddressIndex in 0..<maxUnusedAddressIndexes {
+                        if let searchPath = path.newPath(account: searchAccount, addressIndex: searchAddressIndex),
+                           let childNode = derive(path: searchPath, derivePrivateKey: true),
+                           let ethAddress = Utilities.publicToAddress(childNode.publicKey) {
+                            hasTransactions = try await transactionChecker.hasTransactions(address: ethAddress.address)
+                            if hasTransactions {
+                                break
+                            }
+                        }
+                    }
+                    if !hasTransactions {
+                        throw BIP44Error.warning
+                    }
+                }
+                return derive(path: path, derivePrivateKey: true)
             }
-            var accountIndex = 0
-            return nil
         } else {
             return derive(path: path, derivePrivateKey: true)
         }
@@ -70,7 +98,7 @@ extension String {
      Transforms a bip44 path into a new one changing `account` & `index`. The resulting one will have the change value equal to `0` to represent external chain. Format `m/44'/coin_type'/account'/change/address_index`
      - Parameter account: the new `account` to use
      - Parameter addressIndex: the new `addressIndex` to use
-     - Returns: a valid bip44 path or nil otherwise
+     - Returns: a valid bip44 path with the provided `account`, `addressIndex`and external `change` or nil otherwise
     */
     func newPath(account: Int, addressIndex: Int) -> String? {
         guard isBip44Path else {
@@ -83,8 +111,6 @@ extension String {
         components[changePosition] = "0"
         let addressIndexPosition = 5
         components[addressIndexPosition] = "\(addressIndex)"
-        let result = components.joined(separator: "/")
-        return result
+        return components.joined(separator: "/")
     }
 }
-
