@@ -9,12 +9,12 @@ import _Concurrency
 public struct EtherscanTransactionChecker: TransactionChecker {
     private let urlSession: URLSessionProxy
     private let apiKey: String
-    
+
     public init(urlSession: URLSessionProxy, apiKey: String) {
         self.urlSession = urlSession
         self.apiKey = apiKey
     }
-    
+
     public func hasTransactions(address: String) async throws -> Bool {
         let urlString = "https://api.etherscan.io/api?module=account&action=txlist&address=\(address)&startblock=0&page=1&offset=1&sort=asc&apikey=\(apiKey)"
         guard let url = URL(string: urlString) else {
