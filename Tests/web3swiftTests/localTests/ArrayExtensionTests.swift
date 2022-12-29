@@ -3,7 +3,7 @@
 //  Created by albertopeam on 25/11/22.
 //
 
-@testable import Core
+@testable import Web3Core
 import XCTest
 import BigInt
 
