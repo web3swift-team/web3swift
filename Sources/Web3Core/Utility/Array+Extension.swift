@@ -112,6 +112,6 @@ extension Array where Element: BinaryInteger {
 /// Transforms `[Any?]` into `[AnyObject]`
 extension Array where Element == Any? {
     func toAnyObject() -> [AnyObject] {
-        self.map{ $0 as AnyObject }
+        self.map { $0 as AnyObject }
     }
 }

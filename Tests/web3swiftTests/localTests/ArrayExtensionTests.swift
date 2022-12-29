@@ -12,23 +12,24 @@ final class ArrayExtensionTests: XCTestCase {
         let result = [].toAnyObject()
         XCTAssertEqual(result.count, 0)
     }
-    
+
     func testToAnyObjectNils() throws {
         let result = [nil, nil].toAnyObject()
         XCTAssertEqual(result.count, 2)
         XCTAssertTrue(result.first is NSNull)
         XCTAssertTrue(result.dropFirst().first is NSNull)
     }
-    
+
     func testToAnyObjectNilAndNonNils() throws {
-        let result = [1,
-                      nil,
-                      "2",
-                      NSNull(),
-                      Data(hex: "FA"),
-                      BigInt(3),
-                      BigUInt(4),
-                      EthereumAddress(Data(count: 20))
+        let result = [
+            1,
+            nil,
+            "2",
+            NSNull(),
+            Data(hex: "FA"),
+            BigInt(3),
+            BigUInt(4),
+            EthereumAddress(Data(count: 20))
         ].toAnyObject()
         XCTAssertEqual(result.count, 8)
         XCTAssertEqual(result.first as? Int, 1)
