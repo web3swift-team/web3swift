@@ -7,23 +7,9 @@ import XCTest
 @testable import Web3Core
 
 final class EtherscanTransactionCheckerTests: XCTestCase {
-    private var testApiKey: String!
-    private var vitaliksAddress: String!
-    private var emptyAddress: String!
-
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        testApiKey = "4HVPVMV1PN6NGZDFXZIYKEZRP53IA41KVC"
-        vitaliksAddress = "0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B"
-        emptyAddress = "0x1BeY3KhtHpfATH5Yqxz9d8Z1XbqZFSXtK7"
-    }
-
-    override func tearDownWithError() throws {
-        try super.tearDownWithError()
-        testApiKey = nil
-        vitaliksAddress = nil
-        emptyAddress = nil
-    }
+    private var testApiKey: String { "4HVPVMV1PN6NGZDFXZIYKEZRP53IA41KVC" }
+    private var vitaliksAddress: String { "0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B" }
+    private var emptyAddress: String { "0x1BeY3KhtHpfATH5Yqxz9d8Z1XbqZFSXtK7" }
 
     func testHasTransactions() async throws {
         let sut = EtherscanTransactionChecker(urlSession: URLSession.shared, apiKey: testApiKey)

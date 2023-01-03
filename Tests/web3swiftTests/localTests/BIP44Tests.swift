@@ -8,14 +8,8 @@ import Web3Core
 @testable import web3swift
 
 final class BIP44Tests: XCTestCase {
-    private var accountZeroScannedAddresses: [String]!
-    private var accountZeroAndOneScannedAddresses: [String]!
-    private var mockTransactionChecker: MockTransactionChecker!
-
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        mockTransactionChecker = MockTransactionChecker()
-        accountZeroScannedAddresses = [
+    private var accountZeroScannedAddresses: [String] {
+        [
             "0x31a4aD7593D06D049b3Cc07aB5430264Bf7e069f",
             "0x2b4fb04d485446ade5889e77b0cbC2c71075209c",
             "0x93DDC6583D4BF6e9b309cfBdC681A78F8B5f37Ff",
@@ -36,7 +30,9 @@ final class BIP44Tests: XCTestCase {
             "0xd521A57ea2bAA6396AE916aD2bC4972a9b3635EB",
             "0x561192570145C499f0951dEc0a4Df80D0D0A96bb",
             "0x4DdBe17BB1b0056941A1425739978e44D462D7DD"]
-        accountZeroAndOneScannedAddresses = [
+    }
+    private var accountZeroAndOneScannedAddresses: [String] {
+        [
             "0x31a4aD7593D06D049b3Cc07aB5430264Bf7e069f",
             "0x3C7b0FadC415d0be5EBa971DC7Dcc39DdDcd4AF7",
             "0x73C13e421eF367c4F55BBC02a8e2a2b12e82f717",
@@ -59,13 +55,7 @@ final class BIP44Tests: XCTestCase {
             "0x111FbB56b0B5c97F2896Ee722A917b261bCC77fC",
             "0xF3F66e5C119620eBDbD7Fb48B4b5d365De5c9750"]
     }
-
-    override func tearDownWithError() throws {
-        try super.tearDownWithError()
-        mockTransactionChecker = nil
-        accountZeroScannedAddresses = nil
-        accountZeroAndOneScannedAddresses = nil
-    }
+    private var mockTransactionChecker: MockTransactionChecker = .init()
 
     func testDeriveNoWarn() async throws {
         let rootNode = try rootNode()
