@@ -21,9 +21,10 @@ class TransactionReceiptTests: XCTestCase {
         let cumulativeGasUsed: BigUInt = 789456132
         let gasUsed: BigUInt = 8857745
         let effectiveGasPrice: BigUInt = 123456
+        /// This is not an EventLog decoding test so the array is empty
         let logs: [EventLog] = []
         let status = TransactionReceipt.TXStatus.ok
-        let logsBloom = EthereumBloomFilter(0)!
+        let logsBloom = EthereumBloomFilter(12348880)!
 
         let transactionJson = "{\"transactionHash\":\"\(transactionHash.toHexString().addHexPrefix())\",\"transactionIndex\":\"\(transactionIndex.hexString)\",\"blockNumber\":\"\(blockNumber.hexString)\",\"blockHash\":\"\(blockHash.toHexString().addHexPrefix())\",\"from\":\"0xdf85ee41abbf15cdf1dbf89fb7af9a9557c5dd7e\",\"to\":\"0xe22b8979739d724343bd002f9f432f5990879901\",\"cumulativeGasUsed\":\"\(cumulativeGasUsed.hexString)\",\"gasUsed\":\"\(gasUsed.hexString)\",\"contractAddress\":\"\(contractAddress.address)\",\"logs\":[],\"logsBloom\":\"\(logsBloom.bytes.toHexString().addHexPrefix())\",\"status\":\"0x1\",\"effectiveGasPrice\":\"\(effectiveGasPrice.hexString)\",\"type\":\"0x2\"}"
         let transactionReceipt = try JSONDecoder().decode(TransactionReceipt.self, from: transactionJson.data(using: .utf8)!)
