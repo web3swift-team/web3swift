@@ -42,8 +42,6 @@ public class ERC20: IERC20, ERC20BaseProperties {
     }
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
-        let contract = self.contract
-        transaction.callOnBlock = .latest
         let result = try await contract
             .createReadOperation("balanceOf", parameters: [account] as [AnyObject], extraData: Data())!
             .callContractMethod()
@@ -52,8 +50,6 @@ public class ERC20: IERC20, ERC20BaseProperties {
     }
 
     public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt {
-        let contract = self.contract
-        transaction.callOnBlock = .latest
         let result = try await contract
             .createReadOperation("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data())!
             .callContractMethod()
@@ -154,7 +150,6 @@ public class ERC20: IERC20, ERC20BaseProperties {
     }
 
     public func totalSupply() async throws -> BigUInt {
-        transaction.callOnBlock = .latest
         let result = try await contract
             .createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data())!
             .callContractMethod()

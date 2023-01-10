@@ -68,7 +68,6 @@ public class ERC1155: IERC1155 {
             return
         }
         guard contract.contract.address != nil else {return}
-        transaction.callOnBlock = .latest
 
         guard let tokenIdPromise = try await contract.createReadOperation("id", parameters: [] as [AnyObject], extraData: Data())?.callContractMethod() else {return}
 
@@ -92,7 +91,6 @@ public class ERC1155: IERC1155 {
     }
 
     public func balanceOf(account: EthereumAddress, id: BigUInt) async throws -> BigUInt {
-        transaction.callOnBlock = .latest
         let result = try await contract
             .createReadOperation("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data())!
             .callContractMethod()
@@ -114,14 +112,12 @@ public class ERC1155: IERC1155 {
     }
 
     public func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress, scope: Data) async throws -> Bool {
-        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user, scope] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func supportsInterface(interfaceID: String) async throws -> Bool {
-        transaction.callOnBlock = .latest
         let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data())!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
