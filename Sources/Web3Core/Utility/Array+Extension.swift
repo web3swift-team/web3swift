@@ -106,12 +106,3 @@ extension Array where Element: BinaryInteger {
         return sorted_data[index]
     }
 }
-
-// MARK: - Conversion
-
-/// Transforms `[Any?]` into `[AnyObject]`
-extension Array where Element == Any? {
-    func toAnyObject() -> [AnyObject] {
-        self.map { $0 as AnyObject }
-    }
-}
