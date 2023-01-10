@@ -197,7 +197,7 @@ extension LegacyEnvelope {
         case .transaction:
             fields = [nonce, gasPrice, gasLimit, to.addressData, value, data, v, r, s].toAnyObject()
         case .signature:
-            if let chainID = self.chainID, chainID != 0 {
+            if let chainID = chainID, chainID != 0 {
                 fields = [nonce, gasPrice, gasLimit, to.addressData, value, data, chainID, BigUInt(0), BigUInt(0)].toAnyObject()
             } else {
                 fields = [nonce, gasPrice, gasLimit, to.addressData, value, data].toAnyObject()
