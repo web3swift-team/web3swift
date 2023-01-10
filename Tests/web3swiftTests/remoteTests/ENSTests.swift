@@ -12,8 +12,8 @@ import Web3Core
 class ENSTests: XCTestCase {
 
     func testDomainNormalization() throws {
-        let normalizedString = NameHash.normalizeDomainName("example.ens")
-        
+        let normalizedString = NameHash.normalizeDomainName("Example.ENS")
+        XCTAssertEqual(normalizedString, "example.ens")
     }
 
     func testNameHash() throws {
@@ -79,10 +79,10 @@ class ENSTests: XCTestCase {
 
     func testTTL() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let ens = ENS(web3: web3)
+        let ens = try XCTUnwrap(ENS(web3: web3))
         let domain = "somename.eth"
-        let ttl = try await ens?.registry.getTTL(node: domain)
-        
+        let ttl = try await ens.registry.getTTL(node: domain)
+        XCTAssertGreaterThanOrEqual(ttl, 0)
     }
 
     func testGetAddress() async throws {
