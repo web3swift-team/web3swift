@@ -72,6 +72,10 @@ extension TransactionReceipt: Decodable {
         }
 
         self.logs = try container.decode([EventLog].self, forKey: .logs)
+
+        if let hexBytes = try? container.decodeHex(Data.self, forKey: .logsBloom) {
+            self.logsBloom = EthereumBloomFilter(hexBytes)
+        }
     }
 }
 
