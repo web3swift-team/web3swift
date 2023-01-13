@@ -12,7 +12,7 @@ public struct ABIEncoder {
     /// All negative values will return `nil`.
     /// - Parameter value: an arbitrary object.
     /// - Returns: converted value or `nil` if types is not support or initialization failed.
-    public static func convertToBigUInt(_ value: AnyObject) -> BigUInt? {
+    public static func convertToBigUInt(_ value: Any) -> BigUInt? {
         switch value {
         case let v as BigUInt:
             return v
@@ -60,7 +60,7 @@ public struct ABIEncoder {
     /// Supported types are `BigUInt`, `BigInt`, `String` as hex and decimal, `UInt[8-64]`, `Int[8-64]` and `Data`.
     /// - Parameter value: an arbitrary object.
     /// - Returns: converted value or `nil` if types is not support or initialization failed.
-    public static func convertToBigInt(_ value: AnyObject) -> BigInt? {
+    public static func convertToBigInt(_ value: Any) -> BigInt? {
         switch value {
         case let v as BigUInt:
             return BigInt(v)
@@ -102,7 +102,7 @@ public struct ABIEncoder {
     /// Note: if `String` has `0x` prefix an attempt to interpret it as a hexadecimal number will take place. Otherwise, UTF-8 bytes are returned.
     /// - Parameter value: any object.
     /// - Returns: `Data` representation of an object ready for ABI encoding.
-    public static func convertToData(_ value: AnyObject) -> Data? {
+    public static func convertToData(_ value: Any) -> Data? {
         switch value {
         case let d as Data:
             return d
@@ -137,7 +137,7 @@ public struct ABIEncoder {
     /// - Returns: ABI encoded data, e.g. function call parameters. Returns `nil` if:
     ///     - `types.count != values.count`;
     ///     - encoding of at least one value has failed (e.g. type mismatch).
-    public static func encode(types: [ABI.Element.InOut], values: [AnyObject]) -> Data? {
+    public static func encode(types: [ABI.Element.InOut], values: [Any]) -> Data? {
         guard types.count == values.count else {return nil}
         let params = types.compactMap { el -> ABI.Element.ParameterType in
             return el.type
@@ -153,7 +153,7 @@ public struct ABIEncoder {
     /// - Returns: ABI encoded data, e.g. function call parameters. Returns `nil` if:
     ///     - `types.count != values.count`;
     ///     - encoding of at least one value has failed (e.g. type mismatch).
-    public static func encode(types: [ABI.Element.ParameterType], values: [AnyObject]) -> Data? {
+    public static func encode(types: [ABI.Element.ParameterType], values: [Any]) -> Data? {
         guard types.count == values.count else {return nil}
         var tails = [Data]()
         var heads = [Data]()
@@ -195,7 +195,7 @@ public struct ABIEncoder {
     ///
     /// **It does not add the data offset for dynamic types!!** To return single value **with data offset** use the following instead:
     /// ```swift
-    /// ABIEncoder.encode(types: [type], values: [value] as [AnyObject])
+    /// ABIEncoder.encode(types: [type], values: [value])
     /// ```
     /// Almost identical to use of `web3.eth.abi.encodeParameter` in web3.js.
     /// Calling `web3.eth.abi.encodeParameter('string','test')` in web3.js will return the following:
@@ -204,7 +204,7 @@ public struct ABIEncoder {
     /// 0000000000000000000000000000000000000000000000000000000000000004
     /// 7465737400000000000000000000000000000000000000000000000000000000
     /// ```
-    /// but calling `ABIEncoder.encodeSingleType(type: .string, value: "test" as AnyObject)` will return:
+    /// but calling `ABIEncoder.encodeSingleType(type: .string, value: "test")` will return:
     /// ```
     /// 0x0000000000000000000000000000000000000000000000000000000000000004
     /// 7465737400000000000000000000000000000000000000000000000000000000
@@ -215,7 +215,7 @@ public struct ABIEncoder {
     /// - Returns: ABI encoded data, e.g. function call parameters. Returns `nil` if:
     ///     - `types.count != values.count`;
     ///     - encoding has failed (e.g. type mismatch).
-    public static func encodeSingleType(type: ABI.Element.ParameterType, value: AnyObject) -> Data? {
+    public static func encodeSingleType(type: ABI.Element.ParameterType, value: Any) -> Data? {
         switch type {
         case .uint:
             if let biguint = convertToBigUInt(value) {
@@ -283,7 +283,7 @@ public struct ABIEncoder {
             switch type.arraySize {
             case .dynamicSize:
                 guard length == 0 else {break}
-                guard let val = value as? [AnyObject] else {break}
+                guard let val = value as? [Any] else {break}
                 guard let lengthEncoding = BigUInt(val.count).abiEncode(bits: 256) else {break}
                 if subType.isStatic {
                     // work in a previous context
@@ -330,7 +330,7 @@ public struct ABIEncoder {
                 }
             case .staticSize(let staticLength):
                 guard staticLength != 0 else {break}
-                guard let val = value as? [AnyObject] else {break}
+                guard let val = value as? [Any] else {break}
                 guard staticLength == val.count else {break}
                 if subType.isStatic {
                     // work in a previous context
@@ -375,7 +375,7 @@ public struct ABIEncoder {
         case .tuple(types: let subTypes):
             var tails = [Data]()
             var heads = [Data]()
-            guard let val = value as? [AnyObject] else {break}
+            guard let val = value as? [Any] else {break}
             for i in 0 ..< subTypes.count {
                 let enc = encodeSingleType(type: subTypes[i], value: val[i])
                 guard let encoding = enc else {return nil}
@@ -444,7 +444,7 @@ public extension ABIEncoder {
         }
     }
 
-    /// Using AnyObject any number can be represented as Bool and Bool can be represented as number.
+    /// Using Any any number can be represented as Bool and Bool can be represented as number.
     /// That will lead to invalid hash output. DO NOT USE THIS FUNCTION.
     /// This function will exist to intentionally throw an error that will raise awareness that the hash output can be potentially,
     /// and most likely will be, wrong.
@@ -471,26 +471,26 @@ public extension ABIEncoder {
         if let v = value as? Bool {
             return Data(v ? [0b1] : [0b0])
         } else if let v = value as? Int {
-            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 256)! as AnyObject)!
+            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 256)!)!
         } else if let v = value as? Int8 {
-            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 8) as AnyObject)!
+            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 8))!
         } else if let v = value as? Int16 {
-            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 16)! as AnyObject)!
+            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 16)!)!
         } else if let v = value as? Int32 {
-            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 32)! as AnyObject)!
+            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 32)!)!
         } else if let v = value as? Int64 {
-            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 64)! as AnyObject)!
+            return ABIEncoder.convertToData(BigInt(exactly: v)?.abiEncode(bits: 64)!)!
         } else if let v = value as? UInt {
-            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 256)! as AnyObject)!
+            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 256)!)!
         } else if let v = value as? UInt8 {
-            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 8)! as AnyObject)!
+            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 8)!)!
         } else if let v = value as? UInt16 {
-            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 16)! as AnyObject)!
+            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 16)!)!
         } else if let v = value as? UInt32 {
-            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 32)! as AnyObject)!
+            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 32)!)!
         } else if let v = value as? UInt64 {
-            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 64)! as AnyObject)!
-        } else if let data = ABIEncoder.convertToData(value as AnyObject) {
+            return ABIEncoder.convertToData(BigUInt(exactly: v)?.abiEncode(bits: 64)!)!
+        } else if let data = ABIEncoder.convertToData(value) {
             return data
         }
         throw Web3Error.inputError(desc: "SoliditySha3: `abiEncode` accepts an Int/UInt (any of 8, 16, 32, 64 bits long), decimal or hexadecimal string, Bool, Data, [UInt8], EthereumAddress, [IntegerLiteralType], BigInt or BigUInt instance. Given value is of type \(type(of: value)).")

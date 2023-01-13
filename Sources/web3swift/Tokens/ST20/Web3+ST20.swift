@@ -52,7 +52,7 @@ public class ST20: IST20, ERC20BaseProperties {
     func tokenDetails() async throws -> [UInt32] {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("tokenDetails", parameters: [] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("tokenDetails", parameters: [], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? [UInt32] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -76,7 +76,7 @@ public class ST20: IST20, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("verifyTransfer", parameters: [originalOwner, to, value] as [AnyObject] )!
+        let tx = contract.createWriteOperation("verifyTransfer", parameters: [originalOwner, to, value] )!
         return tx
     }
 
@@ -99,7 +99,7 @@ public class ST20: IST20, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("mint", parameters: [investor, value] as [AnyObject] )!
+        let tx = contract.createWriteOperation("mint", parameters: [investor, value] )!
         return tx
     }
 
@@ -121,14 +121,14 @@ public class ST20: IST20, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("burn", parameters: [value] as [AnyObject] )!
+        let tx = contract.createWriteOperation("burn", parameters: [value] )!
         return tx
     }
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("balanceOf", parameters: [account] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("balanceOf", parameters: [account], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -136,7 +136,7 @@ public class ST20: IST20, ERC20BaseProperties {
     public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("allowance", parameters: [originalOwner, delegate], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -159,7 +159,7 @@ public class ST20: IST20, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("transfer", parameters: [to, value] as [AnyObject] )!
+        let tx = contract.createWriteOperation("transfer", parameters: [to, value] )!
         return tx
     }
 
@@ -182,7 +182,7 @@ public class ST20: IST20, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value] as [AnyObject] )!
+        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value] )!
         return tx
     }
 
@@ -205,7 +205,7 @@ public class ST20: IST20, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value] as [AnyObject] )!
+        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value] )!
         return tx
     }
 
@@ -228,14 +228,14 @@ public class ST20: IST20, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("approve", parameters: [spender, value] as [AnyObject] )!
+        let tx = contract.createWriteOperation("approve", parameters: [spender, value] )!
         return tx
     }
 
     public func totalSupply() async throws -> BigUInt {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("totalSupply", parameters: [Any](), extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }

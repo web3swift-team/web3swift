@@ -77,7 +77,7 @@ public class ERC721x: IERC721x {
         guard contract.contract.address != nil else {return}
         self.transaction.callOnBlock = .latest
 
-        guard let tokenIdPromise = try await contract.createReadOperation("tokenId", parameters: [] as [AnyObject], extraData: Data())?.callContractMethod() else {return}
+        guard let tokenIdPromise = try await contract.createReadOperation("tokenId", parameters: [], extraData: Data())?.callContractMethod() else {return}
 
         guard let tokenId = tokenIdPromise["0"] as? BigUInt else {return}
         self._tokenId = tokenId
@@ -88,7 +88,7 @@ public class ERC721x: IERC721x {
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("balanceOf", parameters: [account] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("balanceOf", parameters: [account], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -96,7 +96,7 @@ public class ERC721x: IERC721x {
     public func getOwner(tokenId: BigUInt) async throws -> EthereumAddress {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("ownerOf", parameters: [tokenId] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("ownerOf", parameters: [tokenId], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -104,7 +104,7 @@ public class ERC721x: IERC721x {
     public func getApproved(tokenId: BigUInt) async throws -> EthereumAddress {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("getApproved", parameters: [tokenId] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("getApproved", parameters: [tokenId], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -114,7 +114,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId] as [AnyObject] )!
+        let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId] )!
         return tx
     }
 
@@ -123,7 +123,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId] as [AnyObject] )!
+        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId] )!
         return tx
     }
 
@@ -132,7 +132,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId] as [AnyObject] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId] )!
         return tx
     }
 
@@ -141,7 +141,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, data] as [AnyObject] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, data] )!
         return tx
     }
 
@@ -150,7 +150,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("approve", parameters: [approved, tokenId] as [AnyObject] )!
+        let tx = contract.createWriteOperation("approve", parameters: [approved, tokenId] )!
         return tx
     }
 
@@ -159,14 +159,14 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved] as [AnyObject] )!
+        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved] )!
         return tx
     }
 
     public func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress) async throws -> Bool {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -174,7 +174,7 @@ public class ERC721x: IERC721x {
     public func supportsInterface(interfaceID: String) async throws -> Bool {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -182,7 +182,7 @@ public class ERC721x: IERC721x {
     public func totalSupply() async throws -> BigUInt {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("totalSupply", parameters: [Any](), extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -190,7 +190,7 @@ public class ERC721x: IERC721x {
     public func tokenByIndex(index: BigUInt) async throws -> BigUInt {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("tokenByIndex", parameters: [index] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("tokenByIndex", parameters: [index], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -198,7 +198,7 @@ public class ERC721x: IERC721x {
     public func tokenOfOwnerByIndex(owner: EthereumAddress, index: BigUInt) async throws -> BigUInt {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("tokenOfOwnerByIndex", parameters: [owner, index] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("tokenOfOwnerByIndex", parameters: [owner, index], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -206,7 +206,7 @@ public class ERC721x: IERC721x {
     public func name() async throws -> String {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("name", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("name", parameters: [Any](), extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? String else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -214,7 +214,7 @@ public class ERC721x: IERC721x {
     public func symbol() async throws -> String {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("symbol", parameters: [AnyObject](), extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("symbol", parameters: [Any](), extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? String else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -222,7 +222,7 @@ public class ERC721x: IERC721x {
     public func tokenURI(tokenId: BigUInt) async throws -> String {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("tokenURI", parameters: [tokenId] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("tokenURI", parameters: [tokenId], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? String else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -230,7 +230,7 @@ public class ERC721x: IERC721x {
     func implementsERC721X() async throws -> Bool {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("implementsERC721X", parameters: [] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("implementsERC721X", parameters: [], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -238,7 +238,7 @@ public class ERC721x: IERC721x {
     func getBalance(account: EthereumAddress, tokenId: BigUInt) async throws -> BigUInt {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("balanceOf", parameters: [account, tokenId] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("balanceOf", parameters: [account, tokenId], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -246,7 +246,7 @@ public class ERC721x: IERC721x {
     func tokensOwned(account: EthereumAddress) async throws -> ([BigUInt], [BigUInt]) {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("tokensOwned", parameters: [account] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("tokensOwned", parameters: [account], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? ([BigUInt], [BigUInt]) else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -256,7 +256,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId, quantity] as [AnyObject] )!
+        let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId, quantity] )!
         return tx
     }
 
@@ -265,7 +265,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId, quantity] as [AnyObject] )!
+        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId, quantity] )!
         return tx
     }
 
@@ -274,7 +274,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, amount] as [AnyObject] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, amount] )!
         return tx
     }
 
@@ -283,7 +283,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, amount, data] as [AnyObject] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, amount, data] )!
         return tx
     }
 
@@ -292,7 +292,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenIds, amounts, data] as [AnyObject] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenIds, amounts, data] )!
         return tx
     }
 }

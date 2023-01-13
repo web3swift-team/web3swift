@@ -23,9 +23,9 @@ extension Web3 {
     public struct EIP681Code {
         public struct EIP681Parameter {
             public var type: ABI.Element.ParameterType
-            public var value: AnyObject
+            public var value: Any
 
-            public init(type: ABI.Element.ParameterType, value: AnyObject) {
+            public init(type: ABI.Element.ParameterType, value: Any) {
                 self.type = type
                 self.value = value
             }
@@ -90,7 +90,7 @@ extension Web3 {
 
     public struct EIP681CodeEncoder {
         public static func encodeFunctionArgument(_ inputType: ABI.Element.ParameterType,
-                                                  _ rawValue: AnyObject) -> String? {
+                                                  _ rawValue: Any) -> String? {
             switch inputType {
             case .address:
                 if let ethAddress = rawValue as? EthereumAddress {
@@ -209,7 +209,7 @@ extension Web3 {
                 }
                 return nil
             case let .array(type, length):
-                if let array = rawValue as? [AnyObject] {
+                if let array = rawValue as? [Any] {
                     let mappedArray = array.compactMap { object in
                         encodeFunctionArgument(type, object)
                     }
@@ -350,58 +350,58 @@ extension Web3 {
                                                   _ rawValue: String,
                                                   chainID: BigUInt,
                                                   inputNumber: Int) async -> FunctionArgument? {
-            var nativeValue: AnyObject?
+            var nativeValue: Any?
             switch inputType {
             case .address:
                 let val = EIP681Code.TargetAddress(rawValue)
                 switch val {
                 case .ethereumAddress(let ethereumAddress):
-                    nativeValue = ethereumAddress as AnyObject
+                    nativeValue = ethereumAddress
                 case .ensAddress(let ens):
                     do {
                         let web = await Web3(provider: InfuraProvider(Networks.fromInt(UInt(chainID)) ?? Networks.Mainnet)!)
                         let ensModel = ENS(web3: web)
                         try await ensModel?.setENSResolver(withDomain: ens)
                         let address = try await ensModel?.getAddress(forNode: ens)
-                        nativeValue = address as AnyObject
+                        nativeValue = address
                     } catch {
                         return nil
                     }
                 }
             case .uint(bits: _):
                 if let val = BigUInt(rawValue, radix: 10) {
-                    nativeValue = val as AnyObject
+                    nativeValue = val
                 } else if let val = BigUInt(rawValue.stripHexPrefix(), radix: 16) {
-                    nativeValue = val as AnyObject
+                    nativeValue = val
                 }
             case .int(bits: _):
                 if let val = BigInt(rawValue, radix: 10) {
-                    nativeValue = val as AnyObject
+                    nativeValue = val
                 } else if let val = BigInt(rawValue.stripHexPrefix(), radix: 16) {
-                    nativeValue = val as AnyObject
+                    nativeValue = val
                 }
             case .string:
-                nativeValue = rawValue as AnyObject
+                nativeValue = rawValue
             case .dynamicBytes:
                 if let val = Data.fromHex(rawValue) {
-                    nativeValue = val as AnyObject
+                    nativeValue = val
                 } else if let val = rawValue.data(using: .utf8) {
-                    nativeValue = val as AnyObject
+                    nativeValue = val
                 }
             case .bytes(length: _):
                 if let val = Data.fromHex(rawValue) {
-                    nativeValue = val as AnyObject
+                    nativeValue = val
                 } else if let val = rawValue.data(using: .utf8) {
-                    nativeValue = val as AnyObject
+                    nativeValue = val
                 }
             case .bool:
                 switch rawValue {
                 case "true", "True", "TRUE", "1":
-                    nativeValue = true as AnyObject
+                    nativeValue = true
                 case "false", "False", "FALSE", "0":
-                    nativeValue = false as AnyObject
+                    nativeValue = false
                 default:
-                    nativeValue = true as AnyObject
+                    nativeValue = true
                 }
             case let .array(type, length):
                 var rawValues: [String] = []
@@ -420,7 +420,7 @@ extension Web3 {
                     rawValues = rawValue.split(separator: ",").map { String($0) }
                 }
 
-                var nativeValueArray: [AnyObject] = []
+                var nativeValueArray: [Any] = []
 
                 for value in rawValues {
                     let intermidiateValue = await parseFunctionArgument(type,
@@ -433,7 +433,7 @@ extension Web3 {
                         nativeValueArray.append(intermidiateValue)
                     }
                 }
-                nativeValue = nativeValueArray as AnyObject
+                nativeValue = nativeValueArray
 
                 guard nativeValueArray.count == rawValues.count &&
                         (length == 0 || UInt64(rawValues.count) == length) else { return nil }

@@ -71,7 +71,7 @@ public class ERC1155: IERC1155 {
         guard contract.contract.address != nil else {return}
         self.transaction.callOnBlock = .latest
 
-        guard let tokenIdPromise = try await contract.createReadOperation("id", parameters: [] as [AnyObject], extraData: Data())?.callContractMethod() else {return}
+        guard let tokenIdPromise = try await contract.createReadOperation("id", parameters: [], extraData: Data())?.callContractMethod() else {return}
 
         guard let tokenId = tokenIdPromise["0"] as? BigUInt else {return}
         self._tokenId = tokenId
@@ -84,7 +84,7 @@ public class ERC1155: IERC1155 {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, id, value, data] as [AnyObject] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, id, value, data] )!
         return tx
     }
 
@@ -94,7 +94,7 @@ public class ERC1155: IERC1155 {
         self.transaction.to = self.address
 
         let tx = contract
-            .createWriteOperation("safeBatchTransferFrom", parameters: [originalOwner, to, ids, values, data] as [AnyObject] )!
+            .createWriteOperation("safeBatchTransferFrom", parameters: [originalOwner, to, ids, values, data] )!
         return tx
     }
 
@@ -102,12 +102,12 @@ public class ERC1155: IERC1155 {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
         let result = try await contract
-            .createReadOperation("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data() )!
+            .createReadOperation("balanceOf", parameters: [account, id], extraData: Data() )!
             .callContractMethod()
 
         /*
          let result = try await contract
-             .prepareToRead("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data() )!
+             .prepareToRead("balanceOf", parameters: [account, id], extraData: Data() )!
              .execute()
              .decodeData()
 
@@ -121,14 +121,14 @@ public class ERC1155: IERC1155 {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved, scope] as [AnyObject] )!
+        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved, scope] )!
         return tx
     }
 
     public func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress, scope: Data) async throws -> Bool {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user, scope] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user, scope], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -136,7 +136,7 @@ public class ERC1155: IERC1155 {
     public func supportsInterface(interfaceID: String) async throws -> Bool {
         let contract = self.contract
         self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID], extraData: Data() )!.callContractMethod()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }

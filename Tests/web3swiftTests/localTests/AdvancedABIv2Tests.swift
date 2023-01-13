@@ -56,7 +56,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         let allAddresses = try await web3.eth.ownedAccounts()
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
-        let parameters = [] as [AnyObject]
+        let parameters: [Any] = []
         // MARK: Writing Data flow
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
@@ -92,7 +92,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         let allAddresses = try await web3.eth.ownedAccounts()
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
-        let parameters = [] as [AnyObject]
+        let parameters: [Any] = []
         // MARK: Writing Data flow
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
@@ -127,7 +127,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         let allAddresses = try await web3.eth.ownedAccounts()
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
-        let parameters = [] as [AnyObject]
+        let parameters: [Any] = []
         // MARK: Writing Data flow
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
@@ -163,7 +163,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         let allAddresses = try await web3.eth.ownedAccounts()
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
-        let parameters = [] as [AnyObject]
+        let parameters: [Any] = []
         // MARK: Writing Data flow
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]

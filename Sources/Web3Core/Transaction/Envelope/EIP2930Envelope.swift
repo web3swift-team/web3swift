@@ -206,14 +206,14 @@ extension EIP2930Envelope {
     }
 
     public func encode(for type: EncodeType = .transaction) -> Data? {
-        let fields: [AnyObject]
-        let list = accessList.map { $0.encodeAsList() as AnyObject }
+        let fields: [Any]
+        let list = accessList.map { $0.encodeAsList() }
 
         switch type {
         case .transaction:
-            fields = [chainID, nonce, gasPrice, gasLimit, to.addressData, value, data, list, v, r, s] as [AnyObject]
+            fields = [chainID, nonce, gasPrice, gasLimit, to.addressData, value, data, list, v, r, s]
         case .signature:
-            fields = [chainID, nonce, gasPrice, gasLimit, to.addressData, value, data, list] as [AnyObject]
+            fields = [chainID, nonce, gasPrice, gasLimit, to.addressData, value, data, list]
         }
         guard var result = RLP.encode(fields) else { return nil }
         result.insert(UInt8(self.type.rawValue), at: 0)
@@ -310,7 +310,7 @@ public struct AccessListEntry: CustomStringConvertible, Codable {
         }
     }
 
-    public func encodeAsList() -> [AnyObject]? {
+    public func encodeAsList() -> [Any]? {
         var storage: [Data] = []
 
         for key in storageKeys {
@@ -318,7 +318,7 @@ public struct AccessListEntry: CustomStringConvertible, Codable {
             storage.append(keyData)
         }
 
-        return [address.address as AnyObject, storage as AnyObject]
+        return [address.address, storage]
     }
 
     // FIXME: THIS NOT WORKING!!!
