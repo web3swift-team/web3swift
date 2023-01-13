@@ -84,7 +84,7 @@ public class ERC1155: IERC1155 {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, id, value, data] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, id, value, data])!
         return tx
     }
 
@@ -94,7 +94,7 @@ public class ERC1155: IERC1155 {
         self.transaction.to = self.address
 
         let tx = contract
-            .createWriteOperation("safeBatchTransferFrom", parameters: [originalOwner, to, ids, values, data] )!
+            .createWriteOperation("safeBatchTransferFrom", parameters: [originalOwner, to, ids, values, data])!
         return tx
     }
 
@@ -121,7 +121,7 @@ public class ERC1155: IERC1155 {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved, scope] )!
+        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved, scope])!
         return tx
     }
 

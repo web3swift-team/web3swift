@@ -114,7 +114,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId] )!
+        let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId])!
         return tx
     }
 
@@ -123,7 +123,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId] )!
+        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId])!
         return tx
     }
 
@@ -132,7 +132,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId])!
         return tx
     }
 
@@ -141,7 +141,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, data] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, data])!
         return tx
     }
 
@@ -150,7 +150,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("approve", parameters: [approved, tokenId] )!
+        let tx = contract.createWriteOperation("approve", parameters: [approved, tokenId])!
         return tx
     }
 
@@ -159,7 +159,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved] )!
+        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved])!
         return tx
     }
 
@@ -256,7 +256,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId, quantity] )!
+        let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId, quantity])!
         return tx
     }
 
@@ -265,7 +265,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId, quantity] )!
+        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId, quantity])!
         return tx
     }
 
@@ -274,7 +274,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, amount] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, amount])!
         return tx
     }
 
@@ -283,7 +283,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, amount, data] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, amount, data])!
         return tx
     }
 
@@ -292,7 +292,7 @@ public class ERC721x: IERC721x {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenIds, amounts, data] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenIds, amounts, data])!
         return tx
     }
 }

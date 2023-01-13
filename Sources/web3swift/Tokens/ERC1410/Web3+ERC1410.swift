@@ -97,7 +97,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("transfer", parameters: [to, value] )!
+        let tx = contract.createWriteOperation("transfer", parameters: [to, value])!
         return tx
     }
 
@@ -120,7 +120,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value] )!
+        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value])!
         return tx
     }
 
@@ -143,7 +143,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value] )!
+        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value])!
         return tx
     }
 
@@ -175,7 +175,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("approve", parameters: [spender, value] )!
+        let tx = contract.createWriteOperation("approve", parameters: [spender, value])!
         return tx
     }
 
@@ -216,7 +216,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("transferByPartition", parameters: [partition, to, value, data] )!
+        let tx = contract.createWriteOperation("transferByPartition", parameters: [partition, to, value, data])!
         return tx
     }
 
@@ -239,7 +239,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("operatorTransferByPartition", parameters: [partition, originalOwner, to, value, data, operatorData] )!
+        let tx = contract.createWriteOperation("operatorTransferByPartition", parameters: [partition, originalOwner, to, value, data, operatorData])!
         return tx
     }
 
@@ -286,7 +286,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("authorizeOperator", parameters: [user] )!
+        let tx = contract.createWriteOperation("authorizeOperator", parameters: [user])!
         return tx
     }
 
@@ -296,7 +296,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("revokeOperator", parameters: [user] )!
+        let tx = contract.createWriteOperation("revokeOperator", parameters: [user])!
         return tx
     }
 
@@ -306,7 +306,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("authorizeOperatorByPartition", parameters: [partition, user] )!
+        let tx = contract.createWriteOperation("authorizeOperatorByPartition", parameters: [partition, user])!
         return tx
     }
 
@@ -316,7 +316,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("revokeOperatorByPartition", parameters: [partition, user] )!
+        let tx = contract.createWriteOperation("revokeOperatorByPartition", parameters: [partition, user])!
         return tx
     }
 
@@ -339,7 +339,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("issueByPartition", parameters: [partition, tokenHolder, value, data] )!
+        let tx = contract.createWriteOperation("issueByPartition", parameters: [partition, tokenHolder, value, data])!
         return tx
     }
 
@@ -362,7 +362,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("redeemByPartition", parameters: [partition, value, data] )!
+        let tx = contract.createWriteOperation("redeemByPartition", parameters: [partition, value, data])!
         return tx
     }
 
@@ -385,7 +385,7 @@ public class ERC1410: IERC1410, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("operatorRedeemByPartition", parameters: [partition, tokenHolder, value, operatorData] )!
+        let tx = contract.createWriteOperation("operatorRedeemByPartition", parameters: [partition, tokenHolder, value, operatorData])!
         return tx
     }
 }
@@ -412,7 +412,7 @@ extension ERC1410: IERC777 {
 
         self.transaction.from = from
 
-        let tx = contract.createWriteOperation("setInterfaceImplementer", parameters: [addr, interfaceHash, implementer] )!
+        let tx = contract.createWriteOperation("setInterfaceImplementer", parameters: [addr, interfaceHash, implementer])!
         return tx
     }
 
@@ -421,7 +421,7 @@ extension ERC1410: IERC777 {
 
         self.transaction.from = from
 
-        let tx = contract.createWriteOperation("setManager", parameters: [addr, newManager] )!
+        let tx = contract.createWriteOperation("setManager", parameters: [addr, newManager])!
         return tx
     }
 
@@ -438,7 +438,7 @@ extension ERC1410: IERC777 {
 
         self.transaction.from = from
 
-        let tx = contract.createWriteOperation("updateERC165Cache", parameters: [contract, interfaceId] )!
+        let tx = contract.createWriteOperation("updateERC165Cache", parameters: [contract, interfaceId])!
         return tx
     }
 
@@ -456,7 +456,7 @@ extension ERC1410: IERC777 {
         self.transaction.from = from
         self.transaction.callOnBlock = .latest
 
-        let tx = contract.createWriteOperation("authorizeOperator", parameters: [user] )!
+        let tx = contract.createWriteOperation("authorizeOperator", parameters: [user])!
         return tx
     }
 
@@ -466,7 +466,7 @@ extension ERC1410: IERC777 {
         self.transaction.from = from
         self.transaction.callOnBlock = .latest
 
-        let tx = contract.createWriteOperation("revokeOperator", parameters: [user] )!
+        let tx = contract.createWriteOperation("revokeOperator", parameters: [user])!
         return tx
     }
 
@@ -496,7 +496,7 @@ extension ERC1410: IERC777 {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("send", parameters: [to, value, data] )!
+        let tx = contract.createWriteOperation("send", parameters: [to, value, data])!
         return tx
     }
 
@@ -518,7 +518,7 @@ extension ERC1410: IERC777 {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("operatorSend", parameters: [originalOwner, to, value, data, operatorData] )!
+        let tx = contract.createWriteOperation("operatorSend", parameters: [originalOwner, to, value, data, operatorData])!
         return tx
     }
 
@@ -540,7 +540,7 @@ extension ERC1410: IERC777 {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("burn", parameters: [value, data] )!
+        let tx = contract.createWriteOperation("burn", parameters: [value, data])!
         return tx
     }
 
@@ -562,7 +562,7 @@ extension ERC1410: IERC777 {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("burn", parameters: [originalOwner, value, data, operatorData] )!
+        let tx = contract.createWriteOperation("burn", parameters: [originalOwner, value, data, operatorData])!
         return tx
     }
 

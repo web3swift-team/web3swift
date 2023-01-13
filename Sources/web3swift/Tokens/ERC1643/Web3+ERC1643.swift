@@ -77,7 +77,7 @@ public class ERC1643: IERC1643, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("transfer", parameters: [to, value] )!
+        let tx = contract.createWriteOperation("transfer", parameters: [to, value])!
         return tx
     }
 
@@ -100,7 +100,7 @@ public class ERC1643: IERC1643, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value] )!
+        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value])!
         return tx
     }
 
@@ -123,7 +123,7 @@ public class ERC1643: IERC1643, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value] )!
+        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value])!
         return tx
     }
 
@@ -154,7 +154,7 @@ public class ERC1643: IERC1643, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("approve", parameters: [spender, value] )!
+        let tx = contract.createWriteOperation("approve", parameters: [spender, value])!
         return tx
     }
 
@@ -173,7 +173,7 @@ public class ERC1643: IERC1643, ERC20BaseProperties {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("setDocument", parameters: [name, uri, documentHash] )!
+        let tx = contract.createWriteOperation("setDocument", parameters: [name, uri, documentHash])!
         return tx
     }
 
@@ -183,7 +183,7 @@ public class ERC1643: IERC1643, ERC20BaseProperties {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("removeDocument", parameters: [name] )!
+        let tx = contract.createWriteOperation("removeDocument", parameters: [name])!
         return tx
     }
 

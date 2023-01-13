@@ -63,7 +63,7 @@ public class ERC888: IERC888, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("transfer", parameters: [to, value] )!
+        let tx = contract.createWriteOperation("transfer", parameters: [to, value])!
         return tx
     }
 

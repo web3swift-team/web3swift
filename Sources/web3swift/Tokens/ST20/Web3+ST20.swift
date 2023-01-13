@@ -76,7 +76,7 @@ public class ST20: IST20, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("verifyTransfer", parameters: [originalOwner, to, value] )!
+        let tx = contract.createWriteOperation("verifyTransfer", parameters: [originalOwner, to, value])!
         return tx
     }
 
@@ -99,7 +99,7 @@ public class ST20: IST20, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("mint", parameters: [investor, value] )!
+        let tx = contract.createWriteOperation("mint", parameters: [investor, value])!
         return tx
     }
 
@@ -121,7 +121,7 @@ public class ST20: IST20, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("burn", parameters: [value] )!
+        let tx = contract.createWriteOperation("burn", parameters: [value])!
         return tx
     }
 
@@ -159,7 +159,7 @@ public class ST20: IST20, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("transfer", parameters: [to, value] )!
+        let tx = contract.createWriteOperation("transfer", parameters: [to, value])!
         return tx
     }
 
@@ -182,7 +182,7 @@ public class ST20: IST20, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value] )!
+        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value])!
         return tx
     }
 
@@ -205,7 +205,7 @@ public class ST20: IST20, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value] )!
+        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value])!
         return tx
     }
 
@@ -228,7 +228,7 @@ public class ST20: IST20, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("approve", parameters: [spender, value] )!
+        let tx = contract.createWriteOperation("approve", parameters: [spender, value])!
         return tx
     }
 

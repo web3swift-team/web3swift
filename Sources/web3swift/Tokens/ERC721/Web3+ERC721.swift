@@ -132,7 +132,7 @@ public class ERC721: IERC721 {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId] )!
+        let tx = contract.createWriteOperation("transfer", parameters: [to, tokenId])!
         return tx
     }
 
@@ -141,7 +141,7 @@ public class ERC721: IERC721 {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId] )!
+        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, tokenId])!
         return tx
     }
 
@@ -150,7 +150,7 @@ public class ERC721: IERC721 {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId])!
         return tx
     }
 
@@ -159,7 +159,7 @@ public class ERC721: IERC721 {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, data] )!
+        let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, tokenId, data])!
         return tx
     }
 
@@ -168,7 +168,7 @@ public class ERC721: IERC721 {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("approve", parameters: [approved, tokenId] )!
+        let tx = contract.createWriteOperation("approve", parameters: [approved, tokenId])!
         return tx
     }
 
@@ -177,7 +177,7 @@ public class ERC721: IERC721 {
         self.transaction.from = from
         self.transaction.to = self.address
 
-        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved] )!
+        let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved])!
         return tx
     }
 

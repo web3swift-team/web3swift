@@ -87,7 +87,7 @@ public class ERC1594: IERC1594, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
-        let tx = contract.createWriteOperation("transfer", parameters: [to, value] )!
+        let tx = contract.createWriteOperation("transfer", parameters: [to, value])!
         return tx
     }
 
@@ -110,7 +110,7 @@ public class ERC1594: IERC1594, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value] )!
+        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value])!
         return tx
     }
 
@@ -133,7 +133,7 @@ public class ERC1594: IERC1594, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value] )!
+        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value])!
         return tx
     }
 
@@ -165,7 +165,7 @@ public class ERC1594: IERC1594, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("approve", parameters: [spender, value] )!
+        let tx = contract.createWriteOperation("approve", parameters: [spender, value])!
         return tx
     }
 
@@ -189,7 +189,7 @@ public class ERC1594: IERC1594, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("transferWithData", parameters: [to, value, data] )!
+        let tx = contract.createWriteOperation("transferWithData", parameters: [to, value, data])!
         return tx
     }
 
@@ -212,7 +212,7 @@ public class ERC1594: IERC1594, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("transferFromWithData", parameters: [originalOwner, to, value, data] )!
+        let tx = contract.createWriteOperation("transferFromWithData", parameters: [originalOwner, to, value, data])!
         return tx
     }
 
@@ -243,7 +243,7 @@ public class ERC1594: IERC1594, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("issue", parameters: [tokenHolder, value, data] )!
+        let tx = contract.createWriteOperation("issue", parameters: [tokenHolder, value, data])!
         return tx
     }
 
@@ -266,7 +266,7 @@ public class ERC1594: IERC1594, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("redeem", parameters: [value, data] )!
+        let tx = contract.createWriteOperation("redeem", parameters: [value, data])!
         return tx
     }
 
@@ -289,7 +289,7 @@ public class ERC1594: IERC1594, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let tx = contract.createWriteOperation("redeemFrom", parameters: [tokenHolder, value, data] )!
+        let tx = contract.createWriteOperation("redeemFrom", parameters: [tokenHolder, value, data])!
         return tx
     }
 

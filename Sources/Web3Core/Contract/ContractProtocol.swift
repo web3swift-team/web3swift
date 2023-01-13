@@ -35,7 +35,7 @@ import BigInt
 /// let inputArgsTypes: [ABI.Element.InOut] = [.init(name: "firstArgument", type: ABI.Element.ParameterType.string),
 ///                                            .init(name: "secondArgument", type: ABI.Element.ParameterType.uint(bits: 256))]
 /// let constructor = ABI.Element.Constructor(inputs: inputArgsTypes, constant: false, payable: payable)
-/// let constructorArguments = ["This is the array of constructor arguments", 10_000]
+/// let constructorArguments: [Any] = ["This is the array of constructor arguments", 10_000]
 ///
 /// contract.deploy(bytecode: smartContractBytecode,
 ///                 constructor: constructor,
@@ -48,7 +48,7 @@ import BigInt
 ///
 /// ```swift
 /// let contract = EthereumContract(abiString)
-/// let constructorArguments = ["This is the array of constructor arguments", 10_000]
+/// let constructorArguments: [Any] = ["This is the array of constructor arguments", 10_000]
 ///
 /// contract.deploy(bytecode: smartContractBytecode,
 ///                 constructor: contract.constructor,

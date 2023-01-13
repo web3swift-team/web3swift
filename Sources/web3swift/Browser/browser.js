@@ -5379,7 +5379,7 @@
    * @param {AsyncFunction} iteratee - A truth test to apply to each item in `coll`.
    * The iteratee must complete with a boolean value as its result.
    * Invoked with (item, callback).
-   * @param {Function} [callback] - A callback which is called as soon
+   * @param {Function} [callback] - A callback which is called as soon as any
    * iteratee returns `true`, or after all the `iteratee` functions have finished.
    * Result will be the first item in the array that passes the truth test
    * (iteratee) or the value `undefined` if none passed. Invoked with
@@ -5412,7 +5412,7 @@
    * @param {AsyncFunction} iteratee - A truth test to apply to each item in `coll`.
    * The iteratee must complete with a boolean value as its result.
    * Invoked with (item, callback).
-   * @param {Function} [callback] - A callback which is called as soon
+   * @param {Function} [callback] - A callback which is called as soon as any
    * iteratee returns `true`, or after all the `iteratee` functions have finished.
    * Result will be the first item in the array that passes the truth test
    * (iteratee) or the value `undefined` if none passed. Invoked with
@@ -5434,7 +5434,7 @@
    * @param {AsyncFunction} iteratee - A truth test to apply to each item in `coll`.
    * The iteratee must complete with a boolean value as its result.
    * Invoked with (item, callback).
-   * @param {Function} [callback] - A callback which is called as soon
+   * @param {Function} [callback] - A callback which is called as soon as any
    * iteratee returns `true`, or after all the `iteratee` functions have finished.
    * Result will be the first item in the array that passes the truth test
    * (iteratee) or the value `undefined` if none passed. Invoked with
@@ -7297,7 +7297,7 @@
    * in the collections in parallel.
    * The iteratee should complete with a boolean `result` value.
    * Invoked with (item, callback).
-   * @param {Function} [callback] - A callback which is called as soon
+   * @param {Function} [callback] - A callback which is called as soon as any
    * iteratee returns `true`, or after all the iteratee functions have finished.
    * Result will be either `true` or `false` depending on the values of the async
    * tests. Invoked with (err, result).
@@ -7329,7 +7329,7 @@
    * in the collections in parallel.
    * The iteratee should complete with a boolean `result` value.
    * Invoked with (item, callback).
-   * @param {Function} [callback] - A callback which is called as soon
+   * @param {Function} [callback] - A callback which is called as soon as any
    * iteratee returns `true`, or after all the iteratee functions have finished.
    * Result will be either `true` or `false` depending on the values of the async
    * tests. Invoked with (err, result).
@@ -7351,7 +7351,7 @@
    * in the collections in series.
    * The iteratee should complete with a boolean `result` value.
    * Invoked with (item, callback).
-   * @param {Function} [callback] - A callback which is called as soon
+   * @param {Function} [callback] - A callback which is called as soon as any
    * iteratee returns `true`, or after all the iteratee functions have finished.
    * Result will be either `true` or `false` depending on the values of the async
    * tests. Invoked with (err, result).
@@ -41538,7 +41538,7 @@
               addUnderlyingListener(
                  fullEventName,
                  predicateEvent, 
-                 jsonPathCompiler( match[2] )
+                 jsonPathCompiler( match[2])
               );
            }
         }    
@@ -41566,7 +41566,7 @@
           */
          addListener = varArgs(function( eventId, parameters ){
   
-              if( oboeApi[eventId] ) {
+              if( oboeApi[eventId]) {
   
                  // for events added as .on(event, callback), if there is a
                  // .event() equivalent with special behaviour , pass through
