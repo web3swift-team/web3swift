@@ -289,7 +289,7 @@ extension Web3 {
                     guard let rawValue = comp.value,
                           let functionArgument = await parseFunctionArgument(inputType,
                                                                              rawValue.trimmingCharacters(in: .whitespacesAndNewlines),
-                                                                             chainID: code.chainID ?? 0,
+                                                                             chainID: code.chainID,
                                                                              inputNumber: inputNumber)
                     else { continue }
 
@@ -348,7 +348,7 @@ extension Web3 {
 
         private static func parseFunctionArgument(_ inputType: ABI.Element.ParameterType,
                                                   _ rawValue: String,
-                                                  chainID: BigUInt,
+                                                  chainID: BigUInt? = Networks.Mainnet.chainID,
                                                   inputNumber: Int) async -> FunctionArgument? {
             var nativeValue: Any?
             switch inputType {
@@ -359,7 +359,7 @@ extension Web3 {
                     nativeValue = ethereumAddress
                 case .ensAddress(let ens):
                     do {
-                        let web = await Web3(provider: InfuraProvider(Networks.fromInt(UInt(chainID)) ?? Networks.Mainnet)!)
+                        let web = await Web3(provider: InfuraProvider(chainID == nil ? .Mainnet : .fromInt(UInt(chainID!)))!)
                         let ensModel = ENS(web3: web)
                         try await ensModel?.setENSResolver(withDomain: ens)
                         let address = try await ensModel?.getAddress(forNode: ens)
