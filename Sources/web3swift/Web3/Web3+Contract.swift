@@ -83,7 +83,7 @@ extension Web3 {
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func createReadOperation(_ method: String = "fallback", parameters: [Any] = [Any](), extraData: Data = Data()) -> ReadOperation? {
+        public func createReadOperation(_ method: String = "fallback", parameters: [Any] = [], extraData: Data = Data()) -> ReadOperation? {
             // MARK: - Encoding ABI Data flow
             guard let data = contract.method(method, parameters: parameters, extraData: extraData) else { return nil }
 
@@ -104,7 +104,7 @@ extension Web3 {
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///
         /// Returns a "Transaction intermediate" object.
-        public func createWriteOperation(_ method: String = "fallback", parameters: [Any] = [Any](), extraData: Data = Data()) -> WriteOperation? {
+        public func createWriteOperation(_ method: String = "fallback", parameters: [Any] = [], extraData: Data = Data()) -> WriteOperation? {
             guard let data = contract.method(method, parameters: parameters, extraData: extraData) else { return nil }
             transaction.data = data
             if let network = web3.provider.network {
