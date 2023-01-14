@@ -57,14 +57,14 @@ public class ERC777: IERC777, ERC20BaseProperties {
     }
 
     public func getGranularity() async throws -> BigUInt {
-        let result = try await contract.createReadOperation("granularity", parameters: [])!.callContractMethod()
+        let result = try await contract.createReadOperation("granularity")!.callContractMethod()
 
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func getDefaultOperators() async throws -> [EthereumAddress] {
-        let result = try await contract.createReadOperation("defaultOperators", parameters: [])!.callContractMethod()
+        let result = try await contract.createReadOperation("defaultOperators")!.callContractMethod()
 
         guard let res = result["0"] as? [EthereumAddress] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res

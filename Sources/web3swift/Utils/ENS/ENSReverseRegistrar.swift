@@ -66,7 +66,7 @@ public extension ENS {
         }
 
         public func getDefaultResolver() async throws -> EthereumAddress {
-            guard let transaction = self.contract.createReadOperation("defaultResolver", parameters: []) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createReadOperation("defaultResolver") else {throw Web3Error.transactionSerializationError}
 
             guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let address = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Can't get answer")}

@@ -76,7 +76,7 @@ public class ERC721x: IERC721x {
         guard contract.contract.address != nil else {return}
         transaction.callOnBlock = .latest
 
-        guard let tokenIdPromise = try await contract.createReadOperation("tokenId", parameters: [])?.callContractMethod() else {return}
+        guard let tokenIdPromise = try await contract.createReadOperation("tokenId")?.callContractMethod() else {return}
 
         guard let tokenId = tokenIdPromise["0"] as? BigUInt else {return}
         self._tokenId = tokenId
@@ -201,7 +201,7 @@ public class ERC721x: IERC721x {
     }
 
     func implementsERC721X() async throws -> Bool {
-        let result = try await contract.createReadOperation("implementsERC721X", parameters: [])!.callContractMethod()
+        let result = try await contract.createReadOperation("implementsERC721X")!.callContractMethod()
 
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res

@@ -298,7 +298,7 @@ public class ERC1376: IERC1376, ERC20BaseProperties {
     func increaseNonce(from: EthereumAddress) throws -> WriteOperation {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
-        let tx = contract.createWriteOperation("increaseNonce", parameters: [])!
+        let tx = contract.createWriteOperation("increaseNonce")!
         return tx
     }
 

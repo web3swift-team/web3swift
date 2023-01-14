@@ -161,7 +161,7 @@ public class ERC1643: IERC1643, ERC20BaseProperties {
     }
     
     public func getAllDocuments() async throws -> [Data] {
-        let result = try await contract.createReadOperation("getAllDocuments", parameters: [])!.callContractMethod()
+        let result = try await contract.createReadOperation("getAllDocuments")!.callContractMethod()
         
         guard let res = result["0"] as? [Data] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res

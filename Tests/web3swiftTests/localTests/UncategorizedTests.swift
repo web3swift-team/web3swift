@@ -120,7 +120,7 @@ class UncategorizedTests: XCTestCase {
             .callContractMethod()
         
         let totalUsers = try await contract!
-            .createReadOperation("totalUsers", parameters: [])?
+            .createReadOperation("totalUsers")?
             .callContractMethod()
         
         let user = try await contract!

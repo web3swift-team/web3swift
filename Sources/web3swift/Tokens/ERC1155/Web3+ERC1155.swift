@@ -69,7 +69,7 @@ public class ERC1155: IERC1155 {
         }
         guard contract.contract.address != nil else {return}
 
-        guard let tokenIdPromise = try await contract.createReadOperation("id", parameters: [])?.callContractMethod() else {return}
+        guard let tokenIdPromise = try await contract.createReadOperation("id")?.callContractMethod() else {return}
 
         guard let tokenId = tokenIdPromise["0"] as? BigUInt else {return}
         self._tokenId = tokenId

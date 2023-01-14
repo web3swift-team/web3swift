@@ -138,14 +138,14 @@ public class ERC1633: IERC1633, ERC20BaseProperties {
     }
     
     func parentToken() async throws -> EthereumAddress {
-        let result = try await contract.createReadOperation("parentToken", parameters: [])!.callContractMethod()
+        let result = try await contract.createReadOperation("parentToken")!.callContractMethod()
         
         guard let res = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
     
     func parentTokenId() async throws -> BigUInt {
-        let result = try await contract.createReadOperation("parentTokenId", parameters: [])!.callContractMethod()
+        let result = try await contract.createReadOperation("parentTokenId")!.callContractMethod()
         
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
