@@ -96,7 +96,7 @@ final class BIP44Tests: XCTestCase {
 
             _ = try await rootNode.derive(path: path, throwOnError: true, transactionChecker: mockTransactionChecker)
 
-            XCTFail("Child must not be created usign warns true for the path: \(path)")
+            XCTFail("Child must not be created using warns true for the path: \(path)")
         } catch BIP44Error.warning {
             XCTAssertTrue(true)
             XCTAssertEqual(mockTransactionChecker.addresses, accountZeroScannedAddresses)
@@ -131,7 +131,7 @@ final class BIP44Tests: XCTestCase {
 
             _ = try await rootNode.derive(path: path, throwOnError: true, transactionChecker: mockTransactionChecker)
 
-            XCTFail("Child must not be created usign warns true for the path: \(path)")
+            XCTFail("Child must not be created using warns true for the path: \(path)")
         } catch BIP44Error.warning {
             XCTAssertTrue(true)
             XCTAssertEqual(mockTransactionChecker.addresses, accountZeroAndOneScannedAddresses)
