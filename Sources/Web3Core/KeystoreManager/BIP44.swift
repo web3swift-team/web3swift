@@ -16,7 +16,7 @@ public protocol BIP44 {
     func derive(path: String, throwOnError: Bool, transactionChecker: TransactionChecker) async throws -> HDNode?
 }
 
-public enum BIP44Error: Error, Equatable, LocalizedError {
+public enum BIP44Error: LocalizedError, Equatable {
     /// The selected path doesn't fulfill BIP44 standard, you can derive the root key anyway
     case warning
     
