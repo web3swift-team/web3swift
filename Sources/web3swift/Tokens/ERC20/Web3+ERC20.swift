@@ -64,7 +64,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
         // get the decimals manually
         let callResult = try await contract
-            .createReadOperation("decimals" )!
+            .createReadOperation("decimals")!
             .callContractMethod()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
@@ -88,7 +88,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
         // get the decimals manually
         let callResult = try await contract
-            .createReadOperation("decimals" )!
+            .createReadOperation("decimals")!
             .callContractMethod()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
@@ -112,7 +112,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
         // get the decimals manually
         let callResult = try await contract
-            .createReadOperation("decimals" )!
+            .createReadOperation("decimals")!
             .callContractMethod()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
@@ -136,7 +136,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
         // get the decimals manually
         let callResult = try await contract
-            .createReadOperation("decimals" )!
+            .createReadOperation("decimals")!
             .callContractMethod()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {

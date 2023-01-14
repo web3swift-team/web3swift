@@ -256,7 +256,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.callOnBlock = .latest
 
         contract.transaction = transaction
-        return contract.createWriteOperation("renounceOwnership" )!
+        return contract.createWriteOperation("renounceOwnership")!
 
     }
 
@@ -341,7 +341,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.callOnBlock = .latest
 
         contract.transaction = transaction
-        return contract.createWriteOperation("createCheckpoint" )!
+        return contract.createWriteOperation("createCheckpoint")!
 
     }
 
