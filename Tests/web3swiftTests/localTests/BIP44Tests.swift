@@ -174,7 +174,7 @@ class BIP44ErrorTests: XCTestCase {
     }
 }
 
-extension Bool {
+private extension Bool {
     func times(n: Int) -> [Bool] {
         var array: [Bool] = .init()
         (0..<n).forEach { _ in
