@@ -83,7 +83,7 @@ class EIP681Tests: XCTestCase {
 
     func testENSParsing() async throws {
         let testAddress = "somename.eth"
-        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)/transfer?address=somename.eth&uint256=1")
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)@1/transfer?address=somename.eth&uint256=1")
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
@@ -110,7 +110,7 @@ class EIP681Tests: XCTestCase {
 
     func testENSParsingWithEncoding() async throws {
         let testAddress = "somename.eth"
-        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)/transfer?address=somename.eth&uint256=1".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)@1/transfer?address=somename.eth&uint256=1".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
