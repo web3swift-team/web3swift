@@ -41538,7 +41538,7 @@
               addUnderlyingListener(
                  fullEventName,
                  predicateEvent, 
-                 jsonPathCompiler( match[2])
+                 jsonPathCompiler( match[2] )
               );
            }
         }    
@@ -41566,7 +41566,7 @@
           */
          addListener = varArgs(function( eventId, parameters ){
   
-              if( oboeApi[eventId]) {
+              if( oboeApi[eventId] ) {
   
                  // for events added as .on(event, callback), if there is a
                  // .event() equivalent with special behaviour , pass through
@@ -68348,4 +68348,3 @@
   
   //# sourceURL=/Users/alexvlasov/Blockchain/web3swift/web3swiftJSProxy/wk.bridge.js
   },{}]},{},[1]);
-  
