@@ -34,7 +34,7 @@ public extension ENS {
             defaultOptions.from = from
             defaultOptions.to = self.address
 
-            guard let transaction = self.contract.createWriteOperation("claim", parameters: [owner as AnyObject]) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createWriteOperation("claim", parameters: [owner]) else {throw Web3Error.transactionSerializationError}
 
             return transaction
         }

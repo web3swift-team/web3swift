@@ -45,7 +45,7 @@ public extension ENS {
         }
         
         public func isNameAvailable(name: String) async throws -> Bool {
-            guard let transaction = self.contract.createReadOperation("available", parameters: [name as AnyObject]) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createReadOperation("available", parameters: [name]) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let available = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Can't get answer")}
             return available
@@ -62,7 +62,7 @@ public extension ENS {
             defaultOptions.from = from
             defaultOptions.to = self.address
             
-            guard let transaction = self.contract.createWriteOperation("commit", parameters: [commitment as AnyObject]) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createWriteOperation("commit", parameters: [commitment]) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
         
