@@ -67,11 +67,9 @@ public class ERC1155: IERC1155 {
         if self._hasReadProperties {
             return
         }
-        let contract = self.contract
         guard contract.contract.address != nil else {return}
-        self.transaction.callOnBlock = .latest
 
-        guard let tokenIdPromise = try await contract.createReadOperation("id", parameters: [], extraData: Data())?.callContractMethod() else {return}
+        guard let tokenIdPromise = try await contract.createReadOperation("id", parameters: [])?.callContractMethod() else {return}
 
         guard let tokenId = tokenIdPromise["0"] as? BigUInt else {return}
         self._tokenId = tokenId
@@ -80,64 +78,55 @@ public class ERC1155: IERC1155 {
     }
 
     public func safeTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, id: BigUInt, value: BigUInt, data: [UInt8]) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract.createWriteOperation("safeTransferFrom", parameters: [originalOwner, to, id, value, data])!
         return tx
     }
 
     public func safeBatchTransferFrom(from: EthereumAddress, to: EthereumAddress, originalOwner: EthereumAddress, ids: [BigUInt], values: [BigUInt], data: [UInt8]) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract
             .createWriteOperation("safeBatchTransferFrom", parameters: [originalOwner, to, ids, values, data])!
         return tx
     }
 
     public func balanceOf(account: EthereumAddress, id: BigUInt) async throws -> BigUInt {
-        let contract = self.contract
-        self.transaction.callOnBlock = .latest
         let result = try await contract
-            .createReadOperation("balanceOf", parameters: [account, id], extraData: Data() )!
+            .createReadOperation("balanceOf", parameters: [account, id])!
             .callContractMethod()
-
-        /*
-         let result = try await contract
-             .prepareToRead("balanceOf", parameters: [account, id], extraData: Data() )!
-             .execute()
-             .decodeData()
-
-         */
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func setApprovalForAll(from: EthereumAddress, operator user: EthereumAddress, approved: Bool, scope: Data) throws -> WriteOperation {
-        let contract = self.contract
-        self.transaction.from = from
-        self.transaction.to = self.address
-
+        updateTransactionAndContract(from: from)
         let tx = contract.createWriteOperation("setApprovalForAll", parameters: [user, approved, scope])!
         return tx
     }
 
     public func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress, scope: Data) async throws -> Bool {
-        let contract = self.contract
-        self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user, scope], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user, scope])!.callContractMethod()
+
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func supportsInterface(interfaceID: String) async throws -> Bool {
-        let contract = self.contract
-        self.transaction.callOnBlock = .latest
-        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID], extraData: Data() )!.callContractMethod()
+        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID])!.callContractMethod()
+
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
+}
+
+// MARK: - Private
+
+extension ERC1155 {
+
+    private func updateTransactionAndContract(from: EthereumAddress) {
+        transaction.from = from
+        transaction.to = address
+        contract.transaction = transaction
+    }
+
 }

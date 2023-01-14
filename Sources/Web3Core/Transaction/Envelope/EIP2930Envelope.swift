@@ -206,7 +206,7 @@ extension EIP2930Envelope {
     }
 
     public func encode(for type: EncodeType = .transaction) -> Data? {
-        let fields: [Any]
+        let fields: [Any?]
         let list = accessList.map { $0.encodeAsList() }
 
         switch type {

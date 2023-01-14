@@ -192,7 +192,7 @@ extension LegacyEnvelope {
 //    }
 
     public func encode(for type: EncodeType = .transaction) -> Data? {
-        let fields: [Any]
+        let fields: [Any?]
         switch type {
         case .transaction:
             fields = [nonce, gasPrice, gasLimit, to.addressData, value, data, v, r, s]

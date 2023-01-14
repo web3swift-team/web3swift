@@ -234,20 +234,20 @@ extension Web3 {
         static var addressRegex = "^(pay-)?([0-9a-zA-Z.]+)(@[0-9]+)?\\/?(.*)?$"
 
         public static func parse(_ data: Data) async -> EIP681Code? {
-            guard let string = String(data: data, encoding: .utf8) else {return nil}
+            guard let string = String(data: data, encoding: .utf8) else { return nil }
             return await parse(string)
         }
 
         public static func parse(_ string: String) async -> EIP681Code? {
-            guard string.hasPrefix("ethereum:") else {return nil}
+            guard string.hasPrefix("ethereum:") else { return nil }
             let striped = string.components(separatedBy: "ethereum:")
-            guard striped.count == 2 else {return nil}
-            guard let encoding = striped[1].removingPercentEncoding else {return nil}
-            //  guard let url = URL.init(string: encoding) else {return nil}
+            guard striped.count == 2 else { return nil }
+            guard let encoding = striped[1].removingPercentEncoding else { return nil }
+            //  guard let url = URL.init(string: encoding) else { return nil }
             let matcher = try! NSRegularExpression(pattern: addressRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
             let match = matcher.matches(in: encoding, options: NSRegularExpression.MatchingOptions.anchored, range: encoding.fullNSRange)
-            guard match.count == 1 else {return nil}
-            guard match[0].numberOfRanges == 5 else {return nil}
+            guard match.count == 1 else { return nil }
+            guard match[0].numberOfRanges == 5 else { return nil }
             var addressString: String?
             var chainIDString: String?
             var tail: String?
@@ -264,7 +264,7 @@ extension Web3 {
             if  let tailRange = Range(match[0].range(at: 4), in: encoding) {
                 tail = String(encoding[tailRange])
             }
-            guard let address = addressString else {return nil}
+            guard let address = addressString else { return nil }
             let targetAddress = EIP681Code.TargetAddress(address)
 
             var code = EIP681Code(targetAddress)
@@ -281,7 +281,7 @@ extension Web3 {
             } else {
                 code.functionName = components.path
             }
-            guard let queryItems = components.queryItems else {return code}
+            guard let queryItems = components.queryItems else { return code }
             var inputNumber: Int = 0
             var inputs = [ABI.Element.InOut]()
             for comp in queryItems {
@@ -299,10 +299,10 @@ extension Web3 {
                 } else {
                     switch comp.name {
                     case "value":
-                        guard let value = comp.value else {return nil}
+                        guard let value = comp.value else { return nil }
                         let splittedValue = value.split(separator: "e")
                         if splittedValue.count <= 1 {
-                            guard let val = BigUInt(value, radix: 10) else {return nil }
+                            guard let val = BigUInt(value, radix: 10) else { return nil }
                             code.amount = val
                         } else if splittedValue.count == 2 {
                             guard let power = Double(splittedValue[1]) else { return nil }
@@ -321,16 +321,16 @@ extension Web3 {
                         } else { return nil }
 
                     case "gas":
-                        guard let value = comp.value else {return nil}
-                        guard let val = BigUInt(value, radix: 10) else {return nil}
+                        guard let value = comp.value else { return nil }
+                        guard let val = BigUInt(value, radix: 10) else { return nil }
                         code.gasLimit = val
                     case "gasLimit":
-                        guard let value = comp.value else {return nil}
-                        guard let val = BigUInt(value, radix: 10) else {return nil}
+                        guard let value = comp.value else { return nil }
+                        guard let val = BigUInt(value, radix: 10) else { return nil }
                         code.gasLimit = val
                     case "gasPrice":
-                        guard let value = comp.value else {return nil}
-                        guard let val = BigUInt(value, radix: 10) else {return nil}
+                        guard let value = comp.value else { return nil }
+                        guard let val = BigUInt(value, radix: 10) else { return nil }
                         code.gasPrice = val
                     default:
                         continue
@@ -365,6 +365,7 @@ extension Web3 {
                         let address = try await ensModel?.getAddress(forNode: ens)
                         nativeValue = address
                     } catch {
+                        NSLog(error.localizedDescription)
                         return nil
                     }
                 }

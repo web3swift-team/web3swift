@@ -36,7 +36,6 @@ public class ReadOperation {
 
     // TODO: Remove type erasing here, some broad wide protocol should be added instead
     public func callContractMethod() async throws -> [String: Any] {
-
         // MARK: Read data from ABI flow
         // FIXME: This should be dropped, and after `execute()` call, just to decode raw data.
         let data: Data = try await self.web3.eth.callTransaction(transaction)

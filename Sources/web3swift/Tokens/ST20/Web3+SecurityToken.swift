@@ -100,7 +100,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -119,7 +119,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -138,7 +138,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -171,7 +171,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -190,7 +190,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -209,7 +209,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -228,7 +228,7 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-
+        contract.transaction = transaction
         // get the decimals manually
         let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
         var decimals = BigUInt(0)
@@ -254,14 +254,20 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-        return contract.createWriteOperation("renounceOwnership", parameters: [Any]() )!
+
+        contract.transaction = transaction
+        return contract.createWriteOperation("renounceOwnership" )!
+
     }
 
     public func transferOwnership(from: EthereumAddress, newOwner: EthereumAddress) throws -> WriteOperation {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
+
+        contract.transaction = transaction
         return contract.createWriteOperation("transferOwnership", parameters: [newOwner])!
+
     }
 
     public func currentCheckpointId() async throws -> BigUInt {
@@ -333,7 +339,10 @@ public class SecurityToken: ISecurityToken, ERC20BaseProperties {
         transaction.from = from
         transaction.to = self.address
         transaction.callOnBlock = .latest
-        return contract.createWriteOperation("createCheckpoint", parameters: [Any]() )!
+
+        contract.transaction = transaction
+        return contract.createWriteOperation("createCheckpoint" )!
+
     }
 
     public func getInvestorsLength() async throws -> BigUInt {
