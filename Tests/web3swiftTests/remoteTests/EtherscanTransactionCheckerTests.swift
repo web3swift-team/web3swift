@@ -40,6 +40,18 @@ final class EtherscanTransactionCheckerTests: XCTestCase {
             XCTAssertTrue(true)
         }
     }
+    
+    func testInitURLError() async throws {
+        do {
+            let sut = EtherscanTransactionChecker(urlSession: URLSessionMock(), apiKey: testApiKey)
+
+            _ = try await sut.hasTransactions(address: " ")
+
+            XCTFail("URL init must throw an error")
+        } catch {
+            XCTAssertTrue(error is EtherscanTransactionCheckerError)
+        }
+    }
 
     func testWrongApiKey() async throws {
         do {
@@ -54,10 +66,22 @@ final class EtherscanTransactionCheckerTests: XCTestCase {
     }
 }
 
-final class URLSessionMock: URLSessionProxy {
-    var response: (Data, HTTPURLResponse) = (Data(), HTTPURLResponse())
 
-    func data(request: URLRequest) async throws -> (Data, HTTPURLResponse) {
+// MARK: - EtherscanTransactionCheckerErrorTests
+
+final class EtherscanTransactionCheckerErrorTests: XCTestCase {
+    func testLocalizedDescription() {
+        let error = EtherscanTransactionCheckerError.invalidUrl(url: "mock url")
+        XCTAssertEqual(error.localizedDescription, "Couldn't create URL(string: mock url)")
+    }
+}
+
+// MARK: - test double
+
+final private class URLSessionMock: URLSessionProxy {
+    var response: (Data, URLResponse) = (Data(), URLResponse())
+
+    func data(for request: URLRequest) async throws -> (Data, URLResponse) {
         return response
     }
 }
