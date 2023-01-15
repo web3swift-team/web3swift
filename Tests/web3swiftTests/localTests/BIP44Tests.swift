@@ -57,7 +57,7 @@ final class BIP44Tests: XCTestCase {
     }
     private var mockTransactionChecker: MockTransactionChecker = .init()
 
-    func testDeriveNoWarn() async throws {
+    func testDeriveWithoutThrowOnError() async throws {
         let rootNode = try rootNode()
 
         let childNode = try await rootNode.derive(path: "m/44'/60'/8096'/0/1", throwOnError: false, transactionChecker: mockTransactionChecker)
@@ -77,7 +77,7 @@ final class BIP44Tests: XCTestCase {
 
     // MARK: - address
 
-    func testAccountZeroCanBeDerivedAlways() async throws {
+    func testZeroAccountNeverThrow() async throws {
         let rootNode = try rootNode()
 
         let childNode = try await rootNode.derive(path: "m/44'/60'/0'/0/255", throwOnError: true, transactionChecker: mockTransactionChecker)
@@ -86,7 +86,7 @@ final class BIP44Tests: XCTestCase {
         XCTAssertEqual(mockTransactionChecker.addresses.count, 0)
     }
 
-    func testAccountOneWithoutTransactionsInAccountZeroWarns() async throws {
+    func testFirstAccountWithNoPreviousTransactionHistory() async throws {
         do {
             let rootNode = try rootNode()
             let path = "m/44'/60'/1'/0/0"
@@ -98,12 +98,11 @@ final class BIP44Tests: XCTestCase {
 
             XCTFail("Child must not be created using warns true for the path: \(path)")
         } catch BIP44Error.warning {
-            XCTAssertTrue(true)
             XCTAssertEqual(mockTransactionChecker.addresses, accountZeroScannedAddresses)
         }
     }
 
-    func testAccountOneWithTransactionsInAccountZeroNotWarns() async throws {
+    func testFirstAccountWithPreviousTransactionHistory() async throws {
         do {
             let rootNode = try rootNode()
             let path = "m/44'/60'/1'/0/0"
@@ -120,7 +119,7 @@ final class BIP44Tests: XCTestCase {
         }
     }
 
-    func testAccountTwoWithTransactionsInAccountZeroButNotInOneWarns() async throws {
+    func testSecondAccountWithNoPreviousTransactionHistory() async throws {
         do {
             let rootNode = try rootNode()
             let path = "m/44'/60'/2'/0/0"
@@ -133,7 +132,6 @@ final class BIP44Tests: XCTestCase {
 
             XCTFail("Child must not be created using warns true for the path: \(path)")
         } catch BIP44Error.warning {
-            XCTAssertTrue(true)
             XCTAssertEqual(mockTransactionChecker.addresses, accountZeroAndOneScannedAddresses)
             XCTAssertEqual(mockTransactionChecker.addresses.count, 21)
         }
@@ -141,7 +139,7 @@ final class BIP44Tests: XCTestCase {
 
     // MARK: - change + addressIndex
 
-    func testAccountOneAndInternalAndNotZeroAddressIndexWithTransactionsInAccountZeroNotWarns() async throws {
+    func testNotZeroChangeAndAddressIndexWithPreviousTransactionHistory() async throws {
         do {
             let rootNode = try rootNode()
             let path = "m/44'/60'/1'/1/128"
