@@ -57,10 +57,10 @@ final class BIP44Tests: XCTestCase {
     }
     private var mockTransactionChecker: MockTransactionChecker = .init()
 
-    func testDeriveWithoutThrowOnError() async throws {
+    func testDeriveWithoutThrowOnWarning() async throws {
         let rootNode = try rootNode()
 
-        let childNode = try await rootNode.derive(path: "m/44'/60'/8096'/0/1", throwOnError: false, transactionChecker: mockTransactionChecker)
+        let childNode = try await rootNode.derive(path: "m/44'/60'/8096'/0/1", throwOnWarning: false, transactionChecker: mockTransactionChecker)
 
         XCTAssertEqual(try XCTUnwrap(childNode).publicKey.toHexString(), "035785d4918449c87892371c0f9ccf6e4eda40a7fb0f773f1254c064d3bba64026")
         XCTAssertEqual(mockTransactionChecker.addresses.count, 0)
@@ -69,7 +69,7 @@ final class BIP44Tests: XCTestCase {
     func testDeriveInvalidPath() async throws {
         let rootNode = try rootNode()
 
-        let childNode = try? await rootNode.derive(path: "", throwOnError: true, transactionChecker: mockTransactionChecker)
+        let childNode = try? await rootNode.derive(path: "", throwOnWarning: true, transactionChecker: mockTransactionChecker)
 
         XCTAssertNil(childNode)
         XCTAssertEqual(mockTransactionChecker.addresses.count, 0)
@@ -80,7 +80,7 @@ final class BIP44Tests: XCTestCase {
     func testZeroAccountNeverThrow() async throws {
         let rootNode = try rootNode()
 
-        let childNode = try await rootNode.derive(path: "m/44'/60'/0'/0/255", throwOnError: true, transactionChecker: mockTransactionChecker)
+        let childNode = try await rootNode.derive(path: "m/44'/60'/0'/0/255", throwOnWarning: true, transactionChecker: mockTransactionChecker)
 
         XCTAssertEqual(try XCTUnwrap(childNode).publicKey.toHexString(), "0262fba1af8f149258123265318114066decf50d16c1222a9d657b7de2296c2734")
         XCTAssertEqual(mockTransactionChecker.addresses.count, 0)
@@ -94,9 +94,9 @@ final class BIP44Tests: XCTestCase {
             results.append(true)
             mockTransactionChecker.results = results
 
-            _ = try await rootNode.derive(path: path, throwOnError: true, transactionChecker: mockTransactionChecker)
+            _ = try await rootNode.derive(path: path, throwOnWarning: true, transactionChecker: mockTransactionChecker)
 
-            XCTFail("Child must not be created using warns true for the path: \(path)")
+            XCTFail("Child must not be created using throwOnWarning true for the path: \(path)")
         } catch BIP44Error.warning {
             XCTAssertEqual(mockTransactionChecker.addresses, accountZeroScannedAddresses)
         }
@@ -110,7 +110,7 @@ final class BIP44Tests: XCTestCase {
             results.append(true)
             mockTransactionChecker.results = results
 
-            let childNode = try await rootNode.derive(path: path, throwOnError: true, transactionChecker: mockTransactionChecker)
+            let childNode = try await rootNode.derive(path: path, throwOnWarning: true, transactionChecker: mockTransactionChecker)
 
             XCTAssertEqual(try XCTUnwrap(childNode).publicKey.toHexString(), "036cd8f1bad46fa7caf7a80d48528b90db2a3b7a5c9a18d74d61b286e03850abf4")
             XCTAssertEqual(mockTransactionChecker.addresses, accountZeroScannedAddresses)
@@ -128,9 +128,9 @@ final class BIP44Tests: XCTestCase {
             results.append(contentsOf: false.times(n: 20))
             mockTransactionChecker.results = results
 
-            _ = try await rootNode.derive(path: path, throwOnError: true, transactionChecker: mockTransactionChecker)
+            _ = try await rootNode.derive(path: path, throwOnWarning: true, transactionChecker: mockTransactionChecker)
 
-            XCTFail("Child must not be created using warns true for the path: \(path)")
+            XCTFail("Child must not be created using throwOnWarning true for the path: \(path)")
         } catch BIP44Error.warning {
             XCTAssertEqual(mockTransactionChecker.addresses, accountZeroAndOneScannedAddresses)
             XCTAssertEqual(mockTransactionChecker.addresses.count, 21)
@@ -147,7 +147,7 @@ final class BIP44Tests: XCTestCase {
             results.append(true)
             mockTransactionChecker.results = results
 
-            let childNode = try await rootNode.derive(path: path, throwOnError: true, transactionChecker: mockTransactionChecker)
+            let childNode = try await rootNode.derive(path: path, throwOnWarning: true, transactionChecker: mockTransactionChecker)
 
             XCTAssertEqual(try XCTUnwrap(childNode).publicKey.toHexString(), "0282134e44d4c040a4b4c1a780d8302955096cf1d5e738b161c83f0ce1b863c14e")
             XCTAssertEqual(mockTransactionChecker.addresses, accountZeroScannedAddresses)

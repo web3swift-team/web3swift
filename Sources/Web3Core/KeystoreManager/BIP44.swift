@@ -7,13 +7,13 @@ import Foundation
 
 public protocol BIP44 {
     /**
-    Derive an ``HDNode`` based on the provided path. The function will throw ``BIP44Error.warning`` if it was invoked with throwOnError equal to`true` and the root key doesn't have a previous child with at least one transaction. If it is invoked with throwOnError equal to `false` the child node will be derived directly using the derive function of ``HDNode``. This function needs to query the blockchain history when throwOnError is `true`, so it can throw network errors.
+    Derive an ``HDNode`` based on the provided path. The function will throw ``BIP44Error.warning`` if it was invoked with throwOnWarning equal to`true` and the root key doesn't have a previous child with at least one transaction. If it is invoked with throwOnError equal to `false` the child node will be derived directly using the derive function of ``HDNode``. This function needs to query the blockchain history when throwOnWarning is `true`, so it can throw network errors.
     - Parameter path: valid BIP44 path.
-    - Parameter throwOnError: `true` to use [Account Discovery](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#account-discovery) standard,  otherwise it will dervive the key using the derive function of ``HDNode``.
+    - Parameter throwOnWarning: `true` to use [Account Discovery](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#account-discovery) standard,  otherwise it will dervive the key using the derive function of ``HDNode``.
     - Throws: ``BIP44Error.warning`` if the child key shouldn't be used according to [Account Discovery](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#account-discovery) standard.
     - Returns: an ``HDNode`` child key for the provided `path` if it can be created, otherwise `nil`
     */
-    func derive(path: String, throwOnError: Bool, transactionChecker: TransactionChecker) async throws -> HDNode?
+    func derive(path: String, throwOnWarning: Bool, transactionChecker: TransactionChecker) async throws -> HDNode?
 }
 
 public enum BIP44Error: LocalizedError, Equatable {
@@ -39,8 +39,8 @@ public protocol TransactionChecker {
 }
 
 extension HDNode: BIP44 {
-    public func derive(path: String, throwOnError: Bool = true, transactionChecker: TransactionChecker) async throws -> HDNode? {
-        guard throwOnError else {
+    public func derive(path: String, throwOnWarning: Bool = true, transactionChecker: TransactionChecker) async throws -> HDNode? {
+        guard throwOnWarning else {
             return derive(path: path, derivePrivateKey: true)
         }
         guard let account = path.accountFromPath else {
