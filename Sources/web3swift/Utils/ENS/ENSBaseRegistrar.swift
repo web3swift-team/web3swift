@@ -12,7 +12,7 @@ import Web3Core
 // FIXME: Rewrite this to CodableTransaction
 public extension ENS {
     class BaseRegistrar: ERC721 {
-        lazy var defaultOptions: CodableTransaction = {
+        lazy var defaultTransaction: CodableTransaction = {
             return CodableTransaction.emptyTransaction
         }()
 
@@ -34,24 +34,24 @@ public extension ENS {
 
         @available(*, message: "Available for only owner")
         public func addController(from: EthereumAddress, controllerAddress: EthereumAddress) throws -> WriteOperation {
-            defaultOptions.from = from
-            defaultOptions.to = self.address
+            defaultTransaction.from = from
+            defaultTransaction.to = self.address
             guard let transaction = self.contract.createWriteOperation("addController", parameters: [controllerAddress as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
         @available(*, message: "Available for only owner")
         public func removeController(from: EthereumAddress, controllerAddress: EthereumAddress) throws -> WriteOperation {
-            defaultOptions.from = from
-            defaultOptions.to = self.address
+            defaultTransaction.from = from
+            defaultTransaction.to = self.address
             guard let transaction = self.contract.createWriteOperation("removeController", parameters: [controllerAddress as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
         @available(*, message: "Available for only owner")
         public func setResolver(from: EthereumAddress, resolverAddress: EthereumAddress) throws -> WriteOperation {
-            defaultOptions.from = from
-            defaultOptions.to = self.address
+            defaultTransaction.from = from
+            defaultTransaction.to = self.address
             guard let transaction = self.contract.createWriteOperation("setResolver", parameters: [resolverAddress as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
@@ -72,8 +72,8 @@ public extension ENS {
         }
 
         public func reclaim(from: EthereumAddress, record: BigUInt) throws -> WriteOperation {
-            defaultOptions.from = from
-            defaultOptions.to = self.address
+            defaultTransaction.from = from
+            defaultTransaction.to = self.address
             guard let transaction = self.contract.createWriteOperation("reclaim", parameters: [record as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
