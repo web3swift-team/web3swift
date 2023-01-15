@@ -167,12 +167,16 @@ final class BIP44Tests: XCTestCase {
     }
 }
 
-class BIP44ErrorTests: XCTestCase {
+// MARK: - BIP44ErrorTests
+
+final class BIP44ErrorTests: XCTestCase {
     func testLocalizedDescription() {
         let error = BIP44Error.warning
         XCTAssertEqual(error.localizedDescription, "Couldn't derive key as it doesn't have a previous account with at least one transaction")
     }
 }
+
+// MARK: - helper
 
 private extension Bool {
     func times(n: Int) -> [Bool] {
@@ -183,6 +187,8 @@ private extension Bool {
         return array
     }
 }
+
+// MARK: - test double
 
 private final class MockTransactionChecker: TransactionChecker {
     var addresses: [String] = .init()
