@@ -35,8 +35,7 @@ public extension ENS {
             }
         }
 
-        // FIXME: Rewrite this to CodableTransaction
-        lazy var defaultOptions: CodableTransaction = {
+        lazy var defaultTransaction: CodableTransaction = {
             return CodableTransaction.emptyTransaction
         }()
 
@@ -72,7 +71,7 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         public func setOwner(node: String, owner: EthereumAddress, options: CodableTransaction?, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultOptions
+            var options = options ?? defaultTransaction
             if let contractAddress = self.registryContractAddress {
                 options.to = contractAddress
             }
@@ -84,7 +83,7 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         public func setSubnodeOwner(node: String, label: String, owner: EthereumAddress, options: CodableTransaction?, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultOptions
+            var options = options ?? defaultTransaction
             if let contractAddress = self.registryContractAddress {
                 options.to = contractAddress
             }
@@ -97,7 +96,7 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         public func setResolver(node: String, resolver: EthereumAddress, options: CodableTransaction?, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultOptions
+            var options = options ?? defaultTransaction
             if let contractAddress = self.registryContractAddress {
                 options.to = contractAddress
             }
@@ -109,7 +108,7 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         public func setTTL(node: String, ttl: BigUInt, options: CodableTransaction?, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultOptions
+            var options = options ?? defaultTransaction
             if let contractAddress = self.registryContractAddress {
                 options.to = contractAddress
             }

@@ -20,8 +20,7 @@ public extension ENS {
             return contract!
         }()
 
-        // FIXME: Rewrite this to CodableTransaction
-        lazy var defaultOptions: CodableTransaction = {
+        lazy var defaultTransaction: CodableTransaction = {
             return CodableTransaction.emptyTransaction
         }()
 
@@ -59,34 +58,34 @@ public extension ENS {
         }
 
         public func sumbitCommitment(from: EthereumAddress, commitment: Data) throws -> WriteOperation {
-            defaultOptions.from = from
-            defaultOptions.to = self.address
+            defaultTransaction.from = from
+            defaultTransaction.to = self.address
             guard let transaction = self.contract.createWriteOperation("commit", parameters: [commitment as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
         public func registerName(from: EthereumAddress, name: String, owner: EthereumAddress, duration: UInt, secret: String, price: String) throws -> WriteOperation {
             guard let amount = Utilities.parseToBigUInt(price, units: .ether) else {throw Web3Error.inputError(desc: "Wrong price: no way for parsing to ether units")}
-            defaultOptions.value = amount
-            defaultOptions.from = from
-            defaultOptions.to = self.address
+            defaultTransaction.value = amount
+            defaultTransaction.from = from
+            defaultTransaction.to = self.address
             guard let transaction = self.contract.createWriteOperation("register", parameters: [name, owner.address, duration, secret] as [AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
         public func extendNameRegistration(from: EthereumAddress, name: String, duration: UInt32, price: String) throws -> WriteOperation {
             guard let amount = Utilities.parseToBigUInt(price, units: .ether) else {throw Web3Error.inputError(desc: "Wrong price: no way for parsing to ether units")}
-            defaultOptions.value = amount
-            defaultOptions.from = from
-            defaultOptions.to = self.address
+            defaultTransaction.value = amount
+            defaultTransaction.from = from
+            defaultTransaction.to = self.address
             guard let transaction = self.contract.createWriteOperation("renew", parameters: [name, duration] as [AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
         @available(*, message: "Available for only owner")
         public func withdraw(from: EthereumAddress) throws -> WriteOperation {
-            defaultOptions.from = from
-            defaultOptions.to = self.address
+            defaultTransaction.from = from
+            defaultTransaction.to = self.address
             guard let transaction = self.contract.createWriteOperation("withdraw", parameters: [AnyObject](), extraData: Data()) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
