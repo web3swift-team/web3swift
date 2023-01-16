@@ -40,7 +40,7 @@ final class EtherscanTransactionCheckerTests: XCTestCase {
             XCTAssertTrue(true)
         }
     }
-    
+
     func testInitURLError() async throws {
         do {
             let sut = EtherscanTransactionChecker(urlSession: URLSessionMock(), apiKey: testApiKey)
@@ -65,7 +65,6 @@ final class EtherscanTransactionCheckerTests: XCTestCase {
         }
     }
 }
-
 
 // MARK: - EtherscanTransactionCheckerErrorTests
 

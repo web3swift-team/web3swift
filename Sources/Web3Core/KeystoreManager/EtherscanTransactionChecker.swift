@@ -14,7 +14,7 @@ public struct EtherscanTransactionChecker: TransactionChecker {
         self.urlSession = URLSessionProxyImplementation(urlSession: urlSession)
         self.apiKey = apiKey
     }
-    
+
     internal init(urlSession: URLSessionProxy, apiKey: String) {
         self.urlSession = urlSession
         self.apiKey = apiKey
@@ -41,7 +41,7 @@ extension EtherscanTransactionChecker {
 
 public enum EtherscanTransactionCheckerError: LocalizedError, Equatable {
     case invalidUrl(url: String)
-    
+
     public var errorDescription: String? {
         switch self {
         case let .invalidUrl(url):
@@ -56,7 +56,7 @@ internal protocol URLSessionProxy {
 
 internal struct URLSessionProxyImplementation: URLSessionProxy {
     let urlSession: URLSession
-    
+
     func data(for request: URLRequest) async throws -> (Data, URLResponse) {
         try await urlSession.data(for: request)
     }
