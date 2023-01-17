@@ -19,3 +19,12 @@ pod 'web3swift', :git => 'https://github.com/veerChauhan/web3swift.git', :branch
   end
 
 end
+
+# set iOS deployment target for every pod to avoid warnings
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+    end
+  end
+end
