@@ -754,7 +754,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D6018FABA256C0117F85A829 /* Pods-myWeb3Wallet-myWeb3WalletUITests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VPS9LBWQ55;
@@ -778,7 +778,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7574A738941D92CC94F93A9E /* Pods-myWeb3Wallet-myWeb3WalletUITests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VPS9LBWQ55;
