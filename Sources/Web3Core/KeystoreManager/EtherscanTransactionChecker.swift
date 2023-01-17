@@ -4,7 +4,6 @@
 //
 
 import Foundation
-import _Concurrency
 
 public struct EtherscanTransactionChecker: TransactionChecker {
     private let urlSession: URLSessionProxy
