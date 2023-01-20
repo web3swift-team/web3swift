@@ -16,12 +16,13 @@ public struct TransactionReceipt {
     public var contractAddress: EthereumAddress?
     public var cumulativeGasUsed: BigUInt
     public var gasUsed: BigUInt
+    public var effectiveGasPrice: BigUInt
     public var logs: [EventLog]
     public var status: TXStatus
     public var logsBloom: EthereumBloomFilter?
 
     static func notProcessed(transactionHash: Data) -> TransactionReceipt {
-        TransactionReceipt(transactionHash: transactionHash, blockHash: Data(), blockNumber: BigUInt(0), transactionIndex: BigUInt(0), contractAddress: nil, cumulativeGasUsed: BigUInt(0), gasUsed: BigUInt(0), logs: [EventLog](), status: .notYetProcessed, logsBloom: nil)
+        TransactionReceipt(transactionHash: transactionHash, blockHash: Data(), blockNumber: 0, transactionIndex: 0, contractAddress: nil, cumulativeGasUsed: 0, gasUsed: 0, effectiveGasPrice: 0, logs: [], status: .notYetProcessed, logsBloom: nil)
     }
 }
 
@@ -45,6 +46,7 @@ extension TransactionReceipt: Decodable {
         case logs
         case logsBloom
         case status
+        case effectiveGasPrice
     }
 
     public init(from decoder: Decoder) throws {
@@ -64,6 +66,8 @@ extension TransactionReceipt: Decodable {
 
         self.gasUsed = try container.decodeHex(BigUInt.self, forKey: .gasUsed)
 
+        self.effectiveGasPrice = (try? container.decodeHex(BigUInt.self, forKey: .effectiveGasPrice)) ?? 0
+
         let status = try? container.decodeHex(BigUInt.self, forKey: .status)
         switch status {
         case nil: self.status = .notYetProcessed
@@ -72,6 +76,10 @@ extension TransactionReceipt: Decodable {
         }
 
         self.logs = try container.decode([EventLog].self, forKey: .logs)
+
+        if let hexBytes = try? container.decodeHex(Data.self, forKey: .logsBloom) {
+            self.logsBloom = EthereumBloomFilter(hexBytes)
+        }
     }
 }
 

@@ -245,14 +245,14 @@ extension EIP1559Envelope {
 //    }
 
     public func encode(for type: EncodeType = .transaction) -> Data? {
-        let fields: [AnyObject]
+        let fields: [Any?]
         let list = accessList.map { $0.encodeAsList() as AnyObject }
 
         switch type {
         case .transaction:
-            fields = [chainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list, v, r, s] as [AnyObject]
+            fields = [chainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list, v, r, s]
         case .signature:
-            fields = [chainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list] as [AnyObject]
+            fields = [chainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list]
         }
         guard var result = RLP.encode(fields) else { return nil }
         result.insert(UInt8(self.type.rawValue), at: 0)

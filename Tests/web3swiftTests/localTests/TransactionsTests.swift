@@ -670,7 +670,6 @@ class TransactionsTests: XCTestCase {
     func testGenerateDummyKeystore() throws {
         let keystore = try! EthereumKeystoreV3.init(password: "web3swift")
         let dump = try! keystore!.serialize()
-        let jsonString = String.init(data: dump!, encoding: .ascii)
-        
+        XCTAssertNotNil(String(data: dump!, encoding: .ascii))
     }
 }

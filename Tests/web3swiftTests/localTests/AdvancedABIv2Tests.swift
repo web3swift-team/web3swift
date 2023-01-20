@@ -44,8 +44,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testSingle")
-        let testSingle = try await tx!.callContractMethod()
-        
+        let _ = try await tx!.callContractMethod()
     }
 
     func testAdvancedABIv2staticArray() async throws {
@@ -80,8 +79,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testStaticArray")
-        let testStaticArray = try await tx!.callContractMethod()
-        
+        let _ = try await tx!.callContractMethod()
     }
 
     func testAdvancedABIv2dynamicArray() async throws {
@@ -115,8 +113,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
 
         let tx = contract.createReadOperation("testDynArray")
-        let testDynArray = try await tx!.callContractMethod()
-        
+        let _ = try await tx!.callContractMethod()
     }
 
     func testAdvancedABIv2dynamicArrayOfStrings() async throws {
@@ -151,8 +148,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testDynOfDyn")
-        let testDynOfDyn = try await tx!.callContractMethod()
-        
+        let _ = try await tx!.callContractMethod()
     }
 
     func testAdvancedABIv2staticArrayOfStrings() async throws {
@@ -187,8 +183,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testStOfDyn")
-        let testStOfDyn = try await tx!.callContractMethod()
-        
+        let _ = try await tx!.callContractMethod()
     }
 
     func testEmptyArrayDecoding() async throws {

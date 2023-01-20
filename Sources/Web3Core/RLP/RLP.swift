@@ -113,10 +113,10 @@ public struct RLP {
     }
 
     // FIXME: Make encode generic to avoid casting it's argument to [AnyObject]
-    internal static func encode(_ elements: [AnyObject]) -> Data? {
+    internal static func encode(_ elements: [Any?]) -> Data? {
         var encodedData = Data()
         for e in elements {
-            if let encoded = encode(e) {
+            if let encoded = encode(e as AnyObject) {
                 encodedData.append(encoded)
             } else {
                 guard let asArray = e as? [AnyObject] else {return nil}
