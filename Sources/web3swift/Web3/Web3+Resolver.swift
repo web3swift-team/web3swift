@@ -7,7 +7,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 public class PolicyResolver {
     private let provider: Web3Provider
@@ -21,6 +21,8 @@ public class PolicyResolver {
             // Nonce should be resolved first - as this might be needed for some
             // tx's gas estimation
             tx.nonce = try await resolveNonce(for: tx, with: policies.noncePolicy)
+        } else {
+            throw Web3Error.valueError(desc: "Could not be resolved with both from and sender are nil")
         }
 
         tx.gasLimit = try await resolveGasEstimate(for: tx, with: policies.gasLimitPolicy)
@@ -33,47 +35,37 @@ public class PolicyResolver {
         }
     }
 
-    public func resolveGasBaseFee(for policy: FeePerGasPolicy) async -> BigUInt {
-        let oracle = Oracle(provider)
+    public func resolveGasBaseFee(for policy: ValueResolutionPolicy) async -> BigUInt {
         switch policy {
         case .automatic:
-            return await oracle.baseFeePercentiles().max() ?? 0
+            return await Oracle(provider).baseFeePercentiles().max() ?? 0
         case .manual(let value):
             return value
         }
     }
 
-    public func resolveGasEstimate(for transaction: CodableTransaction, with policy: GasLimitPolicy) async throws -> BigUInt {
+    public func resolveGasEstimate(for transaction: CodableTransaction, with policy: ValueResolutionPolicy) async throws -> BigUInt {
         switch policy {
-        case .automatic, .withMargin:
+        case .automatic:
             return try await estimateGas(for: transaction)
         case .manual(let value):
             return value
-        case .limited(let limit):
-            let result = try await estimateGas(for: transaction)
-            if limit <= result {
-                return result
-            } else {
-                return limit
-            }
         }
     }
 
-    public func resolveGasPrice(for policy: GasPricePolicy) async -> BigUInt {
-        let oracle = Oracle(provider)
+    public func resolveGasPrice(for policy: ValueResolutionPolicy) async -> BigUInt {
         switch policy {
-        case .automatic, .withMargin:
-            return await oracle.gasPriceLegacyPercentiles().max() ?? 0
+        case .automatic:
+            return await Oracle(provider).gasPriceLegacyPercentiles().max() ?? 0
         case .manual(let value):
             return value
         }
     }
 
-    public func resolveGasPriorityFee(for policy: PriorityFeePerGasPolicy) async -> BigUInt {
-        let oracle = Oracle(provider)
+    public func resolveGasPriorityFee(for policy: ValueResolutionPolicy) async -> BigUInt {
         switch policy {
         case .automatic:
-            return await oracle.tipFeePercentiles().max() ?? 0
+            return await Oracle(provider).tipFeePercentiles().max() ?? 0
         case .manual(let value):
             return value
         }
@@ -82,7 +74,7 @@ public class PolicyResolver {
     public func resolveNonce(for tx: CodableTransaction, with policy: NoncePolicy) async throws -> BigUInt {
         switch policy {
         case .pending, .latest, .earliest:
-            guard let address = tx.from ?? tx.sender else { throw Web3Error.valueError }
+            guard let address = tx.from ?? tx.sender else { throw Web3Error.valueError() }
             let request: APIRequest = .getTransactionCount(address.address, tx.callOnBlock ?? .latest)
             let response: APIResponse<BigUInt> = try await APIRequest.sendRequest(with: provider, for: request)
             return response.result

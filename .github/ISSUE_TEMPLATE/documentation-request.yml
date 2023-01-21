@@ -9,16 +9,16 @@ body:
   - type: textarea
     id: area
     attributes:
-      label: What area of the framework would you like to have improved the documentation for?
-      description: Please be very specific and link to the relevant page in the documentation if possible.
-      placeholder: I would like the documentation for...
+      label: What piece of the framework are having the lack of docs?
+      description: Bring the link, either type, either method name that is having the lack of docs
+      placeholder: "`Sources/Core/EthereumABI.swift:ABIElementPropertiesProtocol` or `ABIElementPropertiesProtocol`"
     validations:
       required: true
   - type: textarea
     id: reason
     attributes:
-      label: Why is the current documentation for this area not sufficient?
+      label: What bit of docs would you like to have?
       description: A clear and concise description of why this documentation needs to be improved.
-      placeholder: The documentation needs to be improved because...
+      placeholder: There's a lack of docs that covers both the intent of this type and the way how it should be used within client code.
     validations:
       required: true

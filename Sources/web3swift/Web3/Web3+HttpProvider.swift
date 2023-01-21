@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 /// The default http provider.
 public class Web3HttpProvider: Web3Provider {
@@ -38,5 +38,11 @@ public class Web3HttpProvider: Web3Provider {
             }
         }
         attachedKeystoreManager = manager
+    }
+    
+    public init(url: URL, network: Networks, keystoreManager: KeystoreManager? = nil) {
+        self.url = url
+        self.network = network
+        self.attachedKeystoreManager = keystoreManager
     }
 }

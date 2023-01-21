@@ -7,12 +7,12 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 // FIXME: Rewrite this to CodableTransaction
 public extension ENS {
     class BaseRegistrar: ERC721 {
-        lazy var defaultOptions: CodableTransaction = {
+        lazy var defaultTransaction: CodableTransaction = {
             return CodableTransaction.emptyTransaction
         }()
 
@@ -34,30 +34,30 @@ public extension ENS {
 
         @available(*, message: "Available for only owner")
         public func addController(from: EthereumAddress, controllerAddress: EthereumAddress) throws -> WriteOperation {
-            defaultOptions.from = from
-            defaultOptions.to = self.address
-            guard let transaction = self.contract.createWriteOperation("addController", parameters: [controllerAddress as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            defaultTransaction.from = from
+            defaultTransaction.to = self.address
+            guard let transaction = self.contract.createWriteOperation("addController", parameters: [controllerAddress as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
         @available(*, message: "Available for only owner")
         public func removeController(from: EthereumAddress, controllerAddress: EthereumAddress) throws -> WriteOperation {
-            defaultOptions.from = from
-            defaultOptions.to = self.address
-            guard let transaction = self.contract.createWriteOperation("removeController", parameters: [controllerAddress as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            defaultTransaction.from = from
+            defaultTransaction.to = self.address
+            guard let transaction = self.contract.createWriteOperation("removeController", parameters: [controllerAddress as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
         @available(*, message: "Available for only owner")
         public func setResolver(from: EthereumAddress, resolverAddress: EthereumAddress) throws -> WriteOperation {
-            defaultOptions.from = from
-            defaultOptions.to = self.address
-            guard let transaction = self.contract.createWriteOperation("setResolver", parameters: [resolverAddress as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            defaultTransaction.from = from
+            defaultTransaction.to = self.address
+            guard let transaction = self.contract.createWriteOperation("setResolver", parameters: [resolverAddress as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 
         public func getNameExpirity(name: BigUInt) async throws -> BigUInt {
-            guard let transaction = self.contract.createReadOperation("nameExpires", parameters: [name as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createReadOperation("nameExpires", parameters: [name as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let expirity = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Can't get answer")}
             return expirity
@@ -65,16 +65,16 @@ public extension ENS {
 
         @available(*, message: "This function should not be used to check if a name can be registered by a user. To check if a name can be registered by a user, check name availablility via the controller")
         public func isNameAvailable(name: BigUInt) async throws -> Bool {
-            guard let transaction = self.contract.createReadOperation("available", parameters: [name as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createReadOperation("available", parameters: [name as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
             guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
             guard let available = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Can't get answer")}
             return available
         }
 
         public func reclaim(from: EthereumAddress, record: BigUInt) throws -> WriteOperation {
-            defaultOptions.from = from
-            defaultOptions.to = self.address
-            guard let transaction = self.contract.createWriteOperation("reclaim", parameters: [record as AnyObject], extraData: Data() ) else {throw Web3Error.transactionSerializationError}
+            defaultTransaction.from = from
+            defaultTransaction.to = self.address
+            guard let transaction = self.contract.createWriteOperation("reclaim", parameters: [record as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
             return transaction
         }
 

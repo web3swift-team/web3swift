@@ -6,7 +6,7 @@
 import Foundation
 import BigInt
 import CryptoSwift
-import Core
+import Web3Core
 
 public typealias Web3Utils = Web3.Utils
 

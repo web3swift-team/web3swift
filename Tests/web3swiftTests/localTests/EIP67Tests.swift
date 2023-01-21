@@ -6,7 +6,7 @@
 import XCTest
 import CryptoSwift
 import BigInt
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -18,7 +18,7 @@ class EIP67Tests: LocalTestCase {
         eip67Data.amount = BigUInt("1000000000000000000")
         //        eip67Data.data =
         let encoding = eip67Data.toString()
-        print(encoding)
+        
     }
 
     func testEIP67codeGeneration() throws {

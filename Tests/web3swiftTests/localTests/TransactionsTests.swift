@@ -7,7 +7,7 @@ import Foundation
 import XCTest
 import CryptoSwift
 import BigInt
-import Core
+import Web3Core
 
 // swiftlint:disable file_length
 // swiftlint:disable type_body_length
@@ -195,7 +195,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            print(error)
+            
             return XCTFail(String(describing: error))
         }
     }
@@ -243,7 +243,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            print(error)
+            
             return XCTFail(String(describing: error))
         }
     }
@@ -264,7 +264,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            print(error)
+            
             return XCTFail(String(describing: error))
         }
     }
@@ -312,7 +312,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            print(error)
+            
             return XCTFail(String(describing: error))
         }
     }
@@ -333,7 +333,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            print(error)
+            
             return XCTFail(String(describing: error))
         }
     }
@@ -381,7 +381,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            print(error)
+            
             return XCTFail(String(describing: error))
         }
     }
@@ -402,7 +402,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            print(error)
+            
             return XCTFail(String(describing: error))
         }
     }
@@ -450,7 +450,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            print(error)
+            
             return XCTFail(String(describing: error))
         }
     }
@@ -471,7 +471,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            print(error)
+            
             return XCTFail(String(describing: error))
         }
     }
@@ -519,7 +519,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            print(error)
+            
             return XCTFail(String(describing: error))
         }
     }
@@ -540,7 +540,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            print(error)
+            
             return XCTFail(String(describing: error))
         }
     }
@@ -588,7 +588,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            print(error)
+            
             return XCTFail(String(describing: error))
         }
     }
@@ -612,16 +612,16 @@ class TransactionsTests: XCTestCase {
             let publicKey = Utilities.privateToPublic(privateKeyData, compressed: false)
             let sender = Utilities.publicToAddress(publicKey!)
             transaction.chainID = 1
-            print(transaction)
+            
             let hash = transaction.hashForSignature()
             let expectedHash = "0xdaf5a779ae972f972197303d7b574746c7ef83eadac0f2791ad23db92e4c8e53".stripHexPrefix()
             XCTAssertEqual(hash!.toHexString(), expectedHash, "Transaction signature failed")
             try transaction.sign(privateKey: privateKeyData, useExtraEntropy: false)
-            print(transaction)
+            
             XCTAssertEqual(transaction.v, 37, "Transaction signature failed")
             XCTAssertEqual(sender, transaction.sender)
         } catch {
-            print(error)
+            
             XCTFail()
         }
     }
@@ -632,20 +632,20 @@ class TransactionsTests: XCTestCase {
             let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
             let allAddresses = try await web3.eth.ownedAccounts()
             let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
-            let value = Utilities.parseToBigUInt("1.0", units: .eth)
+            let value = Utilities.parseToBigUInt("1.0", units: .ether)
             let from = allAddresses[0]
             let writeTX = contract!.createWriteOperation("fallback")!
             writeTX.transaction.from = from
             writeTX.transaction.value = value!
             let policies = Policies(gasLimitPolicy: .manual(78423))
-            let result = try await writeTX.writeToChain(password: "", policies: policies)
+            let result = try await writeTX.writeToChain(password: "", policies: policies, sendRaw: false)
             let txHash = Data.fromHex(result.hash.stripHexPrefix())!
-            print("Transaction with hash ", txHash)
+            
 
             Thread.sleep(forTimeInterval: 1.0)
 
             let receipt = try await web3.eth.transactionReceipt(txHash)
-            print(receipt)
+            
             XCTAssert(receipt.status == .ok)
 
             switch receipt.status {
@@ -656,13 +656,13 @@ class TransactionsTests: XCTestCase {
             }
 
             let details = try await web3.eth.transactionDetails(txHash)
-            print(details)
+            
             // FIXME: Reenable this test.
 //            XCTAssertEqual(details.transaction.gasLimit, BigUInt(78423))
         } catch Web3Error.nodeError(let descr) {
             guard descr == "insufficient funds for gas * price + value" else {return XCTFail()}
         } catch {
-            print(error)
+            
             XCTFail()
         }
     }
@@ -670,7 +670,6 @@ class TransactionsTests: XCTestCase {
     func testGenerateDummyKeystore() throws {
         let keystore = try! EthereumKeystoreV3.init(password: "web3swift")
         let dump = try! keystore!.serialize()
-        let jsonString = String.init(data: dump!, encoding: .ascii)
-        print(jsonString!)
+        XCTAssertNotNil(String(data: dump!, encoding: .ascii))
     }
 }

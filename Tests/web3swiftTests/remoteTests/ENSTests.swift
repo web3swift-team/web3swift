@@ -4,7 +4,7 @@
 //
 
 import XCTest
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -12,8 +12,8 @@ import Core
 class ENSTests: XCTestCase {
 
     func testDomainNormalization() throws {
-        let normalizedString = NameHash.normalizeDomainName("example.ens")
-        print(normalizedString!)
+        let normalizedString = NameHash.normalizeDomainName("Example.ENS")
+        XCTAssertEqual(normalizedString, "example.ens")
     }
 
     func testNameHash() throws {
@@ -27,7 +27,7 @@ class ENSTests: XCTestCase {
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let address = try await ens?.registry.getResolver(forDomain: domain).resolverContractAddress
-        print(address as Any)
+        
         XCTAssertEqual(address?.address.lowercased(), "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41")
     }
 
@@ -44,10 +44,10 @@ class ENSTests: XCTestCase {
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try await ens?.registry.getResolver(forDomain: domain)
-        let isAddrSupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.addr.hash())
-        let isNameSupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.name.hash())
-        let isABIsupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.ABI.hash())
-        let isPubkeySupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.pubkey.hash())
+        let isAddrSupports = try await resolver?.supportsInterface(interfaceID: .addr)
+        let isNameSupports = try await resolver?.supportsInterface(interfaceID: .name)
+        let isABIsupports = try await resolver?.supportsInterface(interfaceID: .ABI)
+        let isPubkeySupports = try await resolver?.supportsInterface(interfaceID: .pubkey)
         XCTAssertEqual(isAddrSupports, true)
         XCTAssertEqual(isNameSupports, true)
         XCTAssertEqual(isABIsupports, true)
@@ -59,7 +59,7 @@ class ENSTests: XCTestCase {
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try await ens?.registry.getResolver(forDomain: domain)
-        if let isABIsupported = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.ABI.hash()),
+        if let isABIsupported = try await resolver?.supportsInterface(interfaceID: .ABI),
             isABIsupported {
             let res = try await resolver?.getContractABI(forNode: domain, contentType: .zlibCompressedJSON)
             XCTAssert(res?.0 == 0)
@@ -79,10 +79,10 @@ class ENSTests: XCTestCase {
 
     func testTTL() async throws {
         let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let ens = ENS(web3: web3)
+        let ens = try XCTUnwrap(ENS(web3: web3))
         let domain = "somename.eth"
-        let ttl = try await ens?.registry.getTTL(node: domain)
-        print(ttl!.description)
+        let ttl = try await ens.registry.getTTL(node: domain)
+        XCTAssertGreaterThanOrEqual(ttl, 0)
     }
 
     func testGetAddress() async throws {

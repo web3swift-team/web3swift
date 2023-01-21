@@ -5,7 +5,7 @@ import BigInt
 import web3swift
 
 @testable
-import Core
+import Web3Core
 
 class EIP1559BlockTests: LocalTestCase {
     let uselessBlockPart = (
