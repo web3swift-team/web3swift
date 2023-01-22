@@ -238,6 +238,12 @@ extension Web3 {
             return await parse(string)
         }
 
+        // TODO: throws errors instead of returning `nil`
+        /// Attempts to parse given string as EIP681 code.
+        /// Note: that ENS addresses as paramteres will be attempted to be resolved into Ethereum addresses.
+        /// Thus, make sure that given raw EIP681 code has chain ID set or default Ethereum Mainnet chan ID will be used instead.
+        /// - Parameter string: raw, encoded EIP681 code.
+        /// - Returns: parsed EIP681 code or `nil` is something has failed.
         public static func parse(_ string: String) async -> EIP681Code? {
             guard string.hasPrefix("ethereum:") else { return nil }
             let striped = string.components(separatedBy: "ethereum:")
@@ -366,7 +372,7 @@ extension Web3 {
                         let address = try await ensModel?.getAddress(forNode: ens)
                         nativeValue = address
                     } catch {
-                        NSLog(error.localizedDescription)
+                        NSLog("Failed to resolve ENS address (parameter nr \(inputNumber)). Error: \(error.localizedDescription)")
                         return nil
                     }
                 }
