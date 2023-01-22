@@ -74,8 +74,7 @@ public class ENS {
         self.reverseRegistrar = reverseRegistrar
     }
 
-    // FIXME: Rewrite this to CodableTransaction
-    lazy var defaultOptions: CodableTransaction = {
+    lazy var defaultTransaction: CodableTransaction = {
         return CodableTransaction.emptyTransaction
     }()
 
@@ -107,7 +106,7 @@ public class ENS {
         guard isAddrSupports else {
             throw Web3Error.processingError(desc: "Address isn't supported")
         }
-        var options = options ?? defaultOptions
+        var options = options ?? defaultTransaction
         options.to = resolver.resolverContractAddress
         guard let result = try? await resolver.setAddress(forNode: node, address: address, options: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
@@ -142,7 +141,7 @@ public class ENS {
         guard isNameSupports else {
             throw Web3Error.processingError(desc: "Name isn't supported")
         }
-        var options = options ?? defaultOptions
+        var options = options ?? defaultTransaction
         options.to = resolver.resolverContractAddress
         guard let result = try? await resolver.setCanonicalName(forNode: node, name: name, options: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
@@ -178,7 +177,7 @@ public class ENS {
         guard isContentSupports else {
             throw Web3Error.processingError(desc: "Content isn't supported")
         }
-        var options = options ?? defaultOptions
+        var options = options ?? defaultTransaction
         options.to = resolver.resolverContractAddress
         guard let result = try? await resolver.setContentHash(forNode: node, hash: hash, options: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
@@ -213,7 +212,7 @@ public class ENS {
         guard isABISupports else {
             throw Web3Error.processingError(desc: "ABI isn't supported")
         }
-        var options = options ?? defaultOptions
+        var options = options ?? defaultTransaction
         options.to = resolver.resolverContractAddress
         guard let result = try? await resolver.setContractABI(forNode: node, contentType: contentType, data: data, options: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
@@ -248,7 +247,7 @@ public class ENS {
         guard isPKSupports else {
             throw Web3Error.processingError(desc: "Public Key isn't supported")
         }
-        var options = options ?? defaultOptions
+        var options = options ?? defaultTransaction
         options.to = resolver.resolverContractAddress
         guard let result = try? await resolver.setPublicKey(forNode: node, publicKey: publicKey, options: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
@@ -283,7 +282,7 @@ public class ENS {
         guard isTextSupports else {
             throw Web3Error.processingError(desc: "Text isn't supported")
         }
-        var options = options ?? defaultOptions
+        var options = options ?? defaultTransaction
         options.to = resolver.resolverContractAddress
         guard let result = try? await resolver.setTextData(forNode: node, key: key, value: value, options: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
