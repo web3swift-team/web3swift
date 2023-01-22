@@ -69,7 +69,7 @@ public class ERC1155: IERC1155 {
         }
         guard contract.contract.address != nil else {return}
 
-        guard let tokenIdPromise = try await contract.createReadOperation("id", parameters: [] as [AnyObject], extraData: Data())?.callContractMethod() else {return}
+        guard let tokenIdPromise = try await contract.createReadOperation("id", parameters: [] as [AnyObject], extraData: Data())?.call() else {return}
 
         guard let tokenId = tokenIdPromise["0"] as? BigUInt else {return}
         self._tokenId = tokenId
@@ -93,7 +93,7 @@ public class ERC1155: IERC1155 {
     public func balanceOf(account: EthereumAddress, id: BigUInt) async throws -> BigUInt {
         let result = try await contract
             .createReadOperation("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data())!
-            .callContractMethod()
+            .call()
         /*
          let result = try await contract
              .prepareToRead("balanceOf", parameters: [account, id] as [AnyObject], extraData: Data())!
@@ -112,13 +112,13 @@ public class ERC1155: IERC1155 {
     }
 
     public func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress, scope: Data) async throws -> Bool {
-        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user, scope] as [AnyObject], extraData: Data())!.callContractMethod()
+        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user, scope] as [AnyObject], extraData: Data())!.call()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func supportsInterface(interfaceID: String) async throws -> Bool {
-        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data())!.callContractMethod()
+        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID] as [AnyObject], extraData: Data())!.call()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }

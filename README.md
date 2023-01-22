@@ -124,7 +124,7 @@ web3.eth.send(transaction)
 let contract = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress!)!
 let readOp = contract.createReadOperation("name")!
 readOp.transaction.from = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")
-let response = try await readTX.callContractMethod()
+let response = try await readTX.call()
 ```
 
 ### Write Transaction and call smart contract method
