@@ -6,7 +6,6 @@ on:
       - master
       - develop
       - hotfix
-      - unstable
     paths:
       - Packag*.swift
       - web3swift.podspec
@@ -20,6 +19,8 @@ on:
       - master
       - develop
       - unstable
+      # Temporary develop-X.Y.Z branches may be added and removed from here as we release new versions
+      - develop-4.0
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_14.1.app/Contents/Developer
