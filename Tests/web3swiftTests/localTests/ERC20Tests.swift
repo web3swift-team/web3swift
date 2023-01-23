@@ -16,7 +16,7 @@ class ERC20Tests: LocalTestCase {
         let contract = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress!)!
         let readTX = contract.createReadOperation("name")!
         readTX.transaction.from = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")
-        let response = try await readTX.callContractMethod()
+        let response = try await readTX.call()
         let name = response["0"] as? String
         XCTAssert(name == "web3swift", "Failed to create ERC20 name transaction")
     }
@@ -28,7 +28,7 @@ class ERC20Tests: LocalTestCase {
         let contract = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress!, abiVersion: 2)!
         guard let readTX = contract.createReadOperation("balanceOf", parameters: [addressOfUser] as [AnyObject]) else {return XCTFail()}
         readTX.transaction.from = addressOfUser
-        let tokenBalance = try await readTX.callContractMethod()
+        let tokenBalance = try await readTX.call()
         guard let bal = tokenBalance["0"] as? BigUInt else {return XCTFail()}
     }
 

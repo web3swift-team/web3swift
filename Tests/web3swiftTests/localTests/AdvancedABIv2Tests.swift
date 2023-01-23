@@ -44,7 +44,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testSingle")
-        let _ = try await tx!.callContractMethod()
+        let _ = try await tx!.call()
     }
 
     func testAdvancedABIv2staticArray() async throws {
@@ -79,7 +79,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testStaticArray")
-        let _ = try await tx!.callContractMethod()
+        let _ = try await tx!.call()
     }
 
     func testAdvancedABIv2dynamicArray() async throws {
@@ -113,7 +113,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
 
         let tx = contract.createReadOperation("testDynArray")
-        let _ = try await tx!.callContractMethod()
+        let _ = try await tx!.call()
     }
 
     func testAdvancedABIv2dynamicArrayOfStrings() async throws {
@@ -148,7 +148,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testDynOfDyn")
-        let _ = try await tx!.callContractMethod()
+        let _ = try await tx!.call()
     }
 
     func testAdvancedABIv2staticArrayOfStrings() async throws {
@@ -183,7 +183,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testStOfDyn")
-        let _ = try await tx!.callContractMethod()
+        let _ = try await tx!.call()
     }
 
     func testEmptyArrayDecoding() async throws {
@@ -196,7 +196,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: - Encoding ABI Data flow
         let tx = contract?.createReadOperation("empty")
         XCTAssertNotNil(tx)
-        _ = try await tx!.callContractMethod()
+        _ = try await tx!.call()
     }
 
     func testUserCase() async throws {
@@ -209,7 +209,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: - Encoding ABI Data flow
         let tx = contract?.createReadOperation("getFlagData")
         XCTAssertNotNil(tx)
-        _ = try await tx!.callContractMethod()
+        _ = try await tx!.call()
     }
 
 }
