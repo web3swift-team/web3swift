@@ -6,9 +6,6 @@ on:
       - master
       - develop
       - hotfix
-      - unstable
-      # Temporary develop-X.Y.Z branches may be added and removed from here as we release new versions
-      - develop-4.0
     paths:
       - Packag*.swift
       - web3swift.podspec
