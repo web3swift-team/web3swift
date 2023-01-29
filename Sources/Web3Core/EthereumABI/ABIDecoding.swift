@@ -196,7 +196,7 @@ extension ABIDecoder {
             let dataSlice = data[pointer ..< pointer + type.memoryUsage]
             let bn = BigUInt(dataSlice)
             if bn > UInt64.max || bn >= data.count {
-                // there are ERC20 contracts that use bytes32 intead of string. Let's be optimistic and return some data
+                // there are ERC20 contracts that use bytes32 instead of string. Let's be optimistic and return some data
                 if case .string = type {
                     let nextElement = pointer + type.memoryUsage
                     let preambula = BigUInt(32).abiEncode(bits: 256)!

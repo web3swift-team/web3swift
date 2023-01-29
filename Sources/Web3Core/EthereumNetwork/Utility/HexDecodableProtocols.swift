@@ -17,7 +17,7 @@ extension String: APIResultType { }
 ///
 /// You better not use it in any other part of a bit of code except `APIResponse<T>` decoding.
 ///
-/// This protocols intention is to work around that Ethereum API cases, when almost all numbers are comming as strings.
+/// This protocols intention is to work around that Ethereum API cases, when almost all numbers are coming as strings.
 /// More than that their notation (e.g. 0x12d) are don't fit with the default Numeric decoders behaviours.
 /// So to work around that for generic cases we're going to force decode `APIResponse.result` field as `String`
 /// and then initiate it

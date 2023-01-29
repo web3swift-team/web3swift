@@ -6,14 +6,14 @@
 import Foundation
 import Web3Core
 
-/// An arbitary Web3 object. Is used only to construct provider bound fully functional object by either supplying provider URL
+/// An arbitrary Web3 object. Is used only to construct provider bound fully functional object by either supplying provider URL
 /// or using pre-coded Infura nodes
 extension Web3 {
 
     /// Initialized provider-bound Web3 instance using a provider's URL. Under the hood it performs a synchronous call to get
     /// the Network ID for EIP155 purposes
     public static func new(_ providerURL: URL, network: Networks = .Mainnet) async throws -> Web3 {
-        // FIXME: Change this hardcoded value to dynamicly fethed from a Node
+        // FIXME: Change this hardcoded value to dynamically fethed from a Node
         guard let provider = await Web3HttpProvider(providerURL, network: network) else {
             throw Web3Error.inputError(desc: "Wrong provider - should be Web3HttpProvider with endpoint scheme http or https")
         }

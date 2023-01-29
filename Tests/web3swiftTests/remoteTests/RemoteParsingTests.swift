@@ -25,18 +25,18 @@ class RemoteParsingTests: XCTestCase {
 //       
 //       guard let eventParser = contract?.createEventParser("Transfer", filter: nil) else {return XCTFail()}
 //       
-//       let pres = try eventParser.parseBlockByNumber(UInt64(5200088))
+//       let present = try eventParser.parseBlockByNumber(UInt64(5200088))
 //       
-//       XCTAssert(pres.count == 1)
+//       XCTAssert(present.count == 1)
 //       
-//       let decoded = pres[0].decodedResult
+//       let decoded = present[0].decodedResult
 //       
 //       XCTAssert(decoded["name"] as! String == "Transfer")
 //       XCTAssert(decoded["_to"] as! EthereumAddress == EthereumAddress("0xa5dcf6e0fee38f635c4a8d50d90e24400ed547d2")!)
 //       XCTAssert(decoded["_from"] as! EthereumAddress == EthereumAddress("0xdbf493e8d7db835192c02b992bd1ab72e96fd2e3")!)
 //       XCTAssert(decoded["_value"] as! BigUInt == BigUInt("3946fe37ffce3a0000", radix: 16)!)
-//       XCTAssert(pres[0].contractAddress == EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!)
-//       XCTAssert(pres[0].transactionReceipt!.transactionHash.toHexString().addHexPrefix() == "0xcb235e8c6ecda032bc82c1084d2159ab82e7e4de35be703da6e80034bc577673")
+//       XCTAssert(present[0].contractAddress == EthereumAddress("0x45245bc59219eeaaf6cd3f382e078a461ff9de7b")!)
+//       XCTAssert(present[0].transactionReceipt!.transactionHash.toHexString().addHexPrefix() == "0xcb235e8c6ecda032bc82c1084d2159ab82e7e4de35be703da6e80034bc577673")
 //   }
 
 //   func testEventParsing2usingABIv2() throws {
@@ -44,8 +44,8 @@ class RemoteParsingTests: XCTestCase {
 //       let web3 = Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
 //       let contract = web3.contract(jsonString, at: nil, abiVersion: 2)
 //       guard let eventParser = contract?.createEventParser("Transfer", filter: nil) else {return XCTFail()}
-//       let pres = try eventParser.parseBlockByNumber(UInt64(5200120))
-//       XCTAssert(pres.count == 81)
+//       let present = try eventParser.parseBlockByNumber(UInt64(5200120))
+//       XCTAssert(present.count == 81)
 //   }
 
 //   func testEventParsing3usingABIv2() throws {
@@ -62,8 +62,8 @@ class RemoteParsingTests: XCTestCase {
 //       }
 //
 //       for i in currentBlockAsInt-1 ... currentBlockAsInt {
-//           let pres = try eventParser.parseBlockByNumber(i)
-//           for p in pres {
+//           let present = try eventParser.parseBlockByNumber(i)
+//           for p in present {
 //                + "\n")
 //               
 //               .addHexPrefix() + "\n")
@@ -82,8 +82,8 @@ class RemoteParsingTests: XCTestCase {
 //       filter.addresses = [EthereumAddress("0x53066cddbc0099eb6c96785d9b3df2aaeede5da3")!]
 //       filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")!] as [EventFilterable])]
 //       guard let eventParser = contract?.createEventParser("Transfer", filter: filter) else {return XCTFail()}
-//       let pres = try eventParser.parseBlockByNumber(UInt64(5200120))
-//       XCTAssert(pres.count == 1)
+//       let present = try eventParser.parseBlockByNumber(UInt64(5200120))
+//       XCTAssert(present.count == 1)
 //       //TODO: - Make following assert
 ////        with filter would be
 ////            [web3swift_iOS.EventLog(address: web3swift_iOS.EthereumAddress(_address: "0x53066cddbc0099eb6c96785d9b3df2aaeede5da3", type: web3swift_iOS.EthereumAddress.AddressType.normal), data: 32 bytes, logIndex: 132, removed: false, topics: [32 bytes, 32 bytes, 32 bytes])], status: web3swift_iOS.TransactionReceipt.TXStatus.ok, logsBloom: Optional(web3swift_iOS.EthereumBloomFilter(bytes: 256 bytes))), contractAddress: web3swift_iOS.EthereumAddress(_address: "0x53066cddbc0099eb6c96785d9b3df2aaeede5da3", type: web3swift_iOS.EthereumAddress.AddressType.normal), decodedResult: ["name": "Transfer", "1": web3swift_iOS.EthereumAddress(_address: "0xd5395c132c791a7f46fa8fc27f0ab6bacd824484", type: web3swift_iOS.EthereumAddress.AddressType.normal), "_from": web3swift_iOS.EthereumAddress(_address: "0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5", type: web3swift_iOS.EthereumAddress.AddressType.normal), "_to": web3swift_iOS.EthereumAddress(_address: "0xd5395c132c791a7f46fa8fc27f0ab6bacd824484", type: web3swift_iOS.EthereumAddress.AddressType.normal), "2": 5000000000000000000, "0": web3swift_iOS.EthereumAddress(_address: "0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5", type: web3swift_iOS.EthereumAddress.AddressType.normal), "_value": 5000000000000000000])]

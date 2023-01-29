@@ -95,7 +95,7 @@ public enum APIRequest {
     /// Estimate required gas amount for transaction
     /// - Parameters:
     ///     - TransactionParameters: parameters of planned transaction
-    ///     - BlockNumber: block where it should be evalueated
+    ///     - BlockNumber: block where it should be evaluated
     case estimateGas(CodableTransaction, BlockNumber)
 
     /// Send raw transaction
@@ -114,7 +114,7 @@ public enum APIRequest {
     case getTransactionByHash(Hash)
 
     /// Get transaction receipt
-    /// - Paramters:
+    /// - Parameters:
     ///     - Hash: transaction hash ID
     case getTransactionReceipt(Hash)
 
@@ -134,7 +134,7 @@ public enum APIRequest {
     /// Mostly could be used for intreacting with a contracts, but also could be used for simple transaction sending
     /// - Parameters:
     ///     - TransactionParameters: transaction to be sent into chain
-    ///     - BlockNumber: block where it should be evalueated
+    ///     - BlockNumber: block where it should be evaluated
     case call(CodableTransaction, BlockNumber)
 
     /// Get a transaction counts on a given block
@@ -149,7 +149,7 @@ public enum APIRequest {
 
     /// Get a balance of a given address
     /// - Parameters:
-    ///     - Address: address which balance would be recieved
+    ///     - Address: address which balance would be received
     ///     - BlockNumber: block to check
     case getBalance(Address, BlockNumber)
 
@@ -190,7 +190,7 @@ public enum APIRequest {
     ///     - BlockNumber: Highest block of the requested range.
     ///     - [Double]: A monotonically increasing list of percentile values.
     ///         For each block in the requested range, the transactions will be sorted in ascending order
-    ///         by effective tip per gas and the coresponding effective tip for the percentile will be determined, accounting for gas consumed."
+    ///         by effective tip per gas and the corresponding effective tip for the percentile will be determined, accounting for gas consumed."
     case feeHistory(BigUInt, BlockNumber, [Double])
 
     // MARK: - Personal Ethereum API

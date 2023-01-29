@@ -91,7 +91,7 @@ public struct EthereumAddress: Equatable {
 }
 
 /// In swift structs it's better to implement initializers in extension
-/// Since it's make available syntetized initializer then for free.
+/// Since it's make available synthesized initializer then for free.
 extension EthereumAddress {
     public init?(_ addressString: String, type: AddressType = .normal, ignoreChecksum: Bool = false) {
         switch type {

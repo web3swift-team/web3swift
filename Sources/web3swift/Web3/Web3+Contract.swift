@@ -78,7 +78,7 @@ extension Web3 {
         // FIXME: Actually this is not rading contract or smth, this is about composing appropriate binary data to iterate with it later.
         // FIXME: Rewrite this to CodableTransaction
         /// Creates and object responsible for calling a particular function of the contract. If method name is not found in ABI - returns nil.
-        /// If extraData is supplied it is appended to encoded function parameters. Can be usefull if one wants to call
+        /// If extraData is supplied it is appended to encoded function parameters. Can be useful if one wants to call
         /// the function not listed in ABI. "Parameters" should be an array corresponding to the list of parameters of the function.
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///
@@ -99,7 +99,7 @@ extension Web3 {
 
         // FIXME: Rewrite this to CodableTransaction
         /// Creates and object responsible for calling a particular function of the contract. If method name is not found in ABI - returns nil.
-        /// If extraData is supplied it is appended to encoded function parameters. Can be usefull if one wants to call
+        /// If extraData is supplied it is appended to encoded function parameters. Can be useful if one wants to call
         /// the function not listed in ABI. "Parameters" should be an array corresponding to the list of parameters of the function.
         /// Elements of "parameters" can be other arrays or instances of String, Data, BigInt, BigUInt, Int or EthereumAddress.
         ///

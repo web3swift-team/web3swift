@@ -44,7 +44,7 @@ public extension TransactionMetadata {
     }
 
     /// since metadata realistically can only come when a transaction is created from
-    /// JSON returned by a node, we only provide an intializer from JSON
+    /// JSON returned by a node, we only provide an initializer from JSON
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
