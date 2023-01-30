@@ -60,7 +60,7 @@ final public class Oracle {
     ///
     /// - Parameter array: `[[min], [middle], [max]]` 2 dimensional array
     /// - Returns: `[min, middle, max].count == self.percentiles.count`
-    private func soft(twoDimentsion array: [[BigUInt]]) -> [BigUInt] {
+    private func soft(twoDimension array: [[BigUInt]]) -> [BigUInt] {
         array.compactMap { percentileArray -> [BigUInt]? in
             guard !percentileArray.isEmpty else { return nil }
             // swiftlint:disable force_unwrapping
@@ -70,7 +70,7 @@ final public class Oracle {
         .flatMap { $0 }
     }
 
-    /// Method calculates percentiles array based on `self.percetniles` value
+    /// Method calculates percentiles array based on `self.percentiles` value
     /// - Parameter data: Integer data from which percentiles should be calculated
     /// - Returns: Array of values which is in positions in dataset to given percentiles
     private func calculatePercentiles(for data: [BigUInt]) -> [BigUInt] {
@@ -99,24 +99,24 @@ final public class Oracle {
     /// - Returns: `[percentile_1, percentile_2, percentile_3, ...].count == self.percentile.count`
     /// by default there's 3 percentile.
     private func suggestTipValue() async throws -> [BigUInt] {
-        var rearrengedArray: [[BigUInt]] = []
+        var rearrangedArray: [[BigUInt]] = []
 
-        /// reaarange `[[min, middle, max]]` to `[[min], [middle], [max]]`
+        /// rearrange `[[min, middle, max]]` to `[[min], [middle], [max]]`
         try await suggestGasValues().reward
             .forEach { percentiles in
                 percentiles.enumerated().forEach { index, percentile in
-                    /// if `rearrengedArray` have not that enough items
+                    /// if `rearrangedArray` have not that enough items
                     /// as `percentiles` current item index
-                    if rearrengedArray.endIndex <= index {
+                    if rearrangedArray.endIndex <= index {
                         /// append its as an array
-                        rearrengedArray.append([percentile])
+                        rearrangedArray.append([percentile])
                     } else {
                         /// append `percentile` value to appropriate `percentiles` array.
-                        rearrengedArray[index].append(percentile)
+                        rearrangedArray[index].append(percentile)
                     }
                 }
             }
-        return soft(twoDimentsion: rearrengedArray)
+        return soft(twoDimension: rearrangedArray)
     }
 
     private func suggestBaseFee() async throws -> [BigUInt] {
@@ -139,7 +139,7 @@ final public class Oracle {
         default: throw Web3Error.valueError(desc: "Unable to use '\(block)' policy to resolve block number to calculate gas fee suggestion.")
         }
 
-        /// checking if latest block number is greather than number of blocks to take in account
+        /// checking if latest block number is greater than number of blocks to take in account
         /// we're ignoring case when `latestBlockNumber` == `blockCount` since it's unlikely case
         /// which we could neglect
         guard latestBlockNumber > blockCount else { return [] }

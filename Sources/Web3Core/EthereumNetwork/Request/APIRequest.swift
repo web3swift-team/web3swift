@@ -59,7 +59,7 @@ public typealias TransactionHash = Hash // 64 chars length without 0x
 /// #### ``APIResultType``
 /// This protocol responsible for any **nonliteral** type that could be stored within `APIResponse<Result>` generic struct. This protocol have no requirements except it conforms `Decodable` protocol. So any decodable type **could be** extended to conforms it.
 ///
-/// #### ``LiteralInitiableFromString``
+/// #### ``LiteralInitableFromString``
 /// This protocol responsible for any literal types that could be stored within `APIResponse<Result>`. This protocol conforms `APIResultType` and it adds some requirements to it, like initializer from hex string. Despite that a given type could be extended to implement such initializer ==this should be done on a user side== because to make it work it requires some work within `sendRequest` method to be done.
 ///
 /// #### ``IntegerInitableWithRadix``
@@ -95,7 +95,7 @@ public enum APIRequest {
     /// Estimate required gas amount for transaction
     /// - Parameters:
     ///     - TransactionParameters: parameters of planned transaction
-    ///     - BlockNumber: block where it should be evalueated
+    ///     - BlockNumber: block where it should be evaluated
     case estimateGas(CodableTransaction, BlockNumber)
 
     /// Send raw transaction
@@ -114,7 +114,7 @@ public enum APIRequest {
     case getTransactionByHash(Hash)
 
     /// Get transaction receipt
-    /// - Paramters:
+    /// - Parameters:
     ///     - Hash: transaction hash ID
     case getTransactionReceipt(Hash)
 
@@ -131,10 +131,10 @@ public enum APIRequest {
 
     /// Call a given contract
     ///
-    /// Mostly could be used for intreacting with a contracts, but also could be used for simple transaction sending
+    /// Mostly could be used for interacting with a contracts, but also could be used for simple transaction sending
     /// - Parameters:
     ///     - TransactionParameters: transaction to be sent into chain
-    ///     - BlockNumber: block where it should be evalueated
+    ///     - BlockNumber: block where it should be evaluated
     case call(CodableTransaction, BlockNumber)
 
     /// Get a transaction counts on a given block
@@ -149,7 +149,7 @@ public enum APIRequest {
 
     /// Get a balance of a given address
     /// - Parameters:
-    ///     - Address: address which balance would be recieved
+    ///     - Address: address which balance would be received
     ///     - BlockNumber: block to check
     case getBalance(Address, BlockNumber)
 
@@ -190,7 +190,7 @@ public enum APIRequest {
     ///     - BlockNumber: Highest block of the requested range.
     ///     - [Double]: A monotonically increasing list of percentile values.
     ///         For each block in the requested range, the transactions will be sorted in ascending order
-    ///         by effective tip per gas and the coresponding effective tip for the percentile will be determined, accounting for gas consumed."
+    ///         by effective tip per gas and the corresponding effective tip for the percentile will be determined, accounting for gas consumed."
     case feeHistory(BigUInt, BlockNumber, [Double])
 
     // MARK: - Personal Ethereum API

@@ -594,7 +594,7 @@ class TransactionsTests: XCTestCase {
     }
 
     // ***** Legacy Tests *****
-    // TODO: Replace `XCTAssert` with more explicite `XCTAssertEqual`, where Applicable
+    // TODO: Replace `XCTAssert` with more explicit `XCTAssertEqual`, where Applicable
 
     func testDirectTransaction() throws {
         do {

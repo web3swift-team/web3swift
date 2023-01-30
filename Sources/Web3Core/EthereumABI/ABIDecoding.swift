@@ -152,7 +152,7 @@ extension ABIDecoder {
                 guard let valueUnwrapped = v, let consumedUnwrapped = c else {return (nil, nil)}
                 toReturn.append(valueUnwrapped)
                 // When decoding a tuple that is not static or an array with a subtype that is not static,
-                // the second value in the tuple returned by decodeSignleType is a pointer to the next element,
+                // the second value in the tuple returned by decodeSingleType is a pointer to the next element,
                 // NOT the length of the consumed element. So when decoding such an element, consumed should
                 // be set to consumedUnwrapped, NOT incremented by consumedUnwrapped.
                 switch subTypes[i] {
@@ -196,7 +196,7 @@ extension ABIDecoder {
             let dataSlice = data[pointer ..< pointer + type.memoryUsage]
             let bn = BigUInt(dataSlice)
             if bn > UInt64.max || bn >= data.count {
-                // there are ERC20 contracts that use bytes32 intead of string. Let's be optimistic and return some data
+                // there are ERC20 contracts that use bytes32 instead of string. Let's be optimistic and return some data
                 if case .string = type {
                     let nextElement = pointer + type.memoryUsage
                     let preambula = BigUInt(32).abiEncode(bits: 256)!

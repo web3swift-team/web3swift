@@ -102,7 +102,7 @@ class EIP1559BlockTests: LocalTestCase {
 
             if touple.is1559 {
                 XCTAssertTrue(Web3.isEip1559Block(parent: parent, current: current),
-                              "Shoult not fail, got parent: \(parent.gasLimit), current: \(current.gasLimit)")
+                              "Should not fail, got parent: \(parent.gasLimit), current: \(current.gasLimit)")
             } else {
                 XCTAssertFalse(Web3.isEip1559Block(parent: parent, current: current),
                                "Should fail, got parent: \(parent.gasLimit), current: \(current.gasLimit)")

@@ -51,10 +51,10 @@ extension APIRequest {
 
         /// This bit of code is purposed to work with literal types that comes in ``Response`` in hexString type.
         /// Currently it's just `Data` and any kind of Integers `(U)Int`, `Big(U)Int`.
-        if let LiteralType = Result.self as? LiteralInitiableFromString.Type {
+        if let LiteralType = Result.self as? LiteralInitableFromString.Type {
             guard let responseAsString = try? JSONDecoder().decode(APIResponse<String>.self, from: data) else { throw Web3Error.dataError }
             guard let literalValue = LiteralType.init(from: responseAsString.result) else { throw Web3Error.dataError }
-            /// `literalValue` conforms `LiteralInitiableFromString`, that conforming to an `APIResponseType` type, so it's never fails.
+            /// `literalValue` conforms `LiteralInitableFromString`, that conforming to an `APIResponseType` type, so it's never fails.
             guard let result = literalValue as? Result else { throw Web3Error.typeError }
             return APIResponse(id: responseAsString.id, jsonrpc: responseAsString.jsonrpc, result: result)
         }

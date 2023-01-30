@@ -269,7 +269,7 @@ extension ABI.Element.Function {
     /// - Parameters:
     ///  - data: bytes returned by a function call;
     ///  - errors: optional dictionary of known errors that could be returned by the function you called. Used to decode the error information.
-    /// - Returns: a dictionary containing decoded data mappend to indices and names of returned values if these are not `nil`.
+    /// - Returns: a dictionary containing decoded data mapped to indices and names of returned values if these are not `nil`.
     /// If `data` is an error response returns dictionary containing all available information about that specific error. Read more for details.
     ///
     /// Return cases:
@@ -373,7 +373,7 @@ extension ABI.Element.Function {
     /// "error_arg2_name": error_arg2, // Otherwise, you can query them by position index.
     /// ...]
     ///
-    /// /// or if custo error found but decoding failed
+    /// /// or if custom error found but decoding failed
     /// ["_success": false,
     /// "_abortedByRevertOrRequire": true,
     /// // "_error" can contain value like `MyCustomError(uint256, address senderAddress)`
@@ -389,7 +389,7 @@ extension ABI.Element.Function {
         }
 
         /// Explanation of this condition:
-        /// When `revert(string)` or `require(false, string)` are called in soliditiy they produce
+        /// When `revert(string)` or `require(false, string)` are called in solidity they produce
         /// an error, specifically an instance of default `Error(string)` type.
         /// 1) The total number of bytes returned are at least 100.
         /// 2) The function selector for `Error(string)` is `08C379A0`;
@@ -438,8 +438,8 @@ extension ABI.Element.Constructor {
 
 /// Generic input decoding function.
 /// - Parameters:
-///   - rawData: data to decode. Must match the followin criteria: `data.count == 0 || data.count % 32 == 4`.
-///   - methodEncoding: 4 bytes represeting method signature like `0xFFffFFff`. Can be ommited to avoid checking method encoding.
+///   - rawData: data to decode. Must match the following criteria: `data.count == 0 || data.count % 32 == 4`.
+///   - methodEncoding: 4 bytes representing method signature like `0xFFffFFff`. Can be omitted to avoid checking method encoding.
 ///   - inputs: expected input types. Order must be the same as in function declaration.
 /// - Returns: decoded dictionary of input arguments mapped to their indices and arguments' names if these are not empty.
 /// If decoding of at least one argument fails, `rawData` size is invalid or `methodEncoding` doesn't match - `nil` is returned.

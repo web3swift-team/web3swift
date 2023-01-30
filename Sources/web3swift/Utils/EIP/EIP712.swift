@@ -100,7 +100,7 @@ fileprivate extension EIP712Hashable {
     }
 
     func encodePrimaryType() -> String {
-        let parametrs: [String] = Mirror(reflecting: self).children.compactMap { key, value in
+        let parameters: [String] = Mirror(reflecting: self).children.compactMap { key, value in
             guard let key = key else { return nil }
 
             func checkIfValueIsNil(value: Any) -> Bool {
@@ -127,7 +127,7 @@ fileprivate extension EIP712Hashable {
             }
             return typeName + " " + key
         }
-        return name + "(" + parametrs.joined(separator: ",") + ")"
+        return name + "(" + parameters.joined(separator: ",") + ")"
     }
 }
 
@@ -152,7 +152,7 @@ public struct GnosisSafeTx: EIP712Hashable {
     let operation: EIP712.UInt8
     /// Max gas to use in the transaction
     let safeTxGas: EIP712.UInt256
-    /// Gast costs not related to the transaction execution (signature check, refund payment...)
+    /// Gas costs not related to the transaction execution (signature check, refund payment...)
     let baseGas: EIP712.UInt256
     /// Gas price used for the refund calculation
     let gasPrice: EIP712.UInt256

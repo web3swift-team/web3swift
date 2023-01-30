@@ -116,7 +116,7 @@ public protocol ContractProtocol {
     ///   - bytecode: bytecode to deploy.
     ///   - constructor: constructor of the smart contract bytecode is related to. Used to encode `parameters`.
     ///   - parameters: parameters for `constructor`.
-    ///   - extraData: any extra data. It can be encoded input arguments for a constuctor but then you should set `constructor` and
+    ///   - extraData: any extra data. It can be encoded input arguments for a constructor but then you should set `constructor` and
     ///   `parameters` to be `nil`.
     /// - Returns: Encoded data for a given parameters, which is should be assigned to ``CodableTransaction.data`` property
     func deploy(bytecode: Data,
@@ -185,7 +185,7 @@ public protocol ContractProtocol {
 extension ContractProtocol {
 
     /// Overloading of ``ContractProtocol/deploy(bytecode:constructor:parameters:extraData:)`` to allow
-    /// omitting evertyhing but `bytecode`.
+    /// omitting everything but `bytecode`.
     ///
     /// See ``ContractProtocol/deploy(bytecode:constructor:parameters:extraData:)`` for details.
     func deploy(_ bytecode: Data,
@@ -252,7 +252,7 @@ extension DefaultContractProtocol {
     ///   - extraData: Any additional data that needs to be encoded
     /// - Returns: preset CodableTransaction with filled date
     ///
-    /// Returned transaction have filled following priperties:
+    /// Returned transaction have filled following properties:
     ///   - to: contractAddress
     ///   - value: 0
     ///   - data: parameters + extraData

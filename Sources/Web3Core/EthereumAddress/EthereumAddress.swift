@@ -56,10 +56,10 @@ public struct EthereumAddress: Equatable {
         }
     }
 
-    /// Validates and checksumms given `addr`.
+    /// Validates and checksums given `addr`.
     /// If given string is not an address, incomplete address or is invalid validation will fail and `nil` will be returned.
     /// - Parameter addr: address in string format, case insensitive, `0x` prefix is not required.
-    /// - Returns: validates and checksumms the address. Returns `nil` if checksumm has failed or given string cannot be
+    /// - Returns: validates and checksums the address. Returns `nil` if checksum has failed or given string cannot be
     /// represented as `ASCII` data. Otherwise, checksummed address is returned with `0x` prefix.
     public static func toChecksumAddress(_ addr: String) -> String? {
         let address = addr.lowercased().stripHexPrefix()
@@ -91,7 +91,7 @@ public struct EthereumAddress: Equatable {
 }
 
 /// In swift structs it's better to implement initializers in extension
-/// Since it's make available syntetized initializer then for free.
+/// Since it's make available synthesized initializer then for free.
 extension EthereumAddress {
     public init?(_ addressString: String, type: AddressType = .normal, ignoreChecksum: Bool = false) {
         switch type {

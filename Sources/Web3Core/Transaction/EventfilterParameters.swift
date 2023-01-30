@@ -62,12 +62,12 @@ extension EventFilterParameters {
      ``EventFilterParameters`` include ``topic`` property with is array of optional values,
      and where `nil` value is a thing, and should be kept in server request.
 
-     This is not a trivial case for swift lang or any other stricktly typed lang.
+     This is not a trivial case for swift lang or any other strictly typed lang.
 
      So to make this possible ``Topic`` enum is provided.
 
      It handle two cases: ``.string(String?)`` and ``.strings([Topic?]?)``,
-     where former should be used to assign first demention value,
+     where former should be used to assign first dimension value,
      and the latter to assign second dimension value into ``EventFilterParameters.topics`` property.
 
      So to encode as a parameter follow JSON array:
@@ -101,7 +101,7 @@ extension EventFilterParameters {
         var rawValue: String {
             switch self {
             case let .string(string):
-                // Assiciated value can contain only String or nil, both of them always encoded as a JSON could be represented as String again.
+                // Associated value can contain only String or nil, both of them always encoded as a JSON could be represented as String again.
                 return String(data: try! JSONEncoder().encode(string), encoding: .utf8)!
             case let .strings(strings):
                 return strings!.textRepresentation
@@ -112,9 +112,9 @@ extension EventFilterParameters {
 
 extension EventFilterParameters: APIRequestParameterType { }
 
-// - Why don't you develope some JSON composer to just send a server request, Yaroslav?
+// - Why don't you develop some JSON composer to just send a server request, Yaroslav?
 // - Indeed, see no reason, why should i pass this.
-// Oh i wish to look deep in the Vitaliks eyes someday.
+// Oh I wish to look deep in Vitalik's eyes someday.
 extension Array where Element == EventFilterParameters.Topic? {
     var textRepresentation: String {
         var string = "["

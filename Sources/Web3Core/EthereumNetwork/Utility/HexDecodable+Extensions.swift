@@ -8,15 +8,15 @@
 import Foundation
 import BigInt
 
-extension Int: LiteralInitiableFromString { }
+extension Int: LiteralInitableFromString { }
 
-extension UInt: LiteralInitiableFromString { }
+extension UInt: LiteralInitableFromString { }
 
-extension BigInt: LiteralInitiableFromString { }
+extension BigInt: LiteralInitableFromString { }
 
-extension BigUInt: LiteralInitiableFromString { }
+extension BigUInt: LiteralInitableFromString { }
 
-extension Data: LiteralInitiableFromString {
+extension Data: LiteralInitableFromString {
     public static func fromHex(_ hex: String) -> Data? {
         let string = hex.lowercased().stripHexPrefix()
         let array = [UInt8](hex: string)

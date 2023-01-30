@@ -137,7 +137,7 @@
    *
    * 1. Previous registration
    * 2. global.Promise if node.js version >= 0.12
-   * 3. Auto detected promise based on first sucessful require of
+   * 3. Auto detected promise based on first successful require of
    *    known promise libraries. Note this is a last resort, as the
    *    loaded library is non-deterministic. node.js >= 0.12 will
    *    always use global.Promise over this priority list.
@@ -438,8 +438,8 @@
     'any', 'contains'
   ].concat(tags);
   
-  // Overrided methods list
-  var overrided = [
+  // Overridden methods list
+  var overridden = [
     '_peekTag', '_decodeTag', '_use',
     '_decodeStr', '_decodeObjid', '_decodeTime',
     '_decodeNull', '_decodeInt', '_decodeBool', '_decodeList',
@@ -562,11 +562,11 @@
   };
   
   //
-  // Overrided methods
+  // Overridden methods
   //
   
-  overrided.forEach(function(method) {
-    Node.prototype[method] = function _overrided() {
+  overridden.forEach(function(method) {
+    Node.prototype[method] = function _overridden() {
       var state = this._baseState;
       throw new Error(method + ' not implemented for encoding: ' + state.enc);
     };
@@ -1554,7 +1554,7 @@
     // Long form
     var num = len & 0x7f;
     if (num > 4)
-      return buf.error('length octect is too long');
+      return buf.error('length octet is too long');
   
     len = 0;
     for (var i = 0; i < num; i++) {
@@ -1706,7 +1706,7 @@
       if (!this._isPrintstr(str)) {
         return this.reporter.error('Encoding of string type: printstr supports ' +
                                    'only latin upper and lower case letters, ' +
-                                   'digits, space, apostrophe, left and rigth ' +
+                                   'digits, space, apostrophe, left and right ' +
                                    'parenthesis, plus sign, comma, hyphen, ' +
                                    'dot, slash, colon, equal sign, ' +
                                    'question mark');
@@ -9326,7 +9326,7 @@
       this.backoffNumber_++;
   };
   
-  // Stops any backoff operation and resets the backoff delay to its inital value.
+  // Stops any backoff operation and resets the backoff delay to its initial value.
   Backoff.prototype.reset = function() {
       this.backoffNumber_ = 0;
       this.backoffStrategy_.reset();
@@ -13413,7 +13413,7 @@
   },{"crypto":55}],55:[function(require,module,exports){
   
   },{}],56:[function(require,module,exports){
-  // based on the aes implimentation in triple sec
+  // based on the aes implementation in triple sec
   // https://github.com/keybase/triplesec
   // which is in turn based on the one from crypto-js
   // https://code.google.com/p/crypto-js/
@@ -15406,7 +15406,7 @@
     if (fill !== undefined) {
       // Only pay attention to encoding if it's a string. This
       // prevents accidentally sending in a number that would
-      // be interpretted as a start offset.
+      // be interpreted as a start offset.
       return typeof encoding === 'string'
         ? createBuffer(size).fill(fill, encoding)
         : createBuffer(size).fill(fill)
@@ -15689,7 +15689,7 @@
       return ''
     }
   
-    // Force coersion to uint32. This will also coerce falsey/NaN values to 0.
+    // Force coercion to uint32. This will also coerce falsey/NaN values to 0.
     end >>>= 0
     start >>>= 0
   
@@ -17345,7 +17345,7 @@
   }
   
   /**
-   * Simple flat clone using prototype, accepts only objects, usefull for property
+   * Simple flat clone using prototype, accepts only objects, useful for property
    * override on FLAT configuration object (no nested props).
    *
    * USE WITH CAUTION! This may not behave as you wish if you do not know how this
@@ -19042,7 +19042,7 @@
   module.exports = Cipher;
   
   Cipher.prototype._init = function _init() {
-    // Might be overrided
+    // Might be overridden
   };
   
   Cipher.prototype.update = function update(data) {
@@ -22355,7 +22355,7 @@
     var isYOdd = j & 1;
     var isSecondKey = j >> 1;
     if (r.cmp(this.curve.p.umod(this.curve.n)) >= 0 && isSecondKey)
-      throw new Error('Unable to find sencond key candinate');
+      throw new Error('Unable to find second key candinate');
   
     // 1.1. Let x = r + jn.
     if (isSecondKey)
@@ -24751,7 +24751,7 @@
         try {
           // attempt request
           await performFetch(network, req, res)
-          // request was succesful
+          // request was successful
           break
         } catch (err) {
           // an error was caught while performing the request
@@ -25749,7 +25749,7 @@
     },
     "expGas": {
       "v": 10,
-      "d": "Once per EXP instuction."
+      "d": "Once per EXP instruction."
     },
     "expByteGas": {
       "v": 10,
@@ -25894,11 +25894,11 @@
     },
     "ommerReward": {
       "v": "625000000000000000",
-      "d": "The amount of wei a miner of an uncle block gets for being inculded in the blockchain"
+      "d": "The amount of wei a miner of an uncle block gets for being included in the blockchain"
     },
     "niblingReward": {
       "v": "156250000000000000",
-      "d": "the amount a miner gets for inculding a uncle"
+      "d": "the amount a miner gets for including a uncle"
     },
     "homeSteadForkNumber": {
       "v": 1150000,
@@ -26526,7 +26526,7 @@
    * var tx = new Transaction(rawTx);
    *
    * @class
-   * @param {Buffer | Array | Object} data a transaction can be initiailized with either a buffer containing the RLP serialized transaction or an array of buffers relating to each of the tx Properties, listed in order below in the exmple.
+   * @param {Buffer | Array | Object} data a transaction can be initiailized with either a buffer containing the RLP serialized transaction or an array of buffers relating to each of the tx Properties, listed in order below in the example.
    *
    * Or lastly an Object containing the Properties of the transaction like in the Usage example.
    *
@@ -26643,7 +26643,7 @@
   
     /**
      * Computes a sha3-256 hash of the serialized tx
-     * @param {Boolean} [includeSignature=true] whether or not to inculde the signature
+     * @param {Boolean} [includeSignature=true] whether or not to include the signature
      * @return {Buffer}
      */
   
@@ -27509,7 +27509,7 @@
       }
     });
   
-    // if the constuctor is passed data
+    // if the constructor is passed data
     if (data) {
       if (typeof data === 'string') {
         data = Buffer.from(exports.stripHexPrefix(data), 'hex');
@@ -28613,7 +28613,7 @@
    *  BigNumber
    *
    *  A wrapper around the BN.js object. We use the BN.js library
-   *  because it is used by elliptic, so it is required regardles.
+   *  because it is used by elliptic, so it is required regardless.
    *
    */
   var bn_js_1 = __importDefault(require("bn.js"));
@@ -28826,7 +28826,7 @@
       if (typeof (value) === 'string') {
           var match = value.match(/^(0x)?[0-9a-fA-F]*$/);
           if (!match) {
-              errors.throwError('invalid hexidecimal string', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
+              errors.throwError('invalid hexadecimal string', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
           }
           if (match[1] !== '0x') {
               errors.throwError('hex string must have 0x prefix', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
@@ -28929,7 +28929,7 @@
       if (typeof (value) === 'string') {
           var match = value.match(/^(0x)?[0-9a-fA-F]*$/);
           if (!match) {
-              errors.throwError('invalid hexidecimal string', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
+              errors.throwError('invalid hexadecimal string', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
           }
           if (match[1] !== '0x') {
               errors.throwError('hex string must have 0x prefix', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
@@ -33460,7 +33460,7 @@
    * Register a new EventListener for the given event.
    *
    * @param {String} event Name of the event.
-   * @param {Functon} fn Callback function.
+   * @param {Function} fn Callback function.
    * @param {Mixed} context The context of the function.
    * @api public
    */
@@ -36311,7 +36311,7 @@
         throw new Error("Failed to validate " + label);
   
       // 4. The label must not contain a U+002E ( . ) FULL STOP.
-      // this should nerver happen as label is chunked internally by this character
+      // this should never happen as label is chunked internally by this character
       /* istanbul ignore if */
       if (label.includes('.'))
         throw new Error("Failed to validate " + label);
@@ -42940,7 +42940,7 @@
   } ())
   function runTimeout(fun) {
       if (cachedSetTimeout === setTimeout) {
-          //normal enviroments in sane situations
+          //normal environments in sane situations
           return setTimeout(fun, 0);
       }
       // if setTimeout wasn't available but was latter defined
@@ -42949,14 +42949,14 @@
           return setTimeout(fun, 0);
       }
       try {
-          // when when somebody has screwed with setTimeout but no I.E. maddness
+          // when when somebody has screwed with setTimeout but no I.E. madness
           return cachedSetTimeout(fun, 0);
       } catch(e){
           try {
               // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
               return cachedSetTimeout.call(null, fun, 0);
           } catch(e){
-              // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+              // same as above but when it's a version of I.E. that must have the global object for 'this', hopefully our context correct otherwise it will throw a global error
               return cachedSetTimeout.call(this, fun, 0);
           }
       }
@@ -42965,7 +42965,7 @@
   }
   function runClearTimeout(marker) {
       if (cachedClearTimeout === clearTimeout) {
-          //normal enviroments in sane situations
+          //normal environments in sane situations
           return clearTimeout(marker);
       }
       // if clearTimeout wasn't available but was latter defined
@@ -42974,14 +42974,14 @@
           return clearTimeout(marker);
       }
       try {
-          // when when somebody has screwed with setTimeout but no I.E. maddness
+          // when when somebody has screwed with setTimeout but no I.E. madness
           return cachedClearTimeout(marker);
       } catch (e){
           try {
               // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
               return cachedClearTimeout.call(null, marker);
           } catch (e){
-              // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+              // same as above but when it's a version of I.E. that must have the global object for 'this', hopefully our context correct otherwise it will throw a global error.
               // Some versions of I.E. have different rules for clearTimeout vs setTimeout
               return cachedClearTimeout.call(this, marker);
           }
@@ -43047,7 +43047,7 @@
       }
   };
   
-  // v8 likes predictible objects
+  // v8 likes predictable objects
   function Item(fun, array) {
       this.fun = fun;
       this.array = array;
@@ -47142,7 +47142,7 @@
   /**
    * RLP Decoding based on: {@link https://github.com/ethereum/wiki/wiki/%5BEnglish%5D-RLP|RLP}
    * @param {Buffer,String,Integer,Array} data - will be converted to buffer
-   * @returns {Array} - returns decode Array of Buffers containg the original message
+   * @returns {Array} - returns decode Array of Buffers containing the original message
    **/
   exports.decode = function (input, stream) {
     if (!input || input.length === 0) {
@@ -47460,7 +47460,7 @@
     try {
       ReflectApply(handler, context, args)
     } catch (err) {
-      // throw error after timeout so as not to interupt the stack
+      // throw error after timeout so as not to interrupt the stack
       setTimeout(() => {
         throw err
       })
@@ -48037,7 +48037,7 @@
         B32[i] |= (B[i * 4 + 1] & 0xff) << 8
         B32[i] |= (B[i * 4 + 2] & 0xff) << 16
         B32[i] |= (B[i * 4 + 3] & 0xff) << 24
-        // B32[i] = B.readUInt32LE(i*4)   <--- this is signficantly slower even in Node.js
+        // B32[i] = B.readUInt32LE(i*4)   <--- this is significantly slower even in Node.js
       }
   
       arraycopy(B32, 0, x, 0, 16)
@@ -48085,7 +48085,7 @@
         B[bi + 1] = (B32[i] >> 8 & 0xff)
         B[bi + 2] = (B32[i] >> 16 & 0xff)
         B[bi + 3] = (B32[i] >> 24 & 0xff)
-        // B.writeInt32LE(B32[i], i*4)  //<--- this is signficantly slower even in Node.js
+        // B.writeInt32LE(B32[i], i*4)  //<--- this is significantly slower even in Node.js
       }
     }
   
@@ -51605,7 +51605,7 @@
   
     // String ~> Promise Bool
     //   Returns true if Swarm is available on `url`.
-    //   Perfoms a test upload to determine that.
+    //   Performs a test upload to determine that.
     //   TODO: improve this?
     var _isAvailable = function _isAvailable(swarmUrl) {
       var testFile = "test";
@@ -53211,7 +53211,7 @@
           source += "';\n" + evaluate + "\n__p+='";
         }
   
-        // Adobe VMs need the match returned to produce the correct offest.
+        // Adobe VMs need the match returned to produce the correct offset.
         return match;
       });
       source += "';\n";
@@ -54544,7 +54544,7 @@
   
   
   /**
-   * Echos the value of a value. Trys to print the value out
+   * Echos the value of a value. Tries to print the value out
    * in the best way possible given the different types.
    *
    * @param {Object} obj The object to print out.
@@ -55703,7 +55703,7 @@
       } else if (utils.isAddress(address)) {
           return '0x' + address.toLowerCase().replace('0x','');
       }
-      throw new Error('Provided address "'+ address +'" is invalid, the capitalization checksum test failed, or its an indrect IBAN address which can\'t be converted.');
+      throw new Error('Provided address "'+ address +'" is invalid, the capitalization checksum test failed, or its an indirect IBAN address which can\'t be converted.');
   };
   
   
@@ -56100,7 +56100,7 @@
                                   defer.resolve(receipt);
                               }
   
-                              // need to remove listeners, as they aren't removed automatically when succesfull
+                              // need to remove listeners, as they aren't removed automatically when successful
                               if (canUnsubscribe) {
                                   defer.eventEmitter.removeAllListeners();
                               }
@@ -56129,7 +56129,7 @@
                           defer.eventEmitter.emit('receipt', receipt);
                           defer.resolve(receipt);
   
-                          // need to remove listeners, as they aren't removed automatically when succesfull
+                          // need to remove listeners, as they aren't removed automatically when successful
                           if (canUnsubscribe) {
                               defer.eventEmitter.removeAllListeners();
                           }
@@ -56496,7 +56496,7 @@
    * Should be called to add create new request to batch request
    *
    * @method add
-   * @param {Object} jsonrpc requet object
+   * @param {Object} jsonrpc request object
    */
   Batch.prototype.add = function (request) {
       this.requests.push(request);
@@ -58335,7 +58335,7 @@
       // sets _requestmanager
       core.packageInit(this, arguments);
   
-      // remove unecessary core functions
+      // remove unnecessary core functions
       delete this.BatchRequest;
       delete this.extend;
   
@@ -59069,7 +59069,7 @@
    * Use default values, if options are not available
    *
    * @method _getOrSetDefaultOptions
-   * @param {Object} options the options gived by the user
+   * @param {Object} options the options given by the user
    * @return {Object} the options with gaps filled by defaults
    */
   Contract.prototype._getOrSetDefaultOptions = function getOrSetDefaultOptions(options) {
@@ -59431,7 +59431,7 @@
               params: 1,
               inputFormatter: [formatters.inputLogFormatter],
               outputFormatter: this._decodeEventABI.bind(subOptions.event),
-              // DUBLICATE, also in web3-eth
+              // DUPLICATE, also in web3-eth
               subscriptionHandler: function (output) {
                   if(output.removed) {
                       this.emit('changed', output);
@@ -59945,8 +59945,8 @@
   var Contract = require('web3-eth-contract');
   var namehash = require('eth-ens-namehash');
   var PromiEvent = require('web3-core-promievent');
-  var REGISTRY_ABI = require('../ressources/ABI/Registry');
-  var RESOLVER_ABI = require('../ressources/ABI/Resolver');
+  var REGISTRY_ABI = require('../resources/ABI/Registry');
+  var RESOLVER_ABI = require('../resources/ABI/Resolver');
   
   
   /**
@@ -60020,7 +60020,7 @@
   
   module.exports = Registry;
   
-  },{"../ressources/ABI/Registry":365,"../ressources/ABI/Resolver":366,"eth-ens-namehash":127,"underscore":325,"web3-core-promievent":340,"web3-eth-contract":359}],363:[function(require,module,exports){
+  },{"../resources/ABI/Registry":365,"../resources/ABI/Resolver":366,"eth-ens-namehash":127,"underscore":325,"web3-core-promievent":340,"web3-eth-contract":359}],363:[function(require,module,exports){
   /*
       This file is part of web3.js.
       web3.js is free software: you can redistribute it and/or modify
@@ -61697,7 +61697,7 @@
                       params: 1,
                       inputFormatter: [formatter.inputLogFormatter],
                       outputFormatter: formatter.outputLogFormatter,
-                      // DUBLICATE, also in web3-eth-contract
+                      // DUPLICATE, also in web3-eth-contract
                       subscriptionHandler: function (output) {
                           if(output.removed) {
                               this.emit('changed', output);
@@ -62419,7 +62419,7 @@
   BlockCacheStrategy.prototype.getBlockCacheForPayload = function(payload, blockNumberHex) {
     const blockNumber = Number.parseInt(blockNumberHex, 16)
     let blockCache = this.cache[blockNumber]
-    // create new cache if necesary
+    // create new cache if necessary
     if (!blockCache) {
       const newCache = {}
       this.cache[blockNumber] = newCache
@@ -62688,7 +62688,7 @@
     self.pendingBlockTimeout = opts.pendingBlockTimeout || 4000
     self.checkForPendingBlocksActive = false
   
-    // we dont have engine immeditately
+    // we dont have engine immediately
     setTimeout(function(){
       // asyncBlockHandlers require locking provider until updates are completed
       self.engine.on('block', function(block){
@@ -67433,7 +67433,7 @@
       }
   
       function getBody() {
-          // Chrome with requestType=blob throws errors arround when even testing access to responseText
+          // Chrome with requestType=blob throws errors around when even testing access to responseText
           var body = undefined
   
           if (xhr.response) {
