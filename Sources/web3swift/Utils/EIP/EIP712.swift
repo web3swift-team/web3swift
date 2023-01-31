@@ -100,7 +100,7 @@ fileprivate extension EIP712Hashable {
     }
 
     func encodePrimaryType() -> String {
-        let parameters: [String] = Mirror(reflecting: self).children.compactMap { key, value in
+        let parametrs: [String] = Mirror(reflecting: self).children.compactMap { key, value in
             guard let key = key else { return nil }
 
             func checkIfValueIsNil(value: Any) -> Bool {
@@ -127,7 +127,7 @@ fileprivate extension EIP712Hashable {
             }
             return typeName + " " + key
         }
-        return name + "(" + parameters.joined(separator: ",") + ")"
+        return name + "(" + parametrs.joined(separator: ",") + ")"
     }
 }
 
