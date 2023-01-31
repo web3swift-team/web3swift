@@ -86,7 +86,7 @@ extension String {
 
     /// Strips leading zeroes from a HEX string.
     /// ONLY HEX string format is supported.
-    /// - Returns: string with stripped leading zeroes (and 0x prefix) or unchaged string.
+    /// - Returns: string with stripped leading zeroes (and 0x prefix) or unchanged string.
     func stripLeadingZeroes() -> String {
         let hex = addHexPrefix()
         guard let matcher = try? NSRegularExpression(pattern: "^(?<prefix>0x)(?<leadingZeroes>0+)(?<end>[0-9a-fA-F]*)$",

@@ -2,7 +2,7 @@
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
-// TODO: Replace `XCTAssert` with more explicite `XCTAssertEqual`, where Applicable
+// TODO: Replace `XCTAssert` with more explicit `XCTAssertEqual`, where Applicable
 import XCTest
 import CryptoSwift
 import BigInt

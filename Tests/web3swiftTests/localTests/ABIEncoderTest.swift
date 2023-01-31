@@ -30,7 +30,7 @@ class ABIEncoderTest: XCTestCase {
         hex = try ABIEncoder.soliditySha3("Hello!%").toHexString().addHexPrefix()
         assert(hex == "0x661136a4267dba9ccdf6bfddb7c00e714de936674c4bdb065a531cf1cb15c7fc")
 
-        // This is not JS. '234' (with single or double qoutes) will be a String, not any kind of number.
+        // This is not JS. '234' (with single or double quotes) will be a String, not any kind of number.
         // From Web3JS docs:> web3.utils.soliditySha3('234'); // auto detects: uint256
 
         hex = try ABIEncoder.soliditySha3(0xea).toHexString().addHexPrefix()

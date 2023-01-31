@@ -11,7 +11,7 @@ import BigInt
 /// While most fields in this struct are optional, they are not necessarily
 /// optional for the type of transaction they apply to.
 public struct CodableTransaction {
-    /// internal acccess only. The transaction envelope object itself that contains all the transaction data
+    /// internal access only. The transaction envelope object itself that contains all the transaction data
     /// and type specific implementation
     internal var envelope: AbstractEnvelope
 
@@ -73,7 +73,7 @@ public struct CodableTransaction {
         set { return envelope.gasLimit = newValue }
     }
 
-    /// the price per gas unit for the tranaction (Legacy and EIP-2930 only)
+    /// the price per gas unit for the transaction (Legacy and EIP-2930 only)
     public var gasPrice: BigUInt? {
         get { return envelope.gasPrice }
         set { return envelope.gasPrice = newValue }
@@ -147,7 +147,7 @@ public struct CodableTransaction {
 
     /// Signs the transaction
     ///
-    /// This method signs transaction iteself and not related to contract call data signing.
+    /// This method signs transaction itself and not related to contract call data signing.
     /// - Parameters:
     ///   - privateKey: the private key to use for signing
     ///   - useExtraEntropy: boolean whether to use extra entropy when signing (default false)
@@ -265,7 +265,7 @@ extension CodableTransaction: Codable {
 }
 
 extension CodableTransaction: CustomStringConvertible {
-    /// required by CustomString convertable
+    /// required by CustomString convertible
     /// returns a string description for the transaction and its data
     public var description: String {
         var toReturn = ""
@@ -290,7 +290,7 @@ extension CodableTransaction {
     ///   - v: signature v parameter (default 1) - will get set properly once signed
     ///   - r: signature r parameter (default 0) - will get set properly once signed
     ///   - s: signature s parameter (default 0) - will get set properly once signed
-    ///   - parameters: EthereumParameters object containing additional parametrs for the transaction like gas
+    ///   - parameters: EthereumParameters object containing additional parameters for the transaction like gas
     public init(type: TransactionType? = nil, to: EthereumAddress, nonce: BigUInt = 0,
                 chainID: BigUInt = 0, value: BigUInt = 0, data: Data = Data(),
                 gasLimit: BigUInt = 0, maxFeePerGas: BigUInt? = nil, maxPriorityFeePerGas: BigUInt? = nil, gasPrice: BigUInt? = nil,

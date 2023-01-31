@@ -60,8 +60,8 @@ public enum EncodeType {
 
 /// Protocol definition for all transaction envelope types
 /// All envelopes must conform to this protocol to work with `CodableTransaction`
-/// each implememtation holds all the type specific data
-/// and implments the type specific encoding/decoding
+/// each implementation holds all the type specific data
+/// and implements the type specific encoding/decoding
 protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
 
     /// The type of transaction this envelope represents
@@ -115,7 +115,7 @@ protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
     // for Decodable support
     /// initializer for creating an `CodableTransaction` with the Decodable protocol
     /// will return an new `CodableTransaction` object on success
-    /// thows a `Web3.dataError` if an error occurs while trying to decode a value
+    /// throws a `Web3.dataError` if an error occurs while trying to decode a value
     /// returns nil if a required field is not found in the decoder stream
     init?(from decoder: Decoder) throws // Decodable Protocol
 

@@ -22,7 +22,7 @@ class ERC20ClassTests: LocalTestCase {
         }
         /// We had an issue with multiple async reads performed at the same point in time
         /// sometimes returning wrong values (actually values of each other).
-        /// The issue is most likely related to async/await feautre of Swift.
+        /// The issue is most likely related to async/await feature of Swift.
         /// Due to that was decided to add a loop to execute the same async calls that checks the same ERC20 properties
         /// multiple times. All calls must succeed.
         /// Each run executes 3 async read operations.

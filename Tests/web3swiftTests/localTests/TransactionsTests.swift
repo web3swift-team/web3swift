@@ -594,7 +594,7 @@ class TransactionsTests: XCTestCase {
     }
 
     // ***** Legacy Tests *****
-    // TODO: Replace `XCTAssert` with more explicite `XCTAssertEqual`, where Applicable
+    // TODO: Replace `XCTAssert` with more explicit `XCTAssertEqual`, where Applicable
 
     func testDirectTransaction() throws {
         do {
@@ -657,7 +657,7 @@ class TransactionsTests: XCTestCase {
 
             let details = try await web3.eth.transactionDetails(txHash)
             
-            // FIXME: Reenable this test.
+            // FIXME: Re-enable this test.
 //            XCTAssertEqual(details.transaction.gasLimit, BigUInt(78423))
         } catch Web3Error.nodeError(let descr) {
             guard descr == "insufficient funds for gas * price + value" else {return XCTFail()}

@@ -8,7 +8,7 @@ import CryptoSwift
 
 public struct NameHash {
     public static func normalizeDomainName(_ domain: String) -> String? {
-        // TODO use ICU4C library later for domain name normalization, althoug f**k it for now, it's few megabytes large piece
+        // TODO use ICU4C library later for domain name normalization, although f**k it for now, it's few megabytes large piece
         let normalized = domain.lowercased()
         return normalized
     }
