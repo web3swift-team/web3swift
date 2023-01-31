@@ -19,17 +19,17 @@ public struct Utilities {
             guard let decompressedKey = SECP256K1.combineSerializedPublicKeys(keys: [publicKey], outputCompressed: false) else {return nil}
             return publicToAddressData(decompressedKey)
         }
-        var stipped = publicKey
-        if stipped.count == 65 {
-            if stipped[0] != 4 {
+        var stripped = publicKey
+        if stripped.count == 65 {
+            if stripped[0] != 4 {
                 return nil
             }
-            stipped = stipped[1...64]
+            stripped = stripped[1...64]
         }
-        if stipped.count != 64 {
+        if stripped.count != 64 {
             return nil
         }
-        let sha3 = stipped.sha3(.keccak256)
+        let sha3 = stripped.sha3(.keccak256)
         let addressData = sha3[12...31]
         return addressData
     }
