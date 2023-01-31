@@ -57,8 +57,8 @@ class EIP1559BlockTests: LocalTestCase {
             (40_000_000, 12_965_000, 39_960_938, false) // Lower limit -1
         ]
 
-        headerArray.forEach { (touple: (parentGasLimit: BigUInt, parentNumber: BigUInt, currentGasLimit: BigUInt, is1559: Bool)) in
-            let parent = Block(number: touple.parentNumber,
+        headerArray.forEach { (tuple: (parentGasLimit: BigUInt, parentNumber: BigUInt, currentGasLimit: BigUInt, is1559: Bool)) in
+            let parent = Block(number: tuple.parentNumber,
                                hash: uselessBlockPart.hash,
                                parentHash: uselessBlockPart.parentHash,
                                nonce: uselessBlockPart.nonce,
@@ -72,14 +72,14 @@ class EIP1559BlockTests: LocalTestCase {
                                totalDifficulty: uselessBlockPart.totalDifficulty,
                                extraData: uselessBlockPart.extraData,
                                size: uselessBlockPart.size,
-                               gasLimit: touple.parentGasLimit,
-                               gasUsed: touple.parentGasLimit / 2,
+                               gasLimit: tuple.parentGasLimit,
+                               gasUsed: tuple.parentGasLimit / 2,
                                baseFeePerGas: Web3.InitialBaseFee,
                                timestamp: uselessBlockPart.timestamp,
                                transactions: uselessBlockPart.transactions,
                                uncles: uselessBlockPart.uncles)
 
-            let current = Block(number: touple.parentNumber + 1,
+            let current = Block(number: tuple.parentNumber + 1,
                                 hash: uselessBlockPart.hash,
                                 parentHash: uselessBlockPart.parentHash,
                                 nonce: uselessBlockPart.nonce,
@@ -93,14 +93,14 @@ class EIP1559BlockTests: LocalTestCase {
                                 totalDifficulty: uselessBlockPart.totalDifficulty,
                                 extraData: uselessBlockPart.extraData,
                                 size: uselessBlockPart.size,
-                                gasLimit: touple.currentGasLimit,
-                                gasUsed: touple.currentGasLimit / 2,
+                                gasLimit: tuple.currentGasLimit,
+                                gasUsed: tuple.currentGasLimit / 2,
                                 baseFeePerGas: Web3.InitialBaseFee,
                                 timestamp: uselessBlockPart.timestamp,
                                 transactions: uselessBlockPart.transactions,
                                 uncles: uselessBlockPart.uncles)
 
-            if touple.is1559 {
+            if tuple.is1559 {
                 XCTAssertTrue(Web3.isEip1559Block(parent: parent, current: current),
                               "Shoult not fail, got parent: \(parent.gasLimit), current: \(current.gasLimit)")
             } else {
@@ -124,8 +124,8 @@ class EIP1559BlockTests: LocalTestCase {
             (Web3.InitialBaseFee, 12_965_000, 20000000, 11000000, 1012500000)              // current above target
         ]
 
-        headerArray.forEach { (touple: (parentBaseFee: BigUInt, parentNumber: BigUInt, parentGasLimit: BigUInt, parentGasUsed: BigUInt, expectedBaseFee: BigUInt)) in
-            let parent = Block(number: touple.parentNumber,
+        headerArray.forEach { (tuple: (parentBaseFee: BigUInt, parentNumber: BigUInt, parentGasLimit: BigUInt, parentGasUsed: BigUInt, expectedBaseFee: BigUInt)) in
+            let parent = Block(number: tuple.parentNumber,
                                hash: uselessBlockPart.hash,
                                parentHash: uselessBlockPart.parentHash,
                                nonce: uselessBlockPart.nonce,
@@ -139,8 +139,8 @@ class EIP1559BlockTests: LocalTestCase {
                                totalDifficulty: uselessBlockPart.totalDifficulty,
                                extraData: uselessBlockPart.extraData,
                                size: uselessBlockPart.size,
-                               gasLimit: touple.parentGasLimit,
-                               gasUsed: touple.parentGasUsed,
+                               gasLimit: tuple.parentGasLimit,
+                               gasUsed: tuple.parentGasUsed,
                                baseFeePerGas: Web3.InitialBaseFee,
                                timestamp: uselessBlockPart.timestamp,
                                transactions: uselessBlockPart.transactions,
@@ -148,7 +148,7 @@ class EIP1559BlockTests: LocalTestCase {
 
             let calculatedBaseFee = Web3.calcBaseFee(parent)
 
-            XCTAssertEqual(calculatedBaseFee, touple.expectedBaseFee, "Base fee calculation fails: should be \(touple.expectedBaseFee), got: \(String(describing: calculatedBaseFee))")
+            XCTAssertEqual(calculatedBaseFee, tuple.expectedBaseFee, "Base fee calculation fails: should be \(tuple.expectedBaseFee), got: \(String(describing: calculatedBaseFee))")
         }
     }
 }
