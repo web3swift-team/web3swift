@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          pip install codespell
+          pip3 install codespell || python3 -m pip install codespell
           codespell --count --ignore-words-list=ans,deriver,inout,packag --skip="*.js,*WordLists.swift"
       - name: Resolve dependencies
         run: swift package resolve
