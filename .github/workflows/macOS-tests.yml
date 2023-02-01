@@ -34,10 +34,9 @@ jobs:
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v3
-      - uses: codespell-project/actions-codespell@v1
-        with:
-          ignore_words_list: ans,deriver,inout,packag
-          skip: "*.js,*WordLists.swift"
+      - run: |
+          pip install codespell
+          codespell --count --ignore-words-list=ans,deriver,inout,packag --skip="*.js,*WordLists.swift"
       - name: Resolve dependencies
         run: swift package resolve
       - name: Build
