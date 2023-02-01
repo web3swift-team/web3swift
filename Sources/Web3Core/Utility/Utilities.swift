@@ -10,34 +10,39 @@ import BigInt
 
 public struct Utilities {
 
-    /// Convert a public key to the corresponding EthereumAddress. Accepts public keys in compressed (33 bytes), non-compressed (65 bytes)
-    /// or raw concat(X, Y) (64 bytes) format.
+    /// Convert a public key to the corresponding ``EthereumAddress``. Accepts public keys in compressed (33 bytes), uncompressed (65 bytes)
+    /// or uncompressed without prefix (64 bytes) format.
     ///
-    /// Returns 20 bytes of address data.
+    /// - Parameter publicKey: compressed 33, non-compressed (65 bytes) or non-compressed without prefix (64 bytes)
+    /// - Returns: 20 bytes of address data.
     static func publicToAddressData(_ publicKey: Data) -> Data? {
+        var publicKey = publicKey
         if publicKey.count == 33 {
-            guard let decompressedKey = SECP256K1.combineSerializedPublicKeys(keys: [publicKey], outputCompressed: false) else {return nil}
-            return publicToAddressData(decompressedKey)
-        }
-        var stipped = publicKey
-        if stipped.count == 65 {
-            if stipped[0] != 4 {
+            guard (publicKey[0] == 2 || publicKey[0] == 3),
+                  let decompressedKey = SECP256K1.combineSerializedPublicKeys(keys: [publicKey], outputCompressed: false) else {
                 return nil
             }
-            stipped = stipped[1...64]
+            publicKey = decompressedKey
         }
-        if stipped.count != 64 {
+
+        if publicKey.count == 65 {
+            guard publicKey[0] == 4 else {
+                return nil
+            }
+            publicKey = publicKey[1...64]
+        } else if publicKey.count != 64 {
             return nil
         }
-        let sha3 = stipped.sha3(.keccak256)
+        let sha3 = publicKey.sha3(.keccak256)
         let addressData = sha3[12...31]
         return addressData
     }
 
-    /// Convert a public key to the corresponding EthereumAddress. Accepts public keys in compressed (33 bytes), non-compressed (65 bytes)
-    /// or raw concat(X, Y) (64 bytes) format.
+    /// Convert a public key to the corresponding ``EthereumAddress``. Accepts public keys in compressed (33 bytes), uncompressed (65 bytes)
+    /// or uncompressed without prefix (64 bytes) format.
     ///
-    /// Returns the EthereumAddress object.
+    /// - Parameter publicKey: compressed 33, non-compressed (65 bytes) or non-compressed without prefix (64 bytes)
+    /// - Returns: `EthereumAddress` object.
     public static func publicToAddress(_ publicKey: Data) -> EthereumAddress? {
         guard let addressData = publicToAddressData(publicKey) else {return nil}
         let address = addressData.toHexString().addHexPrefix().lowercased()
@@ -50,10 +55,11 @@ public struct Utilities {
         return publicKey
     }
 
-    /// Convert a public key to the corresponding EthereumAddress. Accepts public keys in compressed (33 bytes), non-compressed (65 bytes)
-    /// or raw concat(X, Y) (64 bytes) format.
+    /// Convert a public key to the corresponding ``EthereumAddress``. Accepts public keys in compressed (33 bytes), uncompressed (65 bytes)
+    /// or uncompressed without prefix (64 bytes) format.
     ///
-    /// Returns a 0x prefixed hex string.
+    /// - Parameter publicKey: compressed 33, non-compressed (65 bytes) or non-compressed without prefix (64 bytes)
+    /// - Returns: `0x` prefixed hex string.
     public static func publicToAddressString(_ publicKey: Data) -> String? {
         guard let addressData = Utilities.publicToAddressData(publicKey) else {return nil}
         let address = addressData.toHexString().addHexPrefix().lowercased()
