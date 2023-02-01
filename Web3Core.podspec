@@ -3,7 +3,6 @@ Pod::Spec.new do |spec|
 
     spec.name         = 'Web3Core'
     spec.version      = '3.0.6'
-    spec.module_name  = 'Core'
     spec.ios.deployment_target = "13.0"
     spec.osx.deployment_target = "10.15"
     spec.license      = { :type => 'Apache License 2.0', :file => 'LICENSE.md' }
