@@ -190,7 +190,7 @@ Make sure that `ganache` is running on its default port `8546`. To change the po
 
 ### Before you commit
 
-Please, run `.githooks/init_hooks.sh` to initialize git hooks that will do `codespell`, `swiftlint` and other checks. _Issues may arise with hooks on platforms other than Mac OS._
+We are using [pre-commit](https://pre-commit.com) to run validations locally before a commit is created. Please, install pre-commit and run `pre-commit install` from project's root directory. After that before every commit git hook will run and execute `codespell`, `swiftlint` and other checks.
 
 ## Contribute
 Want to improve? It's awesome:
