@@ -1,0 +1,43 @@
+#!/bin/sh
+
+if ! command -v pip3 &> /dev/null
+then
+    >&2 echo "\033[31mpip3 could not be found. Please, install pip3 following the guide on https://pip.pypa.io/en/stable/installation/\033[0m"
+    exit 1
+fi
+
+codespell_out=$(pip3 show codespell | grep "Location")
+codespell_path=(${codespell_out//"Location: "/ })
+
+if [ -z "$codespell_path" ]
+then
+    echo "codespell not found. Installing codespell..."
+    pip3 install --upgrade pip
+	pip3 install codespell
+
+	codespell_out=$(pip3 show codespell | grep "Location")
+	codespell_path=(${codespell_out//"Location: "/ })
+	codespell_path="${codespell_path}/bin/codespell"
+else
+	codespell_path="${codespell_path}/bin/codespell"
+fi
+
+$codespell_path --count --ignore-words-list=ans,deriver,inout,packag --skip="*.js,*WordLists.swift" Sources/ Tests/ Package.swift CHANGELOG.md CONTRIBUTION.md README.md Web3Core.podspec Web3Swift.podspec
+
+if [ $? -eq 65 ]; then
+  echo "codespell returned exit code 65. Please, fix the errors."
+  exit 1
+fi
+
+if [ "$(uname -s)" = "Darwin" ]; then
+	export PATH="$PATH:/opt/homebrew/bin"
+
+	if ! command -v swiftlint &> /dev/null
+	then
+	    echo "swiftlint wasn't found. Installing it from Homebrew."
+	    brew install swiftlint
+	fi
+
+	swiftlint Sources
+	swiftlint Tests
+fi
