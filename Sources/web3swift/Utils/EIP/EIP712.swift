@@ -38,7 +38,6 @@ public extension EIP712Hashable {
     }
 
     func hash() throws -> Data {
-        typealias SolidityValue = (value: Any, type: ABI.Element.ParameterType)
         var parameters: [Data] = [typehash]
         for case let (_, field) in Mirror(reflecting: self).children {
             let result: Data
@@ -48,14 +47,15 @@ public extension EIP712Hashable {
             case let data as EIP712.Bytes:
                 result = data.sha3(.keccak256)
             case is EIP712.UInt8:
-                result = ABIEncoder.encodeSingleType(type: .uint(bits: 8), value: field as AnyObject)!
+                result = ABIEncoder.encodeSingleType(type: .uint(bits: 8), value: field)!
             case is EIP712.UInt256:
-                result = ABIEncoder.encodeSingleType(type: .uint(bits: 256), value: field as AnyObject)!
+                result = ABIEncoder.encodeSingleType(type: .uint(bits: 256), value: field)!
             case is EIP712.Address:
-                result = ABIEncoder.encodeSingleType(type: .address, value: field as AnyObject)!
+                result = ABIEncoder.encodeSingleType(type: .address, value: field)!
             case let hashable as EIP712Hashable:
                 result = try hashable.hash()
             default:
+                /// Cast to `AnyObject` is required. Otherwise, `nil` value will fail this condition.
                 if (field as AnyObject) is NSNull {
                     continue
                 } else {

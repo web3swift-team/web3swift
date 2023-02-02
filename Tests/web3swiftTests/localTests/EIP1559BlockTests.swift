@@ -18,7 +18,7 @@ class EIP1559BlockTests: LocalTestCase {
         logsBloom: EthereumBloomFilter(Data(from: "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!), // "logsBloom":
         transactionsRoot: Data(from: "0x3a1b03875115b79539e5bd33fb00d8f7b7cd61929d5a3c574f507b8acf415bee")!, // "transactionsRoot":
         stateRoot: Data(from: "0xf1133199d44695dfa8fd1bcfe424d82854b5cebef75bddd7e40ea94cda515bcb")!, // "stateRoot":
-        miner: EthereumAddress( Data(from: "0x8888f1f195afa192cfee860698584c030f4c9db1")!)!, // "miner":
+        miner: EthereumAddress(Data(from: "0x8888f1f195afa192cfee860698584c030f4c9db1")!)!, // "miner":
         difficulty: BigUInt(21345678965432), // "difficulty":
         totalDifficulty: BigUInt(324567845321), // "totalDifficulty":
         size: BigUInt(616), // "size":
@@ -102,7 +102,7 @@ class EIP1559BlockTests: LocalTestCase {
 
             if tuple.is1559 {
                 XCTAssertTrue(Web3.isEip1559Block(parent: parent, current: current),
-                              "Shoult not fail, got parent: \(parent.gasLimit), current: \(current.gasLimit)")
+                              "Should not fail, got parent: \(parent.gasLimit), current: \(current.gasLimit)")
             } else {
                 XCTAssertFalse(Web3.isEip1559Block(parent: parent, current: current),
                                "Should fail, got parent: \(parent.gasLimit), current: \(current.gasLimit)")

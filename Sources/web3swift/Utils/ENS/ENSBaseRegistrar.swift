@@ -36,7 +36,7 @@ public extension ENS {
         public func addController(from: EthereumAddress, controllerAddress: EthereumAddress) throws -> WriteOperation {
             defaultTransaction.from = from
             defaultTransaction.to = self.address
-            guard let transaction = self.contract.createWriteOperation("addController", parameters: [controllerAddress as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createWriteOperation("addController", parameters: [controllerAddress]) else { throw Web3Error.transactionSerializationError }
             return transaction
         }
 
@@ -44,7 +44,7 @@ public extension ENS {
         public func removeController(from: EthereumAddress, controllerAddress: EthereumAddress) throws -> WriteOperation {
             defaultTransaction.from = from
             defaultTransaction.to = self.address
-            guard let transaction = self.contract.createWriteOperation("removeController", parameters: [controllerAddress as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createWriteOperation("removeController", parameters: [controllerAddress]) else { throw Web3Error.transactionSerializationError }
             return transaction
         }
 
@@ -52,29 +52,31 @@ public extension ENS {
         public func setResolver(from: EthereumAddress, resolverAddress: EthereumAddress) throws -> WriteOperation {
             defaultTransaction.from = from
             defaultTransaction.to = self.address
-            guard let transaction = self.contract.createWriteOperation("setResolver", parameters: [resolverAddress as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createWriteOperation("setResolver", parameters: [resolverAddress]) else { throw Web3Error.transactionSerializationError }
             return transaction
         }
 
         public func getNameExpirity(name: BigUInt) async throws -> BigUInt {
-            guard let transaction = self.contract.createReadOperation("nameExpires", parameters: [name as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
-            guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
-            guard let expirity = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Can't get answer")}
+            guard let transaction = self.contract.createReadOperation("nameExpires", parameters: [name]) else { throw Web3Error.transactionSerializationError }
+
+            guard let result = try? await transaction.callContractMethod() else { throw Web3Error.processingError(desc: "Can't call transaction") }
+            guard let expirity = result["0"] as? BigUInt else { throw Web3Error.processingError(desc: "Can't get answer") }
             return expirity
         }
 
         @available(*, message: "This function should not be used to check if a name can be registered by a user. To check if a name can be registered by a user, check name availablility via the controller")
         public func isNameAvailable(name: BigUInt) async throws -> Bool {
-            guard let transaction = self.contract.createReadOperation("available", parameters: [name as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
-            guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
-            guard let available = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Can't get answer")}
+            guard let transaction = self.contract.createReadOperation("available", parameters: [name]) else { throw Web3Error.transactionSerializationError }
+
+            guard let result = try? await transaction.callContractMethod() else { throw Web3Error.processingError(desc: "Can't call transaction") }
+            guard let available = result["0"] as? Bool else { throw Web3Error.processingError(desc: "Can't get answer") }
             return available
         }
 
         public func reclaim(from: EthereumAddress, record: BigUInt) throws -> WriteOperation {
             defaultTransaction.from = from
             defaultTransaction.to = self.address
-            guard let transaction = self.contract.createWriteOperation("reclaim", parameters: [record as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createWriteOperation("reclaim", parameters: [record]) else { throw Web3Error.transactionSerializationError }
             return transaction
         }
 

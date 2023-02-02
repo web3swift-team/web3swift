@@ -32,35 +32,37 @@ public extension ENS {
         public func claimAddress(from: EthereumAddress, owner: EthereumAddress) throws -> WriteOperation {
             defaultTransaction.from = from
             defaultTransaction.to = self.address
-            guard let transaction = self.contract.createWriteOperation("claim", parameters: [owner as AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createWriteOperation("claim", parameters: [owner]) else { throw Web3Error.transactionSerializationError }
             return transaction
         }
 
         public func claimAddressWithResolver(from: EthereumAddress, owner: EthereumAddress, resolver: EthereumAddress) throws -> WriteOperation {
             defaultTransaction.from = from
             defaultTransaction.to = self.address
-            guard let transaction = self.contract.createWriteOperation("claimWithResolver", parameters: [owner, resolver] as [AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createWriteOperation("claimWithResolver", parameters: [owner, resolver]) else { throw Web3Error.transactionSerializationError }
             return transaction
         }
 
         public func setName(from: EthereumAddress, name: String) throws -> WriteOperation {
             defaultTransaction.from = from
             defaultTransaction.to = self.address
-            guard let transaction = self.contract.createWriteOperation("setName", parameters: [name] as [AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createWriteOperation("setName", parameters: [name]) else { throw Web3Error.transactionSerializationError }
             return transaction
         }
 
         public func getReverseRecordName(address: EthereumAddress) async throws -> Data {
-            guard let transaction = self.contract.createReadOperation("node", parameters: [address] as [AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createReadOperation("node", parameters: [address]) else { throw Web3Error.transactionSerializationError }
+
             guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
-            guard let name = result["0"] as? Data else {throw Web3Error.processingError(desc: "Can't get answer")}
+            guard let name = result["0"] as? Data else { throw Web3Error.processingError(desc: "Can't get answer") }
             return name
         }
 
         public func getDefaultResolver() async throws -> EthereumAddress {
-            guard let transaction = self.contract.createReadOperation("defaultResolver", parameters: [] as [AnyObject], extraData: Data()) else {throw Web3Error.transactionSerializationError}
+            guard let transaction = self.contract.createReadOperation("defaultResolver") else { throw Web3Error.transactionSerializationError }
+
             guard let result = try? await transaction.callContractMethod() else {throw Web3Error.processingError(desc: "Can't call transaction")}
-            guard let address = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Can't get answer")}
+            guard let address = result["0"] as? EthereumAddress else { throw Web3Error.processingError(desc: "Can't get answer") }
             return address
         }
     }
