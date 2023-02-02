@@ -20,13 +20,14 @@ do
 	git_hook_path="../.git/hooks/$hook"
 
 	web3swift_hook_comment="# web3swift git hook to perform actions like SwiftLint and codespell"
-	web3swift_hook_path="source $(pwd)/${hook}"
+	web3swift_hook_path="$(pwd)/${hook}"
+	web3swift_hook_command="source $(pwd)/${hook}"
 
 	is_hook_linked=false
 
 	if test -f $git_hook_path; then
 		last_line=$( tac ${git_hook_path} | grep -m 1 -E '[^[:space:]]' )
-		if [ "$last_line" = "$web3swift_hook_path" ]; then
+		if [ "$last_line" = "$web3swift_hook_command" ]; then
 			is_hook_linked=true
 		fi
 	else
@@ -36,7 +37,13 @@ do
 	fi
 
 	if [ "$is_hook_linked" = false ] ; then
-		echo "$web3swift_hook_path" >> $git_hook_path
+			cat << EOF >> $git_hook_path
+web3swift_hook_path=${web3swift_hook_path}
+
+if test -f \$web3swift_hook_path; then
+	${web3swift_hook_command}
+fi
+EOF
 		echo "${hook} is linked successfully."
 	else
 		echo "${hook} is already linked."
