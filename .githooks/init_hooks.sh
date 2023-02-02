@@ -1,9 +1,8 @@
 #!/bin/sh
-# Creates symlinks of hooks in .githooks directory in .git/hooks
-# If user already has hooks in .git/hooks then hooks from .githooks
-# will be added as separate files with different names and a command
-# to run these hooks will be added to the respective existing hooks
-# on the last line of the file.
+# Creates hooks in .git/hooks directory based on the hooks available in .githooks.
+# If user already has hooks in .git/hooks then hooks from .githooks will be added
+# as separate files with different names and a command to run these hooks will be
+# added to the respective existing hooks on the last line of the file.
 
 current_dir=${PWD##*/}
 
