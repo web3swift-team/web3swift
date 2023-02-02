@@ -27,7 +27,6 @@ public enum Web3Error: LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-
         case .transactionSerializationError:
             return "Transaction Serialization Error"
         case .connectionError:

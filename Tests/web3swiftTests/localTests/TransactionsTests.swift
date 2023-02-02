@@ -471,7 +471,6 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            
             return XCTFail(String(describing: error))
         }
     }
