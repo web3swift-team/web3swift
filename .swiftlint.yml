@@ -6,6 +6,8 @@ excluded:
   - DerivedData
 
 disabled_rules:
+  - function_parameter_count
+  - nesting
   - type_name
   - identifier_name
   - line_length
