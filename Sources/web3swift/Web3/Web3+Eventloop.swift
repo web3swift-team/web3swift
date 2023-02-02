@@ -9,22 +9,15 @@ extension Web3.Eventloop {
 
     // @available(iOS 10.0, *)
     public func start(_ timeInterval: TimeInterval) {
-        if self.timer != nil {
-            self.timer!.suspend()
-            self.timer = nil
-        }
-
-        self.timer = RepeatingTimer(timeInterval: timeInterval)
-        self.timer?.eventHandler = self.runnable
-        self.timer?.resume()
-
+        timer?.suspend()
+        timer = RepeatingTimer(timeInterval: timeInterval)
+        timer?.eventHandler = self.runnable
+        timer?.resume()
     }
 
     public func stop() {
-        if self.timer != nil {
-            self.timer!.suspend()
-            self.timer = nil
-        }
+        timer?.suspend()
+        timer = nil
     }
 
     func runnable() {

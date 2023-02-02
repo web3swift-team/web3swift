@@ -190,12 +190,12 @@ class ABIEncoderTest: XCTestCase {
         var hexData = ABIEncoder.encode(types: [.string], values: ["test"] as [AnyObject])?.toHexString()
         XCTAssertEqual(hexData?[0..<64], "0000000000000000000000000000000000000000000000000000000000000020")
         XCTAssertEqual(hexData, "000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000047465737400000000000000000000000000000000000000000000000000000000")
-        hexData = ABIEncoder.encode(types: [.array(type: .uint(bits: 8), length: 0)], values: [[1,2,3,4]] as [AnyObject])?.toHexString()
+        hexData = ABIEncoder.encode(types: [.array(type: .uint(bits: 8), length: 0)], values: [[1, 2, 3, 4]] as [AnyObject])?.toHexString()
         XCTAssertEqual(hexData?[0..<64], "0000000000000000000000000000000000000000000000000000000000000020")
         XCTAssertEqual(hexData, "000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000004")
 
         // This one shouldn't have data offset
-        hexData = ABIEncoder.encode(types: [.array(type: .uint(bits: 8), length: 4)], values: [[1,2,3,4]] as [AnyObject])?.toHexString()
+        hexData = ABIEncoder.encode(types: [.array(type: .uint(bits: 8), length: 4)], values: [[1, 2, 3, 4]] as [AnyObject])?.toHexString()
         // First 32 bytes are the first value from the array
         XCTAssertEqual(hexData?[0..<64], "0000000000000000000000000000000000000000000000000000000000000001")
         XCTAssertEqual(hexData, "0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000004")
@@ -204,7 +204,7 @@ class ABIEncoderTest: XCTestCase {
                                                   .bool,
                                                   .array(type: .uint(bits: 8), length: 0),
                                                   .bytes(length: 2)]
-        let values: [AnyObject] = [10, false, [1,2,3,4], Data(count: 2)] as [AnyObject]
+        let values: [AnyObject] = [10, false, [1, 2, 3, 4], Data(count: 2)] as [AnyObject]
         hexData = ABIEncoder.encode(types: types, values: values)?.toHexString()
         XCTAssertEqual(hexData?[128..<192], "0000000000000000000000000000000000000000000000000000000000000080")
         XCTAssertEqual(hexData, "000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000004")
@@ -220,7 +220,7 @@ class ABIEncoderTest: XCTestCase {
 
         encodedValue = ABIEncoder.encode(types: [.dynamicBytes], values: [Data.fromHex("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1")!] as [AnyObject])!.toHexString()
         XCTAssertEqual(encodedValue, "0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000009ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff100")
-        
+
         encodedValue = ABIEncoder.encode(types: [.dynamicBytes], values: [Data.fromHex("c3a40000c3a4")!] as [AnyObject])!.toHexString()
         XCTAssertEqual(encodedValue, "00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000006c3a40000c3a40000000000000000000000000000000000000000000000000000")
 

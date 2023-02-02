@@ -366,4 +366,3 @@ extension ERC1376 {
     }
 
 }
-

@@ -173,4 +173,3 @@ extension ERC1643 {
     }
 
 }
-

@@ -57,8 +57,6 @@ class BasicLocalNodeTests: LocalTestCase {
 
         let balanceBeforeTo = try await web3.eth.getBalance(for: sendToAddress)
         let balanceBeforeFrom = try await web3.eth.getBalance(for: allAddresses[0])
-        
-        
 
         let result = try await sendTx.writeToChain(password: "web3swift", sendRaw: false)
         let txHash = Data.fromHex(result.hash.stripHexPrefix())!
@@ -66,7 +64,6 @@ class BasicLocalNodeTests: LocalTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(txHash)
-        
 
         switch receipt.status {
         case .notYetProcessed:
@@ -76,12 +73,9 @@ class BasicLocalNodeTests: LocalTestCase {
         }
 
         let details = try await web3.eth.transactionDetails(txHash)
-        
 
         let balanceAfterTo = try await web3.eth.getBalance(for: sendToAddress)
         let balanceAfterFrom = try await web3.eth.getBalance(for: allAddresses[0])
-        
-        
 
         XCTAssertEqual(balanceAfterTo - balanceBeforeTo, valueToSend)
         let txnGasPrice = details.transaction.meta?.gasPrice ?? 0

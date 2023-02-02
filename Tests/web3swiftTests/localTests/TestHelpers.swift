@@ -39,7 +39,6 @@ class TestHelpers {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(txHash)
-        
 
         switch receipt.status {
         case .notYetProcessed:

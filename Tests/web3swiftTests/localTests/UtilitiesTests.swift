@@ -10,14 +10,14 @@ import Web3Core
 
 @testable import web3swift
 
-class UtilitiesTests: XCTestCase {    
+class UtilitiesTests: XCTestCase {
     // MARK: - units
-    
+
     struct Test {
         let input: Utilities.Units
         let output: Int
     }
-    
+
     func testUnitsDecimals() throws {
         let units: [Test] = [.init(input: .wei, output: 0),
                              .init(input: .kwei, output: 3),
@@ -41,7 +41,7 @@ class UtilitiesTests: XCTestCase {
                              .init(input: .grand, output: 21),
                              .init(input: .mether, output: 24),
                              .init(input: .gether, output: 27),
-                             .init(input: .tether, output: 30),
+                             .init(input: .tether, output: 30)
         ]
         units.forEach { test in
             XCTAssertEqual(test.input.decimals, test.output)

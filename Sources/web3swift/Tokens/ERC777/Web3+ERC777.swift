@@ -310,4 +310,3 @@ extension ERC777 {
     }
 
 }
-

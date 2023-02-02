@@ -4,7 +4,6 @@ import BigInt
 @testable
 import web3swift
 
-@testable
 import Web3Core
 
 class EIP1559BlockTests: LocalTestCase {
