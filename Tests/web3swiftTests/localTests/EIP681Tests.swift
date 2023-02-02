@@ -83,7 +83,7 @@ class EIP681Tests: XCTestCase {
 
     func testENSParsing() async throws {
         let testAddress = "somename.eth"
-        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)/transfer?address=somename.eth&uint256=1")
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)@1/transfer?address=somename.eth&uint256=1")
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
@@ -91,6 +91,11 @@ class EIP681Tests: XCTestCase {
             fatalError("Returned target address cannot be EthereumAddress. It must be ENS address.")
         case .ensAddress(let address):
             XCTAssertEqual(address, testAddress)
+        }
+
+        guard eip681Code.parameters.count > 1 else {
+            XCTFail("'eip681Code.parameters.count' must be at least 2.")
+            return
         }
 
         XCTAssertEqual(eip681Code.functionName, "transfer")
@@ -105,7 +110,7 @@ class EIP681Tests: XCTestCase {
 
     func testENSParsingWithEncoding() async throws {
         let testAddress = "somename.eth"
-        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)/transfer?address=somename.eth&uint256=1".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
+        let eip681Code = await Web3.EIP681CodeParser.parse("ethereum:\(testAddress)@1/transfer?address=somename.eth&uint256=1".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
         XCTAssert(eip681Code != nil)
         guard let eip681Code = eip681Code else { return }
         switch eip681Code.targetAddress {
@@ -113,6 +118,11 @@ class EIP681Tests: XCTestCase {
             fatalError("Returned target address cannot be EthereumAddress. It must be ENS address.")
         case .ensAddress(let address):
             XCTAssertEqual(address, testAddress)
+        }
+
+        guard eip681Code.parameters.count > 1 else {
+            XCTFail("'eip681Code.parameters.count' must be at least 2.")
+            return
         }
 
         XCTAssertEqual(eip681Code.functionName, "transfer")
@@ -284,24 +294,24 @@ class EIP681Tests: XCTestCase {
         eip681Link.functionName = "setData"
         eip681Link.parameters = [Web3.EIP681Code.EIP681Parameter(type: .array(type: .bytes(length: 32), length: 0),
                                                                  value: [Data.fromHex("0x1234789565875498655487123478956587549865548712347895658754980000")!,
-                                                                         Data.fromHex("0x1234789565875498655487123478956587549865548712347895658754986554")!] as AnyObject),
+                                                                         Data.fromHex("0x1234789565875498655487123478956587549865548712347895658754986554")!]),
                                  Web3.EIP681Code.EIP681Parameter(type: .array(type: .dynamicBytes, length: 0),
                                                                  value: [Data.fromHex("0x12345607")!,
-                                                                         Data.fromHex("0x8965abcdef")!] as AnyObject),
+                                                                         Data.fromHex("0x8965abcdef")!]),
                                  Web3.EIP681Code.EIP681Parameter(type: .uint(bits: 256),
-                                                                 value: 98986565 as AnyObject),
+                                                                 value: 98986565),
                                  Web3.EIP681Code.EIP681Parameter(type: .int(bits: 256),
-                                                                 value: 155445566 as AnyObject),
+                                                                 value: 155445566),
                                  Web3.EIP681Code.EIP681Parameter(type: .address,
-                                                                 value: EthereumAddress("0x9aBbDB06A61cC686BD635484439549D45c2449cc")! as AnyObject),
+                                                                 value: EthereumAddress("0x9aBbDB06A61cC686BD635484439549D45c2449cc")!),
                                  Web3.EIP681Code.EIP681Parameter(type: .bytes(length: 5),
-                                                                 value: "0x9aBbDB06A6" as AnyObject),
+                                                                 value: "0x9aBbDB06A6"),
                                  Web3.EIP681Code.EIP681Parameter(type: .bytes(length: 3),
-                                                                 value: Data.fromHex("0x9aBbDB")! as AnyObject),
+                                                                 value: Data.fromHex("0x9aBbDB")!),
                                  Web3.EIP681Code.EIP681Parameter(type: .dynamicBytes,
-                                                                 value: Data.fromHex("0x11009aBbDB87879898656545")! as AnyObject),
+                                                                 value: Data.fromHex("0x11009aBbDB87879898656545")!),
                                  Web3.EIP681Code.EIP681Parameter(type: .string,
-                                                                 value: "this is EIP681 query parameter string" as AnyObject)]
+                                                                 value: "this is EIP681 query parameter string")]
 
         let unencodedResult =  "ethereum:0x9aBbDB06A61cC686BD635484439549D45c2449cc/setData?bytes32[]=[0x1234789565875498655487123478956587549865548712347895658754980000,0x1234789565875498655487123478956587549865548712347895658754986554]&bytes[]=[0x12345607,0x8965abcdef]&uint256=98986565&int256=155445566&address=0x9aBbDB06A61cC686BD635484439549D45c2449cc&bytes5=0x9abbdb06a6&bytes3=0x9abbdb&bytes=0x11009abbdb87879898656545&string=this is EIP681 query parameter string"
 

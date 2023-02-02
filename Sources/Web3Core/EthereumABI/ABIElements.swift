@@ -174,7 +174,7 @@ public extension ABI {
 // MARK: - Function parameters encoding
 
 extension ABI.Element {
-    public func encodeParameters(_ parameters: [AnyObject]) -> Data? {
+    public func encodeParameters(_ parameters: [Any]) -> Data? {
         switch self {
         case .constructor(let constructor):
             return constructor.encodeParameters(parameters)
@@ -193,7 +193,7 @@ extension ABI.Element {
 }
 
 extension ABI.Element.Constructor {
-    public func encodeParameters(_ parameters: [AnyObject]) -> Data? {
+    public func encodeParameters(_ parameters: [Any]) -> Data? {
         guard parameters.count == inputs.count else { return nil }
         return ABIEncoder.encode(types: inputs, values: parameters)
     }
@@ -204,7 +204,7 @@ extension ABI.Element.Function {
     /// Encode parameters of a given contract method
     /// - Parameter parameters: Parameters to pass to Ethereum contract
     /// - Returns: Encoded data
-    public func encodeParameters(_ parameters: [AnyObject]) -> Data? {
+    public func encodeParameters(_ parameters: [Any]) -> Data? {
         guard parameters.count == inputs.count,
               let data = ABIEncoder.encode(types: inputs, values: parameters) else { return nil }
         return methodEncoding + data

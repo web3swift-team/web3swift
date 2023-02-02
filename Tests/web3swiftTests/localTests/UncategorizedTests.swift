@@ -116,15 +116,15 @@ class UncategorizedTests: XCTestCase {
         XCTAssert(contract != nil)
         let allMethods = contract!.contract.allMethods
         let userDeviceCount = try await contract!
-            .createReadOperation("userDeviceCount", parameters: [addr as AnyObject])?
+            .createReadOperation("userDeviceCount", parameters: [addr])?
             .callContractMethod()
 
         let totalUsers = try await contract!
-            .createReadOperation("totalUsers", parameters: [])?
+            .createReadOperation("totalUsers")?
             .callContractMethod()
 
         let user = try await contract!
-            .createReadOperation("users", parameters: [0 as AnyObject])?
+            .createReadOperation("users", parameters: [0])?
             .callContractMethod()
 
     }
