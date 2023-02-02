@@ -23,7 +23,7 @@ extension Web3.Utils {
     // /// and the nonce of this address
     // public static func calculateContractAddress(from: EthereumAddress, nonce: BigUInt) -> EthereumAddress? {
     //     guard let normalizedAddress = from.addressData.setLengthLeft(32) else {return nil}
-    //     guard let data = RLP.encode([normalizedAddress, nonce] as [AnyObject]) else {return nil}
+    //     guard let data = RLP.encode([normalizedAddress, nonce]) else {return nil}
     //     guard let contractAddressData = Utilities.sha3(data)?[12..<32] else {return nil}
     //     guard let contractAddress = EthereumAddress(Data(contractAddressData)) else {return nil}
     //     return contractAddress

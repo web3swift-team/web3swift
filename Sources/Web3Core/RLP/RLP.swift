@@ -18,10 +18,9 @@ public struct RLP {
     static var length56 = BigUInt(UInt(56))
     static var lengthMax = (BigUInt(UInt(1)) << 256)
 
-    internal static func encode(_ element: AnyObject) -> Data? {
+    internal static func encode(element: Any?) -> Data? {
         if let string = element as? String {
             return encode(string)
-
         } else if let data = element as? Data {
             return encode(data)
         } else if let biguint = element as? BigUInt {
@@ -112,14 +111,13 @@ public struct RLP {
         return encoded.bytes[0]
     }
 
-    // FIXME: Make encode generic to avoid casting it's argument to [AnyObject]
     internal static func encode(_ elements: [Any?]) -> Data? {
         var encodedData = Data()
         for e in elements {
-            if let encoded = encode(e as AnyObject) {
+            if let encoded = encode(element: e) {
                 encodedData.append(encoded)
             } else {
-                guard let asArray = e as? [AnyObject] else {return nil}
+                guard let asArray = e as? [Any] else {return nil}
                 guard let encoded = encode(asArray) else {return nil}
                 encodedData.append(encoded)
             }
