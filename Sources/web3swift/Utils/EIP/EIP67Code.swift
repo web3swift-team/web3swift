@@ -25,7 +25,7 @@ extension Web3 {
             public var parameters: [(ABI.Element.ParameterType, Any)]
 
             public func toString() -> String? {
-                let encoding = method + "(" + parameters.map({ el -> String in
+                let encoding = method + "(" + parameters.map { el -> String in
                     if let string = el.1 as? String {
                         return el.0.abiRepresentation + " " + string
                     } else if let number = el.1 as? BigUInt {
@@ -36,7 +36,7 @@ extension Web3 {
                         return el.0.abiRepresentation + " " + data.toHexString().addHexPrefix()
                     }
                     return ""
-                }).joined(separator: ", ") + ")"
+                }.joined(separator: ", ") + ")"
                 return encoding
             }
         }
@@ -104,25 +104,27 @@ extension Web3 {
         public static func parse(_ string: String) -> EIP67Code? {
             guard string.hasPrefix("ethereum:") else { return nil }
             let striped = string.components(separatedBy: "ethereum:")
-            guard striped.count == 2 else { return nil }
-            guard let encoding = striped[1].removingPercentEncoding else { return nil }
-            guard let url = URL.init(string: encoding) else { return nil }
-            guard let address = EthereumAddress(url.lastPathComponent) else { return nil }
+            guard striped.count == 2,
+                  let encoding = striped[1].removingPercentEncoding,
+                  let url = URL.init(string: encoding),
+                  let address = EthereumAddress(url.lastPathComponent) else { return nil }
             var code = EIP67Code(address: address)
-            guard let components = URLComponents(string: encoding)?.queryItems else {return code}
+            parseEncodingComponents(&code, encoding)
+            return code
+        }
+
+        private static func parseEncodingComponents(_ code: inout EIP67Code, _ encoding: ) {
+            guard let components = URLComponents(string: encoding)?.queryItems else { return code }
             for comp in components {
                 switch comp.name {
                 case "value":
-                    guard let value = comp.value else { return nil }
-                    guard let val = BigUInt(value, radix: 10) else { return nil }
+                    guard let value = comp.value, let val = BigUInt(value, radix: 10) else { return nil }
                     code.amount = val
                 case "gas":
-                    guard let value = comp.value else { return nil }
-                    guard let val = BigUInt(value, radix: 10) else { return nil }
+                    guard let value = comp.value, let val = BigUInt(value, radix: 10) else { return nil }
                     code.gasLimit = val
                 case "data":
-                    guard let value = comp.value else { return nil }
-                    guard let data = Data.fromHex(value) else { return nil }
+                    guard let value = comp.value, let data = Data.fromHex(value) else { return nil }
                     code.data = EIP67Code.DataType.data(data)
                 case "function":
                     continue
@@ -130,7 +132,6 @@ extension Web3 {
                     continue
                 }
             }
-            return code
         }
     }
 }
