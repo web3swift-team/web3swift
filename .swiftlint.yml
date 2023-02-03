@@ -29,6 +29,7 @@ opt_in_rules:
  - empty_string
  - closure_body_length
  - fallthrough
+ - commented_out_code
 
 # force warnings
 force_cast: error
@@ -39,7 +40,7 @@ custom_rules:
     included: ".*\\.swift" # regex that defines paths to include during linting. optional.
     excluded: ".*Test(s)?\\.swift" # regex that defines paths to exclude during linting. optional
     name: "Commented out code" # rule name. optional.
-    regex: "^\\/\\/\\s*(@|\\.?([a-z]|(\\})))" # matching pattern
+    regex: "^\\s*(\/\/(?!\\s*swiftlint:).*|\/\\*[\\s\\S]*?\\*\/)" # matching pattern
     capture_group: 0 # number of regex capture group to highlight the rule violation at. optional.
     match_kinds: # SyntaxKinds to match. optional.
       - comment
