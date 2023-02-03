@@ -140,13 +140,13 @@ public extension Web3 {
 
         var mainNetFisrtBlockNumber: BigUInt {
             switch self {
-                case .Byzantium: return 4_370_000
-                case .Constantinople: return 7_280_000
-                case .Istanbul: return 9_069_000
-                case .MuirGlacier: return 9_200_000
-                case .Berlin: return 12_244_000
-                case .London: return 12_965_000
-                case .ArrowGlacier: return 13_773_000
+            case .Byzantium: return 4_370_000
+            case .Constantinople: return 7_280_000
+            case .Istanbul: return 9_069_000
+            case .MuirGlacier: return 9_200_000
+            case .Berlin: return 12_244_000
+            case .London: return 12_965_000
+            case .ArrowGlacier: return 13_773_000
             }
         }
     }
@@ -156,7 +156,7 @@ public extension Web3 {
         // to get the block's ChainVersion.
         if block < MainChainVersion.Constantinople.mainNetFisrtBlockNumber {
             return .Byzantium
-        // ~= means included in a given range
+            // ~= means included in a given range
         } else if MainChainVersion.Constantinople.mainNetFisrtBlockNumber..<MainChainVersion.Istanbul.mainNetFisrtBlockNumber ~= block {
             return .Constantinople
         } else if MainChainVersion.Istanbul.mainNetFisrtBlockNumber..<MainChainVersion.MuirGlacier.mainNetFisrtBlockNumber ~= block {
@@ -176,7 +176,7 @@ public extension Web3 {
 
 extension Web3.MainChainVersion: Comparable {
     public static func < (lhs: Web3.MainChainVersion, rhs: Web3.MainChainVersion) -> Bool { return lhs.mainNetFisrtBlockNumber < rhs.mainNetFisrtBlockNumber }
- }
+}
 
 extension Block {
     /// Returns chain version of mainnet block with such number
