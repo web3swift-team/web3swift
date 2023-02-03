@@ -6,14 +6,14 @@ excluded:
   - DerivedData
 
 disabled_rules:
-  - function_parameter_count
-  - nesting
   - type_name
   - identifier_name
   - line_length
   - multiple_closures_with_trailing_closure
   - todo
   - indentation_width
+  - function_parameter_count
+  - nesting
 
 opt_in_rules:
  - weak_delegate
@@ -29,7 +29,6 @@ opt_in_rules:
  - empty_string
  - closure_body_length
  - fallthrough
- - commented_out_code
 
 # force warnings
 force_cast: error
@@ -37,12 +36,12 @@ force_try: error
 
 custom_rules:
   commented_out_code: 
-    included: ".*\\.swift" # regex that defines paths to include during linting. optional.
-    excluded: ".*Test(s)?\\.swift" # regex that defines paths to exclude during linting. optional
-    name: "Commented out code" # rule name. optional.
-    regex: "^\\s*(\/\/(?!\\s*swiftlint:).*|\/\\*[\\s\\S]*?\\*\/)" # matching pattern
+    included: .*\.swift # regex that defines paths to include during linting. optional.
+    excluded: .*Test(s)?\.swift # regex that defines paths to exclude during linting. optional
+    name: Commented out code # rule name. optional.
+    regex: ^\s*(\/\/(?!\s*swiftlint:).*|\/\*[\s\S]*?\*\/) # matching pattern
     capture_group: 0 # number of regex capture group to highlight the rule violation at. optional.
     match_kinds: # SyntaxKinds to match. optional.
       - comment
-    message: "No commented code in devel branch allowed." # violation message. optional.
+    message: No commented code in devel branch allowed. # violation message. optional.
     severity: warning # violation severity. optional.
