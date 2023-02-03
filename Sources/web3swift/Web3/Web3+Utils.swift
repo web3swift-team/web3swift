@@ -13,24 +13,19 @@ public typealias Web3Utils = Web3.Utils
 extension Web3 {
     /// Namespaced Utils functions. Are not bound to particular web3 instance, so capitalization matters.
     public struct Utils {
+        // swiftlint:disable nesting
         typealias Iban = IBAN
+        // swiftlint:enable nesting
     }
 }
 
+// swiftlint:disable file_length
+// swiftlint:disable line_length
 extension Web3.Utils {
-
-    // /// Calculate address of deployed contract deterministically based on the address of the deploying Ethereum address
-    // /// and the nonce of this address
-    // public static func calculateContractAddress(from: EthereumAddress, nonce: BigUInt) -> EthereumAddress? {
-    //     guard let normalizedAddress = from.addressData.setLengthLeft(32) else {return nil}
-    //     guard let data = RLP.encode([normalizedAddress, nonce]) else {return nil}
-    //     guard let contractAddressData = Utilities.sha3(data)?[12..<32] else {return nil}
-    //     guard let contractAddress = EthereumAddress(Data(contractAddressData)) else {return nil}
-    //     return contractAddress
-    // }
 
     /// Various units used in Ethereum ecosystem
     public enum Units {
+        // swiftlint:disable identifier_name
         case eth
         case wei
         case Kwei
@@ -40,23 +35,21 @@ extension Web3.Utils {
         case Finney
 
         var decimals: Int {
-            get {
-                switch self {
-                case .eth:
-                    return 18
-                case .wei:
-                    return 0
-                case .Kwei:
-                    return 3
-                case .Mwei:
-                    return 6
-                case .Gwei:
-                    return 9
-                case .Microether:
-                    return 12
-                case .Finney:
-                    return 15
-                }
+            switch self {
+            case .eth:
+                return 18
+            case .wei:
+                return 0
+            case .Kwei:
+                return 3
+            case .Mwei:
+                return 6
+            case .Gwei:
+                return 9
+            case .Microether:
+                return 12
+            case .Finney:
+                return 15
             }
         }
     }
