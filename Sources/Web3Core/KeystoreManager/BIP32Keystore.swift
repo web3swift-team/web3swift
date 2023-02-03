@@ -74,10 +74,10 @@ public class BIP32Keystore: AbstractKeystore {
     }
 
     public init?(_ jsonData: Data) {
-        guard var keystorePars = try? JSONDecoder().decode(KeystoreParamsBIP32.self, from: jsonData) else {return nil}
-        if keystorePars.version != Self.KeystoreParamsBIP32Version {return nil}
-        if keystorePars.crypto.version != nil && keystorePars.crypto.version != "1" {return nil}
-        if !keystorePars.isHDWallet {return nil}
+        guard var keystorePars = try? JSONDecoder().decode(KeystoreParamsBIP32.self, from: jsonData) else { return nil }
+        if keystorePars.version != Self.KeystoreParamsBIP32Version { return nil }
+        if keystorePars.crypto.version != nil && keystorePars.crypto.version != "1" { return nil }
+        if !keystorePars.isHDWallet { return nil }
 
         addressStorage = PathAddressStorage(pathAddressPairs: keystorePars.pathAddressPairs)
 
@@ -100,7 +100,7 @@ public class BIP32Keystore: AbstractKeystore {
 
     public init? (seed: Data, password: String, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
         addressStorage = PathAddressStorage()
-        guard let rootNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else {return nil}
+        guard let rootNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else { return nil }
         self.rootPrefix = prefixPath
         try createNewAccount(parentNode: rootNode, password: password)
         guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {

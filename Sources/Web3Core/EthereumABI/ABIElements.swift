@@ -215,7 +215,7 @@ extension ABI.Element.Function {
 
 extension ABI.Element.Event {
     public func decodeReturnedLogs(eventLogTopics: [Data], eventLogData: Data) -> [String: Any]? {
-        guard let eventContent = ABIDecoder.decodeLog(event: self, eventLogTopics: eventLogTopics, eventLogData: eventLogData) else {return nil}
+        guard let eventContent = ABIDecoder.decodeLog(event: self, eventLogTopics: eventLogTopics, eventLogData: eventLogData) else { return nil }
         return eventContent
     }
 }
@@ -478,7 +478,7 @@ private func decodeInputData(_ rawData: Data,
         guard inputs.count * 32 <= data.count else { return nil }
 
         var i = 0
-        guard let values = ABIDecoder.decode(types: inputs, data: data) else {return nil}
+        guard let values = ABIDecoder.decode(types: inputs, data: data) else { return nil }
         for input in inputs {
             let name = "\(i)"
             returnArray[name] = values[i]

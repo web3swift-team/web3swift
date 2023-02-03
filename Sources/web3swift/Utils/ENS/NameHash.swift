@@ -14,7 +14,7 @@ public struct NameHash {
     }
 
     public static func nameHash(_ domain: String) -> Data? {
-        guard let normalized = NameHash.normalizeDomainName(domain) else {return nil}
+        guard let normalized = NameHash.normalizeDomainName(domain) else { return nil }
         return namehash(normalized)
     }
 

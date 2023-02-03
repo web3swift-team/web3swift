@@ -63,7 +63,7 @@ public struct EthereumAddress: Equatable {
     /// represented as `ASCII` data. Otherwise, checksummed address is returned with `0x` prefix.
     public static func toChecksumAddress(_ addr: String) -> String? {
         let address = addr.lowercased().stripHexPrefix()
-        guard let hash = address.data(using: .ascii)?.sha3(.keccak256).toHexString().stripHexPrefix() else {return nil}
+        guard let hash = address.data(using: .ascii)?.sha3(.keccak256).toHexString().stripHexPrefix() else { return nil }
         var ret = "0x"
 
         for (i, char) in address.enumerated() {
@@ -71,7 +71,7 @@ public struct EthereumAddress: Equatable {
             let endIdx = hash.index(hash.startIndex, offsetBy: i+1)
             let hashChar = String(hash[startIdx..<endIdx])
             let c = String(char)
-            guard let int = Int(hashChar, radix: 16) else {return nil}
+            guard let int = Int(hashChar, radix: 16) else { return nil }
             if int >= 8 {
                 ret += c.uppercased()
             } else {
@@ -96,8 +96,8 @@ extension EthereumAddress {
     public init?(_ addressString: String, type: AddressType = .normal, ignoreChecksum: Bool = false) {
         switch type {
         case .normal:
-            guard let data = Data.fromHex(addressString) else {return nil}
-            guard data.count == 20 else {return nil}
+            guard let data = Data.fromHex(addressString) else { return nil }
+            guard data.count == 20 else { return nil }
             if !addressString.hasHexPrefix() {
                 return nil
             }
@@ -113,7 +113,7 @@ extension EthereumAddress {
                     return
                 } else {
                     let checksummedAddress = EthereumAddress.toChecksumAddress(data.toHexString().addHexPrefix())
-                    guard checksummedAddress == addressString else {return nil}
+                    guard checksummedAddress == addressString else { return nil }
                     self._address = data.toHexString().addHexPrefix()
                     self.type = .normal
                     return
@@ -131,7 +131,7 @@ extension EthereumAddress {
     }
 
     public init?(_ addressData: Data, type: AddressType = .normal) {
-        guard addressData.count == 20 else {return nil}
+        guard addressData.count == 20 else { return nil }
         self._address = addressData.toHexString().addHexPrefix()
         self.type = type
     }

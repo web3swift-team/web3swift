@@ -33,7 +33,7 @@ extension Web3 {
                 return nil
             case 2:
                 // TODO: should throw
-                guard let contract = try? EthereumContract(abiString, at: at) else {return nil}
+                guard let contract = try? EthereumContract(abiString, at: at) else { return nil }
                 self.contract = contract
             default:
                 return nil
