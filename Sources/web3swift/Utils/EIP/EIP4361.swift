@@ -46,18 +46,18 @@ private let uriPattern = "(([^:?#\\s]+):)?(([^?#\\s]*))?([^?#\\s]*)(\\?([^#\\s]*
 public final class EIP4361 {
 
     public enum EIP4361Field: String {
-        case domain = "domain"
-        case address = "address"
-        case statement = "statement"
-        case uri = "uri"
-        case version = "version"
-        case chainId = "chainId"
-        case nonce = "nonce"
-        case issuedAt = "issuedAt"
-        case expirationTime = "expirationTime"
-        case notBefore = "notBefore"
-        case requestId = "requestId"
-        case resources = "resources"
+        case domain
+        case address
+        case statement
+        case uri
+        case version
+        case chainId
+        case nonce
+        case issuedAt
+        case expirationTime
+        case notBefore
+        case requestId
+        case resources
     }
 
     private static let domain = "(?<\(EIP4361Field.domain.rawValue)>([^?#]*)) wants you to sign in with your Ethereum account:"
@@ -77,9 +77,9 @@ public final class EIP4361 {
         "^\(domain)\(address)\(statementParagraph)\(uri)\(version)\(chainId)\(nonce)\(issuedAt)\(expirationTime)\(notBefore)\(requestId)\(resourcesParagraph)$"
     }
 
-    private static var _eip4361OptionalPattern: String!
+    private static var _eip4361OptionalPattern: String?
     private static var eip4361OptionalPattern: String {
-        guard _eip4361OptionalPattern == nil else { return _eip4361OptionalPattern! }
+        if let _eip4361OptionalPattern = _eip4361OptionalPattern { return _eip4361OptionalPattern }
 
         let domain = "(?<\(EIP4361Field.domain.rawValue)>(.*)) wants you to sign in with your Ethereum account:"
         let address = "\\n(?<\(EIP4361Field.address.rawValue)>.*)\\n\\n"
@@ -106,20 +106,27 @@ public final class EIP4361 {
                                       "\(requestId)",
                                       "\(resourcesParagraph)$"]
 
-        _eip4361OptionalPattern = patternParts.joined()
-        return _eip4361OptionalPattern!
+        let eip4361OptionalPattern = patternParts.joined()
+        _eip4361OptionalPattern = eip4361OptionalPattern
+        return eip4361OptionalPattern
     }
 
     public static func validate(_ message: String) -> EIP4361ValidationResponse {
+        // swiftlint:disable force_try
         let siweConstantMessageRegex = try! NSRegularExpression(pattern: "^\(domain)\\n")
         guard siweConstantMessageRegex.firstMatch(in: message, range: message.fullNSRange) != nil else {
             return EIP4361ValidationResponse(isEIP4361: false, eip4361: nil, capturedFields: [:])
         }
 
         let eip4361Regex = try! NSRegularExpression(pattern: eip4361OptionalPattern)
+        // swiftlint:enable force_try
         var capturedFields: [EIP4361Field: String] = [:]
         for (key, value) in eip4361Regex.captureGroups(string: message) {
+            /// We are using EIP4361Field.rawValue to create regular expression.
+            /// These values must decode back from raw representation always.
+            // swiftlint:disable force_unwrapping
             capturedFields[.init(rawValue: key)!] = value
+            // swiftlint:enable force_unwrapping
         }
         return EIP4361ValidationResponse(isEIP4361: true,
                                   eip4361: EIP4361(message),
@@ -153,7 +160,9 @@ public final class EIP4361 {
     public let resources: [URL]?
 
     public init?(_ message: String) {
+        // swiftlint:disable force_try
         let eip4361Regex = try! NSRegularExpression(pattern: EIP4361.eip4361Pattern)
+        // swiftlint:enable force_try
         let groups = eip4361Regex.captureGroups(string: message)
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
