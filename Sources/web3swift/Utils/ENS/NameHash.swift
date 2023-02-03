@@ -19,7 +19,7 @@ public struct NameHash {
     }
 
     static func namehash(_ name: String) -> Data? {
-        if name == "" {
+        if name.isEmpty {
             return Data(repeating: 0, count: 32)
         }
         let parts = name.split(separator: ".")
