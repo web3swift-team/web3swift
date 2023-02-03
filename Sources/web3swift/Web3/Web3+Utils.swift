@@ -13,9 +13,7 @@ public typealias Web3Utils = Web3.Utils
 extension Web3 {
     /// Namespaced Utils functions. Are not bound to particular web3 instance, so capitalization matters.
     public struct Utils {
-        // swiftlint:disable nesting
         typealias Iban = IBAN
-        // swiftlint:enable nesting
     }
 }
 
