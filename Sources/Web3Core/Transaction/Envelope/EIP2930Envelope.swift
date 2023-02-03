@@ -207,7 +207,7 @@ extension EIP2930Envelope {
 
     public func encode(for type: EncodeType = .transaction) -> Data? {
         let fields: [Any?]
-        let list = accessList.map { $0.encodeAsList() as AnyObject }
+        let list = accessList.map { $0.encodeAsList() }
 
         switch type {
         case .transaction:
@@ -310,7 +310,7 @@ public struct AccessListEntry: CustomStringConvertible, Codable {
         }
     }
 
-    public func encodeAsList() -> [AnyObject]? {
+    public func encodeAsList() -> [Any]? {
         var storage: [Data] = []
 
         for key in storageKeys {
@@ -318,7 +318,7 @@ public struct AccessListEntry: CustomStringConvertible, Codable {
             storage.append(keyData)
         }
 
-        return [address.address as AnyObject, storage as AnyObject]
+        return [address.address, storage]
     }
 
     // FIXME: THIS NOT WORKING!!!

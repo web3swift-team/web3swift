@@ -22,7 +22,7 @@ extension Web3 {
         }
         public struct Function {
             public var method: String
-            public var parameters: [(ABI.Element.ParameterType, AnyObject)]
+            public var parameters: [(ABI.Element.ParameterType, Any)]
 
             public func toString() -> String? {
                 let encoding = method + "(" + parameters.map({ el -> String in

@@ -41,7 +41,7 @@
 //        let allAddresses = try await web3.eth.ownedAccounts()
 //        let contract = web3.contract(Web3.Utils.estimateGasTestABI, at: nil, abiVersion: 2)!
 //
-//        let parameters = [] as [AnyObject]
+//        let parameters = []
 //        let deployTx = contract.deploy(bytecode: bytecode, parameters: parameters)!
 //        deployTx.transaction.from = allAddresses[0]
 //        deployTx.transaction.gasLimitPolicy = .manual(3000000)
@@ -80,7 +80,7 @@
 //
 //        // MARK: Writing Data flow
 //        guard let tx1 = contract.write("test",
-//                                       parameters: [amount1] as [AnyObject],
+//                                       parameters: [amount1],
 //                                       extraData: Data(),
 //                                       transaction: options) else {
 //            return
@@ -93,7 +93,7 @@
 //
 //        // MARK: Writing Data flow
 //        guard let tx2 = contract.write("test",
-//                                       parameters: [amount2] as [AnyObject],
+//                                       parameters: [amount2],
 //                                       extraData: Data(),
 //                                       transaction: options) else {
 //            return
@@ -122,7 +122,7 @@
 //        let token = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress, abiVersion: 2)!
 //
 //        let userAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
-//        let tokenBalance = try await token.read("balanceOf", parameters: [userAddress] as [AnyObject])!.decodedData()
+//        let tokenBalance = try await token.read("balanceOf", parameters: [userAddress])!.decodedData()
 //        guard let bal = tokenBalance["0"] as? BigUInt else {return XCTFail()}
 //        )
 //    }

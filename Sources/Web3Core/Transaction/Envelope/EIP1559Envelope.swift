@@ -246,8 +246,7 @@ extension EIP1559Envelope {
 
     public func encode(for type: EncodeType = .transaction) -> Data? {
         let fields: [Any?]
-        let list = accessList.map { $0.encodeAsList() as AnyObject }
-
+        let list = accessList.map { $0.encodeAsList() }
         switch type {
         case .transaction:
             fields = [chainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list, v, r, s]
