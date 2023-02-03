@@ -240,7 +240,7 @@ extension Web3 {
 
         // TODO: throws errors instead of returning `nil`
         /// Attempts to parse given string as EIP681 code.
-        /// Note: that ENS addresses as paramteres will be attempted to be resolved into Ethereum addresses.
+        /// Note: that ENS addresses as parameters will be attempted to be resolved into Ethereum addresses.
         /// Thus, make sure that given raw EIP681 code has chain ID set or default Ethereum Mainnet chan ID will be used instead.
         /// - Parameter string: raw, encoded EIP681 code.
         /// - Returns: parsed EIP681 code or `nil` is something has failed.
