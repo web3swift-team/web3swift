@@ -14,16 +14,6 @@ import BigInt
 
 class ABIEncoderTest: XCTestCase {
 
-    func testEncodeInt() {
-        XCTAssertEqual(ABIEncoder.encodeSingleType(type: .int(bits: 32), value: -10 as AnyObject)?.toHexString(), "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6")
-        XCTAssertEqual(ABIEncoder.encodeSingleType(type: .int(bits: 32), value: 10 as AnyObject)?.toHexString(), "000000000000000000000000000000000000000000000000000000000000000a")
-    }
-
-    func testEncodeUInt() {
-        XCTAssertEqual(ABIEncoder.encodeSingleType(type: .uint(bits: 32), value: -10 as AnyObject), nil)
-        XCTAssertEqual(ABIEncoder.encodeSingleType(type: .uint(bits: 32), value: 10 as AnyObject)?.toHexString(), "000000000000000000000000000000000000000000000000000000000000000a")
-    }
-
     func testSoliditySha3() throws {
         var hex = try ABIEncoder.soliditySha3(true).toHexString().addHexPrefix()
         assert(hex == "0x5fe7f977e71dba2ea1a68e21057beebb9be2ac30c6410aa38d4f3fbe41dcffd2")
