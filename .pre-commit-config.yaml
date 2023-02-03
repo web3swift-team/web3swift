@@ -15,7 +15,7 @@ repos:
     rev: v2.2.2
     hooks:
     -   id: codespell
-        args: ["--count --ignore-words-list=ans,deriver,inout,packag --skip=\"*.js,*WordLists.swift\""]
+        args: ["--count --ignore-words-list=ans,deriver,inout,packag --skip=\"*.js,*WordLists.swift\",.git,Carthage,.build,build"]
 -   repo: https://github.com/realm/SwiftLint
     rev: 0.50.3
     hooks:
