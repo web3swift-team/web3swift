@@ -467,7 +467,7 @@ class TransactionsTests: XCTestCase {
             // check that the transaction type is eip1559
             XCTAssertEqual(jsonTxn.type, .eip1559, "Transaction Type Mismatch")
             // check the hash, if they match everything was parsed, and re-encoded correctly
-            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch Shoult")
+            XCTAssertEqual(jsonTxn.hash!.toHexString().addHexPrefix(), vector.hash, "Transaction Hash Mismatch")
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
