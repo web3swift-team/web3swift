@@ -98,7 +98,7 @@ public struct ABIEncoder {
 
     /// Attempts to convert given object into `Data`.
     /// Used as a part of ABI encoding process.
-    /// Supported types are `Data`, `String`, `[UInt8]`, ``EthereumAddress`` and `[IntegerLiteralType]`.
+    /// Supported types are `Data`, `String`, `[UInt8]`, ``EthereumAddress``, `[IntegerLiteralType]` and `Bool`.
     /// Note: if `String` has `0x` prefix an attempt to interpret it as a hexadecimal number will take place. Otherwise, UTF-8 bytes are returned.
     /// - Parameter value: any object.
     /// - Returns: `Data` representation of an object ready for ABI encoding.
@@ -123,6 +123,8 @@ public struct ABIEncoder {
                 bytesArray.append(UInt8(el))
             }
             return Data(bytesArray)
+        case let b as Bool:
+            return b ? Data([UInt8(1)]) : Data(count: 1)
         default:
             return nil
         }
