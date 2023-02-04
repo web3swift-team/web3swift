@@ -113,18 +113,18 @@ extension Web3 {
             return code
         }
 
-        private static func parseEncodingComponents(_ code: inout EIP67Code, _ encoding: ) {
-            guard let components = URLComponents(string: encoding)?.queryItems else { return code }
+        private static func parseEncodingComponents(_ code: inout EIP67Code, _ encoding: String) {
+            guard let components = URLComponents(string: encoding)?.queryItems else { return }
             for comp in components {
                 switch comp.name {
                 case "value":
-                    guard let value = comp.value, let val = BigUInt(value, radix: 10) else { return nil }
+                    guard let value = comp.value, let val = BigUInt(value, radix: 10) else { return }
                     code.amount = val
                 case "gas":
-                    guard let value = comp.value, let val = BigUInt(value, radix: 10) else { return nil }
+                    guard let value = comp.value, let val = BigUInt(value, radix: 10) else { return }
                     code.gasLimit = val
                 case "data":
-                    guard let value = comp.value, let data = Data.fromHex(value) else { return nil }
+                    guard let value = comp.value, let data = Data.fromHex(value) else { return }
                     code.data = EIP67Code.DataType.data(data)
                 case "function":
                     continue
