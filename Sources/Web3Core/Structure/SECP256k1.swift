@@ -133,11 +133,13 @@ extension SECP256K1 {
                 let serializedPubkeyPointer = serializedPkRawPointer.assumingMemoryBound(to: UInt8.self)
                 return withUnsafeMutablePointer(to: &keyLength) { (keyPtr: UnsafeMutablePointer<Int>) -> Int32 in
                     withUnsafeMutablePointer(to: &publicKey) { (pubKeyPtr: UnsafeMutablePointer<secp256k1_pubkey>) -> Int32 in
-                        let res = secp256k1_ec_pubkey_serialize(context,
-                                                                serializedPubkeyPointer,
-                                                                keyPtr,
-                                                                pubKeyPtr,
-                                                                UInt32(compressed ? SECP256K1_EC_COMPRESSED : SECP256K1_EC_UNCOMPRESSED))
+                        let res = secp256k1_ec_pubkey_serialize(
+                            context,
+                            serializedPubkeyPointer,
+                            keyPtr,
+                            pubKeyPtr,
+                            UInt32(compressed ? SECP256K1_EC_COMPRESSED : SECP256K1_EC_UNCOMPRESSED)
+                        )
                         return res
                     }
                 }
@@ -152,8 +154,10 @@ extension SECP256K1 {
     }
 
     internal static func parsePublicKey(serializedKey: Data) -> secp256k1_pubkey? {
-        guard let context = context,
-              serializedKey.count == 33 || serializedKey.count == 65 else {
+        guard
+            let context = context,
+            (serializedKey.count == 33 || serializedKey.count == 65)
+        else {
             return nil
         }
         let keyLen: Int = Int(serializedKey.count)
