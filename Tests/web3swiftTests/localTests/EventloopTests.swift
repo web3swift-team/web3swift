@@ -21,7 +21,7 @@ class EventloopTests: XCTestCase {
                     expectation.fulfill()
                 }
             } catch {
-                
+
             }
         }
 

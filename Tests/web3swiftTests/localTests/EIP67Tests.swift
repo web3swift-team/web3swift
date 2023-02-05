@@ -18,7 +18,7 @@ class EIP67Tests: LocalTestCase {
         eip67Data.amount = BigUInt("1000000000000000000")
         //        eip67Data.data =
         let encoding = eip67Data.toString()
-        
+
     }
 
     func testEIP67codeGeneration() throws {
