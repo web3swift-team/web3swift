@@ -19,8 +19,8 @@
 
 - [Core features](#core-features)
 - [Installation](#installation)
-    - [CocoaPods](#cocoapods)
     - [Swift Package](#swift-package)
+    - [CocoaPods](#cocoapods)
 - [Example usage](#example-usage)
     - [Send Ether](#send-ether)
     - [Contract read method](#contract-read-method)
@@ -66,6 +66,24 @@
 
 ## Installation
 
+### Swift Package
+The [Swift Package Manager](https://swift.org/package-manager/ "") is a tool for automating the distribution of Swift code and is integrated into the swift compiler.
+
+Once you have your Swift package set up, adding Alamofire as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+```swift
+dependencies: [
+    .package(url: "https://github.com/web3swift-team/web3swift.git", .upToNextMajor(from: "3.0.0"))
+]
+```
+
+## Example usage
+In the imports section:
+
+```swift
+import web3swift
+import Web3Core
+```
+
 ### CocoaPods
 
 [CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
@@ -91,23 +109,6 @@ Then, run the following command:
 $ pod install
 ```
 
-### Swift Package
-The [Swift Package Manager](https://swift.org/package-manager/ "") is a tool for automating the distribution of Swift code and is integrated into the swift compiler.
-
-Once you have your Swift package set up, adding Alamofire as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
-```swift
-dependencies: [
-    .package(url: "https://github.com/web3swift-team/web3swift.git", .upToNextMajor(from: "3.0.0"))
-]
-```
-
-## Example usage
-In the imports section:
-
-```swift
-import web3swift
-import Web3Core
-```
 
 ### Send Ether
 ```swift
