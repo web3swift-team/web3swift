@@ -206,7 +206,7 @@ public struct Utilities {
     ///
     /// Input parameters should be Data objects.
     public static func personalECRecover(_ personalMessage: Data, signature: Data) -> EthereumAddress? {
-        if signature.count != 65 { return nil}
+        if signature.count != 65 { return nil }
         let rData = signature[0..<32].bytes
         let sData = signature[32..<64].bytes
         var vData = signature[64]
@@ -229,7 +229,7 @@ public struct Utilities {
     ///
     /// Input parameters should be Data objects.
     public static func hashECRecover(hash: Data, signature: Data) -> EthereumAddress? {
-        if signature.count != 65 { return nil}
+        if signature.count != 65 { return nil }
         let rData = signature[0..<32].bytes
         let sData = signature[32..<64].bytes
         var vData = signature[64]
