@@ -109,6 +109,7 @@ Then, run the following command:
 $ pod install
 ```
 
+> **WARNING**: CocoaPods is a powerful tool for managing dependencies in iOS development, but it also has some limitations that need to be considered such as its limited control over dependencies, lack of transparency, complex setup and slow performance.
 
 ### Send Ether
 ```swift
