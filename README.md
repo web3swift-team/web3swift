@@ -66,7 +66,7 @@
 
 ## Installation
 
-### Swift Package
+### Swift Package (Recommended)
 The [Swift Package Manager](https://swift.org/package-manager/ "") is a tool for automating the distribution of Swift code and is integrated into the swift compiler.
 
 Once you have your Swift package set up, adding `web3swift` as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
@@ -109,7 +109,7 @@ Then, run the following command:
 $ pod install
 ```
 
-> **WARNING**: CocoaPods is a powerful tool for managing dependencies in iOS development, but it also has some limitations that need to be considered such as its limited control over dependencies, lack of transparency, complex setup and slow performance.
+> **WARNING**: CocoaPods is a powerful tool for managing dependencies in iOS development, but it also has some limitations that need to be considered such as its limited control over dependencies, lack of transparency, complex setup and slow performance. We highly recommend using SPM first as using CocoaPods will delay new updates and bug fixes being delivered to you.
 
 ### Send Ether
 ```swift
