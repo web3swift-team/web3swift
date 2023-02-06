@@ -1,34 +1,34 @@
 excluded:
-  - Carthage
-  - Pods
   - .build
   - Build
+  - Carthage
   - DerivedData
+  - Pods
 
 disabled_rules:
-  - type_name
+  - function_parameter_count
   - identifier_name
   - line_length
   - multiple_closures_with_trailing_closure
-  - todo  
-  - function_parameter_count
   - nesting
+  - todo
+  - type_name
 
 opt_in_rules:
- - weak_delegate
- - unused_import
- - unneeded_parentheses_in_closure_argument
- - trailing_closure
- - static_operator
- - redundant_nil_coalescing
- - override_in_extension
- - legacy_objc_type
- - implicitly_unwrapped_optional
- - force_unwrapping
- - empty_string
- - closure_body_length
- - fallthrough
- - indentation_width
+  - closure_body_length
+  - empty_string
+  - fallthrough
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - indentation_width
+  - legacy_objc_type
+  - override_in_extension
+  - redundant_nil_coalescing
+  - static_operator
+  - trailing_closure
+  - unneeded_parentheses_in_closure_argument
+  - unused_import
+  - weak_delegate
 
 # force warnings
 force_cast: error
