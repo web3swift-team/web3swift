@@ -22,4 +22,4 @@ repos:
 #    rev: 0.50.3
 #    hooks:
 #    -   id: swiftlint
-#        args: [Sources, Tests]
+#        args: [--fix, Sources, Tests]
