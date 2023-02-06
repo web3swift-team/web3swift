@@ -67,9 +67,9 @@
 ## Installation
 
 ### Swift Package (Recommended)
-The [Swift Package Manager](https://swift.org/package-manager/ "") is a tool for automating the distribution of Swift code and is integrated into the swift compiler.
+The [Swift Package Manager](https://swift.org/package-manager/ "") is a tool for automating the distribution of Swift code that is well integrated with Swift build system.
 
-Once you have your Swift package set up, adding `web3swift` as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+Once you have your Swift project set up, adding `web3swift` as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
 ```swift
 dependencies: [
     .package(url: "https://github.com/web3swift-team/web3swift.git", .upToNextMajor(from: "3.0.0"))
