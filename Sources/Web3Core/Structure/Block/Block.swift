@@ -110,7 +110,7 @@ extension Block: Codable {
         try container.encodeHex(parentHash, forKey: .parentHash)
         try container.encodeHexIfPresent(nonce, forKey: .nonce)
         try container.encodeHex(sha3Uncles, forKey: .sha3Uncles)
-        // FIXME:
+        
         try container.encodeHexIfPresent(logsBloom?.bytes, forKey: .logsBloom)
 
         try container.encodeHex(transactionsRoot, forKey: .transactionsRoot)
