@@ -13,6 +13,10 @@ extension KeyedEncodingContainer {
         try encode(value.hexString, forKey: key)
     }
 
+    mutating func encodeHexIfPresent<T: EncodableToHex>(_ value: T?, forKey key: KeyedEncodingContainer<K>.Key) throws {
+        try encodeIfPresent(value?.hexString, forKey: key)
+    }
+
     mutating func encodeHex<T: EncodableToHex>(_ value: [T], forKey key: KeyedEncodingContainer<K>.Key) throws {
         var container = nestedUnkeyedContainer(forKey: key)
         try container.encodeHex(value)
@@ -63,3 +67,15 @@ public extension EncodableToHex where Self: BinaryInteger {
 extension BigUInt: EncodableToHex { }
 
 extension UInt: EncodableToHex { }
+
+extension Data: EncodableToHex {
+    public var hexString: String {
+        toHexString().addHexPrefix()
+    }
+}
+
+extension Date: EncodableToHex {
+    public var hexString: String {
+        String(UInt(timeIntervalSince1970), radix: 16).addHexPrefix()
+    }
+}

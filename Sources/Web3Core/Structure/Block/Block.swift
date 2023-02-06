@@ -60,7 +60,7 @@ public struct Block {
     }
 }
 
-extension Block: Decodable {
+extension Block: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -101,6 +101,40 @@ extension Block: Decodable {
             guard let data = Data.fromHex($0) else { throw Web3Error.dataError }
             return data
         }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeHex(number, forKey: .number)
+        try container.encodeHex(hash, forKey: .hash)
+        try container.encodeHex(parentHash, forKey: .parentHash)
+        try container.encodeHexIfPresent(nonce, forKey: .nonce)
+        try container.encodeHex(sha3Uncles, forKey: .sha3Uncles)
+        // FIXME:
+        try container.encodeHexIfPresent(logsBloom?.bytes, forKey: .logsBloom)
+
+        try container.encodeHex(transactionsRoot, forKey: .transactionsRoot)
+        try container.encodeHex(stateRoot, forKey: .stateRoot)
+        try container.encodeHex(receiptsRoot, forKey: .receiptsRoot)
+
+        try container.encodeIfPresent(miner?.address, forKey: .miner)
+
+        try container.encodeHex(difficulty, forKey: .difficulty)
+        try container.encodeHex(totalDifficulty, forKey: .totalDifficulty)
+        try container.encodeHex(extraData, forKey: .extraData)
+        try container.encodeHex(size, forKey: .size)
+        try container.encodeHex(gasLimit, forKey: .gasLimit)
+        try container.encodeHex(gasUsed, forKey: .gasUsed)
+
+        // optional, since pre EIP-1559 block haven't such property.
+        try container.encodeHexIfPresent(baseFeePerGas, forKey: .baseFeePerGas)
+
+        try container.encodeHex(timestamp, forKey: .timestamp)
+
+        try container.encode(transactions, forKey: .transactions)
+
+        try container.encode(uncles.map { $0.hexString }, forKey: .uncles)
+
     }
 }
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum TransactionInBlock: Decodable {
+public enum TransactionInBlock: Codable {
     case hash(Data)
     case transaction(CodableTransaction)
     case null
@@ -21,6 +21,18 @@ public enum TransactionInBlock: Decodable {
             self = .transaction(transaction)
         } else {
             self = .null
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .hash(let data):
+            try container.encode(data.toHexString())
+        case .transaction(let transactions):
+            try container.encode(transactions)
+        case .null:
+            try container.encodeNil()
         }
     }
 }
