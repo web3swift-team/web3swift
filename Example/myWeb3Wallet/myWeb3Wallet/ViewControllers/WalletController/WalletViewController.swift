@@ -7,6 +7,8 @@
 
 import UIKit
 import web3swift
+import Web3Core
+
 class WalletViewController: UIViewController {
     
     @IBOutlet weak var continueButton: UIButton!
@@ -47,9 +49,9 @@ class WalletViewController: UIViewController {
     @IBAction func onClickContinueButton(_ sender: UIButton) {
         print("Clicked on COntinue button")
         guard let dashboardScreen = self.storyboard?.instantiateViewController(withIdentifier: "DashboardViewController") as? DashboardViewController else {
-            #if DEBUG
+#if DEBUG
             printContent("Unable to get Wallet controller")
-            #endif
+#endif
             return
         }
         self.navigationController?.pushViewController(dashboardScreen, animated: true)
@@ -84,7 +86,7 @@ class WalletViewController: UIViewController {
             return
         }
         do {
-            let keystore =  try EthereumKeystoreV3(privateKey: dataKey)
+            let keystore =  try EthereumKeystoreV3(privateKey: dataKey, password: "")
             if let myWeb3KeyStore = keystore {
                 let manager = KeystoreManager([myWeb3KeyStore])
                 let address = keystore?.addresses?.first
@@ -113,15 +115,13 @@ class WalletViewController: UIViewController {
         
         
     }
+
     func importWalletWith(mnemonics: String) {
-        let walletAddress = try? BIP32Keystore(mnemonics: mnemonics , prefixPath: "m/44'/77777'/0'/0")
-        print(walletAddress?.addresses)
+        let walletAddress = try? BIP32Keystore(mnemonics: mnemonics, password: "", prefixPath: "m/44'/77777'/0'/0")
         self.walletAddressLabel.text = "\(walletAddress?.addresses?.first?.address ?? "0x")"
-        
     }
-    
-    
 }
+
 extension WalletViewController {
     
     fileprivate func createMnemonics(){
@@ -136,10 +136,9 @@ extension WalletViewController {
                 }
                 self._mnemonics = tMnemonics
                 print(_mnemonics)
-                let tempWalletAddress = try? BIP32Keystore(mnemonics: self._mnemonics , prefixPath: "m/44'/77777'/0'/0")
-                print(tempWalletAddress?.addresses?.first?.address)
+                let tempWalletAddress = try? BIP32Keystore(mnemonics: self._mnemonics, password: "", prefixPath: "m/44'/77777'/0'/0")
                 guard let walletAddress = tempWalletAddress?.addresses?.first else {
-                    self.showAlertMessage(title: "", message: "We are unable to create wallet", actionName: "Ok")
+                    self.showAlertMessage(title: "", message: "Unable to create wallet", actionName: "Ok")
                     return
                 }
                 self._walletAddress = walletAddress.address
@@ -148,7 +147,7 @@ extension WalletViewController {
                 print(privateKey, "Is the private key")
 #endif
                 let keyData = try? JSONEncoder().encode(tempWalletAddress?.keystoreParams)
-                FileManager.default.createFile(atPath: userDir + "/keystore"+"/key.json", contents: keyData, attributes: nil)
+                FileManager.default.createFile(atPath: userDir + "/keystore" + "/key.json", contents: keyData, attributes: nil)
             }
         } catch {
             
