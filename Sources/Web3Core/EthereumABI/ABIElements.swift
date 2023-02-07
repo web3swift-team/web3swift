@@ -262,7 +262,7 @@ extension ABI.Element {
 
 extension ABI.Element.Function {
     public func decodeInputData(_ rawData: Data) -> [String: Any]? {
-        return ABI.Element.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
+        return ABIDecoder.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
     }
 
     /// Decodes data returned by a function call. Able to decode `revert(string)`, `revert CustomError(...)` and `require(expression, string)` calls.
@@ -432,11 +432,11 @@ extension ABI.Element.Function {
 
 extension ABI.Element.Constructor {
     public func decodeInputData(_ rawData: Data) -> [String: Any]? {
-        return ABI.Element.decodeInputData(rawData, inputs: inputs)
+        return ABIDecoder.decodeInputData(rawData, inputs: inputs)
     }
 }
 
-extension ABI.Element {
+extension ABIDecoder {
     /// Generic input decoding function.
     /// - Parameters:
     ///   - rawData: data to decode. Must match the following criteria: `data.count == 0 || data.count % 32 == 4`.
@@ -444,7 +444,7 @@ extension ABI.Element {
     ///   - inputs: expected input types. Order must be the same as in function declaration.
     /// - Returns: decoded dictionary of input arguments mapped to their indices and arguments' names if these are not empty.
     /// If decoding of at least one argument fails, `rawData` size is invalid or `methodEncoding` doesn't match - `nil` is returned.
-    static private func decodeInputData(_ rawData: Data,
+    static func decodeInputData(_ rawData: Data,
                                      methodEncoding: Data? = nil,
                                      inputs: [ABI.Element.InOut]) -> [String: Any]? {
         let data: Data
