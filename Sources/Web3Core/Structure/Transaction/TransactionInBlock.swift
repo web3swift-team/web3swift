@@ -28,7 +28,7 @@ public enum TransactionInBlock: Codable {
         var container = encoder.singleValueContainer()
         switch self {
         case .hash(let data):
-            try container.encode(data.toHexString())
+            try container.encode(data.hexString)
         case .transaction(let transactions):
             try container.encode(transactions)
         case .null:
