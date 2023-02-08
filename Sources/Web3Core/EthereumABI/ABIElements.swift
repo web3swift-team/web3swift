@@ -262,7 +262,7 @@ extension ABI.Element {
 
 extension ABI.Element.Function {
     public func decodeInputData(_ rawData: Data) -> [String: Any]? {
-        return Web3Core.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
+        return ABIDecoder.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
     }
 
     /// Decodes data returned by a function call. Able to decode `revert(string)`, `revert CustomError(...)` and `require(expression, string)` calls.
@@ -432,61 +432,63 @@ extension ABI.Element.Function {
 
 extension ABI.Element.Constructor {
     public func decodeInputData(_ rawData: Data) -> [String: Any]? {
-        return Web3Core.decodeInputData(rawData, inputs: inputs)
+        return ABIDecoder.decodeInputData(rawData, inputs: inputs)
     }
 }
 
-/// Generic input decoding function.
-/// - Parameters:
-///   - rawData: data to decode. Must match the following criteria: `data.count == 0 || data.count % 32 == 4`.
-///   - methodEncoding: 4 bytes representing method signature like `0xFFffFFff`. Can be omitted to avoid checking method encoding.
-///   - inputs: expected input types. Order must be the same as in function declaration.
-/// - Returns: decoded dictionary of input arguments mapped to their indices and arguments' names if these are not empty.
-/// If decoding of at least one argument fails, `rawData` size is invalid or `methodEncoding` doesn't match - `nil` is returned.
-private func decodeInputData(_ rawData: Data,
-                                 methodEncoding: Data? = nil,
-                                 inputs: [ABI.Element.InOut]) -> [String: Any]? {
-    let data: Data
-    let sig: Data?
+extension ABIDecoder {
+    /// Generic input decoding function.
+    /// - Parameters:
+    ///   - rawData: data to decode. Must match the following criteria: `data.count == 0 || data.count % 32 == 4`.
+    ///   - methodEncoding: 4 bytes representing method signature like `0xFFffFFff`. Can be omitted to avoid checking method encoding.
+    ///   - inputs: expected input types. Order must be the same as in function declaration.
+    /// - Returns: decoded dictionary of input arguments mapped to their indices and arguments' names if these are not empty.
+    /// If decoding of at least one argument fails, `rawData` size is invalid or `methodEncoding` doesn't match - `nil` is returned.
+    static func decodeInputData(_ rawData: Data,
+                                     methodEncoding: Data? = nil,
+                                     inputs: [ABI.Element.InOut]) -> [String: Any]? {
+        let data: Data
+        let sig: Data?
 
-    switch rawData.count % 32 {
-    case 0:
-        sig = nil
-        data = Data()
-        break
-    case 4:
-        sig = rawData[0 ..< 4]
-        data = Data(rawData[4 ..< rawData.count])
-    default:
-        return nil
-    }
-
-    if methodEncoding != nil && sig != nil && sig != methodEncoding {
-        return nil
-    }
-
-    var returnArray = [String: Any]()
-
-    if data.count == 0 && inputs.count == 1 {
-        let name = "0"
-        let value = inputs[0].type.emptyValue
-        returnArray[name] = value
-        if inputs[0].name != "" {
-            returnArray[inputs[0].name] = value
+        switch rawData.count % 32 {
+        case 0:
+            sig = nil
+            data = Data()
+            break
+        case 4:
+            sig = rawData[0 ..< 4]
+            data = Data(rawData[4 ..< rawData.count])
+        default:
+            return nil
         }
-    } else {
-        guard inputs.count * 32 <= data.count else { return nil }
 
-        var i = 0
-        guard let values = ABIDecoder.decode(types: inputs, data: data) else {return nil}
-        for input in inputs {
-            let name = "\(i)"
-            returnArray[name] = values[i]
-            if input.name != "" {
-                returnArray[input.name] = values[i]
+        if methodEncoding != nil && sig != nil && sig != methodEncoding {
+            return nil
+        }
+
+        var returnArray = [String: Any]()
+
+        if data.count == 0 && inputs.count == 1 {
+            let name = "0"
+            let value = inputs[0].type.emptyValue
+            returnArray[name] = value
+            if inputs[0].name != "" {
+                returnArray[inputs[0].name] = value
             }
-            i = i + 1
+        } else {
+            guard inputs.count * 32 <= data.count else { return nil }
+
+            var i = 0
+            guard let values = ABIDecoder.decode(types: inputs, data: data) else {return nil}
+            for input in inputs {
+                let name = "\(i)"
+                returnArray[name] = values[i]
+                if input.name != "" {
+                    returnArray[input.name] = values[i]
+                }
+                i = i + 1
+            }
         }
+        return returnArray
     }
-    return returnArray
 }
