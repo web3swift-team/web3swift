@@ -1,6 +1,6 @@
 //
 //  APIRequest+Methods.swift
-//  
+//
 //
 //  Created by Yaroslav Yashin on 12.07.2022.
 //
@@ -14,7 +14,7 @@ extension APIRequest {
         return try await APIRequest.send(uRLRequest: request, with: provider.session)
     }
 
-    static func setupRequest(for call: APIRequest, with provider: Web3Provider) -> URLRequest {
+    public static func setupRequest(for call: APIRequest, with provider: Web3Provider) -> URLRequest {
         var urlRequest = URLRequest(url: provider.url, cachePolicy: .reloadIgnoringCacheData)
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -23,7 +23,7 @@ extension APIRequest {
         return urlRequest
     }
 
-    public static func send<Result>(uRLRequest: URLRequest, with session: URLSession) async throws -> APIResponse<Result> {
+    public static func send(uRLRequest: URLRequest, with session: URLSession) async throws -> Data {
         let (data, response) = try await session.data(for: uRLRequest)
 
         guard 200 ..< 400 ~= response.statusCode else {
@@ -48,6 +48,12 @@ extension APIRequest {
                 throw Web3Error.nodeError(desc: description)
             }
         }
+
+        return data
+    }
+
+    public static func send<Result>(uRLRequest: URLRequest, with session: URLSession) async throws -> APIResponse<Result> {
+        let data = try await send(uRLRequest: uRLRequest, with: session)
 
         /// This bit of code is purposed to work with literal types that comes in ``Response`` in hexString type.
         /// Currently it's just `Data` and any kind of Integers `(U)Int`, `Big(U)Int`.
