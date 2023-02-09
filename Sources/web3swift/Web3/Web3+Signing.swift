@@ -18,7 +18,7 @@ public struct Web3Signer {
         defer { Data.zero(&privateKey) }
         try transaction.sign(privateKey: privateKey, useExtraEntropy: useExtraEntropy)
     }
-    
+
     public static func signPersonalMessage<T: AbstractKeystore>(_ personalMessage: Data,
                                                                 keystore: T,
                                                                 account: EthereumAddress,
@@ -32,14 +32,14 @@ public struct Web3Signer {
                                                                  useExtraEntropy: useExtraEntropy)
         return compressedSignature
     }
-    
+
     public static func signEIP712(_ eip712Hashable: EIP712Hashable,
                                   keystore: BIP32Keystore,
                                   verifyingContract: EthereumAddress,
                                   account: EthereumAddress,
                                   password: String? = nil,
                                   chainId: BigUInt? = nil) throws -> Data {
-        
+
         let domainSeparator: EIP712Hashable = EIP712Domain(chainId: chainId, verifyingContract: verifyingContract)
         let hash = try eip712encode(domainSeparator: domainSeparator, message: eip712Hashable)
         guard let signature = try Web3Signer.signPersonalMessage(hash,

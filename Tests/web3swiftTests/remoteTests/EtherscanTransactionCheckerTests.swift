@@ -13,7 +13,7 @@ final class EtherscanTransactionCheckerTests: XCTestCase {
 
     func testHasTransactions() async throws {
         let sut = EtherscanTransactionChecker(urlSession: URLSession.shared, apiKey: testApiKey)
-        
+
         let result = try await sut.hasTransactions(ethereumAddress: try XCTUnwrap(EthereumAddress(vitaliksAddress)))
 
         XCTAssertTrue(result)
