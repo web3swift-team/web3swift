@@ -9,7 +9,7 @@ import Foundation
 
 extension RequestParameter: Encodable {
     /**
-     This encoder encodes `RequestParameter` assotiated value ignoring self value
+     This encoder encodes `RequestParameter` associated value ignoring self value
 
      This is required to encode mixed types array, like
 
@@ -48,7 +48,7 @@ extension RequestParameter: Encodable {
 
         case is CodableTransaction.Type: try enumContainer.encode(rawValue as! CodableTransaction)
         case is EventFilterParameters.Type: try enumContainer.encode(rawValue as! EventFilterParameters)
-        default: break /// can't be executed, coz possible `self.rawValue` types are strictly defined in it's inplementation.`
+        default: break /// can't be executed, coz possible `self.rawValue` types are strictly defined in it's implementation.`
         }
         // swiftlint:enable force_cast
     }

@@ -9,12 +9,12 @@ import XCTest
 final class EtherscanTransactionCheckerTests: XCTestCase {
     private var testApiKey: String { "4HVPVMV1PN6NGZDFXZIYKEZRP53IA41KVC" }
     private var vitaliksAddress: String { "0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B" }
-    private var emptyAddress: String { "0x1BeY3KhtHpfATH5Yqxz9d8Z1XbqZFSXtK7" }
+    private var emptyAddress: String { "0x3a0cd085155dc74cdddf3196f23c8cec9b217dd8" }
 
     func testHasTransactions() async throws {
         let sut = EtherscanTransactionChecker(urlSession: URLSession.shared, apiKey: testApiKey)
-
-        let result = try await sut.hasTransactions(address: vitaliksAddress)
+        
+        let result = try await sut.hasTransactions(ethereumAddress: try XCTUnwrap(EthereumAddress(vitaliksAddress)))
 
         XCTAssertTrue(result)
     }
@@ -22,7 +22,8 @@ final class EtherscanTransactionCheckerTests: XCTestCase {
     func testHasNotTransactions() async throws {
         let sut = EtherscanTransactionChecker(urlSession: URLSession.shared, apiKey: testApiKey)
 
-        let result = try await sut.hasTransactions(address: emptyAddress)
+        let ethAddr = try XCTUnwrap(EthereumAddress(emptyAddress))
+        let result = try await sut.hasTransactions(ethereumAddress: ethAddr)
 
         XCTAssertFalse(result)
     }
@@ -33,31 +34,31 @@ final class EtherscanTransactionCheckerTests: XCTestCase {
             urlSessionMock.response = (Data(), try XCTUnwrap(HTTPURLResponse(url: try XCTUnwrap(URL(string: "https://")), statusCode: 500, httpVersion: nil, headerFields: nil)))
             let sut = EtherscanTransactionChecker(urlSession: urlSessionMock, apiKey: testApiKey)
 
-            _ = try await sut.hasTransactions(address: vitaliksAddress)
+            _ = try await sut.hasTransactions(ethereumAddress: try XCTUnwrap(EthereumAddress(vitaliksAddress)))
 
             XCTFail("Network must throw an error")
-        } catch {
-            XCTAssertTrue(true)
+        } catch let EtherscanTransactionCheckerError.network(statusCode) {
+            XCTAssertEqual(statusCode, 500)
         }
     }
 
     func testInitURLError() async throws {
         do {
-            let sut = EtherscanTransactionChecker(urlSession: URLSessionMock(), apiKey: testApiKey)
+            let sut = EtherscanTransactionChecker(urlSession: URLSessionMock(), apiKey: " ")
 
-            _ = try await sut.hasTransactions(address: " ")
+            _ = try await sut.hasTransactions(ethereumAddress: try XCTUnwrap(EthereumAddress(vitaliksAddress)))
 
             XCTFail("URL init must throw an error")
-        } catch {
-            XCTAssertTrue(error is EtherscanTransactionCheckerError)
+        } catch EtherscanTransactionCheckerError.invalidUrl {
+            XCTAssertTrue(true)
         }
     }
 
     func testWrongApiKey() async throws {
         do {
-            let sut = EtherscanTransactionChecker(urlSession: URLSession.shared, apiKey: "")
+            let sut = EtherscanTransactionChecker(urlSession: URLSession.shared, apiKey: "-")
 
-            _ = try await sut.hasTransactions(address: "")
+            _ = try await sut.hasTransactions(ethereumAddress: try XCTUnwrap(EthereumAddress(vitaliksAddress)))
 
             XCTFail("API not returns a valid response")
         } catch DecodingError.typeMismatch {

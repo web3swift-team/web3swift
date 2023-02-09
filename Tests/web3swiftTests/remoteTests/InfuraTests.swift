@@ -94,7 +94,7 @@ class InfuraTests: XCTestCase {
 //        let web3 = Web3.InfuraRinkebyWeb3(accessToken: Constants.infuraToken)
 //        let contract = web3.contract(jsonString, at: contractAddress, abiVersion: 2)
 //        guard let eventParser = contract?.createEventParser("Deposit", filter: nil) else {return XCTFail()}
-//        let pres = try eventParser.parseBlockByNumber(UInt64(2138657))
-//        XCTAssert(pres.count == 1)
+//        let present = try eventParser.parseBlockByNumber(UInt64(2138657))
+//        XCTAssert(present.count == 1)
 //    }
 }

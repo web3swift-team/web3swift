@@ -34,7 +34,7 @@ extension Web3.Personal {
      - parameters:
          - account: EthereumAddress of the account to unlock
          - password: Password to use for the account
-         - seconds: Time inteval before automatic account lock by Ethereum node
+         - seconds: Time interval before automatic account lock by Ethereum node
 
      - returns:
         - Result object

@@ -1,7 +1,7 @@
 # web3swift
 **web3swift** is an iOS toolbelt for interaction with the Ethereum network.
 
-## Social medias
+## Social media
 [Join our discord](https://discord.gg/8bHCNmhS7x) or [Telegram](https://t.me/web3swift) if you need support or want to contribute to web3swift development!
 
 ![matter-github-swift](https://github.com/web3swift-team/web3swift/blob/develop/web3swift-logo.png)
@@ -19,8 +19,8 @@
 
 - [Core features](#core-features)
 - [Installation](#installation)
-    - [CocoaPods](#cocoapods)
     - [Swift Package](#swift-package)
+    - [CocoaPods](#cocoapods)
 - [Example usage](#example-usage)
     - [Send Ether](#send-ether)
     - [Contract read method](#contract-read-method)
@@ -57,7 +57,7 @@
 - [x] 🕵️‍♂️ Possibility to **add or remove "middleware" that intercepts**, modifies and even **cancel transaction** workflow on stages "before assembly", "after assembly" and "before submission"
 - [x] ✅**Literally following the standards** (BIP, EIP, etc):
     - [x] **[BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) (HD Wallets), [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases), [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)**
-- [x] **[EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)** (Standart interface for tokens - ERC-20), **[EIP-67](https://github.com/ethereum/EIPs/issues/67)** (Standard URI scheme), **[EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md)** (Replay attacks protection), **[EIP-2718](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2718.md)** (Typed Transaction Envelope), **[EIP-1559](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md)** (Gas Fee market change)
+- [x] **[EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)** (Standard interface for tokens - ERC-20), **[EIP-67](https://github.com/ethereum/EIPs/issues/67)** (Standard URI scheme), **[EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md)** (Replay attacks protection), **[EIP-2718](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2718.md)** (Typed Transaction Envelope), **[EIP-1559](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md)** (Gas Fee market change)
     - [x] **And many others** *(For details about this EIP's look at [Documentation page](https://github.com/web3swift-team/web3swift/blob/master/Documentation/))*: EIP-681, EIP-721, EIP-165, EIP-777, EIP-820, EIP-888, EIP-1400, EIP-1410, EIP-1594, EIP-1643, EIP-1644, EIP-1633, EIP-721, EIP-1155, EIP-1376, ST-20
 - [x] **RLP encoding**
 - [x] Base58 encoding scheme
@@ -65,6 +65,27 @@
 - [x] Comprehensive Unit and Integration Test Coverage
 
 ## Installation
+
+### Swift Package (Recommended)
+The [Swift Package Manager](https://swift.org/package-manager/ "") is a tool for automating the distribution of Swift code that is well integrated with Swift build system.
+
+Once you have your Swift package set up, adding `web3swift` as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+```swift
+dependencies: [
+    .package(url: "https://github.com/web3swift-team/web3swift.git", .upToNextMajor(from: "3.0.0"))
+]
+```
+
+Or if your project is not a package follow these guidelines on [how to add a Swift Package to your Xcode project](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app).
+
+
+## Example usage
+In the imports section:
+
+```swift
+import web3swift
+import Web3Core
+```
 
 ### CocoaPods
 
@@ -91,23 +112,7 @@ Then, run the following command:
 $ pod install
 ```
 
-### Swift Package
-The [Swift Package Manager](https://swift.org/package-manager/ "") is a tool for automating the distribution of Swift code and is integrated into the swift compiler.
-
-Once you have your Swift package set up, adding Alamofire as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
-```swift
-dependencies: [
-    .package(url: "https://github.com/web3swift-team/web3swift.git", .upToNextMajor(from: "3.0.0"))
-]
-```
-
-## Example usage
-In the imports section:
-
-```swift
-import web3swift
-import Web3Core
-```
+> **WARNING**: CocoaPods is a powerful tool for managing dependencies in iOS development, but it also has some limitations that preventing us of providing first class support there. We highly recommend using SPM first as using CocoaPods will delay new updates and bug fixes being delivered to you.
 
 ### Send Ether
 ```swift
@@ -132,7 +137,7 @@ let response = try await readTX.callContractMethod()
 let abiString = "[]" // some ABI string
 let bytecode = Data.fromHex("") // some ABI bite sequence
 let contract = web3.contract(abiString, at: nil, abiVersion: 2)!
-let parameters = [...] as [AnyObject]
+let parameters: [Any] = [...]
 let deployOp = contract.prepareDeploy(bytecode: bytecode, constructor: contract.contract.constructor, parameters: parameters)!
 deployOp.transaction.from = "" // your address
 deployOp.transaction.gasLimitPolicy = .manual(3000000)

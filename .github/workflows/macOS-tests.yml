@@ -6,7 +6,6 @@ on:
       - master
       - develop
       - hotfix
-      - unstable
     paths:
       - Packag*.swift
       - web3swift.podspec
@@ -20,6 +19,8 @@ on:
       - master
       - develop
       - unstable
+      # Temporary develop-X.Y.Z branches may be added and removed from here as we release new versions
+      - develop-4.0
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_14.1.app/Contents/Developer
@@ -32,7 +33,12 @@ jobs:
       group: spm-${{ github.run_id }}
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Discover typos
+        run: |
+          pip3 install --upgrade pip
+          pip3 install codespell
+          codespell --count --ignore-words-list=ans,deriver,inout,packag --skip="*.js,*WordLists.swift"
       - name: Resolve dependencies
         run: swift package resolve
       - name: Build

@@ -339,7 +339,7 @@ static void secp256k1_ecmult_strauss_wnaf(const secp256k1_ecmult_context *ctx, c
     secp256k1_ge tmpa;
     secp256k1_fe Z;
 #ifdef USE_ENDOMORPHISM
-    /* Splitted G factors. */
+    /* Split G factors. */
     secp256k1_scalar ng_1, ng_128;
     int wnaf_ng_1[129];
     int bits_ng_1 = 0;

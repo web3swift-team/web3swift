@@ -7,9 +7,9 @@ import Foundation
 
 public protocol BIP44 {
     /**
-    Derive an ``HDNode`` based on the provided path. The function will throw ``BIP44Error.warning`` if it was invoked with throwOnWarning equal to
-    `true` and the root key doesn't have a previous child with at least one transaction. If it is invoked with throwOnError equal to `false` the child node will be
-    derived directly using the derive function of ``HDNode``. This function needs to query the blockchain history when throwOnWarning is `true`, so it can throw
+    Derive an ``HDNode`` based on the provided path. The function will throw ``BIP44Error.warning`` if it was invoked with `throwOnWarning` equal to
+    `true` and the root key doesn't have a previous child with at least one transaction. If it is invoked with `throwOnWarning` equal to `false` the child node will be
+    derived directly using the derive function of ``HDNode``. This function needs to query the blockchain history when `throwOnWarning` is `true`, so it can throw
     network errors.
     - Parameter path: valid BIP44 path.
     - Parameter throwOnWarning: `true` to use
@@ -41,7 +41,7 @@ public protocol TransactionChecker {
     - Throws: any error related to query the blockchain provider
     - Returns: `true` if the address has at least one transaction, `false` otherwise
     */
-    func hasTransactions(address: String) async throws -> Bool
+    func hasTransactions(ethereumAddress: EthereumAddress) async throws -> Bool
 }
 
 extension HDNode: BIP44 {
@@ -62,7 +62,7 @@ extension HDNode: BIP44 {
                     if let searchPath = path.newPath(account: searchAccount, addressIndex: searchAddressIndex),
                     let childNode = derive(path: searchPath, derivePrivateKey: true),
                     let ethAddress = Utilities.publicToAddress(childNode.publicKey) {
-                        hasTransactions = try await transactionChecker.hasTransactions(address: ethAddress.address)
+                        hasTransactions = try await transactionChecker.hasTransactions(ethereumAddress: ethAddress)
                         if hasTransactions {
                             break
                         }

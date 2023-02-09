@@ -89,13 +89,13 @@ class WalletViewController: UIViewController {
                 let manager = KeystoreManager([myWeb3KeyStore])
                 let address = keystore?.addresses?.first
 #if DEBUG
-                print("Address :::>>>>> ", address as Any)
-                print("Address :::>>>>> ", manager.addresses as Any)
+                print("Address :::>>>>> ", address)
+                print("Address :::>>>>> ", manager.addresses)
 #endif
                 let walletAddress = manager.addresses?.first?.address
                 self.walletAddressLabel.text = walletAddress ?? "0x"
                 
-                print(walletAddress as Any)
+                print(walletAddress)
             } else {
                 print("error")
             }
@@ -115,7 +115,7 @@ class WalletViewController: UIViewController {
     }
     func importWalletWith(mnemonics: String) {
         let walletAddress = try? BIP32Keystore(mnemonics: mnemonics , prefixPath: "m/44'/77777'/0'/0")
-        print(walletAddress?.addresses as Any)
+        print(walletAddress?.addresses)
         self.walletAddressLabel.text = "\(walletAddress?.addresses?.first?.address ?? "0x")"
         
     }
@@ -137,7 +137,7 @@ extension WalletViewController {
                 self._mnemonics = tMnemonics
                 print(_mnemonics)
                 let tempWalletAddress = try? BIP32Keystore(mnemonics: self._mnemonics , prefixPath: "m/44'/77777'/0'/0")
-                print(tempWalletAddress?.addresses?.first?.address as Any)
+                print(tempWalletAddress?.addresses?.first?.address)
                 guard let walletAddress = tempWalletAddress?.addresses?.first else {
                     self.showAlertMessage(title: "", message: "We are unable to create wallet", actionName: "Ok")
                     return
@@ -145,7 +145,7 @@ extension WalletViewController {
                 self._walletAddress = walletAddress.address
                 let privateKey = try tempWalletAddress?.UNSAFE_getPrivateKeyData(password: "", account: walletAddress)
 #if DEBUG
-                print(privateKey as Any, "Is the private key")
+                print(privateKey, "Is the private key")
 #endif
                 let keyData = try? JSONEncoder().encode(tempWalletAddress?.keystoreParams)
                 FileManager.default.createFile(atPath: userDir + "/keystore"+"/key.json", contents: keyData, attributes: nil)
