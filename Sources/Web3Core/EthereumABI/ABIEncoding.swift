@@ -119,7 +119,7 @@ public struct ABIEncoder {
         case let d as [IntegerLiteralType]:
             var bytesArray = [UInt8]()
             for el in d {
-                guard el >= 0, el <= 255 else {return nil}
+                guard el >= 0, el <= 255 else { return nil }
                 bytesArray.append(UInt8(el))
             }
             return Data(bytesArray)
@@ -140,7 +140,7 @@ public struct ABIEncoder {
     ///     - `types.count != values.count`;
     ///     - encoding of at least one value has failed (e.g. type mismatch).
     public static func encode(types: [ABI.Element.InOut], values: [Any]) -> Data? {
-        guard types.count == values.count else {return nil}
+        guard types.count == values.count else { return nil }
         let params = types.compactMap { el -> ABI.Element.ParameterType in
             return el.type
         }
@@ -156,12 +156,12 @@ public struct ABIEncoder {
     ///     - `types.count != values.count`;
     ///     - encoding of at least one value has failed (e.g. type mismatch).
     public static func encode(types: [ABI.Element.ParameterType], values: [Any]) -> Data? {
-        guard types.count == values.count else {return nil}
+        guard types.count == values.count else { return nil }
         var tails = [Data]()
         var heads = [Data]()
         for i in 0 ..< types.count {
             let enc = encodeSingleType(type: types[i], value: values[i])
-            guard let encoding = enc else {return nil}
+            guard let encoding = enc else { return nil }
             if types[i].isStatic {
                 heads.append(encoding)
                 tails.append(Data())
@@ -181,7 +181,7 @@ public struct ABIEncoder {
             let head = heads[i]
             let tail = tails[i]
             if !types[i].isStatic {
-                guard let newHead = tailsPointer.abiEncode(bits: 256) else {return nil}
+                guard let newHead = tailsPointer.abiEncode(bits: 256) else { return nil }
                 headsConcatenated.append(newHead)
                 tailsConcatenated.append(tail)
                 tailsPointer = tailsPointer + BigUInt(tail.count)
@@ -227,7 +227,7 @@ public struct ABIEncoder {
             return bigint == nil ? nil : bigint!.abiEncode(bits: 256)
         case .address:
             if let string = value as? String {
-                guard let address = EthereumAddress(string) else {return nil}
+                guard let address = EthereumAddress(string) else { return nil }
                 let data = address.addressData
                 return data.setLengthLeft(32)
             } else if let address = value as? EthereumAddress {
@@ -295,7 +295,7 @@ public struct ABIEncoder {
                     var heads = [Data]()
                     for i in 0 ..< val.count {
                         let enc = encodeSingleType(type: subType, value: val[i])
-                        guard let encoding = enc else {return nil}
+                        guard let encoding = enc else { return nil }
                         heads.append(Data(repeating: 0x0, count: 32))
                         tails.append(encoding)
                     }
@@ -310,7 +310,7 @@ public struct ABIEncoder {
                         let head = heads[i]
                         let tail = tails[i]
                         if tail != Data() {
-                            guard let newHead = tailsPointer.abiEncode(bits: 256) else {return nil}
+                            guard let newHead = tailsPointer.abiEncode(bits: 256) else { return nil }
                             headsConcatenated.append(newHead)
                             tailsConcatenated.append(tail)
                             tailsPointer = tailsPointer + BigUInt(tail.count)
@@ -342,7 +342,7 @@ public struct ABIEncoder {
                     var heads = [Data]()
                     for i in 0 ..< val.count {
                         let enc = encodeSingleType(type: subType, value: val[i])
-                        guard let encoding = enc else {return nil}
+                        guard let encoding = enc else { return nil }
                         heads.append(Data(repeating: 0x0, count: 32))
                         tails.append(encoding)
                     }
@@ -355,7 +355,7 @@ public struct ABIEncoder {
                     var tailsConcatenated = Data()
                     for i in 0 ..< val.count {
                         let tail = tails[i]
-                        guard let newHead = tailsPointer.abiEncode(bits: 256) else {return nil}
+                        guard let newHead = tailsPointer.abiEncode(bits: 256) else { return nil }
                         headsConcatenated.append(newHead)
                         tailsConcatenated.append(tail)
                         tailsPointer = tailsPointer + BigUInt(tail.count)
@@ -372,7 +372,7 @@ public struct ABIEncoder {
             guard let val = value as? [Any] else {break}
             for i in 0 ..< subTypes.count {
                 let enc = encodeSingleType(type: subTypes[i], value: val[i])
-                guard let encoding = enc else {return nil}
+                guard let encoding = enc else { return nil }
                 if subTypes[i].isStatic {
                     heads.append(encoding)
                     tails.append(Data())
@@ -392,7 +392,7 @@ public struct ABIEncoder {
                 let head = heads[i]
                 let tail = tails[i]
                 if !subTypes[i].isStatic {
-                    guard let newHead = tailsPointer.abiEncode(bits: 256) else {return nil}
+                    guard let newHead = tailsPointer.abiEncode(bits: 256) else { return nil }
                     headsConcatenated.append(newHead)
                     tailsConcatenated.append(tail)
                     tailsPointer = tailsPointer + BigUInt(tail.count)

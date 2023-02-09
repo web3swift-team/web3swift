@@ -21,8 +21,7 @@ public final class ERC20BasePropertiesProvider {
     }
 
     public func readProperties() async throws {
-        guard !hasReadProperties else { return }
-        guard contract.contract.address != nil else {return}
+        guard !hasReadProperties && contract.contract.address != nil else { return }
         name = try await contract
             .createReadOperation("name")?
             .callContractMethod()["0"] as? String
