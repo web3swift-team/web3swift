@@ -22,4 +22,3 @@ class Web3ErrorTests: XCTestCase {
     }
 
 }
-

@@ -65,7 +65,7 @@ class NumberFormattingUtilTests: LocalTestCase {
         let formatted = Utilities.formatToPrecision(balance, units: .ether, formattingDecimals: 4, decimalSeparator: ",", fallbackToScientific: true)
         XCTAssert(formatted == "1,0000e-12")
     }
-    
+
     func testFormatPreccissionFallbacksToUnitsDecimals() throws {
         let bInt = BigInt(1_700_000_000_000_000_000)
         let result = Utilities.formatToPrecision(bInt, units: .ether, formattingDecimals: Utilities.Units.ether.decimals + 1, decimalSeparator: ",")

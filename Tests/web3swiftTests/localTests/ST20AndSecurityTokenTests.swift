@@ -111,7 +111,7 @@ class ST20AndSecurityTokenTests: XCTestCase {
 
     func testSecurityTokenGranularity() async throws {
         let expectedGranularity = BigUInt.randomInteger(lessThan: BigUInt(10000000000))
-        
+
         ethMock.onCallTransaction = { transaction in
             guard let function = self.securityToken.contract.contract.getFunctionCalled(transaction.data) else {
                 XCTFail("Failed to decode function call to determine what shall be returned")

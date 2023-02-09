@@ -640,7 +640,6 @@ class TransactionsTests: XCTestCase {
             let result = try await writeTX.writeToChain(password: "", policies: policies, sendRaw: false)
             let txHash = Data.fromHex(result.hash.stripHexPrefix())!
 
-
             Thread.sleep(forTimeInterval: 1.0)
 
             let receipt = try await web3.eth.transactionReceipt(txHash)
