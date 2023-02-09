@@ -193,6 +193,10 @@ $ ganache
 This will create a local blockchain and also some test accounts that are used throughout our tests.
 Make sure that `ganache` is running on its default port `8546`. To change the port in test cases locate `LocalTestCase.swift` and modify the static `url` variable.
 
+### Before you commit
+
+We are using [pre-commit](https://pre-commit.com) to run validations locally before a commit is created. Please, install pre-commit and run `pre-commit install` from project's root directory. After that before every commit git hook will run and execute `codespell`, `swiftlint` and other checks.
+
 ## Contribute
 Want to improve? It's awesome:
 Then good news for you: **We are ready to pay for your contribution via [@gitcoin bot](https://gitcoin.co/grants/358/web3swift)!**
