@@ -16,7 +16,11 @@ class GasOracleTests: XCTestCase {
     let blockNumber: BigUInt = 14571792
 
     func testPretictBaseFee() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        else {
+            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
+            return
+        }
         lazy var oracle: Oracle = .init(web3.provider, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
         let etalonPercentiles: [BigUInt] = [
             94217344703,    // 10 percentile
@@ -30,7 +34,11 @@ class GasOracleTests: XCTestCase {
     }
 
     func testPredictTip() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        else {
+            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
+            return
+        }
         lazy var oracle: Oracle = .init(web3.provider, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
         let etalonPercentiles: [BigUInt] = [
             1217066957,     // 10 percentile
@@ -44,7 +52,11 @@ class GasOracleTests: XCTestCase {
     }
 
     func testPredictBothFee() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        else {
+            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
+            return
+        }
         lazy var oracle: Oracle = .init(web3.provider, block: .exact(blockNumber), blockCount: 20, percentiles: [10, 40, 60, 90])
         let etalonPercentiles: ([BigUInt], [BigUInt]) = (
             baseFee: [

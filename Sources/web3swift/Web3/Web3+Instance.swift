@@ -27,11 +27,9 @@ public class Web3 {
 
     /// Public web3.eth.* namespace.
     public var eth: IEth {
-        if ethInstance != nil {
-            return ethInstance!
-        }
-        ethInstance = Web3.Eth(provider: provider)
-        return ethInstance!
+        let ethInstance = ethInstance ?? Web3.Eth(provider: provider)
+        self.ethInstance = ethInstance
+        return ethInstance
     }
 
     // FIXME: Rewrite this to CodableTransaction
@@ -47,11 +45,9 @@ public class Web3 {
 
     /// Public web3.personal.* namespace.
     public var personal: Web3.Personal {
-        if self.personalInstance != nil {
-            return self.personalInstance!
-        }
-        self.personalInstance = Web3.Personal(provider: self.provider, web3: self)
-        return self.personalInstance!
+        let personalInstance = personalInstance ?? Web3.Personal(provider: provider, web3: self)
+        self.personalInstance = personalInstance
+        return personalInstance
     }
 
     // FIXME: Rewrite this to CodableTransaction
@@ -69,11 +65,9 @@ public class Web3 {
 
     /// Public web3.personal.* namespace.
     public var txPool: Web3.TxPool {
-        if self.txPoolInstance != nil {
-            return self.txPoolInstance!
-        }
-        self.txPoolInstance = Web3.TxPool(provider: self.provider, web3: self)
-        return self.txPoolInstance!
+        let txPoolInstance = txPoolInstance ?? Web3.TxPool(provider: provider, web3: self)
+        self.txPoolInstance = txPoolInstance
+        return txPoolInstance
     }
 
     // FIXME: Rewrite this to CodableTransaction
@@ -91,11 +85,9 @@ public class Web3 {
 
     /// Public web3.wallet.* namespace.
     public var wallet: Web3.Web3Wallet {
-        if self.walletInstance != nil {
-            return self.walletInstance!
-        }
-        self.walletInstance = Web3.Web3Wallet(provider: self.provider, web3: self)
-        return self.walletInstance!
+        let walletInstance = walletInstance ?? Web3.Web3Wallet(provider: provider, web3: self)
+        self.walletInstance = walletInstance
+        return walletInstance
     }
 
     public class Web3Wallet {
@@ -112,11 +104,9 @@ public class Web3 {
 
     /// Public web3.browserFunctions.* namespace.
     public var browserFunctions: Web3.BrowserFunctions {
-        if self.browserFunctionsInstance != nil {
-            return self.browserFunctionsInstance!
-        }
-        self.browserFunctionsInstance = Web3.BrowserFunctions(provider: self.provider, web3: self)
-        return self.browserFunctionsInstance!
+        let browserFunctionsInstance = browserFunctionsInstance ?? Web3.BrowserFunctions(provider: provider, web3: self)
+        self.browserFunctionsInstance = browserFunctionsInstance
+        return browserFunctionsInstance
     }
 
     // FIXME: Rewrite this to CodableTransaction
@@ -134,11 +124,9 @@ public class Web3 {
 
     /// Public web3.browserFunctions.* namespace.
     public var eventLoop: Web3.Eventloop {
-        if self.eventLoopInstance != nil {
-            return self.eventLoopInstance!
-        }
-        self.eventLoopInstance = Web3.Eventloop(provider: self.provider, web3: self)
-        return self.eventLoopInstance!
+        let eventLoopInstance = eventLoopInstance ?? Web3.Eventloop(provider: provider, web3: self)
+        self.eventLoopInstance = eventLoopInstance
+        return eventLoopInstance
     }
 
     // FIXME: Rewrite this to CodableTransaction
@@ -158,7 +146,6 @@ public class Web3 {
         var timer: RepeatingTimer?
 
         public var monitoredProperties: [MonitoredProperty] = [MonitoredProperty]()
-        //  public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
         public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -166,28 +153,12 @@ public class Web3 {
         }
     }
 
-//    public typealias AssemblyHookFunction = ((inout CodableTransaction, EthereumContract)) -> Bool
-//
-//    public typealias SubmissionHookFunction = (inout CodableTransaction) -> Bool
-
     public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> Void
-
-//    public struct AssemblyHook {
-//        public var function: AssemblyHookFunction
-//    }
-
-//    public struct SubmissionHook {
-//        public var function: SubmissionHookFunction
-//    }
 
     public struct SubmissionResultHook {
         public var function: SubmissionResultHookFunction
     }
 
-//    public var preAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
-//    public var postAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
-//
-//    public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
     public var postSubmissionHooks: [SubmissionResultHook] = [SubmissionResultHook]()
 
 }

@@ -215,7 +215,7 @@ extension ABI.Element.Function {
 
 extension ABI.Element.Event {
     public func decodeReturnedLogs(eventLogTopics: [Data], eventLogData: Data) -> [String: Any]? {
-        guard let eventContent = ABIDecoder.decodeLog(event: self, eventLogTopics: eventLogTopics, eventLogData: eventLogData) else {return nil}
+        guard let eventContent = ABIDecoder.decodeLog(event: self, eventLogTopics: eventLogTopics, eventLogData: eventLogData) else { return nil }
         return eventContent
     }
 }
@@ -467,7 +467,6 @@ extension ABIDecoder {
         }
 
         var returnArray = [String: Any]()
-
         if data.count == 0 && inputs.count == 1 {
             let name = "0"
             let value = inputs[0].type.emptyValue

@@ -27,7 +27,9 @@ public struct EIP712Domain: EIP712Hashable {
 
 public extension EIP712.Address {
     static var zero: Self {
+        // swiftlint:disable force_unwrapping
         EthereumAddress(Data(count: 20))!
+        // swiftlint:enable force_unwrapping
     }
 }
 

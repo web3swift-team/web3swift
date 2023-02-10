@@ -23,7 +23,11 @@ class ENSTests: XCTestCase {
     }
 
     func testResolverAddress() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        else {
+            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
+            return
+        }
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let address = try await ens?.registry.getResolver(forDomain: domain).resolverContractAddress
@@ -32,7 +36,11 @@ class ENSTests: XCTestCase {
     }
 
     func testResolver() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        else {
+            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
+            return
+        }
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let address = try await ens?.getAddress(forNode: domain)
@@ -40,7 +48,11 @@ class ENSTests: XCTestCase {
     }
 
     func testSupportsInterface() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        else {
+            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
+            return
+        }
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try await ens?.registry.getResolver(forDomain: domain)
@@ -55,7 +67,11 @@ class ENSTests: XCTestCase {
     }
 
     func testABI() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        else {
+            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
+            return
+        }
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try await ens?.registry.getResolver(forDomain: domain)
@@ -70,7 +86,11 @@ class ENSTests: XCTestCase {
     }
 
     func testOwner() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        else {
+            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
+            return
+        }
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let owner = try await ens?.registry.getOwner(node: domain)
@@ -78,7 +98,11 @@ class ENSTests: XCTestCase {
     }
 
     func testTTL() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        else {
+            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
+            return
+        }
         let ens = try XCTUnwrap(ENS(web3: web3))
         let domain = "somename.eth"
         let ttl = try await ens.registry.getTTL(node: domain)
@@ -86,7 +110,11 @@ class ENSTests: XCTestCase {
     }
 
     func testGetAddress() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        else {
+            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
+            return
+        }
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try await ens?.registry.getResolver(forDomain: domain)
@@ -95,7 +123,11 @@ class ENSTests: XCTestCase {
     }
 
     func testGetPubkey() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        else {
+            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
+            return
+        }
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try await ens?.registry.getResolver(forDomain: domain)

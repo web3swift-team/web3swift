@@ -63,9 +63,11 @@ public class ERC721: IERC721 {
     public var address: EthereumAddress
 
     lazy var contract: Web3.Contract = {
+        // swiftlint:disable force_unwrapping
         let contract = self.web3.contract(Web3.Utils.erc721ABI, at: self.address, abiVersion: 2)
         precondition(contract != nil)
         return contract!
+        // swiftlint:enable force_unwrapping
     }()
 
     public init(web3: Web3, provider: Web3Provider, address: EthereumAddress, transaction: CodableTransaction = .emptyTransaction) {
@@ -88,12 +90,12 @@ public class ERC721: IERC721 {
         if self._hasReadProperties {
             return
         }
-        guard contract.contract.address != nil else {return}
+        guard contract.contract.address != nil else { return }
 
         async let tokenIdPromise = contract.createReadOperation("tokenId")?.callContractMethod()
 
-        guard let tokenIdResult = try await tokenIdPromise else {return}
-        guard let tokenId = tokenIdResult["0"] as? BigUInt else {return}
+        guard let tokenIdResult = try await tokenIdPromise else { return }
+        guard let tokenId = tokenIdResult["0"] as? BigUInt else { return }
         self._tokenId = tokenId
 
         self._hasReadProperties = true

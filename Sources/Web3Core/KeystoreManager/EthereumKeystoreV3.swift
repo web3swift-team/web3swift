@@ -6,6 +6,7 @@
 import Foundation
 import CryptoSwift
 
+// swiftlint:disable cyclomatic_complexity
 public class EthereumKeystoreV3: AbstractKeystore {
     // Protocol
     public var isHDKeystore: Bool = false
