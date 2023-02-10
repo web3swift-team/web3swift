@@ -19,8 +19,8 @@
 
 - [Core features](#core-features)
 - [Installation](#installation)
-    - [CocoaPods](#cocoapods)
     - [Swift Package](#swift-package)
+    - [CocoaPods](#cocoapods)
 - [Example usage](#example-usage)
     - [Send Ether](#send-ether)
     - [Contract read method](#contract-read-method)
@@ -66,6 +66,27 @@
 
 ## Installation
 
+### Swift Package (Recommended)
+The [Swift Package Manager](https://swift.org/package-manager/ "") is a tool for automating the distribution of Swift code that is well integrated with Swift build system.
+
+Once you have your Swift package set up, adding `web3swift` as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+```swift
+dependencies: [
+    .package(url: "https://github.com/web3swift-team/web3swift.git", .upToNextMajor(from: "3.0.0"))
+]
+```
+
+Or if your project is not a package follow these guidelines on [how to add a Swift Package to your Xcode project](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app).
+
+
+## Example usage
+In the imports section:
+
+```swift
+import web3swift
+import Web3Core
+```
+
 ### CocoaPods
 
 [CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
@@ -91,23 +112,7 @@ Then, run the following command:
 $ pod install
 ```
 
-### Swift Package
-The [Swift Package Manager](https://swift.org/package-manager/ "") is a tool for automating the distribution of Swift code and is integrated into the swift compiler.
-
-Once you have your Swift package set up, adding Alamofire as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
-```swift
-dependencies: [
-    .package(url: "https://github.com/web3swift-team/web3swift.git", .upToNextMajor(from: "3.0.0"))
-]
-```
-
-## Example usage
-In the imports section:
-
-```swift
-import web3swift
-import Web3Core
-```
+> **WARNING**: CocoaPods is a powerful tool for managing dependencies in iOS development, but it also has some limitations that preventing us of providing first class support there. We highly recommend using SPM first as using CocoaPods will delay new updates and bug fixes being delivered to you.
 
 ### Send Ether
 ```swift
@@ -187,6 +192,10 @@ $ ganache
 
 This will create a local blockchain and also some test accounts that are used throughout our tests.
 Make sure that `ganache` is running on its default port `8546`. To change the port in test cases locate `LocalTestCase.swift` and modify the static `url` variable.
+
+### Before you commit
+
+We are using [pre-commit](https://pre-commit.com) to run validations locally before a commit is created. Please, install pre-commit and run `pre-commit install` from project's root directory. After that before every commit git hook will run and execute `codespell`, `swiftlint` and other checks.
 
 ## Contribute
 Want to improve? It's awesome:
