@@ -21,11 +21,11 @@ extension ABIDecoder {
         var consumed: UInt64 = 0
         for i in 0 ..< types.count {
             let (v, c) = decodeSingleType(type: types[i], data: data, pointer: consumed)
-            guard let valueUnwrapped = v, let consumedUnwrapped = c else {return nil}
+            guard let valueUnwrapped = v, let consumedUnwrapped = c else { return nil }
             toReturn.append(valueUnwrapped)
             consumed = consumed + consumedUnwrapped
         }
-        guard toReturn.count == types.count else {return nil}
+        guard toReturn.count == types.count else { return nil }
         return toReturn
     }
 
@@ -235,23 +235,23 @@ extension ABIDecoder {
         let nonIndexedTypes = nonIndexedInputs.compactMap { inp -> ABI.Element.ParameterType in
             return inp.type
         }
-        guard logs.count == indexedInputs.count + 1 else {return nil}
+        guard logs.count == indexedInputs.count + 1 else { return nil }
         var indexedValues = [Any]()
         for i in 0 ..< indexedInputs.count {
             let data = logs[i+1]
             let input = indexedInputs[i]
             if !input.type.isStatic || input.type.isArray || input.type.memoryUsage != 32 {
                 let (v, _) = ABIDecoder.decodeSingleType(type: .bytes(length: 32), data: data)
-                guard let valueUnwrapped = v else {return nil}
+                guard let valueUnwrapped = v else { return nil }
                 indexedValues.append(valueUnwrapped)
             } else {
                 let (v, _) = ABIDecoder.decodeSingleType(type: input.type, data: data)
-                guard let valueUnwrapped = v else {return nil}
+                guard let valueUnwrapped = v else { return nil }
                 indexedValues.append(valueUnwrapped)
             }
         }
         let v = ABIDecoder.decode(types: nonIndexedTypes, data: dataForProcessing)
-        guard let nonIndexedValues = v else {return nil}
+        guard let nonIndexedValues = v else { return nil }
         var indexedInputCounter = 0
         var nonIndexedInputCounter = 0
         for i in 0 ..< event.inputs.count {
