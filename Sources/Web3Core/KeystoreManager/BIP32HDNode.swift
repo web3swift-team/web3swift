@@ -135,7 +135,7 @@ extension HDNode {
                     inputForHMAC.append(Data([UInt8(0x00)]))
                     inputForHMAC.append(self.privateKey!)
                     inputForHMAC.append(trueIndex.serialize32())
-                    guard let ent = try? hmac.authenticate(inputForHMAC.bytes) else {return nil }
+                    guard let ent = try? hmac.authenticate(inputForHMAC.bytes) else { return nil }
                     guard ent.count == 64 else { return nil }
                     entropy = ent
                 } else {
@@ -144,7 +144,7 @@ extension HDNode {
                     var inputForHMAC = Data()
                     inputForHMAC.append(self.publicKey)
                     inputForHMAC.append(trueIndex.serialize32())
-                    guard let ent = try? hmac.authenticate(inputForHMAC.bytes) else {return nil }
+                    guard let ent = try? hmac.authenticate(inputForHMAC.bytes) else { return nil }
                     guard ent.count == 64 else { return nil }
                     entropy = ent
                 }
@@ -166,7 +166,7 @@ extension HDNode {
                     return nil
                 }
                 guard let privKeyCandidate = newPK.serialize().setLengthLeft(32) else { return nil }
-                guard SECP256K1.verifyPrivateKey(privateKey: privKeyCandidate) else {return nil }
+                guard SECP256K1.verifyPrivateKey(privateKey: privKeyCandidate) else { return nil }
                 guard let pubKeyCandidate = SECP256K1.privateToPublic(privateKey: privKeyCandidate, compressed: true) else { return nil }
                 guard pubKeyCandidate.bytes[0] == 0x02 || pubKeyCandidate.bytes[0] == 0x03 else { return nil }
                 guard self.depth < UInt8.max else { return nil }
@@ -201,7 +201,7 @@ extension HDNode {
                 var inputForHMAC = Data()
                 inputForHMAC.append(self.publicKey)
                 inputForHMAC.append(index.serialize32())
-                guard let ent = try? hmac.authenticate(inputForHMAC.bytes) else {return nil }
+                guard let ent = try? hmac.authenticate(inputForHMAC.bytes) else { return nil }
                 guard ent.count == 64 else { return nil }
                 entropy = ent
             }
@@ -216,7 +216,7 @@ extension HDNode {
                 return nil
             }
             guard let tempKey = bn.serialize().setLengthLeft(32) else { return nil }
-            guard SECP256K1.verifyPrivateKey(privateKey: tempKey) else {return nil }
+            guard SECP256K1.verifyPrivateKey(privateKey: tempKey) else { return nil }
             guard let pubKeyCandidate = SECP256K1.privateToPublic(privateKey: tempKey, compressed: true) else { return nil }
             guard pubKeyCandidate.bytes[0] == 0x02 || pubKeyCandidate.bytes[0] == 0x03 else { return nil }
             guard let newPublicKey = SECP256K1.combineSerializedPublicKeys(keys: [self.publicKey, pubKeyCandidate], outputCompressed: true) else { return nil }
