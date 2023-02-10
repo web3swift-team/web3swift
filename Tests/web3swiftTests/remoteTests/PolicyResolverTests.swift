@@ -15,11 +15,7 @@ import Web3Core
 final class PolicyResolverTests: XCTestCase {
 
     func testResolveAllForEIP1159Transaction() async throws {
-        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        else {
-            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
-            return
-        }
+        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let resolver = PolicyResolver(provider: web3.provider)
         var tx = CodableTransaction(
             type: .eip1559,
@@ -40,11 +36,7 @@ final class PolicyResolverTests: XCTestCase {
     }
 
     func testResolveAllForLegacyTransaction() async throws {
-        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        else {
-            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
-            return
-        }
+        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let resolver = PolicyResolver(provider: web3.provider)
         var tx = CodableTransaction(
             type: .legacy,
@@ -68,11 +60,7 @@ final class PolicyResolverTests: XCTestCase {
         let expectedGasLimit = BigUInt(22_000)
         let expectedBaseFee = BigUInt(20)
         let expectedPriorityFee = BigUInt(9)
-        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        else {
-            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
-            return
-        }
+        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let resolver = PolicyResolver(provider: web3.provider)
         var tx = CodableTransaction(
             type: .eip1559,

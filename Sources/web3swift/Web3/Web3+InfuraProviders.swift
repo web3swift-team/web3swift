@@ -8,12 +8,18 @@ import Web3Core
 
 /// Custom Web3 HTTP provider of Infura nodes.
 public final class InfuraProvider: Web3HttpProvider {
-    public init?(_ net: Networks, accessToken token: String? = nil, keystoreManager manager: KeystoreManager? = nil) async {
+
+    @available(*, deprecated, message: "Will be removed in Web3Swift v4. Please use `init(net: Networks, accessToken: String?, keystoreManager: KeystoreManager?)` instead as it will throw an error instead of returning `nil`.")
+    public convenience init?(_ net: Networks, accessToken token: String? = nil, keystoreManager manager: KeystoreManager? = nil) async {
+        try? await self.init(net: net, accessToken: token, keystoreManager: manager)
+    }
+
+    public init(net: Networks, accessToken token: String? = nil, keystoreManager manager: KeystoreManager? = nil) async throws {
         var requestURLstring = "https://" + net.name + Constants.infuraHttpScheme
         requestURLstring += token ?? Constants.infuraToken
         guard let providerURL = URL(string: requestURLstring) else {
-            return nil
+            throw Web3Error.inputError(desc: "URL created with token \(token ?? "Default token - \(Constants.infuraToken)") is not a valid URL: \(requestURLstring)")
         }
-        await super.init(providerURL, network: net, keystoreManager: manager)
+        try await super.init(url: providerURL, network: net, keystoreManager: manager)
     }
 }

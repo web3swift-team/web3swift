@@ -14,11 +14,7 @@ import Web3Core
 final class EIP1559Tests: XCTestCase {
 
     func testEIP1159MainnetTransaction() async throws {
-        guard let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        else {
-            XCTFail("Failed to connect to InfuraMainnet using token \(Constants.infuraToken)")
-            return
-        }
+        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         var tx = CodableTransaction(
             type: .eip1559,
             to: EthereumAddress("0xb47292B7bBedA4447564B8336E4eD1f93735e7C7")!,
@@ -34,11 +30,7 @@ final class EIP1559Tests: XCTestCase {
     }
 
     func testEIP1159GoerliTransaction() async throws {
-        guard let web3 = await Web3.InfuraGoerliWeb3(accessToken: Constants.infuraToken)
-        else {
-            XCTFail("Failed to connect to InfuraGoerli using token \(Constants.infuraToken)")
-            return
-        }
+        let web3 = try await Web3.InfuraGoerliWeb3(accessToken: Constants.infuraToken)
         var tx = CodableTransaction(
             type: .eip1559,
             to: EthereumAddress("0xeBec795c9c8bBD61FFc14A6662944748F299cAcf")!,
