@@ -14,7 +14,12 @@ extension APIRequest {
         return try await APIRequest.send(uRLRequest: request, with: provider.session)
     }
 
-    public static func setupRequest(for call: APIRequest, with provider: Web3Provider) -> URLRequest {
+    public static func sendRequest(with provider: Web3Provider, for call: APIRequest) async throws -> Data {
+        let request = setupRequest(for: call, with: provider)
+        return try await APIRequest.send(uRLRequest: request, with: provider.session)
+    }
+
+    static func setupRequest(for call: APIRequest, with provider: Web3Provider) -> URLRequest {
         var urlRequest = URLRequest(url: provider.url, cachePolicy: .reloadIgnoringCacheData)
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
