@@ -202,11 +202,9 @@ public struct Utilities {
     }
 
     /// Recover the Ethereum address from recoverable secp256k1 signature. Message is first hashed using the "personal hash" protocol.
-    /// BE WARNED - changing a message will result in different Ethereum address, but not in error.
-    ///
-    /// Input parameters should be Data objects.
+    /// BE WARNED - changing a message will result in different Ethereum address, but not in an error.
     public static func personalECRecover(_ personalMessage: Data, signature: Data) -> EthereumAddress? {
-        if signature.count != 65 { return nil}
+        if signature.count != 65 { return nil }
         let rData = signature[0..<32].bytes
         let sData = signature[32..<64].bytes
         var vData = signature[64]
@@ -226,10 +224,8 @@ public struct Utilities {
 
     /// Recover the Ethereum address from recoverable secp256k1 signature.
     /// Takes a hash of some message. What message is hashed should be checked by user separately.
-    ///
-    /// Input parameters should be Data objects.
     public static func hashECRecover(hash: Data, signature: Data) -> EthereumAddress? {
-        if signature.count != 65 { return nil}
+        if signature.count != 65 { return nil }
         let rData = signature[0..<32].bytes
         let sData = signature[32..<64].bytes
         var vData = signature[64]
