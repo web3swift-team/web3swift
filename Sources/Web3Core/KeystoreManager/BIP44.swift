@@ -36,11 +36,11 @@ public enum BIP44Error: LocalizedError, Equatable {
 
 public protocol TransactionChecker {
     /**
-    It verifies if the provided address has at least one transaction
-    - Parameter address: to be queried
-    - Throws: any error related to query the blockchain provider
-    - Returns: `true` if the address has at least one transaction, `false` otherwise
-    */
+     It verifies if the provided address has at least one transaction
+     - Parameter ethereumAddress: to be queried
+     - Throws: any error related to query the blockchain provider
+     - Returns: `true` if the address has at least one transaction, `false` otherwise
+     */
     func hasTransactions(ethereumAddress: EthereumAddress) async throws -> Bool
 }
 
@@ -105,11 +105,11 @@ extension String {
     }
 
     /**
-    Transforms a bip44 path into a new one changing account & index. The resulting one will have the change value equal to `0` to represent the external chain. The format will be `m/44'/coin_type'/account'/change/address_index`
-    - Parameter account: the new account to use
-    - Parameter addressIndex: the new addressIndex to use
-    - Returns: a valid bip44 path with the provided account, addressIndex and external change or `nil` otherwise
-    */
+     Transforms a bip44 path into a new one changing account & index. The resulting one will have the change value equal to `0` to represent the external chain. The format will be `m/44'/coin_type'/account'/change/address_index`
+     - Parameter account: the new account to use
+     - Parameter addressIndex: the new addressIndex to use
+     - Returns: a valid bip44 path with the provided account, addressIndex and external change or `nil` otherwise
+     */
     func newPath(account: Int, addressIndex: Int) -> String? {
         guard isBip44Path else {
             return nil

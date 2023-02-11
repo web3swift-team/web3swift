@@ -15,6 +15,7 @@ extension RequestParameter: RawRepresentable {
      which encodes an array of self-assosiated values.
 
      You're totally free to use explicit and more convenience member init as `RequestParameter.int(12)` in your code.
+     - Parameter rawValue: one of the supported types like `Int`, `UInt` etc.
      */
     init?(rawValue: APIRequestParameterType) {
         /// force casting in this switch is safe because

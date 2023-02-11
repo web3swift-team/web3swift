@@ -15,15 +15,16 @@ extension RequestParameter: Encodable {
 
      ```swift
      let someArray: [RequestParameter] = [
-        .init(rawValue: 12)!,
-        .init(rawValue: "this")!,
-        .init(rawValue: 12.2)!,
-        .init(rawValue: [12.2, 12.4])!
+         .init(rawValue: 12)!,
+         .init(rawValue: "this")!,
+         .init(rawValue: 12.2)!,
+         .init(rawValue: [12.2, 12.4])!
      ]
      let encoded = try JSONEncoder().encode(someArray)
      print(String(data: encoded, encoding: .utf8)!)
      //> [12,\"this\",12.2,[12.2,12.4]]`
      ```
+     - Parameter encoder: encoder
      */
     func encode(to encoder: Encoder) throws {
         var enumContainer = encoder.singleValueContainer()
