@@ -8,15 +8,15 @@
 import Foundation
 
 extension RequestParameter: RawRepresentable {
-    /**
-     This init is required by ``RawRepresentable`` protocol, which is required to encode mixed type values array in JSON.
 
-     This protocol is used to implement custom `encode` method for that enum,
-     which encodes an array of self-assosiated values.
-
-     You're totally free to use explicit and more convenience member init as `RequestParameter.int(12)` in your code.
-     - Parameter rawValue: one of the supported types like `Int`, `UInt` etc.
-     */
+    /// This init is required by ``RawRepresentable`` protocol, which is required
+    /// to encode mixed type values array in JSON.
+    ///
+    /// This protocol is used to implement custom `encode` method for that enum,
+    /// which encodes an array of self-assosiated values.
+    ///
+    /// You're totally free to use explicit and more convenience member init as `RequestParameter.int(12)` in your code.
+    /// - Parameter rawValue: one of the supported types like `Int`, `UInt` etc.
     init?(rawValue: APIRequestParameterType) {
         /// force casting in this switch is safe because
         /// each `rawValue` forced to casts only in exact case which is runs based on `rawValues` type

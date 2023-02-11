@@ -8,24 +8,23 @@
 import Foundation
 
 extension RequestParameter: Encodable {
-    /**
-     This encoder encodes `RequestParameter` associated value ignoring self value
 
-     This is required to encode mixed types array, like
-
-     ```swift
-     let someArray: [RequestParameter] = [
-         .init(rawValue: 12)!,
-         .init(rawValue: "this")!,
-         .init(rawValue: 12.2)!,
-         .init(rawValue: [12.2, 12.4])!
-     ]
-     let encoded = try JSONEncoder().encode(someArray)
-     print(String(data: encoded, encoding: .utf8)!)
-     //> [12,\"this\",12.2,[12.2,12.4]]`
-     ```
-     - Parameter encoder: encoder
-     */
+    /// This encoder encodes `RequestParameter` associated value ignoring self value
+    ///
+    /// This is required to encode mixed types array, like
+    ///
+    /// ```swift
+    /// let someArray: [RequestParameter] = [
+    ///     .init(rawValue: 12)!,
+    ///     .init(rawValue: "this")!,
+    ///     .init(rawValue: 12.2)!,
+    ///     .init(rawValue: [12.2, 12.4])!
+    /// ]
+    /// let encoded = try JSONEncoder().encode(someArray)
+    /// print(String(data: encoded, encoding: .utf8)!)
+    /// //> [12,\"this\",12.2,[12.2,12.4]]`
+    /// ```
+    /// - Parameter encoder: The encoder to write data to.
     func encode(to encoder: Encoder) throws {
         var enumContainer = encoder.singleValueContainer()
         /// force casting in this switch is safe because

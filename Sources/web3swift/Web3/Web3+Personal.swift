@@ -45,12 +45,28 @@ extension Web3.Personal {
         Utilities.personalECRecover(personalMessage, signature: signature)
     }
 
+    @available(*, deprecated, message: "Will be removed in Web3Swift v4. Please, use `func ecrecover(personalMessage: Data, signature: Data) -> EthereumAddress?` instead.")
+    public func ecrecover(personalMessage: Data, signature: Data) throws -> EthereumAddress {
+        if let address = ecrecover(personalMessage: personalMessage, signature: signature) {
+            return address
+        }
+        throw Web3Error.dataError
+    }
+
     /// Recovers a signer of some hash.
     /// - Parameters:
     ///   - hash: some hash, e.g. hashed personal message;
     ///   - signature: 65 bytes serialized signature;
     /// - Returns: address of the signer or `nil`.
-    public func ecrecover(hash: Data, signature: Data) -> EthereumAddress {
+    public func ecrecover(hash: Data, signature: Data) -> EthereumAddress? {
         Utilities.hashECRecover(hash: hash, signature: signature)
+    }
+
+    @available(*, deprecated, message: "Will be removed in Web3Swift v4. Please, use `func ecrecover(hash: Data, signature: Data) -> EthereumAddress?` instead.")
+    public func ecrecover(hash: Data, signature: Data) throws -> EthereumAddress {
+        if let address = ecrecover(hash: hash, signature: signature) {
+            return address
+        }
+        throw Web3Error.dataError
     }
 }
