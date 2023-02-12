@@ -22,7 +22,7 @@ class PersonalSignatureTests: XCTestCase {
 
         let signature = try await web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
         let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: signature)!
-        let signer = try web3.personal.ecrecover(personalMessage: message.data(using: .utf8)!, signature: signature)
+        let signer = web3.personal.recoverAddress(message: message.data(using: .utf8)!, signature: signature)
         XCTAssert(expectedAddress == signer, "Failed to sign personal message")
     }
 
