@@ -97,7 +97,7 @@ public class HDNode {
         let hmacKey = "Bitcoin seed".data(using: .ascii)!
         let hmac: Authenticator = HMAC(key: hmacKey.bytes, variant: HMAC.Variant.sha2(.sha512))
         guard let entropy = try? hmac.authenticate(seed.bytes) else { return nil }
-        guard entropy.count == 64 else { return nil}
+        guard entropy.count == 64 else { return nil }
         let I_L = entropy[0..<32]
         let I_R = entropy[32..<64]
         chaincode = Data(I_R)
