@@ -18,8 +18,10 @@ public struct Utilities {
     static func publicToAddressData(_ publicKey: Data) -> Data? {
         var publicKey = publicKey
         if publicKey.count == 33 {
-            guard (publicKey[0] == 2 || publicKey[0] == 3),
-                  let decompressedKey = SECP256K1.combineSerializedPublicKeys(keys: [publicKey], outputCompressed: false) else {
+            guard
+                (publicKey[0] == 2 || publicKey[0] == 3),
+                let decompressedKey = SECP256K1.combineSerializedPublicKeys(keys: [publicKey], outputCompressed: false)
+            else {
                 return nil
             }
             publicKey = decompressedKey
@@ -98,7 +100,7 @@ public struct Utilities {
         return parseToBigUInt(amount, decimals: unitDecimals)
     }
 
-    /// Parse a user-supplied string using the number of decimals.
+    /// Parse a string using the number of decimals.
     /// If input is non-numeric or precision is not sufficient - returns nil.
     /// Allowed decimal separators are ".", ",".
     public static func parseToBigUInt(_ amount: String, decimals: Int = 18) -> BigUInt? {
@@ -107,22 +109,28 @@ public struct Utilities {
         guard components.count == 1 || components.count == 2 else { return nil }
         let unitDecimals = decimals
         guard let beforeDecPoint = BigUInt(components[0], radix: 10) else { return nil }
-        var mainPart = beforeDecPoint*BigUInt(10).power(unitDecimals)
+        var mainPart = beforeDecPoint * BigUInt(10).power(unitDecimals)
         if components.count == 2 {
             let numDigits = components[1].count
             guard numDigits <= unitDecimals else { return nil }
             guard let afterDecPoint = BigUInt(components[1], radix: 10) else { return nil }
-            let extraPart = afterDecPoint*BigUInt(10).power(unitDecimals-numDigits)
-            mainPart = mainPart + extraPart
+            let extraPart = afterDecPoint * BigUInt(10).power(unitDecimals-numDigits)
+            mainPart += extraPart
         }
         return mainPart
     }
 
-    /// Formats a BigInt object to String. The supplied number is first divided into integer and decimal part based on "units",
-    /// then limit the decimal part to "decimals" symbols and uses a "decimalSeparator" as a separator.
+    /// Formats a `BigInt` object to `String`. The supplied number is first divided into integer and decimal part based on `units` value,
+    /// then limits the decimal part to `formattingDecimals` symbols and uses a `decimalSeparator` as a separator.
     /// Fallbacks to scientific format if higher precision is required.
     ///
-    /// Returns nil of formatting is not possible to satisfy.
+    /// - Parameters:
+    ///   - bigNumber: number to format;
+    ///   - units: unit to format number to;
+    ///   - formattingDecimals: the number of decimals that should be in the final formatted number;
+    ///   - decimalSeparator: decimals separator;
+    ///   - fallbackToScientific: if should fallback to scienctific representation like `1.23e-10`.
+    /// - Returns: formatted number or `nil` if formatting was not possible.
     public static func formatToPrecision(_ bigNumber: BigInt, units: Utilities.Units = .ether, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String {
         let magnitude = bigNumber.magnitude
         let formatted = formatToPrecision(magnitude, units: units, formattingDecimals: formattingDecimals, decimalSeparator: decimalSeparator, fallbackToScientific: fallbackToScientific)
@@ -134,13 +142,19 @@ public struct Utilities {
         }
     }
 
-    /// Formats a BigUInt object to String. The supplied number is first divided into integer and decimal part based on "units",
-    /// then limits the decimal part to "formattingDecimals" symbols and uses a "decimalSeparator" as a separator.
+    /// Formats a `BigUInt` object to `String`. The supplied number is first divided into integer and decimal part based on `units` value,
+    /// then limits the decimal part to `formattingDecimals` symbols and uses a `decimalSeparator` as a separator.
     /// Fallbacks to scientific format if higher precision is required.
     ///
-    /// Returns nil of formatting is not possible to satisfy.
+    /// - Parameters:
+    ///   - bigNumber: number to format;
+    ///   - units: unit to format number to;
+    ///   - formattingDecimals: the number of decimals that should be in the final formatted number;
+    ///   - decimalSeparator: decimals separator;
+    ///   - fallbackToScientific: if should fallback to scienctific representation like `1.23e-10`.
+    /// - Returns: formatted number or `nil` if formatting was not possible.
     public static func formatToPrecision(_ bigNumber: BigUInt, units: Utilities.Units = .ether, formattingDecimals: Int = 4, decimalSeparator: String = ".", fallbackToScientific: Bool = false) -> String {
-        if bigNumber == 0 {
+        guard bigNumber != 0 else {
             return "0"
         }
         let unitDecimals = units.decimals
@@ -150,45 +164,58 @@ public struct Utilities {
         }
         let divisor = BigUInt(10).power(unitDecimals)
         let (quotient, remainder) = bigNumber.quotientAndRemainder(dividingBy: divisor)
-        var fullRemainder = "\(remainder)"
-        let fullPaddedRemainder = fullRemainder.leftPadding(toLength: unitDecimals, withPad: "0")
-        let remainderPadded = fullPaddedRemainder[0..<toDecimals]
-        if remainderPadded == String(repeating: "0", count: toDecimals) {
-            if quotient != 0 {
-                return "\(quotient)"
-            } else if fallbackToScientific {
-                var firstDigit = 0
-                for char in fullPaddedRemainder {
-                    if char == "0" {
-                        firstDigit = firstDigit + 1
-                    } else {
-                        let firstDecimalUnit = String(fullPaddedRemainder[firstDigit ..< firstDigit+1])
-                        var remainingDigits = ""
-                        let numOfRemainingDecimals = fullPaddedRemainder.count - firstDigit - 1
-                        if numOfRemainingDecimals <= 0 {
-                            remainingDigits = ""
-                        } else if numOfRemainingDecimals > formattingDecimals {
-                            let end = firstDigit+1+formattingDecimals > fullPaddedRemainder.count ? fullPaddedRemainder.count: firstDigit+1+formattingDecimals
-                            remainingDigits = String(fullPaddedRemainder[firstDigit+1 ..< end])
-                        } else {
-                            remainingDigits = String(fullPaddedRemainder[firstDigit+1 ..< fullPaddedRemainder.count])
-                        }
-                        if remainingDigits != "" {
-                            fullRemainder = firstDecimalUnit + decimalSeparator + remainingDigits
-                        } else {
-                            fullRemainder = firstDecimalUnit
-                        }
-                        firstDigit = firstDigit + 1
-                        break
-                    }
-                }
-                return fullRemainder + "e-" + String(firstDigit)
-            }
-        }
-        if toDecimals == 0 {
+
+        guard toDecimals != 0 else {
             return "\(quotient)"
         }
+
+        let remainderStr = "\(remainder)"
+        let fullPaddedRemainder = remainderStr.leftPadding(toLength: unitDecimals, withPad: "0")
+        let remainderPadded = fullPaddedRemainder[0..<toDecimals]
+
+        guard remainderPadded == String(repeating: "0", count: toDecimals) else {
+            return "\(quotient)" + decimalSeparator + remainderPadded
+        }
+
+        if fallbackToScientific {
+            return formatToScientificRepresentation(remainderStr, remainder: fullPaddedRemainder, decimals: formattingDecimals, decimalSeparator: decimalSeparator)
+        }
+
+        guard quotient == 0 else {
+            return "\(quotient)"
+        }
+
         return "\(quotient)" + decimalSeparator + remainderPadded
+    }
+
+    private static func formatToScientificRepresentation(_ remainder: String, remainder fullPaddedRemainder: String, decimals: Int, decimalSeparator: String) -> String {
+        var remainder = remainder
+        var firstDigit = 0
+        for char in fullPaddedRemainder {
+            if char == "0" {
+                firstDigit += 1
+            } else {
+                let firstDecimalUnit = String(fullPaddedRemainder[firstDigit ..< firstDigit + 1])
+                var remainingDigits = ""
+                let numOfRemainingDecimals = fullPaddedRemainder.count - firstDigit - 1
+                if numOfRemainingDecimals <= 0 {
+                    remainingDigits = ""
+                } else if numOfRemainingDecimals > decimals {
+                    let end = firstDigit + 1 + decimals > fullPaddedRemainder.count ? fullPaddedRemainder.count : firstDigit + 1 + decimals
+                    remainingDigits = String(fullPaddedRemainder[firstDigit + 1 ..< end])
+                } else {
+                    remainingDigits = String(fullPaddedRemainder[firstDigit + 1 ..< fullPaddedRemainder.count])
+                }
+                if !remainingDigits.isEmpty {
+                    remainder = firstDecimalUnit + decimalSeparator + remainingDigits
+                } else {
+                    remainder = firstDecimalUnit
+                }
+                firstDigit += 1
+                break
+            }
+        }
+        return remainder + "e-" + String(firstDigit)
     }
 
     /// Recover the Ethereum address from recoverable secp256k1 signature. Message is first hashed using the "personal hash" protocol.
@@ -202,32 +229,14 @@ public struct Utilities {
     }
 
     /// Recover the Ethereum address from recoverable secp256k1 signature. Message is first hashed using the "personal hash" protocol.
-    /// BE WARNED - changing a message will result in different Ethereum address, but not in error.
-    ///
-    /// Input parameters should be Data objects.
+    /// BE WARNED - changing a message will result in different Ethereum address, but not in an error.
     public static func personalECRecover(_ personalMessage: Data, signature: Data) -> EthereumAddress? {
-        if signature.count != 65 { return nil }
-        let rData = signature[0..<32].bytes
-        let sData = signature[32..<64].bytes
-        var vData = signature[64]
-        if vData >= 27 && vData <= 30 {
-            vData -= 27
-        } else if vData >= 31 && vData <= 34 {
-            vData -= 31
-        } else if vData >= 35 && vData <= 38 {
-            vData -= 35
-        }
-
-        guard let signatureData = SECP256K1.marshalSignature(v: vData, r: rData, s: sData) else { return nil }
         guard let hash = Utilities.hashPersonalMessage(personalMessage) else { return nil }
-        guard let publicKey = SECP256K1.recoverPublicKey(hash: hash, signature: signatureData) else { return nil }
-        return Utilities.publicToAddress(publicKey)
+        return hashECRecover(hash: hash, signature: signature)
     }
 
     /// Recover the Ethereum address from recoverable secp256k1 signature.
     /// Takes a hash of some message. What message is hashed should be checked by user separately.
-    ///
-    /// Input parameters should be Data objects.
     public static func hashECRecover(hash: Data, signature: Data) -> EthereumAddress? {
         if signature.count != 65 { return nil }
         let rData = signature[0..<32].bytes

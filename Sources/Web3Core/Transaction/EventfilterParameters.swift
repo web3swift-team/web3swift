@@ -56,44 +56,42 @@ extension EventFilterParameters {
 }
 
 extension EventFilterParameters {
-    /**
-     This enum covers the optional nested Arrays
-
-     ``EventFilterParameters`` include ``topic`` property with is array of optional values,
-     and where `nil` value is a thing, and should be kept in server request.
-
-     This is not a trivial case for swift lang or any other stricktly typed lang.
-
-     So to make this possible ``Topic`` enum is provided.
-
-     It handle two cases: ``.string(String?)`` and ``.strings([Topic?]?)``,
-     where former should be used to assign first demention value,
-     and the latter to assign second dimension value into ``EventFilterParameters.topics`` property.
-
-     So to encode as a parameter follow JSON array:
-     ```JSON
-     [
-         "0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b",
-         null,
-         [
-             "0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b",
-             "0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc"
-         ]
-     ]
-     ```
-
-     you have to pass to the ``topics`` property follow swift array:
-     ```swift
-     let topics: [Topic?] = [
-         .string("0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b"),
-         .string(nil),
-         .strings([
-             .string("0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b"),
-             .string("0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc"),
-         ])
-     ]
-     ```
-     */
+    /// This enum covers the optional nested Arrays
+    ///
+    /// ``EventFilterParameters`` include ``topic`` property with is array of optional values,
+    /// and where `nil` value is a thing, and should be kept in server request.
+    ///
+    /// This is not a trivial case for swift lang or any other stricktly typed lang.
+    ///
+    /// So to make this possible ``Topic`` enum is provided.
+    ///
+    /// It handle two cases: ``.string(String?)`` and ``.strings([Topic?]?)``,
+    /// where former should be used to assign first demention value,
+    /// and the latter to assign second dimension value into ``EventFilterParameters.topics`` property.
+    ///
+    ///  So to encode as a parameter follow JSON array:
+    ///  ```JSON
+    ///  [
+    ///          "0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b",
+    ///          null,
+    ///          [
+    ///              "0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b",
+    ///              "0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc"
+    ///          ]
+    /// ]
+    /// ```
+    ///
+    /// you have to pass to the ``topics`` property follow swift array:
+    /// ```swift
+    /// let topics: [Topic?] = [
+    ///          .string("0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b"),
+    ///          .string(nil),
+    ///          .strings([
+    ///              .string("0x000000000000000000000000a94f5374fce5edbc8e2a8697c15331677e6ebf0b"),
+    ///              .string("0x0000000000000000000000000aff3454fce5edbc8cca8697c15331677e6ebccc"),
+    ///          ])
+    ///      ]
+    /// ```
     public enum Topic: Encodable {
         case string(String?)
         case strings([Topic?]?)
