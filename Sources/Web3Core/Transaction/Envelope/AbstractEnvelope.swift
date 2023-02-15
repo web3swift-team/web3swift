@@ -16,7 +16,7 @@ import BigInt
 
     Adding a new transaction type in the future should be as straight forward as adding to the TransactionType enum here
     then creating a new struct that implements to `EIP2718Envelope`, and implementing the required elements for the type
-    Finally adding the type specific inits to the factory routines in `EnvelopeFactory` so that objectts of the new type 
+    Finally adding the type specific inits to the factory routines in `EnvelopeFactory` so that objectts of the new type
     will get generated when `CodableTransaction` is being created with data for the new type
 */
 

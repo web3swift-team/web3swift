@@ -29,7 +29,7 @@ jobs:
   spm:
     name: Swift Package Manager 5.7
     runs-on: macOS-12
-    concurrency: 
+    concurrency:
       group: spm-${{ github.run_id }}
       cancel-in-progress: false
     steps:
@@ -39,6 +39,10 @@ jobs:
           pip3 install --upgrade pip
           pip3 install codespell
           codespell --count --ignore-words-list=ans,deriver,inout,packag --skip="*.js,*WordLists.swift"
+      - name: SwiftLint
+        run: |
+          swiftlint --fix
+          # swiftlint analyze
       - name: Resolve dependencies
         run: swift package resolve
       - name: Build

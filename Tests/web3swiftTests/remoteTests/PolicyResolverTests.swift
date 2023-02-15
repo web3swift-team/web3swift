@@ -1,6 +1,6 @@
 //
 //  PolicyResolverTests.swift
-//  
+//
 //
 //  Created by Jann Driessen on 01.11.22.
 //
