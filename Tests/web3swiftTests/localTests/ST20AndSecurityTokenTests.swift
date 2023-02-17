@@ -18,7 +18,7 @@ class ST20AndSecurityTokenTests: XCTestCase {
     var securityToken: SecurityToken!
 
     override func setUp() async throws {
-        web3 = await Web3.InfuraGoerliWeb3(accessToken: Constants.infuraToken)
+        web3 = try await Web3.InfuraGoerliWeb3(accessToken: Constants.infuraToken)
         ethMock = Web3EthMock(provider: web3.provider)
         web3.ethInstance = ethMock
         st20token = ST20.init(web3: web3, provider: web3.provider, address: .contractDeploymentAddress())
