@@ -38,11 +38,10 @@ jobs:
         run: |
           pip3 install --upgrade pip
           pip3 install codespell
-          codespell --count --ignore-words-list=ans,deriver,inout,packag --skip="*.js,*WordLists.swift"
+          codespell  # See .codespellrc for args
       - name: SwiftLint
         run: |
           swiftlint --fix
-          # swiftlint analyze
       - name: Resolve dependencies
         run: swift package resolve
       - name: Build
