@@ -155,3 +155,16 @@ extension EthereumAddress: Codable {
 extension EthereumAddress: Hashable { }
 
 extension EthereumAddress: APIResultType { }
+
+// MARK: - CustomStringConvertible
+
+extension EthereumAddress: CustomStringConvertible {
+    /// Used when converting an instance to a string
+    public var description: String {
+        var toReturn = ""
+        toReturn += "EthereumAddress" + "\n"
+        toReturn += "type: " + String(describing: type) + "\n"
+        toReturn += "address: " + String(describing: address) + "\n"
+        return toReturn
+    }
+}

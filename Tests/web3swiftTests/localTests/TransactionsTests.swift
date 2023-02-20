@@ -592,6 +592,18 @@ class TransactionsTests: XCTestCase {
         }
     }
 
+    func testDescription() async throws {
+        let vector = testVector[TestCase.eip1559.rawValue]
+        let jsonData = try XCTUnwrap(vector.JSON.data(using: .utf8))
+        let txn = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
+
+        let sut = String(describing: txn)
+
+        XCTAssertTrue(sut.contains("Transaction"))
+        XCTAssertTrue(sut.contains("from: "))
+        XCTAssertTrue(sut.contains("hash: "))
+    }
+
     // ***** Legacy Tests *****
     // TODO: Replace `XCTAssert` with more explicit `XCTAssertEqual`, where Applicable
 

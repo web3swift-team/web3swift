@@ -1,6 +1,6 @@
 //
 //  EthereumAddressTest.swift
-//  
+//
 //
 //  Created by JeneaVranceanu on 03.02.2023.
 //
@@ -35,4 +35,15 @@ class EthereumAddressTest: XCTestCase {
         XCTAssertNil(ethereumAddress)
     }
 
+    func testDescription() async throws {
+        let rawAddress = "0x200eb5ccda1c35b0f5bf82552fdd65a8aee98e79"
+        let ethereumAddress = EthereumAddress(rawAddress)
+
+        let sut = String(describing: ethereumAddress)
+        print(sut)
+
+        XCTAssertTrue(sut.contains("EthereumAddress\n"))
+        XCTAssertTrue(sut.contains("type: normal\n"))
+        XCTAssertTrue(sut.contains("address: 0x"))
+    }
 }
