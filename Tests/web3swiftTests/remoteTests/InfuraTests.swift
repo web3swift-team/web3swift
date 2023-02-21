@@ -69,7 +69,7 @@ class InfuraTests: XCTestCase {
 //        filter.topics = [EventFilterParameters.Topic.strings([EventFilterParameters.Topic.string("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5"), EventFilterParameters.Topic.string(nil)])]
 //        // need
 //        let eventParserResult = try await contract!.getIndexedEvents(eventName: "Transfer", filter: filter, joinWithReceipts: true)
-//        
+//
 //        XCTAssert(eventParserResult.count == 2)
 //        XCTAssert(eventParserResult.first?.transactionReceipt != nil)
 //        XCTAssert(eventParserResult.first?.eventLog != nil)
@@ -84,10 +84,10 @@ class InfuraTests: XCTestCase {
 //        filter.parameterFilters = [([EthereumAddress("0xefdcf2c36f3756ce7247628afdb632fa4ee12ec5")!] as [EventFilterable]), ([EthereumAddress("0xd5395c132c791a7f46fa8fc27f0ab6bacd824484")!] as [EventFilterable])]
 //        guard let eventParser = contract?.createEventParser("Transfer", filter: filter) else {return XCTFail()}
 //        let present = try eventParser.parseBlockByNumberPromise(UInt64(5200120)).wait()
-//        
+//
 //        XCTAssert(present.count == 1)
 //    }
-//    
+//
 //    func testUserCaseEventParsing() throws {
 //        let contractAddress = EthereumAddress("0x7ff546aaccd379d2d1f241e1d29cdd61d4d50778")
 //        let jsonString = "[{\"constant\":false,\"inputs\":[{\"name\":\"_id\",\"type\":\"string\"}],\"name\":\"deposit\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_from\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_id\",\"type\":\"string\"},{\"indexed\":true,\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"Deposit\",\"type\":\"event\"}]"

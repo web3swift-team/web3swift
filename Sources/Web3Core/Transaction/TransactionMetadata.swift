@@ -9,7 +9,7 @@ import BigInt
 
 /// This structure holds additional data
 /// returned by nodes when reading a transaction
-/// from the blockchain. The data here is not 
+/// from the blockchain. The data here is not
 /// part of the transaction itself
 public struct TransactionMetadata {
 
@@ -29,7 +29,7 @@ public struct TransactionMetadata {
 
     /// gasPrice value returned by the node
     /// note this is a duplicate value for legacy and EIP-2930 transaction types
-    /// but is included here since EIP-1559 does not contain a `gasPrice`, but 
+    /// but is included here since EIP-1559 does not contain a `gasPrice`, but
     /// nodes still report the value.
     public var gasPrice: BigUInt?
 }

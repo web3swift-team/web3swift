@@ -75,7 +75,7 @@ class GasOracleTests: XCTestCase {
 //            111000000000,    // 60 percentile
 //            127210686305     // 90 percentile
 //        ]
-//        
+//
 //        let gasPriceLegacyPercentiles = await oracle.gasPriceLegacyPercentiles()
 //        XCTAssertEqual(gasPriceLegacyPercentiles, etalonPercentiles, "Arrays should be equal")
 //    }
@@ -97,12 +97,12 @@ class GasOracleTests: XCTestCase {
 //    func testBlockNumber() async throws {
 //        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
 //        let latestBlockNumber = try await web3.eth.getBlockNumber()
-//        
+//
 //    }
 //
 //    func testgetAccounts() async throws {
 //        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
 //        let accounts = try await web3.eth.getAccounts()
-//        
+//
 //    }
 }
