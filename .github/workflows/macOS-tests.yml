@@ -41,6 +41,7 @@ jobs:
           codespell  # See .codespellrc for args
       - name: SwiftLint
         run: |
+          # Adding --fix flag makes CI print only errors that cannot be fixed automatically
           swiftlint --fix
       - name: Resolve dependencies
         run: swift package resolve
