@@ -34,6 +34,8 @@ jobs:
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2  # Enable `git diff` in GitHub Actions
       - name: Discover typos
         run: |
           pip3 install --upgrade pip
