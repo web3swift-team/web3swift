@@ -601,7 +601,8 @@ class TransactionsTests: XCTestCase {
 
         XCTAssertTrue(sut.contains("Transaction"))
         XCTAssertTrue(sut.contains("from: "))
-        XCTAssertTrue(sut.contains("hash: "))
+        XCTAssertTrue(sut.contains(#"hash: Optional("0x41dc0cd9b133e0d4e47e269988b0109c966db5220d57e2a7f3cdc6c2f8de6a72")"#))
+
     }
 
     // ***** Legacy Tests *****
