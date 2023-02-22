@@ -43,6 +43,6 @@ class EthereumAddressTest: XCTestCase {
 
         XCTAssertTrue(sut.contains("EthereumAddress\n"))
         XCTAssertTrue(sut.contains("type: normal\n"))
-        XCTAssertTrue(sut.contains("address: 0x"))
+        XCTAssertTrue(sut.contains("address: 0x200EB5cCdA1c35B0F5Bf82552FDD65a8AEe98E79"))
     }
 }
