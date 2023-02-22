@@ -42,7 +42,10 @@ jobs:
       - name: SwiftLint
         run: |
           # Adding --fix flag makes CI print only errors that cannot be fixed automatically
-          swiftlint --fix
+          # 1. Make automated fixes that are possible
+          # 2. git diff to see what automated fixes were made
+          # 3. See https://github.com/realm/SwiftLint#xcode explains why the double run
+          swiftlint --fix && git diff && swiftlint
       - name: Resolve dependencies
         run: swift package resolve
       - name: Build
