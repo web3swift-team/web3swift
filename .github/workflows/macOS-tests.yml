@@ -41,10 +41,10 @@ jobs:
           codespell  # See .codespellrc for args
       - name: SwiftLint
         run: |
-          # 1. Make automated fixes that are possible
-          # 2. git diff to see what automated fixes were made
+          # 1. Make all automated fixes that are possible
+          # 2. git diff to see what (if any) automated fixes were made
           # 3. See https://github.com/realm/SwiftLint#xcode explains why the double run
-          swiftlint --fix && git diff && swiftlint
+          swiftlint --fix --quiet && git diff && swiftlint --quiet
       - name: Resolve dependencies
         run: swift package resolve
       - name: Build
