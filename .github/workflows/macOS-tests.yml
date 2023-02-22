@@ -44,7 +44,7 @@ jobs:
           # 1. Make automated fixes that are possible
           # 2. git diff to see what automated fixes were made
           # 3. See https://github.com/realm/SwiftLint#xcode explains why the double run
-          swiftlint --fix && git diff origin/${GITHUB_REF##*/} origin/${GITHUB_HEAD_REF} && swiftlint
+          swiftlint --fix && git diff origin/develop origin/${GITHUB_HEAD_REF} && swiftlint
       - name: Resolve dependencies
         run: swift package resolve
       - name: Build
