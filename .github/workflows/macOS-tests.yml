@@ -42,7 +42,7 @@ jobs:
       - name: SwiftLint
         run: |
           # Adding --fix flag makes CI print only errors that cannot be fixed automatically
-          swiftlint --fix
+          swiftlint --fix --quiet && swiftlint --quiet
       - name: Resolve dependencies
         run: swift package resolve
       - name: Build
