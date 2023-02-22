@@ -40,7 +40,6 @@ class EthereumAddressTest: XCTestCase {
         let ethereumAddress = EthereumAddress(rawAddress)
 
         let sut = String(describing: ethereumAddress)
-        print(sut)
 
         XCTAssertTrue(sut.contains("EthereumAddress\n"))
         XCTAssertTrue(sut.contains("type: normal\n"))
