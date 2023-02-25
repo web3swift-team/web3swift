@@ -105,8 +105,8 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         @available(*, message: "Available for only owner")
-        public func setAddress(forNode node: String, address: EthereumAddress, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultTransaction
+        public func setAddress(forNode node: String, address: EthereumAddress, transaction: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
+            var options = transaction ?? defaultTransaction
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.createWriteOperation("setAddr", parameters: [nameHash, address] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
@@ -124,8 +124,8 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         @available(*, message: "Available for only owner")
-        func setCanonicalName(forNode node: String, name: String, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultTransaction
+        func setCanonicalName(forNode node: String, name: String, transaction: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
+            var options = transaction ?? defaultTransaction
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.createWriteOperation("setName", parameters: [nameHash, name] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
@@ -143,8 +143,8 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         @available(*, message: "Available for only owner")
-        func setContentHash(forNode node: String, hash: String, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultTransaction
+        func setContentHash(forNode node: String, hash: String, transaction: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
+            var options = transaction ?? defaultTransaction
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.createWriteOperation("setContenthash", parameters: [nameHash, hash] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
@@ -164,8 +164,8 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         @available(*, message: "Available for only owner")
-        func setContractABI(forNode node: String, contentType: ENS.Resolver.ContentType, data: Data, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultTransaction
+        func setContractABI(forNode node: String, contentType: ENS.Resolver.ContentType, data: Data, transaction: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
+            var options = transaction ?? defaultTransaction
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.createWriteOperation("setABI", parameters: [nameHash, contentType.rawValue, data] as [AnyObject]) else {throw Web3Error.transactionSerializationError}
@@ -185,8 +185,8 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         @available(*, message: "Available for only owner")
-        public func setPublicKey(forNode node: String, publicKey: PublicKey, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultTransaction
+        public func setPublicKey(forNode node: String, publicKey: PublicKey, transaction: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
+            var options = transaction ?? defaultTransaction
             options.to = self.resolverContractAddress
             let pubkeyWithoutPrefix = publicKey.getComponentsWithoutPrefix()
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
@@ -205,8 +205,8 @@ public extension ENS {
 
         // FIXME: Rewrite this to CodableTransaction
         @available(*, message: "Available for only owner")
-        public func setTextData(forNode node: String, key: String, value: String, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultTransaction
+        public func setTextData(forNode node: String, key: String, value: String, transaction: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
+            var options = transaction ?? defaultTransaction
             options.to = self.resolverContractAddress
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
             guard let transaction = self.resolverContract.createWriteOperation("setText", parameters: [nameHash, key, value] as [AnyObject]) else {throw Web3Error.transactionSerializationError}

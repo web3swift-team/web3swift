@@ -70,8 +70,8 @@ public extension ENS {
         }
 
         // FIXME: Rewrite this to CodableTransaction
-        public func setOwner(node: String, owner: EthereumAddress, options: CodableTransaction?, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultTransaction
+        public func setOwner(node: String, owner: EthereumAddress, transaction: CodableTransaction?, password: String) async throws -> TransactionSendingResult {
+            var options = transaction ?? defaultTransaction
             if let contractAddress = self.registryContractAddress {
                 options.to = contractAddress
             }
@@ -82,8 +82,8 @@ public extension ENS {
         }
 
         // FIXME: Rewrite this to CodableTransaction
-        public func setSubnodeOwner(node: String, label: String, owner: EthereumAddress, options: CodableTransaction?, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultTransaction
+        public func setSubnodeOwner(node: String, label: String, owner: EthereumAddress, transaction: CodableTransaction?, password: String) async throws -> TransactionSendingResult {
+            var options = transaction ?? defaultTransaction
             if let contractAddress = self.registryContractAddress {
                 options.to = contractAddress
             }
@@ -95,8 +95,8 @@ public extension ENS {
         }
 
         // FIXME: Rewrite this to CodableTransaction
-        public func setResolver(node: String, resolver: EthereumAddress, options: CodableTransaction?, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultTransaction
+        public func setResolver(node: String, resolver: EthereumAddress, transaction: CodableTransaction?, password: String) async throws -> TransactionSendingResult {
+            var options = transaction ?? defaultTransaction
             if let contractAddress = self.registryContractAddress {
                 options.to = contractAddress
             }
@@ -107,8 +107,8 @@ public extension ENS {
         }
 
         // FIXME: Rewrite this to CodableTransaction
-        public func setTTL(node: String, ttl: BigUInt, options: CodableTransaction?, password: String) async throws -> TransactionSendingResult {
-            var options = options ?? defaultTransaction
+        public func setTTL(node: String, ttl: BigUInt, transaction: CodableTransaction?, password: String) async throws -> TransactionSendingResult {
+            var options = transaction ?? defaultTransaction
             if let contractAddress = self.registryContractAddress {
                 options.to = contractAddress
             }
