@@ -41,8 +41,10 @@ jobs:
           codespell  # See .codespellrc for args
       - name: SwiftLint
         run: |
-          # Adding --fix flag makes CI print only errors that cannot be fixed automatically
-          swiftlint --fix
+          # 1. Make all automated fixes that are possible
+          # 2. git diff to see what (if any) automated fixes were made
+          # 3. See https://github.com/realm/SwiftLint#xcode explains why the double run
+          swiftlint --fix --quiet && git diff && swiftlint --quiet
       - name: Resolve dependencies
         run: swift package resolve
       - name: Build

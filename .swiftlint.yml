@@ -60,10 +60,6 @@ opt_in_rules:
   - unneeded_parentheses_in_closure_argument
   - weak_delegate
 
-# force warnings
-force_cast: error
-force_try: error
-
 custom_rules:
   commented_out_code:
     included: .*\.swift # regex that defines paths to include during linting. optional.
