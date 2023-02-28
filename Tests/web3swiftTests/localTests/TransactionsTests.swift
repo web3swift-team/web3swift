@@ -592,6 +592,18 @@ class TransactionsTests: XCTestCase {
         }
     }
 
+    func testDescription() async throws {
+        let vector = testVector[TestCase.eip1559.rawValue]
+        let jsonData = try XCTUnwrap(vector.JSON.data(using: .utf8))
+        let txn = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
+
+        let sut = String(describing: txn)
+
+        XCTAssertTrue(sut.contains("Transaction"))
+        XCTAssertTrue(sut.contains("from: Optional(EthereumAddress\ntype: normal\naddress: 0x9d8A62f656a8d1615C1294fd71e9CFb3E4855A4F\n)\n"))
+        XCTAssertTrue(sut.contains(#"hash: Optional("0x41dc0cd9b133e0d4e47e269988b0109c966db5220d57e2a7f3cdc6c2f8de6a72")"#))
+    }
+
     // ***** Legacy Tests *****
     // TODO: Replace `XCTAssert` with more explicit `XCTAssertEqual`, where Applicable
 
