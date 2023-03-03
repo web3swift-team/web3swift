@@ -2,7 +2,7 @@ Pod::Spec.new do |spec|
     spec.compiler_flags = '-DCOCOAPODS'
 
     spec.name         = 'Web3Core'
-    spec.version      = '3.1.1'
+    spec.version      = '3.1.2'
     spec.ios.deployment_target = "13.0"
     spec.osx.deployment_target = "10.15"
     spec.license      = { :type => 'Apache License 2.0', :file => 'LICENSE.md' }
