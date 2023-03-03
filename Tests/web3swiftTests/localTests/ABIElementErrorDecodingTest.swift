@@ -51,7 +51,7 @@ class ABIElementErrorDecodingTest: XCTestCase {
             .init(name: "rand_bytes", type: .bytes(length: 123)),
             .init(name: "", type: .dynamicBytes),
             .init(name: "arrarrarray123", type: .array(type: .bool, length: 0)),
-            .init(name: "error_message_maybe", type: .string),
+            .init(name: "error_message_maybe", type: .string)
         ]
         XCTAssertEqual(EthError(name: "VeryCustomErrorName",
                                 inputs: allTypesNamedAndNot).errorDeclaration,
@@ -113,7 +113,7 @@ class ABIElementErrorDecodingTest: XCTestCase {
         /// 82b42900 - Unauthorized() function selector
         /// 00000000000000000000000000000000000000000000000000000000 - padding bytes
         let errorResponse = Data.fromHex("82b4290000000000000000000000000000000000000000000000000000000000")!
-        let errors: [String: EthError] = ["82b42900" : .init(name: "Unauthorized", inputs: [])]
+        let errors: [String: EthError] = ["82b42900": .init(name: "Unauthorized", inputs: [])]
         guard let errorData = emptyFunction.decodeErrorResponse(errorResponse, errors: errors) else {
             XCTFail("Data must be decoded as a `revert(\"Not enough Ether provided.\")` or `require(false, \"Not enough Ether provided.\")` but decoding failed completely.")
             return
@@ -136,7 +136,7 @@ class ABIElementErrorDecodingTest: XCTestCase {
         /// 82b42900 - Unauthorized() function selector
         /// 00000000000000000000000000000000000000000000000000000000 - padding bytes
         let errorResponse = Data.fromHex("82b4290000000000000000000000000000000000000000000000000000000000")!
-        let errors: [String: EthError] = ["82b42900" : .init(name: "Unauthorized", inputs: [.init(name: "", type: .string)])]
+        let errors: [String: EthError] = ["82b42900": .init(name: "Unauthorized", inputs: [.init(name: "", type: .string)])]
         guard let errorData = emptyFunction.decodeErrorResponse(errorResponse, errors: errors) else {
             XCTFail("Data must be decoded as a `revert(\"Not enough Ether provided.\")` or `require(false, \"Not enough Ether provided.\")` but decoding failed completely.")
             return
@@ -164,7 +164,7 @@ class ABIElementErrorDecodingTest: XCTestCase {
         /// 526561736f6e0000000000000000000000000000000000000000000000000000 - first custom argument bytes + 0 bytes padding
         /// 0000... - some more 0 bytes padding to make the number of bytes match 32 bytes chunks
         let errorResponse = Data.fromHex("973d02cb00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000006526561736f6e000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!
-        let errors: [String: EthError] = ["973d02cb" : .init(name: "Unauthorized", inputs: [.init(name: "message_arg", type: .string)])]
+        let errors: [String: EthError] = ["973d02cb": .init(name: "Unauthorized", inputs: [.init(name: "message_arg", type: .string)])]
         guard let errorData = emptyFunction.decodeErrorResponse(errorResponse, errors: errors) else {
             XCTFail("Data must be decoded as a `revert(\"Not enough Ether provided.\")` or `require(false, \"Not enough Ether provided.\")` but decoding failed completely.")
             return

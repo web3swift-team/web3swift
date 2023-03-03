@@ -18,7 +18,7 @@ class ST20AndSecurityTokenTests: XCTestCase {
     var securityToken: SecurityToken!
 
     override func setUp() async throws {
-        web3 = await Web3.InfuraGoerliWeb3(accessToken: Constants.infuraToken)
+        web3 = try await Web3.InfuraGoerliWeb3(accessToken: Constants.infuraToken)
         ethMock = Web3EthMock(provider: web3.provider)
         web3.ethInstance = ethMock
         st20token = ST20.init(web3: web3, provider: web3.provider, address: .contractDeploymentAddress())
@@ -111,7 +111,7 @@ class ST20AndSecurityTokenTests: XCTestCase {
 
     func testSecurityTokenGranularity() async throws {
         let expectedGranularity = BigUInt.randomInteger(lessThan: BigUInt(10000000000))
-        
+
         ethMock.onCallTransaction = { transaction in
             guard let function = self.securityToken.contract.contract.getFunctionCalled(transaction.data) else {
                 XCTFail("Failed to decode function call to determine what shall be returned")

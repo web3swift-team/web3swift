@@ -15,7 +15,7 @@
 //    func testGetBalancePromise() async throws {
 //        let web3 = try await Web3.new(LocalTestCase.url)
 //        let balance = try await web3.eth.getBalance(for: EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!)
-//        
+//
 //    }
 //
 //    func testEstimateGasPromise() async throws {
@@ -29,7 +29,7 @@
 //        writeTX.transaction.from = tempKeystore!.addresses?.first
 //        writeTX.transaction.value = BigUInt("1.0", Utilities.Units.eth)!
 //        let estimate = try await writeTX.estimateGas(with: nil)
-//        
+//
 //        XCTAssertEqual(estimate, 21000)
 //    }
 //
@@ -47,12 +47,12 @@
 //        deployTx.transaction.gasLimitPolicy = .manual(3000000)
 //        let result = try await deployTx.send(password: "web3swift")
 //        let txHash = result.hash
-//        
+//
 //
 //        Thread.sleep(forTimeInterval: 1.0)
 //
 //        let receipt = try await web3.eth.transactionReceipt(txHash)
-//        
+//
 //
 //        switch receipt.status {
 //        case .notYetProcessed:
@@ -87,7 +87,7 @@
 //        }
 //        // MARK: Writing Data flow
 //        let estimate1 = try await tx1.estimateGas(with: nil)
-//        
+//
 //
 //        let amount2 = Utilities.parseToBigUInt("0.00000005", units: .eth) // 50 gwei
 //
@@ -100,7 +100,7 @@
 //        }
 //        // MARK: Writing Data flow
 //        let estimate2 = try await tx2.estimateGas(with: nil)
-//        
+//
 //        XCTAssertLessThanOrEqual(estimate2 - estimate1, 22000)
 //    }
 //    // FIXME: Temporary deleted method `sendETH` should be restored.
@@ -113,7 +113,7 @@
 //    //        writeTX.transaction.from = allAddresses[0]
 //    //        writeTX.transaction.gasPricePolicy = .manual(gasPricePolicy)
 //    //        let result = try await writeTX.send()
-//    //        
+//    //
 //    //    }
 //    //
 //    func testERC20tokenBalancePromise() async throws {

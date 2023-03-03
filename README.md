@@ -44,13 +44,13 @@
 
 ## Core features
 
-- [x] :zap: Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality 
-- [x] :thought_balloon: Interaction with remote node via **JSON RPC** 
+- [x] :zap: Swift implementation of [web3.js](https://github.com/ethereum/web3.js/) functionality
+- [x] :thought_balloon: Interaction with remote node via **JSON RPC**
 - [x] 🔐 Local **keystore management** (`geth` compatible)
-- [x] 🤖 Smart-contract **ABI parsing** 
+- [x] 🤖 Smart-contract **ABI parsing**
 - [x] 🔓**ABI decoding** (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
 - [x] 🕸Ethereum Name Service **(ENS) support** - a secure & decentralised way to address resources both on and off the blockchain using simple, human-readable names
-- [x] :arrows_counterclockwise: **Smart contracts interactions** (read/write) 
+- [x] :arrows_counterclockwise: **Smart contracts interactions** (read/write)
 - [x]  ⛩ **Infura support**
 - [x] ⚒  **Parsing TxPool** content into native values (ethereum addresses and transactions) - easy to get pending transactions
 - [x] 🖇 **Event loops** functionality
@@ -192,6 +192,10 @@ $ ganache
 
 This will create a local blockchain and also some test accounts that are used throughout our tests.
 Make sure that `ganache` is running on its default port `8546`. To change the port in test cases locate `LocalTestCase.swift` and modify the static `url` variable.
+
+### Before you commit
+
+We are using [pre-commit](https://pre-commit.com) to run validations locally before a commit is created. Please, install pre-commit and run `pre-commit install` from project's root directory. After that before every commit git hook will run and execute `codespell`, `swiftlint` and other checks.
 
 ## Contribute
 Want to improve? It's awesome:

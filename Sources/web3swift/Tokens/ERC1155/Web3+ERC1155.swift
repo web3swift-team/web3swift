@@ -41,9 +41,11 @@ public class ERC1155: IERC1155 {
     public var abi: String
 
     lazy var contract: Web3.Contract = {
+        // swiftlint:disable force_unwrapping
         let contract = self.web3.contract(self.abi, at: self.address, abiVersion: 2)
         precondition(contract != nil)
         return contract!
+        // swiftlint:enable force_unwrapping
     }()
 
     public init(web3: Web3, provider: Web3Provider, address: EthereumAddress, abi: String = Web3.Utils.erc1155ABI, transaction: CodableTransaction = .emptyTransaction) {
@@ -67,11 +69,11 @@ public class ERC1155: IERC1155 {
         if self._hasReadProperties {
             return
         }
-        guard contract.contract.address != nil else {return}
+        guard contract.contract.address != nil else { return }
 
-        guard let tokenIdPromise = try await contract.createReadOperation("id")?.callContractMethod() else {return}
+        guard let tokenIdPromise = try await contract.createReadOperation("id")?.callContractMethod() else { return }
 
-        guard let tokenId = tokenIdPromise["0"] as? BigUInt else {return}
+        guard let tokenId = tokenIdPromise["0"] as? BigUInt else { return }
         self._tokenId = tokenId
 
         self._hasReadProperties = true
@@ -94,7 +96,7 @@ public class ERC1155: IERC1155 {
         let result = try await contract
             .createReadOperation("balanceOf", parameters: [account, id])!
             .callContractMethod()
-        guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
+        guard let res = result["0"] as? BigUInt else { throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node") }
         return res
     }
 
@@ -107,14 +109,14 @@ public class ERC1155: IERC1155 {
     public func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress, scope: Data) async throws -> Bool {
         let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user, scope])!.callContractMethod()
 
-        guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
+        guard let res = result["0"] as? Bool else { throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node") }
         return res
     }
 
     public func supportsInterface(interfaceID: String) async throws -> Bool {
         let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID])!.callContractMethod()
 
-        guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
+        guard let res = result["0"] as? Bool else { throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node") }
         return res
     }
 }

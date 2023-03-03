@@ -1,6 +1,6 @@
 //
 //  Async+BackwardCapability.swift
-//  
+//
 //
 //  Created by Yaroslav Yashin on 05.06.2022.
 //

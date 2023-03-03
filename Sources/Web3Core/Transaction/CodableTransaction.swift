@@ -54,7 +54,7 @@ public struct CodableTransaction {
         set { envelope.value = newValue }
     }
 
-    public var data: Data  {
+    public var data: Data {
         get { return envelope.data }
         set { envelope.data = newValue }
     }
@@ -271,7 +271,7 @@ extension CodableTransaction: CustomStringConvertible {
         var toReturn = ""
         toReturn += "Transaction" + "\n"
         toReturn += String(describing: self.envelope)
-        toReturn += "from: " + String(describing: self.sender?.address)  + "\n"
+        toReturn += "from: " + String(describing: self.sender)  + "\n"
         toReturn += "hash: " + String(describing: self.hash?.toHexString().addHexPrefix()) + "\n"
         return toReturn
     }

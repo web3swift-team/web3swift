@@ -29,7 +29,7 @@ jobs:
   spm:
     name: Swift Package Manager 5.7
     runs-on: macOS-12
-    concurrency: 
+    concurrency:
       group: spm-${{ github.run_id }}
       cancel-in-progress: false
     steps:
@@ -38,7 +38,13 @@ jobs:
         run: |
           pip3 install --upgrade pip
           pip3 install codespell
-          codespell --count --ignore-words-list=ans,deriver,inout,packag --skip="*.js,*WordLists.swift"
+          codespell  # See .codespellrc for args
+      - name: SwiftLint
+        run: |
+          # 1. Make all automated fixes that are possible
+          # 2. git diff to see what (if any) automated fixes were made
+          # 3. See https://github.com/realm/SwiftLint#xcode explains why the double run
+          swiftlint --fix --quiet && git diff && swiftlint --quiet
       - name: Resolve dependencies
         run: swift package resolve
       - name: Build

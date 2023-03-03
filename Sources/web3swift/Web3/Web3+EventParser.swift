@@ -205,7 +205,7 @@ import Web3Core
 //
 //        let decodedLogs = response.result.compactMap { (log) -> EventParserResult? in
 //            let (n, d) = self.contract.parseEvent(log)
-//            guard let evName = n, let evData = d else {return nil}
+//            guard let evName = n, let evData = d else { return nil }
 //            var res = EventParserResult(eventName: evName, transactionReceipt: nil, contractAddress: log.address, decodedResult: evData)
 //            res.eventLog = log
 //            return res

@@ -1,6 +1,6 @@
 //
 //  ERC20BaseProperties.swift
-//  
+//
 //
 //  Created by Jann Driessen on 21.11.22.
 //

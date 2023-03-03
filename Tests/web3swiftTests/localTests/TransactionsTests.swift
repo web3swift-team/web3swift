@@ -195,7 +195,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            
+
             return XCTFail(String(describing: error))
         }
     }
@@ -243,7 +243,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            
+
             return XCTFail(String(describing: error))
         }
     }
@@ -264,7 +264,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            
+
             return XCTFail(String(describing: error))
         }
     }
@@ -312,7 +312,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            
+
             return XCTFail(String(describing: error))
         }
     }
@@ -333,7 +333,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            
+
             return XCTFail(String(describing: error))
         }
     }
@@ -381,7 +381,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            
+
             return XCTFail(String(describing: error))
         }
     }
@@ -402,7 +402,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            
+
             return XCTFail(String(describing: error))
         }
     }
@@ -450,7 +450,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            
+
             return XCTFail(String(describing: error))
         }
     }
@@ -518,7 +518,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            
+
             return XCTFail(String(describing: error))
         }
     }
@@ -539,7 +539,7 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            
+
             return XCTFail(String(describing: error))
         }
     }
@@ -587,9 +587,21 @@ class TransactionsTests: XCTestCase {
             // check that we recovered the address correctly
             XCTAssertEqual(jsonTxn.sender!.address, expectedAddress.address, "Recovered Address Mismatch")
         } catch {
-            
+
             return XCTFail(String(describing: error))
         }
+    }
+
+    func testDescription() async throws {
+        let vector = testVector[TestCase.eip1559.rawValue]
+        let jsonData = try XCTUnwrap(vector.JSON.data(using: .utf8))
+        let txn = try JSONDecoder().decode(CodableTransaction.self, from: jsonData)
+
+        let sut = String(describing: txn)
+
+        XCTAssertTrue(sut.contains("Transaction"))
+        XCTAssertTrue(sut.contains("from: Optional(EthereumAddress\ntype: normal\naddress: 0x9d8A62f656a8d1615C1294fd71e9CFb3E4855A4F\n)\n"))
+        XCTAssertTrue(sut.contains(#"hash: Optional("0x41dc0cd9b133e0d4e47e269988b0109c966db5220d57e2a7f3cdc6c2f8de6a72")"#))
     }
 
     // ***** Legacy Tests *****
@@ -611,16 +623,16 @@ class TransactionsTests: XCTestCase {
             let publicKey = Utilities.privateToPublic(privateKeyData, compressed: false)
             let sender = Utilities.publicToAddress(publicKey!)
             transaction.chainID = 1
-            
+
             let hash = transaction.hashForSignature()
             let expectedHash = "0xdaf5a779ae972f972197303d7b574746c7ef83eadac0f2791ad23db92e4c8e53".stripHexPrefix()
             XCTAssertEqual(hash!.toHexString(), expectedHash, "Transaction signature failed")
             try transaction.sign(privateKey: privateKeyData, useExtraEntropy: false)
-            
+
             XCTAssertEqual(transaction.v, 37, "Transaction signature failed")
             XCTAssertEqual(sender, transaction.sender)
         } catch {
-            
+
             XCTFail()
         }
     }
@@ -639,12 +651,11 @@ class TransactionsTests: XCTestCase {
             let policies = Policies(gasLimitPolicy: .manual(78423))
             let result = try await writeTX.writeToChain(password: "", policies: policies, sendRaw: false)
             let txHash = Data.fromHex(result.hash.stripHexPrefix())!
-            
 
             Thread.sleep(forTimeInterval: 1.0)
 
             let receipt = try await web3.eth.transactionReceipt(txHash)
-            
+
             XCTAssert(receipt.status == .ok)
 
             switch receipt.status {
@@ -655,13 +666,13 @@ class TransactionsTests: XCTestCase {
             }
 
             let details = try await web3.eth.transactionDetails(txHash)
-            
+
             // FIXME: Re-enable this test.
 //            XCTAssertEqual(details.transaction.gasLimit, BigUInt(78423))
         } catch Web3Error.nodeError(let descr) {
             guard descr == "insufficient funds for gas * price + value" else {return XCTFail()}
         } catch {
-            
+
             XCTFail()
         }
     }

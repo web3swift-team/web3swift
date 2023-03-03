@@ -1,6 +1,6 @@
 //
 //  Web3Error.swift
-//  
+//
 //
 //  Created by Yaroslav Yashin on 11.07.2022.
 //

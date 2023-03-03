@@ -215,7 +215,7 @@ extension ABI.Element.Function {
 
 extension ABI.Element.Event {
     public func decodeReturnedLogs(eventLogTopics: [Data], eventLogData: Data) -> [String: Any]? {
-        guard let eventContent = ABIDecoder.decodeLog(event: self, eventLogTopics: eventLogTopics, eventLogData: eventLogData) else {return nil}
+        guard let eventContent = ABIDecoder.decodeLog(event: self, eventLogTopics: eventLogTopics, eventLogData: eventLogData) else { return nil }
         return eventContent
     }
 }
@@ -274,35 +274,35 @@ extension ABI.Element.Function {
     ///
     /// Return cases:
     /// - when no `outputs` declared and `data` is not an error response:
-    ///```swift
-    ///["_success": true]
-    ///```
+    /// ```swift
+    /// ["_success": true]
+    /// ```
     /// - when `outputs` declared and decoding completed successfully:
-    ///```swift
-    ///["_success": true, "0": value_1, "1": value_2, ...]
-    ///```
-    ///Additionally this dictionary will have mappings to output names if these names are specified in the ABI;
+    /// ```swift
+    /// ["_success": true, "0": value_1, "1": value_2, ...]
+    /// ```
+    /// Additionally this dictionary will have mappings to output names if these names are specified in the ABI;
     /// - function call was aborted using `revert(message)` or `require(expression, message)`:
-    ///```swift
-    ///["_success": false, "_abortedByRevertOrRequire": true, "_errorMessage": message]`
-    ///```
+    /// ```swift
+    /// ["_success": false, "_abortedByRevertOrRequire": true, "_errorMessage": message]`
+    /// ```
     /// - function call was aborted using `revert CustomMessage()` and `errors` argument contains the ABI of that custom error type:
-    ///```swift
-    ///["_success": false,
-    ///"_abortedByRevertOrRequire": true,
-    ///"_error": error_name_and_types, // e.g. `MyCustomError(uint256, address senderAddress)`
-    ///"0": error_arg1,
-    ///"1": error_arg2,
-    ///...,
-    ///"error_arg1_name": error_arg1, // Only named arguments will be mapped to their names, e.g. `"senderAddress": EthereumAddress`
-    ///"error_arg2_name": error_arg2, // Otherwise, you can query them by position index.
-    ///...]
-    ///```
-    ///- in case of any error:
-    ///```swift
-    ///["_success": false, "_failureReason": String]
-    ///```
-    ///Error reasons include:
+    /// ```swift
+    /// ["_success": false,
+    /// "_abortedByRevertOrRequire": true,
+    /// "_error": error_name_and_types, // e.g. `MyCustomError(uint256, address senderAddress)`
+    /// "0": error_arg1,
+    /// "1": error_arg2,
+    /// ...,
+    /// "error_arg1_name": error_arg1, // Only named arguments will be mapped to their names, e.g. `"senderAddress": EthereumAddress`
+    /// "error_arg2_name": error_arg2, // Otherwise, you can query them by position index.
+    /// ...]
+    /// ```
+    /// - in case of any error:
+    /// ```swift
+    /// ["_success": false, "_failureReason": String]
+    /// ```
+    /// Error reasons include:
     /// -  `outputs` declared but at least one value failed to be decoded;
     /// - `data.count` is less than `outputs.count * 32`;
     /// - `outputs` defined and `data` is empty;
@@ -467,7 +467,6 @@ extension ABIDecoder {
         }
 
         var returnArray = [String: Any]()
-
         if data.count == 0 && inputs.count == 1 {
             let name = "0"
             let value = inputs[0].type.emptyValue
@@ -479,7 +478,7 @@ extension ABIDecoder {
             guard inputs.count * 32 <= data.count else { return nil }
 
             var i = 0
-            guard let values = ABIDecoder.decode(types: inputs, data: data) else {return nil}
+            guard let values = ABIDecoder.decode(types: inputs, data: data) else { return nil }
             for input in inputs {
                 let name = "\(i)"
                 returnArray[name] = values[i]
