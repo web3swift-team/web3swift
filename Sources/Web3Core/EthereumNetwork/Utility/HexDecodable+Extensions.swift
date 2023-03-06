@@ -20,12 +20,8 @@ extension Data: LiteralInitiableFromString {
     public static func fromHex(_ hex: String) -> Data? {
         let string = hex.lowercased().stripHexPrefix()
         let array = [UInt8](hex: string)
-        if array.count == 0 {
-            if hex == "0x" || hex == "" {
-                return Data()
-            } else {
-                return nil
-            }
+        if (array.count == 0) {
+            return (hex == "0x" || hex.isEmpty) ? Data() : nil
         }
         return Data(array)
     }
