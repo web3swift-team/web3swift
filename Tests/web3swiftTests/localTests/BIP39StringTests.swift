@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import Core
+@testable import Web3Core
 @testable import web3swift
 
 
