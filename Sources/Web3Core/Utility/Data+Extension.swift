@@ -5,7 +5,8 @@
 
 import Foundation
 
-extension Data {
+public extension Data {
+
     init<T>(fromArray values: [T]) {
         let values = values
         let ptrUB = values.withUnsafeBufferPointer { (ptr: UnsafeBufferPointer) in return ptr }
@@ -33,32 +34,33 @@ extension Data {
         return difference == UInt8(0x00)
     }
 
-    public static func zero(_ data: inout Data) {
+    static func zero(_ data: inout Data) {
         let count = data.count
         data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) in
             body.baseAddress?.assumingMemoryBound(to: UInt8.self).initialize(repeating: 0, count: count)
         }
     }
 
-    public static func randomBytes(length: Int) -> Data? {
-        for _ in 0...1024 {
-            var data = Data(repeating: 0, count: length)
-            let result = data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) -> Int32? in
-                if let bodyAddress = body.baseAddress, body.count > 0 {
-                    let pointer = bodyAddress.assumingMemoryBound(to: UInt8.self)
-                    return SecRandomCopyBytes(kSecRandomDefault, length, pointer)
-                } else {
-                    return nil
-                }
-            }
-            if let notNilResult = result, notNilResult == errSecSuccess {
-                return data
-            }
+    static func randomBytes(length: Int) -> Data? {
+        let entropy_bit_size = length//128
+        //# valid_entropy_bit_sizes = [128, 160, 192, 224, 256], count: [12, 15, 18, 21, 24]
+        var entropy_bytes = [UInt8](repeating: 0, count: entropy_bit_size)// / 8)
+
+        let status = SecRandomCopyBytes(kSecRandomDefault, entropy_bytes.count, &entropy_bytes)
+
+        if status != errSecSuccess { // Always test the status.
+
+        } else {
+            entropy_bytes = [UInt8](repeating: 0, count: entropy_bit_size)// / 8)
+            arc4random_buf(&entropy_bytes, entropy_bytes.count)
         }
-        return nil
+
+        let entropyData = entropy_bytes.shuffled()
+
+        return Data(entropyData)
     }
 
-    public func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public
+    func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public
         if startingBit + length / 8 > self.count, length > 64, startingBit > 0, length >= 1 { return nil }
         let bytes = self[(startingBit/8) ..< (startingBit+length+7)/8]
         let padding = Data(repeating: 0, count: 8 - bytes.count)
