@@ -42,47 +42,4 @@ public class WriteOperation: ReadOperation {
         guard let transactionData = transaction.encode(for: .transaction) else { throw Web3Error.dataError }
         return try await web3.eth.send(raw: transactionData)
     }
-    
-    public func depploy(password: String, policies: Policies = .auto) async throws -> TransactionSendingResult {
-        //TODO: optimize/cleanup
-//        try await transaction.resolve(provider: web3.provider)
-        try await policyResolver.resolveAll(for: &transaction, with: policies)
-
-        guard let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager else {
-            throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
-        }
-
-        do {
-            //TODO: optimize/cleanup
-//            transaction.unsign()
-            let account = transaction.from ?? transaction.sender ?? EthereumAddress.contractDeploymentAddress()
-            var privateKey = try attachedKeystoreManager.UNSAFE_getPrivateKeyData(password: password, account: account)
-            defer { Data.zero(&privateKey) }
-            try transaction.sign(privateKey: privateKey, useExtraEntropy: false)
-        } catch {
-            throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
-        }
-
-        //TODO: optimize/cleanup
-        guard let transactionData = transaction.encode(for: .transaction) else { throw Web3Error.dataError }
-//        let vectorHash = transaction.hash!.toHexString().addHexPrefix()
-//        print(vectorHash)
-
-        //TODO: optimize/cleanup
-        return try await web3.eth.send(raw: transactionData)
-    }
-
-    // FIXME: Rewrite this to CodableTransaction
-//    func nonce(for policy: CodableTransaction.NoncePolicy, from: EthereumAddress) async throws -> BigUInt {
-//        switch policy {
-//        case .latest:
-//            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .latest)
-//        case .pending:
-//            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .pending)
-//        case .earliest:
-//            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .earliest)
-//        case .exact(let nonce):
-//            return nonce
-//        }
-//    }
 }
