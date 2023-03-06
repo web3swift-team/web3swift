@@ -4,7 +4,7 @@
 //
 
 import XCTest
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -22,7 +22,7 @@ class ERC20ClassTests: LocalTestCase {
         }
         /// We had an issue with multiple async reads performed at the same point in time
         /// sometimes returning wrong values (actually values of each other).
-        /// The issue is most likely related to async/await feautre of Swift.
+        /// The issue is most likely related to async/await feature of Swift.
         /// Due to that was decided to add a loop to execute the same async calls that checks the same ERC20 properties
         /// multiple times. All calls must succeed.
         /// Each run executes 3 async read operations.
@@ -39,7 +39,7 @@ class ERC20ClassTests: LocalTestCase {
 
     func testERC20tokenBalanceAndAllowance() async throws {
         let (web3, _, receipt, _) = try await TestHelpers.localDeployERC20()
-        let erc20token = ERC20.init(web3: web3, provider: web3.provider, address: receipt.contractAddress!)
+        let erc20token = ERC20(web3: web3, provider: web3.provider, address: receipt.contractAddress!)
 
         let userAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
 

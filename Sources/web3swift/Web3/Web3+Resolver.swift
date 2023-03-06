@@ -1,13 +1,13 @@
 //
 //  Web3+Resolver.swift
-//  
+//
 //
 //  Created by Jann Driessen on 01.11.22.
 //
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 public class PolicyResolver {
     private let provider: Web3Provider

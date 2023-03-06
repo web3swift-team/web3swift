@@ -7,7 +7,7 @@
 import Foundation
 import XCTest
 
-@testable import Core
+@testable import Web3Core
 
 class NSRegularExpressionTest: XCTestCase {
 

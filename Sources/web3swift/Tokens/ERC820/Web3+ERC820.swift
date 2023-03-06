@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Core
+import Web3Core
 
 // Pseudo-introspection using a registry contract
 protocol IERC820: IERC165 {

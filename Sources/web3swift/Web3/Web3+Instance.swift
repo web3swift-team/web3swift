@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 // FIXME: Rewrite this to CodableTransaction
 /// A web3 instance bound to provider. All further functionality is provided under web.*. namespaces.
@@ -20,29 +20,24 @@ public class Web3 {
     /// Keystore manager can be bound to Web3 instance. If some manager is bound all further account related functions, such
     /// as account listing, transaction signing, etc. are done locally using private keys and accounts found in a manager.
     public func addKeystoreManager(_ manager: KeystoreManager?) {
-        self.provider.attachedKeystoreManager = manager
+        provider.attachedKeystoreManager = manager
     }
 
-    var ethInstance: Web3.Eth?
+    var ethInstance: IEth?
 
     /// Public web3.eth.* namespace.
-    public var eth: Web3.Eth {
-        if self.ethInstance != nil {
-            return self.ethInstance!
-        }
-        self.ethInstance = Web3.Eth(provider: self.provider, web3: self)
-        return self.ethInstance!
+    public var eth: IEth {
+        let ethInstance = ethInstance ?? Web3.Eth(provider: provider)
+        self.ethInstance = ethInstance
+        return ethInstance
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public class Eth {
-        var provider: Web3Provider
-        //  weak var web3: web3?
-        var web3: Web3
+    public class Eth: IEth {
+        public var provider: Web3Provider
 
-        public init(provider prov: Web3Provider, web3 web3instance: Web3) {
+        public init(provider prov: Web3Provider) {
             provider = prov
-            web3 = web3instance
         }
     }
 
@@ -50,17 +45,15 @@ public class Web3 {
 
     /// Public web3.personal.* namespace.
     public var personal: Web3.Personal {
-        if self.personalInstance != nil {
-            return self.personalInstance!
-        }
-        self.personalInstance = Web3.Personal(provider: self.provider, web3: self)
-        return self.personalInstance!
+        let personalInstance = personalInstance ?? Web3.Personal(provider: provider, web3: self)
+        self.personalInstance = personalInstance
+        return personalInstance
     }
 
     // FIXME: Rewrite this to CodableTransaction
     public class Personal {
         var provider: Web3Provider
-        //        weak var web3: web3?
+        // FIXME: remove dependency on web3 instance!!
         var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -72,17 +65,15 @@ public class Web3 {
 
     /// Public web3.personal.* namespace.
     public var txPool: Web3.TxPool {
-        if self.txPoolInstance != nil {
-            return self.txPoolInstance!
-        }
-        self.txPoolInstance = Web3.TxPool(provider: self.provider, web3: self)
-        return self.txPoolInstance!
+        let txPoolInstance = txPoolInstance ?? Web3.TxPool(provider: provider, web3: self)
+        self.txPoolInstance = txPoolInstance
+        return txPoolInstance
     }
 
     // FIXME: Rewrite this to CodableTransaction
     public class TxPool {
         var provider: Web3Provider
-        //        weak var web3: web3?
+        // FIXME: remove dependency on web3 instance!!
         var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -94,16 +85,14 @@ public class Web3 {
 
     /// Public web3.wallet.* namespace.
     public var wallet: Web3.Web3Wallet {
-        if self.walletInstance != nil {
-            return self.walletInstance!
-        }
-        self.walletInstance = Web3.Web3Wallet(provider: self.provider, web3: self)
-        return self.walletInstance!
+        let walletInstance = walletInstance ?? Web3.Web3Wallet(provider: provider, web3: self)
+        self.walletInstance = walletInstance
+        return walletInstance
     }
 
     public class Web3Wallet {
         var provider: Web3Provider
-        //  weak var web3: web3?
+        // FIXME: remove dependency on web3 instance!!
         var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -115,17 +104,15 @@ public class Web3 {
 
     /// Public web3.browserFunctions.* namespace.
     public var browserFunctions: Web3.BrowserFunctions {
-        if self.browserFunctionsInstance != nil {
-            return self.browserFunctionsInstance!
-        }
-        self.browserFunctionsInstance = Web3.BrowserFunctions(provider: self.provider, web3: self)
-        return self.browserFunctionsInstance!
+        let browserFunctionsInstance = browserFunctionsInstance ?? Web3.BrowserFunctions(provider: provider, web3: self)
+        self.browserFunctionsInstance = browserFunctionsInstance
+        return browserFunctionsInstance
     }
 
     // FIXME: Rewrite this to CodableTransaction
     public class BrowserFunctions {
         var provider: Web3Provider
-        //        weak var web3: web3?
+        // FIXME: remove dependency on web3 instance!!
         public var web3: Web3
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -137,11 +124,9 @@ public class Web3 {
 
     /// Public web3.browserFunctions.* namespace.
     public var eventLoop: Web3.Eventloop {
-        if self.eventLoopInstance != nil {
-            return self.eventLoopInstance!
-        }
-        self.eventLoopInstance = Web3.Eventloop(provider: self.provider, web3: self)
-        return self.eventLoopInstance!
+        let eventLoopInstance = eventLoopInstance ?? Web3.Eventloop(provider: provider, web3: self)
+        self.eventLoopInstance = eventLoopInstance
+        return eventLoopInstance
     }
 
     // FIXME: Rewrite this to CodableTransaction
@@ -156,12 +141,11 @@ public class Web3 {
         }
 
         var provider: Web3Provider
-        //        weak var web3: web3?
+        // FIXME: remove dependency on web3 instance!!
         var web3: Web3
         var timer: RepeatingTimer?
 
         public var monitoredProperties: [MonitoredProperty] = [MonitoredProperty]()
-        //  public var monitoredContracts: [MonitoredContract] = [MonitoredContract]()
         public var monitoredUserFunctions: [EventLoopRunnableProtocol] = [EventLoopRunnableProtocol]()
         public init(provider prov: Web3Provider, web3 web3instance: Web3) {
             provider = prov
@@ -169,28 +153,12 @@ public class Web3 {
         }
     }
 
-//    public typealias AssemblyHookFunction = ((inout CodableTransaction, EthereumContract)) -> Bool
-//
-//    public typealias SubmissionHookFunction = (inout CodableTransaction) -> Bool
-
     public typealias SubmissionResultHookFunction = (TransactionSendingResult) -> Void
-
-//    public struct AssemblyHook {
-//        public var function: AssemblyHookFunction
-//    }
-
-//    public struct SubmissionHook {
-//        public var function: SubmissionHookFunction
-//    }
 
     public struct SubmissionResultHook {
         public var function: SubmissionResultHookFunction
     }
 
-//    public var preAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
-//    public var postAssemblyHooks: [AssemblyHook] = [AssemblyHook]()
-//
-//    public var preSubmissionHooks: [SubmissionHook] = [SubmissionHook]()
     public var postSubmissionHooks: [SubmissionResultHook] = [SubmissionResultHook]()
 
 }

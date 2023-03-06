@@ -83,7 +83,7 @@
 - `subscribeOnLogs` method with specific contract address is not working!!!! [\#366](https://github.com/skywinder/web3swift/issues/366)
 - EthereumContract with Custom ABI returns nil [\#342](https://github.com/skywinder/web3swift/issues/342)
 - Error on running tests [\#290](https://github.com/skywinder/web3swift/issues/290)
-- Serialisation of BIP32 misplaced address postition [\#257](https://github.com/skywinder/web3swift/issues/257)
+- Serialisation of BIP32 misplaced address position [\#257](https://github.com/skywinder/web3swift/issues/257)
 - Xcode 10.2.1 carthage update hangs while building web3swift.xcodeproj [\#197](https://github.com/skywinder/web3swift/issues/197)
 
 **Closed issues:**
@@ -118,7 +118,7 @@
 - @ravi-ranjan-oodles thanks for the update. [\#329](https://github.com/skywinder/web3swift/issues/329)
 - Issue in Uploading to Test Flight  [\#328](https://github.com/skywinder/web3swift/issues/328)
 - Update CryptoSwift podspec [\#322](https://github.com/skywinder/web3swift/issues/322)
-- cann't open DApp， such as "https://uniswap.tokenpocket.pro/\#/swap" [\#321](https://github.com/skywinder/web3swift/issues/321)
+- can't open DApp， such as "https://uniswap.tokenpocket.pro/\#/swap" [\#321](https://github.com/skywinder/web3swift/issues/321)
 - CryptoSwift version is too low to work properly in Xcode12.5 [\#318](https://github.com/skywinder/web3swift/issues/318)
 - web3swift.Web3Error.processingError\(desc: "Failed to fetch gas estimate"\)（BSC Chain） [\#317](https://github.com/skywinder/web3swift/issues/317)
 - Quick simple steps for minting ERC20 or ERC721 tokens  [\#314](https://github.com/skywinder/web3swift/issues/314)
@@ -126,7 +126,7 @@
 - I can't find func 'Web3.InfuraKovanWeb3\(\)' [\#311](https://github.com/skywinder/web3swift/issues/311)
 - web3 instance error:  Variable used within its own initial value [\#310](https://github.com/skywinder/web3swift/issues/310)
 - Failed to fetch gas estimate when sending erc20 [\#307](https://github.com/skywinder/web3swift/issues/307)
-- DApp browser cann't open Uniswap in a right way [\#304](https://github.com/skywinder/web3swift/issues/304)
+- DApp browser can't open Uniswap in a right way [\#304](https://github.com/skywinder/web3swift/issues/304)
 - Update cocoapods bigint to 5.0 [\#288](https://github.com/skywinder/web3swift/issues/288)
 - When I use getBlockByNumber  ,  hash Unable to check [\#287](https://github.com/skywinder/web3swift/issues/287)
 - How to parse the return value of read transaction [\#284](https://github.com/skywinder/web3swift/issues/284)
@@ -231,7 +231,7 @@
 - policy [\#247](https://github.com/skywinder/web3swift/pull/247) ([BaldyAsh](https://github.com/BaldyAsh))
 - Fix dependencies, build [\#245](https://github.com/skywinder/web3swift/pull/245) ([BaldyAsh](https://github.com/BaldyAsh))
 - chore: update ENS Registry migration  [\#243](https://github.com/skywinder/web3swift/pull/243) ([aranhaagency](https://github.com/aranhaagency))
-- improtant notice update [\#232](https://github.com/skywinder/web3swift/pull/232) ([skywinder](https://github.com/skywinder))
+- important notice update [\#232](https://github.com/skywinder/web3swift/pull/232) ([skywinder](https://github.com/skywinder))
 - Add Alice Wallet to project list [\#230](https://github.com/skywinder/web3swift/pull/230) ([lmcmz](https://github.com/lmcmz))
 - Update Extensions.swift [\#225](https://github.com/skywinder/web3swift/pull/225) ([kocherovets](https://github.com/kocherovets))
 - correct gasLimit [\#222](https://github.com/skywinder/web3swift/pull/222) ([luqz](https://github.com/luqz))
@@ -249,10 +249,10 @@
 **Closed issues:**
 
 - BigInt 3.1 [\#207](https://github.com/skywinder/web3swift/issues/207)
-- recevied transaction id from geth node server but not able to see that transaction id at etherscan.io [\#200](https://github.com/skywinder/web3swift/issues/200)
+- received transaction id from geth node server but not able to see that transaction id at etherscan.io [\#200](https://github.com/skywinder/web3swift/issues/200)
 - How do I fetch information such as balance, decimal,symbol and name of ERC20token ?   [\#199](https://github.com/skywinder/web3swift/issues/199)
 - Starscream 3.1.0 not compatible with Swift 5.0 [\#195](https://github.com/skywinder/web3swift/issues/195)
-- How to Connect infuraWebsocket and subsribe perticular event in swift? [\#193](https://github.com/skywinder/web3swift/issues/193)
+- How to Connect infuraWebsocket and subsribe particular event in swift? [\#193](https://github.com/skywinder/web3swift/issues/193)
 - Use of unresolved identifier 'Wallet' [\#192](https://github.com/skywinder/web3swift/issues/192)
 - V in Signed Message Hash not being calculated properly [\#191](https://github.com/skywinder/web3swift/issues/191)
 - Not possible to calculate fast, normal and cheap transaction fee ? [\#190](https://github.com/skywinder/web3swift/issues/190)

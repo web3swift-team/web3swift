@@ -1,7 +1,7 @@
 import Foundation
 import XCTest
 import BigInt
-import Core
+import Web3Core
 
 import web3swift
 
@@ -18,8 +18,6 @@ class LocalTestCase: XCTestCase {
         let block = try await web3.eth.blockNumber()
         guard block < 25 else { return }
 
-        print("\n ****** Preloading Ganache (\(25 - block) blocks) *****\n")
-
         let allAddresses = try! await web3.eth.ownedAccounts()
         let sendToAddress = allAddresses[0]
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)
@@ -30,7 +28,7 @@ class LocalTestCase: XCTestCase {
         writeTX.transaction.value = value
         let policies = Policies(gasLimitPolicy: .manual(78423), gasPricePolicy: .manual(20000000000))
         for _ in block..<25 {
-            _ = try! await writeTX.writeToChain(password: "", policies: policies)
+            _ = try! await writeTX.writeToChain(password: "", policies: policies, sendRaw: false)
         }
     }
 }

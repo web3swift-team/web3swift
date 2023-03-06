@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		08D762AA7F8C96F1FEC2BDDA /* Pods_myWeb3Wallet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6EB035B54D0DDFE25556549 /* Pods_myWeb3Wallet.framework */; };
-		1A3D2B3177B96101E5BA3A86 /* Pods_myWeb3WalletTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4590F35DEE4A4CA41141602 /* Pods_myWeb3WalletTests.framework */; };
-		ADDA7950DDF6B6F2FFB1F198 /* Pods_myWeb3Wallet_myWeb3WalletUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DEF494BADF9FD39D553B87D /* Pods_myWeb3Wallet_myWeb3WalletUITests.framework */; };
+		D6DD90D22991966100EE140E /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD90D12991966100EE140E /* web3swift */; };
 		FA5308212721D59B002C1F06 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308202721D59B002C1F06 /* AppDelegate.swift */; };
 		FA5308232721D59B002C1F06 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308222721D59B002C1F06 /* SceneDelegate.swift */; };
 		FA5308252721D59B002C1F06 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308242721D59B002C1F06 /* ViewController.swift */; };
@@ -47,14 +45,8 @@
 
 /* Begin PBXFileReference section */
 		2DEF494BADF9FD39D553B87D /* Pods_myWeb3Wallet_myWeb3WalletUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_myWeb3Wallet_myWeb3WalletUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5B0E97C0C8FE51D0241E7D19 /* Pods-myWeb3Wallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myWeb3Wallet.release.xcconfig"; path = "Target Support Files/Pods-myWeb3Wallet/Pods-myWeb3Wallet.release.xcconfig"; sourceTree = "<group>"; };
-		600772647D45BC0D702D4137 /* Pods-myWeb3Wallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myWeb3Wallet.debug.xcconfig"; path = "Target Support Files/Pods-myWeb3Wallet/Pods-myWeb3Wallet.debug.xcconfig"; sourceTree = "<group>"; };
-		7574A738941D92CC94F93A9E /* Pods-myWeb3Wallet-myWeb3WalletUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myWeb3Wallet-myWeb3WalletUITests.release.xcconfig"; path = "Target Support Files/Pods-myWeb3Wallet-myWeb3WalletUITests/Pods-myWeb3Wallet-myWeb3WalletUITests.release.xcconfig"; sourceTree = "<group>"; };
-		A87A2F63C4B3084139E790F5 /* Pods-myWeb3WalletTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myWeb3WalletTests.debug.xcconfig"; path = "Target Support Files/Pods-myWeb3WalletTests/Pods-myWeb3WalletTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D4590F35DEE4A4CA41141602 /* Pods_myWeb3WalletTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_myWeb3WalletTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D6018FABA256C0117F85A829 /* Pods-myWeb3Wallet-myWeb3WalletUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myWeb3Wallet-myWeb3WalletUITests.debug.xcconfig"; path = "Target Support Files/Pods-myWeb3Wallet-myWeb3WalletUITests/Pods-myWeb3Wallet-myWeb3WalletUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D6EB035B54D0DDFE25556549 /* Pods_myWeb3Wallet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_myWeb3Wallet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E41A5A8BF0A312348D3C52FD /* Pods-myWeb3WalletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myWeb3WalletTests.release.xcconfig"; path = "Target Support Files/Pods-myWeb3WalletTests/Pods-myWeb3WalletTests.release.xcconfig"; sourceTree = "<group>"; };
 		FA53081D2721D59B002C1F06 /* myWeb3Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = myWeb3Wallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA5308202721D59B002C1F06 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FA5308222721D59B002C1F06 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,7 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08D762AA7F8C96F1FEC2BDDA /* Pods_myWeb3Wallet.framework in Frameworks */,
+				D6DD90D22991966100EE140E /* web3swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +82,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A3D2B3177B96101E5BA3A86 /* Pods_myWeb3WalletTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,26 +89,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADDA7950DDF6B6F2FFB1F198 /* Pods_myWeb3Wallet_myWeb3WalletUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		40AC3854191B335F2FCA6C71 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				600772647D45BC0D702D4137 /* Pods-myWeb3Wallet.debug.xcconfig */,
-				5B0E97C0C8FE51D0241E7D19 /* Pods-myWeb3Wallet.release.xcconfig */,
-				D6018FABA256C0117F85A829 /* Pods-myWeb3Wallet-myWeb3WalletUITests.debug.xcconfig */,
-				7574A738941D92CC94F93A9E /* Pods-myWeb3Wallet-myWeb3WalletUITests.release.xcconfig */,
-				A87A2F63C4B3084139E790F5 /* Pods-myWeb3WalletTests.debug.xcconfig */,
-				E41A5A8BF0A312348D3C52FD /* Pods-myWeb3WalletTests.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		B67819FA7D92C1562AFD65A8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,7 +112,6 @@
 				FA5308362721D59D002C1F06 /* myWeb3WalletTests */,
 				FA5308402721D59D002C1F06 /* myWeb3WalletUITests */,
 				FA53081E2721D59B002C1F06 /* Products */,
-				40AC3854191B335F2FCA6C71 /* Pods */,
 				B67819FA7D92C1562AFD65A8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -227,17 +203,18 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FA5308472721D59D002C1F06 /* Build configuration list for PBXNativeTarget "myWeb3Wallet" */;
 			buildPhases = (
-				2C189F9EA9914E3A42777867 /* [CP] Check Pods Manifest.lock */,
 				FA5308192721D59B002C1F06 /* Sources */,
 				FA53081A2721D59B002C1F06 /* Frameworks */,
 				FA53081B2721D59B002C1F06 /* Resources */,
-				5E0CBD27780EAD115251C9AC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = myWeb3Wallet;
+			packageProductDependencies = (
+				D6DD90D12991966100EE140E /* web3swift */,
+			);
 			productName = myWeb3Wallet;
 			productReference = FA53081D2721D59B002C1F06 /* myWeb3Wallet.app */;
 			productType = "com.apple.product-type.application";
@@ -246,7 +223,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FA53084A2721D59D002C1F06 /* Build configuration list for PBXNativeTarget "myWeb3WalletTests" */;
 			buildPhases = (
-				342829194E3F4C74B29C947B /* [CP] Check Pods Manifest.lock */,
 				FA53082F2721D59D002C1F06 /* Sources */,
 				FA5308302721D59D002C1F06 /* Frameworks */,
 				FA5308312721D59D002C1F06 /* Resources */,
@@ -265,11 +241,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FA53084D2721D59D002C1F06 /* Build configuration list for PBXNativeTarget "myWeb3WalletUITests" */;
 			buildPhases = (
-				5F33F7D7F77389C37C4F1656 /* [CP] Check Pods Manifest.lock */,
 				FA5308392721D59D002C1F06 /* Sources */,
 				FA53083A2721D59D002C1F06 /* Frameworks */,
 				FA53083B2721D59D002C1F06 /* Resources */,
-				AAF75ECFD98859A6D0818BB6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -313,6 +287,9 @@
 				Base,
 			);
 			mainGroup = FA5308142721D59B002C1F06;
+			packageReferences = (
+				D6DD90D02991966100EE140E /* XCRemoteSwiftPackageReference "web3swift" */,
+			);
 			productRefGroup = FA53081E2721D59B002C1F06 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -354,109 +331,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		2C189F9EA9914E3A42777867 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-myWeb3Wallet-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		342829194E3F4C74B29C947B /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-myWeb3WalletTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5E0CBD27780EAD115251C9AC /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-myWeb3Wallet/Pods-myWeb3Wallet-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-myWeb3Wallet/Pods-myWeb3Wallet-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-myWeb3Wallet/Pods-myWeb3Wallet-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5F33F7D7F77389C37C4F1656 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-myWeb3Wallet-myWeb3WalletUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AAF75ECFD98859A6D0818BB6 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-myWeb3Wallet-myWeb3WalletUITests/Pods-myWeb3Wallet-myWeb3WalletUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-myWeb3Wallet-myWeb3WalletUITests/Pods-myWeb3Wallet-myWeb3WalletUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-myWeb3Wallet-myWeb3WalletUITests/Pods-myWeb3Wallet-myWeb3WalletUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FA5308192721D59B002C1F06 /* Sources */ = {
@@ -642,7 +516,6 @@
 		};
 		FA5308482721D59D002C1F06 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 600772647D45BC0D702D4137 /* Pods-myWeb3Wallet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -671,7 +544,6 @@
 		};
 		FA5308492721D59D002C1F06 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B0E97C0C8FE51D0241E7D19 /* Pods-myWeb3Wallet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -700,7 +572,6 @@
 		};
 		FA53084B2721D59D002C1F06 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A87A2F63C4B3084139E790F5 /* Pods-myWeb3WalletTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -726,7 +597,6 @@
 		};
 		FA53084C2721D59D002C1F06 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E41A5A8BF0A312348D3C52FD /* Pods-myWeb3WalletTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -752,9 +622,8 @@
 		};
 		FA53084E2721D59D002C1F06 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D6018FABA256C0117F85A829 /* Pods-myWeb3Wallet-myWeb3WalletUITests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VPS9LBWQ55;
@@ -776,9 +645,8 @@
 		};
 		FA53084F2721D59D002C1F06 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7574A738941D92CC94F93A9E /* Pods-myWeb3Wallet-myWeb3WalletUITests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VPS9LBWQ55;
@@ -838,6 +706,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D6DD90D02991966100EE140E /* XCRemoteSwiftPackageReference "web3swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/web3swift-team/web3swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D6DD90D12991966100EE140E /* web3swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6DD90D02991966100EE140E /* XCRemoteSwiftPackageReference "web3swift" */;
+			productName = web3swift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FA5308152721D59B002C1F06 /* Project object */;
 }

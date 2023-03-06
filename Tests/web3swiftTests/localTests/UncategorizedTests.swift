@@ -7,7 +7,7 @@ import XCTest
 import CryptoSwift
 import BigInt
 
-@testable import Core
+@testable import Web3Core
 @testable import web3swift
 
 class UncategorizedTests: XCTestCase {
@@ -69,7 +69,7 @@ class UncategorizedTests: XCTestCase {
             bloom.add(BigUInt(data))
             let newBytes = bloom.bytes
             if newBytes != oldBytes {
-                print("Added new bits")
+
             }
         }
         for str in positive {
@@ -116,18 +116,17 @@ class UncategorizedTests: XCTestCase {
         XCTAssert(contract != nil)
         let allMethods = contract!.contract.allMethods
         let userDeviceCount = try await contract!
-            .createReadOperation("userDeviceCount", parameters: [addr as AnyObject])?
+            .createReadOperation("userDeviceCount", parameters: [addr])?
             .callContractMethod()
-        print(userDeviceCount!)
+
         let totalUsers = try await contract!
-            .createReadOperation("totalUsers", parameters: [])?
+            .createReadOperation("totalUsers")?
             .callContractMethod()
-        print(totalUsers!)
+
         let user = try await contract!
-            .createReadOperation("users", parameters: [0 as AnyObject])?
+            .createReadOperation("users", parameters: [0])?
             .callContractMethod()
-        print(user!)
-        print(allMethods)
+
     }
 
     func testBloomFilterPerformance() throws {

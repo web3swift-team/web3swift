@@ -7,14 +7,16 @@
 
 import UIKit
 import web3swift
+import Web3Core
+
 class WalletViewController: UIViewController {
-    
+
     @IBOutlet weak var continueButton: UIButton!
     @IBOutlet weak var walletAddressLabel: UILabel!
     @IBOutlet weak var importWalletButton: UIButton!
     @IBOutlet weak var createWalletButton: UIButton!
     var _walletAddress: String {
-        set{
+        set {
             self.continueButton.isHidden = false
             self.walletAddressLabel.text = newValue
         }
@@ -27,34 +29,33 @@ class WalletViewController: UIViewController {
         super.viewDidLoad()
         self.createWalletButton.layer.cornerRadius = 5.0
         self.importWalletButton.layer.cornerRadius = 5.0
-        
+
         // Do any additional setup after loading the view.
     }
-    
-    
+
     @IBAction func onClickCreateWallet(_ sender: UIButton) {
 #if DEBUG
         print("Clicked on Create Wallet Option")
 #endif
         self.createMnemonics()
-        
+
     }
     @IBAction func onClickImportWalletButton(_ sender: UIButton) {
         print("Clicked on import Wallet Option")
         self.showImportALert()
     }
-    
+
     @IBAction func onClickContinueButton(_ sender: UIButton) {
         print("Clicked on COntinue button")
         guard let dashboardScreen = self.storyboard?.instantiateViewController(withIdentifier: "DashboardViewController") as? DashboardViewController else {
-            #if DEBUG
+#if DEBUG
             printContent("Unable to get Wallet controller")
-            #endif
+#endif
             return
         }
         self.navigationController?.pushViewController(dashboardScreen, animated: true)
     }
-    fileprivate func showImportALert(){
+    fileprivate func showImportALert() {
         let alert = UIAlertController(title: "MyWeb3Wallet", message: "", preferredStyle: .alert)
         alert.addTextField { textfied in
             textfied.placeholder = "Enter mnemonics/private Key"
@@ -69,7 +70,7 @@ class WalletViewController: UIViewController {
             guard let privateKey = alert.textFields?[0].text else { return }
             print(privateKey)
             self.importWalletWith(privateKey: privateKey)
-            
+
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addAction(mnemonicsAction)
@@ -77,25 +78,25 @@ class WalletViewController: UIViewController {
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
     }
-    func importWalletWith(privateKey: String){
+    func importWalletWith(privateKey: String) {
         let formattedKey = privateKey.trimmingCharacters(in: .whitespacesAndNewlines)
         guard let dataKey = Data.fromHex(formattedKey) else {
             self.showAlertMessage(title: "Error", message: "Please enter a valid Private key ", actionName: "Ok")
             return
         }
         do {
-            let keystore =  try EthereumKeystoreV3(privateKey: dataKey)
+            let keystore =  try EthereumKeystoreV3(privateKey: dataKey, password: "")
             if let myWeb3KeyStore = keystore {
                 let manager = KeystoreManager([myWeb3KeyStore])
                 let address = keystore?.addresses?.first
 #if DEBUG
-                print("Address :::>>>>> ", address as Any)
-                print("Address :::>>>>> ", manager.addresses as Any)
+                print("Address :::>>>>> ", address)
+                print("Address :::>>>>> ", manager.addresses)
 #endif
                 let walletAddress = manager.addresses?.first?.address
                 self.walletAddressLabel.text = walletAddress ?? "0x"
-                
-                print(walletAddress as Any)
+
+                print(walletAddress)
             } else {
                 print("error")
             }
@@ -109,26 +110,22 @@ class WalletViewController: UIViewController {
             alert.addAction(okAction)
             self.present(alert, animated: true)
         }
-        
-        
-        
+
     }
+
     func importWalletWith(mnemonics: String) {
-        let walletAddress = try? BIP32Keystore(mnemonics: mnemonics , prefixPath: "m/44'/77777'/0'/0")
-        print(walletAddress?.addresses as Any)
+        let walletAddress = try? BIP32Keystore(mnemonics: mnemonics, password: "", prefixPath: "m/44'/77777'/0'/0")
         self.walletAddressLabel.text = "\(walletAddress?.addresses?.first?.address ?? "0x")"
-        
     }
-    
-    
 }
+
 extension WalletViewController {
-    
-    fileprivate func createMnemonics(){
+
+    fileprivate func createMnemonics() {
         let userDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         let web3KeystoreManager = KeystoreManager.managerForPath(userDir + "/keystore")
         do {
-            if (web3KeystoreManager?.addresses?.count ?? 0 >= 0) {
+            if web3KeystoreManager?.addresses?.count ?? 0 >= 0 {
                 let tempMnemonics = try? BIP39.generateMnemonics(bitsOfEntropy: 256, language: .english)
                 guard let tMnemonics = tempMnemonics else {
                     self.showAlertMessage(title: "", message: "We are unable to create wallet", actionName: "Ok")
@@ -136,24 +133,24 @@ extension WalletViewController {
                 }
                 self._mnemonics = tMnemonics
                 print(_mnemonics)
-                let tempWalletAddress = try? BIP32Keystore(mnemonics: self._mnemonics , prefixPath: "m/44'/77777'/0'/0")
-                print(tempWalletAddress?.addresses?.first?.address as Any)
+
+                let tempWalletAddress = try? BIP32Keystore(mnemonics: self._mnemonics, password: "", prefixPath: "m/44'/77777'/0'/0")
                 guard let walletAddress = tempWalletAddress?.addresses?.first else {
-                    self.showAlertMessage(title: "", message: "We are unable to create wallet", actionName: "Ok")
+                    self.showAlertMessage(title: "", message: "Unable to create wallet", actionName: "Ok")
                     return
                 }
                 self._walletAddress = walletAddress.address
                 let privateKey = try tempWalletAddress?.UNSAFE_getPrivateKeyData(password: "", account: walletAddress)
 #if DEBUG
-                print(privateKey as Any, "Is the private key")
+                print(privateKey, "Is the private key")
 #endif
                 let keyData = try? JSONEncoder().encode(tempWalletAddress?.keystoreParams)
-                FileManager.default.createFile(atPath: userDir + "/keystore"+"/key.json", contents: keyData, attributes: nil)
+                FileManager.default.createFile(atPath: userDir + "/keystore" + "/key.json", contents: keyData, attributes: nil)
             }
         } catch {
-            
+
         }
-        
+
     }
 }
 extension UIViewController {
@@ -163,5 +160,5 @@ extension UIViewController {
         alertController.addAction(action)
         self.present(alertController, animated: true)
     }
-    
+
 }
