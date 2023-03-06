@@ -97,8 +97,6 @@ public class BIP32Keystore: AbstractKeystore {
         try self.init(seed: seed, password: password, prefixPath: prefixPath, aesMode: aesMode)
     }
 
-    //TODO: Unit Test
-    //TODO: merge and cleanup with above code
     public convenience init?(mnemonicsPhrase: [String], password: String, mnemonicsPassword: String = "", language: BIP39Language = .english, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
         guard var seed = BIP39.seedFromMmemonics(mnemonicsPhrase, password: mnemonicsPassword, language: language) else {
             throw AbstractKeystoreError.noEntropyError
