@@ -124,7 +124,7 @@ extension SECP256K1 {
         return publicKey
     }
 
-    public static func serializePublicKey(publicKey: input secp256k1_pubkey, compressed: Bool = false) -> Data? {
+    public static func serializePublicKey(publicKey: inout secp256k1_pubkey, compressed: Bool = false) -> Data? {
         guard let context = context else { return nil }
         var keyLength = compressed ? 33 : 65
         var serializedPubkey = Data(repeating: 0x00, count: keyLength)
