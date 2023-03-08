@@ -19,11 +19,10 @@ extension UInt32 {
         let byteArray = Array(bytePtr)
         return Data(byteArray)
     }
-    static var maxIterationIndex = UInt32(1) << 31
 }
 
 public class HDNode {
-
+    static var maxIterationIndex = UInt32(1) << 31
     private struct HDversion {
         public static var privatePrefix: Data? = Data.fromHex("0x0488ADE4")
         public static var publicPrefix: Data? = Data.fromHex("0x0488B21E")
@@ -37,11 +36,11 @@ public class HDNode {
     public var parentFingerprint: Data = Data(repeating: 0, count: 4)
     public var childNumber: UInt32 = UInt32(0)
     public var isHardened: Bool {
-        childNumber >= UInt32.maxIterationIndex
+        childNumber >= Self.maxIterationIndex
     }
     public var index: UInt32 {
         if self.isHardened {
-            return childNumber - UInt32.maxIterationIndex
+            return childNumber - Self.maxIterationIndex
         } else {
             return childNumber
         }
@@ -113,7 +112,7 @@ public class HDNode {
     public static var defaultPathPrefix: String = "m/44'/60'/0'"
     public static var defaultPathMetamask: String = "m/44'/60'/0'/0/0"
     public static var defaultPathMetamaskPrefix: String = "m/44'/60'/0'/0"
-    public static var hardenedIndexPrefix: UInt32 = UInt32.maxIterationIndex
+    public static var hardenedIndexPrefix: UInt32 { Self.maxIterationIndex }
 }
 
 extension HDNode {
@@ -127,7 +126,7 @@ extension HDNode {
 
     public func deriveWithoutPrivateKey(index: UInt32, hardened: Bool = false) -> HDNode? {
         var entropy: [UInt8] // derive public key when is itself public key
-        if index >= UInt32.maxIterationIndex || hardened {
+        if index >= Self.maxIterationIndex || hardened {
             return nil // no derivation of hardened public key from extended public key
         } else {
             let hmac: Authenticator = HMAC(key: self.chaincode.bytes, variant: .sha2(.sha512))
@@ -181,10 +180,10 @@ extension HDNode {
         }
         var entropy: [UInt8]
         var trueIndex: UInt32
-        if index >= UInt32.maxIterationIndex || hardened {
+        if index >= Self.maxIterationIndex || hardened {
             trueIndex = index
-            if trueIndex < UInt32.maxIterationIndex {
-                trueIndex = trueIndex + UInt32.maxIterationIndex
+            if trueIndex < Self.maxIterationIndex {
+                trueIndex = trueIndex + Self.maxIterationIndex
             }
             let hmac: Authenticator = HMAC(key: self.chaincode.bytes, variant: .sha2(.sha512))
             var inputForHMAC = Data()
