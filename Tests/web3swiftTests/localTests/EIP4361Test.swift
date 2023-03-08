@@ -13,7 +13,7 @@ import Web3Core
 class EIP4361Test: XCTestCase {
 
     /// Parsing Sign in with Ethereum message
-    func test_EIP4361Parsing() {
+    func testEIP4361Parsing() {
         let rawSiweMessage = "service.invalid wants you to sign in with your Ethereum account:\n0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\n\nI accept the ServiceOrg Terms of Service: https://service.invalid/tos\n\nURI: https://service.invalid/login\nVersion: 1\nChain ID: 1\nNonce: 32891756\nIssued At: 2021-09-30T16:25:24.345Z\nExpiration Time: 2021-09-29T15:25:24.234Z\nNot Before: 2021-10-28T14:25:24.123Z\nRequest ID: random-0123456789abcdefrequest-id_STRING-._~:@!$&\'()*+,;=\nResources:\n- ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/\n- https://example.com/my-web2-claim.json"
         guard let siweMessage = EIP4361(rawSiweMessage) else {
             XCTFail("Failed to parse SIWE message.")
@@ -38,7 +38,7 @@ class EIP4361Test: XCTestCase {
         XCTAssertEqual(siweMessage.description, rawSiweMessage)
     }
 
-    func test_EIP4361StaticValidationFunc() {
+    func testEIP4361StaticValidationFunc() {
         let rawSiweMessage = "service.invalid wants you to sign in with your Ethereum account:\n0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\n\nI accept the ServiceOrg Terms of Service: https://service.invalid/tos\n\nURI: https://service.invalid/login\nVersion: 1\nChain ID: 1\nNonce: 32891756\nIssued At: 2021-09-30T16:25:24.345Z\nExpiration Time: 2021-09-29T15:25:24.234Z\nNot Before: 2021-10-28T14:25:24.123Z\nRequest ID: random-0123456789abcdefrequest-id_STRING-._~:@!$&\'()*+,;=\nResources:\n- ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/\n- https://example.com/my-web2-claim.json"
 
         let validationResponse = EIP4361.validate(rawSiweMessage)
@@ -68,7 +68,7 @@ class EIP4361Test: XCTestCase {
         XCTAssertEqual(siweMessage.description, rawSiweMessage)
     }
 
-    func test_validEIP4361_noOptionalFields() {
+    func testValidEIP4361NoOptionalFields() {
         let rawSiweMessage = "service.invalid wants you to sign in with your Ethereum account:\n0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\n\nI accept the ServiceOrg Terms of Service: https://service.invalid/tos\n\nURI: https://service.invalid/login\nVersion: 1\nChain ID: 1\nNonce: 32891756\nIssued At: 2021-09-30T16:25:24.345Z"
 
         let validationResponse = EIP4361.validate(rawSiweMessage)
@@ -84,7 +84,7 @@ class EIP4361Test: XCTestCase {
         XCTAssertNil(validationResponse.capturedFields[.resources])
     }
 
-    func test_invalidEIP4361_missingAddress() {
+    func testInvalidEIP4361MissingAddress() {
         let rawSiweMessage = "service.invalid wants you to sign in with your Ethereum account:\nI accept the ServiceOrg Terms of Service: https://service.invalid/tos\n\nURI: https://service.invalid/login\nVersion: 1\nChain ID: 1\nNonce: 32891756\nIssued At: 2021-09-30T16:25:24.345Z\nExpiration Time: 2021-09-29T15:25:24.234Z\nNot Before: 2021-10-28T14:25:24.123Z\nRequest ID: random-0123456789abcdefrequest-id_STRING-._~:@!$&\'()*+,;=\nResources:\n- ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/\n- https://example.com/my-web2-claim.json"
 
         let validationResponse = EIP4361.validate(rawSiweMessage)
@@ -96,7 +96,7 @@ class EIP4361Test: XCTestCase {
         XCTAssertNil(validationResponse.capturedFields[.address])
     }
 
-    func test_invalidEIP4361_missingUri() {
+    func testInvalidEIP4361MissingUri() {
         let rawSiweMessage = "service.invalid wants you to sign in with your Ethereum account:\n0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\n\nI accept the ServiceOrg Terms of Service: https://service.invalid/tos\n\nVersion: 1\nChain ID: 1\nNonce: 32891756\nIssued At: 2021-09-30T16:25:24.345Z\nExpiration Time: 2021-09-29T15:25:24.234Z\nNot Before: 2021-10-28T14:25:24.123Z\nRequest ID: random-0123456789abcdefrequest-id_STRING-._~:@!$&\'()*+,;=\nResources:\n- ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/\n- https://example.com/my-web2-claim.json"
 
         let validationResponse = EIP4361.validate(rawSiweMessage)
@@ -108,7 +108,7 @@ class EIP4361Test: XCTestCase {
         XCTAssertNil(validationResponse.capturedFields[.uri])
     }
 
-    func test_invalidEIP4361_missingVersion() {
+    func testInvalidEIP4361MissingVersion() {
         let rawSiweMessage = "service.invalid wants you to sign in with your Ethereum account:\n0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\n\nI accept the ServiceOrg Terms of Service: https://service.invalid/tos\n\nURI: https://service.invalid/login\nChain ID: 1\nNonce: 32891756\nIssued At: 2021-09-30T16:25:24.345Z\nExpiration Time: 2021-09-29T15:25:24.234Z\nNot Before: 2021-10-28T14:25:24.123Z\nRequest ID: random-0123456789abcdefrequest-id_STRING-._~:@!$&\'()*+,;=\nResources:\n- ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/\n- https://example.com/my-web2-claim.json"
 
         let validationResponse = EIP4361.validate(rawSiweMessage)
@@ -120,7 +120,7 @@ class EIP4361Test: XCTestCase {
         XCTAssertNil(validationResponse.capturedFields[.version])
     }
 
-    func test_invalidEIP4361_missingChainId() {
+    func testInvalidEIP4361MissingChainId() {
         let rawSiweMessage = "service.invalid wants you to sign in with your Ethereum account:\n0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\n\nI accept the ServiceOrg Terms of Service: https://service.invalid/tos\n\nURI: https://service.invalid/login\nVersion: 1\nNonce: 32891756\nIssued At: 2021-09-30T16:25:24.345Z\nExpiration Time: 2021-09-29T15:25:24.234Z\nNot Before: 2021-10-28T14:25:24.123Z\nRequest ID: random-0123456789abcdefrequest-id_STRING-._~:@!$&\'()*+,;=\nResources:\n- ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/\n- https://example.com/my-web2-claim.json"
 
         let validationResponse = EIP4361.validate(rawSiweMessage)
@@ -132,7 +132,7 @@ class EIP4361Test: XCTestCase {
         XCTAssertNil(validationResponse.capturedFields[.chainId])
     }
 
-    func test_invalidEIP4361_missingNonce() {
+    func testInvalidEIP4361MissingNonce() {
         let rawSiweMessage = "service.invalid wants you to sign in with your Ethereum account:\n0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\n\nI accept the ServiceOrg Terms of Service: https://service.invalid/tos\n\nURI: https://service.invalid/login\nVersion: 1\nChain ID: 1\nIssued At: 2021-09-30T16:25:24.345Z\nExpiration Time: 2021-09-29T15:25:24.234Z\nNot Before: 2021-10-28T14:25:24.123Z\nRequest ID: random-0123456789abcdefrequest-id_STRING-._~:@!$&\'()*+,;=\nResources:\n- ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/\n- https://example.com/my-web2-claim.json"
 
         let validationResponse = EIP4361.validate(rawSiweMessage)
@@ -144,7 +144,7 @@ class EIP4361Test: XCTestCase {
         XCTAssertNil(validationResponse.capturedFields[.nonce])
     }
 
-    func test_invalidEIP4361_missingIssuedAt() {
+    func testInvalidEIP4361MissingIssuedAt() {
         let rawSiweMessage = "service.invalid wants you to sign in with your Ethereum account:\n0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\n\nI accept the ServiceOrg Terms of Service: https://service.invalid/tos\n\nURI: https://service.invalid/login\nVersion: 1\nChain ID: 1\nNonce: 32891756\nExpiration Time: 2021-09-29T15:25:24.234Z\nNot Before: 2021-10-28T14:25:24.123Z\nRequest ID: random-0123456789abcdefrequest-id_STRING-._~:@!$&\'()*+,;=\nResources:\n- ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/\n- https://example.com/my-web2-claim.json"
 
         let validationResponse = EIP4361.validate(rawSiweMessage)
@@ -156,7 +156,7 @@ class EIP4361Test: XCTestCase {
         XCTAssertNil(validationResponse.capturedFields[.issuedAt])
     }
 
-    func test_invalidEIP4361_wrongVersionNumber() {
+    func testInvalidEIP4361WrongVersionNumber() {
         let rawSiweMessage = "service.invalid wants you to sign in with your Ethereum account:\n0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\n\nI accept the ServiceOrg Terms of Service: https://service.invalid/tos\n\nURI: https://service.invalid/login\nVersion: 123\nChain ID: 1\nNonce: 32891756\nIssued At: 2021-09-30T16:25:24.345Z\nExpiration Time: 2021-09-29T15:25:24.234Z\nNot Before: 2021-10-28T14:25:24.123Z\nRequest ID: random-0123456789abcdefrequest-id_STRING-._~:@!$&\'()*+,;=\nResources:\n- ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/\n- https://example.com/my-web2-claim.json"
 
         let validationResponse = EIP4361.validate(rawSiweMessage)
@@ -168,7 +168,7 @@ class EIP4361Test: XCTestCase {
         XCTAssertEqual(validationResponse.capturedFields[.version], "123")
     }
 
-    func test_invalidEIP4361_wrongCharInDomain() {
+    func testInvalidEIP4361WrongCharInDomain() {
         let rawSiweMessage = "service.invalid/ wants you to sign in with your Ethereum account:\n0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\n\nI accept the ServiceOrg Terms of Service: https://service.invalid/tos\n\nURI: https://service.invalid/login\nVersion: 1\nChain ID: 1\nNonce: 32891756\nIssued At: 2021-09-30T16:25:24.345Z"
 
         let validationResponse = EIP4361.validate(rawSiweMessage)
@@ -181,7 +181,7 @@ class EIP4361Test: XCTestCase {
         XCTAssertEqual(validationResponse.capturedFields[.domain], "service.invalid/")
     }
 
-    func test_validEIP4361_allRequiredFieldsContainWrongData() {
+    func testInvalidEIP4361AllRequiredFieldsContainWrongData() {
         let rawSiweMessage = "service.invalid/path wants you to sign in with your Ethereum account:\nnot-a-hex-1234567890qwertyuiop1234567890qwertyuiop\n\nTHESTATEMENT123102938102938: aURIisSupposedToBeHEre\n\nURI: ANOTHER_URIisSupposedToBeHEre\nVersion: dsfjlsdafhjalsdfjh\nChain ID: not-a-chain-id\nNonce: not a nonce\nIssued At: this-is-not-a-date\nExpiration Time: expiration-time-not-a-date\nNot Before: not-before-not-a-date\nRequest ID: %%%%random-0123456789abcdefrequest-id_STRING-._~:@!$&\'()*+,;=\nResources:noURLSreallyHERE"
 
         let validationResponse = EIP4361.validate(rawSiweMessage)
