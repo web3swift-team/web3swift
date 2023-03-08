@@ -206,7 +206,7 @@ extension SECP256K1 {
         return recoverableSignature
     }
 
-    internal static func serializeSignature(recoverableSignature: input secp256k1_ecdsa_recoverable_signature) -> Data? {
+    internal static func serializeSignature(recoverableSignature: inout secp256k1_ecdsa_recoverable_signature) -> Data? {
         guard let context = context else { return nil }
         var serializedSignature = Data(repeating: 0x00, count: 64)
         var v: Int32 = 0
