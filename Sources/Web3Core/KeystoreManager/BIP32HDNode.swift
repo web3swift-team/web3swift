@@ -23,9 +23,19 @@ extension UInt32 {
 
 public class HDNode {
     static var maxIterationIndex = UInt32(1) << 31
-    private struct HDversion {
-        public static var privatePrefix: Data? = Data.fromHex("0x0488ADE4")
-        public static var publicPrefix: Data? = Data.fromHex("0x0488B21E")
+
+    public struct HDversion {
+        // swiftlint:disable force_unwrapping
+        public var privatePrefix: Data = Data.fromHex("0x0488ADE4") ?? Data()
+        public var publicPrefix: Data = Data.fromHex("0x0488B21E") ?? Data()
+        // swiftlint:enable force_unwrapping
+        public init() {}
+        public static var privatePrefix: Data {
+            HDversion().privatePrefix
+        }
+        public static var publicPrefix: Data {
+            HDversion().publicPrefix
+        }
 
     }
     public var path: String? = "m"
@@ -231,16 +241,16 @@ extension HDNode {
         newNode.publicKey = pubKeyCandidate
         newNode.privateKey = privKeyCandidate
         newNode.childNumber = trueIndex
-        guard let fprint = try? RIPEMD160.hash(message: self.publicKey.sha256())[0..<4] else {
-            return nil
-        }
+        guard let fprint = try? RIPEMD160.hash(message: self.publicKey.sha256())[0..<4],
+              let path = path
+        else { return nil }
         newNode.parentFingerprint = fprint
         var newPath = String()
         if newNode.isHardened {
-            newPath = self.path! + "/"
+            newPath = path + "/"
             newPath += String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
         } else {
-            newPath = self.path! + "/" + String(newNode.index)
+            newPath = path + "/" + String(newNode.index)
         }
         newNode.path = newPath
         return newNode
@@ -282,9 +292,9 @@ extension HDNode {
         }
 
         if serializePublic {
-            data.append(HDversion.publicPrefix!)
+            data.append(HDversion.publicPrefix)
         } else {
-            data.append(HDversion.privatePrefix!)
+            data.append(HDversion.privatePrefix)
         }
         data.append(contentsOf: [self.depth])
         data.append(self.parentFingerprint)
