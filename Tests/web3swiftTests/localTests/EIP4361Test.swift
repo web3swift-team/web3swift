@@ -84,6 +84,19 @@ class EIP4361Test: XCTestCase {
         XCTAssertNil(validationResponse.capturedFields[.resources])
     }
 
+    func testInvalidEIP4361MissingDomain() {
+        let rawSiweMessage = "wants you to sign in with your Ethereum account:\n0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\n\nI accept the ServiceOrg Terms of Service: https://service.invalid/tos\n\nURI: https://service.invalid/login\nVersion: 1\nChain ID: 1\nNonce: 32891756\nIssued At: 2021-09-30T16:25:24.345Z"
+
+        let validationResponse = EIP4361.validate(rawSiweMessage)
+        guard !validationResponse.isValid else {
+            XCTFail("Failed to parse valid SIWE message.")
+            return
+        }
+
+        XCTAssertNil(validationResponse.eip4361)
+        XCTAssertNil(validationResponse.capturedFields[.domain])
+    }
+
     func testInvalidEIP4361MissingAddress() {
         let rawSiweMessage = "service.invalid wants you to sign in with your Ethereum account:\nI accept the ServiceOrg Terms of Service: https://service.invalid/tos\n\nURI: https://service.invalid/login\nVersion: 1\nChain ID: 1\nNonce: 32891756\nIssued At: 2021-09-30T16:25:24.345Z\nExpiration Time: 2021-09-29T15:25:24.234Z\nNot Before: 2021-10-28T14:25:24.123Z\nRequest ID: random-0123456789abcdefrequest-id_STRING-._~:@!$&\'()*+,;=\nResources:\n- ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/\n- https://example.com/my-web2-claim.json"
 
