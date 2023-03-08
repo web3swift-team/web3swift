@@ -15,6 +15,9 @@ private let uriPattern = "(([^:?#\\s]+):)?(([^?#\\s]*))?([^?#\\s]*)(\\?([^#\\s]*
 
 /// Sign-In with Ethereum protocol and parser implementation.
 ///
+/// _Regular expressions were generated using ABNF grammar from https://github.com/spruceid/siwe/blob/main/packages/siwe-parser/lib/abnf.ts#L5
+/// and tool https://pypi.org/project/abnf-to-regexp/ that outputs Python supported regular expressions._
+///
 /// EIP-4361:
 ///    - https://eips.ethereum.org/EIPS/eip-4361
 ///    - https://github.com/ethereum/EIPs/blob/master/EIPS/eip-4361.md
@@ -60,22 +63,64 @@ public final class EIP4361 {
         case resources
     }
 
-    private static let domain = "(?<\(EIP4361Field.domain.rawValue)>([^?#]*)) wants you to sign in with your Ethereum account:"
-    private static let address = "\\n(?<\(EIP4361Field.address.rawValue)>0x[a-zA-Z0-9]{40})\\n\\n"
-    private static let statementParagraph = "((?<\(EIP4361Field.statement.rawValue)>[^\\n]+)\\n)?"
-    private static let uri = "\\nURI: (?<\(EIP4361Field.uri.rawValue)>(\(uriPattern))?)"
-    private static let version = "\\nVersion: (?<\(EIP4361Field.version.rawValue)>[0-9]+)"
-    private static let chainId = "\\nChain ID: (?<\(EIP4361Field.chainId.rawValue)>[0-9a-fA-F]+)"
-    private static let nonce = "\\nNonce: (?<\(EIP4361Field.nonce.rawValue)>[a-zA-Z0-9]{8,})"
-    private static let issuedAt = "\\nIssued At: (?<\(EIP4361Field.issuedAt.rawValue)>(\(datetimePattern)))"
-    private static let expirationTime = "(\\nExpiration Time: (?<\(EIP4361Field.expirationTime.rawValue)>(\(datetimePattern))))?"
-    private static let notBefore = "(\\nNot Before: (?<\(EIP4361Field.notBefore.rawValue)>(\(datetimePattern))))?"
-    private static let requestId = "(\\nRequest ID: (?<\(EIP4361Field.requestId.rawValue)>[-._~!$&'()*+,;=:@%a-zA-Z0-9]*))?"
-    private static let resourcesParagraph = "(\\nResources:(?<\(EIP4361Field.resources.rawValue)>(\\n- (\(uriPattern))?)+))?"
+    private static let unreserved = "[a-zA-Z0-9\\-._~]"
+    private static let pctEncoded = "%[0-9A-Fa-f][0-9A-Fa-f]"
+    private static let subDelims = "[!$&'()*+,;=]"
+    private static let userinfo = "(\(unreserved)|\(pctEncoded)|\(subDelims)|:)*"
+    private static let h16 = "[0-9A-Fa-f]{1,4}"
+    private static let decOctet = "([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])"
+    private static let ipv4address = "\(decOctet)\\.\(decOctet)\\.\(decOctet)\\.\(decOctet)"
+    private static let ls32 = "(\(h16):\(h16)|\(ipv4address))"
+    private static let ipv6address = "((\(h16):){6}\(ls32)|::(\(h16):){5}\(ls32)|(\(h16))?::(\(h16):){4}\(ls32)|((\(h16):)?\(h16))?::(\(h16):){3}\(ls32)|((\(h16):){2}\(h16))?::(\(h16):){2}\(ls32)|((\(h16):){3}\(h16))?::\(h16):\(ls32)|((\(h16):){4}\(h16))?::\(ls32)|((\(h16):){5}\(h16))?::\(h16)|((\(h16):){6}\(h16))?::)"
+    private static let ipvfuture = "[vV][0-9A-Fa-f]+\\.(\(unreserved)|\(subDelims)|:)+"
+    private static let ipLiteral = "\\[(\(ipv6address)|\(ipvfuture))\\]"
+    private static let regName = "(\(unreserved)|\(pctEncoded)|\(subDelims))*"
+    private static let host = "(\(ipLiteral)|\(ipv4address)|\(regName))"
+    private static let port = "[0-9]*"
+    private static let authority = "(\(userinfo)@)?\(host)(:\(port))?"
+    private static let dateFullyear = "[0-9]{4}"
+    private static let dateMday = "[0-9]{2}"
+    private static let dateMonth = "[0-9]{2}"
+    private static let fullDate = "\(dateFullyear)-\(dateMonth)-\(dateMday)"
+    private static let timeHour = "[0-9]{2}"
+    private static let timeMinute = "[0-9]{2}"
+    private static let timeSecond = "[0-9]{2}"
+    private static let timeSecfrac = "\\.[0-9]+"
+    private static let partialTime = "\(timeHour):\(timeMinute):\(timeSecond)(\(timeSecfrac))?"
+    private static let timeNumoffset = "[+\\-]\(timeHour):\(timeMinute)"
+    private static let timeOffset = "([zZ]|\(timeNumoffset))"
+    private static let fullTime = "\(partialTime)\(timeOffset)"
+    private static let dateTime = "\(fullDate)[tT]\(fullTime)"
+    private static let pchar = "(\(unreserved)|\(pctEncoded)|\(subDelims)|[:@])"
+    private static let fragment = "(\(pchar)|[/?])*"
+    private static let genDelims = "[:/?#\\[\\]@]"
+    private static let segment = "(\(pchar))*"
+    private static let pathAbempty = "(/\(segment))*"
+    private static let segmentNz = "(\(pchar))+"
+    private static let pathAbsolute = "/(\(segmentNz)(/\(segment))*)?"
+    private static let pathRootless = "\(segmentNz)(/\(segment))*"
+    private static let pathEmpty = "(\(pchar)){0}"
+    private static let hierPart = "(//\(authority)\(pathAbempty)|\(pathAbsolute)|\(pathRootless)|\(pathEmpty))"
+    private static let query = "(\(pchar)|[/?])*"
+    private static let reserved = "(\(genDelims)|\(subDelims))"
+    private static let scheme = "[a-zA-Z][a-zA-Z0-9+\\-.]*"
+    private static let resource = "- \(uri)"
 
-    private static var eip4361Pattern: String {
-        "^\(domain)\(address)\(statementParagraph)\(uri)\(version)\(chainId)\(nonce)\(issuedAt)\(expirationTime)\(notBefore)\(requestId)\(resourcesParagraph)$"
-    }
+    // MARK: The final regular expression parts
+    private static let domain = authority
+    private static let address = "0x[0-9A-Fa-f]{40}"
+    private static let statement = "(\(reserved)|\(unreserved)| )+"
+    private static let uri = "\(scheme):\(hierPart)(\\?\(query))?(\\#\(fragment))?"
+    private static let version = "[0-9]+"
+    private static let chainId = "[0-9]+"
+    private static let nonce = "[a-zA-Z0-9]{8,}"
+    private static let issuedAt = dateTime
+    private static let expirationTime = dateTime
+    private static let notBefore = dateTime
+    private static let requestId = "(\(pchar))*"
+    private static let resources = "(\\n\(resource))*"
+
+    private static let eip4361Pattern = "(?<\(EIP4361Field.domain.rawValue)>\(domain)) wants you to sign in with your Ethereum account:\\n(?<\(EIP4361Field.address.rawValue)>\(address))\\n\\n((?<\(EIP4361Field.statement.rawValue)>\(statement))\\n)?\\nURI: (?<\(EIP4361Field.uri.rawValue)>\(uri))\\nVersion: (?<\(EIP4361Field.version.rawValue)>\(version))\\nChain ID: (?<\(EIP4361Field.chainId.rawValue)>\(chainId))\\nNonce: (?<\(EIP4361Field.nonce.rawValue)>\(nonce))\\nIssued At: (?<\(EIP4361Field.issuedAt.rawValue)>\(issuedAt))(\\nExpiration Time: (?<\(EIP4361Field.expirationTime.rawValue)>\(expirationTime)))?(\\nNot Before: (?<\(EIP4361Field.notBefore.rawValue)>\(notBefore)))?(\\nRequest ID: (?<\(EIP4361Field.requestId.rawValue)>\(requestId)))?(\\nResources:(?<\(EIP4361Field.resources.rawValue)>\(resources)))?"
 
     private static var _eip4361OptionalPattern: String?
     private static var eip4361OptionalPattern: String {
@@ -95,7 +140,7 @@ public final class EIP4361 {
 
         let patternParts: [String] = ["^\(domain)",
                                       "(\(address))?",
-                                      "\(statementParagraph)",
+                                      "((?<\(EIP4361Field.statement.rawValue)>\(statement))\\n)?",
                                       "(\(uri))?",
                                       "(\(version))?",
                                       "(\(chainId))?",
@@ -113,12 +158,7 @@ public final class EIP4361 {
 
     public static func validate(_ message: String) -> EIP4361ValidationResponse {
         // swiftlint:disable force_try
-        let siweConstantMessageRegex = try! NSRegularExpression(pattern: "^\(domain)\\n")
-        guard siweConstantMessageRegex.firstMatch(in: message, range: message.fullNSRange) != nil else {
-            return EIP4361ValidationResponse(isEIP4361: false, eip4361: nil, capturedFields: [:])
-        }
-
-        let eip4361Regex = try! NSRegularExpression(pattern: eip4361OptionalPattern)
+        let eip4361Regex = try! NSRegularExpression(pattern: EIP4361.eip4361OptionalPattern)
         // swiftlint:enable force_try
         var capturedFields: [EIP4361Field: String] = [:]
         for (key, value) in eip4361Regex.captureGroups(string: message) {
@@ -129,7 +169,7 @@ public final class EIP4361 {
             // swiftlint:enable force_unwrapping
         }
         return EIP4361ValidationResponse(isEIP4361: true,
-                                  eip4361: EIP4361(message),
+                                         eip4361: EIP4361(message),
                                          capturedFields: capturedFields)
     }
 
@@ -167,6 +207,7 @@ public final class EIP4361 {
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         guard let domain = groups["domain"],
+              !domain.isEmpty,
               let rawAddress = groups["address"],
               let address = EthereumAddress(rawAddress),
               let rawUri = groups["uri"],
