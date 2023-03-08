@@ -137,7 +137,7 @@
    *
    * 1. Previous registration
    * 2. global.Promise if node.js version >= 0.12
-   * 3. Auto detected promise based on first sucessful require of
+   * 3. Auto detected promise based on first successful require of
    *    known promise libraries. Note this is a last resort, as the
    *    loaded library is non-deterministic. node.js >= 0.12 will
    *    always use global.Promise over this priority list.
@@ -1554,7 +1554,7 @@
     // Long form
     var num = len & 0x7f;
     if (num > 4)
-      return buf.error('length octect is too long');
+      return buf.error('length octet is too long');
 
     len = 0;
     for (var i = 0; i < num; i++) {
@@ -1706,7 +1706,7 @@
       if (!this._isPrintstr(str)) {
         return this.reporter.error('Encoding of string type: printstr supports ' +
                                    'only latin upper and lower case letters, ' +
-                                   'digits, space, apostrophe, left and rigth ' +
+                                   'digits, space, apostrophe, left and right ' +
                                    'parenthesis, plus sign, comma, hyphen, ' +
                                    'dot, slash, colon, equal sign, ' +
                                    'question mark');
@@ -9326,7 +9326,7 @@
       this.backoffNumber_++;
   };
 
-  // Stops any backoff operation and resets the backoff delay to its inital value.
+  // Stops any backoff operation and resets the backoff delay to its initial value.
   Backoff.prototype.reset = function() {
       this.backoffNumber_ = 0;
       this.backoffStrategy_.reset();
@@ -13413,7 +13413,7 @@
   },{"crypto":55}],55:[function(require,module,exports){
 
   },{}],56:[function(require,module,exports){
-  // based on the aes implimentation in triple sec
+  // based on the aes implementation in triple sec
   // https://github.com/keybase/triplesec
   // which is in turn based on the one from crypto-js
   // https://code.google.com/p/crypto-js/
@@ -13762,7 +13762,7 @@
   module.exports = StreamCipher
 
   },{"./aes":56,"./ghash":61,"./incr32":62,"buffer-xor":83,"cipher-base":86,"inherits":180,"safe-buffer":290}],58:[function(require,module,exports){
-  var ciphers = require('./encrypter')
+  var ciphers = require('./encryptor')
   var deciphers = require('./decrypter')
   var modes = require('./modes/list.json')
 
@@ -13776,7 +13776,7 @@
   exports.createDecipheriv = exports.Decipheriv = deciphers.createDecipheriv
   exports.listCiphers = exports.getCiphers = getCiphers
 
-  },{"./decrypter":59,"./encrypter":60,"./modes/list.json":70}],59:[function(require,module,exports){
+  },{"./decrypter":59,"./encryptor":60,"./modes/list.json":70}],59:[function(require,module,exports){
   var AuthCipher = require('./authCipher')
   var Buffer = require('safe-buffer').Buffer
   var MODES = require('./modes')
@@ -14633,15 +14633,15 @@
   var inherits = require('inherits')
 
   var modes = {
-    'des-ede3-cbc': des.CBC.instantiate(des.EDE),
-    'des-ede3': des.EDE,
-    'des-ede-cbc': des.CBC.instantiate(des.EDE),
-    'des-ede': des.EDE,
+    'des-edge3-cbc': des.CBC.instantiate(des.EDGE),
+    'des-edge3': des.EDGE,
+    'des-edge-cbc': des.CBC.instantiate(des.EDGE),
+    'des-edge': des.EDGE,
     'des-cbc': des.CBC.instantiate(des.DES),
     'des-ecb': des.DES
   }
   modes.des = modes['des-cbc']
-  modes.des3 = modes['des-ede3-cbc']
+  modes.des3 = modes['des-edge3-cbc']
   module.exports = DES
   inherits(DES, CipherBase)
   function DES (opts) {
@@ -14655,7 +14655,7 @@
       type = 'encrypt'
     }
     var key = opts.key
-    if (modeName === 'des-ede' || modeName === 'des-ede-cbc') {
+    if (modeName === 'des-edge' || modeName === 'des-edge-cbc') {
       key = Buffer.concat([key, key.slice(0, 8)])
     }
     var iv = opts.iv
@@ -14682,19 +14682,19 @@
     key: 8,
     iv: 8
   }
-  exports['des-ede3-cbc'] = exports.des3 = {
+  exports['des-edge3-cbc'] = exports.des3 = {
     key: 24,
     iv: 8
   }
-  exports['des-ede3'] = {
+  exports['des-edge3'] = {
     key: 24,
     iv: 0
   }
-  exports['des-ede-cbc'] = {
+  exports['des-edge-cbc'] = {
     key: 16,
     iv: 8
   }
-  exports['des-ede'] = {
+  exports['des-edge'] = {
     key: 16,
     iv: 0
   }
@@ -15406,7 +15406,7 @@
     if (fill !== undefined) {
       // Only pay attention to encoding if it's a string. This
       // prevents accidentally sending in a number that would
-      // be interpretted as a start offset.
+      // be interpreted as a start offset.
       return typeof encoding === 'string'
         ? createBuffer(size).fill(fill, encoding)
         : createBuffer(size).fill(fill)
@@ -15689,7 +15689,7 @@
       return ''
     }
 
-    // Force coersion to uint32. This will also coerce falsey/NaN values to 0.
+    // Force coercion to uint32. This will also coerce falsey/NaN values to 0.
     end >>>= 0
     start >>>= 0
 
@@ -18955,7 +18955,7 @@
   exports.Cipher = require('./des/cipher');
   exports.DES = require('./des/des');
   exports.CBC = require('./des/cbc');
-  exports.EDE = require('./des/ede');
+  exports.EDGE = require('./des/ede');
 
   },{"./des/cbc":100,"./des/cipher":101,"./des/des":102,"./des/ede":103,"./des/utils":104}],100:[function(require,module,exports){
   'use strict';
@@ -19322,7 +19322,7 @@
   var Cipher = des.Cipher;
   var DES = des.DES;
 
-  function EDEState(type, key) {
+  function EDGEState(type, key) {
     assert.equal(key.length, 24, 'Invalid key length');
 
     var k1 = key.slice(0, 8);
@@ -19344,30 +19344,30 @@
     }
   }
 
-  function EDE(options) {
+  function EDGE(options) {
     Cipher.call(this, options);
 
-    var state = new EDEState(this.type, this.options.key);
-    this._edeState = state;
+    var state = new EDGEState(this.type, this.options.key);
+    this._edgeState = state;
   }
-  inherits(EDE, Cipher);
+  inherits(EDGE, Cipher);
 
-  module.exports = EDE;
+  module.exports = EDGE;
 
-  EDE.create = function create(options) {
-    return new EDE(options);
+  EDGE.create = function create(options) {
+    return new EDGE(options);
   };
 
-  EDE.prototype._update = function _update(inp, inOff, out, outOff) {
-    var state = this._edeState;
+  EDGE.prototype._update = function _update(inp, inOff, out, outOff) {
+    var state = this._edgeState;
 
     state.ciphers[0]._update(inp, inOff, out, outOff);
     state.ciphers[1]._update(out, outOff, out, outOff);
     state.ciphers[2]._update(out, outOff, out, outOff);
   };
 
-  EDE.prototype._pad = DES.prototype._pad;
-  EDE.prototype._unpad = DES.prototype._unpad;
+  EDGE.prototype._pad = DES.prototype._pad;
+  EDGE.prototype._unpad = DES.prototype._unpad;
 
   },{"../des":99,"inherits":180,"minimalistic-assert":234}],104:[function(require,module,exports){
   'use strict';
@@ -22355,7 +22355,7 @@
     var isYOdd = j & 1;
     var isSecondKey = j >> 1;
     if (r.cmp(this.curve.p.umod(this.curve.n)) >= 0 && isSecondKey)
-      throw new Error('Unable to find sencond key candinate');
+      throw new Error('Unable to find second key candidate');
 
     // 1.1. Let x = r + jn.
     if (isSecondKey)
@@ -24751,7 +24751,7 @@
         try {
           // attempt request
           await performFetch(network, req, res)
-          // request was succesful
+          // request was successful
           break
         } catch (err) {
           // an error was caught while performing the request
@@ -25749,7 +25749,7 @@
     },
     "expGas": {
       "v": 10,
-      "d": "Once per EXP instuction."
+      "d": "Once per EXP instruction."
     },
     "expByteGas": {
       "v": 10,
@@ -25894,11 +25894,11 @@
     },
     "ommerReward": {
       "v": "625000000000000000",
-      "d": "The amount of wei a miner of an uncle block gets for being inculded in the blockchain"
+      "d": "The amount of wei a miner of an uncle block gets for being included in the blockchain"
     },
     "niblingReward": {
       "v": "156250000000000000",
-      "d": "the amount a miner gets for inculding a uncle"
+      "d": "the amount a miner gets for including a uncle"
     },
     "homeSteadForkNumber": {
       "v": 1150000,
@@ -26526,7 +26526,7 @@
    * var tx = new Transaction(rawTx);
    *
    * @class
-   * @param {Buffer | Array | Object} data a transaction can be initiailized with either a buffer containing the RLP serialized transaction or an array of buffers relating to each of the tx Properties, listed in order below in the exmple.
+   * @param {Buffer | Array | Object} data a transaction can be initiailized with either a buffer containing the RLP serialized transaction or an array of buffers relating to each of the tx Properties, listed in order below in the example.
    *
    * Or lastly an Object containing the Properties of the transaction like in the Usage example.
    *
@@ -26643,7 +26643,7 @@
 
     /**
      * Computes a sha3-256 hash of the serialized tx
-     * @param {Boolean} [includeSignature=true] whether or not to inculde the signature
+     * @param {Boolean} [includeSignature=true] whether or not to include the signature
      * @return {Buffer}
      */
 
@@ -27509,7 +27509,7 @@
       }
     });
 
-    // if the constuctor is passed data
+    // if the constructor is passed data
     if (data) {
       if (typeof data === 'string') {
         data = Buffer.from(exports.stripHexPrefix(data), 'hex');
@@ -28338,7 +28338,7 @@
               else if (c === ')') {
                   depth--;
                   if (depth === -1) {
-                      throw new Error('unbalanced parenthsis');
+                      throw new Error('unbalanced parenthesis');
                   }
               }
           }
@@ -28613,7 +28613,7 @@
    *  BigNumber
    *
    *  A wrapper around the BN.js object. We use the BN.js library
-   *  because it is used by elliptic, so it is required regardles.
+   *  because it is used by elliptic, so it is required regardless.
    *
    */
   var bn_js_1 = __importDefault(require("bn.js"));
@@ -28826,7 +28826,7 @@
       if (typeof (value) === 'string') {
           var match = value.match(/^(0x)?[0-9a-fA-F]*$/);
           if (!match) {
-              errors.throwError('invalid hexidecimal string', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
+              errors.throwError('invalid hexadecimal string', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
           }
           if (match[1] !== '0x') {
               errors.throwError('hex string must have 0x prefix', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
@@ -28929,7 +28929,7 @@
       if (typeof (value) === 'string') {
           var match = value.match(/^(0x)?[0-9a-fA-F]*$/);
           if (!match) {
-              errors.throwError('invalid hexidecimal string', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
+              errors.throwError('invalid hexadecimal string', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
           }
           if (match[1] !== '0x') {
               errors.throwError('hex string must have 0x prefix', errors.INVALID_ARGUMENT, { arg: 'value', value: value });
@@ -29311,7 +29311,7 @@
       else if (data[offset] >= 0x80) {
           var length = data[offset] - 0x80;
           if (offset + 1 + length > data.length) {
-              throw new Error('invlaid rlp data');
+              throw new Error('invalid rlp data');
           }
           var result = bytes_1.hexlify(data.slice(offset + 1, offset + 1 + length));
           return { consumed: (1 + length), result: result };
@@ -33460,7 +33460,7 @@
    * Register a new EventListener for the given event.
    *
    * @param {String} event Name of the event.
-   * @param {Functon} fn Callback function.
+   * @param {Function} fn Callback function.
    * @param {Mixed} context The context of the function.
    * @api public
    */
@@ -36311,7 +36311,7 @@
         throw new Error("Failed to validate " + label);
 
       // 4. The label must not contain a U+002E ( . ) FULL STOP.
-      // this should nerver happen as label is chunked internally by this character
+      // this should never happen as label is chunked internally by this character
       /* istanbul ignore if */
       if (label.includes('.'))
         throw new Error("Failed to validate " + label);
@@ -37409,7 +37409,7 @@
         case 'shake128': return new Shake(1344, 256, 0x1f, options)
         case 'shake256': return new Shake(1088, 512, 0x1f, options)
 
-        default: throw new Error('Invald algorithm: ' + algorithm)
+        default: throw new Error('Invalid algorithm: ' + algorithm)
       }
     }
   }
@@ -42912,7 +42912,7 @@
   var cachedSetTimeout;
   var cachedClearTimeout;
 
-  function defaultSetTimout() {
+  function defaultSetTimeout() {
       throw new Error('setTimeout has not been defined');
   }
   function defaultClearTimeout () {
@@ -42923,10 +42923,10 @@
           if (typeof setTimeout === 'function') {
               cachedSetTimeout = setTimeout;
           } else {
-              cachedSetTimeout = defaultSetTimout;
+              cachedSetTimeout = defaultSetTimeout;
           }
       } catch (e) {
-          cachedSetTimeout = defaultSetTimout;
+          cachedSetTimeout = defaultSetTimeout;
       }
       try {
           if (typeof clearTimeout === 'function') {
@@ -42940,23 +42940,23 @@
   } ())
   function runTimeout(fun) {
       if (cachedSetTimeout === setTimeout) {
-          //normal enviroments in sane situations
+          //normal environments in sane situations
           return setTimeout(fun, 0);
       }
       // if setTimeout wasn't available but was latter defined
-      if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+      if ((cachedSetTimeout === defaultSetTimeout || !cachedSetTimeout) && setTimeout) {
           cachedSetTimeout = setTimeout;
           return setTimeout(fun, 0);
       }
       try {
-          // when when somebody has screwed with setTimeout but no I.E. maddness
+          // when when somebody has screwed with setTimeout but no I.E. madness
           return cachedSetTimeout(fun, 0);
       } catch(e){
           try {
               // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
               return cachedSetTimeout.call(null, fun, 0);
           } catch(e){
-              // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+              // same as above but when it's a version of I.E. that must have the global object for 'this', hopefully our context correct otherwise it will throw a global error
               return cachedSetTimeout.call(this, fun, 0);
           }
       }
@@ -42965,7 +42965,7 @@
   }
   function runClearTimeout(marker) {
       if (cachedClearTimeout === clearTimeout) {
-          //normal enviroments in sane situations
+          //normal environments in sane situations
           return clearTimeout(marker);
       }
       // if clearTimeout wasn't available but was latter defined
@@ -42974,14 +42974,14 @@
           return clearTimeout(marker);
       }
       try {
-          // when when somebody has screwed with setTimeout but no I.E. maddness
+          // when when somebody has screwed with setTimeout but no I.E. madness
           return cachedClearTimeout(marker);
       } catch (e){
           try {
               // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
               return cachedClearTimeout.call(null, marker);
           } catch (e){
-              // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+              // same as above but when it's a version of I.E. that must have the global object for 'this', hopefully our context correct otherwise it will throw a global error.
               // Some versions of I.E. have different rules for clearTimeout vs setTimeout
               return cachedClearTimeout.call(this, marker);
           }
@@ -43047,7 +43047,7 @@
       }
   };
 
-  // v8 likes predictible objects
+  // v8 likes predictable objects
   function Item(fun, array) {
       this.fun = fun;
       this.array = array;
@@ -47142,7 +47142,7 @@
   /**
    * RLP Decoding based on: {@link https://github.com/ethereum/wiki/wiki/%5BEnglish%5D-RLP|RLP}
    * @param {Buffer,String,Integer,Array} data - will be converted to buffer
-   * @returns {Array} - returns decode Array of Buffers containg the original message
+   * @returns {Array} - returns decode Array of Buffers containing the original message
    **/
   exports.decode = function (input, stream) {
     if (!input || input.length === 0) {
@@ -47460,7 +47460,7 @@
     try {
       ReflectApply(handler, context, args)
     } catch (err) {
-      // throw error after timeout so as not to interupt the stack
+      // throw error after timeout so as not to interrupt the stack
       setTimeout(() => {
         throw err
       })
@@ -48037,7 +48037,7 @@
         B32[i] |= (B[i * 4 + 1] & 0xff) << 8
         B32[i] |= (B[i * 4 + 2] & 0xff) << 16
         B32[i] |= (B[i * 4 + 3] & 0xff) << 24
-        // B32[i] = B.readUInt32LE(i*4)   <--- this is signficantly slower even in Node.js
+        // B32[i] = B.readUInt32LE(i*4)   <--- this is significantly slower even in Node.js
       }
 
       arraycopy(B32, 0, x, 0, 16)
@@ -48085,7 +48085,7 @@
         B[bi + 1] = (B32[i] >> 8 & 0xff)
         B[bi + 2] = (B32[i] >> 16 & 0xff)
         B[bi + 3] = (B32[i] >> 24 & 0xff)
-        // B.writeInt32LE(B32[i], i*4)  //<--- this is signficantly slower even in Node.js
+        // B.writeInt32LE(B32[i], i*4)  //<--- this is significantly slower even in Node.js
       }
     }
 
@@ -49728,18 +49728,18 @@
       var Wi16l = W[i - 16 * 2 + 1]
 
       var Wil = (gamma0l + Wi7l) | 0
-      var Wih = (gamma0 + Wi7h + getCarry(Wil, gamma0l)) | 0
+      var With = (gamma0 + Wi7h + getCarry(Wil, gamma0l)) | 0
       Wil = (Wil + gamma1l) | 0
-      Wih = (Wih + gamma1 + getCarry(Wil, gamma1l)) | 0
+      With = (With + gamma1 + getCarry(Wil, gamma1l)) | 0
       Wil = (Wil + Wi16l) | 0
-      Wih = (Wih + Wi16h + getCarry(Wil, Wi16l)) | 0
+      With = (With + Wi16h + getCarry(Wil, Wi16l)) | 0
 
-      W[i] = Wih
+      W[i] = With
       W[i + 1] = Wil
     }
 
     for (var j = 0; j < 160; j += 2) {
-      Wih = W[j]
+      With = W[j]
       Wil = W[j + 1]
 
       var majh = maj(ah, bh, ch)
@@ -49764,7 +49764,7 @@
       t1l = (t1l + Kil) | 0
       t1h = (t1h + Kih + getCarry(t1l, Kil)) | 0
       t1l = (t1l + Wil) | 0
-      t1h = (t1h + Wih + getCarry(t1l, Wil)) | 0
+      t1h = (t1h + With + getCarry(t1l, Wil)) | 0
 
       // t2 = sigma0 + maj
       var t2l = (sigma0l + majl) | 0
@@ -50438,7 +50438,7 @@
     'host',
     'keep-alive',
     'origin',
-    'referer',
+    'referrer',
     'te',
     'trailer',
     'transfer-encoding',
@@ -51250,20 +51250,20 @@
       return function (hash) {
         return downloadEntries(swarmUrl)(hash).then(function (entries) {
           var paths = Object.keys(entries);
-          var hashs = paths.map(function (path) {
+          var hashes = paths.map(function (path) {
             return entries[path].hash;
           });
           var types = paths.map(function (path) {
             return entries[path].type;
           });
-          var datas = hashs.map(downloadData(swarmUrl));
-          var files = function files(datas) {
-            return datas.map(function (data, i) {
+          var data = hashes.map(downloadData(swarmUrl));
+          var files = function files(data) {
+            return data.map(function (data, i) {
               return { type: types[i], data: data };
             });
           };
-          return Promise.all(datas).then(function (datas) {
-            return toMap(paths)(files(datas));
+          return Promise.all(data).then(function (data) {
+            return toMap(paths)(files(data));
           });
         });
       };
@@ -51394,14 +51394,14 @@
           return files.directoryTree(dirPath).then(function (fullPaths) {
             return Promise.all(fullPaths.map(function (path) {
               return fsp.readFile(path);
-            })).then(function (datas) {
+            })).then(function (data) {
               var paths = fullPaths.map(function (path) {
                 return path.slice(dirPath.length);
               });
               var types = fullPaths.map(function (path) {
                 return mimetype.lookup(path) || "text/plain";
               });
-              return toMap(paths)(datas.map(function (data, i) {
+              return toMap(paths)(data.map(function (data, i) {
                 return { type: types[i], data: data };
               }));
             });
@@ -51605,7 +51605,7 @@
 
     // String ~> Promise Bool
     //   Returns true if Swarm is available on `url`.
-    //   Perfoms a test upload to determine that.
+    //   Performs a test upload to determine that.
     //   TODO: improve this?
     var _isAvailable = function _isAvailable(swarmUrl) {
       var testFile = "test";
@@ -53211,7 +53211,7 @@
           source += "';\n" + evaluate + "\n__p+='";
         }
 
-        // Adobe VMs need the match returned to produce the correct offest.
+        // Adobe VMs need the match returned to produce the correct offset.
         return match;
       });
       source += "';\n";
@@ -54544,7 +54544,7 @@
 
 
   /**
-   * Echos the value of a value. Trys to print the value out
+   * Echos the value of a value. Tries to print the value out
    * in the best way possible given the different types.
    *
    * @param {Object} obj The object to print out.
@@ -55703,7 +55703,7 @@
       } else if (utils.isAddress(address)) {
           return '0x' + address.toLowerCase().replace('0x','');
       }
-      throw new Error('Provided address "'+ address +'" is invalid, the capitalization checksum test failed, or its an indrect IBAN address which can\'t be converted.');
+      throw new Error('Provided address "'+ address +'" is invalid, the capitalization checksum test failed, or its an indirect IBAN address which can\'t be converted.');
   };
 
 
@@ -56100,7 +56100,7 @@
                                   defer.resolve(receipt);
                               }
 
-                              // need to remove listeners, as they aren't removed automatically when succesfull
+                              // need to remove listeners, as they aren't removed automatically when successful
                               if (canUnsubscribe) {
                                   defer.eventEmitter.removeAllListeners();
                               }
@@ -56129,7 +56129,7 @@
                           defer.eventEmitter.emit('receipt', receipt);
                           defer.resolve(receipt);
 
-                          // need to remove listeners, as they aren't removed automatically when succesfull
+                          // need to remove listeners, as they aren't removed automatically when successful
                           if (canUnsubscribe) {
                               defer.eventEmitter.removeAllListeners();
                           }
@@ -56496,7 +56496,7 @@
    * Should be called to add create new request to batch request
    *
    * @method add
-   * @param {Object} jsonrpc requet object
+   * @param {Object} jsonrpc request object
    */
   Batch.prototype.add = function (request) {
       this.requests.push(request);
@@ -58335,7 +58335,7 @@
       // sets _requestmanager
       core.packageInit(this, arguments);
 
-      // remove unecessary core functions
+      // remove unnecessary core functions
       delete this.BatchRequest;
       delete this.extend;
 
@@ -59431,7 +59431,7 @@
               params: 1,
               inputFormatter: [formatters.inputLogFormatter],
               outputFormatter: this._decodeEventABI.bind(subOptions.event),
-              // DUBLICATE, also in web3-eth
+              // DUPLICATE, also in web3-eth
               subscriptionHandler: function (output) {
                   if(output.removed) {
                       this.emit('changed', output);
@@ -59731,7 +59731,7 @@
   /**
    * @file ENS.js
    *
-   * @author Samuel Furter <samuel@ethereum.org>
+   * @author Samuel Further <samuel@ethereum.org>
    * @date 2018
    */
 
@@ -59935,7 +59935,7 @@
   /**
    * @file Registry.js
    *
-   * @author Samuel Furter <samuel@ethereum.org>
+   * @author Samuel Further <samuel@ethereum.org>
    * @date 2018
    */
 
@@ -60037,7 +60037,7 @@
   /**
    * @file index.js
    *
-   * @author Samuel Furter <samuel@ethereum.org>
+   * @author Samuel Further <samuel@ethereum.org>
    * @date 2018
    */
 
@@ -60064,7 +60064,7 @@
   /**
    * @file ResolverMethodHandler.js
    *
-   * @author Samuel Furter <samuel@ethereum.org>
+   * @author Samuel Further <samuel@ethereum.org>
    * @date 2018
    */
 
@@ -61697,7 +61697,7 @@
                       params: 1,
                       inputFormatter: [formatter.inputLogFormatter],
                       outputFormatter: formatter.outputLogFormatter,
-                      // DUBLICATE, also in web3-eth-contract
+                      // DUPLICATE, also in web3-eth-contract
                       subscriptionHandler: function (output) {
                           if(output.removed) {
                               this.emit('changed', output);
@@ -62419,7 +62419,7 @@
   BlockCacheStrategy.prototype.getBlockCacheForPayload = function(payload, blockNumberHex) {
     const blockNumber = Number.parseInt(blockNumberHex, 16)
     let blockCache = this.cache[blockNumber]
-    // create new cache if necesary
+    // create new cache if necessary
     if (!blockCache) {
       const newCache = {}
       this.cache[blockNumber] = newCache
@@ -62688,7 +62688,7 @@
     self.pendingBlockTimeout = opts.pendingBlockTimeout || 4000
     self.checkForPendingBlocksActive = false
 
-    // we dont have engine immeditately
+    // we dont have engine immediately
     setTimeout(function(){
       // asyncBlockHandlers require locking provider until updates are completed
       self.engine.on('block', function(block){
@@ -65518,7 +65518,7 @@
    Subscribes to provider events.provider
 
    @method on
-   @param {String} type    'notifcation', 'connect', 'error', 'end' or 'data'
+   @param {String} type    'notification', 'connect', 'error', 'end' or 'data'
    @param {Function} callback   the callback to call
    */
   WebsocketProvider.prototype.on = function (type, callback) {
@@ -65555,7 +65555,7 @@
    Removes event listener
 
    @method removeListener
-   @param {String} type    'notifcation', 'connect', 'error', 'end' or 'data'
+   @param {String} type    'notification', 'connect', 'error', 'end' or 'data'
    @param {Function} callback   the callback to call
    */
   WebsocketProvider.prototype.removeListener = function (type, callback) {
@@ -65581,7 +65581,7 @@
    Removes all event listeners
 
    @method removeAllListeners
-   @param {String} type    'notifcation', 'connect', 'error', 'end' or 'data'
+   @param {String} type    'notification', 'connect', 'error', 'end' or 'data'
    */
   WebsocketProvider.prototype.removeAllListeners = function (type) {
       switch(type){
@@ -67433,7 +67433,7 @@
       }
 
       function getBody() {
-          // Chrome with requestType=blob throws errors arround when even testing access to responseText
+          // Chrome with requestType=blob throws errors around when even testing access to responseText
           var body = undefined
 
           if (xhr.response) {
@@ -67885,7 +67885,7 @@
               host: true,
               'keep-alive': true,
               origin: true,
-              referer: true,
+              referrer: true,
               te: true,
               trailer: true,
               'transfer-encoding': true,
@@ -68062,7 +68062,7 @@
           }
       };
       XMLHttpRequest.prototype._finalizeHeaders = function () {
-          this._headers = __assign({}, this._headers, { Connection: 'keep-alive', Host: this._url.host, 'User-Agent': this._userAgent }, this._anonymous ? { Referer: 'about:blank' } : {});
+          this._headers = __assign({}, this._headers, { Connection: 'keep-alive', Host: this._url.host, 'User-Agent': this._userAgent }, this._anonymous ? { Referrer: 'about:blank' } : {});
           this.upload._finalizeHeaders(this._headers, this._loweredHeaders);
       };
       XMLHttpRequest.prototype._onHttpResponse = function (request, response) {

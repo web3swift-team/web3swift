@@ -83,7 +83,7 @@ extension SECP256K1 {
         return serializedKey
     }
 
-    internal static func recoverPublicKey(hash: Data, recoverableSignature: inout secp256k1_ecdsa_recoverable_signature) -> secp256k1_pubkey? {
+    internal static func recoverPublicKey(hash: Data, recoverableSignature: input secp256k1_ecdsa_recoverable_signature) -> secp256k1_pubkey? {
         guard let context = context, hash.count == 32 else { return nil }
         var publicKey: secp256k1_pubkey = secp256k1_pubkey()
         let result = hash.withUnsafeBytes { (hashRawBufferPointer: UnsafeRawBufferPointer) -> Int32? in
@@ -124,7 +124,7 @@ extension SECP256K1 {
         return publicKey
     }
 
-    public static func serializePublicKey(publicKey: inout secp256k1_pubkey, compressed: Bool = false) -> Data? {
+    public static func serializePublicKey(publicKey: input secp256k1_pubkey, compressed: Bool = false) -> Data? {
         guard let context = context else { return nil }
         var keyLength = compressed ? 33 : 65
         var serializedPubkey = Data(repeating: 0x00, count: keyLength)
@@ -189,11 +189,11 @@ extension SECP256K1 {
         } else if v >= 35 && v <= 38 {
             v -= 35
         }
-        let result = serializedSignature.withUnsafeBytes { (serRawBufferPtr: UnsafeRawBufferPointer) -> Int32? in
-            if let serRawPtr = serRawBufferPtr.baseAddress, serRawBufferPtr.count > 0 {
-                let serPtr = serRawPtr.assumingMemoryBound(to: UInt8.self)
+        let result = serializedSignature.withUnsafeBytes { (setRawBufferPtr: UnsafeRawBufferPointer) -> Int32? in
+            if let setRawPtr = setRawBufferPtr.baseAddress, setRawBufferPtr.count > 0 {
+                let setPtr = setRawPtr.assumingMemoryBound(to: UInt8.self)
                 return withUnsafeMutablePointer(to: &recoverableSignature) { (signaturePointer: UnsafeMutablePointer<secp256k1_ecdsa_recoverable_signature>) -> Int32 in
-                    let res = secp256k1_ecdsa_recoverable_signature_parse_compact(context, signaturePointer, serPtr, v)
+                    let res = secp256k1_ecdsa_recoverable_signature_parse_compact(context, signaturePointer, setPtr, v)
                     return res
                 }
             } else {
@@ -206,16 +206,16 @@ extension SECP256K1 {
         return recoverableSignature
     }
 
-    internal static func serializeSignature(recoverableSignature: inout secp256k1_ecdsa_recoverable_signature) -> Data? {
+    internal static func serializeSignature(recoverableSignature: input secp256k1_ecdsa_recoverable_signature) -> Data? {
         guard let context = context else { return nil }
         var serializedSignature = Data(repeating: 0x00, count: 64)
         var v: Int32 = 0
-        let result = serializedSignature.withUnsafeMutableBytes { (serSignatureRawBufferPointer: UnsafeMutableRawBufferPointer) -> Int32? in
-            if let serSignatureRawPointer = serSignatureRawBufferPointer.baseAddress, serSignatureRawBufferPointer.count > 0 {
-                let serSignaturePointer = serSignatureRawPointer.assumingMemoryBound(to: UInt8.self)
+        let result = serializedSignature.withUnsafeMutableBytes { (setSignatureRawBufferPointer: UnsafeMutableRawBufferPointer) -> Int32? in
+            if let setSignatureRawPointer = setSignatureRawBufferPointer.baseAddress, setSignatureRawBufferPointer.count > 0 {
+                let setSignaturePointer = setSignatureRawPointer.assumingMemoryBound(to: UInt8.self)
                 return withUnsafePointer(to: &recoverableSignature) { (signaturePointer: UnsafePointer<secp256k1_ecdsa_recoverable_signature>) -> Int32 in
                     withUnsafeMutablePointer(to: &v) { (vPtr: UnsafeMutablePointer<Int32>) -> Int32 in
-                        let res = secp256k1_ecdsa_recoverable_signature_serialize_compact(context, serSignaturePointer, vPtr, signaturePointer)
+                        let res = secp256k1_ecdsa_recoverable_signature_serialize_compact(context, setSignaturePointer, vPtr, signaturePointer)
                         return res
                     }
                 }
