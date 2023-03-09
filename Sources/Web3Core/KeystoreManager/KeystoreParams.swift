@@ -12,6 +12,7 @@ public struct KdfParamsV3: Decodable, Encodable {
     var r: Int?
     var c: Int?
     var prf: String?
+    
     public init(salt: String, dklen: Int, n: Int? = nil, p: Int? = nil, r: Int? = nil, c: Int? = nil, prf: String? = nil) {
         self.salt = salt
         self.dklen = dklen
@@ -25,6 +26,7 @@ public struct KdfParamsV3: Decodable, Encodable {
 
 public struct CipherParamsV3: Decodable, Encodable {
     var iv: String
+    
     public init(iv: String) {
         self.iv = iv
     }
@@ -38,6 +40,7 @@ public struct CryptoParamsV3: Decodable, Encodable {
     var kdfparams: KdfParamsV3
     var mac: String
     var version: String?
+    
     public init(ciphertext: String, cipher: String, cipherparams: CipherParamsV3, kdf: String, kdfparams: KdfParamsV3, mac: String, version: String? = nil) {
         self.ciphertext = ciphertext
         self.cipher = cipher
@@ -54,12 +57,12 @@ public protocol AbstractKeystoreParams: Codable {
     var id: String? { get }
     var version: Int { get }
     var isHDWallet: Bool { get }
-
 }
 
 public struct PathAddressPair: Codable {
     public let path: String
     public let address: String
+    
     public init(path: String, address: String) {
         self.path = path
         self.address = address
@@ -97,23 +100,20 @@ public struct KeystoreParamsBIP32: AbstractKeystoreParams {
         self.rootPath = rootPath
         self.isHDWallet = true
     }
-
 }
 
 public struct KeystoreParamsV3: AbstractKeystoreParams {
+    public var address: String?
     public var crypto: CryptoParamsV3
     public var id: String?
     public var version: Int
     public var isHDWallet: Bool
 
-    public var address: String?
-
-    public init(address ad: String?, crypto cr: CryptoParamsV3, id i: String, version ver: Int) {
-        address = ad
-        self.crypto = cr
-        self.id = i
-        self.version = ver
+    public init(address: String?, crypto: CryptoParamsV3, id: String, version: Int) {
+        self.address = address
+        self.crypto = crypto
+        self.id = id
+        self.version = version
         self.isHDWallet = false
     }
-
 }
