@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct KdfParamsV3: Decodable, Encodable {
+public struct KdfParamsV3: Codable {
     var salt: String
     var dklen: Int
     var n: Int?
@@ -24,7 +24,7 @@ public struct KdfParamsV3: Decodable, Encodable {
     }
 }
 
-public struct CipherParamsV3: Decodable, Encodable {
+public struct CipherParamsV3: Codable {
     var iv: String
     
     public init(iv: String) {
@@ -32,7 +32,7 @@ public struct CipherParamsV3: Decodable, Encodable {
     }
 }
 
-public struct CryptoParamsV3: Decodable, Encodable {
+public struct CryptoParamsV3: Codable {
     var ciphertext: String
     var cipher: String
     var cipherparams: CipherParamsV3
@@ -74,20 +74,6 @@ public struct KeystoreParamsBIP32: AbstractKeystoreParams {
     public var id: String?
     public var version: Int
     public var isHDWallet: Bool
-
-    @available(*, deprecated, message: "Please use pathAddressPairs instead")
-    var pathToAddress: [String: String] {
-        get {
-            return self.pathAddressPairs.reduce(into: [String: String]()) {
-                $0[$1.path] = $1.address
-            }
-        }
-        set {
-            for pair in newValue {
-                self.pathAddressPairs.append(PathAddressPair(path: pair.0, address: pair.1))
-            }
-        }
-    }
 
     public var pathAddressPairs: [PathAddressPair]
     var rootPath: String?
