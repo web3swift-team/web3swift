@@ -64,7 +64,7 @@ public extension ENS {
             return expirity
         }
 
-        @available(*, message: "This function should not be used to check if a name can be registered by a user. To check if a name can be registered by a user, check name availablility via the controller")
+        @available(*, message: "This function should not be used to check if a name can be registered by a user. To check if a name can be registered by a user, check name availability via the controller")
         public func isNameAvailable(name: BigUInt) async throws -> Bool {
             guard let transaction = self.contract.createReadOperation("available", parameters: [name]) else { throw Web3Error.transactionSerializationError }
 
