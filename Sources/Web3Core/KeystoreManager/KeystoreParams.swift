@@ -12,7 +12,7 @@ public struct KdfParamsV3: Codable {
     var r: Int?
     var c: Int?
     var prf: String?
-    
+
     public init(salt: String, dklen: Int, n: Int? = nil, p: Int? = nil, r: Int? = nil, c: Int? = nil, prf: String? = nil) {
         self.salt = salt
         self.dklen = dklen
@@ -26,7 +26,7 @@ public struct KdfParamsV3: Codable {
 
 public struct CipherParamsV3: Codable {
     var iv: String
-    
+
     public init(iv: String) {
         self.iv = iv
     }
@@ -40,7 +40,7 @@ public struct CryptoParamsV3: Codable {
     var kdfparams: KdfParamsV3
     var mac: String
     var version: String?
-    
+
     public init(ciphertext: String, cipher: String, cipherparams: CipherParamsV3, kdf: String, kdfparams: KdfParamsV3, mac: String, version: String? = nil) {
         self.ciphertext = ciphertext
         self.cipher = cipher
@@ -62,7 +62,7 @@ public protocol AbstractKeystoreParams: Codable {
 public struct PathAddressPair: Codable {
     public let path: String
     public let address: String
-    
+
     public init(path: String, address: String) {
         self.path = path
         self.address = address
@@ -74,10 +74,10 @@ public struct KeystoreParamsBIP32: AbstractKeystoreParams {
     public var id: String?
     public var version: Int
     public var isHDWallet: Bool
-    
+
     public var pathAddressPairs: [PathAddressPair]
     var rootPath: String?
-    
+
     public init(crypto cr: CryptoParamsV3, id i: String, version ver: Int = 32, rootPath: String? = nil) {
         self.crypto = cr
         self.id = i
@@ -94,7 +94,7 @@ public struct KeystoreParamsV3: AbstractKeystoreParams {
     public var id: String?
     public var version: Int
     public var isHDWallet: Bool
-    
+
     public init(address: String?, crypto: CryptoParamsV3, id: String, version: Int) {
         self.address = address
         self.crypto = crypto
