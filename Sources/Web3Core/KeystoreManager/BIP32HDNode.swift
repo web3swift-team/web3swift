@@ -22,18 +22,18 @@ extension UInt32 {
 }
 
 public class HDNode {
-    static var maxIterationIndex = UInt32(1) << 31
+    private static var maxIterationIndex = UInt32(1) << 31
 
     public struct HDversion {
         // swiftlint:disable force_unwrapping
-        public var privatePrefix: Data = Data.fromHex("0x0488ADE4") ?? Data()
-        public var publicPrefix: Data = Data.fromHex("0x0488B21E") ?? Data()
+        public var privatePrefix: Data = Data.fromHex("0x0488ADE4")!
+        public var publicPrefix: Data = Data.fromHex("0x0488B21E")!
         // swiftlint:enable force_unwrapping
         public init() {}
-        public static var privatePrefix: Data {
+        public static var privatePrefix: Data? {
             HDversion().privatePrefix
         }
-        public static var publicPrefix: Data {
+        public static var publicPrefix: Data? {
             HDversion().publicPrefix
         }
 
@@ -49,11 +49,7 @@ public class HDNode {
         childNumber >= Self.maxIterationIndex
     }
     public var index: UInt32 {
-        if self.isHardened {
-            return childNumber - Self.maxIterationIndex
-        } else {
-            return childNumber
-        }
+        childNumber - (isHardened ? Self.maxIterationIndex : 0)
     }
     public var hasPrivate: Bool {
         privateKey != nil
@@ -101,7 +97,7 @@ public class HDNode {
         guard seed.count >= 16 else { return nil }
 
         guard let hmacKey = "Bitcoin seed".data(using: .ascii) else { return nil }
-        let hmac: Authenticator = HMAC(key: hmacKey.bytes, variant: HMAC.Variant.sha2(.sha512))
+        let hmac = HMAC(key: hmacKey.bytes, variant: .sha2(.sha512))
 
         guard let entropy = try? hmac.authenticate(seed.bytes), entropy.count == 64 else { return nil }
         let I_L = entropy[0..<32]
