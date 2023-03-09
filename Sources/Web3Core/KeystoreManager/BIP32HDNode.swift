@@ -117,12 +117,12 @@ public class HDNode {
         childNumber = UInt32(0)
     }
 
-    private static var curveOrder = BigUInt("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", radix: 16)!
-    public static var defaultPath: String = "m/44'/60'/0'/0"
-    public static var defaultPathPrefix: String = "m/44'/60'/0'"
-    public static var defaultPathMetamask: String = "m/44'/60'/0'/0/0"
-    public static var defaultPathMetamaskPrefix: String = "m/44'/60'/0'/0"
-    public static var hardenedIndexPrefix: UInt32 { Self.maxIterationIndex }
+    private static let curveOrder = BigUInt("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", radix: 16)!
+    public static let defaultPath = "m/44'/60'/0'/0"
+    public static let defaultPathPrefix = "m/44'/60'/0'"
+    public static let defaultPathMetamask = "m/44'/60'/0'/0/0"
+    public static let defaultPathMetamaskPrefix = "m/44'/60'/0'/0"
+    public static let hardenedIndexPrefix: UInt32 { Self.maxIterationIndex }
 }
 
 extension HDNode {
