@@ -189,7 +189,7 @@ extension SECP256K1 {
         } else if v >= 35 && v <= 38 {
             v -= 35
         }
-        let result = serializedSignature.withUnsafeBytes { (setRawBufferPtr: UnsafeRawBufferPointer) -> Int32? in
+        let result = serializedSignature.withUnsafeBytes { (rawBufferPtr: UnsafeRawBufferPointer) -> Int32? in
             if let setRawPtr = setRawBufferPtr.baseAddress, setRawBufferPtr.count > 0 {
                 let setPtr = setRawPtr.assumingMemoryBound(to: UInt8.self)
                 return withUnsafeMutablePointer(to: &recoverableSignature) { (signaturePointer: UnsafeMutablePointer<secp256k1_ecdsa_recoverable_signature>) -> Int32 in
