@@ -83,7 +83,7 @@ extension SECP256K1 {
         return serializedKey
     }
 
-    internal static func recoverPublicKey(hash: Data, recoverableSignature: input secp256k1_ecdsa_recoverable_signature) -> secp256k1_pubkey? {
+    internal static func recoverPublicKey(hash: Data, recoverableSignature: inout secp256k1_ecdsa_recoverable_signature) -> secp256k1_pubkey? {
         guard let context = context, hash.count == 32 else { return nil }
         var publicKey: secp256k1_pubkey = secp256k1_pubkey()
         let result = hash.withUnsafeBytes { (hashRawBufferPointer: UnsafeRawBufferPointer) -> Int32? in
@@ -124,7 +124,7 @@ extension SECP256K1 {
         return publicKey
     }
 
-    public static func serializePublicKey(publicKey: input secp256k1_pubkey, compressed: Bool = false) -> Data? {
+    public static func serializePublicKey(publicKey: inout secp256k1_pubkey, compressed: Bool = false) -> Data? {
         guard let context = context else { return nil }
         var keyLength = compressed ? 33 : 65
         var serializedPubkey = Data(repeating: 0x00, count: keyLength)
@@ -206,7 +206,7 @@ extension SECP256K1 {
         return recoverableSignature
     }
 
-    internal static func serializeSignature(recoverableSignature: input secp256k1_ecdsa_recoverable_signature) -> Data? {
+    internal static func serializeSignature(recoverableSignature: inout secp256k1_ecdsa_recoverable_signature) -> Data? {
         guard let context = context else { return nil }
         var serializedSignature = Data(repeating: 0x00, count: 64)
         var v: Int32 = 0
