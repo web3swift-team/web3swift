@@ -122,7 +122,7 @@ public class HDNode {
     public static let defaultPathPrefix = "m/44'/60'/0'"
     public static let defaultPathMetamask = "m/44'/60'/0'/0/0"
     public static let defaultPathMetamaskPrefix = "m/44'/60'/0'/0"
-    public static let hardenedIndexPrefix: UInt32 { Self.maxIterationIndex }
+    public static var hardenedIndexPrefix: UInt32 { Self.maxIterationIndex }
 }
 
 extension HDNode {
