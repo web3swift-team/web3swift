@@ -210,7 +210,7 @@ extension SECP256K1 {
         guard let context = context else { return nil }
         var serializedSignature = Data(repeating: 0x00, count: 64)
         var v: Int32 = 0
-        let result = serializedSignature.withUnsafeMutableBytes { (setSignatureRawBufferPointer: UnsafeMutableRawBufferPointer) -> Int32? in
+        let result = serializedSignature.withUnsafeMutableBytes { (signatureRawBufferPointer: UnsafeMutableRawBufferPointer) -> Int32? in
             if let setSignatureRawPointer = setSignatureRawBufferPointer.baseAddress, setSignatureRawBufferPointer.count > 0 {
                 let signaturePointer = signatureRawPointer.assumingMemoryBound(to: UInt8.self)
                 return withUnsafePointer(to: &recoverableSignature) { (signaturePointer: UnsafePointer<secp256k1_ecdsa_recoverable_signature>) -> Int32 in
