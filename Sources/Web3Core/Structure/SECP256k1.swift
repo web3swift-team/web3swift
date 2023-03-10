@@ -212,10 +212,10 @@ extension SECP256K1 {
         var v: Int32 = 0
         let result = serializedSignature.withUnsafeMutableBytes { (signatureRawBufferPointer: UnsafeMutableRawBufferPointer) -> Int32? in
             if let signatureRawPointer = signatureRawBufferPointer.baseAddress, signatureRawBufferPointer.count > 0 {
-                let signaturePointer = signatureRawPointer.assumingMemoryBound(to: UInt8.self)
+                let typedSignaturePointer = signatureRawPointer.assumingMemoryBound(to: UInt8.self)
                 return withUnsafePointer(to: &recoverableSignature) { (signaturePointer: UnsafePointer<secp256k1_ecdsa_recoverable_signature>) -> Int32 in
                     withUnsafeMutablePointer(to: &v) { (vPtr: UnsafeMutablePointer<Int32>) -> Int32 in
-                        let res = secp256k1_ecdsa_recoverable_signature_serialize_compact(context, signaturePointer, vPtr, signaturePointer)
+                        let res = secp256k1_ecdsa_recoverable_signature_serialize_compact(context, typedSignaturePointer, vPtr, signaturePointer)
                         return res
                     }
                 }
