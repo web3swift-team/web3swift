@@ -15,6 +15,7 @@ public enum BIP39Language {
     case french
     case italian
     case spanish
+
     public var words: [String] {
         switch self {
         case .english:
@@ -109,7 +110,7 @@ public class BIP39 {
     }
 
     public static func generateMnemonicsFromEntropy(entropy: Data, language: BIP39Language = .english) -> String? {
-        guard entropy.count >= 16, entropy.count & 4 == 0 else {return nil}
+        guard entropy.count >= 16, entropy.count & 4 == 0 else { return nil }
         let separator = language.separator
         let wordList = generateMnemonicsFrom(entropy: entropy)
         return wordList.joined(separator: separator)
@@ -141,7 +142,7 @@ public class BIP39 {
     }
 
     public static func mnemonicsToEntropy(_ mnemonics: [String], language: BIP39Language = .english) -> Data? {
-        guard mnemonics.count >= 12 && mnemonics.count.isMultiple(of: 3) && mnemonics.count <= 24 else {return nil}
+        guard mnemonics.count >= 12 && mnemonics.count.isMultiple(of: 3) && mnemonics.count <= 24 else { return nil }
         var bitString = ""
         for word in mnemonics {
             guard let idx = language.words.firstIndex(of: word) else {
@@ -179,10 +180,10 @@ public class BIP39 {
     }
 
     static private func dataFrom(mnemonics: String, password: String) -> Data? {
-        guard let mnemData = mnemonics.decomposedStringWithCompatibilityMapping.data(using: .utf8) else {return nil}
+        guard let mnemData = mnemonics.decomposedStringWithCompatibilityMapping.data(using: .utf8) else { return nil }
         let salt = "mnemonic" + password
-        guard let saltData = salt.decomposedStringWithCompatibilityMapping.data(using: .utf8) else {return nil}
-        guard let seedArray = try? PKCS5.PBKDF2(password: mnemData.bytes, salt: saltData.bytes, iterations: 2048, keyLength: 64, variant: HMAC.Variant.sha2(.sha512)).calculate() else {return nil}
+        guard let saltData = salt.decomposedStringWithCompatibilityMapping.data(using: .utf8) else { return nil }
+        guard let seedArray = try? PKCS5.PBKDF2(password: mnemData.bytes, salt: saltData.bytes, iterations: 2048, keyLength: 64, variant: HMAC.Variant.sha2(.sha512)).calculate() else { return nil }
         return Data(seedArray)
     }
 
