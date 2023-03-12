@@ -74,12 +74,12 @@ public class BIP39 {
     ///   - bitsOfEntropy: 128 - 12 words, 192 - 18 words, 256 - 24 words in output.
     ///   - language: words language, default english
     /// - Returns: random 12-24 words, that represent new Mnemonic phrase.
-    static public func generateMnemonics(bitsOfEntropy: Int, language: BIP39Language = .english) throws -> String? {
+    public static func generateMnemonics(bitsOfEntropy: Int, language: BIP39Language = .english) throws -> String? {
         guard let entropy = entropyOf(size: bitsOfEntropy) else { throw AbstractKeystoreError.noEntropyError }
         return generateMnemonicsFromEntropy(entropy: entropy, language: language)
     }
 
-    static public func generateMnemonics(entropy: Int, language: BIP39Language = .english) -> [String]? {
+    public static func generateMnemonics(entropy: Int, language: BIP39Language = .english) -> [String]? {
         guard let entropy = entropyOf(size: entropy) else { return nil }
         return generateMnemonicsFrom(entropy: entropy, language: language)
     }
@@ -108,14 +108,14 @@ public class BIP39 {
         return checksum
     }
 
-    static public func generateMnemonicsFromEntropy(entropy: Data, language: BIP39Language = .english) -> String? {
+    public static func generateMnemonicsFromEntropy(entropy: Data, language: BIP39Language = .english) -> String? {
         guard entropy.count >= 16, entropy.count & 4 == 0 else {return nil}
         let separator = language.separator
         let wordList = generateMnemonicsFrom(entropy: entropy)
         return wordList.joined(separator: separator)
     }
 
-    static public func generateMnemonicsFrom(entropy: Data, language: BIP39Language = .english) -> [String] {
+    public static func generateMnemonicsFrom(entropy: Data, language: BIP39Language = .english) -> [String] {
         let entropyBitSize = entropy.count * 8
         let checksum_length = entropyBitSize / 32
 
@@ -135,12 +135,12 @@ public class BIP39 {
             }
     }
 
-    static public func mnemonicsToEntropy(_ mnemonics: String, language: BIP39Language = .english) -> Data? {
+    public static func mnemonicsToEntropy(_ mnemonics: String, language: BIP39Language = .english) -> Data? {
         let wordList = mnemonics.components(separatedBy: language.separator)
         return mnemonicsToEntropy(wordList, language: language)
     }
 
-    static public func mnemonicsToEntropy(_ mnemonics: [String], language: BIP39Language = .english) -> Data? {
+    public static func mnemonicsToEntropy(_ mnemonics: [String], language: BIP39Language = .english) -> Data? {
         guard mnemonics.count >= 12 && mnemonics.count.isMultiple(of: 3) && mnemonics.count <= 24 else {return nil}
         var bitString = ""
         for word in mnemonics {
@@ -166,12 +166,12 @@ public class BIP39 {
         return entropy
     }
 
-    static public func seedFromMmemonics(_ mnemonics: [String], password: String = "", language: BIP39Language = .english) -> Data? {
+    public static func seedFromMmemonics(_ mnemonics: [String], password: String = "", language: BIP39Language = .english) -> Data? {
         let wordList = mnemonics.joined(separator: language.separator)
         return seedFromMmemonics(wordList, password: password, language: language)
     }
 
-    static public func seedFromMmemonics(_ mnemonics: String, password: String = "", language: BIP39Language = .english) -> Data? {
+    public static func seedFromMmemonics(_ mnemonics: String, password: String = "", language: BIP39Language = .english) -> Data? {
         if mnemonicsToEntropy(mnemonics, language: language) == nil {
             return nil
         }
@@ -186,7 +186,7 @@ public class BIP39 {
         return Data(seedArray)
     }
 
-    static public func seedFromEntropy(_ entropy: Data, password: String = "", language: BIP39Language = .english) -> Data? {
+    public static func seedFromEntropy(_ entropy: Data, password: String = "", language: BIP39Language = .english) -> Data? {
         guard let mnemonics = generateMnemonicsFromEntropy(entropy: entropy, language: language) else {
             return nil
         }
