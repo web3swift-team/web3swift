@@ -70,27 +70,38 @@ public enum BIP39Language {
 }
 
 public class BIP39 {
-    /// Initializes a new mnemonics set with the provided bitsOfEntropy.
+
+    /// Generates a mnemonic phrase length of which depends on the provided `bitsOfEntropy`.
+    /// Returned value is a single string where words are joined by ``BIP39Language/separator``.
+    /// Keep in mind that different languages may have different separators.
     /// - Parameters:
     ///   - bitsOfEntropy: 128 - 12 words, 192 - 18 words, 256 - 24 words in output.
-    ///   - language: words language, default english
-    /// - Returns: random 12-24 words, that represent new Mnemonic phrase.
+    ///   - language: words language, default is set to english.
+    /// - Returns: mnemonic phrase as a single string containing 12, 15, 18, 21 or 24 words.
     public static func generateMnemonics(bitsOfEntropy: Int, language: BIP39Language = .english) throws -> String? {
-        guard let entropy = entropyOf(size: bitsOfEntropy) else { throw AbstractKeystoreError.noEntropyError }
+        let entropy = try entropyOf(size: bitsOfEntropy)
         return generateMnemonicsFromEntropy(entropy: entropy, language: language)
     }
 
-    public static func generateMnemonics(entropy: Int, language: BIP39Language = .english) -> [String]? {
-        guard let entropy = entropyOf(size: entropy) else { return nil }
+    /// Generates a mnemonic phrase length of which depends on the provided `entropy`.
+    /// - Parameters:
+    ///   - entropy: 128 - 12 words, 192 - 18 words, 256 - 24 words in output.
+    ///   - language: words language, default is set to english.
+    /// - Returns: mnemonic phrase as an array containing 12, 15, 18, 21 or 24 words.
+    /// `nil` is returned in cases like wrong `entropy` value (e.g. `entropy` is not a multiple of 32).
+    public static func generateMnemonics(entropy: Int, language: BIP39Language = .english) throws -> [String] {
+        let entropy = try entropyOf(size: entropy)
         return generateMnemonicsFrom(entropy: entropy, language: language)
     }
 
-    static private func entropyOf(size: Int) -> Data? {
-        guard size >= 128 && size <= 256 && size.isMultiple(of: 32) else {
-            return nil
+    private static func entropyOf(size: Int) throws -> Data {
+        guard
+            size >= 128 && size <= 256 && size.isMultiple(of: 32),
+            let entropy = Data.randomBytes(length: size/8)
+        else {
+            throw AbstractKeystoreError.noEntropyError
         }
-
-        return Data.randomBytes(length: size/8)
+        return entropy
     }
 
     static func bitarray(from data: Data) -> String {
@@ -178,7 +189,7 @@ public class BIP39 {
         return dataFrom(mnemonics: mnemonics, password: password)
     }
 
-    static private func dataFrom(mnemonics: String, password: String) -> Data? {
+    private static func dataFrom(mnemonics: String, password: String) -> Data? {
         guard let mnemData = mnemonics.decomposedStringWithCompatibilityMapping.data(using: .utf8) else { return nil }
         let salt = "mnemonic" + password
         guard let saltData = salt.decomposedStringWithCompatibilityMapping.data(using: .utf8) else { return nil }
