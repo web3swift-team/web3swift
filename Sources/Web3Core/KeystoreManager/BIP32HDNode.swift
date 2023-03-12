@@ -24,20 +24,29 @@ extension UInt32 {
 public class HDNode {
     private static var maxIterationIndex = UInt32(1) << 31
 
+    /// Contains private and public prefixes for serialization.
+    /// See [BIP-32's serialization format](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#serialization-format) for more info.
     public struct HDversion {
-        // swiftlint:disable force_unwrapping
-        public var privatePrefix: Data = Data.fromHex("0x0488ADE4")!
-        public var publicPrefix: Data = Data.fromHex("0x0488B21E")!
-        // swiftlint:enable force_unwrapping
-        public init() {}
-        public static var privatePrefix: Data? {
-            HDversion().privatePrefix
-        }
-        public static var publicPrefix: Data? {
-            HDversion().publicPrefix
-        }
+        /// Mainnet public key prefix.
+        /// Value `0x0488B21E` is a string `xpub` encoded as Base-58 and later as hexadecimal.
+        public static let publicPrefix: Data! = Data.fromHex("0x0488B21E")
 
+        /// Mainnet private key prefix.
+        /// Value `0x0488ADE4` is a string `xprv` encoded as Base-58 and later as hexadecimal.
+        public static let privatePrefix: Data! = Data.fromHex("0x0488ADE4")
+
+        public let publicPrefix: Data
+        public let privatePrefix: Data
+
+        /// Default values for `publicPrefix` and `privatePrefix` are
+        /// `HDversion.publicPrefix` and `HDversion.privatePrefix` respectively.
+        public init(public publicPrefix: Data = HDversion.publicPrefix,
+                    private privatePrefix: Data = HDversion.privatePrefix) {
+            self.publicPrefix = publicPrefix
+            self.privatePrefix = privatePrefix
+        }
     }
+
     public var path: String? = "m"
     public var privateKey: Data?
     public var publicKey: Data
