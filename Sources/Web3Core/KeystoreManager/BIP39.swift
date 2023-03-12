@@ -105,8 +105,7 @@ public class BIP39 {
         guard let checksumData = inputData.sha256().bitsInRange(0, checksumLength) else {
             return nil
         }
-        let checksum = String(checksumData, radix: 2).leftPadding(toLength: checksumLength, withPad: "0")
-        return checksum
+        return String(checksumData, radix: 2).leftPadding(toLength: checksumLength, withPad: "0")
     }
 
     public static func generateMnemonicsFromEntropy(entropy: Data, language: BIP39Language = .english) -> String? {
