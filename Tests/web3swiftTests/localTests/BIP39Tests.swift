@@ -11,7 +11,7 @@ import XCTest
 
 final class BIP39Tests: XCTestCase {
 
-    func testBIP39 () throws {
+    func testBIP39() throws {
         var entropy = Data.fromHex("00000000000000000000000000000000")!
         var phrase = BIP39.generateMnemonicsFromEntropy(entropy: entropy)
         XCTAssert( phrase == "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about")
@@ -139,16 +139,31 @@ final class BIP39Tests: XCTestCase {
     }
 
     func testNewBIP32keystoreArray() throws {
-        let mnemonic = BIP39.generateMnemonics(entropy: 256)!
+        let mnemonic = try BIP39.generateMnemonics(entropy: 256)
         let keystore = try BIP32Keystore(mnemonicsPhrase: mnemonic, password: "", mnemonicsPassword: "")
         XCTAssert(keystore != nil)
     }
 
     func testSameAddressesFromTheSameMnemonicsArray() throws {
-        let mnemonic = BIP39.generateMnemonics(entropy: 256)!
+        let mnemonic = try BIP39.generateMnemonics(entropy: 256)
         let keystore1 = try BIP32Keystore(mnemonicsPhrase: mnemonic, password: "", mnemonicsPassword: "")
         let keystore2 = try BIP32Keystore(mnemonicsPhrase: mnemonic, password: "", mnemonicsPassword: "")
         XCTAssert(keystore1?.addresses?.first == keystore2?.addresses?.first)
+    }
+
+    func testWrongBitsOfEntropyMustThrow() throws {
+        XCTAssertThrowsError(try BIP39.generateMnemonics(entropy: 127))
+        XCTAssertThrowsError(try BIP39.generateMnemonics(entropy: 255))
+        XCTAssertThrowsError(try BIP39.generateMnemonics(entropy: 32))
+        XCTAssertThrowsError(try BIP39.generateMnemonics(entropy: 288))
+    }
+
+    func testCorrectBitsOfEntropy() throws {
+        XCTAssertFalse(try BIP39.generateMnemonics(entropy: 128).isEmpty)
+        XCTAssertFalse(try BIP39.generateMnemonics(entropy: 160).isEmpty)
+        XCTAssertFalse(try BIP39.generateMnemonics(entropy: 192).isEmpty)
+        XCTAssertFalse(try BIP39.generateMnemonics(entropy: 224).isEmpty)
+        XCTAssertFalse(try BIP39.generateMnemonics(entropy: 256).isEmpty)
     }
 
 }
