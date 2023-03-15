@@ -13,7 +13,7 @@ extension Web3.Personal {
     }
 
     public func unlock(account: Address, password: String, seconds: UInt = 300) async throws -> Bool {
-        guard self.web3.provider.attachedKeystoreManager == nil else {
+        guard eth.provider.keystoreManager == nil else {
             throw Web3Error.inputError(desc: "Can not unlock a local keystore")
         }
 

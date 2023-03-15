@@ -344,7 +344,7 @@
 
 **Closed issues:**
 
-- Use custom JSONRPCmethod and Units [\#148](https://github.com/skywinder/web3swift/issues/148)
+- Use custom JSONRPCMethod and Units [\#148](https://github.com/skywinder/web3swift/issues/148)
 - ERC20 some functions are not working  [\#146](https://github.com/skywinder/web3swift/issues/146)
 - fix `pod install` absolute paths [\#97](https://github.com/skywinder/web3swift/issues/97)
 - Installing issue by pod [\#76](https://github.com/skywinder/web3swift/issues/76)

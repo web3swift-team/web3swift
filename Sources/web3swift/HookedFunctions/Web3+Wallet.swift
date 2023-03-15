@@ -10,7 +10,7 @@ import Web3Core
 extension Web3.Web3Wallet {
 
     public func getAccounts() throws -> [EthereumAddress] {
-        guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {
+        guard let keystoreManager = eth.provider.keystoreManager else {
             throw Web3Error.walletError
         }
         guard let ethAddresses = keystoreManager.addresses else {
@@ -29,14 +29,14 @@ extension Web3.Web3Wallet {
 
     public func signTX(transaction: inout CodableTransaction, account: EthereumAddress, password: String ) throws -> Bool {
         do {
-            guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {
+            guard let keystoreManager = eth.provider.keystoreManager else {
                 throw Web3Error.walletError
             }
             try Web3Signer.signTX(transaction: &transaction, keystore: keystoreManager, account: account, password: password)
             return true
         } catch {
-            if error is AbstractKeystoreError {
-                throw Web3Error.keystoreError(err: error as! AbstractKeystoreError)
+            if let error = error as? AbstractKeystoreError {
+                throw Web3Error.keystoreError(err: error)
             }
             throw Web3Error.generalError(err: error)
         }
@@ -46,12 +46,12 @@ extension Web3.Web3Wallet {
         guard let data = Data.fromHex(personalMessage) else {
             throw Web3Error.dataError
         }
-        return try self.signPersonalMessage(data, account: account, password: password)
+        return try signPersonalMessage(data, account: account, password: password)
     }
 
     public func signPersonalMessage(_ personalMessage: Data, account: EthereumAddress, password: String ) throws -> Data {
         do {
-            guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {
+            guard let keystoreManager = eth.provider.keystoreManager else {
                 throw Web3Error.walletError
             }
             guard let data = try Web3Signer.signPersonalMessage(personalMessage, keystore: keystoreManager, account: account, password: password) else {
@@ -59,11 +59,10 @@ extension Web3.Web3Wallet {
             }
             return data
         } catch {
-            if error is AbstractKeystoreError {
-                throw Web3Error.keystoreError(err: error as! AbstractKeystoreError)
+            if let error = error as? AbstractKeystoreError {
+                throw Web3Error.keystoreError(err: error)
             }
             throw Web3Error.generalError(err: error)
         }
     }
-
 }

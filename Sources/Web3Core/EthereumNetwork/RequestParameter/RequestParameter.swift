@@ -23,13 +23,13 @@ import Foundation
 
  Here's an example of using this enum in field.
  ```swift
- let jsonRPCParams: [APIRequestParameterType] = [
+ let JSONRPCParams: [APIRequestParameterType] = [
     .init(rawValue: 12)!,
     .init(rawValue: "this")!,
     .init(rawValue: 12.2)!,
     .init(rawValue: [12.2, 12.4])!
  ]
- let encoded = try JSONEncoder().encode(jsonRPCParams)
+ let encoded = try JSONEncoder().encode(JSONRPCParams)
  print(String(data: encoded, encoding: .utf8)!)
  //> [12,\"this\",12.2,[12.2,12.4]]`
  ```

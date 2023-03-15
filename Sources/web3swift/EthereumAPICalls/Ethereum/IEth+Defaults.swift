@@ -116,7 +116,7 @@ public extension IEth {
 
 public extension IEth {
     func ownedAccounts() async throws -> [EthereumAddress] {
-        if let addresses = provider.attachedKeystoreManager?.addresses {
+        if let addresses = provider.keystoreManager?.addresses {
             return addresses
         }
         return try await APIRequest.sendRequest(with: provider, for: .getAccounts).result

@@ -47,6 +47,18 @@ class EthereumContractTest: LocalTestCase {
         XCTAssertTrue(contract.contract.methods[getFuncSignature("setData(bytes32,bytes)")]?.count == 1)
         XCTAssertTrue(contract.contract.methods[getFuncSignature("setData(bytes32[],bytes[])")]?.count == 1)
 
+
+        contract.transaction.value = 10000
+        let writeOperation = contract.createWriteOperation("setData(bytes32,bytes)")!
+        NSLog(writeOperation.transaction.value.description) // Will hold 10000
+        //writeOperation.writeToChain(password: ....)
+
+        // .. somewhere down the road
+
+        let writeOperation2 = contract.createWriteOperation("setData(bytes32,bytes)")!
+        NSLog(writeOperation2.transaction.value.description) // Will also hold 10000!!!! MUST NOT HAPPEN!
+        //writeOperation.writeToChain(password: ....)
+
         XCTAssertTrue(contract.contract.methods["noInputFunction"]?.count == 1)
         XCTAssertTrue(contract.contract.methods["noInputFunction()"]?.count == 1)
         XCTAssertTrue(contract.contract.methods[getFuncSignature("noInputFunction()")]?.count == 1)

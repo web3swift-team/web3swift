@@ -27,7 +27,7 @@ public class WriteOperation: ReadOperation {
             return try await web3.eth.send(transaction)
         }
 
-        guard let attachedKeystoreManager = web3.provider.attachedKeystoreManager else {
+        guard let attachedKeystoreManager = web3.provider.keystoreManager else {
             throw Web3Error.inputError(desc: "Failed to locally sign a transaction. Web3 provider doesn't have keystore attached.")
         }
 

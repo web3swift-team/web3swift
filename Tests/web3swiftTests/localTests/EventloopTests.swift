@@ -13,15 +13,15 @@ class EventloopTests: XCTestCase {
     func testBasicEventLoop() async throws {
         var ticksToWait = 5
         let expectation = self.expectation(description: "Waiting")
-        func getBlockNumber(_ web3: Web3) async {
+        func getBlockNumber(_ eth: IEth) async {
             do {
-                let blockNumber = try await web3.eth.blockNumber()
+                let blockNumber = try await eth.blockNumber()
                 ticksToWait = ticksToWait - 1
                 if ticksToWait == 0 {
                     expectation.fulfill()
                 }
             } catch {
-                
+                XCTFail("Failed to get block number: \(error.localizedDescription)")
             }
         }
 

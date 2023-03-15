@@ -10,7 +10,7 @@ import Web3Core
 extension Web3.Personal {
 
     public func signPersonal(message: Data, from: EthereumAddress, password: String) async throws -> Data {
-        guard let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager else {
+        guard let attachedKeystoreManager = self.eth.provider.keystoreManager else {
             let hexData = message.toHexString().addHexPrefix()
             let request: APIRequest = .personalSign(from.address.lowercased(), hexData)
             let response: APIResponse<Data> = try await APIRequest.sendRequest(with: provider, for: request)

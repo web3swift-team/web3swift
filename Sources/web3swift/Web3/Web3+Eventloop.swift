@@ -7,7 +7,6 @@ import Foundation
 
 extension Web3.Eventloop {
 
-    // @available(iOS 10.0, *)
     public func start(_ timeInterval: TimeInterval) {
         if self.timer != nil {
             self.timer!.suspend()
@@ -32,7 +31,7 @@ extension Web3.Eventloop {
 
             let function = prop.calledFunction
             Task {
-                await function(self.web3)
+                await function(eth)
             }
         }
 

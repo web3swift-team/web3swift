@@ -11,7 +11,7 @@ import BigInt
 /// Ethereum Block
 ///
 /// Official specification: [](https://github.com/ethereum/execution-apis/blob/main/src/schemas/block.json)
-public struct Block {
+public struct Block: APIResultType {
 
     public var number: BigUInt // MARK: This is optional in web3js, but required in Ethereum JSON-RPC
     public var hash: Data // MARK: This is optional in web3js, but required in Ethereum JSON-RPC
@@ -103,5 +103,3 @@ extension Block: Decodable {
         }
     }
 }
-
-extension Block: APIResultType { }

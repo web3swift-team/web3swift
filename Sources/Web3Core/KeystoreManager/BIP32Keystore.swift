@@ -74,10 +74,10 @@ public class BIP32Keystore: AbstractKeystore {
     }
 
     public init?(_ jsonData: Data) {
-        guard var keystorePars = try? JSONDecoder().decode(KeystoreParamsBIP32.self, from: jsonData) else {return nil}
-        if keystorePars.version != Self.KeystoreParamsBIP32Version {return nil}
-        if keystorePars.crypto.version != nil && keystorePars.crypto.version != "1" {return nil}
-        if !keystorePars.isHDWallet {return nil}
+        guard var keystorePars = try? JSONDecoder().decode(KeystoreParamsBIP32.self, from: jsonData) else { return nil }
+        if keystorePars.version != Self.KeystoreParamsBIP32Version { return nil }
+        if keystorePars.crypto.version != nil && keystorePars.crypto.version != "1" { return nil }
+        if !keystorePars.isHDWallet { return nil }
 
         addressStorage = PathAddressStorage(pathAddressPairs: keystorePars.pathAddressPairs)
 
@@ -88,8 +88,14 @@ public class BIP32Keystore: AbstractKeystore {
         rootPrefix = keystoreParams!.rootPath!
     }
 
-    public convenience init?(mnemonics: String, password: String, mnemonicsPassword: String = "", language: BIP39Language = BIP39Language.english, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
-        guard var seed = BIP39.seedFromMmemonics(mnemonics, password: mnemonicsPassword, language: language) else {
+    public convenience init?(mnemonics: String,
+                             password: String,
+                             mnemonicsPassword: String = "",
+                             language: BIP39Language = BIP39Language.english,
+                             prefixPath: String = HDNode.defaultPathMetamaskPrefix,
+                             aesMode: String = "aes-128-cbc") throws {
+        guard var seed = BIP39.seedFromMmemonics(mnemonics, password: mnemonicsPassword, language: language)
+        else {
             throw AbstractKeystoreError.noEntropyError
         }
         defer {
@@ -98,9 +104,12 @@ public class BIP32Keystore: AbstractKeystore {
         try self.init(seed: seed, password: password, prefixPath: prefixPath, aesMode: aesMode)
     }
 
-    public init? (seed: Data, password: String, prefixPath: String = HDNode.defaultPathMetamaskPrefix, aesMode: String = "aes-128-cbc") throws {
+    public init?(seed: Data,
+                 password: String,
+                 prefixPath: String = HDNode.defaultPathMetamaskPrefix,
+                 aesMode: String = "aes-128-cbc") throws {
         addressStorage = PathAddressStorage()
-        guard let rootNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else {return nil}
+        guard let rootNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else { return nil }
         self.rootPrefix = prefixPath
         try createNewAccount(parentNode: rootNode, password: password)
         guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {
@@ -127,7 +136,7 @@ public class BIP32Keystore: AbstractKeystore {
         try encryptDataToStorage(password, data: serializedRootNode, aesMode: self.keystoreParams!.crypto.cipher)
     }
 
-    func createNewAccount(parentNode: HDNode, password: String ) throws {
+    func createNewAccount(parentNode: HDNode, password: String) throws {
         var newIndex = UInt32(0)
         for p in addressStorage.paths {
             guard let idx = UInt32(p.components(separatedBy: "/").last!) else {continue}
@@ -151,7 +160,8 @@ public class BIP32Keystore: AbstractKeystore {
         addressStorage.add(address: newAddress, for: newPath)
     }
 
-    public func createNewCustomChildAccount(password: String, path: String) throws {guard let decryptedRootNode = try? self.getPrefixNodeData(password) else {
+    public func createNewCustomChildAccount(password: String, path: String) throws {
+        guard let decryptedRootNode = try? self.getPrefixNodeData(password) else {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
         guard let rootNode = HDNode(decryptedRootNode) else {
@@ -363,8 +373,7 @@ public class BIP32Keystore: AbstractKeystore {
         guard let params = self.keystoreParams else {
             return nil
         }
-        let data = try JSONEncoder().encode(params)
-        return data
+        return try JSONEncoder().encode(params)
     }
 
     public func serializeRootNodeToString(password: String ) throws -> String {

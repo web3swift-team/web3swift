@@ -16,7 +16,7 @@ class PersonalSignatureTests: XCTestCase {
         let web3 = try await Web3.new(LocalTestCase.url)
         let tempKeystore = try! EthereumKeystoreV3(password: "")
         let keystoreManager = KeystoreManager([tempKeystore!])
-        web3.addKeystoreManager(keystoreManager)
+        web3.setKeystoreManager(keystoreManager)
         let message = "Hello World"
         let expectedAddress = keystoreManager.addresses![0]
         
@@ -55,7 +55,7 @@ class PersonalSignatureTests: XCTestCase {
         // Signing
         let tempKeystore = try! EthereumKeystoreV3(password: "")
         let keystoreManager = KeystoreManager([tempKeystore!])
-        web3.addKeystoreManager(keystoreManager)
+        web3.setKeystoreManager(keystoreManager)
         let message = "Hello World"
         let expectedAddress = keystoreManager.addresses![0]
         

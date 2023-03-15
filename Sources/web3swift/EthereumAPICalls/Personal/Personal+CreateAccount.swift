@@ -9,7 +9,7 @@ import Web3Core
 
 extension Web3.Personal {
     public func createAccount(password: String ) async throws -> EthereumAddress {
-        guard self.web3.provider.attachedKeystoreManager == nil else {
+        guard self.eth.provider.keystoreManager == nil else {
             throw Web3Error.inputError(desc: "Creating account in a local keystore with this method is not supported")
         }
 

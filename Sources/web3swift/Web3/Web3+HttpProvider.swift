@@ -12,15 +12,20 @@ public class Web3HttpProvider: Web3Provider {
     public var url: URL
     public var network: Networks?
     public var policies: Policies = .auto
-    public var attachedKeystoreManager: KeystoreManager?
+    public var keystoreManager: KeystoreManager?
+
     public var session: URLSession = {() -> URLSession in
         let config = URLSessionConfiguration.default
         let urlSession = URLSession(configuration: config)
         return urlSession
     }()
-    public init?(_ httpProviderURL: URL, network net: Networks?, keystoreManager manager: KeystoreManager? = nil) async {
+
+    public init?(_ httpProviderURL: URL,
+                 network net: Networks? = nil,
+                 keystoreManager: KeystoreManager? = nil) async {
         guard httpProviderURL.scheme == "http" || httpProviderURL.scheme == "https" else { return nil }
         url = httpProviderURL
+        self.keystoreManager = keystoreManager
         if let net = net {
             network = net
         } else {
@@ -37,7 +42,6 @@ public class Web3HttpProvider: Web3Provider {
                 return nil
             }
         }
-        attachedKeystoreManager = manager
     }
     
     public init(url: URL, network: Networks, keystoreManager: KeystoreManager? = nil) {
