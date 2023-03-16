@@ -34,7 +34,7 @@ final class ABIDecoderTests: XCTestCase {
             throw Web3Error.processingError(desc: "Can not decode returned parameters")
         }
 
-        guard let returnData = decodedData["returnData"] as? Array<Array<Any>> else {
+        guard let returnData = decodedData["returnData"] as? [[Any]] else {
             throw Web3Error.dataError
         }
         var resultArray = [BigUInt]()
