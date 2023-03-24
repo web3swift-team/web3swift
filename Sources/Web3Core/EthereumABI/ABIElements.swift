@@ -410,7 +410,7 @@ extension ABI.Element.Function {
 
         if data.count >= 4,
            let errors = errors,
-           let customError = errors[data[data.indices.startIndex + 0 ..< data.indices.startIndex + 4].toHexString().stripHexPrefix()] {
+           let customError = errors[data[data.indices.startIndex ..< data.indices.startIndex + 4].toHexString().stripHexPrefix()] {
             var errorResponse: [String: Any] = ["_success": false, "_abortedByRevertOrRequire": true, "_error": customError.errorDeclaration]
 
             if (data.count > 32 && !customError.inputs.isEmpty),
