@@ -183,7 +183,7 @@ public class BIP39 {
     }
 
     public static func seedFromMmemonics(_ mnemonics: String, password: String = "", language: BIP39Language = .english) -> Data? {
-        if mnemonicsToEntropy(mnemonics, language: language) == nil {
+        guard mnemonicsToEntropy(mnemonics, language: language) != nil else {
             return nil
         }
         return dataFrom(mnemonics: mnemonics, password: password)
