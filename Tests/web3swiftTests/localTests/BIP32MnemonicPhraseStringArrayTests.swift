@@ -1,5 +1,5 @@
 //
-//  BIP39ArrayTests.swift
+//  BIP32MnemonicPhraseStringArrayTests.swift
 //
 //
 //  Created by Daniel Bell on 11/26/22.
@@ -9,7 +9,9 @@ import XCTest
 @testable import Web3Core
 @testable import web3swift
 
-final class BIP39ArrayTests: XCTestCase {
+/// This test suite is focused on testing the ability of `BIP32Keystore`
+/// to be able to parse and work with mnemonic phrase that is of type `[String]`.
+final class BIP32MnemonicPhraseStringArrayTests: XCTestCase {
 
     let mnemonic = ["fruit", "wave", "dwarf", "banana", "earth", "journey", "tattoo", "true", "farm", "silk", "olive", "fence"]
 
