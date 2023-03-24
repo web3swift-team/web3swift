@@ -1,5 +1,5 @@
 //
-//  BIP39StringTests.swift
+//  BIP32MnemonicPhraseStringTests.swift
 //
 //
 //  Created by Daniel Bell on 11/26/22.
@@ -11,7 +11,7 @@ import XCTest
 
 /// This test suite is focused on testing the ability of `BIP32Keystore`
 /// to be able to parse and work with mnemonic phrase that is of type `String`.
-final class BIP39StringTests: XCTestCase {
+final class BIP32MnemonicPhraseStringTests: XCTestCase {
 
     let mnemonic = "fruit wave dwarf banana earth journey tattoo true farm silk olive fence"
 
