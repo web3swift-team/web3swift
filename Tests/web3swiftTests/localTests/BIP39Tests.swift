@@ -101,7 +101,7 @@ final class BIP39Tests: XCTestCase {
         XCTAssert(seed == recoveredSeed)
     }
 
-//     https://github.com/trezor/python-mnemonic/blob/master/vectors.json
+    /// Test cases were borrowed from https://github.com/trezor/python-mnemonic/blob/master/vectors.json
     func testBIP39MnemonicIsMultipleOfThreeArray() {
         // https://github.com/trezor/python-mnemonic/blob/master/vectors.json#L95
         let mnemonic_12 = ["scheme", "spot", "photo", "card", "baby", "mountain", "device", "kick", "cradle", "pact", "join", "borrow"]
