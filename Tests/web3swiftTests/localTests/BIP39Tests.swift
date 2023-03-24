@@ -81,7 +81,7 @@ final class BIP39Tests: XCTestCase {
         XCTAssert(keystore1?.addresses?.first == keystore2?.addresses?.first)
     }
 
-    func testBIP39Array () throws {
+    func testBIP39Array() throws {
         var entropy = Data.fromHex("00000000000000000000000000000000")!
         var phrase = BIP39.generateMnemonicsFrom(entropy: entropy)
         XCTAssert( phrase == ["abandon", "abandon", "abandon", "abandon", "abandon", "abandon", "abandon", "abandon", "abandon", "abandon", "abandon", "about"])
