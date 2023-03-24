@@ -31,7 +31,7 @@ final class BIP39Tests: XCTestCase {
         XCTAssert(seed == recoveredSeed)
     }
 
-//     https://github.com/trezor/python-mnemonic/blob/master/vectors.json
+    /// Test cases were borrowed from https://github.com/trezor/python-mnemonic/blob/master/vectors.json
     func testBIP39MnemonicIsMultipleOfThree() {
         // https://github.com/trezor/python-mnemonic/blob/master/vectors.json#L95
         let mnemonic_12 = "scheme spot photo card baby mountain device kick cradle pact join borrow"
@@ -80,7 +80,7 @@ final class BIP39Tests: XCTestCase {
         let keystore2 = try BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")
         XCTAssert(keystore1?.addresses?.first == keystore2?.addresses?.first)
     }
-    //====================================================================
+
     func testBIP39Array () throws {
         var entropy = Data.fromHex("00000000000000000000000000000000")!
         var phrase = BIP39.generateMnemonicsFrom(entropy: entropy)
