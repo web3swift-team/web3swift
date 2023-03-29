@@ -397,9 +397,9 @@ extension ABI.Element.Function {
         /// 4) `messageLength` is used to determine where message bytes end to decode string correctly.
         /// 5) The rest of the `data` must be 0 bytes or empty.
         if data.bytes.count >= 100,
-           Data(data[0..<4]) == Data.fromHex("08C379A0"),
-           BigInt(data[4..<36]) == 32,
-           let messageLength = Int(Data(data[36..<68]).toHexString(), radix: 16),
+           Data(data[data.indices.startIndex ..< data.indices.startIndex + 4]) == Data.fromHex("08C379A0"),
+           BigInt(data[data.indices.startIndex + 4 ..< data.indices.startIndex + 36]) == 32,
+           let messageLength = Int(Data(data[data.indices.startIndex + 36 ..< data.indices.startIndex + 68]).toHexString(), radix: 16),
            let message = String(bytes: data.bytes[68..<(68+messageLength)], encoding: .utf8),
            (68+messageLength == data.count || data.bytes[68+messageLength..<data.count].reduce(0) { $0 + $1 } == 0) {
             return ["_success": false,
@@ -410,11 +410,11 @@ extension ABI.Element.Function {
 
         if data.count >= 4,
            let errors = errors,
-           let customError = errors[data[0..<4].toHexString().stripHexPrefix()] {
+           let customError = errors[data[data.indices.startIndex ..< data.indices.startIndex + 4].toHexString().stripHexPrefix()] {
             var errorResponse: [String: Any] = ["_success": false, "_abortedByRevertOrRequire": true, "_error": customError.errorDeclaration]
 
             if (data.count > 32 && !customError.inputs.isEmpty),
-               let decodedInputs = ABIDecoder.decode(types: customError.inputs, data: Data(data[4..<data.count])) {
+               let decodedInputs = ABIDecoder.decode(types: customError.inputs, data: Data(data[data.indices.startIndex + 4 ..< data.indices.startIndex + data.count])) {
                 for idx in decodedInputs.indices {
                     errorResponse["\(idx)"] = decodedInputs[idx]
                     if !customError.inputs[idx].name.isEmpty {
