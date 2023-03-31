@@ -34,27 +34,28 @@ extension ABIDecoder {
         guard let elementItself = elData, let nextElementPointer = nextPtr else {
             return (nil, nil)
         }
+        let startIndex = UInt64(elementItself.startIndex)
         switch type {
         case .uint(let bits):
             guard elementItself.count >= 32 else {break}
             let mod = BigUInt(1) << bits
-            let dataSlice = elementItself[0 ..< 32]
+            let dataSlice = elementItself[startIndex ..< startIndex + 32]
             let v = BigUInt(dataSlice) % mod
             return (v, type.memoryUsage)
         case .int(let bits):
             guard elementItself.count >= 32 else {break}
             let mod = BigInt(1) << bits
-            let dataSlice = elementItself[0 ..< 32]
+            let dataSlice = elementItself[startIndex ..< startIndex + 32]
             let v = BigInt.fromTwosComplement(data: dataSlice) % mod
             return (v, type.memoryUsage)
         case .address:
             guard elementItself.count >= 32 else {break}
-            let dataSlice = elementItself[12 ..< 32]
+            let dataSlice = elementItself[startIndex + 12 ..< startIndex + 32]
             let address = EthereumAddress(dataSlice)
             return (address, type.memoryUsage)
         case .bool:
             guard elementItself.count >= 32 else {break}
-            let dataSlice = elementItself[0 ..< 32]
+            let dataSlice = elementItself[startIndex ..< startIndex + 32]
             let v = BigUInt(dataSlice)
             if v == BigUInt(36) ||
                 v == BigUInt(32) ||
@@ -69,22 +70,22 @@ extension ABIDecoder {
             }
         case .bytes(let length):
             guard elementItself.count >= 32 else {break}
-            let dataSlice = elementItself[0 ..< length]
+            let dataSlice = elementItself[startIndex ..< startIndex + length]
             return (Data(dataSlice), type.memoryUsage)
         case .string:
             guard elementItself.count >= 32 else {break}
-            var dataSlice = elementItself[0 ..< 32]
+            var dataSlice = elementItself[startIndex ..< startIndex + 32]
             let length = UInt64(BigUInt(dataSlice))
-            guard elementItself.count >= 32+length else {break}
+            guard elementItself.count >= 32 + length else {break}
             dataSlice = elementItself[32 ..< 32 + length]
             guard let string = String(data: dataSlice, encoding: .utf8) else {break}
             return (string, type.memoryUsage)
         case .dynamicBytes:
             guard elementItself.count >= 32 else {break}
-            var dataSlice = elementItself[0 ..< 32]
+            var dataSlice = elementItself[startIndex ..< startIndex + 32]
             let length = UInt64(BigUInt(dataSlice))
-            guard elementItself.count >= 32+length else {break}
-            dataSlice = elementItself[32 ..< 32 + length]
+            guard elementItself.count >= 32 + length else {break}
+            dataSlice = elementItself[startIndex + 32 ..< startIndex + 32 + length]
             return (Data(dataSlice), nextElementPointer)
         case .array(type: let subType, length: let length):
             switch type.arraySize {
@@ -92,10 +93,10 @@ extension ABIDecoder {
                 if subType.isStatic {
                     // uint[] like, expect length and elements
                     guard elementItself.count >= 32 else {break}
-                    var dataSlice = elementItself[0 ..< 32]
+                    var dataSlice = elementItself[startIndex ..< startIndex + 32]
                     let length = UInt64(BigUInt(dataSlice))
                     guard elementItself.count >= 32 + subType.memoryUsage*length else {break}
-                    dataSlice = elementItself[32 ..< 32 + subType.memoryUsage*length]
+                    dataSlice = elementItself[startIndex + 32 ..< startIndex + 32 + subType.memoryUsage*length]
                     var subpointer: UInt64 = 32
                     var toReturn = [Any]()
                     for _ in 0 ..< length {
@@ -108,10 +109,10 @@ extension ABIDecoder {
                 } else {
                     // in principle is true for tuple[], so will work for string[] too
                     guard elementItself.count >= 32 else {break}
-                    var dataSlice = elementItself[0 ..< 32]
+                    var dataSlice = elementItself[startIndex ..< startIndex + 32]
                     let length = UInt64(BigUInt(dataSlice))
                     guard elementItself.count >= 32 else {break}
-                    dataSlice = Data(elementItself[32 ..< elementItself.count])
+                    dataSlice = Data(elementItself[startIndex + 32 ..< UInt64(elementItself.count)])
                     var subpointer: UInt64 = 0
                     var toReturn = [Any]()
                     for _ in 0 ..< length {
@@ -179,7 +180,7 @@ extension ABIDecoder {
             }
         case .function:
             guard elementItself.count >= 32 else {break}
-            let dataSlice = elementItself[8 ..< 32]
+            let dataSlice = elementItself[startIndex + 8 ..< startIndex + 32]
             return (dataSlice, type.memoryUsage)
         }
         return (nil, nil)
@@ -209,7 +210,8 @@ extension ABIDecoder {
                 return (nil, nil)
             }
             let elementPointer = UInt64(bn)
-            let elementItself = data[elementPointer ..< UInt64(data.count)]
+            let startIndex = UInt64(data.startIndex)
+            let elementItself = data[startIndex + elementPointer ..< startIndex + UInt64(data.count)]
             let nextElement = pointer + type.memoryUsage
             return (Data(elementItself), nextElement)
         }
