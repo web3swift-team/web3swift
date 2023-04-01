@@ -175,7 +175,7 @@ class KeystoresTests: LocalTestCase {
 
     }
 
-    func testByBIP32keystoreSaveAndDeriva() throws {
+    func testByBIP32keystoreSaveAndDerive() throws {
         let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "", prefixPath: "m/44'/60'/0'")
         XCTAssertNotNil(keystore)

@@ -75,7 +75,7 @@ public class BIP39 {
     /// Returned value is a single string where words are joined by ``BIP39Language/separator``.
     /// Keep in mind that different languages may have different separators.
     /// - Parameters:
-    ///   - bitsOfEntropy: 128 - 12 words, 192 - 18 words, 256 - 24 words in output.
+    ///   - bitsOfEntropy: 128 - 12 words, 160 - 15 words, and up to 256 - 24 words as output. The value must be a multiple of 32.
     ///   - language: words language, default is set to english.
     /// - Returns: mnemonic phrase as a single string containing 12, 15, 18, 21 or 24 words.
     public static func generateMnemonics(bitsOfEntropy: Int, language: BIP39Language = .english) throws -> String? {
