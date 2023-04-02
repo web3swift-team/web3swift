@@ -62,8 +62,8 @@ extension Web3 {
             switch targetAddress {
             case .ethereumAddress(let ethereumAddress):
                 address = ethereumAddress.address
-            case let .ensAddress(ensAdress):
-                address = ensAdress
+            case let .ensAddress(ensAddress):
+                address = ensAddress
             }
             var link = "ethereum:\(address)\(chainID != nil ? "@\(chainID!.description)" : "")"
             if let functionName = functionName, !functionName.isEmpty {
@@ -431,14 +431,14 @@ extension Web3 {
                 var nativeValueArray: [Any] = []
 
                 for value in rawValues {
-                    let intermidiateValue = await parseFunctionArgument(type,
+                    let intermediateValue = await parseFunctionArgument(type,
                                                                         value,
                                                                         chainID: chainID,
                                                                         inputNumber: inputNumber)?
                         .parameter
                         .value
-                    if let intermidiateValue = intermidiateValue {
-                        nativeValueArray.append(intermidiateValue)
+                    if let intermediateValue = intermediateValue {
+                        nativeValueArray.append(intermediateValue)
                     }
                 }
                 nativeValue = nativeValueArray

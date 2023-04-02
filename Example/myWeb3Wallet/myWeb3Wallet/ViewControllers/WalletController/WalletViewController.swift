@@ -102,7 +102,7 @@ class WalletViewController: UIViewController {
             }
         } catch {
 #if DEBUG
-            print("error creating keyStrore")
+            print("error creating keyStore")
             print("Private key error.")
 #endif
             let alert = UIAlertController(title: "Error", message: "Please enter correct Private key", preferredStyle: .alert)
