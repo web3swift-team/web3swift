@@ -326,7 +326,7 @@ extension DefaultContractProtocol {
         if method == "fallback" {
             return nil
         }
-        return methods[method]?.compactMap({ functio n in
+        return methods[method]?.compactMap({ function in
             return function.decodeInputData(data)
         }).first
     }
