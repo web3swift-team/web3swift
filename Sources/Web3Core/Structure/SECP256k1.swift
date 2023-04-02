@@ -189,11 +189,11 @@ extension SECP256K1 {
         } else if v >= 35 && v <= 38 {
             v -= 35
         }
-        let result = serializedSignature.withUnsafeBytes { (serRawBufferPtr: UnsafeRawBufferPointer) -> Int32? in
-            if let serRawPtr = serRawBufferPtr.baseAddress, serRawBufferPtr.count > 0 {
-                let serPtr = serRawPtr.assumingMemoryBound(to: UInt8.self)
+        let result = serializedSignature.withUnsafeBytes { (rawBufferPtr: UnsafeRawBufferPointer) -> Int32? in
+            if let rawPtr = rawBufferPtr.baseAddress, rawBufferPtr.count > 0 {
+                let ptr = rawPtr.assumingMemoryBound(to: UInt8.self)
                 return withUnsafeMutablePointer(to: &recoverableSignature) { (signaturePointer: UnsafeMutablePointer<secp256k1_ecdsa_recoverable_signature>) -> Int32 in
-                    let res = secp256k1_ecdsa_recoverable_signature_parse_compact(context, signaturePointer, serPtr, v)
+                    let res = secp256k1_ecdsa_recoverable_signature_parse_compact(context, signaturePointer, ptr, v)
                     return res
                 }
             } else {
@@ -210,12 +210,12 @@ extension SECP256K1 {
         guard let context = context else { return nil }
         var serializedSignature = Data(repeating: 0x00, count: 64)
         var v: Int32 = 0
-        let result = serializedSignature.withUnsafeMutableBytes { (serSignatureRawBufferPointer: UnsafeMutableRawBufferPointer) -> Int32? in
-            if let serSignatureRawPointer = serSignatureRawBufferPointer.baseAddress, serSignatureRawBufferPointer.count > 0 {
-                let serSignaturePointer = serSignatureRawPointer.assumingMemoryBound(to: UInt8.self)
+        let result = serializedSignature.withUnsafeMutableBytes { (signatureRawBufferPointer: UnsafeMutableRawBufferPointer) -> Int32? in
+            if let signatureRawPointer = signatureRawBufferPointer.baseAddress, signatureRawBufferPointer.count > 0 {
+                let typedSignaturePointer = signatureRawPointer.assumingMemoryBound(to: UInt8.self)
                 return withUnsafePointer(to: &recoverableSignature) { (signaturePointer: UnsafePointer<secp256k1_ecdsa_recoverable_signature>) -> Int32 in
                     withUnsafeMutablePointer(to: &v) { (vPtr: UnsafeMutablePointer<Int32>) -> Int32 in
-                        let res = secp256k1_ecdsa_recoverable_signature_serialize_compact(context, serSignaturePointer, vPtr, signaturePointer)
+                        let res = secp256k1_ecdsa_recoverable_signature_serialize_compact(context, typedSignaturePointer, vPtr, signaturePointer)
                         return res
                     }
                 }
