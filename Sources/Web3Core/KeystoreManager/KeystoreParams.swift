@@ -75,7 +75,7 @@ public struct KeystoreParamsBIP32: AbstractKeystoreParams {
     public var version: Int
     public var isHDWallet: Bool
 
-    public var pathAddressPairs: [PathAddressPair]
+    public internal(set) var pathAddressPairs: [PathAddressPair]
     var rootPath: String?
 
     public init(crypto cr: CryptoParamsV3, id i: String, version ver: Int = 32, rootPath: String? = nil) {
