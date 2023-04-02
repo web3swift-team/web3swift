@@ -17,12 +17,17 @@ extension BigInt: LiteralInitiableFromString { }
 extension BigUInt: LiteralInitiableFromString { }
 
 extension Data: LiteralInitiableFromString {
+    /// Converts hexadecimal string representation of some bytes into actual bytes.
+    /// Notes:
+    ///  - empty string will return `nil`;
+    ///  - empty hex string, meaning it's equal to `"0x"`, will return empty `Data` object.
+    /// - Parameter hex: bytes represented as string.
+    /// - Returns: optional raw bytes.
     public static func fromHex(_ hex: String) -> Data? {
-        let string = hex.lowercased().stripHexPrefix()
-        let array = [UInt8](hex: string)
-        if (array.count == 0) {
-            return (hex == "0x" || hex.isEmpty) ? Data() : nil
-        }
-        return Data(array)
+        let hex = hex.lowercased().trim()
+        guard !hex.isEmpty else { return nil }
+        guard hex != "0x" else { return Data() }
+        let bytes = [UInt8](hex: hex.stripHexPrefix())
+        return bytes.isEmpty ? nil : Data(bytes)
     }
 }
