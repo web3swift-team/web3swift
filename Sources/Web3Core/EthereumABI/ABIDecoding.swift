@@ -181,7 +181,7 @@ extension ABIDecoder {
         case .function:
             guard elementItself.count >= 32 else {break}
             let dataSlice = elementItself[startIndex + 8 ..< startIndex + 32]
-            return (dataSlice, type.memoryUsage)
+            return (Data(dataSlice), type.memoryUsage)
         }
         return (nil, nil)
     }
