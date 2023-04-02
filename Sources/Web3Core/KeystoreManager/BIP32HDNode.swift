@@ -22,13 +22,31 @@ extension UInt32 {
 }
 
 public class HDNode {
+    private static var maxIterationIndex = UInt32(1) << 31
+
+    /// Contains private and public prefixes for serialization.
+    /// See [BIP-32's serialization format](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#serialization-format) for more info.
     public struct HDversion {
-        // swiftlint:disable force_unwrapping
-        public var privatePrefix: Data = Data.fromHex("0x0488ADE4")!
-        public var publicPrefix: Data = Data.fromHex("0x0488B21E")!
-        // swiftlint:enable force_unwrapping
-        public init() {}
+        /// Mainnet public key prefix.
+        /// Value `0x0488B21E` is a string `xpub` encoded as Base-58 and later as hexadecimal.
+        public static let publicPrefix: Data! = Data.fromHex("0x0488B21E")
+
+        /// Mainnet private key prefix.
+        /// Value `0x0488ADE4` is a string `xprv` encoded as Base-58 and later as hexadecimal.
+        public static let privatePrefix: Data! = Data.fromHex("0x0488ADE4")
+
+        public let publicPrefix: Data
+        public let privatePrefix: Data
+
+        /// Default values for `publicPrefix` and `privatePrefix` are
+        /// `HDversion.publicPrefix` and `HDversion.privatePrefix` respectively.
+        public init(public publicPrefix: Data = HDversion.publicPrefix,
+                    private privatePrefix: Data = HDversion.privatePrefix) {
+            self.publicPrefix = publicPrefix
+            self.privatePrefix = privatePrefix
+        }
     }
+
     public var path: String? = "m"
     public var privateKey: Data?
     public var publicKey: Data
@@ -37,14 +55,10 @@ public class HDNode {
     public var parentFingerprint: Data = Data(repeating: 0, count: 4)
     public var childNumber: UInt32 = UInt32(0)
     public var isHardened: Bool {
-        childNumber >= (UInt32(1) << 31)
+        childNumber >= Self.maxIterationIndex
     }
     public var index: UInt32 {
-            if self.isHardened {
-                return childNumber - (UInt32(1) << 31)
-            } else {
-                return childNumber
-            }
+        childNumber - (isHardened ? Self.maxIterationIndex : 0)
     }
     public var hasPrivate: Bool {
         privateKey != nil
@@ -65,7 +79,7 @@ public class HDNode {
         guard data.count == 82 else { return nil }
         let header = data[0..<4]
         var serializePrivate = false
-        if header == HDNode.HDversion().privatePrefix {
+        if header == HDversion.privatePrefix {
             serializePrivate = true
         }
         depth = data[4..<5].bytes[0]
@@ -90,9 +104,10 @@ public class HDNode {
 
     public init?(seed: Data) {
         guard seed.count >= 16 else { return nil }
-        // swiftlint:disable force_unwrapping
-        let hmacKey = "Bitcoin seed".data(using: .ascii)!
-        let hmac = HMAC(key: hmacKey.bytes, variant: HMAC.Variant.sha2(.sha512))
+
+        guard let hmacKey = "Bitcoin seed".data(using: .ascii) else { return nil }
+        let hmac = HMAC(key: hmacKey.bytes, variant: .sha2(.sha512))
+
         guard let entropy = try? hmac.authenticate(seed.bytes), entropy.count == 64 else { return nil }
         let I_L = entropy[0..<32]
         let I_R = entropy[32..<64]
@@ -100,20 +115,19 @@ public class HDNode {
         let privKeyCandidate = Data(I_L)
         guard SECP256K1.verifyPrivateKey(privateKey: privKeyCandidate) else { return nil }
         guard let pubKeyCandidate = SECP256K1.privateToPublic(privateKey: privKeyCandidate, compressed: true) else { return nil }
-        guard pubKeyCandidate.bytes[0] == 0x02 || pubKeyCandidate.bytes[0] == 0x03 else { return nil }
+        guard pubKeyCandidate.bytes.first == 0x02 || pubKeyCandidate.bytes.first == 0x03 else { return nil }
         publicKey = pubKeyCandidate
         privateKey = privKeyCandidate
         depth = 0x00
         childNumber = UInt32(0)
     }
 
-    private static var curveOrder = BigUInt("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", radix: 16)!
-    // swiftlint:enable force_unwrapping
-    public static var defaultPath: String = "m/44'/60'/0'/0"
-    public static var defaultPathPrefix: String = "m/44'/60'/0'"
-    public static var defaultPathMetamask: String = "m/44'/60'/0'/0/0"
-    public static var defaultPathMetamaskPrefix: String = "m/44'/60'/0'/0"
-    public static var hardenedIndexPrefix: UInt32 = (UInt32(1) << 31)
+    private static let curveOrder = BigUInt("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", radix: 16)!
+    public static let defaultPath = "m/44'/60'/0'/0"
+    public static let defaultPathPrefix = "m/44'/60'/0'"
+    public static let defaultPathMetamask = "m/44'/60'/0'/0/0"
+    public static let defaultPathMetamaskPrefix = "m/44'/60'/0'/0"
+    public static var hardenedIndexPrefix: UInt32 { Self.maxIterationIndex }
 }
 
 extension HDNode {
