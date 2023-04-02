@@ -189,12 +189,12 @@ extension ABIDecoder {
     fileprivate static func followTheData(type: ABI.Element.ParameterType, data: Data, pointer: UInt64 = 0) -> (elementEncoding: Data?, nextElementPointer: UInt64?) {
         if type.isStatic {
             guard data.count >= pointer + type.memoryUsage else {return (nil, nil)}
-            let elementItself = data[data.indices.startIndex + Int(pointer) ..< data.indices.startIndex + Int(pointer + type.memoryUsage)]
+            let elementItself = data[data.startIndex + Int(pointer) ..< data.startIndex + Int(pointer + type.memoryUsage)]
             let nextElement = pointer + type.memoryUsage
             return (Data(elementItself), nextElement)
         } else {
             guard data.count >= pointer + type.memoryUsage else {return (nil, nil)}
-            let dataSlice = data[data.indices.startIndex + Int(pointer) ..< data.indices.startIndex + Int(pointer + type.memoryUsage)]
+            let dataSlice = data[data.startIndex + Int(pointer) ..< data.startIndex + Int(pointer + type.memoryUsage)]
             let bn = BigUInt(dataSlice)
             if bn > UInt64.max || bn >= data.count {
                 // there are ERC20 contracts that use bytes32 instead of string. Let's be optimistic and return some data

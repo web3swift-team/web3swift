@@ -210,8 +210,8 @@ extension ContractProtocol {
 
     func decodeInputData(_ data: Data) -> [String: Any]? {
         guard data.count >= 4 else { return nil }
-        let methodId = data[data.indices.startIndex ..< data.indices.startIndex + 4].toHexString()
-        let data = data[(data.indices.startIndex + 4)...]
+        let methodId = data[data.startIndex ..< data.startIndex + 4].toHexString()
+        let data = data[(data.startIndex + 4)...]
         return decodeInputData(methodId, data: data)
     }
 }
@@ -326,21 +326,21 @@ extension DefaultContractProtocol {
         if method == "fallback" {
             return nil
         }
-        return methods[method]?.compactMap({ function in
+        return methods[method]?.compactMap({ functio n in
             return function.decodeInputData(data)
         }).first
     }
 
     public func decodeInputData(_ data: Data) -> [String: Any]? {
         guard data.count % 32 == 4 else { return nil }
-        let methodSignature = data[data.indices.startIndex ..< data.indices.startIndex + 4].toHexString().addHexPrefix().lowercased()
+        let methodSignature = data[data.startIndex ..< data.startIndex + 4].toHexString().addHexPrefix().lowercased()
 
         guard let function = methods[methodSignature]?.first else { return nil }
-        return function.decodeInputData(Data(data[data.indices.startIndex + 4 ..< data.indices.startIndex + data.count]))
+        return function.decodeInputData(Data(data[data.startIndex + 4 ..< data.startIndex + data.count]))
     }
 
     public func getFunctionCalled(_ data: Data) -> ABI.Element.Function? {
         guard data.count >= 4 else { return nil }
-        return methods[data[data.indices.startIndex ..< data.indices.startIndex + 4].toHexString().addHexPrefix()]?.first
+        return methods[data[data.startIndex ..< data.startIndex + 4].toHexString().addHexPrefix()]?.first
     }
 }
