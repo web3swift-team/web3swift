@@ -1,14 +1,14 @@
 # Contribution guide
 ## Version convention
 We’re conforming [default versions convention](https://semver.org/).
-So in the `1.0.0` version each position means follow:
-- 1.\*.* — **major release**, includes API groundbreaking changes (ie: your old code will not work).
-- \*.1.* — **minor release**, we’ve added some new feature to the lib, but we didn’t break something in anyway (ie: everything will work as expected without any moves after update).
-- \*.*.1 — **patch release**, we’re haven’t add any breaking changes or even new features for the user, but we’ve fixed some bugs or rewrote something internal (ie: you should not event mention that anything were changed in the lib).
+So in the `1.0.0` version, each position means the following:
+- 1.\*.* — **major release**. Includes breaking changes. As the result, your old code will break with the new version;
+- \*.1.* — **minor release**. Added one or more new features to the lib and no breaking changes were introduced. Everything will work as expected, no changes are required in your projects;
+- \*.*.1 — **patch release**. Fixed one or more bugs, performed code refactoring, updated documentation or did something with the existing code base that doesn’t include new features nor breaks current ones.
 
-This library yet living within **three weeks minor release** schedule. Also please keep in mind that in sake of avoiding complex merge conflicts, we’re currently taking only **one big feature** in release, so if you want to take some, please drop us a message somewhere to avoiding reworking it after it’ll be broken by some massive merge.
+Though, this library is living within the **three weeks minor release** schedule, please keep in mind that for the sake of avoiding complex merge conflicts, we’re currently taking only **one big feature** per release, so if you want to take some, please drop us a message somewhere to avoiding reworking it after it’ll be broken by some massive merge.
 
-Critical bug fixes are should be marked with appropriate label in PR and should be proceed **within one week** till patch ’ll be released (at least we’ll try our best to made that).
+Critical bug fixes must be marked with the appropriate label in PR and should be processed **within one week** (at least we’ll try our best to make that).
 
 ## What task to choose
 Please take it from the [roadmap](https://hackmd.io/G5znP3xAQY-BVc1X8Y1jSg) or from the [opened issues](https://github.com/skywinder/web3swift/issues?q=is:issue+is:open+sort:updated-desc "").
