@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 // FIXME: Rewrite this to CodableTransaction
 
@@ -41,7 +41,7 @@ public class ReadOperation {
         let data: Data = try await self.web3.eth.callTransaction(transaction)
         if self.method == "fallback" {
             let resultHex = data.toHexString().addHexPrefix()
-            return ["result": resultHex as Any]
+            return ["result": resultHex]
         }
         guard let decodedData = self.contract.decodeReturnData(self.method, data: data) else {
             throw Web3Error.processingError(desc: "Can not decode returned parameters")

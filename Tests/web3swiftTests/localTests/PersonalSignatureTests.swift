@@ -6,7 +6,7 @@
 import XCTest
 import CryptoSwift
 import BigInt
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -19,14 +19,10 @@ class PersonalSignatureTests: XCTestCase {
         web3.addKeystoreManager(keystoreManager)
         let message = "Hello World"
         let expectedAddress = keystoreManager.addresses![0]
-        print(expectedAddress)
+
         let signature = try await web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
         let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: signature)!
-        print("V = " + String(unmarshalledSignature.v))
-        print("R = " + Data(unmarshalledSignature.r).toHexString())
-        print("S = " + Data(unmarshalledSignature.s).toHexString())
-        print("Personal hash = " + Utilities.hashPersonalMessage(message.data(using: .utf8)!)!.toHexString())
-        let signer = try web3.personal.ecrecover(personalMessage: message.data(using: .utf8)!, signature: signature)
+        let signer = web3.personal.recoverAddress(message: message.data(using: .utf8)!, signature: signature)
         XCTAssert(expectedAddress == signer, "Failed to sign personal message")
     }
 
@@ -42,13 +38,12 @@ class PersonalSignatureTests: XCTestCase {
         let allAddresses = try await web3.eth.ownedAccounts()
         deployTx.transaction.from = allAddresses[0]
         let policies = Policies(gasLimitPolicy: .manual(3000000))
-        let deployResult = try await deployTx.writeToChain(password: "web3swift", policies: policies)
+        let deployResult = try await deployTx.writeToChain(password: "web3swift", policies: policies, sendRaw: false)
         let txHash = Data.fromHex(deployResult.hash.stripHexPrefix())!
 
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(txHash)
-        print(receipt)
 
         switch receipt.status {
         case .notYetProcessed:
@@ -63,23 +58,19 @@ class PersonalSignatureTests: XCTestCase {
         web3.addKeystoreManager(keystoreManager)
         let message = "Hello World"
         let expectedAddress = keystoreManager.addresses![0]
-        print(expectedAddress)
+
         let signature = try await web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
         let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: signature)!
-        print("V = " + String(unmarshalledSignature.v))
-        print("R = " + Data(unmarshalledSignature.r).toHexString())
-        print("S = " + Data(unmarshalledSignature.s).toHexString())
-        print("Personal hash = " + Utilities.hashPersonalMessage(message.data(using: .utf8)!)!.toHexString())
 
         // Calling contract
         contract = web3.contract(abiString, at: receipt.contractAddress!)!
-        var tx = contract.createReadOperation("hashPersonalMessage", parameters: [message as AnyObject])
+        var tx = contract.createReadOperation("hashPersonalMessage", parameters: [message])
         tx?.transaction.from = expectedAddress
         var result = try await tx!.callContractMethod()
         guard let hash = result["hash"]! as? Data else { return XCTFail() }
         XCTAssert(Utilities.hashPersonalMessage(message.data(using: .utf8)!)! == hash)
 
-        tx = contract.createReadOperation("recoverSigner", parameters: [message, unmarshalledSignature.v, Data(unmarshalledSignature.r), Data(unmarshalledSignature.s)] as [AnyObject])
+        tx = contract.createReadOperation("recoverSigner", parameters: [message, unmarshalledSignature.v, Data(unmarshalledSignature.r), Data(unmarshalledSignature.s)])
         tx?.transaction.from = expectedAddress
         result = try await tx!.callContractMethod()
         guard let signer = result["signer"]! as? EthereumAddress else { return XCTFail() }

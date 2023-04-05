@@ -1,5 +1,5 @@
 import XCTest
-import Core
+import Web3Core
 @testable import web3swift
 
 class EIP712Tests: LocalTestCase {
@@ -17,8 +17,8 @@ class EIP712Tests: LocalTestCase {
             payable: false)
         let object = ABI.Element.function(function)
         let safeTxData = object.encodeParameters([
-            EthereumAddress("0x41B5844f4680a8C38fBb695b7F9CFd1F64474a72")! as AnyObject,
-            amountLinen as AnyObject
+            EthereumAddress("0x41B5844f4680a8C38fBb695b7F9CFd1F64474a72")!,
+            amountLinen
         ])!
         let operation: EIP712.UInt8 = 1
         let safeTxGas = EIP712.UInt256(250000)
@@ -68,8 +68,8 @@ class EIP712Tests: LocalTestCase {
             payable: false)
         let object = ABI.Element.function(function)
         let safeTxData = object.encodeParameters([
-            EthereumAddress("0x41B5844f4680a8C38fBb695b7F9CFd1F64474a72")! as AnyObject,
-            amount as AnyObject
+            EthereumAddress("0x41B5844f4680a8C38fBb695b7F9CFd1F64474a72")!,
+            amount
         ])!
         let operation: EIP712.UInt8 = 1
         let safeTxGas = EIP712.UInt256(250000)

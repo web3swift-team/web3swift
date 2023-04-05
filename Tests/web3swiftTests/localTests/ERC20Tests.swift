@@ -4,7 +4,7 @@
 //
 import XCTest
 import BigInt
-import Core
+import Web3Core
 
 @testable import web3swift
 
@@ -26,11 +26,10 @@ class ERC20Tests: LocalTestCase {
 
         let addressOfUser = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let contract = web3.contract(Web3.Utils.erc20ABI, at: receipt.contractAddress!, abiVersion: 2)!
-        guard let readTX = contract.createReadOperation("balanceOf", parameters: [addressOfUser] as [AnyObject]) else {return XCTFail()}
+        guard let readTX = contract.createReadOperation("balanceOf", parameters: [addressOfUser]) else { return XCTFail() }
         readTX.transaction.from = addressOfUser
-        let tokenBalance = try await readTX.callContractMethod()
-        guard let bal = tokenBalance["0"] as? BigUInt else {return XCTFail()}
-        print(String(bal))
+        let tokenBalanceResponse = try await readTX.callContractMethod()
+        XCTAssertNotNil(tokenBalanceResponse["0"] as? BigUInt)
     }
 
     // FIXME: Make me work
@@ -50,7 +49,7 @@ class ERC20Tests: LocalTestCase {
 //        let method = "transfer"
 //        let tx = contract.write(
 //          method,
-//          parameters: [toAddress, amount] as [AnyObject],
+//          parameters: [toAddress, amount],
 //          extraData: Data(),
 //          transaction: options)!
 //    }

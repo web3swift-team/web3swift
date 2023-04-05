@@ -5,7 +5,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 // extension web3.web3contract {
 //    /// An event parser to fetch events produced by smart-contract related transactions. Should not be constructed manually, but rather by calling the corresponding function on the web3contract object.
@@ -205,7 +205,7 @@ import Core
 //
 //        let decodedLogs = response.result.compactMap { (log) -> EventParserResult? in
 //            let (n, d) = self.contract.parseEvent(log)
-//            guard let evName = n, let evData = d else {return nil}
+//            guard let evName = n, let evData = d else { return nil }
 //            var res = EventParserResult(eventName: evName, transactionReceipt: nil, contractAddress: log.address, decodedResult: evData)
 //            res.eventLog = log
 //            return res
