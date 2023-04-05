@@ -4,35 +4,35 @@
 //
 
 import XCTest
-import Core
+import Web3Core
 
 @testable import web3swift
 
 // MARK: Works only with network connection
 class ENSTests: XCTestCase {
-    
+
     func testDomainNormalization() throws {
-        let normalizedString = NameHash.normalizeDomainName("example.ens")
-        print(normalizedString!)
+        let normalizedString = NameHash.normalizeDomainName("Example.ENS")
+        XCTAssertEqual(normalizedString, "example.ens")
     }
-    
+
     func testNameHash() throws {
         XCTAssertEqual(NameHash.nameHash(""), Data.fromHex("0x0000000000000000000000000000000000000000000000000000000000000000"))
         XCTAssertEqual(NameHash.nameHash("eth"), Data.fromHex("0x93cdeb708b7545dc668eb9280176169d1c33cfd8ed6f04690a0bcc88a93fc4ae"))
         XCTAssertEqual(NameHash.nameHash("foo.eth"), Data.fromHex("0xde9b09fd7c5f901e23a3f19fecc54828e9c848539801e86591bd9801b019f84f"))
     }
-    
+
     func testResolverAddress() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let address = try await ens?.registry.getResolver(forDomain: domain).resolverContractAddress
-        print(address as Any)
+
         XCTAssertEqual(address?.address.lowercased(), "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41")
     }
 
     func testResolver() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let address = try await ens?.getAddress(forNode: domain)
@@ -40,14 +40,14 @@ class ENSTests: XCTestCase {
     }
 
     func testSupportsInterface() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try await ens?.registry.getResolver(forDomain: domain)
-        let isAddrSupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.addr.hash())
-        let isNameSupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.name.hash())
-        let isABIsupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.ABI.hash())
-        let isPubkeySupports = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.pubkey.hash())
+        let isAddrSupports = try await resolver?.supportsInterface(interfaceID: .addr)
+        let isNameSupports = try await resolver?.supportsInterface(interfaceID: .name)
+        let isABIsupports = try await resolver?.supportsInterface(interfaceID: .ABI)
+        let isPubkeySupports = try await resolver?.supportsInterface(interfaceID: .pubkey)
         XCTAssertEqual(isAddrSupports, true)
         XCTAssertEqual(isNameSupports, true)
         XCTAssertEqual(isABIsupports, true)
@@ -55,11 +55,11 @@ class ENSTests: XCTestCase {
     }
 
     func testABI() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try await ens?.registry.getResolver(forDomain: domain)
-        if let isABIsupported = try await resolver?.supportsInterface(interfaceID: ENS.Resolver.InterfaceName.ABI.hash()),
+        if let isABIsupported = try await resolver?.supportsInterface(interfaceID: .ABI),
             isABIsupported {
             let res = try await resolver?.getContractABI(forNode: domain, contentType: .zlibCompressedJSON)
             XCTAssert(res?.0 == 0)
@@ -70,7 +70,7 @@ class ENSTests: XCTestCase {
     }
 
     func testOwner() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let owner = try await ens?.registry.getOwner(node: domain)
@@ -78,15 +78,15 @@ class ENSTests: XCTestCase {
     }
 
     func testTTL() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        let ens = ENS(web3: web3)
+        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let ens = try XCTUnwrap(ENS(web3: web3))
         let domain = "somename.eth"
-        let ttl = try await ens?.registry.getTTL(node: domain)
-        print(ttl!.description)
+        let ttl = try await ens.registry.getTTL(node: domain)
+        XCTAssertGreaterThanOrEqual(ttl, 0)
     }
 
     func testGetAddress() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try await ens?.registry.getResolver(forDomain: domain)
@@ -95,7 +95,7 @@ class ENSTests: XCTestCase {
     }
 
     func testGetPubkey() async throws {
-        let web3 = await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let ens = ENS(web3: web3)
         let domain = "somename.eth"
         let resolver = try await ens?.registry.getResolver(forDomain: domain)

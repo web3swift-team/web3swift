@@ -7,7 +7,7 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 /// EIP-1559 Base fee extension
 ///
@@ -79,7 +79,7 @@ public extension Web3 {
             let expectedBaseFeePerGas = parentBaseFee + baseFeePerGasDelta
 
             return expectedBaseFeePerGas
-        } else if parent.gasUsed < parentGasTarget  {
+        } else if parent.gasUsed < parentGasTarget {
             // Otherwise if the parent block used less gas than its target, the baseFee should decrease.
             let gasUsedDelta = parentGasTarget - parent.gasUsed
             let baseFeePerGasDelta = parentBaseFee * gasUsedDelta / parentGasTarget / Web3.BaseFeeChangeDenominator
@@ -138,15 +138,15 @@ public extension Web3 {
         /// Block number: 13_773_000
         case ArrowGlacier
 
-        var mainNetFisrtBlockNumber: BigUInt {
+        var mainNetFirstBlockNumber: BigUInt {
             switch self {
-                case .Byzantium: return 4_370_000
-                case .Constantinople: return 7_280_000
-                case .Istanbul: return 9_069_000
-                case .MuirGlacier: return 9_200_000
-                case .Berlin: return 12_244_000
-                case .London: return 12_965_000
-                case .ArrowGlacier: return 13_773_000
+            case .Byzantium: return 4_370_000
+            case .Constantinople: return 7_280_000
+            case .Istanbul: return 9_069_000
+            case .MuirGlacier: return 9_200_000
+            case .Berlin: return 12_244_000
+            case .London: return 12_965_000
+            case .ArrowGlacier: return 13_773_000
             }
         }
     }
@@ -154,20 +154,20 @@ public extension Web3 {
     static func getChainVersion(of block: BigUInt) -> MainChainVersion {
         // Iterate given block number over each ChainVersion block numbers
         // to get the block's ChainVersion.
-        if block < MainChainVersion.Constantinople.mainNetFisrtBlockNumber {
+        if block < MainChainVersion.Constantinople.mainNetFirstBlockNumber {
             return .Byzantium
-        // ~= means included in a given range
-        } else if MainChainVersion.Constantinople.mainNetFisrtBlockNumber..<MainChainVersion.Istanbul.mainNetFisrtBlockNumber ~= block {
+            // ~= means included in a given range
+        } else if MainChainVersion.Constantinople.mainNetFirstBlockNumber..<MainChainVersion.Istanbul.mainNetFirstBlockNumber ~= block {
             return .Constantinople
-        } else if MainChainVersion.Istanbul.mainNetFisrtBlockNumber..<MainChainVersion.MuirGlacier.mainNetFisrtBlockNumber ~= block {
+        } else if MainChainVersion.Istanbul.mainNetFirstBlockNumber..<MainChainVersion.MuirGlacier.mainNetFirstBlockNumber ~= block {
             return .Istanbul
-        } else if MainChainVersion.MuirGlacier.mainNetFisrtBlockNumber..<MainChainVersion.Berlin.mainNetFisrtBlockNumber ~= block {
+        } else if MainChainVersion.MuirGlacier.mainNetFirstBlockNumber..<MainChainVersion.Berlin.mainNetFirstBlockNumber ~= block {
             return .MuirGlacier
-        } else if MainChainVersion.Berlin.mainNetFisrtBlockNumber..<MainChainVersion.London.mainNetFisrtBlockNumber ~= block {
+        } else if MainChainVersion.Berlin.mainNetFirstBlockNumber..<MainChainVersion.London.mainNetFirstBlockNumber ~= block {
             return .Berlin
-        } else if MainChainVersion.London.mainNetFisrtBlockNumber..<MainChainVersion.ArrowGlacier.mainNetFisrtBlockNumber ~= block {
+        } else if MainChainVersion.London.mainNetFirstBlockNumber..<MainChainVersion.ArrowGlacier.mainNetFirstBlockNumber ~= block {
             return .London
-        } else if block >= MainChainVersion.ArrowGlacier.mainNetFisrtBlockNumber {
+        } else if block >= MainChainVersion.ArrowGlacier.mainNetFirstBlockNumber {
             // Pass to the default return.
         }
         return .ArrowGlacier
@@ -175,8 +175,8 @@ public extension Web3 {
 }
 
 extension Web3.MainChainVersion: Comparable {
-    public static func < (lhs: Web3.MainChainVersion, rhs: Web3.MainChainVersion) -> Bool { return lhs.mainNetFisrtBlockNumber < rhs.mainNetFisrtBlockNumber }
- }
+    public static func < (lhs: Web3.MainChainVersion, rhs: Web3.MainChainVersion) -> Bool { return lhs.mainNetFirstBlockNumber < rhs.mainNetFirstBlockNumber }
+}
 
 extension Block {
     /// Returns chain version of mainnet block with such number

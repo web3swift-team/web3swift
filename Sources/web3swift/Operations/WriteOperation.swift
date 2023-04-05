@@ -5,41 +5,41 @@
 
 import Foundation
 import BigInt
-import Core
+import Web3Core
 
 /// Wrapper for `EthererumTransaction.data` property appropriate encoding.
 public class WriteOperation: ReadOperation {
 
     // FIXME: Rewrite this to CodableTransaction
-    public func writeToChain(password: String) async throws -> TransactionSendingResult {
-        await transaction.resolve(provider: web3.provider)
-        if let attachedKeystoreManager = self.web3.provider.attachedKeystoreManager {
-            do {
-                try Web3Signer.signTX(transaction: &transaction,
-                                      keystore: attachedKeystoreManager,
-                                      account: transaction.from ?? transaction.sender ?? EthereumAddress.contractDeploymentAddress(),
-                                      password: password)
-            } catch {
-                throw Web3Error.inputError(desc: "Failed to locally sign a transaction")
-            }
-            guard let transactionData = transaction.encode(for: .transaction) else { throw Web3Error.dataError }
-            return try await web3.eth.send(raw: transactionData)
-        }
-        // MARK: Sending Data flow
-        return try await web3.eth.send(transaction)
-    }
+    /// Sends signed or unsigned transaction for write operation.
+    /// - Parameters:
+    ///   - password: Password for the private key in the keystore manager attached to the provider
+    ///   you set to `web3` passed in the initializer.
+    ///   - policies: Determining the behaviour of how transaction attributes like gas limit and
+    ///   nonce are resolved. Default value is ``Policies/auto``.
+    ///   - sendRaw: If set to `true` transaction will be signed and sent using `eth_sendRawTransaction`.
+    ///   Otherwise, no signing attempts will take place and the `eth_sendTransaction` RPC will be used instead.
+    ///   Default value is `true`.
+    public func writeToChain(password: String, policies: Policies = .auto, sendRaw: Bool = true) async throws -> TransactionSendingResult {
+        try await policyResolver.resolveAll(for: &transaction, with: policies)
 
-    // FIXME: Rewrite this to CodableTransaction
-    func nonce(for policy: CodableTransaction.NoncePolicy, from: EthereumAddress) async throws -> BigUInt {
-        switch policy {
-        case .latest:
-            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .latest)
-        case .pending:
-            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .pending)
-        case .earliest:
-            return try await self.web3.eth.getTransactionCount(for: from, onBlock: .earliest)
-        case .exact(let nonce):
-            return nonce
+        guard sendRaw else {
+            return try await web3.eth.send(transaction)
         }
+
+        guard let attachedKeystoreManager = web3.provider.attachedKeystoreManager else {
+            throw Web3Error.inputError(desc: "Failed to locally sign a transaction. Web3 provider doesn't have keystore attached.")
+        }
+
+        do {
+            try Web3Signer.signTX(transaction: &transaction,
+                                  keystore: attachedKeystoreManager,
+                                  account: transaction.from ?? transaction.sender ?? EthereumAddress.contractDeploymentAddress(),
+                                  password: password)
+        } catch {
+            throw Web3Error.inputError(desc: "Failed to locally sign a transaction. \(error.localizedDescription)")
+        }
+        guard let transactionData = transaction.encode(for: .transaction) else { throw Web3Error.dataError }
+        return try await web3.eth.send(raw: transactionData)
     }
 }

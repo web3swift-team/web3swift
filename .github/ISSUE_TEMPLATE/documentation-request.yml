@@ -1,0 +1,24 @@
+name: Documentation Request
+description: Suggest documentation you would like added
+labels: ['documentation']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this documentation request!
+  - type: textarea
+    id: area
+    attributes:
+      label: What piece of the framework are having the lack of docs?
+      description: Bring the link, either type, either method name that is having the lack of docs
+      placeholder: "`Sources/Core/EthereumABI.swift:ABIElementPropertiesProtocol` or `ABIElementPropertiesProtocol`"
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: What bit of docs would you like to have?
+      description: A clear and concise description of why this documentation needs to be improved.
+      placeholder: There's a lack of docs that covers both the intent of this type and the way how it should be used within client code.
+    validations:
+      required: true
