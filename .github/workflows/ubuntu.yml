@@ -43,12 +43,12 @@ jobs:
       run: swift build
     - name: Install ganache
       run: npm install ganache --global
+    - name: install nc
+      run: apt-get update && apt-get install -y netcat
     - name: Start ganache in background
       run: ganache &
     - name: Wait till ganache starts
       run: sleep 1
-    - name: install nc
-      run: apt-get update && apt-get install -y netcat
     - name: Ping
       run: nc -vz 127.0.0.1 8545
     - name: Run tests
