@@ -10,6 +10,7 @@ on:
       - develop
       - hotfix
       - unstable
+      - linux-support
     paths:
       - Packag*.swift
       - web3swift.podspec
