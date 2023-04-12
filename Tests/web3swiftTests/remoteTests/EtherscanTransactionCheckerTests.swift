@@ -84,7 +84,7 @@ final class EtherscanTransactionCheckerErrorTests: XCTestCase {
 
 final private class URLSessionMock: URLSessionProxy {
     #if os(Linux)
-    var response: (Data, URLResponse) = (Data(), URLResponse(url: URL(filePath: "/"), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)!)
+    var response: (Data, URLResponse) = (Data(), URLResponse(url: URL(string: "/")!, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)!)
     #else
     var response: (Data, URLResponse) = (Data(), URLResponse())
     #endif
