@@ -23,6 +23,7 @@ on:
       - master
       - develop
       - unstable
+      - MoonfishApp/develop
 
 jobs:
   build:
