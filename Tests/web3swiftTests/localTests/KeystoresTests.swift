@@ -27,7 +27,7 @@ class KeystoresTests: LocalTestCase {
     }
 
     func testBIP39SeedAndMnemConversions() throws {
-        let seed = Data.randomBytes(length: 32)!
+        let seed = try Data.randomBytes(count: 32)
         let mnemonics = BIP39.generateMnemonicsFromEntropy(entropy: seed)
         let recoveredSeed = BIP39.mnemonicsToEntropy(mnemonics!, language: .english)
         XCTAssert(seed == recoveredSeed)
@@ -263,7 +263,7 @@ class KeystoresTests: LocalTestCase {
     }
 
     func testKeystoreDerivationTime() throws {
-        let privateKey = Data.randomBytes(length: 32)!
+        let privateKey = try Data.randomBytes(count: 32)
         measure {
             let ks = try! EthereumKeystoreV3(privateKey: privateKey, password: "TEST")!
             let account = ks.addresses!.first!
@@ -272,7 +272,7 @@ class KeystoresTests: LocalTestCase {
     }
 
     func testSingleScryptDerivation() throws {
-        let privateKey = Data.randomBytes(length: 32)!
+        let privateKey = try Data.randomBytes(count: 32)
         _ = try! EthereumKeystoreV3(privateKey: privateKey, password: "TEST")!
     }
 
