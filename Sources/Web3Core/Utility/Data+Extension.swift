@@ -55,7 +55,7 @@ extension Data {
     /// - Parameter count: how many bytes to generate. Value below or equal to 0 will throw an error.
     /// - Parameter useOpenSSL: **has no effect on Linux and Windows**. When set to `true` forces the use of external executable `openssl`. It's your responsibility to make sure openssl is installed on this machine. By default set to `false`. To install follow [the official guide](https://www.openssl.org/source/ ).
     /// - Returns: random bytes or throws an error,
-    public static func randomBytes(count: Int, useOpenSSL: Bool = true) throws -> Data {
+    public static func randomBytes(count: Int, useOpenSSL: Bool = false) throws -> Data {
         guard count > 0 else { throw Web3Error.valueError(desc: "Cannot generate \(count) random bytes.") }
 
         #if !(os(Linux) || os(Windows))
