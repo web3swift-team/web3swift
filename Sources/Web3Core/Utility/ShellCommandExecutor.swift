@@ -1,22 +1,18 @@
 //
-//  BashCommandExecutor.swift
+//  ShellCommandExecutor.swift
 //
 //  Created by JeneaVranceanu on 05.04.2023.
 //
 
 import Foundation
 
-typealias ShellCommandExecutor = BashCommandExecutor
-
-internal protocol CommandExecuting {
-    func run(commandName: String, arguments: [String]) throws -> String
-}
+internal typealias ShellCommandExecutor = BashCommandExecutor
 
 internal enum ShellError: Error {
     case commandNotFound(name: String)
 }
 
-internal struct BashCommandExecutor: CommandExecuting {
+internal struct BashCommandExecutor {
     func run(commandName: String, arguments: [String] = []) throws -> String {
         var arguments = arguments
         var command = commandName
