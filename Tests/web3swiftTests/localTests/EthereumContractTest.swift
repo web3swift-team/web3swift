@@ -66,8 +66,8 @@ class EthereumContractTest: LocalTestCase {
         let web3 = try await Web3.new(LocalTestCase.url)
         let contract = try XCTUnwrap(web3.contract(EthereumContractTest.overloadedFunctionsABI, at: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")))
         let parameters: [Any] = [
-            [Data.randomBytes(length: 32), Data.randomBytes(length: 32)],
-            [Data.randomBytes(length: 32), Data.randomBytes(length: 32)]
+            [try Data.randomBytes(count: 32), try Data.randomBytes(count: 32)],
+            [try Data.randomBytes(count: 32), try Data.randomBytes(count: 32)]
         ]
         let functionNameWithParameters = "setData(bytes32[],bytes[])"
         let transaction = contract.createWriteOperation(functionNameWithParameters, parameters: parameters)
@@ -88,7 +88,7 @@ class EthereumContractTest: LocalTestCase {
     func test_encodeMethodBasedOnHexSignature() async throws {
         let web3 = try await Web3.new(LocalTestCase.url)
         let contract = try XCTUnwrap(web3.contract(EthereumContractTest.overloadedFunctionsABI, at: EthereumAddress("0x6394b37Cf80A7358b38068f0CA4760ad49983a1B")))
-        let parameters: [Any] = [Data.randomBytes(length: 32), Data.randomBytes(length: 32)]
+        let parameters: [Any] = [try Data.randomBytes(count: 32), try Data.randomBytes(count: 32)]
         let functionSignature = getFuncSignature("setData(bytes32,bytes)")
         let transaction = contract.createWriteOperation(functionSignature, parameters: parameters)
         XCTAssertNotNil(transaction)

@@ -1,0 +1,55 @@
+# This workflow will build a Swift project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
+
+name: Ubuntu
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - hotfix
+      - unstable
+      - linux-support
+    paths:
+      - Packag*.swift
+      - web3swift.podspec
+      - Cartfile
+      - Sources/**
+      - 'Tests/**'
+      - 'web3swift*/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches:
+      - master
+      - develop
+      - unstable
+      - MoonfishApp/develop
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    container: swift:5.7-focal
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - name: Resolve dependencies
+      run: swift package resolve
+    - name: Build
+      run: swift build
+    - name: Install ganache
+      run: npm install ganache --global
+    - name: install nc
+      run: apt-get update && apt-get install -y netcat
+    - name: Start ganache in background
+      run: ganache &
+    - name: Wait till ganache starts
+      run: sleep 1
+    - name: Ping
+      run: nc -vz 127.0.0.1 8545
+    - name: Run tests
+      run: swift test

@@ -7,6 +7,9 @@
 
 import Foundation
 import BigInt
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 extension APIRequest {
     public static func sendRequest<Result>(with provider: Web3Provider, for call: APIRequest) async throws -> APIResponse<Result> {

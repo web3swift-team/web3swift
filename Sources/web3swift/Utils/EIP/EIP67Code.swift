@@ -4,7 +4,9 @@
 //
 
 import Foundation
+#if !os(Linux)
 import CoreImage
+#endif
 import BigInt
 import Web3Core
 
@@ -77,11 +79,14 @@ extension Web3 {
             return mainPart
         }
 
+        #if !os(Linux)
         public func toImage(scale: Double = 1.0) -> CIImage {
             return EIP67CodeGenerator.createImage(from: self, scale: scale)
         }
+        #endif
     }
 
+    #if !os(Linux)
     public struct EIP67CodeGenerator {
 
         public static func createImage(from: EIP67Code, scale: Double = 1.0) -> CIImage {
@@ -94,6 +99,7 @@ extension Web3 {
             return image
         }
     }
+    #endif
 
     public struct EIP67CodeParser {
         public static func parse(_ data: Data) -> EIP67Code? {

@@ -25,7 +25,7 @@ final class BIP39Tests: XCTestCase {
     }
 
     func testBIP39SeedAndMnemConversions() throws {
-        let seed = Data.randomBytes(length: 32)!
+        let seed = try Data.randomBytes(count: 32)
         let mnemonics = BIP39.generateMnemonicsFromEntropy(entropy: seed)
         let recoveredSeed = BIP39.mnemonicsToEntropy(mnemonics!, language: .english)
         XCTAssert(seed == recoveredSeed)
@@ -95,7 +95,7 @@ final class BIP39Tests: XCTestCase {
     }
 
     func testBIP39SeedAndMnemConversionsArray() throws {
-        let seed = Data.randomBytes(length: 32)!
+        let seed = try Data.randomBytes(count: 32)
         let mnemonics = BIP39.generateMnemonicsFrom(entropy: seed)
         let recoveredSeed = BIP39.mnemonicsToEntropy(mnemonics, language: .english)
         XCTAssert(seed == recoveredSeed)

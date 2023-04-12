@@ -95,13 +95,10 @@ public class BIP39 {
     }
 
     private static func entropyOf(size: Int) throws -> Data {
-        guard
-            size >= 128 && size <= 256 && size.isMultiple(of: 32),
-            let entropy = Data.randomBytes(length: size/8)
-        else {
+        guard size >= 128 && size <= 256 && size.isMultiple(of: 32) else {
             throw AbstractKeystoreError.noEntropyError
         }
-        return entropy
+        return try Data.randomBytes(count: size / 8)
     }
 
     static func bitarray(from data: Data) -> String {

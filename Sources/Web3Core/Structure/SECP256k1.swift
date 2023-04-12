@@ -244,7 +244,7 @@ extension SECP256K1 {
             return nil
         }
         var recoverableSignature: secp256k1_ecdsa_recoverable_signature = secp256k1_ecdsa_recoverable_signature()
-        guard let extraEntropy = SECP256K1.randomBytes(length: 32) else { return nil }
+        guard let extraEntropy = try? Data.randomBytes(count: 32) else { return nil }
         let result = hash.withUnsafeBytes { hashRBPointer -> Int32? in
             if let hashRPointer = hashRBPointer.baseAddress, hashRBPointer.count > 0 {
                 let hashPointer = hashRPointer.assumingMemoryBound(to: UInt8.self)
@@ -303,7 +303,7 @@ extension SECP256K1 {
 
     public static func generatePrivateKey() -> Data? {
         for _ in 0...1024 {
-            guard let keyData = SECP256K1.randomBytes(length: 32) else {
+            guard let keyData = try? Data.randomBytes(count: 32) else {
                 continue
             }
             guard SECP256K1.verifyPrivateKey(privateKey: keyData) else {
@@ -336,26 +336,6 @@ extension SECP256K1 {
         completeSignature.append(s)
         completeSignature.append(v)
         return completeSignature
-    }
-
-    internal static func randomBytes(length: Int) -> Data? {
-        for _ in 0...1024 {
-            var data = Data(repeating: 0, count: length)
-            let result = data.withUnsafeMutableBytes { mutableRBBytes -> Int32? in
-                if let mutableRBytes = mutableRBBytes.baseAddress, mutableRBBytes.count > 0 {
-                    let mutableBytes = mutableRBytes.assumingMemoryBound(to: UInt8.self)
-                    return SecRandomCopyBytes(kSecRandomDefault, length, mutableBytes)
-                } else {
-                    return nil
-                }
-            }
-            if let res = result, res == errSecSuccess {
-                return data
-            } else {
-                continue
-            }
-        }
-        return nil
     }
 
     internal static func toByteArray<T>(_ value: T) -> [UInt8] {
