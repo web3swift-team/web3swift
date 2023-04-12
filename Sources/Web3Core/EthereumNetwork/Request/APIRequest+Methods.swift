@@ -5,11 +5,11 @@
 //  Created by Yaroslav Yashin on 12.07.2022.
 //
 
+import Foundation
+import BigInt
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-import Foundation
-import BigInt
 
 extension APIRequest {
     public static func sendRequest<Result>(with provider: Web3Provider, for call: APIRequest) async throws -> APIResponse<Result> {

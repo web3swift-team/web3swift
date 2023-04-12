@@ -5,10 +5,10 @@
 //  Created by Yaroslav Yashin on 11.07.2022.
 //
 
+import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-import Foundation
 
 public protocol Web3Provider {
     var network: Networks? {get set}
