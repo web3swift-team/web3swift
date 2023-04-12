@@ -6,6 +6,10 @@
 import XCTest
 @testable import Web3Core
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 final class EtherscanTransactionCheckerTests: XCTestCase {
     private var testApiKey: String { "4HVPVMV1PN6NGZDFXZIYKEZRP53IA41KVC" }
     private var vitaliksAddress: String { "0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B" }
