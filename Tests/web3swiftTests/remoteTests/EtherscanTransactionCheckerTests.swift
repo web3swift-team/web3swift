@@ -83,7 +83,11 @@ final class EtherscanTransactionCheckerErrorTests: XCTestCase {
 // MARK: - test double
 
 final private class URLSessionMock: URLSessionProxy {
+    #if os(Linux)
+    var response: (Data, URLResponse) = (Data(), URLResponse()!)
+    #else
     var response: (Data, URLResponse) = (Data(), URLResponse())
+    #endif
 
     func data(for request: URLRequest) async throws -> (Data, URLResponse) {
         return response
