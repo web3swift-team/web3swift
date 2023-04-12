@@ -38,7 +38,7 @@ jobs:
       with:
         node-version: 18
     - name: Resolve dependencies
-      run: swift package resolve 
+      run: swift package resolve
     - name: Build
       run: swift build
     - name: Install ganache
