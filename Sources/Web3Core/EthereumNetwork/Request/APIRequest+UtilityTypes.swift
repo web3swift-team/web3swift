@@ -14,7 +14,7 @@ public struct APIResponse<Result>: Decodable where Result: APIResultType {
     public var result: Result
 }
 
-enum REST: String {
+public enum REST: String {
     case POST
     case GET
 }

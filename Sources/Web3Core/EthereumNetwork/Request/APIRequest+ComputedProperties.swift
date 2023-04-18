@@ -8,7 +8,7 @@
 import Foundation
 
 extension APIRequest {
-    var method: REST {
+    public var method: REST {
          .POST
     }
 
