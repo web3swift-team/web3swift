@@ -41,21 +41,24 @@ public extension Data {
         }
     }
 
+    /**
+     Generates an array of random bytes with the specified length.
+
+     - Parameter length: The number of random bytes to generate.
+
+     - Returns: An optional `Data` object containing the generated random bytes, or `nil` if an error occurs during generation.
+     - Note: This function uses `SecRandomCopyBytes` to generate random bytes and shuffles the resulting array before returning it as a `Data` object. If an error occurs during random bytes generation, the function returns `nil`.
+     */
     static func randomBytes(length: Int) -> Data? {
-        let entropy_bit_size = length//128
-        //# valid_entropy_bit_sizes = [128, 160, 192, 224, 256], count: [12, 15, 18, 21, 24]
-        var entropy_bytes = [UInt8](repeating: 0, count: entropy_bit_size)// / 8)
+        var entropyBytes = [UInt8](repeating: 0, count: length)
 
-        let status = SecRandomCopyBytes(kSecRandomDefault, entropy_bytes.count, &entropy_bytes)
+        let status = SecRandomCopyBytes(kSecRandomDefault, entropyBytes.count, &entropyBytes)
 
-        if status != errSecSuccess { // Always test the status.
-
-        } else {
-            entropy_bytes = [UInt8](repeating: 0, count: entropy_bit_size)// / 8)
-            arc4random_buf(&entropy_bytes, entropy_bytes.count)
+        guard status == errSecSuccess else {
+            return nil
         }
 
-        let entropyData = entropy_bytes.shuffled()
+        let entropyData = entropyBytes.shuffled()
 
         return Data(entropyData)
     }

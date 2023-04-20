@@ -92,7 +92,7 @@ extension String {
         guard let matcher = try? NSRegularExpression(pattern: "^(?<prefix>0x)(?<leadingZeroes>0+)(?<end>[0-9a-fA-F]*)$",
                                                      options: .dotMatchesLineSeparators)
         else {
-            print("stripLeadingZeroes(): failed to parse regex pattern.")
+            NSLog("stripLeadingZeroes(): failed to parse regex pattern.")
             return self
         }
         let match = matcher.captureGroups(string: hex, options: .anchored)
