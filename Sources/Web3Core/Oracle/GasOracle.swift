@@ -101,7 +101,7 @@ final public class Oracle {
     private func suggestTipValue() async throws -> [BigUInt] {
         var rearrengedArray: [[BigUInt]] = []
 
-        /// reaarange `[[min, middle, max]]` to `[[min], [middle], [max]]`
+        /// rearrange `[[min, middle, max]]` to `[[min], [middle], [max]]`
         try await suggestGasValues().reward
             .forEach { percentiles in
                 percentiles.enumerated().forEach { index, percentile in
@@ -139,7 +139,7 @@ final public class Oracle {
         default: throw Web3Error.valueError(desc: "Unable to use '\(block)' policy to resolve block number to calculate gas fee suggestion.")
         }
 
-        /// checking if latest block number is greather than number of blocks to take in account
+        /// checking if latest block number is greater than number of blocks to take in account
         /// we're ignoring case when `latestBlockNumber` == `blockCount` since it's unlikely case
         /// which we could neglect
         guard latestBlockNumber > blockCount else { return [] }

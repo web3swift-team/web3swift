@@ -43,7 +43,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
         let result = try await contract
-            .createReadOperation("balanceOf", parameters: [account] as [AnyObject], extraData: Data())!
+            .createReadOperation("balanceOf", parameters: [account])!
             .call()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -51,7 +51,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
     public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt {
         let result = try await contract
-            .createReadOperation("allowance", parameters: [originalOwner, delegate] as [AnyObject], extraData: Data())!
+            .createReadOperation("allowance", parameters: [originalOwner, delegate])!
             .call()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -64,7 +64,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
         // get the decimals manually
         let callResult = try await contract
-            .createReadOperation("decimals" )!
+            .createReadOperation("decimals")!
             .call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
@@ -75,8 +75,9 @@ public class ERC20: IERC20, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
+
         contract.transaction = transaction
-        let tx = contract.createWriteOperation("transfer", parameters: [to, value] as [AnyObject])!
+        let tx = contract.createWriteOperation("transfer", parameters: [to, value])!
         return tx
     }
 
@@ -87,7 +88,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
         // get the decimals manually
         let callResult = try await contract
-            .createReadOperation("decimals" )!
+            .createReadOperation("decimals")!
             .call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
@@ -98,8 +99,9 @@ public class ERC20: IERC20, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
+
         contract.transaction = transaction
-        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value] as [AnyObject])!
+        let tx = contract.createWriteOperation("transferFrom", parameters: [originalOwner, to, value])!
         return tx
     }
 
@@ -110,7 +112,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
         // get the decimals manually
         let callResult = try await contract
-            .createReadOperation("decimals" )!
+            .createReadOperation("decimals")!
             .call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
@@ -121,8 +123,9 @@ public class ERC20: IERC20, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(newAmount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
+
         contract.transaction = transaction
-        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value] as [AnyObject])!
+        let tx = contract.createWriteOperation("setAllowance", parameters: [to, value])!
         return tx
     }
 
@@ -133,7 +136,7 @@ public class ERC20: IERC20, ERC20BaseProperties {
 
         // get the decimals manually
         let callResult = try await contract
-            .createReadOperation("decimals" )!
+            .createReadOperation("decimals")!
             .call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
@@ -144,14 +147,15 @@ public class ERC20: IERC20, ERC20BaseProperties {
         guard let value = Utilities.parseToBigUInt(amount, decimals: intDecimals) else {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
+
         contract.transaction = transaction
-        let tx = contract.createWriteOperation("approve", parameters: [spender, value] as [AnyObject])!
+        let tx = contract.createWriteOperation("approve", parameters: [spender, value])!
         return tx
     }
 
     public func totalSupply() async throws -> BigUInt {
         let result = try await contract
-            .createReadOperation("totalSupply", parameters: [AnyObject](), extraData: Data())!
+            .createReadOperation("totalSupply")!
             .call()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res

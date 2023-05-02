@@ -50,7 +50,7 @@ extension String {
         return String(self[start..<end])
     }
 
-    func leftPadding(toLength: Int, withPad character: Character) -> String {
+    public func leftPadding(toLength: Int, withPad character: Character) -> String {
         let stringLength = self.count
         if stringLength < toLength {
             return String(repeatElement(character, count: toLength - stringLength)) + self
@@ -86,7 +86,7 @@ extension String {
 
     /// Strips leading zeroes from a HEX string.
     /// ONLY HEX string format is supported.
-    /// - Returns: string with stripped leading zeroes (and 0x prefix) or unchaged string.
+    /// - Returns: string with stripped leading zeroes (and 0x prefix) or unchanged string.
     func stripLeadingZeroes() -> String {
         let hex = addHexPrefix()
         guard let matcher = try? NSRegularExpression(pattern: "^(?<prefix>0x)(?<leadingZeroes>0+)(?<end>[0-9a-fA-F]*)$",

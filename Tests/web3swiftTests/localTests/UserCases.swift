@@ -13,8 +13,8 @@ class UserCases: XCTestCase {
 
     func getKeystoreData() -> Data? {
         let bundle = Bundle(for: type(of: self))
-        guard let path = bundle.path(forResource: "key", ofType: "json") else {return nil}
-        guard let data = NSData(contentsOfFile: path) else {return nil}
+        guard let path = bundle.path(forResource: "key", ofType: "json") else { return nil }
+        guard let data = NSData(contentsOfFile: path) else { return nil }
         return data as Data
     }
 
@@ -22,11 +22,11 @@ class UserCases: XCTestCase {
         let (web3, _, receipt, abiString) = try await TestHelpers.localDeployERC20()
         let account = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let contract = web3.contract(abiString, at: receipt.contractAddress!)!
-        let readTransaction = contract.createReadOperation("balanceOf", parameters: [account] as [AnyObject])!
+        let readTransaction = contract.createReadOperation("balanceOf", parameters: [account])!
         readTransaction.transaction.from = account
         let response = try await readTransaction.call()
         let balance = response["0"] as? BigUInt
-        
+
     }
 
     func testUserCase2() async {
@@ -76,7 +76,7 @@ class UserCases: XCTestCase {
         let allAddresses = try await web3.eth.ownedAccounts()
         let contract = web3.contract(Web3.Utils.estimateGasTestABI, at: nil, abiVersion: 2)!
 
-        let parameters = [AnyObject]()
+        let parameters = [Any]()
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         let policies = Policies(gasLimitPolicy: .manual(3000000))
@@ -86,7 +86,7 @@ class UserCases: XCTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(txHash)
-        
+
         XCTAssert(receipt.contractAddress != nil)
 
         switch receipt.status {
@@ -97,7 +97,7 @@ class UserCases: XCTestCase {
         }
 
         let details = try await web3.eth.transactionDetails(txHash)
-        
+
         XCTAssert(details.transaction.to == .contractDeploymentAddress())
     }
 
@@ -105,6 +105,6 @@ class UserCases: XCTestCase {
         let web3 = try await Web3.new(LocalTestCase.url)
         let address = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let balanceResult = try await web3.eth.getBalance(for: address)
-        
+
     }
 }

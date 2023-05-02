@@ -18,7 +18,7 @@ class ST20AndSecurityTokenTests: XCTestCase {
     var securityToken: SecurityToken!
 
     override func setUp() async throws {
-        web3 = await Web3.InfuraGoerliWeb3(accessToken: Constants.infuraToken)
+        web3 = try await Web3.InfuraGoerliWeb3(accessToken: Constants.infuraToken)
         ethMock = Web3EthMock(provider: web3.provider)
         web3.ethInstance = ethMock
         st20token = ST20.init(web3: web3, provider: web3.provider, address: .contractDeploymentAddress())
@@ -37,11 +37,11 @@ class ST20AndSecurityTokenTests: XCTestCase {
             }
             switch function.name {
             case "symbol":
-                return ABIEncoder.encode(types: [.string], values: [expectedSymbol] as [AnyObject])!
+                return ABIEncoder.encode(types: [.string], values: [expectedSymbol])!
             case "name":
-                return ABIEncoder.encode(types: [.string], values: [expectedName] as [AnyObject])!
+                return ABIEncoder.encode(types: [.string], values: [expectedName])!
             case "decimals":
-                return ABIEncoder.encode(types: [.uint(bits: 8)], values: [expectedDecimals] as [AnyObject])!
+                return ABIEncoder.encode(types: [.uint(bits: 8)], values: [expectedDecimals])!
             default:
                 // Unexpected function called
                 XCTFail("Called function '\(String(describing: function.name))' which wasn't supposed to be called.")
@@ -71,12 +71,12 @@ class ST20AndSecurityTokenTests: XCTestCase {
             case "balanceOf":
                 let address = function.decodeInputData(transaction.data)?["0"] as? EthereumAddress
                 XCTAssertEqual(address, userAddress)
-                return ABIEncoder.encode(types: [.uint(bits: 256)], values: [expectedBalance] as [AnyObject])!
+                return ABIEncoder.encode(types: [.uint(bits: 256)], values: [expectedBalance])!
             case "allowance":
                 let transactionInput = function.decodeInputData(transaction.data)
                 XCTAssertEqual(transactionInput?["0"] as? EthereumAddress, userAddress)
                 XCTAssertEqual(transactionInput?["1"] as? EthereumAddress, delegate)
-                return ABIEncoder.encode(types: [.uint(bits: 256)], values: [expectedAllowance] as [AnyObject])!
+                return ABIEncoder.encode(types: [.uint(bits: 256)], values: [expectedAllowance])!
             default:
                 // Unexpected function called
                 XCTFail("Called function '\(String(describing: function.name))' which wasn't supposed to be called.")
@@ -98,7 +98,7 @@ class ST20AndSecurityTokenTests: XCTestCase {
                 return Data()
             }
             if function.name == "investorCount" {
-                return ABIEncoder.encode(types: [.uint(bits: 256)], values: [expectedNumberOfInvestors] as [AnyObject])!
+                return ABIEncoder.encode(types: [.uint(bits: 256)], values: [expectedNumberOfInvestors])!
             }
             // Unexpected function called
             XCTFail("Called function '\(String(describing: function.name))' which wasn't supposed to be called.")
@@ -111,7 +111,7 @@ class ST20AndSecurityTokenTests: XCTestCase {
 
     func testSecurityTokenGranularity() async throws {
         let expectedGranularity = BigUInt.randomInteger(lessThan: BigUInt(10000000000))
-        
+
         ethMock.onCallTransaction = { transaction in
             guard let function = self.securityToken.contract.contract.getFunctionCalled(transaction.data) else {
                 XCTFail("Failed to decode function call to determine what shall be returned")
@@ -119,7 +119,7 @@ class ST20AndSecurityTokenTests: XCTestCase {
             }
             switch function.name {
             case "granularity":
-                return ABIEncoder.encode(types: [.uint(bits: 256)], values: [expectedGranularity] as [AnyObject])!
+                return ABIEncoder.encode(types: [.uint(bits: 256)], values: [expectedGranularity])!
             default:
                 // Unexpected function called
                 XCTFail("Called function '\(String(describing: function.name))' which wasn't supposed to be called.")

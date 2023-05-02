@@ -31,7 +31,6 @@ class AdvancedABIv2Tests: LocalTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
-        
 
         switch receipt.status {
         case .notYetProcessed:
@@ -44,7 +43,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testSingle")
-        let _ = try await tx!.call()
+        _ = try await tx!.call()
     }
 
     func testAdvancedABIv2staticArray() async throws {
@@ -55,7 +54,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         let allAddresses = try await web3.eth.ownedAccounts()
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
-        let parameters = [] as [AnyObject]
+        let parameters: [Any] = []
         // MARK: Writing Data flow
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
@@ -66,7 +65,6 @@ class AdvancedABIv2Tests: LocalTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
-        
 
         switch receipt.status {
         case .notYetProcessed:
@@ -79,7 +77,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testStaticArray")
-        let _ = try await tx!.call()
+        _ = try await tx!.call()
     }
 
     func testAdvancedABIv2dynamicArray() async throws {
@@ -90,7 +88,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         let allAddresses = try await web3.eth.ownedAccounts()
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
-        let parameters = [] as [AnyObject]
+        let parameters: [Any] = []
         // MARK: Writing Data flow
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
@@ -101,7 +99,6 @@ class AdvancedABIv2Tests: LocalTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
-        
 
         switch receipt.status {
         case .notYetProcessed:
@@ -113,7 +110,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         contract = web3.contract(abiString, at: receipt.contractAddress, abiVersion: 2)!
 
         let tx = contract.createReadOperation("testDynArray")
-        let _ = try await tx!.call()
+        _ = try await tx!.call()
     }
 
     func testAdvancedABIv2dynamicArrayOfStrings() async throws {
@@ -124,7 +121,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         let allAddresses = try await web3.eth.ownedAccounts()
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
-        let parameters = [] as [AnyObject]
+        let parameters: [Any] = []
         // MARK: Writing Data flow
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
@@ -135,7 +132,6 @@ class AdvancedABIv2Tests: LocalTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
-        
 
         switch receipt.status {
         case .notYetProcessed:
@@ -148,7 +144,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testDynOfDyn")
-        let _ = try await tx!.call()
+        _ = try await tx!.call()
     }
 
     func testAdvancedABIv2staticArrayOfStrings() async throws {
@@ -159,7 +155,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         let allAddresses = try await web3.eth.ownedAccounts()
         var contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
-        let parameters = [] as [AnyObject]
+        let parameters: [Any] = []
         // MARK: Writing Data flow
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
@@ -170,7 +166,6 @@ class AdvancedABIv2Tests: LocalTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(Data.fromHex(txHash)!)
-        
 
         switch receipt.status {
         case .notYetProcessed:
@@ -183,7 +178,7 @@ class AdvancedABIv2Tests: LocalTestCase {
         // MARK: Read data from ABI flow
         // MARK: - Encoding ABI Data flow
         let tx = contract.createReadOperation("testStOfDyn")
-        let _ = try await tx!.call()
+        _ = try await tx!.call()
     }
 
     func testEmptyArrayDecoding() async throws {

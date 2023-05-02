@@ -35,7 +35,7 @@ import BigInt
 /// let inputArgsTypes: [ABI.Element.InOut] = [.init(name: "firstArgument", type: ABI.Element.ParameterType.string),
 ///                                            .init(name: "secondArgument", type: ABI.Element.ParameterType.uint(bits: 256))]
 /// let constructor = ABI.Element.Constructor(inputs: inputArgsTypes, constant: false, payable: payable)
-/// let constructorArguments = ["This is the array of constructor arguments", 10_000] as [AnyObject]
+/// let constructorArguments: [Any] = ["This is the array of constructor arguments", 10_000]
 ///
 /// contract.deploy(bytecode: smartContractBytecode,
 ///                 constructor: constructor,
@@ -48,7 +48,7 @@ import BigInt
 ///
 /// ```swift
 /// let contract = EthereumContract(abiString)
-/// let constructorArguments = ["This is the array of constructor arguments", 10_000] as [AnyObject]
+/// let constructorArguments: [Any] = ["This is the array of constructor arguments", 10_000]
 ///
 /// contract.deploy(bytecode: smartContractBytecode,
 ///                 constructor: contract.constructor,
@@ -116,12 +116,12 @@ public protocol ContractProtocol {
     ///   - bytecode: bytecode to deploy.
     ///   - constructor: constructor of the smart contract bytecode is related to. Used to encode `parameters`.
     ///   - parameters: parameters for `constructor`.
-    ///   - extraData: any extra data. It can be encoded input arguments for a constuctor but then you should set `constructor` and
+    ///   - extraData: any extra data. It can be encoded input arguments for a constructor but then you should set `constructor` and
     ///   `parameters` to be `nil`.
     /// - Returns: Encoded data for a given parameters, which is should be assigned to ``CodableTransaction.data`` property
     func deploy(bytecode: Data,
                 constructor: ABI.Element.Constructor?,
-                parameters: [AnyObject]?,
+                parameters: [Any]?,
                 extraData: Data?) -> Data?
 
     /// Creates function call transaction with data set as `method` encoded with given `parameters`.
@@ -134,7 +134,7 @@ public protocol ContractProtocol {
     ///   - parameters: method input arguments;
     ///   - extraData: additional data to append at the end of `transaction.data` field;
     /// - Returns: transaction object if `method` was found and `parameters` were successfully encoded.
-    func method(_ method: String, parameters: [AnyObject], extraData: Data?) -> Data?
+    func method(_ method: String, parameters: [Any], extraData: Data?) -> Data?
 
     /// Decode output data of a function.
     /// - Parameters:
@@ -185,12 +185,12 @@ public protocol ContractProtocol {
 extension ContractProtocol {
 
     /// Overloading of ``ContractProtocol/deploy(bytecode:constructor:parameters:extraData:)`` to allow
-    /// omitting evertyhing but `bytecode`.
+    /// omitting everything but `bytecode`.
     ///
     /// See ``ContractProtocol/deploy(bytecode:constructor:parameters:extraData:)`` for details.
     func deploy(_ bytecode: Data,
                 constructor: ABI.Element.Constructor? = nil,
-                parameters: [AnyObject]? = nil,
+                parameters: [Any]? = nil,
                 extraData: Data? = nil) -> Data? {
         deploy(bytecode: bytecode,
                constructor: constructor,
@@ -203,15 +203,15 @@ extension ContractProtocol {
     ///
     /// See ``ContractProtocol/method(_:parameters:extraData:)`` for details.
     func method(_ method: String = "fallback",
-                parameters: [AnyObject]? = nil,
+                parameters: [Any]? = nil,
                 extraData: Data? = nil) -> Data? {
         self.method(method, parameters: parameters ?? [], extraData: extraData)
     }
 
     func decodeInputData(_ data: Data) -> [String: Any]? {
         guard data.count >= 4 else { return nil }
-        let methodId = data[0..<4].toHexString()
-        let data = data[4...]
+        let methodId = data[data.startIndex ..< data.startIndex + 4].toHexString()
+        let data = data[(data.startIndex + 4)...]
         return decodeInputData(methodId, data: data)
     }
 }
@@ -222,7 +222,7 @@ extension DefaultContractProtocol {
     // MARK: Writing Data flow
     public func deploy(bytecode: Data,
                        constructor: ABI.Element.Constructor?,
-                       parameters: [AnyObject]?,
+                       parameters: [Any]?,
                        extraData: Data?) -> Data? {
         var fullData = bytecode
 
@@ -258,7 +258,7 @@ extension DefaultContractProtocol {
     ///   - data: parameters + extraData
     ///   - params: EthereumParameters with no contract method call encoded data.
     public func method(_ method: String,
-                       parameters: [AnyObject],
+                       parameters: [Any],
                        extraData: Data?) -> Data? {
         // MARK: - Encoding ABI Data flow
         if method == "fallback" {
@@ -333,14 +333,14 @@ extension DefaultContractProtocol {
 
     public func decodeInputData(_ data: Data) -> [String: Any]? {
         guard data.count % 32 == 4 else { return nil }
-        let methodSignature = data[0..<4].toHexString().addHexPrefix().lowercased()
+        let methodSignature = data[data.startIndex ..< data.startIndex + 4].toHexString().addHexPrefix().lowercased()
 
         guard let function = methods[methodSignature]?.first else { return nil }
-        return function.decodeInputData(Data(data[4 ..< data.count]))
+        return function.decodeInputData(Data(data[data.startIndex + 4 ..< data.startIndex + data.count]))
     }
 
     public func getFunctionCalled(_ data: Data) -> ABI.Element.Function? {
         guard data.count >= 4 else { return nil }
-        return methods[data[0..<4].toHexString().addHexPrefix()]?.first
+        return methods[data[data.startIndex ..< data.startIndex + 4].toHexString().addHexPrefix()]?.first
     }
 }
