@@ -19,10 +19,10 @@ class PersonalSignatureTests: XCTestCase {
         web3.addKeystoreManager(keystoreManager)
         let message = "Hello World"
         let expectedAddress = keystoreManager.addresses![0]
-        
+
         let signature = try await web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
         let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: signature)!
-        let signer = try web3.personal.ecrecover(personalMessage: message.data(using: .utf8)!, signature: signature)
+        let signer = web3.personal.recoverAddress(message: message.data(using: .utf8)!, signature: signature)
         XCTAssert(expectedAddress == signer, "Failed to sign personal message")
     }
 
@@ -44,7 +44,7 @@ class PersonalSignatureTests: XCTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(txHash)
-    
+
         switch receipt.status {
         case .notYetProcessed:
             return
@@ -58,19 +58,19 @@ class PersonalSignatureTests: XCTestCase {
         web3.addKeystoreManager(keystoreManager)
         let message = "Hello World"
         let expectedAddress = keystoreManager.addresses![0]
-        
+
         let signature = try await web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
         let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: signature)!
 
         // Calling contract
         contract = web3.contract(abiString, at: receipt.contractAddress!)!
-        var tx = contract.createReadOperation("hashPersonalMessage", parameters: [message as AnyObject])
+        var tx = contract.createReadOperation("hashPersonalMessage", parameters: [message])
         tx?.transaction.from = expectedAddress
         var result = try await tx!.call()
         guard let hash = result["hash"]! as? Data else { return XCTFail() }
         XCTAssert(Utilities.hashPersonalMessage(message.data(using: .utf8)!)! == hash)
 
-        tx = contract.createReadOperation("recoverSigner", parameters: [message, unmarshalledSignature.v, Data(unmarshalledSignature.r), Data(unmarshalledSignature.s)] as [AnyObject])
+        tx = contract.createReadOperation("recoverSigner", parameters: [message, unmarshalledSignature.v, Data(unmarshalledSignature.r), Data(unmarshalledSignature.s)])
         tx?.transaction.from = expectedAddress
         result = try await tx!.call()
         guard let signer = result["signer"]! as? EthereumAddress else { return XCTFail() }

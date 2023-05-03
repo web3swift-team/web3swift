@@ -1,0 +1,22 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+    -   id: check-case-conflict
+    -   id: check-json
+    -   id: mixed-line-ending
+    -   id: no-commit-to-branch
+        args: [--branch, staging, --branch, main, --branch, master, --branch, develop-4.0, --branch, develop-upstream]
+-   repo: https://github.com/codespell-project/codespell
+    rev: v2.2.2
+    hooks:
+    -   id: codespell  # See .codespellrc for args
+# -   repo: https://github.com/realm/SwiftLint  # Too slow in pre-commit
+#     rev: 0.50.3
+#     hooks:
+#     -   id: swiftlint
+#         args: [--fix, Sources, Tests]

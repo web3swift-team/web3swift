@@ -45,7 +45,7 @@ public struct EIP1559Envelope: EIP2718Envelope, EIP2930Compatible {
     /// all exceed funds will be returned to the sender.
     ///
     /// If amount of this will be **lower** than sum of `Block.baseFeePerGas` and `maxPriorityFeePerGas`
-    /// miner will recieve amount calculated by the following equation: `maxFeePerGas - Block.baseFeePerGas`
+    /// miner will receive amount calculated by the following equation: `maxFeePerGas - Block.baseFeePerGas`
     /// where 'Block' is the block that the transaction will be included.
     public var maxFeePerGas: BigUInt?
     public var accessList: [AccessListEntry] // from EIP-2930
@@ -246,8 +246,7 @@ extension EIP1559Envelope {
 
     public func encode(for type: EncodeType = .transaction) -> Data? {
         let fields: [Any?]
-        let list = accessList.map { $0.encodeAsList() as AnyObject }
-
+        let list = accessList.map { $0.encodeAsList() }
         switch type {
         case .transaction:
             fields = [chainID, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to.addressData, value, data, list, v, r, s]

@@ -192,8 +192,8 @@ private final class MockTransactionChecker: TransactionChecker {
     var addresses: [String] = .init()
     var results: [Bool] = .init()
 
-    func hasTransactions(address: String) async throws -> Bool {
-        addresses.append(address)
+    func hasTransactions(ethereumAddress: EthereumAddress) async throws -> Bool {
+        addresses.append(ethereumAddress.address)
         return results.removeFirst()
     }
 }

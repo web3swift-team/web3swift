@@ -8,23 +8,23 @@
 import Foundation
 
 extension RequestParameter: Encodable {
-    /**
-     This encoder encodes `RequestParameter` assotiated value ignoring self value
 
-     This is required to encode mixed types array, like
-
-     ```swift
-     let someArray: [RequestParameter] = [
-        .init(rawValue: 12)!,
-        .init(rawValue: "this")!,
-        .init(rawValue: 12.2)!,
-        .init(rawValue: [12.2, 12.4])!
-     ]
-     let encoded = try JSONEncoder().encode(someArray)
-     print(String(data: encoded, encoding: .utf8)!)
-     //> [12,\"this\",12.2,[12.2,12.4]]`
-     ```
-     */
+    /// This encoder encodes `RequestParameter` associated value ignoring self value
+    ///
+    /// This is required to encode mixed types array, like
+    ///
+    /// ```swift
+    /// let someArray: [RequestParameter] = [
+    ///     .init(rawValue: 12)!,
+    ///     .init(rawValue: "this")!,
+    ///     .init(rawValue: 12.2)!,
+    ///     .init(rawValue: [12.2, 12.4])!
+    /// ]
+    /// let encoded = try JSONEncoder().encode(someArray)
+    /// print(String(data: encoded, encoding: .utf8)!)
+    /// //> [12,\"this\",12.2,[12.2,12.4]]`
+    /// ```
+    /// - Parameter encoder: The encoder to write data to.
     func encode(to encoder: Encoder) throws {
         var enumContainer = encoder.singleValueContainer()
         /// force casting in this switch is safe because
@@ -48,7 +48,7 @@ extension RequestParameter: Encodable {
 
         case is CodableTransaction.Type: try enumContainer.encode(rawValue as! CodableTransaction)
         case is EventFilterParameters.Type: try enumContainer.encode(rawValue as! EventFilterParameters)
-        default: break /// can't be executed, coz possible `self.rawValue` types are strictly defined in it's inplementation.`
+        default: break /// can't be executed, coz possible `self.rawValue` types are strictly defined in it's implementation.`
         }
         // swiftlint:enable force_cast
     }

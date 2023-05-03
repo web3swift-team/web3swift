@@ -35,7 +35,7 @@ public struct LegacyEnvelope: AbstractEnvelope {
 
     // legacy chainID Mechanism
     private var explicitChainID: BigUInt? // set directly or via options
-    // private var impliedChainID: BigUInt? // we calculate this once, or when explicitely asked to
+    // private var impliedChainID: BigUInt? // we calculate this once, or when explicitly asked to
     private var impliedChainID: BigUInt? {
         if r == 0 && s == 0 { return v }
         if v == 27 || v == 28 || v < 35 { return nil }
@@ -54,7 +54,7 @@ public struct LegacyEnvelope: AbstractEnvelope {
         toReturn += "Data: " + self.data.toHexString().addHexPrefix().lowercased() + "\n"
         toReturn += "Resolved chainID: " + String(describing: self.chainID) + "\n"
         toReturn += "- Intrinsic chainID: " + String(describing: self.explicitChainID) + "\n"
-        toReturn += "- Infered chainID: " + String(describing: self.impliedChainID) + "\n"
+        toReturn += "- Inferred chainID: " + String(describing: self.impliedChainID) + "\n"
         toReturn += "v: " + String(self.v) + "\n"
         toReturn += "r: " + String(self.r) + "\n"
         toReturn += "s: " + String(self.s) + "\n"

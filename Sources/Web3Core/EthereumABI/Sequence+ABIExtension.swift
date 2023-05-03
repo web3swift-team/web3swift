@@ -63,7 +63,7 @@ public extension Sequence where Element == ABI.Element {
     /// Filters out ``ABI/Element/Constructor``.
     /// If there are multiple of them the first encountered will be returned and if there are none a default constructor will be returned
     /// that accepts no input parameters.
-    /// - Returns: the first ``ABI/Element/Constructor`` or default contructor with no input parameters.
+    /// - Returns: the first ``ABI/Element/Constructor`` or default constructor with no input parameters.
     func getConstructor() -> ABI.Element.Constructor {
         for case let .constructor(constructor) in self {
             return constructor

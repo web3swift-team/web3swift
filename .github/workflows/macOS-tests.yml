@@ -29,11 +29,22 @@ jobs:
   spm:
     name: Swift Package Manager 5.7
     runs-on: macOS-12
-    concurrency: 
+    concurrency:
       group: spm-${{ github.run_id }}
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Discover typos
+        run: |
+          pip3 install --upgrade pip
+          pip3 install codespell
+          codespell  # See .codespellrc for args
+      - name: SwiftLint
+        run: |
+          # 1. Make all automated fixes that are possible
+          # 2. git diff to see what (if any) automated fixes were made
+          # 3. See https://github.com/realm/SwiftLint#xcode explains why the double run
+          swiftlint --fix --quiet && git diff && swiftlint --quiet
       - name: Resolve dependencies
         run: swift package resolve
       - name: Build

@@ -27,7 +27,7 @@ extension KeyedDecodingContainer {
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `UInt.Type`
     ///
-    /// - Parameter type: Generic type `T` wich conforms to `DecodableFromHex` protocol
+    /// - Parameter type: Generic type `T` which conforms to `DecodableFromHex` protocol
     /// - Parameter key: The key that the decoded value is associated with.
     /// - Returns: A decoded value of type `T`
     /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `DecodableFromHex`.
@@ -41,7 +41,7 @@ extension KeyedDecodingContainer {
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `UInt.Type`
     ///
-    /// - Parameter type: Array of a generic type `T` wich conforms to `DecodableFromHex` protocol
+    /// - Parameter type: Array of a generic type `T` which conforms to `DecodableFromHex` protocol
     /// - Parameter key: The key that the decoded value is associated with.
     /// - Returns: A decoded value of type `[T]`
     /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `[[DecodableFromHex]]`.
@@ -55,7 +55,7 @@ extension KeyedDecodingContainer {
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `EthereumAddress`, `UInt.Type`
     ///
-    /// - Parameter type: Array of a generic type `T` wich conforms to `DecodableFromHex` protocol
+    /// - Parameter type: Array of a generic type `T` which conforms to `DecodableFromHex` protocol
     /// - Parameter key: The key that the decoded value is associated with.
     /// - Returns: A decoded value of type `[[T]]`
     /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `[[DecodableFromHex]]`.
@@ -69,7 +69,7 @@ extension KeyedDecodingContainer {
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `UInt.Type`
     ///
-    /// - Parameter type: Generic type `T` wich conforms to `DecodableFromHex` protocol
+    /// - Parameter type: Generic type `T` which conforms to `DecodableFromHex` protocol
     /// - Parameter key: The key that the decoded value is associated with.
     /// - Returns: A decoded value of type `T`, or nil if key is not present
     /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `DecodableFromHex`.
@@ -84,7 +84,7 @@ extension UnkeyedDecodingContainer {
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `EthereumAddress`
     ///
-    /// - Parameter type: Generic type `T` wich conforms to `DecodableFromHex` protocol
+    /// - Parameter type: Generic type `T` which conforms to `DecodableFromHex` protocol
     /// - Parameter key: The key that the decoded value is associated with.
     /// - Returns: A decoded value of type `BigUInt`
     /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `[DecodableFromHex]`.
@@ -102,7 +102,7 @@ extension UnkeyedDecodingContainer {
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `EthereumAddress`
     ///
-    /// - Parameter type: Generic type `T` wich conforms to `DecodableFromHex` protocol
+    /// - Parameter type: Generic type `T` which conforms to `DecodableFromHex` protocol
     /// - Parameter key: The key that the decoded value is associated with.
     /// - Returns: A decoded value of type `BigUInt`
     /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `[[DecodableFromHex]]`.

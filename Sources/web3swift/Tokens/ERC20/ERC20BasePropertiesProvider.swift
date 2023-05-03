@@ -1,6 +1,6 @@
 //
 //  ERC20BasePropertiesProvider.swift
-//  
+//
 //
 //  Created by Jann Driessen on 21.11.22.
 //
@@ -8,7 +8,7 @@
 import BigInt
 import Foundation
 
-/// The default implementation of access of common [ERC-20](https://eips.ethereum.org/EIPS/eip-20#methods) properties `name`, `symbol` and `decimals`. 
+/// The default implementation of access of common [ERC-20](https://eips.ethereum.org/EIPS/eip-20#methods) properties `name`, `symbol` and `decimals`.
 public final class ERC20BasePropertiesProvider {
     var name: String?
     var symbol: String?
@@ -21,8 +21,7 @@ public final class ERC20BasePropertiesProvider {
     }
 
     public func readProperties() async throws {
-        guard !hasReadProperties else { return }
-        guard contract.contract.address != nil else {return}
+        guard !hasReadProperties && contract.contract.address != nil else { return }
         name = try await contract
             .createReadOperation("name")?
             .call()["0"] as? String

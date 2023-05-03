@@ -2,7 +2,7 @@
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
-// TODO: Replace `XCTAssert` with more explicite `XCTAssertEqual`, where Applicable
+// TODO: Replace `XCTAssert` with more explicit `XCTAssertEqual`, where Applicable
 import XCTest
 import CryptoSwift
 import BigInt
@@ -21,7 +21,7 @@ class BasicLocalNodeTests: LocalTestCase {
 
         let contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
-        let parameters = [] as [AnyObject]
+        let parameters: [Any] = []
         let deployTx = contract.prepareDeploy(bytecode: bytecode, parameters: parameters)!
         deployTx.transaction.from = allAddresses[0]
         let policies = Policies(gasLimitPolicy: .manual(3000000))
@@ -48,7 +48,7 @@ class BasicLocalNodeTests: LocalTestCase {
         let sendToAddress = EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: sendToAddress, abiVersion: 2)!
 
-        let parameters = [] as [AnyObject]
+        let parameters: [Any] = []
         let sendTx = contract.createWriteOperation("fallback", parameters: parameters)!
 
         let valueToSend = try XCTUnwrap(Utilities.parseToBigUInt("1.0", units: .ether))
@@ -57,8 +57,6 @@ class BasicLocalNodeTests: LocalTestCase {
 
         let balanceBeforeTo = try await web3.eth.getBalance(for: sendToAddress)
         let balanceBeforeFrom = try await web3.eth.getBalance(for: allAddresses[0])
-        
-        
 
         let result = try await sendTx.writeToChain(password: "web3swift", sendRaw: false)
         let txHash = Data.fromHex(result.hash.stripHexPrefix())!
@@ -66,7 +64,6 @@ class BasicLocalNodeTests: LocalTestCase {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(txHash)
-        
 
         switch receipt.status {
         case .notYetProcessed:
@@ -76,12 +73,9 @@ class BasicLocalNodeTests: LocalTestCase {
         }
 
         let details = try await web3.eth.transactionDetails(txHash)
-        
 
         let balanceAfterTo = try await web3.eth.getBalance(for: sendToAddress)
         let balanceAfterFrom = try await web3.eth.getBalance(for: allAddresses[0])
-        
-        
 
         XCTAssertEqual(balanceAfterTo - balanceBeforeTo, valueToSend)
         let txnGasPrice = details.transaction.meta?.gasPrice ?? 0

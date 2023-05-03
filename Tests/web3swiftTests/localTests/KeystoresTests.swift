@@ -81,7 +81,7 @@ class KeystoresTests: LocalTestCase {
         let keystore = try! EthereumKeystoreV3(password: "")
         XCTAssertNotNil(keystore)
         let account = keystore!.addresses![0]
-        
+
         let data = try! keystore!.serialize()
         let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
         XCTAssertNotNil(key)
@@ -172,10 +172,10 @@ class KeystoresTests: LocalTestCase {
         let account = keystore!.addresses![1]
         let key = try! keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
         XCTAssertNotNil(key)
-        
+
     }
 
-    func testByBIP32keystoreSaveAndDeriva() throws {
+    func testByBIP32keystoreSaveAndDerive() throws {
         let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
         let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "", prefixPath: "m/44'/60'/0'")
         XCTAssertNotNil(keystore)
@@ -186,10 +186,7 @@ class KeystoresTests: LocalTestCase {
         let recreatedStore = BIP32Keystore.init(data!)
         XCTAssert(keystore?.addresses?.count == recreatedStore?.addresses?.count)
         XCTAssert(keystore?.rootPrefix == recreatedStore?.rootPrefix)
-        
-        
-        
-        
+
         XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![0])
         XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![1])
     }

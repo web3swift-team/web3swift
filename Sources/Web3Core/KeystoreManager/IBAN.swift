@@ -64,9 +64,9 @@ public struct IBAN {
 
     internal static func decodeToInts(_ iban: String) -> String {
         let uppercasedIBAN = iban.replacingOccurrences(of: " ", with: "").uppercased()
-        let begining = String(uppercasedIBAN[0..<4])
+        let beginning = String(uppercasedIBAN[0..<4])
         let end = String(uppercasedIBAN[4...])
-        let IBAN = end + begining
+        let IBAN = end + beginning
         var arrayOfInts = [Int]()
         for ch in IBAN {
             guard let dataPoint = String(ch).data(using: .ascii) else {return ""}
@@ -111,15 +111,15 @@ public struct IBAN {
 
     public init?(_ ibanString: String) {
         let matched = ibanString.replacingOccurrences(of: " ", with: "").uppercased()
-        guard IBAN.isValidIBANaddress(matched) else {return nil}
+        guard IBAN.isValidIBANaddress(matched) else { return nil }
         self.iban = matched
     }
 
     public init?(_ address: EthereumAddress) {
         let addressString = address.address.lowercased().stripHexPrefix()
-        guard let bigNumber = BigUInt(addressString, radix: 16) else {return nil}
+        guard let bigNumber = BigUInt(addressString, radix: 16) else { return nil }
         let base36EncodedString = String(bigNumber, radix: 36)
-        guard base36EncodedString.count <= 30 else {return nil}
+        guard base36EncodedString.count <= 30 else { return nil }
         let padded = base36EncodedString.leftPadding(toLength: 30, withPad: "0")
         let prefix = "XE"
         let remainder = IBAN.calculateChecksumMod97(IBAN.decodeToInts(prefix + "00" + padded))

@@ -174,7 +174,7 @@ public extension ABI {
 // MARK: - Function parameters encoding
 
 extension ABI.Element {
-    public func encodeParameters(_ parameters: [AnyObject]) -> Data? {
+    public func encodeParameters(_ parameters: [Any]) -> Data? {
         switch self {
         case .constructor(let constructor):
             return constructor.encodeParameters(parameters)
@@ -193,7 +193,7 @@ extension ABI.Element {
 }
 
 extension ABI.Element.Constructor {
-    public func encodeParameters(_ parameters: [AnyObject]) -> Data? {
+    public func encodeParameters(_ parameters: [Any]) -> Data? {
         guard parameters.count == inputs.count else { return nil }
         return ABIEncoder.encode(types: inputs, values: parameters)
     }
@@ -204,7 +204,7 @@ extension ABI.Element.Function {
     /// Encode parameters of a given contract method
     /// - Parameter parameters: Parameters to pass to Ethereum contract
     /// - Returns: Encoded data
-    public func encodeParameters(_ parameters: [AnyObject]) -> Data? {
+    public func encodeParameters(_ parameters: [Any]) -> Data? {
         guard parameters.count == inputs.count,
               let data = ABIEncoder.encode(types: inputs, values: parameters) else { return nil }
         return methodEncoding + data
@@ -215,7 +215,7 @@ extension ABI.Element.Function {
 
 extension ABI.Element.Event {
     public func decodeReturnedLogs(eventLogTopics: [Data], eventLogData: Data) -> [String: Any]? {
-        guard let eventContent = ABIDecoder.decodeLog(event: self, eventLogTopics: eventLogTopics, eventLogData: eventLogData) else {return nil}
+        guard let eventContent = ABIDecoder.decodeLog(event: self, eventLogTopics: eventLogTopics, eventLogData: eventLogData) else { return nil }
         return eventContent
     }
 }
@@ -262,7 +262,7 @@ extension ABI.Element {
 
 extension ABI.Element.Function {
     public func decodeInputData(_ rawData: Data) -> [String: Any]? {
-        return Web3Core.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
+        return ABIDecoder.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
     }
 
     /// Decodes data returned by a function call. Able to decode `revert(string)`, `revert CustomError(...)` and `require(expression, string)` calls.
@@ -274,35 +274,35 @@ extension ABI.Element.Function {
     ///
     /// Return cases:
     /// - when no `outputs` declared and `data` is not an error response:
-    ///```swift
-    ///["_success": true]
-    ///```
+    /// ```swift
+    /// ["_success": true]
+    /// ```
     /// - when `outputs` declared and decoding completed successfully:
-    ///```swift
-    ///["_success": true, "0": value_1, "1": value_2, ...]
-    ///```
-    ///Additionally this dictionary will have mappings to output names if these names are specified in the ABI;
+    /// ```swift
+    /// ["_success": true, "0": value_1, "1": value_2, ...]
+    /// ```
+    /// Additionally this dictionary will have mappings to output names if these names are specified in the ABI;
     /// - function call was aborted using `revert(message)` or `require(expression, message)`:
-    ///```swift
-    ///["_success": false, "_abortedByRevertOrRequire": true, "_errorMessage": message]`
-    ///```
+    /// ```swift
+    /// ["_success": false, "_abortedByRevertOrRequire": true, "_errorMessage": message]`
+    /// ```
     /// - function call was aborted using `revert CustomMessage()` and `errors` argument contains the ABI of that custom error type:
-    ///```swift
-    ///["_success": false,
-    ///"_abortedByRevertOrRequire": true,
-    ///"_error": error_name_and_types, // e.g. `MyCustomError(uint256, address senderAddress)`
-    ///"0": error_arg1,
-    ///"1": error_arg2,
-    ///...,
-    ///"error_arg1_name": error_arg1, // Only named arguments will be mapped to their names, e.g. `"senderAddress": EthereumAddress`
-    ///"error_arg2_name": error_arg2, // Otherwise, you can query them by position index.
-    ///...]
-    ///```
-    ///- in case of any error:
-    ///```swift
-    ///["_success": false, "_failureReason": String]
-    ///```
-    ///Error reasons include:
+    /// ```swift
+    /// ["_success": false,
+    /// "_abortedByRevertOrRequire": true,
+    /// "_error": error_name_and_types, // e.g. `MyCustomError(uint256, address senderAddress)`
+    /// "0": error_arg1,
+    /// "1": error_arg2,
+    /// ...,
+    /// "error_arg1_name": error_arg1, // Only named arguments will be mapped to their names, e.g. `"senderAddress": EthereumAddress`
+    /// "error_arg2_name": error_arg2, // Otherwise, you can query them by position index.
+    /// ...]
+    /// ```
+    /// - in case of any error:
+    /// ```swift
+    /// ["_success": false, "_failureReason": String]
+    /// ```
+    /// Error reasons include:
     /// -  `outputs` declared but at least one value failed to be decoded;
     /// - `data.count` is less than `outputs.count * 32`;
     /// - `outputs` defined and `data` is empty;
@@ -397,9 +397,9 @@ extension ABI.Element.Function {
         /// 4) `messageLength` is used to determine where message bytes end to decode string correctly.
         /// 5) The rest of the `data` must be 0 bytes or empty.
         if data.bytes.count >= 100,
-           Data(data[0..<4]) == Data.fromHex("08C379A0"),
-           BigInt(data[4..<36]) == 32,
-           let messageLength = Int(Data(data[36..<68]).toHexString(), radix: 16),
+           Data(data[data.startIndex ..< data.startIndex + 4]) == Data.fromHex("08C379A0"),
+           BigInt(data[data.startIndex + 4 ..< data.startIndex + 36]) == 32,
+           let messageLength = Int(Data(data[data.startIndex + 36 ..< data.startIndex + 68]).toHexString(), radix: 16),
            let message = String(bytes: data.bytes[68..<(68+messageLength)], encoding: .utf8),
            (68+messageLength == data.count || data.bytes[68+messageLength..<data.count].reduce(0) { $0 + $1 } == 0) {
             return ["_success": false,
@@ -410,11 +410,11 @@ extension ABI.Element.Function {
 
         if data.count >= 4,
            let errors = errors,
-           let customError = errors[data[0..<4].toHexString().stripHexPrefix()] {
+           let customError = errors[data[data.startIndex ..< data.startIndex + 4].toHexString().stripHexPrefix()] {
             var errorResponse: [String: Any] = ["_success": false, "_abortedByRevertOrRequire": true, "_error": customError.errorDeclaration]
 
             if (data.count > 32 && !customError.inputs.isEmpty),
-               let decodedInputs = ABIDecoder.decode(types: customError.inputs, data: Data(data[4..<data.count])) {
+               let decodedInputs = ABIDecoder.decode(types: customError.inputs, data: Data(data[data.startIndex + 4 ..< data.startIndex + data.count])) {
                 for idx in decodedInputs.indices {
                     errorResponse["\(idx)"] = decodedInputs[idx]
                     if !customError.inputs[idx].name.isEmpty {
@@ -432,61 +432,62 @@ extension ABI.Element.Function {
 
 extension ABI.Element.Constructor {
     public func decodeInputData(_ rawData: Data) -> [String: Any]? {
-        return Web3Core.decodeInputData(rawData, inputs: inputs)
+        return ABIDecoder.decodeInputData(rawData, inputs: inputs)
     }
 }
 
-/// Generic input decoding function.
-/// - Parameters:
-///   - rawData: data to decode. Must match the followin criteria: `data.count == 0 || data.count % 32 == 4`.
-///   - methodEncoding: 4 bytes represeting method signature like `0xFFffFFff`. Can be ommited to avoid checking method encoding.
-///   - inputs: expected input types. Order must be the same as in function declaration.
-/// - Returns: decoded dictionary of input arguments mapped to their indices and arguments' names if these are not empty.
-/// If decoding of at least one argument fails, `rawData` size is invalid or `methodEncoding` doesn't match - `nil` is returned.
-private func decodeInputData(_ rawData: Data,
-                                 methodEncoding: Data? = nil,
-                                 inputs: [ABI.Element.InOut]) -> [String: Any]? {
-    let data: Data
-    let sig: Data?
+extension ABIDecoder {
+    /// Generic input decoding function.
+    /// - Parameters:
+    ///   - rawData: data to decode. Must match the following criteria: `data.count == 0 || data.count % 32 == 4`.
+    ///   - methodEncoding: 4 bytes representing method signature like `0xFFffFFff`. Can be omitted to avoid checking method encoding.
+    ///   - inputs: expected input types. Order must be the same as in function declaration.
+    /// - Returns: decoded dictionary of input arguments mapped to their indices and arguments' names if these are not empty.
+    /// If decoding of at least one argument fails, `rawData` size is invalid or `methodEncoding` doesn't match - `nil` is returned.
+    static func decodeInputData(_ rawData: Data,
+                                     methodEncoding: Data? = nil,
+                                     inputs: [ABI.Element.InOut]) -> [String: Any]? {
+        let data: Data
+        let sig: Data?
 
-    switch rawData.count % 32 {
-    case 0:
-        sig = nil
-        data = Data()
-        break
-    case 4:
-        sig = rawData[0 ..< 4]
-        data = Data(rawData[4 ..< rawData.count])
-    default:
-        return nil
-    }
-
-    if methodEncoding != nil && sig != nil && sig != methodEncoding {
-        return nil
-    }
-
-    var returnArray = [String: Any]()
-
-    if data.count == 0 && inputs.count == 1 {
-        let name = "0"
-        let value = inputs[0].type.emptyValue
-        returnArray[name] = value
-        if inputs[0].name != "" {
-            returnArray[inputs[0].name] = value
+        switch rawData.count % 32 {
+        case 0:
+            sig = nil
+            data = Data()
+            break
+        case 4:
+            sig = rawData[0 ..< 4]
+            data = Data(rawData[4 ..< rawData.count])
+        default:
+            return nil
         }
-    } else {
-        guard inputs.count * 32 <= data.count else { return nil }
 
-        var i = 0
-        guard let values = ABIDecoder.decode(types: inputs, data: data) else {return nil}
-        for input in inputs {
-            let name = "\(i)"
-            returnArray[name] = values[i]
-            if input.name != "" {
-                returnArray[input.name] = values[i]
+        if methodEncoding != nil && sig != nil && sig != methodEncoding {
+            return nil
+        }
+
+        var returnArray = [String: Any]()
+        if data.count == 0 && inputs.count == 1 {
+            let name = "0"
+            let value = inputs[0].type.emptyValue
+            returnArray[name] = value
+            if inputs[0].name != "" {
+                returnArray[inputs[0].name] = value
             }
-            i = i + 1
+        } else {
+            guard inputs.count * 32 <= data.count else { return nil }
+
+            var i = 0
+            guard let values = ABIDecoder.decode(types: inputs, data: data) else { return nil }
+            for input in inputs {
+                let name = "\(i)"
+                returnArray[name] = values[i]
+                if input.name != "" {
+                    returnArray[input.name] = values[i]
+                }
+                i = i + 1
+            }
         }
+        return returnArray
     }
-    return returnArray
 }

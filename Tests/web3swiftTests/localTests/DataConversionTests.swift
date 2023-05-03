@@ -22,15 +22,12 @@ class DataConversionTests: LocalTestCase {
     func testBase58() throws {
         let vector = ""
 
-        
         guard let resultDecoded = vector.base58DecodedData else { return XCTFail("base58 decode unexpectedly returned nil") }
         XCTAssert(resultDecoded.count == 0)
 
-        
         let resultEncoded1 = vector.base58EncodedString
         XCTAssert(resultEncoded1 == vector)
 
-    
         let arr = resultDecoded.withUnsafeBytes { Array($0) }
         let resultEncoded2 = arr.base58EncodedString
         XCTAssert(resultEncoded2 == vector)
@@ -41,13 +38,11 @@ class DataConversionTests: LocalTestCase {
         let vector = "2NEpo7TZRRrLZSi2U"
         let expected = "Hello World!"
 
-        
         guard let resultDecoded = vector.base58DecodedData else { return XCTFail("base58 decode unexpectedly returned nil") }
         let arr = resultDecoded.withUnsafeBytes { Array($0) }
         let str = String(bytes: arr, encoding: .utf8)
         XCTAssert(str == expected)
 
-        
         let resultEncoded = expected.base58EncodedString
         XCTAssert(resultEncoded == vector)
     }
@@ -57,13 +52,11 @@ class DataConversionTests: LocalTestCase {
         let vector = "USm3fpXnKG5EUBx2ndxBDMPVciP5hGey2Jh4NDv6gmeo1LkMeiKrLJUUBk6Z"
         let expected = "The quick brown fox jumps over the lazy dog."
 
-        
         guard let resultDecoded = vector.base58DecodedData else { return XCTFail("base58 decode unexpectedly returned nil") }
         let arr = resultDecoded.withUnsafeBytes { Array($0) }
         let str = String(bytes: arr, encoding: .utf8)
         XCTAssert(str == expected)
 
-        
         let resultEncoded = expected.base58EncodedString
         XCTAssert(resultEncoded == vector)
     }
@@ -73,12 +66,10 @@ class DataConversionTests: LocalTestCase {
         let vector = "111233QC4"
         let expected = "0x000000287fb4cd"
 
-        
         guard let resultDecoded = vector.base58DecodedData else { return XCTFail("base58 decode unexpectedly returned nil") }
         let str = resultDecoded.toHexString().addHexPrefix()
         XCTAssert(str == expected)
 
-        
         let arr = resultDecoded.withUnsafeBytes { Array($0) }
         let resultEncoded = arr.base58EncodedString
         XCTAssert(resultEncoded == vector)
@@ -89,12 +80,10 @@ class DataConversionTests: LocalTestCase {
         let vector = "11111111111111111111111111111111"
         let expected = "0x0000000000000000000000000000000000000000000000000000000000000000"
 
-        
         guard let resultDecoded = vector.base58DecodedData else { return XCTFail("base58 decode unexpectedly returned nil") }
         let str = resultDecoded.toHexString().addHexPrefix()
         XCTAssert(str == expected)
 
-        
         let arr = resultDecoded.withUnsafeBytes { Array($0) }
         let resultEncoded = arr.base58EncodedString
         XCTAssert(resultEncoded == vector)

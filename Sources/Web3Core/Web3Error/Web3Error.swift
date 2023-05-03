@@ -1,6 +1,6 @@
 //
 //  Web3Error.swift
-//  
+//
 //
 //  Created by Yaroslav Yashin on 11.07.2022.
 //
@@ -27,7 +27,6 @@ public enum Web3Error: LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-
         case .transactionSerializationError:
             return "Transaction Serialization Error"
         case .connectionError:

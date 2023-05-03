@@ -22,12 +22,12 @@ class TestHelpers {
         let contract = web3.contract(abiString, at: nil, abiVersion: 2)!
 
         // FIXME: This should be zipped, because Arrays don't guarantee it's elements order
-        let parameters = [
+        let parameters: [Any] = [
             "web3swift",
             "w3s",
             EthereumAddress("0xe22b8979739D724343bd002F9f432F5990879901")!,
             1024
-        ] as [AnyObject]
+        ]
         let deployTx = contract.prepareDeploy(bytecode: bytecode,
                                        constructor: contract.contract.constructor,
                                        parameters: parameters)!
@@ -39,7 +39,6 @@ class TestHelpers {
         Thread.sleep(forTimeInterval: 1.0)
 
         let receipt = try await web3.eth.transactionReceipt(txHash)
-        
 
         switch receipt.status {
         case .notYetProcessed:
