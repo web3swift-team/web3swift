@@ -71,7 +71,7 @@ public class ERC1155: IERC1155 {
         }
         guard contract.contract.address != nil else { return }
 
-        guard let tokenIdPromise = try await contract.createReadOperation("id")?.callContractMethod() else { return }
+        guard let tokenIdPromise = try await contract.createReadOperation("id")?.call() else { return }
 
         guard let tokenId = tokenIdPromise["0"] as? BigUInt else { return }
         self._tokenId = tokenId
@@ -95,7 +95,7 @@ public class ERC1155: IERC1155 {
     public func balanceOf(account: EthereumAddress, id: BigUInt) async throws -> BigUInt {
         let result = try await contract
             .createReadOperation("balanceOf", parameters: [account, id])!
-            .callContractMethod()
+            .call()
         guard let res = result["0"] as? BigUInt else { throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node") }
         return res
     }
@@ -107,14 +107,14 @@ public class ERC1155: IERC1155 {
     }
 
     public func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress, scope: Data) async throws -> Bool {
-        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user, scope])!.callContractMethod()
+        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user, scope])!.call()
 
         guard let res = result["0"] as? Bool else { throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node") }
         return res
     }
 
     public func supportsInterface(interfaceID: String) async throws -> Bool {
-        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID])!.callContractMethod()
+        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID])!.call()
 
         guard let res = result["0"] as? Bool else { throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node") }
         return res

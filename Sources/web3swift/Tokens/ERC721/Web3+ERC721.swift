@@ -92,7 +92,7 @@ public class ERC721: IERC721 {
         }
         guard contract.contract.address != nil else { return }
 
-        async let tokenIdPromise = contract.createReadOperation("tokenId")?.callContractMethod()
+        async let tokenIdPromise = contract.createReadOperation("tokenId")?.call()
 
         guard let tokenIdResult = try await tokenIdPromise else { return }
         guard let tokenId = tokenIdResult["0"] as? BigUInt else { return }
@@ -103,19 +103,19 @@ public class ERC721: IERC721 {
     }
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
-        let result = try await contract.createReadOperation("balanceOf", parameters: [account])!.callContractMethod()
+        let result = try await contract.createReadOperation("balanceOf", parameters: [account])!.call()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func getOwner(tokenId: BigUInt) async throws -> EthereumAddress {
-        let result = try await contract.createReadOperation("ownerOf", parameters: [tokenId])!.callContractMethod()
+        let result = try await contract.createReadOperation("ownerOf", parameters: [tokenId])!.call()
         guard let res = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func getApproved(tokenId: BigUInt) async throws -> EthereumAddress {
-        let result = try await contract.createReadOperation("getApproved", parameters: [tokenId])!.callContractMethod()
+        let result = try await contract.createReadOperation("getApproved", parameters: [tokenId])!.call()
         guard let res = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -157,13 +157,13 @@ public class ERC721: IERC721 {
     }
 
     public func isApprovedForAll(owner: EthereumAddress, operator user: EthereumAddress) async throws -> Bool {
-        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user])!.callContractMethod()
+        let result = try await contract.createReadOperation("isApprovedForAll", parameters: [owner, user])!.call()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func supportsInterface(interfaceID: String) async throws -> Bool {
-        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID])!.callContractMethod()
+        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID])!.call()
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -187,19 +187,19 @@ extension ERC721 {
 extension ERC721: IERC721Enumerable {
 
     public func totalSupply() async throws -> BigUInt {
-        let result = try await contract.createReadOperation("totalSupply")!.callContractMethod()
+        let result = try await contract.createReadOperation("totalSupply")!.call()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func tokenByIndex(index: BigUInt) async throws -> BigUInt {
-        let result = try await contract.createReadOperation("tokenByIndex", parameters: [index])!.callContractMethod()
+        let result = try await contract.createReadOperation("tokenByIndex", parameters: [index])!.call()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func tokenOfOwnerByIndex(owner: EthereumAddress, index: BigUInt) async throws -> BigUInt {
-        let result = try await contract.createReadOperation("tokenOfOwnerByIndex", parameters: [owner, index])!.callContractMethod()
+        let result = try await contract.createReadOperation("tokenOfOwnerByIndex", parameters: [owner, index])!.call()
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
@@ -212,19 +212,19 @@ extension ERC721: IERC721Enumerable {
 extension ERC721: IERC721Metadata {
 
     public func name() async throws -> String {
-        let result = try await contract.createReadOperation("name")!.callContractMethod()
+        let result = try await contract.createReadOperation("name")!.call()
         guard let res = result["0"] as? String else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func symbol() async throws -> String {
-        let result = try await contract.createReadOperation("symbol")!.callContractMethod()
+        let result = try await contract.createReadOperation("symbol")!.call()
         guard let res = result["0"] as? String else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func tokenURI(tokenId: BigUInt) async throws -> String {
-        let result = try await contract.createReadOperation("tokenURI", parameters: [tokenId])!.callContractMethod()
+        let result = try await contract.createReadOperation("tokenURI", parameters: [tokenId])!.call()
         guard let res = result["0"] as? String else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }

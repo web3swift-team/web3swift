@@ -59,7 +59,7 @@ public extension ENS {
         public func getNameExpirity(name: BigUInt) async throws -> BigUInt {
             guard let transaction = self.contract.createReadOperation("nameExpires", parameters: [name]) else { throw Web3Error.transactionSerializationError }
 
-            guard let result = try? await transaction.callContractMethod() else { throw Web3Error.processingError(desc: "Can't call transaction") }
+            guard let result = try? await transaction.call() else { throw Web3Error.processingError(desc: "Can't call transaction") }
             guard let expirity = result["0"] as? BigUInt else { throw Web3Error.processingError(desc: "Can't get answer") }
             return expirity
         }
@@ -68,7 +68,7 @@ public extension ENS {
         public func isNameAvailable(name: BigUInt) async throws -> Bool {
             guard let transaction = self.contract.createReadOperation("available", parameters: [name]) else { throw Web3Error.transactionSerializationError }
 
-            guard let result = try? await transaction.callContractMethod() else { throw Web3Error.processingError(desc: "Can't call transaction") }
+            guard let result = try? await transaction.call() else { throw Web3Error.processingError(desc: "Can't call transaction") }
             guard let available = result["0"] as? Bool else { throw Web3Error.processingError(desc: "Can't get answer") }
             return available
         }

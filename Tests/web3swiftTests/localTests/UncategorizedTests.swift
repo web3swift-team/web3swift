@@ -117,16 +117,15 @@ class UncategorizedTests: XCTestCase {
         let allMethods = contract!.contract.allMethods
         let userDeviceCount = try await contract!
             .createReadOperation("userDeviceCount", parameters: [addr])?
-            .callContractMethod()
+            .call()
 
         let totalUsers = try await contract!
             .createReadOperation("totalUsers")?
-            .callContractMethod()
+            .call()
 
         let user = try await contract!
             .createReadOperation("users", parameters: [0])?
-            .callContractMethod()
-
+            .call()
     }
 
     func testBloomFilterPerformance() throws {

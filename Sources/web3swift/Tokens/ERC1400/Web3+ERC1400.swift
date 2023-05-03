@@ -86,14 +86,14 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
     }
 
     public func getBalance(account: EthereumAddress) async throws -> BigUInt {
-        let result = try await contract.createReadOperation("balanceOf", parameters: [account])!.callContractMethod()
+        let result = try await contract.createReadOperation("balanceOf", parameters: [account])!.call()
 
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func getAllowance(originalOwner: EthereumAddress, delegate: EthereumAddress) async throws -> BigUInt {
-        let result = try await contract.createReadOperation("allowance", parameters: [originalOwner, delegate])!.callContractMethod()
+        let result = try await contract.createReadOperation("allowance", parameters: [originalOwner, delegate])!.call()
 
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -103,7 +103,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -122,7 +122,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -141,7 +141,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -157,7 +157,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
     }
 
     public func totalSupply() async throws -> BigUInt {
-        let result = try await contract.createReadOperation("totalSupply")!.callContractMethod()
+        let result = try await contract.createReadOperation("totalSupply")!.call()
 
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -167,7 +167,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -184,7 +184,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
 
     // ERC1400 methods
     public func getDocument(name: Data) async throws -> (String, Data) {
-        let result = try await contract.createReadOperation("getDocument", parameters: [name])!.callContractMethod()
+        let result = try await contract.createReadOperation("getDocument", parameters: [name])!.call()
 
         guard let res = result["0"] as? (String, Data) else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -197,14 +197,14 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
     }
 
     public func balanceOfByPartition(partition: Data, tokenHolder: EthereumAddress) async throws -> BigUInt {
-        let result = try await contract.createReadOperation("balanceOfByPartition", parameters: [partition, tokenHolder])!.callContractMethod()
+        let result = try await contract.createReadOperation("balanceOfByPartition", parameters: [partition, tokenHolder])!.call()
 
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func partitionsOf(tokenHolder: EthereumAddress) async throws -> [Data] {
-        let result = try await contract.createReadOperation("partitionsOf", parameters: [tokenHolder])!.callContractMethod()
+        let result = try await contract.createReadOperation("partitionsOf", parameters: [tokenHolder])!.call()
 
         guard let res = result["0"] as? [Data] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -214,7 +214,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -233,7 +233,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -252,7 +252,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -271,7 +271,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -287,7 +287,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
     }
 
     public func isControllable() async throws -> Bool {
-        let result = try await contract.createReadOperation("isControllable")!.callContractMethod()
+        let result = try await contract.createReadOperation("isControllable")!.call()
 
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -297,7 +297,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -316,7 +316,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -356,21 +356,21 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
     }
 
     public func isOperator(operator user: EthereumAddress, tokenHolder: EthereumAddress) async throws -> Bool {
-        let result = try await contract.createReadOperation("isOperator", parameters: [user, tokenHolder])!.callContractMethod()
+        let result = try await contract.createReadOperation("isOperator", parameters: [user, tokenHolder])!.call()
 
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func isOperatorForPartition(partition: Data, operator user: EthereumAddress, tokenHolder: EthereumAddress) async throws -> Bool {
-        let result = try await contract.createReadOperation("isOperatorForPartition", parameters: [partition, user, tokenHolder])!.callContractMethod()
+        let result = try await contract.createReadOperation("isOperatorForPartition", parameters: [partition, user, tokenHolder])!.call()
 
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func isIssuable() async throws -> Bool {
-        let result = try await contract.createReadOperation("isIssuable")!.callContractMethod()
+        let result = try await contract.createReadOperation("isIssuable")!.call()
 
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -380,7 +380,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -399,7 +399,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -418,7 +418,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -437,7 +437,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -456,7 +456,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -475,7 +475,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -492,7 +492,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
 
     public func canTransfer(to: EthereumAddress, amount: String, data: [UInt8]) async throws -> ([UInt8], Data) {
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -503,7 +503,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let result = try await contract.createReadOperation("canTransfer", parameters: [to, value, data])!.callContractMethod()
+        let result = try await contract.createReadOperation("canTransfer", parameters: [to, value, data])!.call()
 
         guard let res = result["0"] as? ([UInt8], Data) else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -511,7 +511,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
 
     public func canTransferFrom(originalOwner: EthereumAddress, to: EthereumAddress, amount: String, data: [UInt8]) async throws -> ([UInt8], Data) {
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -522,7 +522,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let result = try await contract.createReadOperation("canTransfer", parameters: [originalOwner, to, value, data])!.callContractMethod()
+        let result = try await contract.createReadOperation("canTransfer", parameters: [originalOwner, to, value, data])!.call()
 
         guard let res = result["0"] as? ([UInt8], Data) else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -530,7 +530,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
 
     public func canTransferByPartition(originalOwner: EthereumAddress, to: EthereumAddress, partition: Data, amount: String, data: [UInt8]) async throws -> ([UInt8], Data, Data) {
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -541,7 +541,7 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
             throw Web3Error.inputError(desc: "Can not parse inputted amount")
         }
 
-        let result = try await contract.createReadOperation("canTransfer", parameters: [originalOwner, to, partition, value, data])!.callContractMethod()
+        let result = try await contract.createReadOperation("canTransfer", parameters: [originalOwner, to, partition, value, data])!.call()
 
         guard let res = result["0"] as? ([UInt8], Data, Data) else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -550,14 +550,14 @@ public class ERC1400: IERC1400, ERC20BaseProperties {
 
 extension ERC1400: IERC777 {
     public func canImplementInterfaceForAddress(interfaceHash: Data, addr: EthereumAddress) async throws -> Data {
-        let result = try await contract.createReadOperation("canImplementInterfaceForAddress", parameters: [interfaceHash, addr])!.callContractMethod()
+        let result = try await contract.createReadOperation("canImplementInterfaceForAddress", parameters: [interfaceHash, addr])!.call()
 
         guard let res = result["0"] as? Data else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func getInterfaceImplementer(addr: EthereumAddress, interfaceHash: Data) async throws -> EthereumAddress {
-        let result = try await contract.createReadOperation("getInterfaceImplementer", parameters: [addr, interfaceHash])!.callContractMethod()
+        let result = try await contract.createReadOperation("getInterfaceImplementer", parameters: [addr, interfaceHash])!.call()
 
         guard let res = result["0"] as? EthereumAddress else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -576,7 +576,7 @@ extension ERC1400: IERC777 {
     }
 
     public func interfaceHash(interfaceName: String) async throws -> Data {
-        let result = try await contract.createReadOperation("interfaceHash", parameters: [interfaceName])!.callContractMethod()
+        let result = try await contract.createReadOperation("interfaceHash", parameters: [interfaceName])!.call()
 
         guard let res = result["0"] as? Data else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -589,21 +589,21 @@ extension ERC1400: IERC777 {
     }
 
     public func supportsInterface(interfaceID: String) async throws -> Bool {
-        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID])!.callContractMethod()
+        let result = try await contract.createReadOperation("supportsInterface", parameters: [interfaceID])!.call()
 
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func getGranularity() async throws -> BigUInt {
-        let result = try await contract.createReadOperation("granularity")!.callContractMethod()
+        let result = try await contract.createReadOperation("granularity")!.call()
 
         guard let res = result["0"] as? BigUInt else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
     }
 
     public func getDefaultOperators() async throws -> [EthereumAddress] {
-        let result = try await contract.createReadOperation("defaultOperators")!.callContractMethod()
+        let result = try await contract.createReadOperation("defaultOperators")!.call()
 
         guard let res = result["0"] as? [EthereumAddress] else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -624,7 +624,7 @@ extension ERC1400: IERC777 {
     }
 
     public func isOperatorFor(operator user: EthereumAddress, tokenHolder: EthereumAddress) async throws -> Bool {
-        let result = try await contract.createReadOperation("isOperatorFor", parameters: [user, tokenHolder])!.callContractMethod()
+        let result = try await contract.createReadOperation("isOperatorFor", parameters: [user, tokenHolder])!.call()
 
         guard let res = result["0"] as? Bool else {throw Web3Error.processingError(desc: "Failed to get result of expected type from the Ethereum node")}
         return res
@@ -634,7 +634,7 @@ extension ERC1400: IERC777 {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -653,7 +653,7 @@ extension ERC1400: IERC777 {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -672,7 +672,7 @@ extension ERC1400: IERC777 {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}
@@ -691,7 +691,7 @@ extension ERC1400: IERC777 {
         transaction.callOnBlock = .latest
         updateTransactionAndContract(from: from)
         // get the decimals manually
-        let callResult = try await contract.createReadOperation("decimals")!.callContractMethod()
+        let callResult = try await contract.createReadOperation("decimals")!.call()
         var decimals = BigUInt(0)
         guard let dec = callResult["0"], let decTyped = dec as? BigUInt else {
             throw Web3Error.inputError(desc: "Contract may be not ERC20 compatible, can not get decimals")}

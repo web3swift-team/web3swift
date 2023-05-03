@@ -24,7 +24,7 @@ class UserCases: XCTestCase {
         let contract = web3.contract(abiString, at: receipt.contractAddress!)!
         let readTransaction = contract.createReadOperation("balanceOf", parameters: [account])!
         readTransaction.transaction.from = account
-        let response = try await readTransaction.callContractMethod()
+        let response = try await readTransaction.call()
         let balance = response["0"] as? BigUInt
 
     }

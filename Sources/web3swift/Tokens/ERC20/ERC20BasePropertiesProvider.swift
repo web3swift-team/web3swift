@@ -24,15 +24,15 @@ public final class ERC20BasePropertiesProvider {
         guard !hasReadProperties && contract.contract.address != nil else { return }
         name = try await contract
             .createReadOperation("name")?
-            .callContractMethod()["0"] as? String
+            .call()["0"] as? String
 
         symbol = try await contract
             .createReadOperation("symbol")?
-            .callContractMethod()["0"] as? String
+            .call()["0"] as? String
 
         let decimals = try await contract
             .createReadOperation("decimals")?
-            .callContractMethod()["0"] as? BigUInt
+            .call()["0"] as? BigUInt
         self.decimals = decimals != nil ? UInt8(decimals!) : nil
         hasReadProperties = true
     }

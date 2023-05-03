@@ -96,7 +96,7 @@ public class ENS {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func setAddress(forNode node: String, address: EthereumAddress, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
+    public func setAddress(forNode node: String, address: EthereumAddress, transaction: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
@@ -106,9 +106,9 @@ public class ENS {
         guard isAddrSupports else {
             throw Web3Error.processingError(desc: "Address isn't supported")
         }
-        var options = options ?? defaultTransaction
-        options.to = resolver.resolverContractAddress
-        guard let result = try? await resolver.setAddress(forNode: node, address: address, options: options, password: password) else {
+        var transaction = transaction ?? defaultTransaction
+        transaction.to = resolver.resolverContractAddress
+        guard let result = try? await resolver.setAddress(forNode: node, address: address, transaction: transaction, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
         }
         return result
@@ -131,7 +131,7 @@ public class ENS {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func setName(forNode node: String, name: String, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
+    public func setName(forNode node: String, name: String, transaction: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
@@ -141,9 +141,9 @@ public class ENS {
         guard isNameSupports else {
             throw Web3Error.processingError(desc: "Name isn't supported")
         }
-        var options = options ?? defaultTransaction
+        var options = transaction ?? defaultTransaction
         options.to = resolver.resolverContractAddress
-        guard let result = try? await resolver.setCanonicalName(forNode: node, name: name, options: options, password: password) else {
+        guard let result = try? await resolver.setCanonicalName(forNode: node, name: name, transaction: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
         }
         return result
@@ -167,7 +167,7 @@ public class ENS {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func setContent(forNode node: String, hash: String, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
+    public func setContent(forNode node: String, hash: String, transaction: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
@@ -177,9 +177,9 @@ public class ENS {
         guard isContentSupports else {
             throw Web3Error.processingError(desc: "Content isn't supported")
         }
-        var options = options ?? defaultTransaction
+        var options = transaction ?? defaultTransaction
         options.to = resolver.resolverContractAddress
-        guard let result = try? await resolver.setContentHash(forNode: node, hash: hash, options: options, password: password) else {
+        guard let result = try? await resolver.setContentHash(forNode: node, hash: hash, transaction: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
         }
         return result
@@ -202,7 +202,7 @@ public class ENS {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func setABI(forNode node: String, contentType: ENS.Resolver.ContentType, data: Data, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
+    public func setABI(forNode node: String, contentType: ENS.Resolver.ContentType, data: Data, transaction: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
@@ -212,9 +212,9 @@ public class ENS {
         guard isABISupports else {
             throw Web3Error.processingError(desc: "ABI isn't supported")
         }
-        var options = options ?? defaultTransaction
+        var options = transaction ?? defaultTransaction
         options.to = resolver.resolverContractAddress
-        guard let result = try? await resolver.setContractABI(forNode: node, contentType: contentType, data: data, options: options, password: password) else {
+        guard let result = try? await resolver.setContractABI(forNode: node, contentType: contentType, data: data, transaction: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
         }
         return result
@@ -237,7 +237,7 @@ public class ENS {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func setPublicKey(forNode node: String, publicKey: PublicKey, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
+    public func setPublicKey(forNode node: String, publicKey: PublicKey, transaction: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
@@ -247,9 +247,9 @@ public class ENS {
         guard isPKSupports else {
             throw Web3Error.processingError(desc: "Public Key isn't supported")
         }
-        var options = options ?? defaultTransaction
+        var options = transaction ?? defaultTransaction
         options.to = resolver.resolverContractAddress
-        guard let result = try? await resolver.setPublicKey(forNode: node, publicKey: publicKey, options: options, password: password) else {
+        guard let result = try? await resolver.setPublicKey(forNode: node, publicKey: publicKey, transaction: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
         }
         return result
@@ -272,7 +272,7 @@ public class ENS {
     }
 
     // FIXME: Rewrite this to CodableTransaction
-    public func setText(forNode node: String, key: String, value: String, options: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
+    public func setText(forNode node: String, key: String, value: String, transaction: CodableTransaction? = nil, password: String) async throws -> TransactionSendingResult {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
             throw Web3Error.processingError(desc: "Failed to get resolver for domain")
         }
@@ -282,9 +282,9 @@ public class ENS {
         guard isTextSupports else {
             throw Web3Error.processingError(desc: "Text isn't supported")
         }
-        var options = options ?? defaultTransaction
+        var options = transaction ?? defaultTransaction
         options.to = resolver.resolverContractAddress
-        guard let result = try? await resolver.setTextData(forNode: node, key: key, value: value, options: options, password: password) else {
+        guard let result = try? await resolver.setTextData(forNode: node, key: key, value: value, transaction: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
         }
         return result
