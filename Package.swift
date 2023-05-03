@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7.0
+// swift-tools-version: 5.5.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -14,13 +14,13 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/attaswift/BigInt.git", from: "5.3.0"),
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.5.1"),
-        .package(url: "https://github.com/GigaBitcoin/secp256k1.swift", .upToNextMinor(from: "0.10.0")),
+        .package(name: "secp256k1", url: "https://github.com/GigaBitcoin/secp256k1.swift", .upToNextMinor(from: "0.10.0")),
     ],
     targets: [
         .target(
             name: "Web3Core",
             dependencies: [
-                .product(name: "secp256k1", package: "secp256k1.swift"),
+                "secp256k1",
                 "BigInt",
                 "CryptoSwift"
             ]
@@ -28,7 +28,7 @@ let package = Package(
         .target(
             name: "web3swift",
             dependencies: [
-                .product(name: "secp256k1", package: "secp256k1.swift"),
+                "secp256k1",
                 "Web3Core",
                 "BigInt",
             ],
