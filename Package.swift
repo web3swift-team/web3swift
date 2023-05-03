@@ -20,10 +20,6 @@ let package = Package(
         .target(name: "secp256k1"),
         .target(
             name: "Web3Core",
-            dependencies: ["BigInt", "secp256k1", "CryptoSwift"]
-        ),
-        .target(
-            name: "Web3Core",
             dependencies: [
                 "BigInt",
                 .product(name: "secp256k1", package: "secp256k1.swift", moduleAliases: ["secp256k1": "secp256k1Web3"]),
