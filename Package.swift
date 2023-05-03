@@ -17,8 +17,8 @@ let package = Package(
         .package(url: "https://github.com/GigaBitcoin/secp256k1.swift.git", .exact("0.10.0")),
     ],
     targets: [
-        .target(name: "secp256k1"),
-        .target(
+        .executableTarget(name: "secp256k1"),
+        .executableTarget(
             name: "Web3Core",
             dependencies: [
                 "BigInt",
@@ -26,7 +26,7 @@ let package = Package(
                 "CryptoSwift",
             ])
         ]
-        .target(
+        .executableTarget(
             name: "web3swift",
             dependencies: ["Web3Core", "BigInt", "secp256k1"],
             dependencies: [
