@@ -111,7 +111,7 @@ public class BIP32Keystore: AbstractKeystore {
         addressStorage = PathAddressStorage()
         guard let rootNode = HDNode(seed: seed)?.derive(path: prefixPath, derivePrivateKey: true) else { return nil }
         self.rootPrefix = prefixPath
-        try createNewAccount(parentNode: rootNode, password: password)
+        try createNewAccount(parentNode: rootNode)
         guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {
             throw AbstractKeystoreError.keyDerivationError
         }
@@ -129,14 +129,14 @@ public class BIP32Keystore: AbstractKeystore {
         guard rootNode.depth == prefixPath.components(separatedBy: "/").count - 1 else {
             throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
         }
-        try createNewAccount(parentNode: rootNode, password: password)
+        try createNewAccount(parentNode: rootNode)
         guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {
             throw AbstractKeystoreError.keyDerivationError
         }
         try encryptDataToStorage(password, data: serializedRootNode, aesMode: self.keystoreParams!.crypto.cipher)
     }
 
-    func createNewAccount(parentNode: HDNode, password: String = "web3swift") throws {
+    internal func createNewAccount(parentNode: HDNode) throws {
         let maxIndex = addressStorage.paths
             .compactMap { $0.components(separatedBy: "/").last }
             .compactMap { UInt32($0) }

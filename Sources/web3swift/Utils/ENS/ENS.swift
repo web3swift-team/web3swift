@@ -106,9 +106,9 @@ public class ENS {
         guard isAddrSupports else {
             throw Web3Error.processingError(desc: "Address isn't supported")
         }
-        var options = transaction ?? defaultTransaction
-        options.to = resolver.resolverContractAddress
-        guard let result = try? await resolver.setAddress(forNode: node, address: address, transaction: options, password: password) else {
+        var transaction = transaction ?? defaultTransaction
+        transaction.to = resolver.resolverContractAddress
+        guard let result = try? await resolver.setAddress(forNode: node, address: address, transaction: transaction, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
         }
         return result
