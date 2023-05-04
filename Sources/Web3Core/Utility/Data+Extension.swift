@@ -43,7 +43,7 @@ public extension Data {
 
     /**
      Generates an array of random bytes of the specified length.
-     This function uses `SecRandomCopyBytes` to generate random bytes returning it as a `Data` object. 
+     This function uses `SecRandomCopyBytes` to generate random bytes returning it as a `Data` object.
      If an error occurs during random bytes generation, the function returns `nil`.
      Error occurs only if `SecRandomCopyBytes` returns status that is not `errSecSuccess`.
      See [all status codes](https://developer.apple.com/documentation/security/1542001-security_framework_result_codes) for possible error reasons.
