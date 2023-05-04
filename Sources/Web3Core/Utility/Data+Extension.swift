@@ -42,25 +42,23 @@ public extension Data {
     }
 
     /**
-     Generates an array of random bytes with the specified length.
-
+     Generates an array of random bytes of the specified length.
+     This function uses `SecRandomCopyBytes` to generate random bytes returning it as a `Data` object. 
+     If an error occurs during random bytes generation, the function returns `nil`.
+     Error occurs only if `SecRandomCopyBytes` returns status that is not `errSecSuccess`.
+     See [all status codes](https://developer.apple.com/documentation/security/1542001-security_framework_result_codes) for possible error reasons.
+     Note: in v4 of web3swift this function will be deprecated and a new implementation will be provided that will throw occured error.
      - Parameter length: The number of random bytes to generate.
 
-     - Returns: An optional `Data` object containing the generated random bytes, or `nil` if an error occurs during generation.
-     - Note: This function uses `SecRandomCopyBytes` to generate random bytes and shuffles the resulting array before returning it as a `Data` object. If an error occurs during random bytes generation, the function returns `nil`.
+     - Returns: optional `Data` object containing the generated random bytes, or `nil` if an error occured during generation.
      */
     static func randomBytes(length: Int) -> Data? {
         var entropyBytes = [UInt8](repeating: 0, count: length)
-
         let status = SecRandomCopyBytes(kSecRandomDefault, entropyBytes.count, &entropyBytes)
-
         guard status == errSecSuccess else {
             return nil
         }
-
-        let entropyData = entropyBytes.shuffled()
-
-        return Data(entropyData)
+        return Data(entropyBytes)
     }
 
     func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public
