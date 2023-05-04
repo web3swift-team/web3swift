@@ -47,10 +47,10 @@ public extension Data {
      If an error occurs during random bytes generation, the function returns `nil`.
      Error occurs only if `SecRandomCopyBytes` returns status that is not `errSecSuccess`.
      See [all status codes](https://developer.apple.com/documentation/security/1542001-security_framework_result_codes) for possible error reasons.
-     Note: in v4 of web3swift this function will be deprecated and a new implementation will be provided that will throw occured error.
+     Note: in v4 of web3swift this function will be deprecated and a new implementation will be provided that will throw occurred error.
      - Parameter length: The number of random bytes to generate.
 
-     - Returns: optional `Data` object containing the generated random bytes, or `nil` if an error occured during generation.
+     - Returns: optional `Data` object containing the generated random bytes, or `nil` if an error occurred during generation.
      */
     static func randomBytes(length: Int) -> Data? {
         var entropyBytes = [UInt8](repeating: 0, count: length)
