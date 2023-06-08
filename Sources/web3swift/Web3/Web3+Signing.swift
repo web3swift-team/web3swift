@@ -23,7 +23,7 @@ public struct Web3Signer {
                                                                 keystore: T,
                                                                 account: EthereumAddress,
                                                                 password: String,
-                                                                useHash: Bool,
+                                                                useHash: Bool = true,
                                                                 useExtraEntropy: Bool = false) throws -> Data? {
         var privateKey = try keystore.UNSAFE_getPrivateKeyData(password: password, account: account)
         defer { Data.zero(&privateKey) }
