@@ -215,7 +215,7 @@ public class BIP32Keystore: AbstractKeystore {
         guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {throw AbstractKeystoreError.keyDerivationError}
         try encryptDataToStorage(password, data: serializedRootNode, aesMode: self.keystoreParams!.crypto.cipher)
     }
-    
+
     /// Fast generation addresses for current account
     /// used for shows which address user will get when changed number of his wallet
     /// - Parameters:
@@ -231,7 +231,7 @@ public class BIP32Keystore: AbstractKeystore {
         }
         let prefixPath = self.rootPrefix
         var pathAppendix: String?
-        
+
         return [Int](0..<number).compactMap({ number in
             pathAppendix = nil
             let path = prefixPath + "/\(number)"
@@ -242,7 +242,7 @@ public class BIP32Keystore: AbstractKeystore {
                 } else {
                     return nil
                 }
-                
+
                 guard pathAppendix != nil else {
                     return nil
                 }
@@ -263,7 +263,7 @@ public class BIP32Keystore: AbstractKeystore {
             return newAddress
         })
     }
-    
+
     fileprivate func encryptDataToStorage(_ password: String, data: Data, dkLen: Int = 32, N: Int = 4096, R: Int = 6, P: Int = 1, aesMode: String = "aes-128-cbc") throws {
         guard data.count == 82 else {
             throw AbstractKeystoreError.encryptionError("Invalid expected data length")
