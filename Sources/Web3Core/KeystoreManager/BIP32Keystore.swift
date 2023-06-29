@@ -177,7 +177,7 @@ public class BIP32Keystore: AbstractKeystore {
         if path.hasPrefix(prefixPath) {
             let upperIndex = (path.range(of: prefixPath)?.upperBound)!
             if upperIndex < path.endIndex {
-                pathAppendix = String(path[path.index(after: upperIndex)])
+                pathAppendix = String(path[path.index(after: upperIndex)..<path.endIndex])
             } else {
                 throw AbstractKeystoreError.encryptionError("out of bounds")
             }
@@ -215,7 +215,56 @@ public class BIP32Keystore: AbstractKeystore {
         guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {throw AbstractKeystoreError.keyDerivationError}
         try encryptDataToStorage(password, data: serializedRootNode, aesMode: self.keystoreParams!.crypto.cipher)
     }
-
+    
+    /// Fast generation addresses for current account
+    /// used for shows wich address user wiil get when changed number of his wallet
+    /// - Parameters:
+    ///   - password: password of seed storage
+    ///   - preffixPath: preffix of Derivation Path without account number
+    ///   - number: number of wallets adresses needed to generate from 0 to number-1
+    /// - Returns: Array of addresses generated from 0 to number bound, or empty array in case of error
+    public func getAddressForAccount(password: String, preffixPath: String, number: Int) -> [EthereumAddress] {
+        guard let decryptedRootNode = try? getPrefixNodeData(password) else {
+            return []
+        }
+        guard let rootNode = HDNode(decryptedRootNode) else {
+            return []
+        }
+        let prefixPath = self.rootPrefix
+        var pathAppendix: String?
+        
+        return [Int](0..<number).compactMap({ number in
+            pathAppendix = nil
+            let path = preffixPath + "/\(number)"
+            if path.hasPrefix(prefixPath) {
+                let upperIndex = (path.range(of: prefixPath)?.upperBound)!
+                if upperIndex < path.endIndex {
+                    pathAppendix = String(path[path.index(after: upperIndex)..<path.endIndex])
+                } else {
+                    return nil
+                }
+                
+                guard pathAppendix != nil else {
+                    return nil
+                }
+                if pathAppendix!.hasPrefix("/") {
+                    pathAppendix = pathAppendix?.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
+                }
+            } else {
+                if path.hasPrefix("/") {
+                    pathAppendix = path.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
+                }
+            }
+            guard pathAppendix != nil,
+                  rootNode.depth == prefixPath.components(separatedBy: "/").count - 1,
+                  let newNode = rootNode.derive(path: pathAppendix!, derivePrivateKey: true),
+                  let newAddress = Utilities.publicToAddress(newNode.publicKey) else {
+                return nil
+            }
+            return newAddress
+        })
+    }
+    
     fileprivate func encryptDataToStorage(_ password: String, data: Data, dkLen: Int = 32, N: Int = 4096, R: Int = 6, P: Int = 1, aesMode: String = "aes-128-cbc") throws {
         guard data.count == 82 else {
             throw AbstractKeystoreError.encryptionError("Invalid expected data length")
