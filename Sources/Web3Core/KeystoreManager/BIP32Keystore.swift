@@ -230,10 +230,9 @@ public class BIP32Keystore: AbstractKeystore {
             return []
         }
         let prefixPath = self.rootPrefix
-        var pathAppendix: String?
 
-        return [Int](0..<number).compactMap({ number in
-            pathAppendix = nil
+        return [Int](0..<number).compactMap { number in
+            var pathAppendix: String?
             let path = prefixPath + "/\(number)"
             if path.hasPrefix(prefixPath) {
                 let upperIndex = (path.range(of: prefixPath)?.upperBound)!
@@ -261,7 +260,7 @@ public class BIP32Keystore: AbstractKeystore {
                 return nil
             }
             return newAddress
-        })
+        }
     }
 
     fileprivate func encryptDataToStorage(_ password: String, data: Data, dkLen: Int = 32, N: Int = 4096, R: Int = 6, P: Int = 1, aesMode: String = "aes-128-cbc") throws {
