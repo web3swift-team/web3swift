@@ -30,7 +30,6 @@ class BIP32KeystoreTests: XCTestCase {
         }
         
         let addresses = keystore.getAddressForAccount(password: password,
-                                                      preffixPath: HDNode.defaultPathMetamaskPrefix,
                                                       number: addressesCount)
         XCTAssertEqual(addresses.count, addressesCount)
         XCTAssertNotEqual(addresses[11], addresses[1])

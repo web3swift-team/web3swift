@@ -217,13 +217,12 @@ public class BIP32Keystore: AbstractKeystore {
     }
     
     /// Fast generation addresses for current account
-    /// used for shows wich address user wiil get when changed number of his wallet
+    /// used for shows which address user will get when changed number of his wallet
     /// - Parameters:
     ///   - password: password of seed storage
-    ///   - preffixPath: preffix of Derivation Path without account number
-    ///   - number: number of wallets adresses needed to generate from 0 to number-1
+    ///   - number: number of wallets addresses needed to generate from 0 to number-1
     /// - Returns: Array of addresses generated from 0 to number bound, or empty array in case of error
-    public func getAddressForAccount(password: String, preffixPath: String, number: Int) -> [EthereumAddress] {
+    public func getAddressForAccount(password: String, number: Int) -> [EthereumAddress] {
         guard let decryptedRootNode = try? getPrefixNodeData(password) else {
             return []
         }
@@ -235,7 +234,7 @@ public class BIP32Keystore: AbstractKeystore {
         
         return [Int](0..<number).compactMap({ number in
             pathAppendix = nil
-            let path = preffixPath + "/\(number)"
+            let path = prefixPath + "/\(number)"
             if path.hasPrefix(prefixPath) {
                 let upperIndex = (path.range(of: prefixPath)?.upperBound)!
                 if upperIndex < path.endIndex {
