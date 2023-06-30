@@ -162,7 +162,7 @@ public class BIP32Keystore: AbstractKeystore {
 
     public func createNewCustomChildAccount(password: String, path: String) throws {
         guard let decryptedRootNode = try getPrefixNodeData(password),
-              let keystoreParams = keystoreParams else {
+              let keystoreParams else {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
         guard let rootNode = HDNode(decryptedRootNode) else {
@@ -179,17 +179,17 @@ public class BIP32Keystore: AbstractKeystore {
                 throw AbstractKeystoreError.encryptionError("out of bounds")
             }
 
-            guard var pathAppendix = pathAppendix else {
+            guard let modifiedAppendix = pathAppendix else {
                 throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
             }
-            if pathAppendix.hasPrefix("/") {
-                pathAppendix = pathAppendix.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
+            if modifiedAppendix.hasPrefix("/") {
+                pathAppendix = modifiedAppendix.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
             }
         } else if path.hasPrefix("/") {
             pathAppendix = path.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
         }
 
-        guard let pathAppendix = pathAppendix,
+        guard let pathAppendix,
               rootNode.depth == prefixPath.components(separatedBy: "/").count - 1 else {
             throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
         }
