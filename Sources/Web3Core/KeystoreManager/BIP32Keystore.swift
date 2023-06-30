@@ -155,13 +155,7 @@ public class BIP32Keystore: AbstractKeystore {
         guard let newAddress = Utilities.publicToAddress(newNode.publicKey) else {
             throw AbstractKeystoreError.keyDerivationError
         }
-        let prefixPath = self.rootPrefix
-        var newPath: String
-        if newNode.isHardened {
-            newPath = prefixPath + "/" + String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
-        } else {
-            newPath = prefixPath + "/" + String(newNode.index)
-        }
+        let newPath = rootPrefix + "/" + String(newNode.index)
         addressStorage.add(address: newAddress, for: newPath)
     }
 
