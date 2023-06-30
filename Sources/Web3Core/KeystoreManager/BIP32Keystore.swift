@@ -175,25 +175,12 @@ public class BIP32Keystore: AbstractKeystore {
             } else {
                 throw AbstractKeystoreError.encryptionError("out of bounds")
             }
-
-            guard pathAppendix != nil else {
-                throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
-            }
-            if pathAppendix!.hasPrefix("/") {
-                pathAppendix = pathAppendix?.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
-            }
-        } else {
-            if path.hasPrefix("/") {
-                pathAppendix = path.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
-            }
         }
-        guard pathAppendix != nil else {
+        pathAppendix = pathAppendix?.trimmingCharacters(in: .init(charactersIn: "/"))
+        guard let pathAppendix, rootNode.depth == prefixPath.components(separatedBy: "/").count - 1 else {
             throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
         }
-        guard rootNode.depth == prefixPath.components(separatedBy: "/").count - 1 else {
-            throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
-        }
-        guard let newNode = rootNode.derive(path: pathAppendix!, derivePrivateKey: true) else {
+        guard let newNode = rootNode.derive(path: pathAppendix, derivePrivateKey: true) else {
             throw AbstractKeystoreError.keyDerivationError
         }
         guard let newAddress = Utilities.publicToAddress(newNode.publicKey) else {
@@ -201,12 +188,14 @@ public class BIP32Keystore: AbstractKeystore {
         }
         var newPath: String
         if newNode.isHardened {
-            newPath = prefixPath + "/" + pathAppendix!.trimmingCharacters(in: CharacterSet.init(charactersIn: "'")) + "'"
+            newPath = prefixPath + "/" + pathAppendix.trimmingCharacters(in: .init(charactersIn: "'")) + "'"
         } else {
-            newPath = prefixPath + "/" + pathAppendix!
+            newPath = prefixPath + "/" + pathAppendix
         }
         addressStorage.add(address: newAddress, for: newPath)
-        guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {throw AbstractKeystoreError.keyDerivationError}
+        guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {
+            throw AbstractKeystoreError.keyDerivationError
+        }
         try encryptDataToStorage(password, data: serializedRootNode, aesMode: self.keystoreParams!.crypto.cipher)
     }
 
@@ -241,11 +230,11 @@ public class BIP32Keystore: AbstractKeystore {
                     return nil
                 }
                 if pathAppendix!.hasPrefix("/") {
-                    pathAppendix = pathAppendix?.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
+                    pathAppendix = pathAppendix?.trimmingCharacters(in: .init(charactersIn: "/"))
                 }
             } else {
                 if path.hasPrefix("/") {
-                    pathAppendix = path.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
+                    pathAppendix = path.trimmingCharacters(in: .init(charactersIn: "/"))
                 }
             }
             guard pathAppendix != nil,
