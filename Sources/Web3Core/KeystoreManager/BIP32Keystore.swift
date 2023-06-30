@@ -162,7 +162,7 @@ public class BIP32Keystore: AbstractKeystore {
 
     public func createNewCustomChildAccount(password: String, path: String) throws {
         guard let decryptedRootNode = try getPrefixNodeData(password),
-              keystoreParams != nil else {
+              let keystoreParams else {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
         guard let rootNode = HDNode(decryptedRootNode) else {
@@ -203,7 +203,7 @@ public class BIP32Keystore: AbstractKeystore {
         guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {
             throw AbstractKeystoreError.keyDerivationError
         }
-        try encryptDataToStorage(password, data: serializedRootNode, aesMode: self.keystoreParams!.crypto.cipher)
+        try encryptDataToStorage(password, data: serializedRootNode, aesMode: keystoreParams.crypto.cipher)
     }
 
     /// Fast generation addresses for current account
