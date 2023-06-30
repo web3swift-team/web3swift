@@ -169,8 +169,8 @@ public class BIP32Keystore: AbstractKeystore {
             throw AbstractKeystoreError.encryptionError("Failed to deserialize a root node")
         }
 
-        let prefixPath = self.rootPrefix
-        var pathAppendix: String?
+        let prefixPath = rootPrefix
+        var pathAppendix = path
 
         if path.hasPrefix(prefixPath) {
             if let upperIndex = (path.range(of: prefixPath)?.upperBound), upperIndex < path.endIndex {
@@ -178,36 +178,31 @@ public class BIP32Keystore: AbstractKeystore {
             } else {
                 throw AbstractKeystoreError.encryptionError("out of bounds")
             }
-
-            guard let modifiedAppendix = pathAppendix else {
-                throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
-            }
-            if modifiedAppendix.hasPrefix("/") {
-                pathAppendix = modifiedAppendix.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
-            }
-        } else if path.hasPrefix("/") {
-            pathAppendix = path.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
         }
-
-        guard let pathAppendix,
-              rootNode.depth == prefixPath.components(separatedBy: "/").count - 1 else {
+        if pathAppendix.hasPrefix("/") {
+            pathAppendix = pathAppendix.trimmingCharacters(in: .init(charactersIn: "/"))
+        }
+        guard rootNode.depth == prefixPath.components(separatedBy: "/").count - 1 else {
             throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
         }
-
-        guard let newNode = rootNode.derive(path: pathAppendix, derivePrivateKey: true),
-              let newAddress = Utilities.publicToAddress(newNode.publicKey) else {
+        guard let newNode = rootNode.derive(path: pathAppendix, derivePrivateKey: true) else {
+            throw AbstractKeystoreError.keyDerivationError
+        }
+        guard let newAddress = Utilities.publicToAddress(newNode.publicKey) else {
             throw AbstractKeystoreError.keyDerivationError
         }
 
-        var newPath: String
+        let newPath: String
         if newNode.isHardened {
-            newPath = prefixPath + "/" + pathAppendix.trimmingCharacters(in: CharacterSet.init(charactersIn: "'")) + "'"
+            newPath = prefixPath + "/" + pathAppendix.trimmingCharacters(in: .init(charactersIn: "'")) + "'"
         } else {
             newPath = prefixPath + "/" + pathAppendix
         }
 
         addressStorage.add(address: newAddress, for: newPath)
-        guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {throw AbstractKeystoreError.keyDerivationError}
+        guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {
+            throw AbstractKeystoreError.keyDerivationError
+        }
         try encryptDataToStorage(password, data: serializedRootNode, aesMode: keystoreParams.crypto.cipher)
     }
 
@@ -222,7 +217,6 @@ public class BIP32Keystore: AbstractKeystore {
               let rootNode = HDNode(decryptedRootNode) else {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
-
         return try [UInt](0..<number).compactMap({ number in
             guard rootNode.depth == rootPrefix.components(separatedBy: "/").count - 1,
                   let newNode = rootNode.derive(path: "\(number)", derivePrivateKey: true) else {
