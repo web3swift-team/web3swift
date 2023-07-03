@@ -217,7 +217,7 @@ public class BIP32Keystore: AbstractKeystore {
               let rootNode = HDNode(decryptedRootNode) else {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
-        return try [UInt](0..<number).compactMap() { number in
+        return try [UInt](0..<number).compactMap { number in
             guard rootNode.depth == rootPrefix.components(separatedBy: "/").count - 1,
                   let newNode = rootNode.derive(path: "\(number)", derivePrivateKey: true) else {
                 throw AbstractKeystoreError.keyDerivationError
