@@ -192,12 +192,7 @@ public class BIP32Keystore: AbstractKeystore {
             throw AbstractKeystoreError.keyDerivationError
         }
 
-        let newPath: String
-        if newNode.isHardened {
-            newPath = prefixPath + "/" + pathAppendix.trimmingCharacters(in: .init(charactersIn: "'")) + "'"
-        } else {
-            newPath = prefixPath + "/" + pathAppendix
-        }
+        let newPath = prefixPath + "/" + pathAppendix
 
         addressStorage.add(address: newAddress, for: newPath)
         guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {
