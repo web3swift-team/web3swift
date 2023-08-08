@@ -58,7 +58,7 @@
 - [x] ✅**Literally following the standards** (BIP, EIP, etc):
     - [x] **[BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) (HD Wallets), [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) (Seed phrases), [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) (Key generation prefixes)**
 - [x] **[EIP-20](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md)** (Standard interface for tokens - ERC-20), **[EIP-67](https://github.com/ethereum/EIPs/issues/67)** (Standard URI scheme), **[EIP-155](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md)** (Replay attacks protection), **[EIP-2718](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2718.md)** (Typed Transaction Envelope), **[EIP-1559](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md)** (Gas Fee market change)
-    - [x] **And many others** *(For details about this EIP's look at [Documentation page](https://github.com/web3swift-team/web3swift/blob/master/Documentation/))*: EIP-681, EIP-721, EIP-165, EIP-777, EIP-820, EIP-888, EIP-1400, EIP-1410, EIP-1594, EIP-1643, EIP-1644, EIP-1633, EIP-721, EIP-1155, EIP-1376, ST-20
+    - [x] **And many others** *(For details about this EIP's look at [Documentation page](https://github.com/web3swift-team/web3swift/blob/master/Documentation/))*: EIP-165, EIP-681, EIP-721, EIP-777, EIP-820, EIP-888, EIP-1155, EIP-1376, EIP-1400, EIP-1410, EIP-1594, EIP-1633, EIP-1643, EIP-1644, EIP-4361 ([SIWE](https://eips.ethereum.org/EIPS/eip-4361)), ST-20
 - [x] **RLP encoding**
 - [x] Base58 encoding scheme
 - [x] Formatting to and from Ethereum Units

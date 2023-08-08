@@ -54,7 +54,7 @@ protocol ISecurityToken: IST20, IOwnable {
     /// Queries balances as of a defined checkpoint
     func balanceOfAt(investor: EthereumAddress, checkpointId: BigUInt) async throws -> BigUInt
 
-    /// Creates a checkpoint that can be used to query historical balances / totalSuppy
+    /// Creates a checkpoint that can be used to query historical balances / totalSupply
     func createCheckpoint(from: EthereumAddress) async throws -> WriteOperation
 
     /// gets length of investors array

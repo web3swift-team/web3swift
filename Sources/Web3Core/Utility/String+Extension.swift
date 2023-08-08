@@ -50,7 +50,7 @@ extension String {
         return String(self[start..<end])
     }
 
-    func leftPadding(toLength: Int, withPad character: Character) -> String {
+    public func leftPadding(toLength: Int, withPad character: Character) -> String {
         let stringLength = self.count
         if stringLength < toLength {
             return String(repeatElement(character, count: toLength - stringLength)) + self

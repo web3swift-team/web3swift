@@ -210,8 +210,8 @@ extension ContractProtocol {
 
     func decodeInputData(_ data: Data) -> [String: Any]? {
         guard data.count >= 4 else { return nil }
-        let methodId = data[0..<4].toHexString()
-        let data = data[4...]
+        let methodId = data[data.startIndex ..< data.startIndex + 4].toHexString()
+        let data = data[(data.startIndex + 4)...]
         return decodeInputData(methodId, data: data)
     }
 }
@@ -333,14 +333,14 @@ extension DefaultContractProtocol {
 
     public func decodeInputData(_ data: Data) -> [String: Any]? {
         guard data.count % 32 == 4 else { return nil }
-        let methodSignature = data[0..<4].toHexString().addHexPrefix().lowercased()
+        let methodSignature = data[data.startIndex ..< data.startIndex + 4].toHexString().addHexPrefix().lowercased()
 
         guard let function = methods[methodSignature]?.first else { return nil }
-        return function.decodeInputData(Data(data[4 ..< data.count]))
+        return function.decodeInputData(Data(data[data.startIndex + 4 ..< data.startIndex + data.count]))
     }
 
     public func getFunctionCalled(_ data: Data) -> ABI.Element.Function? {
         guard data.count >= 4 else { return nil }
-        return methods[data[0..<4].toHexString().addHexPrefix()]?.first
+        return methods[data[data.startIndex ..< data.startIndex + 4].toHexString().addHexPrefix()]?.first
     }
 }
