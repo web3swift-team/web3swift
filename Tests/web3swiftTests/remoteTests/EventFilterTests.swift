@@ -24,7 +24,7 @@ class EventFilerTests: XCTestCase {
         let parameters = EventFilterParameters(fromBlock: .exact(block.number - 1000), address: [address], topics: topics)
         let result = try await web3.eth.getLogs(eventFilter: parameters)
 
-        // result not always has object in it.
+        // result not always has a log in it.
         print(result)
     }
 }

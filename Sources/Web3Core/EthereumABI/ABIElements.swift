@@ -236,7 +236,7 @@ extension ABI.Element.Event {
             }
             return .string(encoded.toHexString().addHexPrefix())
         }
-        guard let data = ABIEncoder.convertToData(value)!.setLengthLeft(32) else {
+        guard let data = ABIEncoder.convertToData(value)?.setLengthLeft(32) else {
             return nil
         }
         return .string(data.toHexString().addHexPrefix())
