@@ -1,6 +1,6 @@
 //
 //  EventTests.swift
-//  
+//
 //
 //  Created by liugang zhang on 2023/8/24.
 //
@@ -49,49 +49,6 @@ class EventTests: XCTestCase {
     }
 
     let TestEvent = """
-    [{
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "bytes32",
-              "name": "userOpHash",
-              "type": "bytes32"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "sender",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "string",
-              "name": "a",
-              "type": "string"
-            },
-            {
-              "indexed": true,
-              "internalType": "bool",
-              "name": "b",
-              "type": "bool"
-            },
-            {
-              "indexed": true,
-              "internalType": "bytes",
-              "name": "c",
-              "type": "bytes"
-            },
-            {
-              "indexed": true,
-              "internalType": "uint256",
-              "name": "d",
-              "type": "uint256"
-            },
-          ],
-          "name": "UserOperationEvent",
-          "type": "event"
-        }
-    ]
+    [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"userOpHash","type":"bytes32"},{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"string","name":"a","type":"string"},{"indexed":true,"internalType":"bool","name":"b","type":"bool"},{"indexed":true,"internalType":"bytes","name":"c","type":"bytes"},{"indexed":true,"internalType":"uint256","name":"d","type":"uint256"}],"name":"UserOperationEvent","type":"event"}]
     """
 }
