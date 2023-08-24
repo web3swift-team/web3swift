@@ -211,12 +211,66 @@ extension ABI.Element.Function {
     }
 }
 
-// MARK: - Event logs decoding
+// MARK: - Event logs decoding & encoding
 
 extension ABI.Element.Event {
     public func decodeReturnedLogs(eventLogTopics: [Data], eventLogData: Data) -> [String: Any]? {
         guard let eventContent = ABIDecoder.decodeLog(event: self, eventLogTopics: eventLogTopics, eventLogData: eventLogData) else { return nil }
         return eventContent
+    }
+
+    func encodeTopic(input: ABI.Element.Event.Input, value: Any) -> EventFilterParameters.Topic? {
+        if case .string = input.type {
+            guard let string = value as? String else {
+                return nil
+            }
+            return .string(string.sha3(.keccak256).addHexPrefix())
+        } else if case .dynamicBytes = input.type {
+            guard let data = ABIEncoder.convertToData(value) else {
+                return nil
+            }
+            return .string(data.sha3(.keccak256).toHexString().addHexPrefix())
+        } else if case .address = input.type {
+            guard let encoded = ABIEncoder.encode(types: [input.type], values: [value]) else {
+                return nil
+            }
+            return .string(encoded.toHexString().addHexPrefix())
+        }
+        guard let data = ABIEncoder.convertToData(value)!.setLengthLeft(32) else {
+            return nil
+        }
+        return .string(data.toHexString().addHexPrefix())
+    }
+
+    public func encodeParameters(_ parameters: [Any?]) -> [EventFilterParameters.Topic?] {
+        guard parameters.count <= inputs.count else {
+            // too many arguments for fragment
+            return []
+        }
+        var topics: [EventFilterParameters.Topic?] = []
+
+        if !anonymous {
+            topics.append(.string(topic.toHexString().addHexPrefix()))
+        }
+
+        for (i, p) in parameters.enumerated() {
+            let input = inputs[i]
+            if !input.indexed {
+                // cannot filter non-indexed parameters; must be null
+                return []
+            }
+            if p == nil {
+                topics.append(.string(nil))
+            } else if input.type.isArray {
+                // filtering with tuples or arrays not supported
+                return []
+            } else if let p = p as? Array<Any> {
+                topics.append(.strings(p.map { encodeTopic(input: input, value: $0) }))
+            } else {
+                topics.append(encodeTopic(input: input, value: p!))
+            }
+        }
+        return topics
     }
 }
 

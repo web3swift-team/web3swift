@@ -131,6 +131,12 @@ public extension IEth {
 }
 
 public extension IEth {
+    func getLogs(eventFilter: EventFilterParameters) async throws -> [EventLog] {
+        try await APIRequest.sendRequest(with: self.provider, for: .getLogs(eventFilter)).result
+    }
+}
+
+public extension IEth {
     func send(_ transaction: CodableTransaction) async throws -> TransactionSendingResult {
         let request = APIRequest.sendTransaction(transaction)
         let response: APIResponse<Hash> = try await APIRequest.sendRequest(with: provider, for: request)
