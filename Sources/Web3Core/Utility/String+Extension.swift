@@ -135,6 +135,10 @@ extension String {
     func trim() -> String {
         trimmingCharacters(in: .whitespacesAndNewlines)
     }
+
+    public var isHex: Bool {
+        stripHexPrefix().reduce(true, { $0 && $1.isHexDigit } )
+    }
 }
 
 extension Character {

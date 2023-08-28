@@ -220,6 +220,40 @@ extension ABI.Element.Event {
     }
 }
 
+// MARK: - Decode custom error
+
+extension ABI.Element.EthError {
+    public func decodeEthError(_ data: Data) -> [String: Any]? {
+        guard inputs.count * 32 <= data.count,
+              let decoded = ABIDecoder.decode(types: inputs, data: data) else {
+            return nil
+        }
+
+        var result = [String: Any]()
+        for (index, out) in inputs.enumerated() {
+            result["\(index)"] = decoded[index]
+            if !out.name.isEmpty {
+                result[out.name] = decoded[index]
+            }
+        }
+        return result
+    }
+
+    /// Decodes `revert(string)` and `require(expression, string)` calls.
+    /// These calls are decomposed as `Error(string` error.
+    public static func decodeStringError(_ data: Data) -> String? {
+        let decoded = ABIDecoder.decode(types: [.init(name: "", type: .string)], data: data)
+        return decoded?.first as? String
+    }
+
+    /// Decodes `Panic(uint256)` errors.
+    /// See more about panic code explain at:  https://docs.soliditylang.org/en/v0.8.21/control-structures.html#panic-via-assert-and-error-via-require
+    public static func decodePanicError(_ data: Data) -> BigUInt? {
+        let decoded = ABIDecoder.decode(types: [.init(name: "", type: .uint(bits: 256))], data: data)
+        return decoded?.first as? BigUInt
+    }
+}
+
 // MARK: - Function input/output decoding
 
 extension ABI.Element {
@@ -232,7 +266,7 @@ extension ABI.Element {
         case .fallback:
             return nil
         case .function(let function):
-            return function.decodeReturnData(data)
+            return try? function.decodeReturnData(data)
         case .receive:
             return nil
         case .error:
@@ -314,25 +348,21 @@ extension ABI.Element.Function {
     ///  - next 32 bytes are the error message length;
     ///  - the next N bytes, where N >= 32, are the message bytes
     ///  - the rest are 0 bytes padding.
-    public func decodeReturnData(_ data: Data, errors: [String: ABI.Element.EthError]? = nil) -> [String: Any] {
-        if let decodedError = decodeErrorResponse(data, errors: errors) {
-            return decodedError
-        }
-
+    public func decodeReturnData(_ data: Data) throws -> [String: Any] {
         guard !outputs.isEmpty else {
             NSLog("Function doesn't have any output types to decode given data.")
-            return ["_success": true]
+            return [:]
         }
 
         guard outputs.count * 32 <= data.count else {
-            return ["_success": false, "_failureReason": "Bytes count must be at least \(outputs.count * 32). Given \(data.count). Decoding will fail."]
+            throw Web3Error.revert("Bytes count must be at least \(outputs.count * 32). Given \(data.count). Decoding will fail.", reason: nil)
         }
 
         // TODO: need improvement - we should be able to tell which value failed to be decoded
         guard let values = ABIDecoder.decode(types: outputs, data: data) else {
-            return ["_success": false, "_failureReason": "Failed to decode at least one value."]
+            throw Web3Error.revert("Failed to decode at least one value.", reason: nil)
         }
-        var returnArray: [String: Any] = ["_success": true]
+        var returnArray: [String: Any] = [:]
         for i in outputs.indices {
             returnArray["\(i)"] = values[i]
             if !outputs[i].name.isEmpty {
@@ -412,6 +442,7 @@ extension ABI.Element.Function {
            let errors = errors,
            let customError = errors[data[data.startIndex ..< data.startIndex + 4].toHexString().stripHexPrefix()] {
             var errorResponse: [String: Any] = ["_success": false, "_abortedByRevertOrRequire": true, "_error": customError.errorDeclaration]
+//            customError.decodeEthError(data[4...])
 
             if (data.count > 32 && !customError.inputs.isEmpty),
                let decodedInputs = ABIDecoder.decode(types: customError.inputs, data: Data(data[data.startIndex + 4 ..< data.startIndex + data.count])) {

@@ -33,13 +33,8 @@ public class Web3HttpProvider: Web3Provider {
         if let net = net {
             network = net
         } else {
-            var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData)
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
-            urlRequest.httpMethod = APIRequest.getNetwork.method.rawValue
-            urlRequest.httpBody = APIRequest.getNetwork.encodedBody
-            let response: APIResponse<UInt> = try await APIRequest.send(uRLRequest: urlRequest, with: session)
-            self.network = Networks.fromInt(response.result)
+            let response: UInt = try await APIRequest.send(APIRequest.getNetwork.call, parameter: [], with: self).result
+            self.network = Networks.fromInt(response)
         }
         attachedKeystoreManager = manager
     }

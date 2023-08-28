@@ -112,5 +112,11 @@ extension Web3 {
             }
             return .init(transaction: transaction, web3: web3, contract: contract, method: method)
         }
+
+        /// Combines `createReadOperation`& `callContractMethod`
+        @discardableResult
+        public func callStatic(_ method: String, parameters: [Any]) async throws -> [String: Any] {
+            try await contract.callStatic(method, parameters: parameters, provider: web3.provider)
+        }
     }
 }

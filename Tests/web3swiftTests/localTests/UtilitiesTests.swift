@@ -82,4 +82,9 @@ class UtilitiesTests: XCTestCase {
         address = Utilities.publicToAddress(Data.fromHex("0x0852972572d465d016d4c501887b8df303eee3ed602c056b1eb09260dfa0da0ab2")!)?.address
         XCTAssertEqual(address, nil)
     }
+
+    func testStringIsHex() {
+        XCTAssertTrue("1234567890abcdef".isHex)
+        XCTAssertFalse("ghijklmn".isHex)
+    }
 }
