@@ -34,8 +34,12 @@ func spelunkData(value: Any?) -> (message: String, data: String)? {
         return nil
     }
 
-    if let error = value as? JsonRpcErrorObject.RpcError, let data = error.data as? String {
-        return spelunkRpcError(error.message, data: data)
+    if let error = value as? JsonRpcErrorObject.RpcError {
+        if let data = error.data as? String {
+            return spelunkRpcError(error.message, data: data)
+        } else {
+            return spelunkData(value: error.data)
+        }
     }
 
     // Spelunk further...
