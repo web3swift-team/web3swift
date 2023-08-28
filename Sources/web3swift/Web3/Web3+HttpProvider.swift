@@ -33,8 +33,15 @@ public class Web3HttpProvider: Web3Provider {
         if let net = net {
             network = net
         } else {
-            let response: UInt = try await APIRequest.send(APIRequest.getNetwork.call, parameter: [], with: self).result
-            self.network = Networks.fromInt(response)
+            /// chain id could be a hex string or an int value.
+            let response: String = try await APIRequest.send(APIRequest.getNetwork.call, parameter: [], with: self).result
+            let result: UInt
+            if response.hasHexPrefix() {
+                result = UInt(BigUInt(response, radix: 16) ?? Networks.Mainnet.chainID)
+            } else {
+                result = UInt(response) ?? UInt(Networks.Mainnet.chainID)
+            }
+            self.network = Networks.fromInt(result)
         }
         attachedKeystoreManager = manager
     }
