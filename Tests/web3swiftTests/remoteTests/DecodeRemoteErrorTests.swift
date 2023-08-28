@@ -17,7 +17,7 @@ final class DecodeRemoteErrorTests: XCTestCase {
 
     func testDecodeRemoteFunc() async throws {
         let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        
+
         let entryABI = try EthereumContract(abi: [
             .error(.init(name: "SenderAddressResult",
                          inputs: [.init(name: "sender", type: .address)])),
