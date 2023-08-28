@@ -76,7 +76,7 @@ func spelunkData(value: Any?) -> (message: String, data: String)? {
 
 extension APIRequest {
     public static func sendRequest<Result>(with provider: Web3Provider, for call: APIRequest) async throws -> APIResponse<Result> {
-        try await send(call.method.rawValue, parameter: call.parameters, with: provider)
+        try await send(call.call, parameter: call.parameters, with: provider)
     }
 
     static func setupRequest(for body: RequestBody, with provider: Web3Provider) -> URLRequest {
