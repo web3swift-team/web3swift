@@ -219,27 +219,34 @@ extension ABI.Element.Event {
         return eventContent
     }
 
-    func encodeTopic(input: ABI.Element.Event.Input, value: Any) -> EventFilterParameters.Topic? {
-        if case .string = input.type {
+    public static func encodeTopic(input: ABI.Element.Event.Input, value: Any) -> EventFilterParameters.Topic? {
+        switch input.type {
+        case .string:
             guard let string = value as? String else {
                 return nil
             }
             return .string(string.sha3(.keccak256).addHexPrefix())
-        } else if case .dynamicBytes = input.type {
+        case .dynamicBytes:
             guard let data = ABIEncoder.convertToData(value) else {
                 return nil
             }
             return .string(data.sha3(.keccak256).toHexString().addHexPrefix())
-        } else if case .address = input.type {
-            guard let encoded = ABIEncoder.encode(types: [input.type], values: [value]) else {
+        case .bytes(length: _):
+            guard let data = value as? Data, let data = data.setLengthLeft(32) else {
+                return nil
+            }
+            return .string(data.toHexString().addHexPrefix())
+        case .address, .uint(bits: _), .int(bits: _), .bool:
+            guard let encoded = ABIEncoder.encodeSingleType(type: input.type, value: value) else {
                 return nil
             }
             return .string(encoded.toHexString().addHexPrefix())
+        default:
+            guard let data = try? ABIEncoder.abiEncode(value).setLengthLeft(32) else {
+                return nil
+            }
+            return .string(data.toHexString().addHexPrefix())
         }
-        guard let data = ABIEncoder.convertToData(value)?.setLengthLeft(32) else {
-            return nil
-        }
-        return .string(data.toHexString().addHexPrefix())
     }
 
     public func encodeParameters(_ parameters: [Any?]) -> [EventFilterParameters.Topic?] {
@@ -260,14 +267,25 @@ extension ABI.Element.Event {
                 return []
             }
             if p == nil {
-                topics.append(.string(nil))
-            } else if input.type.isArray {
+                topics.append(nil)
+            } else if input.type.isArray || input.type.isTuple {
                 // filtering with tuples or arrays not supported
                 return []
             } else if let p = p as? Array<Any> {
-                topics.append(.strings(p.map { encodeTopic(input: input, value: $0) }))
+                topics.append(.strings(p.map { Self.encodeTopic(input: input, value: $0) }))
             } else {
-                topics.append(encodeTopic(input: input, value: p!))
+                topics.append(Self.encodeTopic(input: input, value: p!))
+            }
+        }
+
+        // Trim off trailing nulls
+        while let last = topics.last {
+            if last == nil {
+                topics.removeLast()
+            } else if case .string(let string) = last, string == nil {
+                topics.removeLast()
+            } else {
+                break
             }
         }
         return topics
