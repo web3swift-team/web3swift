@@ -6,22 +6,20 @@ import PackageDescription
 let package = Package(
     name: "Web3swift",
     platforms: [
-        .macOS(.v12), .iOS(.v13)
+        .macOS(.v10_15), .iOS(.v13)
     ],
     products: [
         .library(name: "web3swift", targets: ["web3swift"])
     ],
     dependencies: [
         .package(url: "https://github.com/attaswift/BigInt.git", from: "5.3.0"),
-        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.5.1"),
-//        .package(url: "https://github.com/realm/SwiftLint", branch: "main")
+        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.5.1")
     ],
     targets: [
         .target(name: "secp256k1"),
         .target(
             name: "Web3Core",
-            dependencies: ["BigInt", "secp256k1", "CryptoSwift"]//,
-//            plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
+            dependencies: ["BigInt", "secp256k1", "CryptoSwift"]
         ),
         .target(
             name: "web3swift",
@@ -30,8 +28,7 @@ let package = Package(
                 .copy("./Browser/browser.js"),
                 .copy("./Browser/browser.min.js"),
                 .copy("./Browser/wk.bridge.min.js")
-            ]//,
-//            plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
+            ]
         ),
         .testTarget(
             name: "localTests",

@@ -65,16 +65,6 @@ public extension ENS {
             return Resolver(web3: self.web3, resolverContractAddress: resolverAddress)
         }
 
-        let hexCharacters: [Character] = Array("0123456789abcdef")
-
-        func hexlify(_ value: Data) -> String {
-            var result = "0x"
-            for byte in value {
-                result += "\(hexCharacters[Int(byte / 16)])\(hexCharacters[Int(byte % 16)])"
-            }
-            return result
-        }
-
         public func getTTL(node: String) async throws -> BigUInt {
             guard let nameHash = NameHash.nameHash(node) else {throw Web3Error.processingError(desc: "Failed to get name hash")}
 

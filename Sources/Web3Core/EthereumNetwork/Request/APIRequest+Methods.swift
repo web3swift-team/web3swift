@@ -39,7 +39,6 @@ extension APIRequest {
                 throw Web3Error.nodeError(desc: "\(error.message)\nError code: \(error.code)")
             }
             let description = "\(parsedErrorCode.errorName). Error code: \(error.code). \(error.message)"
-            print(description)
             switch parsedErrorCode {
             case .parseError, .invalidParams:
                 throw Web3Error.inputError(desc: description)
