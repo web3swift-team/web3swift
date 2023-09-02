@@ -11,7 +11,7 @@ import Web3Core
 @testable import web3swift
 
 final class Web3HttpProviderTests: XCTestCase {
-    
+
     /// if one of these rpc server lose efficacy, find a substitution from https://chainlist.org/
     func testGetNetwork() async throws {
         let requestURLstring = "https://" + Networks.Mainnet.name + Constants.infuraHttpScheme + Constants.infuraToken
