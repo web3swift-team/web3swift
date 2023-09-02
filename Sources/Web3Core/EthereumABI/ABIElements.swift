@@ -240,7 +240,7 @@ extension ABI.Element.EthError {
     }
 
     /// Decodes `revert(string)` and `require(expression, string)` calls.
-    /// These calls are decomposed as `Error(string` error.
+    /// These calls are decomposed as `Error(string)` error.
     public static func decodeStringError(_ data: Data) -> String? {
         let decoded = ABIDecoder.decode(types: [.init(name: "", type: .string)], data: data)
         return decoded?.first as? String
@@ -411,6 +411,7 @@ extension ABI.Element.Function {
     /// // "_parsingError" is optional and is present only if decoding of custom error arguments failed
     /// "_parsingError": "Data matches MyCustomError(uint256, address senderAddress) but failed to be decoded."]
     /// ```
+    @available(*, deprecated, message: "Use `ABI.Element.EthError.decodeEthError(_:)` instead")
     public func decodeErrorResponse(_ data: Data, errors: [String: ABI.Element.EthError]? = nil) -> [String: Any]? {
         /// If data is empty and outputs are expected it is treated as a `require(expression)` or `revert()` call with no message.
         /// In solidity `require(false)` and `revert()` calls return empty error response.
@@ -442,7 +443,6 @@ extension ABI.Element.Function {
            let errors = errors,
            let customError = errors[data[data.startIndex ..< data.startIndex + 4].toHexString().stripHexPrefix()] {
             var errorResponse: [String: Any] = ["_success": false, "_abortedByRevertOrRequire": true, "_error": customError.errorDeclaration]
-//            customError.decodeEthError(data[4...])
 
             if (data.count > 32 && !customError.inputs.isEmpty),
                let decodedInputs = ABIDecoder.decode(types: customError.inputs, data: Data(data[data.startIndex + 4 ..< data.startIndex + data.count])) {

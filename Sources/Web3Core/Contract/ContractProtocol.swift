@@ -321,7 +321,7 @@ extension DefaultContractProtocol {
         }
 
         guard let function = methods[method]?.first else {
-            throw Web3Error.inputError(desc: "Function method does not exist.")
+            throw Web3Error.inputError(desc: "Make sure ABI you use contains '\(method)' method.")
         }
 
         switch data.count % 32 {
@@ -343,7 +343,7 @@ extension DefaultContractProtocol {
                     throw Web3Error.inputError(desc: "Signature matches \(customError.errorDeclaration) but failed to be decoded.")
                 }
             } else {
-                throw Web3Error.inputError(desc: "Found no matched error")
+                throw Web3Error.inputError(desc: "Make sure ABI you use contains error that can match signature: 0x\(selector.toHexString())")
             }
         default:
             throw Web3Error.inputError(desc: "Invalid data count")

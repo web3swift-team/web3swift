@@ -37,9 +37,15 @@ public class Web3HttpProvider: Web3Provider {
             let response: String = try await APIRequest.send(APIRequest.getNetwork.call, parameter: [], with: self).result
             let result: UInt
             if response.hasHexPrefix() {
-                result = UInt(BigUInt(response, radix: 16) ?? Networks.Mainnet.chainID)
+                guard let num = BigUInt(response, radix: 16)  else {
+                    throw Web3Error.processingError(desc: "Get network successed but can't be parsed to a valid chain id")
+                }
+                result = UInt(num)
             } else {
-                result = UInt(response) ?? UInt(Networks.Mainnet.chainID)
+                guard let num = UInt(response) else {
+                    throw Web3Error.processingError(desc: "Get network successed but can't be parsed to a valid chain id")
+                }
+                result = num
             }
             self.network = Networks.fromInt(result)
         }
