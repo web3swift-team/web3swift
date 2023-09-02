@@ -57,7 +57,7 @@ class EventTests: XCTestCase {
         XCTAssertEqual(logs.count, 6)
 
         XCTAssertTrue(logs[0] == topic.toHexString().addHexPrefix())
-        XCTAssertTrue(logs[1] == nil)
+        XCTAssertTrue(logs[1] == "0x2c16c07e1c68d502e9c7ad05f0402b365671a0e6517cb807b2de4edd95657042")
         XCTAssertTrue(logs[2] == "0x000000000000000000000000581074d2d9e50913eb37665b07cafa9bffdd1640")
         XCTAssertTrue(logs[3] == "0xab036729af8b8f9b610af4e11b14fa30c348f40c2c230cce92ef6ef37726fee7")
         XCTAssertTrue(logs[4] == "0x0000000000000000000000000000000000000000000000000000000000000001")
@@ -69,10 +69,13 @@ class EventTests: XCTestCase {
         XCTAssertTrue(ABI.Element.Event.encodeTopic(input: .init(name: "", type: .address, indexed: true), value: "0x003e36550908907c2a2da960fd19a419b9a774b7") == "0x000000000000000000000000003e36550908907c2a2da960fd19a419b9a774b7")
         XCTAssertTrue(ABI.Element.Event.encodeTopic(input: .init(name: "", type: .address, indexed: true), value: EthereumAddress("0x003e36550908907c2a2da960fd19a419b9a774b7")!) == "0x000000000000000000000000003e36550908907c2a2da960fd19a419b9a774b7")
         XCTAssertTrue(ABI.Element.Event.encodeTopic(input: .init(name: "", type: .bool, indexed: true), value: true) == "0x0000000000000000000000000000000000000000000000000000000000000001")
+        XCTAssertTrue(ABI.Element.Event.encodeTopic(input: .init(name: "", type: .bool, indexed: true), value: false) == "0x0000000000000000000000000000000000000000000000000000000000000000")
         XCTAssertTrue(ABI.Element.Event.encodeTopic(input: .init(name: "", type: .uint(bits: 256), indexed: true), value: BigUInt("dbe20a", radix: 16)!) == "0x0000000000000000000000000000000000000000000000000000000000dbe20a")
+        XCTAssertTrue(ABI.Element.Event.encodeTopic(input: .init(name: "", type: .uint(bits: 256), indexed: true), value: "dbe20a") == "0x0000000000000000000000000000000000000000000000000000000000dbe20a")
         XCTAssertTrue(ABI.Element.Event.encodeTopic(input: .init(name: "", type: .int(bits: 32), indexed: true), value: 100) == "0x0000000000000000000000000000000000000000000000000000000000000064")
         XCTAssertTrue(ABI.Element.Event.encodeTopic(input: .init(name: "", type: .dynamicBytes, indexed: true), value: Data(hex: "6761766f66796f726b")) == "0xe0859ceea0a2fd2474deef2b2183f10f4c741ebba702e9a07d337522c0af55fb")
         XCTAssertTrue(ABI.Element.Event.encodeTopic(input: .init(name: "", type: .bytes(length: 32), indexed: true), value: Data(hex: "6761766f66796f726b")) == "0x00000000000000000000000000000000000000000000006761766f66796f726b")
+        XCTAssertTrue(ABI.Element.Event.encodeTopic(input: .init(name: "", type: .bytes(length: 32), indexed: true), value: "0x6761766f66796f726b") == "0x00000000000000000000000000000000000000000000006761766f66796f726b")
     }
 }
 

@@ -232,7 +232,7 @@ extension ABI.Element.Event {
             }
             return .string(data.sha3(.keccak256).toHexString().addHexPrefix())
         case .bytes(length: _):
-            guard let data = value as? Data, let data = data.setLengthLeft(32) else {
+            guard let data = ABIEncoder.convertToData(value), let data = data.setLengthLeft(32) else {
                 return nil
             }
             return .string(data.toHexString().addHexPrefix())
