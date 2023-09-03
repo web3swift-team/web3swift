@@ -143,7 +143,10 @@ public protocol ContractProtocol {
     ///     - name with arguments:`myFunction(uint256)`.
     ///     - method signature (with or without `0x` prefix, case insensitive): `0xFFffFFff`;
     ///   - data: non empty bytes to decode;
-    /// - Returns: dictionary with decoded values. `nil` if decoding failed.
+    /// - Returns: dictionary with decoded values.
+    /// - Throws:
+    ///   - `Web3Error.revert(String, String?)` when function call aborted by `revert(string)` and `require(expression, string)`.
+    ///   - `Web3Error.revertCustom(String, Dictionary)` when function call aborted by `revert CustomError()`.
     @discardableResult
     func decodeReturnData(_ method: String, data: Data) throws -> [String: Any]
 
