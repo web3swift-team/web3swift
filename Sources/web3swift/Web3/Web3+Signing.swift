@@ -44,11 +44,12 @@ public struct Web3Signer {
                                   keystore: BIP32Keystore,
                                   account: EthereumAddress,
                                   password: String? = nil) throws -> Data {
-        let hash = try eip712hash(eip712TypedDataPayload)
+        let hash = try eip712TypedDataPayload.signHash()
         guard let signature = try Web3Signer.signPersonalMessage(hash,
                                                                  keystore: keystore,
                                                                  account: account,
-                                                                 password: password ?? "")
+                                                                 password: password ?? "",
+                                                                 useHash: false)
         else {
             throw Web3Error.dataError
         }
@@ -67,7 +68,8 @@ public struct Web3Signer {
         guard let signature = try Web3Signer.signPersonalMessage(hash,
                                                                  keystore: keystore,
                                                                  account: account,
-                                                                 password: password ?? "")
+                                                                 password: password ?? "",
+                                                                 useHash: false)
         else {
             throw Web3Error.dataError
         }

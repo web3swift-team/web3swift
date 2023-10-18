@@ -233,4 +233,66 @@ public struct EIP712TypedData {
         }
         return type + "(" + parameters.joined(separator: ",") + ")" + encodedSubtypes.joined(separator: "")
     }
+
+    /// Convenience function for ``encodeData(_:data:)`` that uses ``primaryType`` and ``message`` as values.
+    /// - Returns: encoded data based on ``primaryType`` and ``message``.
+    public func encodeData() throws -> Data {
+        try encodeData(primaryType, data: message)
+    }
+
+    public func encodeData(_ type: String, data: [String : AnyObject]) throws -> Data {
+        // Adding typehash
+        var encTypes: [ABI.Element.ParameterType] = [.bytes(length: 32)]
+        var encValues: [Any] = [try typeHash(type)]
+
+        guard let typeData = types[type] else {
+            throw Web3Error.processingError(desc: "EIP712. Attempting to encode data for type that doesn't exist in this payload. Given type: \(type). Available types: \(types.values).")
+        }
+
+        // Add field contents
+        for field in typeData {
+            let value = data[field.name]
+            if field.type == "string" {
+                guard let value = value as? String else {
+                    throw Web3Error.processingError(desc: "EIP712. Type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to String.")
+                }
+                encTypes.append(.bytes(length: 32))
+                encValues.append(value.sha3(.keccak256).addHexPrefix())
+            } else if field.type == "bytes"{
+                guard let value = value as? Data else {
+                    throw Web3Error.processingError(desc: "EIP712. Type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to Data.")
+                }
+                encTypes.append(.bytes(length: 32))
+                encValues.append(value.sha3(.keccak256))
+            } else if types[field.type] != nil {
+                guard let value = value as? [String : AnyObject] else {
+                    throw Web3Error.processingError(desc: "EIP712. Custom type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to [String : AnyObject].")
+                }
+                encTypes.append(.bytes(length: 32))
+                encValues.append(try encodeData(field.type, data: value).sha3(.keccak256))
+            } else {
+                encTypes.append(try ABITypeParser.parseTypeString(field.type))
+                encValues.append(value as Any)
+            }
+        }
+
+        guard let encodedData = ABIEncoder.encode(types: encTypes, values: encValues) else {
+            throw Web3Error.processingError(desc: "EIP712. ABIEncoder.encode failed with the following types and values: \(encTypes); \(encValues)")
+        }
+        return encodedData
+    }
+
+    /// Convenience function for ``structHash(_:data:)`` that uses ``primaryType`` and ``message`` as values.
+    /// - Returns: SH# keccak256 hash of encoded data based on ``primaryType`` and ``message``.
+    public func structHash() throws -> Data {
+        try structHash(primaryType, data: message)
+    }
+
+    public func structHash(_ type: String, data: [String : AnyObject]) throws -> Data {
+        try encodeData(type, data: data).sha3(.keccak256)
+    }
+
+    public func signHash() throws -> Data {
+        try (Data.fromHex("0x1901")! + structHash("EIP712Domain", data: domain) + structHash()).sha3(.keccak256)
+    }
 }
