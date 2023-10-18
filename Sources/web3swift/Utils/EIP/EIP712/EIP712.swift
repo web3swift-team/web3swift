@@ -16,6 +16,12 @@ public class EIP712 {
     public typealias Bytes = Data
 }
 
+// FIXME: this type is wrong - The minimum number of optional fields is 5, and those are
+// string name the user readable name of signing domain, i.e. the name of the DApp or the protocol.
+// string version the current major version of the signing domain. Signatures from different versions are not compatible.
+// uint256 chainId the EIP-155 chain id. The user-agent should refuse signing if it does not match the currently active chain.
+// address verifyingContract the address of the contract that will verify the signature. The user-agent may do contract specific phishing prevention.
+// bytes32 salt an disambiguating salt for the protocol. This can be used as a domain separator of last resort.
 public struct EIP712Domain: EIP712Hashable {
     public let chainId: EIP712.UInt256?
     public let verifyingContract: EIP712.Address
@@ -54,7 +60,10 @@ public extension EIP712Hashable {
                 result = ABIEncoder.encodeSingleType(type: .uint(bits: 256), value: field)!
             case is EIP712.Address:
                 result = ABIEncoder.encodeSingleType(type: .address, value: field)!
+            case let boolean as Bool:
+                result = ABIEncoder.encodeSingleType(type: .uint(bits: 8), value: boolean ? 1 : 0)!
             case let hashable as EIP712Hashable:
+                // TODO: should it be hashed here?
                 result = try hashable.hash()
             default:
                 /// Cast to `AnyObject` is required. Otherwise, `nil` value will fail this condition.
@@ -64,16 +73,77 @@ public extension EIP712Hashable {
                     preconditionFailure("Not solidity type")
                 }
             }
-            guard result.count == 32 else { preconditionFailure("ABI encode error") }
+            guard result.count % 32 == 0 else { preconditionFailure("ABI encode error") }
             parameters.append(result)
         }
         return Data(parameters.flatMap { $0.bytes }).sha3(.keccak256)
     }
 }
 
-public func eip712encode(domainSeparator: EIP712Hashable, message: EIP712Hashable) throws -> Data {
-    let data = try Data([UInt8(0x19), UInt8(0x01)]) + domainSeparator.hash() + message.hash()
-    return data.sha3(.keccak256)
+public func eip712hash(domainSeparator: EIP712Hashable, message: EIP712Hashable) throws -> Data {
+    try eip712hash(domainSeparatorHash: domainSeparator.hash(), messageHash: message.hash())
+}
+
+public func eip712hash(_ eip712TypedData: EIP712TypedData) throws -> Data {
+    guard let chainId = eip712TypedData.domain["chainId"] as? Int64,
+          let verifyingContract = eip712TypedData.domain["verifyingContract"] as? String,
+          let verifyingContractAddress = EIP712.Address(verifyingContract)
+    else {
+        throw Web3Error.inputError(desc: "Failed to parse chainId or verifyingContract address. Domain object is \(eip712TypedData.domain).")
+    }
+
+    let domainHash = try EIP712Domain(chainId: EIP712.UInt256(chainId), verifyingContract: verifyingContractAddress).hash()
+    guard let primaryTypeData = eip712TypedData.types[eip712TypedData.primaryType] else {
+        throw Web3Error.inputError(desc: "EIP712 hashing error. Given primary type name is not present amongst types. primaryType - \(eip712TypedData.primaryType); available types - \(eip712TypedData.types.values)")
+    }
+
+    let messageHash = try hashEip712Message(eip712TypedData,
+                                            eip712TypedData.message,
+                                            messageTypeData: primaryTypeData)
+    return eip712hash(domainSeparatorHash: domainHash, messageHash: messageHash)
+}
+
+func hashEip712Message(_ typedData: EIP712TypedData, _ message: [String: AnyObject], messageTypeData: [EIP712TypeProperty]) throws -> Data {
+    var messageData: [Data] = []
+    for field in messageTypeData {
+        guard let fieldValue = message[field.name] else {
+            throw Web3Error.inputError(desc: "EIP712 message doesn't have field with name \(field.name).")
+        }
+
+        if let customType = typedData.types[field.type] {
+            guard let objectAttribute = fieldValue as? [String: AnyObject] else {
+                throw Web3Error.processingError(desc: "Failed to hash EIP712 message. A property from 'message' field with custom type cannot be represented as object and thus encoded & hashed. Property name \(field.name); value \(String(describing: message[field.name])).")
+            }
+            try messageData.append(hashEip712Message(typedData, objectAttribute, messageTypeData: customType))
+        } else {
+            let type = try ABITypeParser.parseTypeString(field.type)
+            var data: Data?
+            switch type {
+            case .dynamicBytes, .bytes:
+                if let bytes = fieldValue as? Data {
+                    data = bytes.sha3(.keccak256)
+                }
+            case .string:
+                if let string = fieldValue as? String {
+                    data = Data(string.bytes).sha3(.keccak256)
+                }
+            default:
+                data = ABIEncoder.encodeSingleType(type: type, value: fieldValue)
+            }
+
+            if let data = data {
+                messageData.append(data)
+            } else {
+                throw Web3Error.processingError(desc: "Failed to encode property of EIP712 message. Property name \(field.name); value \(String(describing: message[field.name]))")
+            }
+        }
+    }
+
+    return Data(messageData.flatMap { $0.bytes }).sha3(.keccak256)
+}
+
+public func eip712hash(domainSeparatorHash: Data, messageHash: Data) -> Data {
+    (Data([UInt8(0x19), UInt8(0x01)]) + domainSeparatorHash + messageHash).sha3(.keccak256)
 }
 
 // MARK: - Additional private and public extensions with support members
