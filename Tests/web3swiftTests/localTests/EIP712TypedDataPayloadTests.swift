@@ -1,6 +1,5 @@
 //
-//  EIP712ParserTests.swift
-//
+//  EIP712TypedDataPayloadTests.swift
 //
 //  Created by JeneaVranceanu on 18.10.2023.
 //
@@ -10,7 +9,7 @@ import XCTest
 import web3swift
 import Web3Core
 
-class EIP712ParserTests: XCTestCase {
+class EIP712TypedDataPayloadTests: XCTestCase {
     let testTypedDataPayload = """
     {
     "types":{
