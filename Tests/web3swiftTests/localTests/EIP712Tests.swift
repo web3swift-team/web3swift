@@ -3,72 +3,6 @@ import Web3Core
 @testable import web3swift
 
 class EIP712Tests: XCTestCase {
-    let testTypedDataPayload = """
-    {
-    "types":{
-      "EIP712Domain":[
-         {
-            "name":"name",
-            "type":"string"
-         },
-         {
-            "name":"version",
-            "type":"string"
-         },
-         {
-            "name":"chainId",
-            "type":"uint256"
-         },
-         {
-            "name":"verifyingContract",
-            "type":"address"
-         }
-      ],
-      "Person":[
-         {
-            "name":"name",
-            "type":"string"
-         },
-         {
-            "name":"wallet",
-            "type":"address"
-         }
-      ],
-      "Mail":[
-         {
-            "name":"from",
-            "type":"Person"
-         },
-         {
-            "name":"to",
-            "type":"Person"
-         },
-         {
-            "name":"contents",
-            "type":"string"
-         }
-      ]
-    },
-    "primaryType":"Mail",
-    "domain":{
-      "name":"Ether Mail",
-      "version":"1",
-      "chainId":1,
-      "verifyingContract":"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"
-    },
-    "message":{
-      "from":{
-         "name":"Cow",
-         "wallet":"0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826"
-      },
-      "to":{
-         "name":"Bob",
-         "wallet":"0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"
-      },
-      "contents":"Hello, Bob!"
-    }
-    }
-    """
 
     func testWithoutChainId() throws {
         let to = EthereumAddress("0x3F06bAAdA68bB997daB03d91DBD0B73e196c5A4d")!
@@ -170,9 +104,5 @@ class EIP712Tests: XCTestCase {
             password: password,
             chainId: chainId)
         XCTAssertEqual(signature.toHexString(), "9ee2aadf14739e1cafc3bc1a0b48457c12419d5b480a8ffa86eb7df538c82d0753ca2a6f8024dea576b383cbcbe5e2b181b087e489298674bf6512756cabc5b01b")
-    }
-
-    func testEIP712Parser() throws {
-        try NSLog(String.init(describing: EIP712Parser.parse(testTypedDataPayload)))
     }
 }
