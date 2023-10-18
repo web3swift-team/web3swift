@@ -9,6 +9,8 @@ import XCTest
 import web3swift
 import Web3Core
 
+
+/// Tests based primarily on the following example https://eips.ethereum.org/assets/eip-712/Example.js
 class EIP712TypedDataPayloadTests: XCTestCase {
     let testTypedDataPayload = """
     {
