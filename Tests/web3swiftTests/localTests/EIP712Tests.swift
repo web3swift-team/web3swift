@@ -105,4 +105,16 @@ class EIP712Tests: XCTestCase {
             chainId: chainId)
         XCTAssertEqual(signature.toHexString(), "9ee2aadf14739e1cafc3bc1a0b48457c12419d5b480a8ffa86eb7df538c82d0753ca2a6f8024dea576b383cbcbe5e2b181b087e489298674bf6512756cabc5b01b")
     }
+
+    func testEIP712TypedDataSigning() throws {
+        let mnemonic = "normal dune pole key case cradle unfold require tornado mercy hospital buyer"
+        let keystore = try! BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "")!
+        let account = keystore.addresses?[0]
+        let eip712TypedData = try EIP712Parser.parse(EIP712TestData.testTypedDataPayload)
+        let signature = try Web3Signer.signEIP712(
+            eip712TypedData,
+            keystore: keystore,
+            account: account!)
+        XCTAssertEqual(signature.toHexString(), "70d1f5d9eac7b6303683d0792ea8dc93369e3b79888c4e0b86121bec19f479ba4067cf7ac3f8208cbc60a706c4793c2c17e19637298bb31642e531619272b26e1b")
+    }
 }
