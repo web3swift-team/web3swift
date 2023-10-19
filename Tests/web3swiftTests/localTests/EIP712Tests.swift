@@ -52,7 +52,7 @@ class EIP712Tests: XCTestCase {
             account: account!,
             password: password,
             chainId: chainId)
-        XCTAssertEqual(signature.toHexString(), "c0567b120d3de6b3042ae3de1aa346e167454c675e1eaf40ea2f9de89e6a95c2783c1aa6c96aa1e0aaead4ae8901052fa9fd7abe4acb331adafd61610e93c3f01c")
+        XCTAssertEqual(signature.toHexString(), "39e48b17008344acd58c86fba540ce65a9a4dad048e0d4d10efced291e02174c7267c9749cd2c1f9738ba1267f6fb8caadd054497daa20e2eaaee6472e7fde4e1b")
     }
 
     func testWithChainId() throws {
@@ -103,7 +103,7 @@ class EIP712Tests: XCTestCase {
             account: account!,
             password: password,
             chainId: chainId)
-        XCTAssertEqual(signature.toHexString(), "9ee2aadf14739e1cafc3bc1a0b48457c12419d5b480a8ffa86eb7df538c82d0753ca2a6f8024dea576b383cbcbe5e2b181b087e489298674bf6512756cabc5b01b")
+        XCTAssertEqual(signature.toHexString(), "e5ebc20f5794b756f01adb271db9e535df74751dfce4328b2f5bae4740d6e5ef392626b95ae0c0975a91b99033b079e6e0ccd41cb6fa70dd5f8833d78af4282f1c")
     }
 
     func testEIP712TypedDataSigning() throws {
