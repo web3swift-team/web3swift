@@ -7,7 +7,7 @@
 import Foundation
 import Web3Core
 
-/// The only purpose of this class is to parse raw JSON and output an EIP712 hash.
+/// The only purpose of this class is to parse raw JSON and output an EIP712 hash ready for signing.
 /// Example of a payload that is received via `eth_signTypedData` for signing:
 /// ```
 /// {
@@ -75,7 +75,19 @@ import Web3Core
 ///    }
 /// }
 /// ```
+///
+/// Example use case:
+/// ```
+///     let payload: String = ... // This is the payload received from eth_signTypedData
+///     let eip712TypedData = try EIP712Parser.parse(payload)
+///     let signature = try Web3Signer.signEIP712(
+///         eip712TypedData,
+///         keystore: keystore,
+///         account: account,
+///         password: password)
+/// ```
 public class EIP712Parser {
+
     static func toData(_ json: String) throws -> Data {
         guard let json = json.data(using: .utf8) else {
             throw Web3Error.inputError(desc: "Failed to parse EIP712 payload. Given string is not valid UTF8 string. \(json)")

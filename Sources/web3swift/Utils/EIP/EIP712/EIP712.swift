@@ -63,7 +63,6 @@ public extension EIP712Hashable {
             case let boolean as Bool:
                 result = ABIEncoder.encodeSingleType(type: .uint(bits: 8), value: boolean ? 1 : 0)!
             case let hashable as EIP712Hashable:
-                // TODO: should it be hashed here?
                 result = try hashable.hash()
             default:
                 /// Cast to `AnyObject` is required. Otherwise, `nil` value will fail this condition.
