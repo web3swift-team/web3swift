@@ -95,11 +95,13 @@ public class BIP39 {
     }
 
     private static func entropyOf(size: Int) throws -> Data {
+        let isCorrectSize = size >= 128 && size <= 256 && size.isMultiple(of: 32)
+        let randomBytesCount = size / 8
         guard
-            size >= 128 && size <= 256 && size.isMultiple(of: 32),
-            let entropy = Data.randomBytes(length: size/8)
+            isCorrectSize,
+            let entropy = Data.randomBytes(length: randomBytesCount)
         else {
-            throw AbstractKeystoreError.noEntropyError
+            throw AbstractKeystoreError.noEntropyError("BIP39. \(!isCorrectSize ? "Requested entropy of wrong bits size \(size)." : "Failed to generated \(randomBytesCount) of random bytes.")")
         }
         return entropy
     }

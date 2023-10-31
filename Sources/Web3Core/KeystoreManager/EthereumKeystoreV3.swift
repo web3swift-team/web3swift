@@ -23,13 +23,13 @@ public class EthereumKeystoreV3: AbstractKeystore {
     }
 
     public func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data {
-        if self.addresses?.count == 1 && account == self.addresses?.last {
-            guard let privateKey = try? self.getKeyData(password) else {
+        if account == addresses?.last {
+            guard let privateKey = try? getKeyData(password) else {
                 throw AbstractKeystoreError.invalidPasswordError
             }
             return privateKey
         }
-        throw AbstractKeystoreError.invalidAccountError
+        throw AbstractKeystoreError.invalidAccountError("EthereumKeystoreV3. Cannot get private key: keystore doesn't contain information about given address \(account.address).")
     }
 
     // Class
@@ -77,7 +77,7 @@ public class EthereumKeystoreV3: AbstractKeystore {
         defer {
             Data.zero(&newPrivateKey)
         }
-        try encryptDataToStorage(password, keyData: newPrivateKey, aesMode: aesMode)
+        try encryptDataToStorage(password, privateKey: newPrivateKey, aesMode: aesMode)
     }
 
     public init?(privateKey: Data, password: String, aesMode: String = "aes-128-cbc") throws {
@@ -87,53 +87,46 @@ public class EthereumKeystoreV3: AbstractKeystore {
         guard SECP256K1.verifyPrivateKey(privateKey: privateKey) else {
             return nil
         }
-        try encryptDataToStorage(password, keyData: privateKey, aesMode: aesMode)
+        try encryptDataToStorage(password, privateKey: privateKey, aesMode: aesMode)
     }
 
-    fileprivate func encryptDataToStorage(_ password: String, keyData: Data?, dkLen: Int = 32, N: Int = 4096, R: Int = 6, P: Int = 1, aesMode: String = "aes-128-cbc") throws {
-        if keyData == nil {
-            throw AbstractKeystoreError.encryptionError("Encryption without key data")
+    fileprivate func encryptDataToStorage(_ password: String, privateKey: Data, dkLen: Int = 32, N: Int = 4096, R: Int = 6, P: Int = 1, aesMode: String = "aes-128-cbc") throws {
+        if privateKey.count != 32 {
+            throw AbstractKeystoreError.encryptionError("EthereumKeystoreV3. Attempted encryption with private key of length != 32. Given private key length is \(privateKey.count).")
         }
         let saltLen = 32
         guard let saltData = Data.randomBytes(length: saltLen) else {
-            throw AbstractKeystoreError.noEntropyError
+            throw AbstractKeystoreError.noEntropyError("EthereumKeystoreV3. Failed to generate random bytes: `Data.randomBytes(length: \(saltLen))`.")
         }
         guard let derivedKey = scrypt(password: password, salt: saltData, length: dkLen, N: N, R: R, P: P) else {
-            throw AbstractKeystoreError.keyDerivationError
+            throw AbstractKeystoreError.keyDerivationError("EthereumKeystoreV3. Scrypt function failed.")
         }
         let last16bytes = Data(derivedKey[(derivedKey.count - 16)...(derivedKey.count - 1)])
         let encryptionKey = Data(derivedKey[0...15])
         guard let IV = Data.randomBytes(length: 16) else {
-            throw AbstractKeystoreError.noEntropyError
+            throw AbstractKeystoreError.noEntropyError("EthereumKeystoreV3. Failed to generate random bytes: `Data.randomBytes(length: 16)`.")
         }
-        var aesCipher: AES?
-        switch aesMode {
+        var aesCipher: AES
+        switch aesMode.lowercased() {
         case "aes-128-cbc":
-            aesCipher = try? AES(key: encryptionKey.bytes, blockMode: CBC(iv: IV.bytes), padding: .noPadding)
+            aesCipher = try AES(key: encryptionKey.bytes, blockMode: CBC(iv: IV.bytes), padding: .noPadding)
         case "aes-128-ctr":
-            aesCipher = try? AES(key: encryptionKey.bytes, blockMode: CTR(iv: IV.bytes), padding: .noPadding)
+            aesCipher = try AES(key: encryptionKey.bytes, blockMode: CTR(iv: IV.bytes), padding: .noPadding)
         default:
-            aesCipher = nil
+            throw AbstractKeystoreError.aesError("EthereumKeystoreV3. AES error: given AES mode can be one of 'aes-128-cbc' or 'aes-128-ctr'. Instead '\(aesMode)' was given.")
         }
-        if aesCipher == nil {
-            throw AbstractKeystoreError.aesError
-        }
-        guard let encryptedKey = try aesCipher?.encrypt(keyData!.bytes) else {
-            throw AbstractKeystoreError.aesError
-        }
-        let encryptedKeyData = Data(encryptedKey)
-        var dataForMAC = Data()
-        dataForMAC.append(last16bytes)
-        dataForMAC.append(encryptedKeyData)
+
+        let encryptedKeyData = Data(try aesCipher.encrypt(privateKey.bytes))
+        let dataForMAC = last16bytes + encryptedKeyData
         let mac = dataForMAC.sha3(.keccak256)
         let kdfparams = KdfParamsV3(salt: saltData.toHexString(), dklen: dkLen, n: N, p: P, r: R, c: nil, prf: nil)
         let cipherparams = CipherParamsV3(iv: IV.toHexString())
         let crypto = CryptoParamsV3(ciphertext: encryptedKeyData.toHexString(), cipher: aesMode, cipherparams: cipherparams, kdf: "scrypt", kdfparams: kdfparams, mac: mac.toHexString(), version: nil)
-        guard let pubKey = Utilities.privateToPublic(keyData!) else {
-            throw AbstractKeystoreError.keyDerivationError
+        guard let publicKey = Utilities.privateToPublic(privateKey) else {
+            throw AbstractKeystoreError.keyDerivationError("EthereumKeystoreV3. Failed to derive public key from given private key. `Utilities.privateToPublic(privateKey)` returned `nil`.")
         }
-        guard let addr = Utilities.publicToAddress(pubKey) else {
-            throw AbstractKeystoreError.keyDerivationError
+        guard let addr = Utilities.publicToAddress(publicKey) else {
+            throw AbstractKeystoreError.keyDerivationError("EthereumKeystoreV3. Failed to derive address from derived public key. `Utilities.publicToAddress(publicKey)` returned `nil`.")
         }
         self.address = addr
         let keystoreparams = KeystoreParamsV3(address: addr.address.lowercased(), crypto: crypto, id: UUID().uuidString.lowercased(), version: 3)
@@ -141,14 +134,13 @@ public class EthereumKeystoreV3: AbstractKeystore {
     }
 
     public func regenerate(oldPassword: String, newPassword: String, dkLen: Int = 32, N: Int = 4096, R: Int = 6, P: Int = 1) throws {
-        var keyData = try self.getKeyData(oldPassword)
-        if keyData == nil {
-            throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
+        guard var privateKey = try getKeyData(oldPassword) else {
+            throw AbstractKeystoreError.encryptionError("EthereumKeystoreV3. Failed to decrypt a keystore")
         }
         defer {
-            Data.zero(&keyData!)
+            Data.zero(&privateKey)
         }
-        try self.encryptDataToStorage(newPassword, keyData: keyData!, aesMode: self.keystoreParams!.crypto.cipher)
+        try self.encryptDataToStorage(newPassword, privateKey: privateKey, aesMode: self.keystoreParams!.crypto.cipher)
     }
 
     fileprivate func getKeyData(_ password: String) throws -> Data? {
