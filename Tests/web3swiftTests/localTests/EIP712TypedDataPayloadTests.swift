@@ -360,4 +360,103 @@ class EIP712TypedDataPayloadTests: XCTestCase {
         let (compressedSignature, _) = try SECP256K1.signForRecovery(hash: parsedEip712TypedData.signHash(), privateKey: privateKey)
         XCTAssertEqual(compressedSignature!.toHexString(), "f2ec61e636ff7bb3ac8bc2a4cc2c8b8f635dd1b2ec8094c963128b358e79c85c5ca6dd637ed7e80f0436fe8fce39c0e5f2082c9517fe677cc2917dcd6c84ba881c")
     }
+
+    /// This test makes sure that custom types are alphabetically ordered when encoded
+    /// This test is built on thje following example: https://github.com/trustwallet/wallet-core/pull/2325/files
+    /// Link to the GitHub issue https://github.com/trustwallet/wallet-core/issues/2323
+    /// > According to the description of the issues it fixes (see the link above):
+    /// > The type string is different from `metamask/eth-sig-util`
+    /// > `type: OrderComponents(...)OfferItem(...)ConsiderationItem(...)`
+    /// > `ConsiderationItem` should be in front of `OfferItem`
+    func testEIP712OpenseaInvalidOrderSignature() throws {
+        let rawPayload = """
+        {
+            "types": {
+                "EIP712Domain": [
+                    { "name": "name", "type": "string" },
+                    { "name": "version", "type": "string" },
+                    { "name": "chainId", "type": "uint256" },
+                    { "name": "verifyingContract", "type": "address" }
+                ],
+                "OrderComponents": [
+                    { "name": "offerer", "type": "address" },
+                    { "name": "zone", "type": "address" },
+                    { "name": "offer", "type": "OfferItem[]" },
+                    { "name": "consideration", "type": "ConsiderationItem[]" },
+                    { "name": "orderType", "type": "uint8" },
+                    { "name": "startTime", "type": "uint256" },
+                    { "name": "endTime", "type": "uint256" },
+                    { "name": "zoneHash", "type": "bytes32" },
+                    { "name": "salt", "type": "uint256" },
+                    { "name": "conduitKey", "type": "bytes32" },
+                    { "name": "counter", "type": "uint256" }
+                ],
+                "OfferItem": [
+                    { "name": "itemType", "type": "uint8" },
+                    { "name": "token", "type": "address" },
+                    { "name": "identifierOrCriteria", "type": "uint256" },
+                    { "name": "startAmount", "type": "uint256" },
+                    { "name": "endAmount", "type": "uint256" }
+                ],
+                "ConsiderationItem": [
+                    { "name": "itemType", "type": "uint8" },
+                    { "name": "token", "type": "address" },
+                    { "name": "identifierOrCriteria", "type": "uint256" },
+                    { "name": "startAmount", "type": "uint256" },
+                    { "name": "endAmount", "type": "uint256" },
+                    { "name": "recipient", "type": "address" }
+                ]
+            },
+            "primaryType": "OrderComponents",
+            "domain": {
+                "name": "Seaport",
+                "version": "1.1",
+                "chainId": "1",
+                "verifyingContract": "0x00000000006c3852cbEf3e08E8dF289169EdE581"
+            },
+            "message": {
+                "offerer": "0x7d8bf18C7cE84b3E175b339c4Ca93aEd1dD166F1",
+                "offer": [
+                    {
+                        "itemType": "2",
+                        "token": "0x3F53082981815Ed8142384EDB1311025cA750Ef1",
+                        "identifierOrCriteria": "134",
+                        "startAmount": "1",
+                        "endAmount": "1"
+                    }
+                ],
+                "orderType": "2",
+                "consideration": [
+                    {
+                        "itemType": "0",
+                        "token": "0x0000000000000000000000000000000000000000",
+                        "identifierOrCriteria": "0",
+                        "startAmount": "975000000000000000",
+                        "endAmount": "975000000000000000",
+                        "recipient": "0x7d8bf18C7cE84b3E175b339c4Ca93aEd1dD166F1"
+                    },
+                    {
+                        "itemType": "0",
+                        "token": "0x0000000000000000000000000000000000000000",
+                        "identifierOrCriteria": "0",
+                        "startAmount": "25000000000000000",
+                        "endAmount": "25000000000000000",
+                        "recipient": "0x8De9C5A032463C561423387a9648c5C7BCC5BC90"
+                    }
+                ],
+                "startTime": "1655450129",
+                "endTime": "1658042129",
+                "zone": "0x004C00500000aD104D7DBd00e3ae0A5C00560C00",
+                "zoneHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                "salt": "795459960395409",
+                "conduitKey": "0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000",
+                "totalOriginalConsiderationItems": "2",
+                "counter": "0"
+            }
+        }
+        """
+
+        let parsedPayload = try EIP712Parser.parse(rawPayload)
+        try XCTAssertEqual(parsedPayload.signHash().toHexString(), "54140d99a864932cbc40fd8a2d1d1706c3923a79c183a3b151e929ac468064db")
+    }
 }
