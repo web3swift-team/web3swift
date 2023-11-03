@@ -90,7 +90,7 @@ public class EIP712Parser {
 
     static func toData(_ json: String) throws -> Data {
         guard let json = json.data(using: .utf8) else {
-            throw Web3Error.inputError(desc: "Failed to parse EIP712 payload. Given string is not valid UTF8 string. \(json)")
+            throw Web3Error.inputError(desc: "EIP712Parser. Failed to parse EIP712 payload. Given string is not valid UTF8 string. \(json)")
         }
         return json
     }
@@ -176,7 +176,7 @@ public struct EIP712TypedData {
 
     public func encodeType(_ type: String) throws -> String {
         guard let typeData = types[type] else {
-            throw Web3Error.processingError(desc: "EIP712. Attempting to encode type that doesn't exist in this payload. Given type: \(type). Available types: \(types.values).")
+            throw Web3Error.processingError(desc: "EIP712Parser. Attempting to encode type that doesn't exist in this payload. Given type: \(type). Available types: \(types.values).")
         }
         return try encodeType(type, typeData)
     }
@@ -216,7 +216,7 @@ public struct EIP712TypedData {
         var encValues: [Any] = [try typeHash(type)]
 
         guard let typeData = types[type] else {
-            throw Web3Error.processingError(desc: "EIP712. Attempting to encode data for type that doesn't exist in this payload. Given type: \(type). Available types: \(types.values).")
+            throw Web3Error.processingError(desc: "EIP712Parser. Attempting to encode data for type that doesn't exist in this payload. Given type: \(type). Available types: \(types.values).")
         }
 
         func encodeField(_ field: EIP712TypeProperty,
@@ -225,19 +225,19 @@ public struct EIP712TypedData {
             var encValues: [Any] = []
             if field.type == "string" {
                 guard let value = value as? String else {
-                    throw Web3Error.processingError(desc: "EIP712. Type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to String.")
+                    throw Web3Error.processingError(desc: "EIP712Parser. Type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to String.")
                 }
                 encTypes.append(.bytes(length: 32))
                 encValues.append(value.sha3(.keccak256).addHexPrefix())
             } else if field.type == "bytes"{
                 guard let value = value as? Data else {
-                    throw Web3Error.processingError(desc: "EIP712. Type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to Data.")
+                    throw Web3Error.processingError(desc: "EIP712Parser. Type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to Data.")
                 }
                 encTypes.append(.bytes(length: 32))
                 encValues.append(value.sha3(.keccak256))
             } else if field.isArray {
                 guard let values = value as? [AnyObject] else {
-                    throw Web3Error.processingError(desc: "EIP712. Custom type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to [AnyObject].")
+                    throw Web3Error.processingError(desc: "EIP712Parser. Custom type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to [AnyObject].")
                 }
                 encTypes.append(.bytes(length: 32))
                 let subField = EIP712TypeProperty(name: field.name, type: field.coreType)
@@ -250,7 +250,7 @@ public struct EIP712TypedData {
                 }
 
                 guard let encodedValue = ABIEncoder.encode(types: encodedSubTypes, values: encodedSubValues) else {
-                    throw Web3Error.processingError(desc: "EIP712. Failed to encode an array of custom type. Field: '\(field)'; value: '\(String(describing: value))'.")
+                    throw Web3Error.processingError(desc: "EIP712Parser. Failed to encode an array of custom type. Field: '\(field)'; value: '\(String(describing: value))'.")
                 }
 
                 encValues.append(encodedValue.sha3(.keccak256))
@@ -276,7 +276,7 @@ public struct EIP712TypedData {
         }
 
         guard let encodedData = ABIEncoder.encode(types: encTypes, values: encValues) else {
-            throw Web3Error.processingError(desc: "EIP712. ABIEncoder.encode failed with the following types and values: \(encTypes); \(encValues)")
+            throw Web3Error.processingError(desc: "EIP712Parser. ABIEncoder.encode failed with the following types and values: \(encTypes); \(encValues)")
         }
         return encodedData
     }
