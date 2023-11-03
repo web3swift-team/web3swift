@@ -102,14 +102,18 @@ public class EIP712Parser {
     public static func parse(_ rawJson: Data) throws -> EIP712TypedData {
         let decoder = JSONDecoder()
         let types = try decoder.decode(EIP712TypeArray.self, from: rawJson).types
-        guard let json = try rawJson.asJsonDictionary(),
-              let primaryType = json["primaryType"] as? String,
-              let domain = json["domain"] as? [String : AnyObject],
-              let message = json["message"] as? [String : AnyObject]
-        else {
-            throw Web3Error.inputError(desc: "EIP712Parser: cannot decode EIP712TypedData object. Failed to parse one of primaryType, domain or message fields. Is any field missing?")
+        guard let json = try rawJson.asJsonDictionary() else {
+            throw Web3Error.inputError(desc: "EIP712Parser. Cannot decode given JSON as it cannot be represented as a Dictionary. Is it valid JSON?")
         }
-
+        guard let primaryType = json["primaryType"] as? String else {
+            throw Web3Error.inputError(desc: "EIP712Parser. Top-level string field 'primaryType' missing.")
+        }
+        guard let domain = json["domain"] as? [String : AnyObject] else {
+            throw Web3Error.inputError(desc: "EIP712Parser. Top-level object field 'domain' missing.")
+        }
+        guard let message = json["message"] as? [String : AnyObject] else {
+            throw Web3Error.inputError(desc: "EIP712Parser. Top-level object field 'message' missing.")
+        }
         return try EIP712TypedData(types: types, primaryType: primaryType, domain: domain, message: message)
     }
 }
