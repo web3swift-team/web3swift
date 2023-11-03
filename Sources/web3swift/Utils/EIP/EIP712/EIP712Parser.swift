@@ -187,17 +187,21 @@ public struct EIP712TypedData {
 
     internal func encodeType(_ type: String, _ typeData: [EIP712TypeProperty], typesCovered: [String] = []) throws -> String {
         var typesCovered = typesCovered
-        var encodedSubtypes: [String] = []
+        var encodedSubtypes: [String : String] = [:]
         let parameters = try typeData.map { attributeType in
             if let innerTypes = types[attributeType.coreType], !typesCovered.contains(attributeType.coreType) {
                 typesCovered.append(attributeType.coreType)
                 if attributeType.coreType != type {
-                    encodedSubtypes.append(try encodeType(attributeType.coreType, innerTypes))
+                    encodedSubtypes[attributeType.coreType] = try encodeType(attributeType.coreType, innerTypes)
                 }
             }
             return "\(attributeType.type) \(attributeType.name)"
         }
-        return type + "(" + parameters.joined(separator: ",") + ")" + encodedSubtypes.joined(separator: "")
+        return type + "(" + parameters.joined(separator: ",") + ")" + encodedSubtypes.sorted { lhs, rhs in
+            return lhs.key < rhs.key
+        }
+        .map { $0.value }
+        .joined(separator: "")
     }
 
     /// Convenience function for ``encodeData(_:data:)`` that uses ``primaryType`` and ``message`` as values.
