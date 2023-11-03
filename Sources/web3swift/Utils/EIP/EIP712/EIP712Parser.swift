@@ -123,10 +123,31 @@ public struct EIP712TypeProperty: Codable {
     public let name: String
     /// Property type. A type that's ABI encodable.
     public let type: String
+    /// Strips brackets (e.g. [] - denoting an array) and other characters augmenting the type.
+    /// If ``type`` is an array of then ``coreType`` will return the type of the array.
+    public let coreType: String
+
+    public let isArray: Bool
 
     public init(name: String, type: String) {
-        self.name = name
-        self.type = type
+        self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.type = type.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        var _coreType = self.type
+        if _coreType.hasSuffix("[]") {
+            _coreType.removeLast(2)
+            isArray = true
+        } else {
+            isArray = false
+        }
+        self.coreType = _coreType
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let name = try container.decode(String.self, forKey: .name)
+        let type = try container.decode(String.self, forKey: .type)
+        self.init(name: name, type: type)
     }
 }
 
@@ -144,82 +165,9 @@ public struct EIP712TypedData {
                 domain: [String : AnyObject],
                 message: [String : AnyObject]) throws {
         self.types = types
-        self.primaryType = primaryType
+        self.primaryType = primaryType.trimmingCharacters(in: .whitespacesAndNewlines)
         self.domain = domain
         self.message = message
-        if let problematicType = hasCircularDependency() {
-            throw Web3Error.inputError(desc: "Created EIP712TypedData has a circular dependency amongst it's types. Cycle was first identified in '\(problematicType)'. Review it's uses in 'types'.")
-        }
-    }
-
-    /// Checks for a circular dependency among the given types.
-    ///
-    /// If a circular dependency is detected, it returns the name of the type where the cycle was first identified.
-    /// Otherwise, it returns `nil`.
-    ///
-    /// - Returns: The type name where a circular dependency is detected, or `nil` if no circular dependency exists.
-    /// - Note: The function utilizes depth-first search to identify the circular dependencies.
-    func hasCircularDependency() -> String? {
-
-        /// Generates an adjacency list for the given types, representing their dependencies.
-        ///
-        /// - Parameter types: A dictionary mapping type names to their property definitions.
-        /// - Returns: An adjacency list representing type dependencies.
-        func createAdjacencyList(types: [String: [EIP712TypeProperty]]) -> [String: [String]] {
-            var adjList: [String: [String]] = [:]
-
-            for (typeName, fields) in types {
-                adjList[typeName] = []
-                for field in fields {
-                    if types.keys.contains(field.type) {
-                        adjList[typeName]?.append(field.type)
-                    }
-                }
-            }
-
-            return adjList
-        }
-
-        let adjList = createAdjacencyList(types: types)
-
-        /// Depth-first search to check for circular dependencies.
-        ///
-        /// - Parameters:
-        ///   - node: The current type being checked.
-        ///   - visited: A dictionary keeping track of the visited types.
-        ///   - stack: A dictionary used for checking the current path for cycles.
-        ///
-        /// - Returns: `true` if a cycle is detected from the current node, `false` otherwise.
-        func depthFirstSearch(node: String, visited: inout [String: Bool], stack: inout [String: Bool]) -> Bool {
-            visited[node] = true
-            stack[node] = true
-
-            for neighbor in adjList[node] ?? [] {
-                if visited[neighbor] == nil {
-                    if depthFirstSearch(node: neighbor, visited: &visited, stack: &stack) {
-                        return true
-                    }
-                } else if stack[neighbor] == true {
-                    return true
-                }
-            }
-
-            stack[node] = false
-            return false
-        }
-
-        var visited: [String: Bool] = [:]
-        var stack: [String: Bool] = [:]
-
-        for typeName in adjList.keys {
-            if visited[typeName] == nil {
-                if depthFirstSearch(node: typeName, visited: &visited, stack: &stack) {
-                    return typeName
-                }
-            }
-        }
-
-        return nil
     }
 
     public func encodeType(_ type: String) throws -> String {
@@ -237,9 +185,11 @@ public struct EIP712TypedData {
         var typesCovered = typesCovered
         var encodedSubtypes: [String] = []
         let parameters = try typeData.map { attributeType in
-            if let innerTypes = types[attributeType.type], !typesCovered.contains(attributeType.type) {
-                encodedSubtypes.append(try encodeType(attributeType.type, innerTypes))
-                typesCovered.append(attributeType.type)
+            if let innerTypes = types[attributeType.coreType], !typesCovered.contains(attributeType.coreType) {
+                typesCovered.append(attributeType.coreType)
+                if attributeType.coreType != type {
+                    encodedSubtypes.append(try encodeType(attributeType.coreType, innerTypes))
+                }
             }
             return "\(attributeType.type) \(attributeType.name)"
         }
@@ -261,9 +211,10 @@ public struct EIP712TypedData {
             throw Web3Error.processingError(desc: "EIP712. Attempting to encode data for type that doesn't exist in this payload. Given type: \(type). Available types: \(types.values).")
         }
 
-        // Add field contents
-        for field in typeData {
-            let value = data[field.name]
+        func encodeField(_ field: EIP712TypeProperty,
+                         value: AnyObject?) throws -> (encTypes: [ABI.Element.ParameterType], encValues: [Any]) {
+            var encTypes: [ABI.Element.ParameterType] = []
+            var encValues: [Any] = []
             if field.type == "string" {
                 guard let value = value as? String else {
                     throw Web3Error.processingError(desc: "EIP712. Type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to String.")
@@ -276,16 +227,44 @@ public struct EIP712TypedData {
                 }
                 encTypes.append(.bytes(length: 32))
                 encValues.append(value.sha3(.keccak256))
-            } else if types[field.type] != nil {
-                guard let value = value as? [String : AnyObject] else {
-                    throw Web3Error.processingError(desc: "EIP712. Custom type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to [String : AnyObject].")
+            } else if field.isArray {
+                guard let values = value as? [AnyObject] else {
+                    throw Web3Error.processingError(desc: "EIP712. Custom type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to [AnyObject].")
                 }
                 encTypes.append(.bytes(length: 32))
-                encValues.append(try encodeData(field.type, data: value).sha3(.keccak256))
+                let subField = EIP712TypeProperty(name: field.name, type: field.coreType)
+                var encodedSubTypes: [ABI.Element.ParameterType] = []
+                var encodedSubValues: [Any] = []
+                try values.forEach { value in
+                    let encoded = try encodeField(subField, value: value)
+                    encodedSubTypes.append(contentsOf: encoded.encTypes)
+                    encodedSubValues.append(contentsOf: encoded.encValues)
+                }
+
+                guard let encodedValue = ABIEncoder.encode(types: encodedSubTypes, values: encodedSubValues) else {
+                    throw Web3Error.processingError(desc: "EIP712. Failed to encode an array of custom type. Field: '\(field)'; value: '\(String(describing: value))'.")
+                }
+
+                encValues.append(encodedValue.sha3(.keccak256))
+            } else if types[field.coreType] != nil  {
+                encTypes.append(.bytes(length: 32))
+                if let value = value as? [String : AnyObject] {
+                    encValues.append(try encodeData(field.type, data: value).sha3(.keccak256))
+                } else {
+                    encValues.append(Data(count: 32))
+                }
             } else {
                 encTypes.append(try ABITypeParser.parseTypeString(field.type))
                 encValues.append(value as Any)
             }
+            return (encTypes, encValues)
+        }
+
+        // Add field contents
+        for field in typeData {
+            let (_encTypes, _encValues) = try encodeField(field, value: data[field.name])
+            encTypes.append(contentsOf: _encTypes)
+            encValues.append(contentsOf: _encValues)
         }
 
         guard let encodedData = ABIEncoder.encode(types: encTypes, values: encValues) else {
