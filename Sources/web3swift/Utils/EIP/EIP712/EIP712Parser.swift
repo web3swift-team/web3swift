@@ -176,7 +176,7 @@ public struct EIP712TypedData {
 
     public func encodeType(_ type: String) throws -> String {
         guard let typeData = types[type] else {
-            throw Web3Error.processingError(desc: "EIP712Parser. Attempting to encode type that doesn't exist in this payload. Given type: \(type). Available types: \(types.values).")
+            throw Web3Error.processingError(desc: "EIP712Parser. Attempting to encode type that doesn't exist in this payload. Given type: \(type). Available types: \(types.keys).")
         }
         return try encodeType(type, typeData)
     }
@@ -216,7 +216,7 @@ public struct EIP712TypedData {
         var encValues: [Any] = [try typeHash(type)]
 
         guard let typeData = types[type] else {
-            throw Web3Error.processingError(desc: "EIP712Parser. Attempting to encode data for type that doesn't exist in this payload. Given type: \(type). Available types: \(types.values).")
+            throw Web3Error.processingError(desc: "EIP712Parser. Attempting to encode data for type that doesn't exist in this payload. Given type: \(type). Available types: \(types.keys).")
         }
 
         func encodeField(_ field: EIP712TypeProperty,
