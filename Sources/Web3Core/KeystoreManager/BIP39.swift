@@ -101,7 +101,7 @@ public class BIP39 {
             isCorrectSize,
             let entropy = Data.randomBytes(length: randomBytesCount)
         else {
-            throw AbstractKeystoreError.noEntropyError("BIP39. \(!isCorrectSize ? "Requested entropy of wrong bits size \(size)." : "Failed to generated \(randomBytesCount) of random bytes.")")
+            throw AbstractKeystoreError.noEntropyError("BIP39. \(!isCorrectSize ? "Requested entropy of wrong bits size: \(size). Expected: 128 <= size <= 256, size % 32 == 0." : "Failed to generate \(randomBytesCount) of random bytes.")")
         }
         return entropy
     }
