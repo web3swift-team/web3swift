@@ -90,7 +90,7 @@ public class EIP712Parser {
 
     static func toData(_ json: String) throws -> Data {
         guard let json = json.data(using: .utf8) else {
-            throw Web3Error.inputError(desc: "EIP712Parser. Failed to parse EIP712 payload. Given string is not valid UTF8 string. \(json)")
+            throw Web3Error.inputError(desc: "EIP712Parser. Failed to parse EIP712 payload. Given string is not valid UTF8 string.")
         }
         return json
     }
