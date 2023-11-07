@@ -51,6 +51,17 @@ class UncategorizedTests: XCTestCase {
         XCTAssert(biguint == BigUInt("126978086000000000"))
     }
 
+    func testStringSplit() {
+        XCTAssertEqual("abcdefgh".split(every: 3), ["abc", "def", "gh"])
+        XCTAssertEqual("abcdefgh".split(every: 3, backwards: true), ["ab", "cde", "fgh"])
+
+        XCTAssertEqual("abcdefgh".split(every: 10), ["abcdefgh"])
+        XCTAssertEqual("".split(every: 3), [])
+
+        XCTAssertEqual("abcdefgh".split(every: 1), ["a", "b", "c", "d", "e", "f", "g", "h"])
+        XCTAssertEqual("abcdefgh".split(every: 1, backwards: true), ["a", "b", "c", "d", "e", "f", "g", "h"])  // should be the same as from the front
+    }
+
     func testBloom() throws {
         let positive = [
                 "testtest",
