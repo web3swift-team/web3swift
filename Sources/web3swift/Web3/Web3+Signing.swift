@@ -41,7 +41,7 @@ public struct Web3Signer {
     }
 
     public static func signEIP712(_ eip712TypedDataPayload: EIP712TypedData,
-                                  keystore: BIP32Keystore,
+                                  keystore: AbstractKeystore,
                                   account: EthereumAddress,
                                   password: String? = nil) throws -> Data {
         let hash = try eip712TypedDataPayload.signHash()
@@ -57,7 +57,7 @@ public struct Web3Signer {
     }
 
     public static func signEIP712(_ eip712Hashable: EIP712Hashable,
-                                  keystore: BIP32Keystore,
+                                  keystore: AbstractKeystore,
                                   verifyingContract: EthereumAddress,
                                   account: EthereumAddress,
                                   password: String? = nil,
