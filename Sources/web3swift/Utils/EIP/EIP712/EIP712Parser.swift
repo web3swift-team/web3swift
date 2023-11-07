@@ -90,7 +90,7 @@ public class EIP712Parser {
 
     static func toData(_ json: String) throws -> Data {
         guard let json = json.data(using: .utf8) else {
-            throw Web3Error.inputError(desc: "EIP712Parser. Failed to parse EIP712 payload. Given string is not valid UTF8 string. \(json)")
+            throw Web3Error.inputError(desc: "EIP712Parser. Failed to parse EIP712 payload. Given string is not valid UTF8 string.")
         }
         return json
     }
@@ -125,9 +125,9 @@ internal struct EIP712TypeArray: Codable {
 public struct EIP712TypeProperty: Codable {
     /// Property name. An arbitrary string.
     public let name: String
-    /// Property type. A type that's ABI encodable.
+    /// Property type. A type that's ABI encodable or a custom type from ``EIP712TypedData/types``.
     public let type: String
-    /// Strips brackets (e.g. [] - denoting an array) and other characters augmenting the type.
+    /// Stripped of brackets ([] - denoting an array).
     /// If ``type`` is an array of then ``coreType`` will return the type of the array.
     public let coreType: String
 
