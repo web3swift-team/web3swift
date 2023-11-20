@@ -225,19 +225,26 @@ public struct EIP712TypedData {
             var encValues: [Any] = []
             if field.type == "string" {
                 guard let value = value as? String else {
-                    throw Web3Error.processingError(desc: "EIP712Parser. Type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to String.")
+                    throw Web3Error.processingError(desc: "EIP712Parser. Type metadata of '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to String. Parent object type: \(type).")
                 }
                 encTypes.append(.bytes(length: 32))
                 encValues.append(value.sha3(.keccak256).addHexPrefix())
             } else if field.type == "bytes"{
-                guard let value = value as? Data else {
-                    throw Web3Error.processingError(desc: "EIP712Parser. Type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to Data.")
+                let _value: Data?
+                if let value = value as? String,
+                   let data = Data.fromHex(value) {
+                    _value = data
+                } else {
+                    _value = value as? Data
+                }
+                guard let value = _value else {
+                    throw Web3Error.processingError(desc: "EIP712Parser. Type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast/parse value to Data. Parent object type: \(type).")
                 }
                 encTypes.append(.bytes(length: 32))
                 encValues.append(value.sha3(.keccak256))
             } else if field.isArray {
                 guard let values = value as? [AnyObject] else {
-                    throw Web3Error.processingError(desc: "EIP712Parser. Custom type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to [AnyObject].")
+                    throw Web3Error.processingError(desc: "EIP712Parser. Custom type metadata '\(field)' and actual value '\(String(describing: value))' type doesn't match. Cannot cast value to [AnyObject]. Parent object type: \(type)")
                 }
                 encTypes.append(.bytes(length: 32))
                 let subField = EIP712TypeProperty(name: field.name, type: field.coreType)
@@ -250,7 +257,7 @@ public struct EIP712TypedData {
                 }
 
                 guard let encodedValue = ABIEncoder.encode(types: encodedSubTypes, values: encodedSubValues) else {
-                    throw Web3Error.processingError(desc: "EIP712Parser. Failed to encode an array of custom type. Field: '\(field)'; value: '\(String(describing: value))'.")
+                    throw Web3Error.processingError(desc: "EIP712Parser. Failed to encode an array of custom type. Field: '\(field)'; value: '\(String(describing: value))'. Parent object type: \(type)")
                 }
 
                 encValues.append(encodedValue.sha3(.keccak256))

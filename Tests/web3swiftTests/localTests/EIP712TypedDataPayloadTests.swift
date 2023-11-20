@@ -461,4 +461,133 @@ class EIP712TypedDataPayloadTests: XCTestCase {
         let parsedPayload = try EIP712Parser.parse(rawPayload)
         try XCTAssertEqual(parsedPayload.signHash().toHexString(), "54140d99a864932cbc40fd8a2d1d1706c3923a79c183a3b151e929ac468064db")
     }
+
+    /// A test to check payload encoding, specifically parsing and encoding of fields with "bytes" type.
+    /// Given raw payload was failing with the following error:
+    /// ```
+    ///     EIP712Parser.
+    ///     Type metadata 'EIP712TypeProperty(name: "data", type: "bytes", coreType: "bytes", isArray: false)'
+    ///     and actual value
+    ///     'Optional(0x000000000000000000000000e84a7676aae742770a179dd7431073429a88c7b8000000000000000000000000000000000000000000000000000000000000002c)'
+    ///     type doesn't match.
+    ///     Cannot cast value to Data.
+    ///
+    /// ```
+    func testEIP712BytesEncoding() throws {
+        let rawPayload = """
+            {
+            "message":{
+                "takeAsset":{
+                    "assetType":{
+                        "assetClass":"0xaaaebeba",
+                        "data":"0x"
+                    },
+                    "value":"2000000000000000000"
+                },
+                "data":"0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000d6ffd79b52a587a0a9941a61f4e6cb0d386d54580000000000000000000000000000000000000000000000000000000000000064",
+                "dataType":"0x23d235ef",
+                "maker":"0xd0727e8a578de9dd19bced635b1aa43576e638bc",
+                "taker":"0x0000000000000000000000000000000000000000",
+                "salt":"0x8f9761e56ed73b34d0cb184a2c5530d86c355c63c1cde8db1e0d2557d93f10d7",
+                "end":1703058225,
+                "makeAsset":{
+                    "value":"1",
+                    "assetType":{
+                        "data":"0x000000000000000000000000e84a7676aae742770a179dd7431073429a88c7b8000000000000000000000000000000000000000000000000000000000000002c",
+                        "assetClass":"0x73ad2146"
+                    }
+                },
+                "start":0
+            },
+            "domain":{
+                "verifyingContract":"0x02afbd43cad367fcb71305a2dfb9a3928218f0c1",
+                "version":"2",
+                "chainId":5,
+                "name":"Exchange"
+            },
+            "primaryType":"Order",
+            "types":{
+                "Order":[
+                    {
+                        "type":"address",
+                        "name":"maker"
+                    },
+                    {
+                        "type":"Asset",
+                        "name":"makeAsset"
+                    },
+                    {
+                        "name":"taker",
+                        "type":"address"
+                    },
+                    {
+                        "name":"takeAsset",
+                        "type":"Asset"
+                    },
+                    {
+                        "name":"salt",
+                        "type":"uint256"
+                    },
+                    {
+                        "name":"start",
+                        "type":"uint256"
+                    },
+                    {
+                        "type":"uint256",
+                        "name":"end"
+                    },
+                    {
+                        "type":"bytes4",
+                        "name":"dataType"
+                    },
+                    {
+                        "type":"bytes",
+                        "name":"data"
+                    }
+                ],
+                "EIP712Domain":[
+                    {
+                        "name":"name",
+                        "type":"string"
+                    },
+                    {
+                        "type":"string",
+                        "name":"version"
+                    },
+                    {
+                        "name":"chainId",
+                        "type":"uint256"
+                    },
+                    {
+                        "name":"verifyingContract",
+                        "type":"address"
+                    }
+                ],
+                "Asset":[
+                    {
+                        "name":"assetType",
+                        "type":"AssetType"
+                    },
+                    {
+                        "type":"uint256",
+                        "name":"value"
+                    }
+                ],
+                "AssetType":[
+                    {
+                        "type":"bytes4",
+                        "name":"assetClass"
+                    },
+                    {
+                        "name":"data",
+                        "type":"bytes"
+                    }
+                ]
+            }
+            }
+            """
+
+        let parsedPayload = try EIP712Parser.parse(rawPayload)
+        try XCTAssertEqual(parsedPayload.signHash().toHexString(), "95625b9843950aa6cdd50c703e2bf0bdaa5ddeef9842d5839a81d927b7159637")
+    }
 }
