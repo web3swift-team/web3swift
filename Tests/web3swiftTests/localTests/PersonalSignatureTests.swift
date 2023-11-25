@@ -21,9 +21,78 @@ class PersonalSignatureTests: XCTestCase {
         let expectedAddress = keystoreManager.addresses![0]
 
         let signature = try await web3.personal.signPersonalMessage(message: message.data(using: .utf8)!, from: expectedAddress, password: "")
-        let unmarshalledSignature = SECP256K1.unmarshalSignature(signatureData: signature)!
         let signer = web3.personal.recoverAddress(message: message.data(using: .utf8)!, signature: signature)
-        XCTAssert(expectedAddress == signer, "Failed to sign personal message")
+        XCTAssertEqual(expectedAddress, signer, "Failed to sign personal message")
+    }
+
+    /// This test was created by using Metamask 10.3.0
+    /// Source: https://github.com/NomicFoundation/hardhat/pull/2009/files#diff-c5f213b3ca761cf1b580355b76fc841122e29cc7f378cb35ffec2949db9e237aR592
+    func testPersonalSignatureCompatibleWithMetaMask() async throws {
+        let privateKey = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+        let messageToSign = "0x7699f568ecd7753e6ddf75a42fa4c2cc86cbbdc704c9eb1a6b6d4b9d8b8d1519"
+        let expectedSignature = "2875e4206c9fe3b229291c81f95cc4f421e2f4d3e023f5b4041daa56ab4000977010b47a3c01036ec8a6a0872aec2ab285150f003d01b0d8da60c1cceb9154181c"
+
+        let keystore = try! EthereumKeystoreV3(privateKey: Data.fromHex(privateKey)!, password: "")!
+        let address = keystore.addresses!.first!
+        let signature = try Web3Signer.signPersonalMessage(Data.fromHex(messageToSign)!,
+                                                           keystore: keystore,
+                                                           account: address,
+                                                           password: "")
+        XCTAssertNotNil(signature)
+        XCTAssertEqual(signature?.toHexString(), expectedSignature)
+    }
+
+    func testPersonalSignatureCompatibleWithMetaMaskv11_5_1() async throws {
+        let privateKey = "0xbb5bbb5c11112bf637cca88d3612db25202a6e68df28f15ed7118c6a006c2938"
+        let messageToSign = "Example `personal_sign` message"
+        let expectedSignature = "24fef5a5d3757929a8782a96c9df2fa30cf39db52cd56c54fd42f17c6325fff220d1e2028f3c4426a66e8b8e665bff7b45f0766df4a12c9c9c59262d6efe9a6b1b"
+        let keystore = try! EthereumKeystoreV3(privateKey: Data.fromHex(privateKey)!, password: "")!
+        let address = EthereumAddress("0xeee666c6625aec1807a035b1815264fed21ac566")!
+        let signature = try Web3Signer.signPersonalMessage(messageToSign.data(using: .utf8)!,
+                                                           keystore: keystore,
+                                                           account: address,
+                                                           password: "")
+        XCTAssertNotNil(signature)
+        XCTAssertEqual(signature?.toHexString(), expectedSignature)
+    }
+
+    /// The same as ``PersonalSignatureTests/testPersonalSignatureCompatibleWithMetaMask``
+    func testPersonalSignatureCompatibleWithMetaMaskUsingWeb3Obj() async throws {
+        let privateKey = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+        let messageToSign = "0x7699f568ecd7753e6ddf75a42fa4c2cc86cbbdc704c9eb1a6b6d4b9d8b8d1519"
+        let expectedSignature = "2875e4206c9fe3b229291c81f95cc4f421e2f4d3e023f5b4041daa56ab4000977010b47a3c01036ec8a6a0872aec2ab285150f003d01b0d8da60c1cceb9154181c"
+
+        let web3 = try await Web3.new(LocalTestCase.url)
+        let keystore = try! EthereumKeystoreV3(privateKey: Data.fromHex(privateKey)!, password: "")!
+        let keystoreManager = KeystoreManager([keystore])
+        web3.addKeystoreManager(keystoreManager)
+        let expectedAddress = keystoreManager.addresses![0]
+
+        let signature = try await web3.personal.signPersonalMessage(message: Data.fromHex(messageToSign)!, from: expectedAddress, password: "")
+        // ATTENTION: web3.wallet.signPersonalMessage accepts a raw string instead but expects it
+        // ATTENTION: to be a hex string!
+        let signature_walletObj = try web3.wallet.signPersonalMessage(messageToSign, account: expectedAddress, password: "")
+        let signer = web3.personal.recoverAddress(message: Data.fromHex(messageToSign)!, signature: signature)
+
+        XCTAssertEqual(expectedAddress, signer, "Failed to sign personal message")
+        XCTAssertNotNil(signature)
+        XCTAssertEqual(signature.toHexString(), expectedSignature)
+        XCTAssertEqual(signature_walletObj.toHexString(), expectedSignature)
+    }
+
+    /// Source: https://github.com/NomicFoundation/hardhat/pull/2009/files#diff-c5f213b3ca761cf1b580355b76fc841122e29cc7f378cb35ffec2949db9e237aR592
+    func testPersonalSignatureCompatibleWithGeth() async throws {
+        let privateKey = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+        let messageToSign = "0x5417aa2a18a44da0675524453ff108c545382f0d7e26605c56bba47c21b5e979"
+        let expectedSignature = "9c73dd4937a37eecab3abb54b74b6ec8e500080431d36afedb1726624587ee6710296e10c1194dded7376f13ff03ef6c9e797eb86bae16c20c57776fc69344271c"
+
+        let keystore = try! EthereumKeystoreV3(privateKey: Data.fromHex(privateKey)!, password: "")!
+        let signature = try Web3Signer.signPersonalMessage(Data.fromHex(messageToSign)!,
+                                                           keystore: keystore,
+                                                           account: keystore.addresses!.first!,
+                                                           password: "")
+        XCTAssertNotNil(signature)
+        XCTAssertEqual(signature?.toHexString(), expectedSignature)
     }
 
     // TODO: - write contract
