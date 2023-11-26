@@ -69,8 +69,9 @@ class PersonalSignatureTests: XCTestCase {
         let expectedAddress = keystoreManager.addresses![0]
 
         let signature = try await web3.personal.signPersonalMessage(message: Data.fromHex(messageToSign)!, from: expectedAddress, password: "")
-        // ATTENTION: web3.wallet.signPersonalMessage accepts a raw string instead but expects it
-        // ATTENTION: to be a hex string!
+        // ATTENTION: web3.wallet.signPersonalMessage accepts a raw string
+        // ATTENTION: instead of the message hash but expects it to be
+        // ATTENTION: 'string' -> to 'UTF-8 bytes' -> to hex string converted!
         let signature_walletObj = try web3.wallet.signPersonalMessage(messageToSign, account: expectedAddress, password: "")
         let signer = web3.personal.recoverAddress(message: Data.fromHex(messageToSign)!, signature: signature)
 
