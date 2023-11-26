@@ -15,7 +15,7 @@ func checkError(method: String, error: JsonRpcErrorObject.RpcError) throws -> St
         if let result = spelunkData(value: error) {
             return result.data
         }
-        throw Web3Error.nodeError(desc: "missing revert data in call exception; Transaction reverted without a reason string")
+        throw Web3Error.nodeError(desc: "Error data decoding failed: missing revert data in exception; Transaction reverted without a reason string.")
     }
 
     throw Web3Error.nodeError(desc: error.message)
