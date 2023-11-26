@@ -137,7 +137,17 @@ extension String {
     }
 
     public var isHex: Bool {
-        stripHexPrefix().reduce(true, { $0 && $1.isHexDigit } )
+        var _str = self.trim()
+        if _str.isEmpty {
+            return false
+        }
+        _str = _str.stripHexPrefix()
+        for char in _str {
+            if !char.isHexDigit {
+                return false
+            }
+        }
+        return true
     }
 }
 
