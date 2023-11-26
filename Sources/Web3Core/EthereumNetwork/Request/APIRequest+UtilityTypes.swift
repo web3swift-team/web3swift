@@ -46,8 +46,8 @@ struct RequestBody: Encodable {
     }
 
     public var encodedBody: Data {
-         // this is safe to force try this here
-         // Because request must failed to compile if it not conformable with `Encodable` protocol
+         // Safe to use force-try because request will fail to
+         // compile if it's not conforming to the `Encodable` protocol.
          return try! JSONEncoder().encode(self)
      }
 }
