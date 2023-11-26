@@ -284,6 +284,13 @@ extension DefaultContractProtocol {
         return encodedData
     }
 
+    public func event(_ event: String, parameters: [Any]) -> [EventFilterParameters.Topic?] {
+        guard let event = events[event] else {
+            return []
+        }
+        return event.encodeParameters(parameters)
+    }
+
     public func parseEvent(_ eventLog: EventLog) -> (eventName: String?, eventData: [String: Any]?) {
         for (eName, ev) in self.events {
             if !ev.anonymous {
