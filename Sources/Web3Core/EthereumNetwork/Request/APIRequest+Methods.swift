@@ -22,16 +22,16 @@ func checkError(method: String, error: JsonRpcErrorObject.RpcError) throws -> St
 }
 
 func spelunkData(value: Any?) -> (message: String, data: String)? {
+    if (value == nil) {
+        return nil
+    }
+    
     func spelunkRpcError(_ message: String, data: String) -> (message: String, data: String)? {
         if message.contains("revert") && data.isHex {
             return (message, data)
         } else {
             return nil
         }
-    }
-
-    if (value == nil) {
-        return nil
     }
 
     if let error = value as? JsonRpcErrorObject.RpcError {
