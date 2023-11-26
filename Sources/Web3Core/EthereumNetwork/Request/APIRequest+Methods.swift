@@ -110,7 +110,7 @@ extension APIRequest {
         if let LiteralType = Result.self as? LiteralInitiableFromString.Type {
             guard let responseAsString = try? JSONDecoder().decode(APIResponse<String>.self, from: data) else { throw Web3Error.dataError }
             guard let literalValue = LiteralType.init(from: responseAsString.result) else { throw Web3Error.dataError }
-            /// `literalValue` conforms `LiteralInitiableFromString`, that conforming to an `APIResponseType` type, so it's never fails.
+            /// `literalValue` conforms `LiteralInitiableFromString` (which conforms to an `APIResponseType` type) so it never fails.
             guard let result = literalValue as? Result else { throw Web3Error.typeError }
             return APIResponse(id: responseAsString.id, jsonrpc: responseAsString.jsonrpc, result: result)
         }
