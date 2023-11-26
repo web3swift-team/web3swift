@@ -25,7 +25,7 @@ class StringExtensionsTest: XCTestCase {
         XCTAssertFalse("xyz".isHex)
         XCTAssertFalse("0xCAFEQ".isHex)
         XCTAssertFalse("R0123456789abcdefABCDEF ".isHex)
-        XCTAssertFalse(" R0123456789abcdefABCDEFT ".isHex)
+        XCTAssertFalse(" R0123456789abcdefABCDEF ".isHex)
     }
 
 }
