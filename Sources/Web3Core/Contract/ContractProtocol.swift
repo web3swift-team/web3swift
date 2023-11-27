@@ -356,7 +356,7 @@ extension DefaultContractProtocol {
                 throw Web3Error.inputError(desc: "Make sure ABI you use contains error that can match signature: 0x\(selector.toHexString())")
             }
         default:
-            throw Web3Error.inputError(desc: "Invalid data count")
+            throw Web3Error.inputError(desc: "Given data has invalid bytes count.")
         }
     }
 
@@ -395,7 +395,7 @@ extension DefaultContractProtocol {
     @discardableResult
     public func callStatic(_ method: String, parameters: [Any], provider: Web3Provider) async throws -> [String: Any] {
         guard let address = address else {
-            throw Web3Error.inputError(desc: "address field is missing")
+            throw Web3Error.inputError(desc: "RPC failed: contract is missing an address.")
         }
         guard let data = self.method(method, parameters: parameters, extraData: nil) else {
             throw Web3Error.dataError
