@@ -80,7 +80,7 @@ final class ABIDecoderSliceTests: XCTestCase {
         var resultArray = [BigUInt]()
         for i in 0..<2 {
             guard let data = returnData[i][1] as? Data,
-                  let balance = try erc20_balanceof.decodeReturnData(data)["0"] as? BigUInt else {
+                  let balance = try? erc20_balanceof.decodeReturnData(data)["0"] as? BigUInt else {
                 resultArray.append(0)
                 continue
             }
