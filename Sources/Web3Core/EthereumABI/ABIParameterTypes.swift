@@ -168,45 +168,79 @@ extension ABI.Element.ParameterType: Equatable {
 }
 
 extension ABI.Element.Function {
+    /// String representation of a function, e.g. `transfer(address,uint256)`.
     public var signature: String {
         return "\(name ?? "")(\(inputs.map { $0.type.abiRepresentation }.joined(separator: ",")))"
     }
 
+    /// Function selector, e.g. `"cafe1234"`. Without hex prefix `0x`.
+    @available(*, deprecated, renamed: "selector", message: "Please, use 'selector' property instead.")
     public var methodString: String {
+        return selector
+    }
+
+    /// Function selector, e.g. `"cafe1234"`. Without hex prefix `0x`.
+    public var selector: String {
         return String(signature.sha3(.keccak256).prefix(8))
     }
 
+    /// Function selector (e.g. `0xcafe1234`) but as raw bytes.
+    @available(*, deprecated, renamed: "selectorEncoded", message: "Please, use 'selectorEncoded' property instead.")
     public var methodEncoding: Data {
-        return signature.data(using: .ascii)!.sha3(.keccak256)[0...3]
+        return selectorEncoded
+    }
+
+    /// Function selector (e.g. `0xcafe1234`) but as raw bytes.
+    public var selectorEncoded: Data {
+        return Data.fromHex(selector)!
     }
 }
 
 // MARK: - Event topic
 extension ABI.Element.Event {
+    /// String representation of an event, e.g. `ContractCreated(address)`.
     public var signature: String {
         return "\(name)(\(inputs.map { $0.type.abiRepresentation }.joined(separator: ",")))"
     }
 
+    /// Hashed signature of an event, e.g. `0xcf78cf0d6f3d8371e1075c69c492ab4ec5d8cf23a1a239b6a51a1d00be7ca312`.
     public var topic: Data {
         return signature.data(using: .ascii)!.sha3(.keccak256)
     }
 }
 
 extension ABI.Element.EthError {
+    /// String representation of an error, e.g. `TrasferFailed(address)`.
     public var signature: String {
         return "\(name)(\(inputs.map { $0.type.abiRepresentation }.joined(separator: ",")))"
     }
 
+    /// Error selector, e.g. `"cafe1234"`. Without hex prefix `0x`.
+    @available(*, deprecated, renamed: "selector", message: "Please, use 'selector' property instead.")
     public var methodString: String {
+        return selector
+    }
+
+    /// Error selector, e.g. `"cafe1234"`. Without hex prefix `0x`.
+    public var selector: String {
         return String(signature.sha3(.keccak256).prefix(8))
     }
 
+    /// Error selector (e.g. `0xcafe1234`) but as raw bytes.
+    @available(*, deprecated, renamed: "selectorEncoded", message: "Please, use 'selectorEncoded' property instead.")
     public var methodEncoding: Data {
-        return signature.data(using: .ascii)!.sha3(.keccak256)[0...3]
+        return selectorEncoded
+    }
+
+    /// Error selector (e.g. `0xcafe1234`) but as raw bytes.
+    public var selectorEncoded: Data {
+        return Data.fromHex(selector)!
     }
 }
 
 extension ABI.Element.ParameterType: ABIEncoding {
+
+    /// Returns a valid solidity type like `address`, `uint128` or any other built-in type from Solidity.
     public var abiRepresentation: String {
         switch self {
         case .uint(let bits):

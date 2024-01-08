@@ -34,7 +34,7 @@ public class Web3HttpProvider: Web3Provider {
             network = net
         } else {
             /// chain id could be a hex string or an int value.
-            let response: String = try await APIRequest.send(APIRequest.getNetwork.call, parameter: [], with: self).result
+            let response: String = try await APIRequest.send(APIRequest.getNetwork.call, parameters: [], with: self).result
             let result: UInt
             if response.hasHexPrefix() {
                 guard let num = BigUInt(response, radix: 16)  else {
