@@ -88,8 +88,8 @@ extension APIRequest {
         return urlRequest
     }
 
-    public static func send<Result>(_ method: String, parameter: [Encodable], with provider: Web3Provider) async throws -> APIResponse<Result> {
-        let body = RequestBody(method: method, params: parameter)
+    public static func send<Result>(_ method: String, parameters: [Encodable], with provider: Web3Provider) async throws -> APIResponse<Result> {
+        let body = RequestBody(method: method, params: parameters)
         let uRLRequest = setupRequest(for: body, with: provider)
 
         let data: Data
