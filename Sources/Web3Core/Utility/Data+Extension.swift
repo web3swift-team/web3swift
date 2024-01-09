@@ -5,7 +5,8 @@
 
 import Foundation
 
-extension Data {
+public extension Data {
+
     init<T>(fromArray values: [T]) {
         let values = values
         let ptrUB = values.withUnsafeBufferPointer { (ptr: UnsafeBufferPointer) in return ptr }
@@ -33,32 +34,34 @@ extension Data {
         return difference == UInt8(0x00)
     }
 
-    public static func zero(_ data: inout Data) {
+    static func zero(_ data: inout Data) {
         let count = data.count
         data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) in
             body.baseAddress?.assumingMemoryBound(to: UInt8.self).initialize(repeating: 0, count: count)
         }
     }
 
-    public static func randomBytes(length: Int) -> Data? {
-        for _ in 0...1024 {
-            var data = Data(repeating: 0, count: length)
-            let result = data.withUnsafeMutableBytes { (body: UnsafeMutableRawBufferPointer) -> Int32? in
-                if let bodyAddress = body.baseAddress, body.count > 0 {
-                    let pointer = bodyAddress.assumingMemoryBound(to: UInt8.self)
-                    return SecRandomCopyBytes(kSecRandomDefault, length, pointer)
-                } else {
-                    return nil
-                }
-            }
-            if let notNilResult = result, notNilResult == errSecSuccess {
-                return data
-            }
+    /**
+     Generates an array of random bytes of the specified length.
+     This function uses `SecRandomCopyBytes` to generate random bytes returning it as a `Data` object.
+     If an error occurs during random bytes generation, the function returns `nil`.
+     Error occurs only if `SecRandomCopyBytes` returns status that is not `errSecSuccess`.
+     See [all status codes](https://developer.apple.com/documentation/security/1542001-security_framework_result_codes) for possible error reasons.
+     Note: in v4 of web3swift this function will be deprecated and a new implementation will be provided that will throw occurred error.
+     - Parameter length: The number of random bytes to generate.
+
+     - Returns: optional `Data` object containing the generated random bytes, or `nil` if an error occurred during generation.
+     */
+    static func randomBytes(length: Int) -> Data? {
+        var entropyBytes = [UInt8](repeating: 0, count: length)
+        let status = SecRandomCopyBytes(kSecRandomDefault, entropyBytes.count, &entropyBytes)
+        guard status == errSecSuccess else {
+            return nil
         }
-        return nil
+        return Data(entropyBytes)
     }
 
-    public func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public
+    func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public
         if startingBit + length / 8 > self.count, length > 64, startingBit > 0, length >= 1 { return nil }
         let bytes = self[(startingBit/8) ..< (startingBit+length+7)/8]
         let padding = Data(repeating: 0, count: 8 - bytes.count)
