@@ -7,8 +7,6 @@
 ![matter-github-swift](https://github.com/web3swift-team/web3swift/blob/develop/web3swift-logo.png)
 [![Web3swift CI](https://github.com/web3swift-team/web3swift/actions/workflows/macOS-12.yml/badge.svg)](https://github.com/web3swift-team/web3swift/actions/workflows/macOS-12.yml)
 [![Swift](https://img.shields.io/badge/Swift-5.4-orange.svg?style=flat)](https://developer.apple.com/swift/)
-[![Platform](https://img.shields.io/cocoapods/p/web3swift?style=flat)](http://cocoapods.org/pods/web3swift)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/web3swift?style=flat)](http://cocoapods.org/pods/web3swift)
 [![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](https://github.com/web3swift-team/web3swift/blob/master/LICENSE.md)
 [![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0xe22b8979739d724343bd002f9f432f5990879901)
 [![Stackoverflow](https://img.shields.io/badge/stackoverflow-ask-blue.svg)](https://stackoverflow.com/questions/tagged/web3swift)
@@ -89,30 +87,7 @@ import Web3Core
 
 ### CocoaPods
 
-[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
-
-```bash
-$ sudo gem install cocoapods
-```
-
-To integrate web3swift into your Xcode project using CocoaPods, specify it in your `Podfile`:
-
-```ruby
-source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '13.0'
-
-target '<Your Target Name>' do
-    use_frameworks!
-    pod 'web3swift'
-end
-```
-
-Then, run the following command:
-```bash
-$ pod install
-```
-
-> **WARNING**: CocoaPods is a powerful tool for managing dependencies in iOS development, but it also has some limitations that preventing us of providing first class support there. We highly recommend using SPM first as using CocoaPods will delay new updates and bug fixes being delivered to you.
+CocoaPods is not supported.
 
 ### Send Ether
 ```swift
