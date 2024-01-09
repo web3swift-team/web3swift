@@ -8,7 +8,6 @@ on:
       - hotfix
     paths:
       - Packag*.swift
-      - web3swift.podspec
       - Cartfile
       - Sources/**
       - 'Tests/**'
