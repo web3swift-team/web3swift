@@ -25,6 +25,11 @@ public enum Web3Error: LocalizedError {
     case generalError(err: Error)
     case unknownError
 
+    case rpcError(JsonRpcErrorObject.RpcError)
+    case revert(String, reason: String?)
+    case revertCustom(String, [String: Any])
+
+
     public var errorDescription: String? {
         switch self {
         case .transactionSerializationError:
@@ -55,6 +60,12 @@ public enum Web3Error: LocalizedError {
             return "Client error: \(code)"
         case .valueError(let errorDescription):
             return (errorDescription?.isEmpty ?? true) ? "You're passing value that isn't supported by this method" : errorDescription!
+        case .rpcError(let error):
+            return error.message
+        case .revert(let message, let reason):
+            return "\(message); reverted with reason string: \(reason ?? "")"
+        case .revertCustom(let error, _):
+            return "reverted with custom error: \(error)"
         }
     }
 }

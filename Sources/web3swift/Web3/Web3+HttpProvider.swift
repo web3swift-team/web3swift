@@ -33,13 +33,21 @@ public class Web3HttpProvider: Web3Provider {
         if let net = net {
             network = net
         } else {
-            var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData)
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
-            urlRequest.httpMethod = APIRequest.getNetwork.call
-            urlRequest.httpBody = APIRequest.getNetwork.encodedBody
-            let response: APIResponse<UInt> = try await APIRequest.send(uRLRequest: urlRequest, with: session)
-            self.network = Networks.fromInt(response.result)
+            /// chain id could be a hex string or an int value.
+            let response: String = try await APIRequest.send(APIRequest.getNetwork.call, parameters: [], with: self).result
+            let result: UInt
+            if response.hasHexPrefix() {
+                guard let num = BigUInt(response, radix: 16)  else {
+                    throw Web3Error.processingError(desc: "Get network succeeded but can't be parsed to a valid chain id.")
+                }
+                result = UInt(num)
+            } else {
+                guard let num = UInt(response) else {
+                    throw Web3Error.processingError(desc: "Get network succeeded but can't be parsed to a valid chain id.")
+                }
+                result = num
+            }
+            self.network = Networks.fromInt(result)
         }
         attachedKeystoreManager = manager
     }
