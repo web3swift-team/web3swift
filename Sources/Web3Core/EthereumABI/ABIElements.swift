@@ -211,12 +211,84 @@ extension ABI.Element.Function {
     }
 }
 
-// MARK: - Event logs decoding
+// MARK: - Event logs decoding & encoding
 
 extension ABI.Element.Event {
     public func decodeReturnedLogs(eventLogTopics: [Data], eventLogData: Data) -> [String: Any]? {
         guard let eventContent = ABIDecoder.decodeLog(event: self, eventLogTopics: eventLogTopics, eventLogData: eventLogData) else { return nil }
         return eventContent
+    }
+
+    public static func encodeTopic(input: ABI.Element.Event.Input, value: Any) -> EventFilterParameters.Topic? {
+        switch input.type {
+        case .string:
+            guard let string = value as? String else {
+                return nil
+            }
+            return .string(string.sha3(.keccak256).addHexPrefix())
+        case .dynamicBytes:
+            guard let data = ABIEncoder.convertToData(value) else {
+                return nil
+            }
+            return .string(data.sha3(.keccak256).toHexString().addHexPrefix())
+        case .bytes(length: _):
+            guard let data = ABIEncoder.convertToData(value), let data = data.setLengthLeft(32) else {
+                return nil
+            }
+            return .string(data.toHexString().addHexPrefix())
+        case .address, .uint(bits: _), .int(bits: _), .bool:
+            guard let encoded = ABIEncoder.encodeSingleType(type: input.type, value: value) else {
+                return nil
+            }
+            return .string(encoded.toHexString().addHexPrefix())
+        default:
+            guard let data = try? ABIEncoder.abiEncode(value).setLengthLeft(32) else {
+                return nil
+            }
+            return .string(data.toHexString().addHexPrefix())
+        }
+    }
+
+    public func encodeParameters(_ parameters: [Any?]) -> [EventFilterParameters.Topic?] {
+        guard parameters.count <= inputs.count else {
+            // too many arguments for fragment
+            return []
+        }
+        var topics: [EventFilterParameters.Topic?] = []
+
+        if !anonymous {
+            topics.append(.string(topic.toHexString().addHexPrefix()))
+        }
+
+        for (i, p) in parameters.enumerated() {
+            let input = inputs[i]
+            if !input.indexed {
+                // cannot filter non-indexed parameters; must be null
+                return []
+            }
+            if p == nil {
+                topics.append(nil)
+            } else if input.type.isArray || input.type.isTuple {
+                // filtering with tuples or arrays not supported
+                return []
+            } else if let p = p as? Array<Any> {
+                topics.append(.strings(p.map { Self.encodeTopic(input: input, value: $0) }))
+            } else {
+                topics.append(Self.encodeTopic(input: input, value: p!))
+            }
+        }
+
+        // Trim off trailing nulls
+        while let last = topics.last {
+            if last == nil {
+                topics.removeLast()
+            } else if case .string(let string) = last, string == nil {
+                topics.removeLast()
+            } else {
+                break
+            }
+        }
+        return topics
     }
 }
 
