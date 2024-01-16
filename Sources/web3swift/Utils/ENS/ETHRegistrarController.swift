@@ -22,74 +22,44 @@ public extension ENS {
             // swiftlint:enable force_unwrapping
         }()
 
-        lazy var defaultTransaction: CodableTransaction = {
-            return CodableTransaction.emptyTransaction
-        }()
-
         public init(web3: Web3, address: EthereumAddress) {
             self.web3 = web3
             self.address = address
         }
 
         public func getRentPrice(name: String, duration: UInt) async throws -> BigUInt {
-            guard let transaction = self.contract.createReadOperation("rentPrice", parameters: [name, duration]) else { throw Web3Error.transactionSerializationError }
-            guard let result = try? await transaction.call() else { throw Web3Error.processingError(desc: "Can't call transaction") }
-            guard let price = result["0"] as? BigUInt else { throw Web3Error.processingError(desc: "Can't get answer") }
-            return price
+            try await contract.callReadOnlyFunction("rentPrice", parameters: [name, duration])
         }
 
         public func checkNameValidity(name: String) async throws -> Bool {
-            guard let transaction = self.contract.createReadOperation("valid", parameters: [name]) else { throw Web3Error.transactionSerializationError }
-            guard let result = try? await transaction.call() else { throw Web3Error.processingError(desc: "Can't call transaction") }
-            guard let valid = result["0"] as? Bool else { throw Web3Error.processingError(desc: "Can't get answer") }
-            return valid
+            try await contract.callReadOnlyFunction("valid", parameters: [name])
         }
 
         public func isNameAvailable(name: String) async throws -> Bool {
-            guard let transaction = self.contract.createReadOperation("available", parameters: [name]) else { throw Web3Error.transactionSerializationError }
-            guard let result = try? await transaction.call() else { throw Web3Error.processingError(desc: "Can't call transaction") }
-            guard let available = result["0"] as? Bool else { throw Web3Error.processingError(desc: "Can't get answer") }
-            return available
+            try await contract.callReadOnlyFunction("available", parameters: [name])
         }
 
         public func calculateCommitmentHash(name: String, owner: EthereumAddress, secret: String) async throws -> Data {
-            guard let transaction = self.contract.createReadOperation("makeCommitment", parameters: [name, owner.address, secret]) else { throw Web3Error.transactionSerializationError }
-            guard let result = try? await transaction.call() else { throw Web3Error.processingError(desc: "Can't call transaction") }
-            guard let hash = result["0"] as? Data else { throw Web3Error.processingError(desc: "Can't get answer") }
-            return hash
+            try await contract.callReadOnlyFunction("makeCommitment", parameters: [name, owner, secret])
         }
 
         public func sumbitCommitment(from: EthereumAddress, commitment: Data) throws -> WriteOperation {
-            defaultTransaction.from = from
-            defaultTransaction.to = self.address
-            guard let transaction = self.contract.createWriteOperation("commit", parameters: [commitment]) else { throw Web3Error.transactionSerializationError }
-            return transaction
+            try contract.createWriteFunctionCall("commit", parameters: [commitment])
         }
 
         public func registerName(from: EthereumAddress, name: String, owner: EthereumAddress, duration: UInt, secret: String, price: String) throws -> WriteOperation {
             guard let amount = Utilities.parseToBigUInt(price, units: .ether) else { throw Web3Error.inputError(desc: "Wrong price: no way for parsing to ether units") }
-            defaultTransaction.value = amount
-            defaultTransaction.from = from
-            defaultTransaction.to = self.address
-            guard let transaction = self.contract.createWriteOperation("register", parameters: [name, owner.address, duration, secret]) else { throw Web3Error.transactionSerializationError }
-            return transaction
+            return try contract.createWriteFunctionCall("register", parameters: [name, owner.address, duration, secret])
         }
 
         public func extendNameRegistration(from: EthereumAddress, name: String, duration: UInt32, price: String) throws -> WriteOperation {
             guard let amount = Utilities.parseToBigUInt(price, units: .ether) else { throw Web3Error.inputError(desc: "Wrong price: no way for parsing to ether units") }
-            defaultTransaction.value = amount
-            defaultTransaction.from = from
-            defaultTransaction.to = self.address
-            guard let transaction = self.contract.createWriteOperation("renew", parameters: [name, duration]) else { throw Web3Error.transactionSerializationError }
-            return transaction
+            return try contract.createWriteFunctionCall("renew", parameters: [name, duration])
         }
 
         @available(*, message: "Available for only owner")
         public func withdraw(from: EthereumAddress) throws -> WriteOperation {
-            defaultTransaction.from = from
-            defaultTransaction.to = self.address
-            guard let transaction = self.contract.createWriteOperation("withdraw") else { throw Web3Error.transactionSerializationError }
-            return transaction
+            try contract.createWriteFunctionCall("withdraw")
         }
     }
 }

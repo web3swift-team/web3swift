@@ -45,7 +45,7 @@ public struct EthereumAddress: Equatable {
         }
     }
 
-    /// Checksummed address with `0x` HEX prefix.
+    /// Checksummed address with `0x` hex prefix.
     /// If the ``type`` is ``EthereumAddress/AddressType/contractDeployment`` only `0x` prefix is returned.
     public var address: String {
         switch self.type {

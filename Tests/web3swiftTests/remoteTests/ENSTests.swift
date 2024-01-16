@@ -4,8 +4,7 @@
 //
 
 import XCTest
-import Web3Core
-
+@testable import Web3Core
 @testable import web3swift
 
 // MARK: Works only with network connection
@@ -102,5 +101,10 @@ class ENSTests: XCTestCase {
         let pubkey = try await resolver?.getPublicKey(forNode: domain)
         XCTAssert(pubkey?.x == "0x0000000000000000000000000000000000000000000000000000000000000000")
         XCTAssert(pubkey?.y == "0x0000000000000000000000000000000000000000000000000000000000000000")
+    }
+
+    func testRegistryAddressesNotNil() async {
+        XCTAssertNotNil(ENS.Registry.ethereumMainnetENSRegistryAddress)
+        XCTAssertNotNil(ENS.Registry.goerliTestnetENSRegistryAddress)
     }
 }

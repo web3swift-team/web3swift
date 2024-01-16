@@ -39,7 +39,7 @@ public class WriteOperation: ReadOperation {
         } catch {
             throw Web3Error.inputError(desc: "Failed to locally sign a transaction. \(error.localizedDescription)")
         }
-        guard let transactionData = transaction.encode(for: .transaction) else { throw Web3Error.dataError }
+        guard let transactionData = transaction.encode(for: .transaction) else { throw Web3Error.transactionSerializationError(desc: "Failed to encode transaction. Check transaction data and envelope type. EncodeType used is `.transaction`.") }
         return try await web3.eth.send(raw: transactionData)
     }
 }

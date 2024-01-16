@@ -112,5 +112,28 @@ extension Web3 {
             }
             return .init(transaction: transaction, web3: web3, contract: contract, method: method)
         }
+
+        // FIXME: Reduces code duplication.
+        // FIXME: this function is temporary just for convenience of checking for errors
+        // FIXME: and reporting useful information back to the developers.
+        // FIXME: this function will be removed later as continue refactoring
+        internal func callReadOnlyFunction<T>(_ method: String, parameters: [Any] = []) async throws -> T {
+            guard let transaction = createReadOperation(method, parameters: parameters) else {
+                throw Web3Error.transactionSerializationError(desc: "Failed to encode `\(method)` function call with given parameters \(String(describing: parameters)). Make sure contract contains `\(method)` function ABI and the order of given parameters is correct.")
+            }
+            let result = try await transaction.call()
+            guard let returnValue = result["0"] as? T else {
+                throw Web3Error.processingError(desc: "Response value for key \"0\" cannot be cast to type \(T.self). Response is: \(String(describing: result)).")
+            }
+            return returnValue
+        }
+
+        // FIXME: See callReadOnlyFunction description.
+        internal func createWriteFunctionCall(_ method: String, parameters: [Any] = []) throws -> WriteOperation {
+            guard let transaction = createWriteOperation(method, parameters: parameters) else {
+                throw Web3Error.transactionSerializationError(desc: "Failed to encode `\(method)` function call with given parameters \(String(describing: parameters)). Make sure contract contains `\(method)` function ABI and the order of given parameters is correct.")
+            }
+            return transaction
+        }
     }
 }

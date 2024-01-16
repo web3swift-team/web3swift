@@ -102,14 +102,16 @@ extension EIP1559Envelope {
         let list = try? container.decode([AccessListEntry].self, forKey: .accessList)
         self.accessList = list ?? []
 
-        let toString = try? container.decode(String.self, forKey: .to)
-        switch toString {
+        let stringValue = try? container.decode(String.self, forKey: .to)
+        switch stringValue {
         case nil, "0x", "0x0":
             self.to = EthereumAddress.contractDeploymentAddress()
         default:
             // the forced unwrap here is safe as we trap nil in the previous case
             // swiftlint:disable force_unwrapping
-            guard let ethAddr = EthereumAddress(toString!) else { throw Web3Error.dataError }
+            guard let ethAddr = EthereumAddress(stringValue!) else {
+                throw Web3Error.dataError(desc: "Failed to parse string as EthereumAddress. Given string: \(stringValue!). Is it a valid hex value 20 bytes in length?")
+            }
             // swiftlint:enable force_unwrapping
             self.to = ethAddr
         }

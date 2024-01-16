@@ -63,7 +63,9 @@ public struct EventLog: Decodable {
         let topicsStrings = try container.decode([String].self, forKey: .topics)
 
         self.topics = try topicsStrings.map {
-            guard let topic = Data.fromHex($0) else { throw Web3Error.dataError }
+            guard let topic = Data.fromHex($0) else {
+                throw Web3Error.dataError(desc: "Failed to parse event's topic from hex string to Data. Given string is not valid hex: \($0).")
+            }
             return topic
         }
     }

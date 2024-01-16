@@ -49,16 +49,27 @@ extension APIRequest {
             }
         }
 
-        /// This bit of code is purposed to work with literal types that comes in ``Response`` in hexString type.
-        /// Currently it's just `Data` and any kind of Integers `(U)Int`, `Big(U)Int`.
-        if let LiteralType = Result.self as? LiteralInitiableFromString.Type {
-            guard let responseAsString = try? JSONDecoder().decode(APIResponse<String>.self, from: data) else { throw Web3Error.dataError }
-            guard let literalValue = LiteralType.init(from: responseAsString.result) else { throw Web3Error.dataError }
-            /// `literalValue` conforms `LiteralInitiableFromString`, that conforming to an `APIResponseType` type, so it's never fails.
-            guard let result = literalValue as? Result else { throw Web3Error.typeError }
-            return APIResponse(id: responseAsString.id, jsonrpc: responseAsString.jsonrpc, result: result)
+        return try initalizeLiteralTypeApiResponse(data) ?? JSONDecoder().decode(APIResponse<Result>.self, from: data)
+    }
+
+    /// Attempts decoding and parsing of a response into literal types as `Data`, `(U)Int`, `Big(U)Int`.
+    /// - Parameter data: response to parse.
+    /// - Returns: parsed response or `nil`. Throws ``Web3Error``.
+    internal static func initalizeLiteralTypeApiResponse<Result>(_ data: Data) throws -> APIResponse<Result>? {
+        guard let LiteralType = Result.self as? LiteralInitiableFromString.Type else {
+            return nil
         }
-        return try JSONDecoder().decode(APIResponse<Result>.self, from: data)
+        guard let responseAsString = try? JSONDecoder().decode(APIResponse<String>.self, from: data) else {
+            throw Web3Error.dataError(desc: "Failed to decode received data as `APIResponse<String>`. Given data: \(data.toHexString().addHexPrefix()).")
+        }
+        guard let literalValue = LiteralType.init(from: responseAsString.result) else {
+            throw Web3Error.dataError(desc: "Failed to initialize \(LiteralType.self) from String `\(responseAsString.result)`.")
+        }
+        /// `literalValue` conforms `LiteralInitiableFromString`, that conforming to an `APIResultType` type, so it's never fails.
+        guard let result = literalValue as? Result else {
+            throw Web3Error.typeError(desc: "Initialized value of type \(LiteralType.self) cannot be cast as \(Result.self).")
+        }
+        return APIResponse(id: responseAsString.id, jsonrpc: responseAsString.jsonrpc, result: result)
     }
 }
 

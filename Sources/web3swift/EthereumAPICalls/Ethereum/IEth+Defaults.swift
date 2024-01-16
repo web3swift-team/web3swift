@@ -145,10 +145,7 @@ public extension IEth {
 
     func send(raw data: Data) async throws -> TransactionSendingResult {
         guard let transaction = CodableTransaction(rawValue: data) else {
-            // FIXME: When the PR is merged add this description to dataError ->
-            // Description to add:
-            // Link to PR:
-            throw Web3Error.dataError
+            throw Web3Error.dataError(desc: "Failed to decode raw bytes into CodableTransaction. Given bytes are \(data.toHexString()).")
         }
         let request = APIRequest.sendRawTransaction(data.toHexString().addHexPrefix())
         let response: APIResponse<Hash> = try await APIRequest.sendRequest(with: provider, for: request)

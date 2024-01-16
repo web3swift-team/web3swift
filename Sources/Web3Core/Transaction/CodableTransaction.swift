@@ -210,7 +210,9 @@ extension CodableTransaction: Codable {
     /// initializer required to support the Decodable protocol
     /// - Parameter decoder: the decoder stream for the input data
     public init(from decoder: Decoder) throws {
-        guard let env = try EnvelopeFactory.createEnvelope(from: decoder) else { throw Web3Error.dataError }
+        guard let env = try EnvelopeFactory.createEnvelope(from: decoder) else {
+            throw Web3Error.dataError(desc: "EnvelopeFactory.createEnvelope failed. Failed to decode given data into CodableTransaction.")
+        }
         self.envelope = env
 
         // capture any metadata that might be present

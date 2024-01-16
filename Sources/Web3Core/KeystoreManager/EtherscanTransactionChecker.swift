@@ -12,17 +12,17 @@ public struct EtherscanTransactionChecker: TransactionChecker {
 
     public init(urlSession: URLSession, apiKey: String) {
         self.urlSession = URLSessionProxyImplementation(urlSession: urlSession)
-        self.apiKey = apiKey
+        self.apiKey = apiKey.trim()
     }
 
     internal init(urlSession: URLSessionProxy, apiKey: String) {
         self.urlSession = urlSession
-        self.apiKey = apiKey
+        self.apiKey = apiKey.trim()
     }
 
     public func hasTransactions(ethereumAddress: EthereumAddress) async throws -> Bool {
         let urlString = "https://api.etherscan.io/api?module=account&action=txlist&address=\(ethereumAddress.address)&startblock=0&page=1&offset=1&sort=asc&apikey=\(apiKey)"
-        guard let url = URL(string: urlString) else {
+        guard let url = URL(string: urlString), !apiKey.isEmpty else {
             throw EtherscanTransactionCheckerError.invalidUrl(url: urlString)
         }
         let request = URLRequest(url: url)
