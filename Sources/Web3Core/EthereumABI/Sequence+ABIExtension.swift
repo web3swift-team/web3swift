@@ -56,6 +56,8 @@ public extension Sequence where Element == ABI.Element {
         var errors = [String: ABI.Element.EthError]()
         for case let .error(error) in self {
             errors[error.name] = error
+            errors[error.signature] = error
+            errors[error.methodString.addHexPrefix().lowercased()] = error
         }
         return errors
     }
