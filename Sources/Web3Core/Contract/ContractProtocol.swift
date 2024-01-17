@@ -143,8 +143,12 @@ public protocol ContractProtocol {
     ///     - name with arguments:`myFunction(uint256)`.
     ///     - method signature (with or without `0x` prefix, case insensitive): `0xFFffFFff`;
     ///   - data: non empty bytes to decode;
-    /// - Returns: dictionary with decoded values. `nil` if decoding failed.
-    func decodeReturnData(_ method: String, data: Data) -> [String: Any]?
+    /// - Returns: dictionary with decoded values.
+    /// - Throws:
+    ///   - `Web3Error.revert(String, String?)` when function call aborted by `revert(string)` and `require(expression, string)`.
+    ///   - `Web3Error.revertCustom(String, Dictionary)` when function call aborted by `revert CustomError()`.
+    @discardableResult
+    func decodeReturnData(_ method: String, data: Data) throws -> [String: Any]
 
     /// Decode input arguments of a function.
     /// - Parameters:
@@ -320,13 +324,40 @@ extension DefaultContractProtocol {
         return bloom.test(topic: event.topic)
     }
 
-    public func decodeReturnData(_ method: String, data: Data) -> [String: Any]? {
+    @discardableResult
+    public func decodeReturnData(_ method: String, data: Data) throws -> [String: Any] {
         if method == "fallback" {
-            return [String: Any]()
+            return [:]
         }
-        return methods[method]?.compactMap({ function in
-            return function.decodeReturnData(data)
-        }).first
+
+        guard let function = methods[method]?.first else {
+            throw Web3Error.inputError(desc: "Make sure ABI you use contains '\(method)' method.")
+        }
+
+        switch data.count % 32 {
+        case 0:
+            return try function.decodeReturnData(data)
+        case 4:
+            let selector = data[0..<4]
+            if selector.toHexString() == "08c379a0", let reason = ABI.Element.EthError.decodeStringError(data[4...]) {
+                throw Web3Error.revert("revert(string)` or `require(expression, string)` was executed. reason: \(reason)", reason: reason)
+            }
+            else if selector.toHexString() == "4e487b71", let reason = ABI.Element.EthError.decodePanicError(data[4...]) {
+                let panicCode = String(format: "%02X", Int(reason)).addHexPrefix()
+                throw Web3Error.revert("Error: call revert exception; VM Exception while processing transaction: reverted with panic code \(panicCode)", reason: panicCode)
+            }
+            else if let customError = errors[selector.toHexString().addHexPrefix().lowercased()] {
+                if let errorArgs = customError.decodeEthError(data[4...]) {
+                    throw Web3Error.revertCustom(customError.signature, errorArgs)
+                } else {
+                    throw Web3Error.inputError(desc: "Signature matches \(customError.errorDeclaration) but failed to be decoded.")
+                }
+            } else {
+                throw Web3Error.inputError(desc: "Make sure ABI you use contains error that can match signature: 0x\(selector.toHexString())")
+            }
+        default:
+            throw Web3Error.inputError(desc: "Given data has invalid bytes count.")
+        }
     }
 
     public func decodeInputData(_ method: String, data: Data) -> [String: Any]? {
@@ -346,8 +377,32 @@ extension DefaultContractProtocol {
         return function.decodeInputData(Data(data[data.startIndex + 4 ..< data.startIndex + data.count]))
     }
 
+    public func decodeEthError(_ data: Data) -> [String: Any]? {
+        guard data.count >= 4,
+              let err = errors.first(where: { $0.value.selectorEncoded == data[0..<4] })?.value else {
+            return nil
+        }
+        return err.decodeEthError(data[4...])
+    }
+
     public func getFunctionCalled(_ data: Data) -> ABI.Element.Function? {
         guard data.count >= 4 else { return nil }
         return methods[data[data.startIndex ..< data.startIndex + 4].toHexString().addHexPrefix()]?.first
+    }
+}
+
+extension DefaultContractProtocol {
+    @discardableResult
+    public func callStatic(_ method: String, parameters: [Any], provider: Web3Provider) async throws -> [String: Any] {
+        guard let address = address else {
+            throw Web3Error.inputError(desc: "RPC failed: contract is missing an address.")
+        }
+        guard let data = self.method(method, parameters: parameters, extraData: nil) else {
+            throw Web3Error.dataError(desc: "Failed to encode method \(method) with given parameters: \(String(describing: parameters))")
+        }
+        let transaction = CodableTransaction(to: address, data: data)
+
+        let result: Data = try await APIRequest.sendRequest(with: provider, for: .call(transaction, .latest)).result
+        return try decodeReturnData(method, data: result)
     }
 }

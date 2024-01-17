@@ -8,22 +8,108 @@
 import Foundation
 import BigInt
 
-extension APIRequest {
-    public static func sendRequest<Result>(with provider: Web3Provider, for call: APIRequest) async throws -> APIResponse<Result> {
-        let request = setupRequest(for: call, with: provider)
-        return try await APIRequest.send(uRLRequest: request, with: provider.session)
+/// TODO: should we do more error explain like ethers.js?
+/// https://github.com/ethers-io/ethers.js/blob/0bfa7f497dc5793b66df7adfb42c6b846c51d794/packages/providers/src.ts/json-rpc-provider.ts#L55
+func checkError(method: String, error: JsonRpcErrorObject.RpcError) throws -> String {
+    if method == "eth_call" {
+        if let result = spelunkData(value: error) {
+            return result.data
+        }
+        throw Web3Error.nodeError(desc: "Error data decoding failed: missing revert data in exception; Transaction reverted without a reason string.")
     }
 
-    static func setupRequest(for call: APIRequest, with provider: Web3Provider) -> URLRequest {
+    throw Web3Error.nodeError(desc: error.message)
+}
+
+func spelunkData(value: Any?) -> (message: String, data: String)? {
+    if (value == nil) {
+        return nil
+    }
+
+    func spelunkRpcError(_ message: String, data: String) -> (message: String, data: String)? {
+        if message.contains("revert") && data.isHex {
+            return (message, data)
+        } else {
+            return nil
+        }
+    }
+
+    if let error = value as? JsonRpcErrorObject.RpcError {
+        if let data = error.data as? String {
+            return spelunkRpcError(error.message, data: data)
+        } else {
+            return spelunkData(value: error.data)
+        }
+    }
+
+    // Spelunk further...
+    if let object = value as? [String: Any] {
+        if let message = object["message"] as? String,
+           let data = object["data"] as? String {
+            return spelunkRpcError(message, data: data)
+        }
+
+        for value in object.values {
+            if let result = spelunkData(value: value) {
+                return result
+            }
+            return nil
+        }
+    }
+    if let array = value as? [Any] {
+        for e in array {
+            if let result = spelunkData(value: e) {
+                return result
+            }
+            return nil
+        }
+    }
+
+    // Might be a JSON string we can further descend...
+    if let string = value as? String, let data = string.data(using: .utf8) {
+        let json = try? JSONSerialization.jsonObject(with: data)
+        return spelunkData(value: json)
+    }
+
+    return nil
+}
+
+extension APIRequest {
+    public static func sendRequest<Result>(with provider: Web3Provider, for call: APIRequest) async throws -> APIResponse<Result> {
+        try await send(call.call, parameters: call.parameters, with: provider)
+    }
+
+    static func setupRequest(for body: RequestBody, with provider: Web3Provider) -> URLRequest {
         var urlRequest = URLRequest(url: provider.url, cachePolicy: .reloadIgnoringCacheData)
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
-        urlRequest.httpMethod = call.method.rawValue
-        urlRequest.httpBody = call.encodedBody
+        urlRequest.httpMethod = "POST"
+        urlRequest.httpBody = body.encodedBody
         return urlRequest
     }
 
-    public static func send<Result>(uRLRequest: URLRequest, with session: URLSession) async throws -> APIResponse<Result> {
+    public static func send<Result>(_ method: String, parameters: [Encodable], with provider: Web3Provider) async throws -> APIResponse<Result> {
+        let body = RequestBody(method: method, params: parameters)
+        let uRLRequest = setupRequest(for: body, with: provider)
+
+        let data: Data
+        do {
+            data = try await send(uRLRequest: uRLRequest, with: provider.session)
+        } catch Web3Error.rpcError(let error) {
+            let responseAsString = try checkError(method: method, error: error)
+            // TODO: why do we try to cast error response to Result.self?
+            guard let LiteralType = Result.self as? LiteralInitiableFromString.Type,
+                  let literalValue = LiteralType.init(from: responseAsString),
+                  let result = literalValue as? Result else {
+                throw Web3Error.rpcError(error)
+            }
+            return APIResponse(id: 2, result: result)
+        }
+
+        return try initalizeLiteralTypeApiResponse(data) ?? JSONDecoder().decode(APIResponse<Result>.self, from: data)
+    }
+
+    public static func send(uRLRequest: URLRequest, with session: URLSession) async throws -> Data {
         let (data, response) = try await session.data(for: uRLRequest)
 
         guard 200 ..< 400 ~= response.statusCode else {
@@ -34,9 +120,9 @@ extension APIRequest {
             }
         }
 
-        if let error = (try? JSONDecoder().decode(JsonRpcErrorObject.self, from: data))?.error {
+        if let error = JsonRpcErrorObject.init(from: data)?.error {
             guard let parsedErrorCode = error.parsedErrorCode else {
-                throw Web3Error.nodeError(desc: "\(error.message)\nError code: \(error.code)")
+                throw Web3Error.rpcError(error)
             }
             let description = "\(parsedErrorCode.errorName). Error code: \(error.code). \(error.message)"
             switch parsedErrorCode {
@@ -49,7 +135,7 @@ extension APIRequest {
             }
         }
 
-        return try initalizeLiteralTypeApiResponse(data) ?? JSONDecoder().decode(APIResponse<Result>.self, from: data)
+        return data
     }
 
     /// Attempts decoding and parsing of a response into literal types as `Data`, `(U)Int`, `Big(U)Int`.
@@ -74,21 +160,46 @@ extension APIRequest {
 }
 
 /// JSON RPC Error object. See official specification https://www.jsonrpc.org/specification#error_object
-private struct JsonRpcErrorObject: Decodable {
+public struct JsonRpcErrorObject {
     public let error: RpcError?
 
-    class RpcError: Decodable {
-        let message: String
-        let code: Int
+    public class RpcError {
+        public let message: String
+        public let code: Int
+        public let data: Any?
+
+        init(message: String, code: Int, data: Any?) {
+            self.message = message
+            self.code = code
+            self.data = data
+        }
+
         var parsedErrorCode: JsonRpcErrorCode? {
             JsonRpcErrorCode.from(code)
+        }
+    }
+
+    init?(from data: Data) {
+        guard let root = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return nil
+        }
+        if let error = root["error"] as? [String: Any],
+           let message = error["message"] as? String,
+           let code = error["code"] as? Int {
+            guard let errorData = error["data"] else {
+                self.error = RpcError(message: message, code: code, data: nil)
+                return
+            }
+            self.error = RpcError(message: message, code: code, data: errorData)
+        } else {
+            self.error = nil
         }
     }
 }
 
 /// For error codes specification see chapter `5.1 Error object`
 /// https://www.jsonrpc.org/specification#error_object
-private enum JsonRpcErrorCode {
+enum JsonRpcErrorCode {
     /// -32700
     /// Invalid JSON was received by the server. An error occurred on the server while parsing the JSON
     case parseError

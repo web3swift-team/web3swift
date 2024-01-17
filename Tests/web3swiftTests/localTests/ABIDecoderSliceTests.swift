@@ -27,7 +27,7 @@ final class ABIDecoderSliceTests: XCTestCase {
         while startIndex < data.count {
             let slice = data[startIndex ..< startIndex + answerSize]
             startIndex += answerSize
-            guard let bigInt = balanceofMethod.decodeReturnData(slice)["0"] as? BigUInt else {
+            guard let bigInt = try balanceofMethod.decodeReturnData(slice)["0"] as? BigUInt else {
                 throw Web3Error.processingError(desc: "Can not decode returned parameters")
             }
             let value = Utilities.formatToPrecision(bigInt, units: .wei)
@@ -52,10 +52,7 @@ final class ABIDecoderSliceTests: XCTestCase {
         XCTAssertEqual(methods.count, 3)
 
         /// Act
-        guard let decodedData = multiCall2Contract.decodeReturnData("aggregate", data: data) else {
-            XCTFail("Can not decode returned parameters")
-            return
-        }
+        let decodedData = try multiCall2Contract.decodeReturnData("aggregate", data: data)
 
         guard let returnData = decodedData["returnData"] as? [Data] else {
             XCTFail("Failed to cast 'returnData' to [Data].")
@@ -65,7 +62,7 @@ final class ABIDecoderSliceTests: XCTestCase {
         XCTAssertEqual(returnData.count, 3)
 
         for item in methods.enumerated() {
-            XCTAssertNotNil(item.element.decodeReturnData(returnData[item.offset])["0"])
+            XCTAssertNotNil(try item.element.decodeReturnData(returnData[item.offset])["0"])
         }
     }
 
@@ -76,10 +73,7 @@ final class ABIDecoderSliceTests: XCTestCase {
         let erc20_balanceof = try EthereumContract(Web3.Utils.erc20ABI).methods["balanceOf"]!.first!
 
         /// Act
-        guard let decodedData = contract.decodeReturnData("tryAggregate", data: data) else {
-            XCTFail("Can not decode returned parameters")
-            return
-        }
+        let decodedData = try contract.decodeReturnData("tryAggregate", data: data)
 
         guard let returnData = decodedData["returnData"] as? [[Any]] else {
             XCTFail("Failed to cast 'returnData' to [[Any]].")
@@ -88,7 +82,7 @@ final class ABIDecoderSliceTests: XCTestCase {
         var resultArray = [BigUInt]()
         for i in 0..<2 {
             guard let data = returnData[i][1] as? Data,
-                  let balance = erc20_balanceof.decodeReturnData(data)["0"] as? BigUInt else {
+                  let balance = try? erc20_balanceof.decodeReturnData(data)["0"] as? BigUInt else {
                 resultArray.append(0)
                 continue
             }

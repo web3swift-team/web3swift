@@ -43,9 +43,6 @@ public class ReadOperation {
             let resultHex = data.toHexString().addHexPrefix()
             return ["result": resultHex]
         }
-        guard let decodedData = self.contract.decodeReturnData(self.method, data: data) else {
-            throw Web3Error.processingError(desc: "Can not decode returned parameters")
-        }
-        return decodedData
+        return try self.contract.decodeReturnData(self.method, data: data)
     }
 }

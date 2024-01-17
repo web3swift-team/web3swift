@@ -122,7 +122,7 @@ class ABIEncoderTest: XCTestCase {
                                                        constant: false,
                                                        payable: false)
         let encodedFunction = functionWithNoInput.encodeParameters([])
-        XCTAssertTrue(functionWithNoInput.methodEncoding == encodedFunction)
+        XCTAssertTrue(functionWithNoInput.selectorEncoded == encodedFunction)
         XCTAssertTrue("0xe16b4a9b" == encodedFunction?.toHexString().addHexPrefix().lowercased())
     }
 
