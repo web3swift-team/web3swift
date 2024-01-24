@@ -65,123 +65,140 @@ class ABIElementErrorDecodingTest: XCTestCase {
         XCTAssertTrue(emptyFunction.decodeErrorResponse(Data()) == nil)
     }
 
-    func testDecodeEmptyErrorOnOneOutputFunction() {
-        guard let errorData = oneOutputFunction.decodeErrorResponse(Data()) else {
-            XCTFail("Empty Data must be decoded as a `revert()` or `require(false)` call if function used to decode it has at least one output parameter.")
-            return
+    /// `require(expression)` and `revert()` without a message return 0 bytes,
+    /// we can noly catch an error when function has a return value
+    func testDecodeEmptyErrorOnOneOutputFunction() throws {
+        let contract = try EthereumContract(abi: [.function(emptyFunction)])
+        do {
+            try contract.decodeReturnData(emptyFunction.signature, data: Data())
+        } catch {
+            XCTFail()
         }
 
-        XCTAssertEqual(errorData["_success"] as? Bool, false)
-        XCTAssertNotNil(errorData["_failureReason"] as? String)
-
-        let decodedOutput = oneOutputFunction.decodeReturnData(Data())
-
-        XCTAssertEqual(errorData["_success"] as? Bool, decodedOutput["_success"] as? Bool)
-        XCTAssertEqual(errorData["_failureReason"] as? String, decodedOutput["_failureReason"] as? String)
+        let contract2 = try EthereumContract(abi: [.function(oneOutputFunction)])
+        do {
+            try contract2.decodeReturnData(oneOutputFunction.signature, data: Data())
+            XCTFail()
+        } catch {
+            print(error)
+        }
     }
 
     /// Data is decoded as a call of `revert` or `require` with a message no matter the number of outputs configured in the ``ABI/Element/Function``.
     /// `revert(message)` and `require(false,message)`return at least 128 bytes. We cannot differentiate between `require` or `revert`.
-    func testDecodeDefaultErrorWithMessage() {
+    func testDecodeDefaultErrorWithMessage() throws {
         /// 08c379a0 - Error(string) function selector
         /// 0000000000000000000000000000000000000000000000000000000000000020 - Data offset
         /// 000000000000000000000000000000000000000000000000000000000000001a - Message length
         /// 4e6f7420656e6f7567682045746865722070726f76696465642e000000000000 - Message + 0 bytes padding
         /// 0000... - some more 0 bytes padding to make the number of bytes match 32 bytes chunks
-        let errorResponse = Data.fromHex("08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001a4e6f7420656e6f7567682045746865722070726f76696465642e00000000000000000000000000000000000000000000000000000000000000000000")!
-        guard let errorData = emptyFunction.decodeErrorResponse(errorResponse) else {
-            XCTFail("Data must be decoded as a `revert(\"Not enough Ether provided.\")` or `require(false, \"Not enough Ether provided.\")` but decoding failed completely.")
-            return
+        let errorResponse = Data.fromHex("08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001a4e6f7420656e6f7567682045746865722070726f76696465642e0000000000000000000000000000000000000000000000000000000000000000000000000000")!
+        let contract = try EthereumContract(abi: [.function(emptyFunction)])
+
+        do {
+            try contract.decodeReturnData(emptyFunction.signature, data: errorResponse)
+            XCTFail("decode function should throw an error")
+        } catch Web3Error.revert(_, let reason) {
+            XCTAssertEqual(reason, "Not enough Ether provided.")
         }
 
-        XCTAssertEqual(errorData["_success"] as? Bool, false)
-        XCTAssertEqual(errorData["_abortedByRevertOrRequire"] as? Bool, true)
-        XCTAssertEqual(errorData["_errorMessage"] as? String, "Not enough Ether provided.")
-        XCTAssertNotNil(errorData["_failureReason"] as? String)
-
-        let decodedOutput = oneOutputFunction.decodeReturnData(errorResponse)
-
-        XCTAssertEqual(errorData["_success"] as? Bool, decodedOutput["_success"] as? Bool)
-        XCTAssertEqual(errorData["_failureReason"] as? String, decodedOutput["_failureReason"] as? String)
-        XCTAssertEqual(errorData["_abortedByRevertOrRequire"] as? Bool, decodedOutput["_abortedByRevertOrRequire"] as? Bool)
-        XCTAssertEqual(errorData["_errorMessage"] as? String, decodedOutput["_errorMessage"] as? String)
-        XCTAssertEqual(decodedOutput["_errorMessage"] as? String, "Not enough Ether provided.")
+        XCTAssertEqual(EthError.decodeStringError(errorResponse[4...]), "Not enough Ether provided.")
     }
 
-    /// Data is decoded as a call of `revert Unauthorized()`. Decoded only if custom error ABI is given.
-    func testDecodeRevertWithCustomError() {
+    /// Data is decoded as a call of `revert Unauthorized()`
+    func testDecodeRevertWithCustomError() throws {
         /// 82b42900 - Unauthorized() function selector
         /// 00000000000000000000000000000000000000000000000000000000 - padding bytes
-        let errorResponse = Data.fromHex("82b4290000000000000000000000000000000000000000000000000000000000")!
-        let errors: [String: EthError] = ["82b42900": .init(name: "Unauthorized", inputs: [])]
-        guard let errorData = emptyFunction.decodeErrorResponse(errorResponse, errors: errors) else {
-            XCTFail("Data must be decoded as a `revert(\"Not enough Ether provided.\")` or `require(false, \"Not enough Ether provided.\")` but decoding failed completely.")
-            return
+        let errorResponse = Data.fromHex("82b429000000000000000000000000000000000000000000000000000000000000000000")!
+        let error = ABI.Element.EthError(name: "Unauthorized", inputs: [])
+        let contract = try EthereumContract(abi: [.function(emptyFunction), .error(error)] )
+
+        do {
+            try contract.decodeReturnData(emptyFunction.signature, data: errorResponse)
+            XCTFail("decode function should throw an error")
+        } catch Web3Error.revertCustom(let signature, let args) {
+            XCTAssertEqual(signature, "Unauthorized()")
+            XCTAssertTrue(args.isEmpty)
         }
 
-        XCTAssertEqual(errorData["_success"] as? Bool, false)
-        XCTAssertEqual(errorData["_abortedByRevertOrRequire"] as? Bool, true)
-        XCTAssertEqual(errorData["_error"] as? String, "Unauthorized()")
-
-        let decodedOutput = oneOutputFunction.decodeReturnData(errorResponse, errors: errors)
-
-        XCTAssertEqual(errorData["_success"] as? Bool, decodedOutput["_success"] as? Bool)
-        XCTAssertEqual(errorData["_abortedByRevertOrRequire"] as? Bool, decodedOutput["_abortedByRevertOrRequire"] as? Bool)
-        XCTAssertEqual(errorData["_error"] as? String, decodedOutput["_error"] as? String)
+        guard let decoded = error.decodeEthError(errorResponse[4...]) else {
+            XCTFail("decode response failed.")
+            return
+        }
+        XCTAssertTrue(decoded.isEmpty)
     }
 
-    /// Data is decoded as a call of `revert Unauthorized()`. Decoded only if custom error ABI is given.
+    /// Data is decoded as a call of `revert Unauthorized(bool)`.
     /// Trying to decode as `Unauthorized(string)`. Must fail.
-    func testDecodeRevertWithCustomErrorFailed() {
-        /// 82b42900 - Unauthorized() function selector
+    func testDecodeRevertWithCustomErrorFailed() throws {
+        /// 5caef992 - Unauthorized(bool) function selector
         /// 00000000000000000000000000000000000000000000000000000000 - padding bytes
-        let errorResponse = Data.fromHex("82b4290000000000000000000000000000000000000000000000000000000000")!
-        let errors: [String: EthError] = ["82b42900": .init(name: "Unauthorized", inputs: [.init(name: "", type: .string)])]
-        guard let errorData = emptyFunction.decodeErrorResponse(errorResponse, errors: errors) else {
-            XCTFail("Data must be decoded as a `revert(\"Not enough Ether provided.\")` or `require(false, \"Not enough Ether provided.\")` but decoding failed completely.")
-            return
+        let errorResponse = Data.fromHex("5caef9920000000000000000000000000000000000000000000000000000000000000000")!
+        let error = ABI.Element.EthError(name: "Unauthorized", inputs: [.init(name: "", type: .bool)])
+        let contract = try EthereumContract(abi: [.function(oneOutputFunction), .error(error)] )
+
+        do {
+            try contract.decodeReturnData(oneOutputFunction.signature, data: errorResponse)
+            XCTFail("decode function should throw an error")
+        } catch Web3Error.revertCustom(let signature, let args) {
+            XCTAssertEqual(signature, "Unauthorized(bool)")
+            XCTAssertEqual(args["0"] as? Bool, false)
         }
 
-        XCTAssertEqual(errorData["_success"] as? Bool, false)
-        XCTAssertEqual(errorData["_abortedByRevertOrRequire"] as? Bool, true)
-        XCTAssertEqual(errorData["_error"] as? String, "Unauthorized(string)")
-        XCTAssertEqual(errorData["_parsingError"] as? String, "Data matches Unauthorized(string) but failed to be decoded.")
-
-        let decodedOutput = oneOutputFunction.decodeReturnData(errorResponse, errors: errors)
-
-        XCTAssertEqual(errorData["_success"] as? Bool, decodedOutput["_success"] as? Bool)
-        XCTAssertEqual(errorData["_abortedByRevertOrRequire"] as? Bool, decodedOutput["_abortedByRevertOrRequire"] as? Bool)
-        XCTAssertEqual(errorData["_error"] as? String, decodedOutput["_error"] as? String)
-        XCTAssertEqual(errorData["_parsingError"] as? String, decodedOutput["_parsingError"] as? String)
+        guard let decoded = error.decodeEthError(errorResponse[4...]) else {
+            XCTFail("decode response failed.")
+            return
+        }
+        XCTAssertEqual(decoded["0"] as? Bool, false)
     }
 
     /// Data is decoded as a call of `revert Unauthorized("Reason")`. Decoded only if custom error ABI is given.
     /// The custom error argument must be extractable by index and name if the name is available.
-    func testDecodeRevertWithCustomErrorWithArguments() {
+    func testDecodeRevertWithCustomErrorWithArguments() throws {
         /// 973d02cb  - `Unauthorized(string)` function selector
         /// 0000000000000000000000000000000000000000000000000000000000000020 - data offset
         /// 0000000000000000000000000000000000000000000000000000000000000006 - first custom argument length
         /// 526561736f6e0000000000000000000000000000000000000000000000000000 - first custom argument bytes + 0 bytes padding
         /// 0000... - some more 0 bytes padding to make the number of bytes match 32 bytes chunks
-        let errorResponse = Data.fromHex("973d02cb00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000006526561736f6e000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!
-        let errors: [String: EthError] = ["973d02cb": .init(name: "Unauthorized", inputs: [.init(name: "message_arg", type: .string)])]
-        guard let errorData = emptyFunction.decodeErrorResponse(errorResponse, errors: errors) else {
-            XCTFail("Data must be decoded as a `revert(\"Not enough Ether provided.\")` or `require(false, \"Not enough Ether provided.\")` but decoding failed completely.")
-            return
+        let errorResponse = Data.fromHex("973d02cb00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000006526561736f6e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")!
+        let error = ABI.Element.EthError(name: "Unauthorized", inputs: [.init(name: "message_arg", type: .string)])
+        let contract = try EthereumContract(abi: [.function(emptyFunction), .error(error)])
+
+        do {
+            try contract.decodeReturnData(emptyFunction.signature, data: errorResponse)
+            XCTFail("decode function should throw an error")
+        } catch Web3Error.revertCustom(let signature, let args) {
+            XCTAssertEqual(signature, "Unauthorized(string)")
+            XCTAssertEqual(args["0"] as? String, "Reason")
+            XCTAssertEqual(args["message_arg"] as? String, "Reason")
         }
 
-        XCTAssertEqual(errorData["_success"] as? Bool, false)
-        XCTAssertEqual(errorData["_abortedByRevertOrRequire"] as? Bool, true)
-        XCTAssertEqual(errorData["_error"] as? String, "Unauthorized(string message_arg)")
-        XCTAssertEqual(errorData["0"] as? String, "Reason")
-        XCTAssertEqual(errorData["0"] as? String, errorData["message_arg"] as? String)
+        guard let decoded = error.decodeEthError(errorResponse[4...]) else {
+            XCTFail("decode response failed.")
+            return
+        }
+        XCTAssertEqual(decoded["0"] as? String, "Reason")
+        XCTAssertEqual(decoded["message_arg"] as? String, "Reason")
+    }
 
-        let decodedOutput = oneOutputFunction.decodeReturnData(errorResponse, errors: errors)
+    /// Data is decoded as a panic exception is generated.
+    /// Example:
+    /// ``` solidity
+    /// function panicError() public {
+    ///     assert(false);
+    /// }
+    /// ```
+    func testDecodePanicError() throws {
+        let errorResponse = Data(hex: "4e487b710000000000000000000000000000000000000000000000000000000000000001")
+        let contract = try EthereumContract(abi: [.function(emptyFunction)])
 
-        XCTAssertEqual(errorData["_success"] as? Bool, decodedOutput["_success"] as? Bool)
-        XCTAssertEqual(errorData["_abortedByRevertOrRequire"] as? Bool, decodedOutput["_abortedByRevertOrRequire"] as? Bool)
-        XCTAssertEqual(errorData["_error"] as? String, decodedOutput["_error"] as? String)
-        XCTAssertEqual(errorData["0"] as? String, decodedOutput["0"] as? String)
-        XCTAssertEqual(errorData["message_arg"] as? String, decodedOutput["message_arg"] as? String)
+        do {
+            try contract.decodeReturnData(emptyFunction.signature, data: errorResponse)
+        } catch Web3Error.revert(let message, let code) {
+            XCTAssertTrue(message.contains("reverted with panic code 0x01"))
+            XCTAssertEqual(code, "0x01")
+        }
+
+        XCTAssertEqual(EthError.decodePanicError(errorResponse[4...]), 1)
     }
 }
