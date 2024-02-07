@@ -95,7 +95,7 @@ CocoaPods is not supported.
 Currently, web3swift supports only HTTP providers. WebSocket provider support was removed and is planned to be rebuilt from scratch.
 To create a Web3HttpProvider you only need an RPC URL:
 ```swift
-try await Web3HttpProvider(url: yourRpcUrl)
+try await Web3HttpProvider(url: rpcUrl)
 ```
 
 But if you know chain ID upfront it's better to specify one as well as with chain ID, the initializer won't have to ask the RPC for it and thus you guarantee that the initializer completes successfully without any asynchronous calls, considering your URL using `http/s` scheme:
@@ -104,7 +104,7 @@ let optionalChainId: Networks = .Custom(networkID: 42)
 try await Web3HttpProvider(url: rpcUrl, network: optionalChainId)
 ```
 
-Specify a keystore manager for the Web3HttpProvider if you want `web3.personal` namespace to work as it relies on the keystore and password:
+Specify a keystore manager for the Web3HttpProvider if you want `web3.personal` namespace to work as it relies on use of the keystore:
 ```swift
 try await Web3HttpProvider(url: rpcUrl, network: optionalChainId, keystoreManager: optionalKeystoreManager)
 ```
