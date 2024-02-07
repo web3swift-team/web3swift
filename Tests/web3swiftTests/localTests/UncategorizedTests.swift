@@ -138,7 +138,6 @@ class UncategorizedTests: LocalTestCase {
         let user = try await contract!
             .createReadOperation("users", parameters: [0])?
             .call()
-
         XCTAssertEqual((userDeviceCount?["0"] as? BigUInt)?.hexString.lowercased(), addr.address.lowercased())
         XCTAssertEqual(totalUsers?["0"] as? BigUInt, 100)
         XCTAssertEqual(user?["0"] as? BigUInt, 0)
