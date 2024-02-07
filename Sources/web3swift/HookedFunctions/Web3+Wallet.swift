@@ -9,11 +9,15 @@ import Web3Core
 
 extension Web3.Web3Wallet {
 
+    /// A list of addresses available in the attached keystore.
+    /// - Returns: a list of addresses or an error.
     public func getAccounts() throws -> [EthereumAddress] {
         guard let keystoreManager = self.web3.provider.attachedKeystoreManager else {
+            // TODO: add the following error message: Missing `attachedKeystoreManager`.
             throw Web3Error.walletError
         }
         guard let ethAddresses = keystoreManager.addresses else {
+            // TODO: add the following error message: Missing attached keystore is empty.
             throw Web3Error.walletError
         }
         return ethAddresses
@@ -42,6 +46,12 @@ extension Web3.Web3Wallet {
         }
     }
 
+    /// Execute `personal_sign` for given arbitrary message.
+    /// - Parameters:
+    ///   - personalMessage: message. Must be HEX formatted: message -> to 'UTF-8 bytes' -> to hex string!
+    ///   - account: signer address.
+    ///   - password: web3 attached keystore password.
+    /// - Returns: signature for the given message or throws an error.
     public func signPersonalMessage(_ personalMessage: String, account: EthereumAddress, password: String ) throws -> Data {
         guard let data = Data.fromHex(personalMessage) else {
             throw Web3Error.dataError

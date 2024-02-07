@@ -47,7 +47,7 @@ extension Web3 {
 
         // MARK: Writing Data flow
         // FIXME: Rewrite this to CodableTransaction
-        /// Deploys a contract instance using the previously provided  ABI, some bytecode, constructor parameters and options.
+        /// Deploys a contract instance using the previously provided ABI, some bytecode, constructor parameters and options.
         /// If extraData is supplied it is appended to encoded bytecode and constructor parameters.
         ///
         /// Returns a "Transaction intermediate" object.
