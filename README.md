@@ -5,7 +5,7 @@
 [Join our discord](https://discord.gg/8bHCNmhS7x) or [Telegram](https://t.me/web3swift) if you need support or want to contribute to web3swift development!
 
 ![matter-github-swift](https://github.com/web3swift-team/web3swift/blob/develop/web3swift-logo.png)
-[![Web3swift CI](https://github.com/web3swift-team/web3swift/actions/workflows/macOS-12.yml/badge.svg)](https://github.com/web3swift-team/web3swift/actions/workflows/macOS-12.yml)
+[![Web3swift CI](https://github.com/web3swift-team/web3swift/actions/workflows/macOS-tests.yml/badge.svg)](https://github.com/web3swift-team/web3swift/actions/workflows/macOS-tests.yml)
 [![Swift](https://img.shields.io/badge/Swift-5.4-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](https://github.com/web3swift-team/web3swift/blob/master/LICENSE.md)
 [![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0xe22b8979739d724343bd002f9f432f5990879901)
