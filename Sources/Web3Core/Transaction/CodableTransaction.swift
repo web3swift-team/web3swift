@@ -156,7 +156,7 @@ public struct CodableTransaction {
             let result = self.attemptSignature(privateKey: privateKey, useExtraEntropy: useExtraEntropy)
             if result { return }
         }
-        throw AbstractKeystoreError.invalidAccountError
+        throw AbstractKeystoreError.invalidAccountError("Failed to sign transaction with given private key.")
     }
 
     // actual signing algorithm implementation

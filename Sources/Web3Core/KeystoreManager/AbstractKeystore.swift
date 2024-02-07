@@ -11,11 +11,30 @@ public protocol AbstractKeystore {
     func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data
 }
 
-public enum AbstractKeystoreError: Error {
-    case noEntropyError
-    case keyDerivationError
-    case aesError
-    case invalidAccountError
+public enum AbstractKeystoreError: LocalizedError {
+    case noEntropyError(_ additionalDescription: String? = nil)
+    case keyDerivationError(_ additionalDescription: String? = nil)
+    case aesError(_ additionalDescription: String? = nil)
+    case invalidAccountError(_ additionalDescription: String? = nil)
     case invalidPasswordError
-    case encryptionError(String)
+    case encryptionError(_ additionalDescription: String? = nil)
+
+    public var errorDescription: String? {
+        var errorMessage: [String?]
+        switch self {
+        case .noEntropyError(let additionalDescription):
+            errorMessage = ["Entropy error (e.g. failed to generate a random array of bytes).", additionalDescription]
+        case .keyDerivationError(let additionalDescription):
+            errorMessage = ["Key derivation error.", additionalDescription]
+        case .aesError(let additionalDescription):
+            errorMessage = ["AES error.", additionalDescription]
+        case .invalidAccountError(let additionalDescription):
+            errorMessage = ["Invalid account error.", additionalDescription]
+        case .invalidPasswordError:
+            errorMessage = ["Invalid password error."]
+        case .encryptionError(let additionalDescription):
+            errorMessage = ["Encryption error.", additionalDescription]
+        }
+        return errorMessage.compactMap { $0 }.joined(separator: " ")
+    }
 }

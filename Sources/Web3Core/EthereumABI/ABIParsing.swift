@@ -7,9 +7,9 @@ import Foundation
 
 extension ABI {
 
-    public enum ParsingError: Swift.Error {
+    public enum ParsingError: LocalizedError {
         case invalidJsonFile
-        case elementTypeInvalid
+        case elementTypeInvalid(_ desc: String? = nil)
         case elementNameInvalid
         case functionInputInvalid
         case functionOutputInvalid
@@ -17,6 +17,31 @@ extension ABI {
         case parameterTypeInvalid
         case parameterTypeNotFound
         case abiInvalid
+
+        public var errorDescription: String? {
+            var errorMessage: [String?]
+            switch self {
+            case .invalidJsonFile:
+                errorMessage = ["invalidJsonFile"]
+            case .elementTypeInvalid(let desc):
+                errorMessage = ["elementTypeInvalid", desc]
+            case .elementNameInvalid:
+                errorMessage = ["elementNameInvalid"]
+            case .functionInputInvalid:
+                errorMessage = ["functionInputInvalid"]
+            case .functionOutputInvalid:
+                errorMessage = ["functionOutputInvalid"]
+            case .eventInputInvalid:
+                errorMessage = ["eventInputInvalid"]
+            case .parameterTypeInvalid:
+                errorMessage = ["parameterTypeInvalid"]
+            case .parameterTypeNotFound:
+                errorMessage = ["parameterTypeNotFound"]
+            case .abiInvalid:
+                errorMessage = ["abiInvalid"]
+            }
+            return errorMessage.compactMap { $0 }.joined(separator: " ")
+        }
     }
 
     enum TypeParsingExpressions {
@@ -39,7 +64,7 @@ extension ABI.Record {
     public func parse() throws -> ABI.Element {
         let typeString = self.type ?? "function"
         guard let type = ABI.ElementType(rawValue: typeString) else {
-            throw ABI.ParsingError.elementTypeInvalid
+            throw ABI.ParsingError.elementTypeInvalid("Invalid ABI type \(typeString).")
         }
         return try parseToElement(from: self, type: type)
     }
