@@ -25,6 +25,8 @@ public protocol IEth {
 
     func code(for address: EthereumAddress, onBlock: BlockNumber) async throws -> Hash
 
+    func getLogs(eventFilter: EventFilterParameters) async throws -> [EventLog]
+
     func gasPrice() async throws -> BigUInt
 
     func getTransactionCount(for address: EthereumAddress, onBlock: BlockNumber) async throws -> BigUInt

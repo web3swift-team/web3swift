@@ -149,71 +149,76 @@ public class BIP32Keystore: AbstractKeystore {
         } else {
             newIndex = UInt32.zero
         }
+
         guard let newNode = parentNode.derive(index: newIndex, derivePrivateKey: true, hardened: false) else {
             throw AbstractKeystoreError.keyDerivationError
         }
         guard let newAddress = Utilities.publicToAddress(newNode.publicKey) else {
             throw AbstractKeystoreError.keyDerivationError
         }
-        let prefixPath = self.rootPrefix
-        var newPath: String
-        if newNode.isHardened {
-            newPath = prefixPath + "/" + String(newNode.index % HDNode.hardenedIndexPrefix) + "'"
-        } else {
-            newPath = prefixPath + "/" + String(newNode.index)
-        }
+        let newPath = rootPrefix + "/" + String(newNode.index)
         addressStorage.add(address: newAddress, for: newPath)
     }
 
     public func createNewCustomChildAccount(password: String, path: String) throws {
-        guard let decryptedRootNode = try getPrefixNodeData(password) else {
+        guard let decryptedRootNode = try getPrefixNodeData(password),
+              let keystoreParams else {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
         guard let rootNode = HDNode(decryptedRootNode) else {
             throw AbstractKeystoreError.encryptionError("Failed to deserialize a root node")
         }
-        let prefixPath = self.rootPrefix
-        var pathAppendix: String?
+
+        let prefixPath = rootPrefix
+        var pathAppendix = path
+
         if path.hasPrefix(prefixPath) {
-            let upperIndex = (path.range(of: prefixPath)?.upperBound)!
-            if upperIndex < path.endIndex {
-                pathAppendix = String(path[path.index(after: upperIndex)])
+            if let upperIndex = (path.range(of: prefixPath)?.upperBound), upperIndex < path.endIndex {
+                pathAppendix = String(path[path.index(after: upperIndex)..<path.endIndex])
             } else {
                 throw AbstractKeystoreError.encryptionError("out of bounds")
             }
-
-            guard pathAppendix != nil else {
-                throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
-            }
-            if pathAppendix!.hasPrefix("/") {
-                pathAppendix = pathAppendix?.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
-            }
-        } else {
-            if path.hasPrefix("/") {
-                pathAppendix = path.trimmingCharacters(in: CharacterSet.init(charactersIn: "/"))
-            }
         }
-        guard pathAppendix != nil else {
-            throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
+        if pathAppendix.hasPrefix("/") {
+            pathAppendix = pathAppendix.trimmingCharacters(in: .init(charactersIn: "/"))
         }
         guard rootNode.depth == prefixPath.components(separatedBy: "/").count - 1 else {
             throw AbstractKeystoreError.encryptionError("Derivation depth mismatch")
         }
-        guard let newNode = rootNode.derive(path: pathAppendix!, derivePrivateKey: true) else {
+        guard let newNode = rootNode.derive(path: pathAppendix, derivePrivateKey: true) else {
             throw AbstractKeystoreError.keyDerivationError
         }
         guard let newAddress = Utilities.publicToAddress(newNode.publicKey) else {
             throw AbstractKeystoreError.keyDerivationError
         }
-        var newPath: String
-        if newNode.isHardened {
-            newPath = prefixPath + "/" + pathAppendix!.trimmingCharacters(in: CharacterSet.init(charactersIn: "'")) + "'"
-        } else {
-            newPath = prefixPath + "/" + pathAppendix!
-        }
+
+        let newPath = prefixPath + "/" + pathAppendix
+
         addressStorage.add(address: newAddress, for: newPath)
-        guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {throw AbstractKeystoreError.keyDerivationError}
-        try encryptDataToStorage(password, data: serializedRootNode, aesMode: self.keystoreParams!.crypto.cipher)
+        guard let serializedRootNode = rootNode.serialize(serializePublic: false) else {
+            throw AbstractKeystoreError.keyDerivationError
+        }
+        try encryptDataToStorage(password, data: serializedRootNode, aesMode: keystoreParams.crypto.cipher)
+    }
+
+    /// Fast generation addresses for current account
+    /// used to show which addresses the user can get for indices from `0` to `number-1`
+    /// - Parameters:
+    ///   - password: password of seed storage
+    ///   - number: number of wallets addresses needed to generate from  `0` to `number-1`
+    /// - Returns: Array of addresses generated from `0` to number bound
+    public func getAddressForAccount(password: String, number: UInt) throws -> [EthereumAddress] {
+        guard let decryptedRootNode = try? getPrefixNodeData(password),
+              let rootNode = HDNode(decryptedRootNode) else {
+            throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
+        }
+        return try [UInt](0..<number).compactMap { number in
+            guard rootNode.depth == rootPrefix.components(separatedBy: "/").count - 1,
+                  let newNode = rootNode.derive(path: "\(number)", derivePrivateKey: true) else {
+                throw AbstractKeystoreError.keyDerivationError
+            }
+            return Utilities.publicToAddress(newNode.publicKey)
+        }
     }
 
     fileprivate func encryptDataToStorage(_ password: String, data: Data, dkLen: Int = 32, N: Int = 4096, R: Int = 6, P: Int = 1, aesMode: String = "aes-128-cbc") throws {

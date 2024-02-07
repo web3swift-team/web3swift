@@ -10,7 +10,6 @@ import Web3Core
 
 // MARK: Works only with network connection
 class InfuraTests: XCTestCase {
-
     func testGetBalance() async throws {
         let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
         let address = EthereumAddress("0xd61b5ca425F8C8775882d4defefC68A6979DBbce")!

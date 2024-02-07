@@ -47,7 +47,7 @@ extension Web3 {
 
         // MARK: Writing Data flow
         // FIXME: Rewrite this to CodableTransaction
-        /// Deploys a constact instance using the previously provided  ABI, some bytecode, constructor parameters and options.
+        /// Deploys a contract instance using the previously provided ABI, some bytecode, constructor parameters and options.
         /// If extraData is supplied it is appended to encoded bytecode and constructor parameters.
         ///
         /// Returns a "Transaction intermediate" object.
@@ -111,6 +111,12 @@ extension Web3 {
                 transaction.chainID = network.chainID
             }
             return .init(transaction: transaction, web3: web3, contract: contract, method: method)
+        }
+
+        /// Combines `createReadOperation` & `callContractMethod`
+        @discardableResult
+        public func callStatic(_ method: String, parameters: [Any]) async throws -> [String: Any] {
+            try await contract.callStatic(method, parameters: parameters, provider: web3.provider)
         }
     }
 }
