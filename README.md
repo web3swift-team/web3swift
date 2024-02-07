@@ -20,6 +20,8 @@
     - [Swift Package](#swift-package)
     - [CocoaPods](#cocoapods)
 - [Example usage](#example-usage)
+    - [Create Web3 Provider](#create-web3-provider)
+    - [Create Web3 Object](#create-web3-object)
     - [Send Ether](#send-ether)
     - [Contract read method](#contract-read-method)
     - [Write Transaction and call smart contract method](#write-transaction-and-call-smart-contract-method)
@@ -64,7 +66,7 @@
 
 ## Installation
 
-### Swift Package (Recommended)
+### Swift Package
 The [Swift Package Manager](https://swift.org/package-manager/ "") is a tool for automating the distribution of Swift code that is well integrated with Swift build system.
 
 Once you have your Swift package set up, adding `web3swift` as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
@@ -88,6 +90,44 @@ import Web3Core
 ### CocoaPods
 
 CocoaPods is not supported.
+
+### Create Web3 Provider
+Currently web3swift supports only HTTP provider. WebSocket provider support was removed and is planned to be rebuilt from scratch.
+To create a Web3HttpProvider you only need an RPC URL:
+```swift
+try await Web3HttpProvider(url: yourRpcUrl)
+```
+
+But if you know chain ID upfront it's better to specify one as well as with chain ID initializer won't have to ask the RPC for it and thus you guarantee that initializer completes successfully without any asynchronous calls, considering your URL starts uses `http/s` scheme:
+```swift
+let optionalChainId: Networks = .Custom(networkID: 42)
+try await Web3HttpProvider(url: rpcUrl, network: optionalChainId)
+```
+
+Specify keystore for the Web3HttpProvider if you want `web3.personal` namespace to work as it relies on the keystore and password:
+```swift
+try await Web3HttpProvider(url: rpcUrl, network: optionalChainId, keystoreManager: optionalKeystoreManager)
+```
+
+### Create Web3 Object
+Creating Web3 object is quite simple once you have a Web3 HTTP provider:
+```swift
+Web3(provider: provider)
+```
+
+Or if you are a user of Infura:
+```swift
+try await Web3.InfuraMainnetWeb3(accessToken: optionalInfuraToken)
+try await Web3.InfuraGoerliWeb3(accessToken: optionalInfuraToken)
+```
+
+If you have a URL or you are using Infura you can use the following:
+```swift
+try await Web3.new(url, network: chainIdHere)
+// or
+let web3 = try await Web3.InfuraMainnetWeb3(accessToken: optionalInfuraToken)
+let web3 = try await Web3.InfuraGoerliWeb3(accessToken: optionalGoerliToken)
+```
 
 ### Send Ether
 ```swift
@@ -127,6 +167,7 @@ func feeHistory(blockCount: UInt, block: BlockNumber, percentiles:[Double]) asyn
     return response.result
 }
 ```
+
 ## Build from source
 ### SPM
 ```bash
