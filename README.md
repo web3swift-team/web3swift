@@ -5,23 +5,23 @@
 [Join our discord](https://discord.gg/8bHCNmhS7x) or [Telegram](https://t.me/web3swift) if you need support or want to contribute to web3swift development!
 
 ![matter-github-swift](https://github.com/web3swift-team/web3swift/blob/develop/web3swift-logo.png)
-[![Web3swift CI](https://github.com/web3swift-team/web3swift/actions/workflows/macOS-12.yml/badge.svg)](https://github.com/web3swift-team/web3swift/actions/workflows/macOS-12.yml)
-[![Swift](https://img.shields.io/badge/Swift-5.4-orange.svg?style=flat)](https://developer.apple.com/swift/)
-[![Platform](https://img.shields.io/cocoapods/p/web3swift?style=flat)](http://cocoapods.org/pods/web3swift)
-[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/web3swift?style=flat)](http://cocoapods.org/pods/web3swift)
+[![Web3swift CI](https://github.com/web3swift-team/web3swift/actions/workflows/macOS-tests.yml/badge.svg)](https://github.com/web3swift-team/web3swift/actions/workflows/macOS-tests.yml)
+[![Swift](https://img.shields.io/badge/Swift-5.5-f26118.svg?style=flat)](https://developer.apple.com/swift/)
 [![License](https://img.shields.io/cocoapods/l/web3swift.svg?style=flat)](https://github.com/web3swift-team/web3swift/blob/master/LICENSE.md)
-[![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0xe22b8979739d724343bd002f9f432f5990879901)
 [![Stackoverflow](https://img.shields.io/badge/stackoverflow-ask-blue.svg)](https://stackoverflow.com/questions/tagged/web3swift)
+<!-- [![support](https://brianmacdonald.github.io/Ethonate/svg/eth-support-blue.svg)](https://brianmacdonald.github.io/Ethonate/address#0xe22b8979739d724343bd002f9f432f5990879901) -->
 
 ---
 
 <!-- MarkdownTOC -->
 
-- [Core features](#core-features)
+- [Core Features](#core-features)
 - [Installation](#installation)
     - [Swift Package](#swift-package)
     - [CocoaPods](#cocoapods)
 - [Example usage](#example-usage)
+    - [Create Web3 Provider](#create-web3-provider)
+    - [Create Web3 Object](#create-web3-object)
     - [Send Ether](#send-ether)
     - [Contract read method](#contract-read-method)
     - [Write Transaction and call smart contract method](#write-transaction-and-call-smart-contract-method)
@@ -48,11 +48,11 @@
 - [x] :thought_balloon: Interaction with remote node via **JSON RPC**
 - [x] 🔐 Local **keystore management** (`geth` compatible)
 - [x] 🤖 Smart-contract **ABI parsing**
-- [x] 🔓**ABI decoding** (V2 is supported with return of structures from public functions. Part of 0.4.22 Solidity compiler)
+- [x] 🔓**ABI decoding** (V2 is supported with a return of structures from public functions. Part of 0.4.22 Solidity compiler)
 - [x] 🕸Ethereum Name Service **(ENS) support** - a secure & decentralised way to address resources both on and off the blockchain using simple, human-readable names
 - [x] :arrows_counterclockwise: **Smart contracts interactions** (read/write)
 - [x]  ⛩ **Infura support**
-- [x] ⚒  **Parsing TxPool** content into native values (ethereum addresses and transactions) - easy to get pending transactions
+- [x] ⚒  **Parsing TxPool** content into native values (Ethereum addresses and transactions) - easy to get pending transactions
 - [x] 🖇 **Event loops** functionality
 - [x] 🕵️‍♂️ Possibility to **add or remove "middleware" that intercepts**, modifies and even **cancel transaction** workflow on stages "before assembly", "after assembly" and "before submission"
 - [x] ✅**Literally following the standards** (BIP, EIP, etc):
@@ -66,7 +66,7 @@
 
 ## Installation
 
-### Swift Package (Recommended)
+### Swift Package
 The [Swift Package Manager](https://swift.org/package-manager/ "") is a tool for automating the distribution of Swift code that is well integrated with Swift build system.
 
 Once you have your Swift package set up, adding `web3swift` as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
@@ -89,30 +89,45 @@ import Web3Core
 
 ### CocoaPods
 
-[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
+CocoaPods is not supported.
 
-```bash
-$ sudo gem install cocoapods
+### Create Web3 Provider
+Currently, web3swift supports only HTTP providers. WebSocket provider support was removed and is planned to be rebuilt from scratch.
+To create a Web3HttpProvider you only need an RPC URL:
+```swift
+try await Web3HttpProvider(url: rpcUrl)
 ```
 
-To integrate web3swift into your Xcode project using CocoaPods, specify it in your `Podfile`:
-
-```ruby
-source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '13.0'
-
-target '<Your Target Name>' do
-    use_frameworks!
-    pod 'web3swift'
-end
+But if you know chain ID upfront it's better to specify one as well as with chain ID, the initializer won't have to ask the RPC for it and thus you guarantee that the initializer completes successfully without any asynchronous calls, considering your URL using `http/s` scheme:
+```swift
+let optionalChainId: Networks = .Custom(networkID: 42)
+try await Web3HttpProvider(url: rpcUrl, network: optionalChainId)
 ```
 
-Then, run the following command:
-```bash
-$ pod install
+Specify a keystore manager for the Web3HttpProvider if you want `web3.personal` namespace to work as it relies on use of the keystore:
+```swift
+try await Web3HttpProvider(url: rpcUrl, network: optionalChainId, keystoreManager: optionalKeystoreManager)
 ```
 
-> **WARNING**: CocoaPods is a powerful tool for managing dependencies in iOS development, but it also has some limitations that preventing us of providing first class support there. We highly recommend using SPM first as using CocoaPods will delay new updates and bug fixes being delivered to you.
+### Create Web3 Object
+Creating a Web3 object is quite simple once you have a Web3 HTTP provider:
+```swift
+Web3(provider: provider)
+```
+
+Or if you are a user of Infura:
+```swift
+try await Web3.InfuraMainnetWeb3(accessToken: optionalInfuraToken)
+try await Web3.InfuraGoerliWeb3(accessToken: optionalInfuraToken)
+```
+
+If you have a URL or you are using Infura you can use the following:
+```swift
+try await Web3.new(url, network: chainIdHere)
+// or
+let web3 = try await Web3.InfuraMainnetWeb3(accessToken: optionalInfuraToken)
+let web3 = try await Web3.InfuraGoerliWeb3(accessToken: optionalGoerliToken)
+```
 
 ### Send Ether
 ```swift
@@ -152,6 +167,7 @@ func feeHistory(blockCount: UInt, block: BlockNumber, percentiles:[Double]) asyn
     return response.result
 }
 ```
+
 ## Build from source
 ### SPM
 ```bash
@@ -166,7 +182,7 @@ swift build
 - Swift 5.5
 
 ## Documentation
-Documentation is under construction👷🏻👷🏼‍♀️. We’re trying our best to comment all public API as detailed as we can, but the end it still far to come. But in one of the nearest minor updates we’ll bring DocC support of already done amount of docs. And your PR in such are more than welcome.
+Documentation is under construction👷🏻👷🏼‍♀️. We’re trying our best to comment on all public APIs as detailed as possible, but the end is still far to come. But in one of the nearest minor updates we’ll bring DocC support of already done amount of docs. And your PR in such are more than welcome.
 
 ## Projects that are using web3swift
 Please take a look at [Our customers](https://github.com/web3swift-team/web3swift/wiki/Our-Customers) wiki page.
@@ -180,7 +196,7 @@ Please take a look at [Our customers](https://github.com/web3swift-team/web3swif
 - If you **found a bug**, [open an issue](https://github.com/web3swift-team/web3swift/issues).
 
 ## Development
-To do local development and run the local tests, we recommend to use [ganache](https://github.com/trufflesuite/ganache) which is also used by CI when running github actions.
+To do local development and run the local tests, we recommend using [ganache](https://github.com/trufflesuite/ganache) which is also used by CI when running GitHub actions.
 
 ```cli
 // To install
@@ -195,24 +211,24 @@ Make sure that `ganache` is running on its default port `8546`. To change the po
 
 ### Before you commit
 
-We are using [pre-commit](https://pre-commit.com) to run validations locally before a commit is created. Please, install pre-commit and run `pre-commit install` from project's root directory. After that before every commit git hook will run and execute `codespell`, `swiftlint` and other checks.
+We are using [pre-commit](https://pre-commit.com) to run validations locally before a commit is created. Please, install pre-commit and run `pre-commit install` from the project's root directory. After that before every commit git hook will run and execute `codespell`, `swiftlint` and other checks.
 
 ## Contribute
 Want to improve? It's awesome:
-Then good news for you: **We are ready to pay for your contribution via [@gitcoin bot](https://gitcoin.co/grants/358/web3swift)!**
+The good news for you: **We are ready to pay for your contribution via [@gitcoin bot](https://gitcoin.co/grants/358/web3swift)!**
 
 - If you **have a feature request**, [open an issue](https://github.com/web3swift-team/web3swift/issues).
 - If you **want to contribute**, [submit a pull request](https://github.com/web3swift-team/web3swift/pulls).
 
 ### Contribution
-1. You are more than welcome to participate and get bounty by contributing! **Your contribution will be paid via  [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift).**
+1. You are more than welcome to participate and get a bounty by contributing! **Your contribution will be paid via  [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift).**
 2. Find or create an [issue](https://github.com/web3swift-team/web3swift/issues)
 3. You can find open bounties in [Gitcoin Bounties](https://gitcoin.co/explorer?applicants=ALL&keywords=web3swift&order_by=-web3_created) list
-4. Commita fix or a new feature in branch, push your changes
+4. Commita fix or a new feature in a branch, push your changes
 5. [Submit a pull request to **develop** branch](https://github.com/web3swift-team/web3swift/pulls)
-	1. Please, provide detailed description to it to help us proceed it faster.
+	1. Please, provide a detailed description of it to help us proceed faster.
 
-[@skywinder](https://github.com/skywinder) are charged with open-sourсe and do not require money for using web3swift library.
+[@skywinder](https://github.com/skywinder) are charged with open-sourсe and do not require money to use the web3swift library.
 We want to continue to do everything we can to move the needle forward.
 
 - **Support us** via [@gitcoin Grant program](https://gitcoin.co/grants/358/web3swift)

@@ -35,8 +35,6 @@ In ci/cd we’re using Xcode test plans feature to spread tests to local and rem
 Please add any files unused due build process to `excludeFiles` array in `Package.swift`.
 ### Carthage
 Please do not forget to add & remove all new or dropped files and dependencies in carthage `.xcodeproj` file if you’re working with project anywhere but carthage project.
-### Cocoapods
-Please do not forget to add & remove all dependencies within `web3swift.podspec` file.
 ### GitHub actions
 You’re able to use our github actions checks in your fork without needing to make PR to this repo. To get that just add your branch name to the branch list in file on path `.github/actions/ci.yml` to let the magic happening like follow:
 
