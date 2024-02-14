@@ -28,7 +28,7 @@ public extension Sequence where Element == ABI.Element {
         for case let .function(function) in self where function.name != nil {
             appendFunction(function.name!, function)
             appendFunction(function.signature, function)
-            appendFunction(function.methodString.addHexPrefix().lowercased(), function)
+            appendFunction(function.selector.addHexPrefix().lowercased(), function)
 
             /// ABI cannot have two functions with exactly the same name and input arguments
             if (functions[function.signature]?.count ?? 0) > 1 {

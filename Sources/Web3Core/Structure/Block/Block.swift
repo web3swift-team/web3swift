@@ -98,7 +98,9 @@ extension Block: Decodable {
 
         let unclesStrings = try container.decode([String].self, forKey: .uncles)
         self.uncles = try unclesStrings.map {
-            guard let data = Data.fromHex($0) else { throw Web3Error.dataError }
+            guard let data = Data.fromHex($0) else {
+                throw Web3Error.dataError(desc: "Failed to parse uncle block from hex string to Data. Given string is not valid hex: \($0).")
+            }
             return data
         }
     }

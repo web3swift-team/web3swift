@@ -55,7 +55,8 @@ final class ABIDecoderSliceTests: XCTestCase {
         let decodedData = try multiCall2Contract.decodeReturnData("aggregate", data: data)
 
         guard let returnData = decodedData["returnData"] as? [Data] else {
-            throw Web3Error.dataError
+            XCTFail("Failed to cast 'returnData' to [Data].")
+            return
         }
 
         XCTAssertEqual(returnData.count, 3)
@@ -75,7 +76,8 @@ final class ABIDecoderSliceTests: XCTestCase {
         let decodedData = try contract.decodeReturnData("tryAggregate", data: data)
 
         guard let returnData = decodedData["returnData"] as? [[Any]] else {
-            throw Web3Error.dataError
+            XCTFail("Failed to cast 'returnData' to [[Any]].")
+            return
         }
         var resultArray = [BigUInt]()
         for i in 0..<2 {

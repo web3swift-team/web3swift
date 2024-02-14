@@ -74,10 +74,6 @@ public class ENS {
         self.reverseRegistrar = reverseRegistrar
     }
 
-    lazy var defaultTransaction: CodableTransaction = {
-        return CodableTransaction.emptyTransaction
-    }()
-
     // MARK: - Convenience public resolver methods
     public func getAddress(forNode node: String) async throws -> EthereumAddress {
         guard let resolver = try? await self.registry.getResolver(forDomain: node) else {
@@ -106,7 +102,7 @@ public class ENS {
         guard isAddrSupports else {
             throw Web3Error.processingError(desc: "Address isn't supported")
         }
-        var transaction = transaction ?? defaultTransaction
+        var transaction = transaction ?? CodableTransaction.emptyTransaction
         transaction.to = resolver.resolverContractAddress
         guard let result = try? await resolver.setAddress(forNode: node, address: address, transaction: transaction, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
@@ -141,7 +137,7 @@ public class ENS {
         guard isNameSupports else {
             throw Web3Error.processingError(desc: "Name isn't supported")
         }
-        var options = transaction ?? defaultTransaction
+        var options = transaction ?? CodableTransaction.emptyTransaction
         options.to = resolver.resolverContractAddress
         guard let result = try? await resolver.setCanonicalName(forNode: node, name: name, transaction: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
@@ -177,7 +173,7 @@ public class ENS {
         guard isContentSupports else {
             throw Web3Error.processingError(desc: "Content isn't supported")
         }
-        var options = transaction ?? defaultTransaction
+        var options = transaction ?? CodableTransaction.emptyTransaction
         options.to = resolver.resolverContractAddress
         guard let result = try? await resolver.setContentHash(forNode: node, hash: hash, transaction: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
@@ -212,7 +208,7 @@ public class ENS {
         guard isABISupports else {
             throw Web3Error.processingError(desc: "ABI isn't supported")
         }
-        var options = transaction ?? defaultTransaction
+        var options = transaction ?? CodableTransaction.emptyTransaction
         options.to = resolver.resolverContractAddress
         guard let result = try? await resolver.setContractABI(forNode: node, contentType: contentType, data: data, transaction: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
@@ -247,7 +243,7 @@ public class ENS {
         guard isPKSupports else {
             throw Web3Error.processingError(desc: "Public Key isn't supported")
         }
-        var options = transaction ?? defaultTransaction
+        var options = transaction ?? CodableTransaction.emptyTransaction
         options.to = resolver.resolverContractAddress
         guard let result = try? await resolver.setPublicKey(forNode: node, publicKey: publicKey, transaction: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")
@@ -282,7 +278,7 @@ public class ENS {
         guard isTextSupports else {
             throw Web3Error.processingError(desc: "Text isn't supported")
         }
-        var options = transaction ?? defaultTransaction
+        var options = transaction ?? CodableTransaction.emptyTransaction
         options.to = resolver.resolverContractAddress
         guard let result = try? await resolver.setTextData(forNode: node, key: key, value: value, transaction: options, password: password) else {
             throw Web3Error.processingError(desc: "Can't get result")

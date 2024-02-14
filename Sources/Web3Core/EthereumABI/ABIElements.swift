@@ -207,7 +207,7 @@ extension ABI.Element.Function {
     public func encodeParameters(_ parameters: [Any]) -> Data? {
         guard parameters.count == inputs.count,
               let data = ABIEncoder.encode(types: inputs, values: parameters) else { return nil }
-        return methodEncoding + data
+        return selectorEncoded + data
     }
 }
 
@@ -300,16 +300,18 @@ extension ABI.Element.EthError {
     ///  - data: bytes returned by a function call that stripped error signature hash.
     /// - Returns: a dictionary containing decoded data mappend to indices and names of returned values or nil if decoding failed.
     public func decodeEthError(_ data: Data) -> [String: Any]? {
-        guard inputs.count * 32 <= data.count,
+        guard data.count > 0,
+              data.count % 32 == 0,
+              inputs.count * 32 <= data.count,
               let decoded = ABIDecoder.decode(types: inputs, data: data) else {
             return nil
         }
 
         var result = [String: Any]()
-        for (index, out) in inputs.enumerated() {
+        for (index, input) in inputs.enumerated() {
             result["\(index)"] = decoded[index]
-            if !out.name.isEmpty {
-                result[out.name] = decoded[index]
+            if !input.name.isEmpty {
+                result[input.name] = decoded[index]
             }
         }
         return result
@@ -372,7 +374,7 @@ extension ABI.Element {
 
 extension ABI.Element.Function {
     public func decodeInputData(_ rawData: Data) -> [String: Any]? {
-        return ABIDecoder.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
+        return ABIDecoder.decodeInputData(rawData, methodEncoding: selectorEncoded, inputs: inputs)
     }
 
     /// Decodes data returned by a function call.
@@ -520,8 +522,8 @@ extension ABIDecoder {
     /// - Returns: decoded dictionary of input arguments mapped to their indices and arguments' names if these are not empty.
     /// If decoding of at least one argument fails, `rawData` size is invalid or `methodEncoding` doesn't match - `nil` is returned.
     static func decodeInputData(_ rawData: Data,
-                                     methodEncoding: Data? = nil,
-                                     inputs: [ABI.Element.InOut]) -> [String: Any]? {
+                                methodEncoding: Data? = nil,
+                                inputs: [ABI.Element.InOut]) -> [String: Any]? {
         let data: Data
         let sig: Data?
 

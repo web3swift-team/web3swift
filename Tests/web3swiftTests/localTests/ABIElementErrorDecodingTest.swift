@@ -19,6 +19,7 @@ class ABIElementErrorDecodingTest: XCTestCase {
                                                      outputs: [],
                                                      constant: false,
                                                      payable: false)
+    private let emptyEthError = ABI.Element.EthError(name: "none")
     private let oneOutputFunction = ABI.Element.Function(name: "any",
                                                          inputs: [],
                                                          outputs: [.init(name: "", type: .bool)],
@@ -62,7 +63,7 @@ class ABIElementErrorDecodingTest: XCTestCase {
     /// If a function that has no outputs attempts to decode empty `revert` or `require` must return `nil`
     /// because we don't know just based on the output if the call was successful or reverted.
     func testDecodeEmptyErrorOnNoOutputFunction() {
-        XCTAssertTrue(emptyFunction.decodeErrorResponse(Data()) == nil)
+        XCTAssertTrue(emptyEthError.decodeEthError(Data()) == nil)
     }
 
     /// `require(expression)` and `revert()` without a message return 0 bytes,

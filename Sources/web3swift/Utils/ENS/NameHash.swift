@@ -7,15 +7,14 @@ import Foundation
 import CryptoSwift
 
 public struct NameHash {
-    public static func normalizeDomainName(_ domain: String) -> String? {
+    public static func normalizeDomainName(_ domain: String) -> String {
         // TODO use ICU4C library later for domain name normalization, although f**k it for now, it's few megabytes large piece
         let normalized = domain.lowercased()
         return normalized
     }
 
     public static func nameHash(_ domain: String) -> Data? {
-        guard let normalized = NameHash.normalizeDomainName(domain) else { return nil }
-        return namehash(normalized)
+        namehash(NameHash.normalizeDomainName(domain))
     }
 
     static func namehash(_ name: String) -> Data? {

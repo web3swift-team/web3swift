@@ -379,7 +379,7 @@ extension DefaultContractProtocol {
 
     public func decodeEthError(_ data: Data) -> [String: Any]? {
         guard data.count >= 4,
-              let err = errors.first(where: { $0.value.methodEncoding == data[0..<4] })?.value else {
+              let err = errors.first(where: { $0.value.selectorEncoded == data[0..<4] })?.value else {
             return nil
         }
         return err.decodeEthError(data[4...])
@@ -398,7 +398,7 @@ extension DefaultContractProtocol {
             throw Web3Error.inputError(desc: "RPC failed: contract is missing an address.")
         }
         guard let data = self.method(method, parameters: parameters, extraData: nil) else {
-            throw Web3Error.dataError
+            throw Web3Error.dataError(desc: "Failed to encode method \(method) with given parameters: \(String(describing: parameters))")
         }
         let transaction = CodableTransaction(to: address, data: data)
 

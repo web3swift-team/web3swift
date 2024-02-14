@@ -84,8 +84,8 @@ extension String {
         return self
     }
 
-    /// Strips leading zeroes from a HEX string.
-    /// ONLY HEX string format is supported.
+    /// Strips leading zeroes from a hex string.
+    /// ONLY hex string format is supported.
     /// - Returns: string with stripped leading zeroes (and 0x prefix) or unchanged string.
     func stripLeadingZeroes() -> String {
         let hex = addHexPrefix()

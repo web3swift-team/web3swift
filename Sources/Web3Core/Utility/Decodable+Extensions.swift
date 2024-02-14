@@ -23,7 +23,7 @@ struct AnyCodingKey: CodingKey {
 }
 
 extension KeyedDecodingContainer {
-    /// Decodes a value of the given key from Hex to `DecodableFromHex`
+    /// Decodes a value of the given key from hex to `DecodableFromHex`
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `UInt.Type`
     ///
@@ -32,26 +32,26 @@ extension KeyedDecodingContainer {
     /// - Returns: A decoded value of type `T`
     /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `DecodableFromHex`.
     public func decodeHex<T: DecodableFromHex>(_ type: T.Type, forKey: KeyedDecodingContainer<K>.Key) throws -> T {
-        let hexString = try self.decode(String.self, forKey: forKey)
-        guard let value = T(from: hexString) else { throw Web3Error.dataError }
+        let hexString = try decode(String.self, forKey: forKey)
+        guard let value = T(from: hexString) else {
+            throw Web3Error.dataError(desc: "Unable to decode given hex string into type `\(T.self)`. Hex string given: `\(hexString)`.")
+        }
         return value
     }
 
-    /// Decodes a value of the given key from Hex to `[DecodableFromHex]`
+    /// Decodes a value of the given key from hex to `[DecodableFromHex]`
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `UInt.Type`
     ///
     /// - Parameter type: Array of a generic type `T` which conforms to `DecodableFromHex` protocol
     /// - Parameter key: The key that the decoded value is associated with.
     /// - Returns: A decoded value of type `[T]`
-    /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `[[DecodableFromHex]]`.
     public func decodeHex<T: DecodableFromHex>(_ type: [T].Type, forKey: KeyedDecodingContainer<K>.Key) throws -> [T] {
         var container = try nestedUnkeyedContainer(forKey: forKey)
-        guard let array = try? container.decodeHex(type) else { throw Web3Error.dataError }
-        return array
+        return try container.decodeHex(type)
     }
 
-    /// Decodes a value of the given key from Hex to `[[DecodableFromHex]]`
+    /// Decodes a value of the given key from hex to `[[DecodableFromHex]]`
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `EthereumAddress`, `UInt.Type`
     ///
@@ -61,11 +61,10 @@ extension KeyedDecodingContainer {
     /// - throws: `Web3Error.dataError` if value associated with key are unable to be initialized as `[[DecodableFromHex]]`.
     public func decodeHex<T: DecodableFromHex>(_ type: [[T]].Type, forKey: KeyedDecodingContainer<K>.Key) throws -> [[T]] {
         var container = try nestedUnkeyedContainer(forKey: forKey)
-        guard let array = try? container.decodeHex(type) else { throw Web3Error.dataError }
-        return array
+        return try container.decodeHex(type)
     }
 
-    /// Decodes a value of the given key from Hex to `DecodableFromHex`
+    /// Decodes a value of the given key from hex to `DecodableFromHex`
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `UInt.Type`
     ///
@@ -91,14 +90,18 @@ extension UnkeyedDecodingContainer {
     mutating func decodeHex<T: DecodableFromHex>(_ type: [T].Type) throws -> [T] {
         var array: [T] = []
         while !isAtEnd {
-            let hexString = try decode(String.self)
-            guard let item = T(from: hexString) else { continue }
-            array.append(item)
+            do {
+                let hexString = try decode(String.self)
+                guard let item = T(from: hexString) else { continue }
+                array.append(item)
+            } catch (let error) {
+                throw Web3Error.dataError(desc: "Unable to decode UnkeyedDecodingContainer as hex string. Thrown error: \(error.localizedDescription).")
+            }
         }
         return array
     }
 
-    /// Decodes a unkeyed value from Hex to `DecodableFromHex`
+    /// Decodes a unkeyed value from hex to `DecodableFromHex`
     ///
     /// Currently this method supports only `Data.Type`, `BigUInt.Type`, `Date.Type`, `EthereumAddress`
     ///

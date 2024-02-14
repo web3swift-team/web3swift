@@ -23,14 +23,14 @@ public struct TxPoolContent: Decodable {
         for addressKey in raw.allKeys {
             let addressString = addressKey.stringValue
             guard let address = EthereumAddress(addressString, type: .normal, ignoreChecksum: true) else {
-                throw Web3Error.dataError
+                throw Web3Error.dataError(desc: "Failed to initialize EthereumAddress from value \(addressString). Is it 20 bytes hex string?")
             }
             let nestedContainer = try raw.nestedContainer(keyedBy: AdditionalDataCodingKeys.self, forKey: addressKey)
             var perNonceInformation = [TxPoolContentForNonce]()
             perNonceInformation.reserveCapacity(nestedContainer.allKeys.count)
             for nonceKey in nestedContainer.allKeys {
                 guard let nonce = BigUInt(nonceKey.stringValue) else {
-                    throw Web3Error.dataError
+                    throw Web3Error.dataError(desc: "Failed to parse \(nonceKey.stringValue) as BigUInt nonce value for address \(addressString).")
                 }
                 let n = try? nestedContainer.nestedUnkeyedContainer(forKey: nonceKey)
                 if n != nil {

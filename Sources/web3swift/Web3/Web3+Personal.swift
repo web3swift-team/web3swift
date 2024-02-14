@@ -50,7 +50,7 @@ extension Web3.Personal {
         if let address = recoverAddress(message: personalMessage, signature: signature) {
             return address
         }
-        throw Web3Error.dataError
+        throw Web3Error.dataError(desc: "Failed to ecrecover an address from given personalMessage and signature. Personal message bytes as hex string = \(personalMessage.toHexString()); signature = \(signature.toHexString()).")
     }
 
     /// Recovers a signer of some hash.
@@ -67,6 +67,6 @@ extension Web3.Personal {
         if let address = recoverAddress(hash: hash, signature: signature) {
             return address
         }
-        throw Web3Error.dataError
+        throw Web3Error.dataError(desc: "Failed to ecrecover an address from given hash and signature. Hash = \(hash.toHexString()); signature = \(signature.toHexString()).")
     }
 }

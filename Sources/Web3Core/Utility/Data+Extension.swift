@@ -14,19 +14,19 @@ public extension Data {
     }
 
     func toArray<T>(type: T.Type) throws -> [T] {
-        return try self.withUnsafeBytes { (body: UnsafeRawBufferPointer) in
+        return try withUnsafeBytes { (body: UnsafeRawBufferPointer) in
             if let bodyAddress = body.baseAddress, body.count > 0 {
                 let pointer = bodyAddress.assumingMemoryBound(to: T.self)
                 return [T](UnsafeBufferPointer(start: pointer, count: self.count/MemoryLayout<T>.stride))
             } else {
-                throw Web3Error.dataError
+                throw Web3Error.dataError(desc: "`withUnsafeBytes` function call failed. We were unable to get a pointer to the first byte of the buffer or the buffer length was 0.")
             }
         }
     }
 
     func constantTimeComparisonTo(_ other: Data?) -> Bool {
-        guard let rhs = other else {return false}
-        guard self.count == rhs.count else {return false}
+        guard let rhs = other else { return false }
+        guard self.count == rhs.count else { return false }
         var difference = UInt8(0x00)
         for i in 0..<self.count { // compare full length
             difference |= self[i] ^ rhs[i] // constant time

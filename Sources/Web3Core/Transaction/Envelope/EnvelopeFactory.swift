@@ -51,10 +51,10 @@ public struct EnvelopeFactory {
         let envelopeType: TransactionType
         if container.contains(.type) {
             let typeUInt = try container.decodeHex(UInt.self, forKey: .type)
-            if typeUInt < TransactionType.allCases.count {
-                guard let type = TransactionType(rawValue: typeUInt) else { throw Web3Error.dataError } // conversion error
-                envelopeType = type
-            } else { throw Web3Error.dataError } // illegal value
+            guard let type = TransactionType(rawValue: typeUInt) else {
+                throw Web3Error.dataError(desc: "Given TransactionType raw value is not supported. Value given is \(typeUInt).")
+            }
+            envelopeType = type
         } else { envelopeType = .legacy } // legacy streams may not have type set
 
         switch envelopeType {

@@ -80,14 +80,16 @@ extension EIP2930Envelope {
         let list = try? container.decode([AccessListEntry].self, forKey: .accessList)
         self.accessList = list ?? []
 
-        let toString = try? container.decode(String.self, forKey: .to)
-        switch toString {
+        let stringValue = try? container.decode(String.self, forKey: .to)
+        switch stringValue {
         case nil, "0x", "0x0":
             self.to = EthereumAddress.contractDeploymentAddress()
         default:
             // the forced unwrap here is safe as we trap nil in the previous case
             // swiftlint:disable force_unwrapping
-            guard let ethAddr = EthereumAddress(toString!) else { throw Web3Error.dataError }
+            guard let ethAddr = EthereumAddress(stringValue!) else {
+                throw Web3Error.dataError(desc: "Failed to parse string as EthereumAddress. Given string: \(stringValue!). Is it a valid hex value 20 bytes in length?")
+            }
             // swiftlint:enable force_unwrapping
             self.to = ethAddr
         }
@@ -241,21 +243,25 @@ public struct AccessListEntry: CustomStringConvertible, Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        let addrString = try? container.decode(String.self, forKey: .address)
-        switch addrString {
+        let stringValue = try? container.decode(String.self, forKey: .address)
+        switch stringValue {
         case nil, "0x", "0x0":
             self.address = EthereumAddress.contractDeploymentAddress()
         default:
             // the forced unwrap here is safe as we trap nil in the previous case
             // swiftlint:disable force_unwrapping
-            guard let ethAddr = EthereumAddress(addrString!) else { throw Web3Error.dataError }
+            guard let ethAddr = EthereumAddress(stringValue!) else {
+                throw Web3Error.dataError(desc: "Failed to parse string as EthereumAddress. Given string: \(stringValue!). Is it a valid hex value 20 bytes in length?")
+            }
             // swiftlint:enable force_unwrapping
             self.address = ethAddr
         }
         self.storageKeys = []
         if let keyStrings = try? container.decode([String].self, forKey: .storageKeys) {
             for keyString in keyStrings {
-                guard let number = BigUInt(from: keyString) else { throw Web3Error.dataError }
+                guard let number = BigUInt(from: keyString) else {
+                    throw Web3Error.dataError(desc: "Failed to patse storage key values string into BigUInt. String value: \(keyString). Check the formmating of your values.")
+                }
                 self.storageKeys.append(number)
             }
         }

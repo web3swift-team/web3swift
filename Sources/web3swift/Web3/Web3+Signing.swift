@@ -54,7 +54,7 @@ public struct Web3Signer {
                                                                  account: account,
                                                                  password: password ?? "")
         else {
-            throw Web3Error.dataError
+            throw Web3Error.dataError(desc: "Failed to sign personal message. Hashing or signing failed and returned `nil`.")
         }
         return signature
     }
