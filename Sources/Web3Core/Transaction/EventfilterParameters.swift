@@ -50,8 +50,8 @@ extension EventFilterParameters {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(fromBlock.description, forKey: .fromBlock)
         try container.encode(toBlock.description, forKey: .toBlock)
-        try container.encode(address.description, forKey: .address)
-        try container.encode(topics.textRepresentation, forKey: .topics)
+        try container.encode(address, forKey: .address)
+        try container.encode(topics, forKey: .topics)
     }
 }
 
@@ -95,6 +95,17 @@ extension EventFilterParameters {
     public enum Topic: Encodable {
         case string(String?)
         case strings([Topic?]?)
+
+        public func encode(to encoder: Encoder) throws {
+            switch self {
+            case let .string(s):
+                var container = encoder.singleValueContainer()
+                try container.encode(s)
+            case let .strings(ss):
+                var container = encoder.unkeyedContainer()
+                try container.encode(contentsOf: ss ?? [])
+            }
+        }
 
         var rawValue: String {
             switch self {

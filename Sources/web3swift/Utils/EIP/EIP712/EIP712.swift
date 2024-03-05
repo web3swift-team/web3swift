@@ -16,6 +16,12 @@ public class EIP712 {
     public typealias Bytes = Data
 }
 
+// FIXME: this type is wrong - The minimum number of optional fields is 5, and those are
+// string name the user readable name of signing domain, i.e. the name of the DApp or the protocol.
+// string version the current major version of the signing domain. Signatures from different versions are not compatible.
+// uint256 chainId the EIP-155 chain id. The user-agent should refuse signing if it does not match the currently active chain.
+// address verifyingContract the address of the contract that will verify the signature. The user-agent may do contract specific phishing prevention.
+// bytes32 salt an disambiguating salt for the protocol. This can be used as a domain separator of last resort.
 public struct EIP712Domain: EIP712Hashable {
     public let chainId: EIP712.UInt256?
     public let verifyingContract: EIP712.Address
@@ -54,6 +60,8 @@ public extension EIP712Hashable {
                 result = ABIEncoder.encodeSingleType(type: .uint(bits: 256), value: field)!
             case is EIP712.Address:
                 result = ABIEncoder.encodeSingleType(type: .address, value: field)!
+            case let boolean as Bool:
+                result = ABIEncoder.encodeSingleType(type: .uint(bits: 8), value: boolean ? 1 : 0)!
             case let hashable as EIP712Hashable:
                 result = try hashable.hash()
             default:
@@ -64,16 +72,19 @@ public extension EIP712Hashable {
                     preconditionFailure("Not solidity type")
                 }
             }
-            guard result.count == 32 else { preconditionFailure("ABI encode error") }
+            guard result.count % 32 == 0 else { preconditionFailure("ABI encode error") }
             parameters.append(result)
         }
         return Data(parameters.flatMap { $0.bytes }).sha3(.keccak256)
     }
 }
 
-public func eip712encode(domainSeparator: EIP712Hashable, message: EIP712Hashable) throws -> Data {
-    let data = try Data([UInt8(0x19), UInt8(0x01)]) + domainSeparator.hash() + message.hash()
-    return data.sha3(.keccak256)
+public func eip712hash(domainSeparator: EIP712Hashable, message: EIP712Hashable) throws -> Data {
+    try eip712hash(domainSeparatorHash: domainSeparator.hash(), messageHash: message.hash())
+}
+
+public func eip712hash(domainSeparatorHash: Data, messageHash: Data) -> Data {
+    (Data([UInt8(0x19), UInt8(0x01)]) + domainSeparatorHash + messageHash).sha3(.keccak256)
 }
 
 // MARK: - Additional private and public extensions with support members

@@ -202,7 +202,7 @@ extension ABI.Element.Constructor {
 extension ABI.Element.Function {
 
     /// Encode parameters of a given contract method
-    /// - Parameter parameters: Parameters to pass to Ethereum contract
+    /// - Parameters: Parameters to pass to Ethereum contract
     /// - Returns: Encoded data
     public func encodeParameters(_ parameters: [Any]) -> Data? {
         guard parameters.count == inputs.count,
@@ -211,12 +211,122 @@ extension ABI.Element.Function {
     }
 }
 
-// MARK: - Event logs decoding
+// MARK: - Event logs decoding & encoding
 
 extension ABI.Element.Event {
     public func decodeReturnedLogs(eventLogTopics: [Data], eventLogData: Data) -> [String: Any]? {
         guard let eventContent = ABIDecoder.decodeLog(event: self, eventLogTopics: eventLogTopics, eventLogData: eventLogData) else { return nil }
         return eventContent
+    }
+
+    public static func encodeTopic(input: ABI.Element.Event.Input, value: Any) -> EventFilterParameters.Topic? {
+        switch input.type {
+        case .string:
+            guard let string = value as? String else {
+                return nil
+            }
+            return .string(string.sha3(.keccak256).addHexPrefix())
+        case .dynamicBytes:
+            guard let data = ABIEncoder.convertToData(value) else {
+                return nil
+            }
+            return .string(data.sha3(.keccak256).toHexString().addHexPrefix())
+        case .bytes(length: _):
+            guard let data = ABIEncoder.convertToData(value), let data = data.setLengthLeft(32) else {
+                return nil
+            }
+            return .string(data.toHexString().addHexPrefix())
+        case .address, .uint(bits: _), .int(bits: _), .bool:
+            guard let encoded = ABIEncoder.encodeSingleType(type: input.type, value: value) else {
+                return nil
+            }
+            return .string(encoded.toHexString().addHexPrefix())
+        default:
+            guard let data = try? ABIEncoder.abiEncode(value).setLengthLeft(32) else {
+                return nil
+            }
+            return .string(data.toHexString().addHexPrefix())
+        }
+    }
+
+    public func encodeParameters(_ parameters: [Any?]) -> [EventFilterParameters.Topic?] {
+        guard parameters.count <= inputs.count else {
+            // too many arguments for fragment
+            return []
+        }
+        var topics: [EventFilterParameters.Topic?] = []
+
+        if !anonymous {
+            topics.append(.string(topic.toHexString().addHexPrefix()))
+        }
+
+        for (i, p) in parameters.enumerated() {
+            let input = inputs[i]
+            if !input.indexed {
+                // cannot filter non-indexed parameters; must be null
+                return []
+            }
+            if p == nil {
+                topics.append(nil)
+            } else if input.type.isArray || input.type.isTuple {
+                // filtering with tuples or arrays not supported
+                return []
+            } else if let p = p as? Array<Any> {
+                topics.append(.strings(p.map { Self.encodeTopic(input: input, value: $0) }))
+            } else {
+                topics.append(Self.encodeTopic(input: input, value: p!))
+            }
+        }
+
+        // Trim off trailing nulls
+        while let last = topics.last {
+            if last == nil {
+                topics.removeLast()
+            } else if case .string(let string) = last, string == nil {
+                topics.removeLast()
+            } else {
+                break
+            }
+        }
+        return topics
+    }
+}
+
+// MARK: - Decode custom error
+
+extension ABI.Element.EthError {
+    /// Decodes `revert CustomError(_)` calls.
+    /// - Parameters:
+    ///  - data: bytes returned by a function call that stripped error signature hash.
+    /// - Returns: a dictionary containing decoded data mappend to indices and names of returned values or nil if decoding failed.
+    public func decodeEthError(_ data: Data) -> [String: Any]? {
+        guard inputs.count * 32 <= data.count,
+              let decoded = ABIDecoder.decode(types: inputs, data: data) else {
+            return nil
+        }
+
+        var result = [String: Any]()
+        for (index, out) in inputs.enumerated() {
+            result["\(index)"] = decoded[index]
+            if !out.name.isEmpty {
+                result[out.name] = decoded[index]
+            }
+        }
+        return result
+    }
+
+    /// Decodes `revert(string)` or `require(expression, string)` calls.
+    /// These calls are decomposed as `Error(string)` error.
+    public static func decodeStringError(_ data: Data) -> String? {
+        let decoded = ABIDecoder.decode(types: [.init(name: "", type: .string)], data: data)
+        return decoded?.first as? String
+    }
+
+    /// Decodes `Panic(uint256)` errors.
+    /// See more about panic code explain at:  https://docs.soliditylang.org/en/v0.8.21/control-structures.html#panic-via-assert-and-error-via-require
+    public static func decodePanicError(_ data: Data) -> BigUInt? {
+        let decoded = ABIDecoder.decode(types: [.init(name: "", type: .uint(bits: 256))], data: data)
+        return decoded?.first as? BigUInt
     }
 }
 
@@ -232,7 +342,7 @@ extension ABI.Element {
         case .fallback:
             return nil
         case .function(let function):
-            return function.decodeReturnData(data)
+            return try? function.decodeReturnData(data)
         case .receive:
             return nil
         case .error:
@@ -265,74 +375,38 @@ extension ABI.Element.Function {
         return ABIDecoder.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
     }
 
-    /// Decodes data returned by a function call. Able to decode `revert(string)`, `revert CustomError(...)` and `require(expression, string)` calls.
+    /// Decodes data returned by a function call.
     /// - Parameters:
     ///  - data: bytes returned by a function call;
-    ///  - errors: optional dictionary of known errors that could be returned by the function you called. Used to decode the error information.
     /// - Returns: a dictionary containing decoded data mappend to indices and names of returned values if these are not `nil`.
-    /// If `data` is an error response returns dictionary containing all available information about that specific error. Read more for details.
+    /// - Throws:
+    ///  - `Web3Error.processingError(desc: String)` when decode process failed.
     ///
     /// Return cases:
-    /// - when no `outputs` declared and `data` is not an error response:
+    /// - when no `outputs` declared:
     /// ```swift
-    /// ["_success": true]
+    /// [:]
     /// ```
     /// - when `outputs` declared and decoding completed successfully:
     /// ```swift
-    /// ["_success": true, "0": value_1, "1": value_2, ...]
+    /// ["0": value_1, "1": value_2, ...]
     /// ```
     /// Additionally this dictionary will have mappings to output names if these names are specified in the ABI;
-    /// - function call was aborted using `revert(message)` or `require(expression, message)`:
-    /// ```swift
-    /// ["_success": false, "_abortedByRevertOrRequire": true, "_errorMessage": message]`
-    /// ```
-    /// - function call was aborted using `revert CustomMessage()` and `errors` argument contains the ABI of that custom error type:
-    /// ```swift
-    /// ["_success": false,
-    /// "_abortedByRevertOrRequire": true,
-    /// "_error": error_name_and_types, // e.g. `MyCustomError(uint256, address senderAddress)`
-    /// "0": error_arg1,
-    /// "1": error_arg2,
-    /// ...,
-    /// "error_arg1_name": error_arg1, // Only named arguments will be mapped to their names, e.g. `"senderAddress": EthereumAddress`
-    /// "error_arg2_name": error_arg2, // Otherwise, you can query them by position index.
-    /// ...]
-    /// ```
-    /// - in case of any error:
-    /// ```swift
-    /// ["_success": false, "_failureReason": String]
-    /// ```
-    /// Error reasons include:
-    /// -  `outputs` declared but at least one value failed to be decoded;
-    /// - `data.count` is less than `outputs.count * 32`;
-    /// - `outputs` defined and `data` is empty;
-    /// - `data` represent reverted transaction
-    ///
-    /// How `revert(string)` and `require(expression, string)` return value is decomposed:
-    ///  - `08C379A0` function selector for `Error(string)`;
-    ///  - next 32 bytes are the data offset;
-    ///  - next 32 bytes are the error message length;
-    ///  - the next N bytes, where N >= 32, are the message bytes
-    ///  - the rest are 0 bytes padding.
-    public func decodeReturnData(_ data: Data, errors: [String: ABI.Element.EthError]? = nil) -> [String: Any] {
-        if let decodedError = decodeErrorResponse(data, errors: errors) {
-            return decodedError
-        }
-
+    public func decodeReturnData(_ data: Data) throws -> [String: Any] {
         guard !outputs.isEmpty else {
             NSLog("Function doesn't have any output types to decode given data.")
-            return ["_success": true]
+            return [:]
         }
 
         guard outputs.count * 32 <= data.count else {
-            return ["_success": false, "_failureReason": "Bytes count must be at least \(outputs.count * 32). Given \(data.count). Decoding will fail."]
+            throw Web3Error.processingError(desc: "Bytes count must be at least \(outputs.count * 32). Given \(data.count). Decoding will fail.")
         }
 
         // TODO: need improvement - we should be able to tell which value failed to be decoded
         guard let values = ABIDecoder.decode(types: outputs, data: data) else {
-            return ["_success": false, "_failureReason": "Failed to decode at least one value."]
+            throw Web3Error.processingError(desc: "Failed to decode at least one value.")
         }
-        var returnArray: [String: Any] = ["_success": true]
+        var returnArray: [String: Any] = [:]
         for i in outputs.indices {
             returnArray["\(i)"] = values[i]
             if !outputs[i].name.isEmpty {
@@ -381,6 +455,7 @@ extension ABI.Element.Function {
     /// // "_parsingError" is optional and is present only if decoding of custom error arguments failed
     /// "_parsingError": "Data matches MyCustomError(uint256, address senderAddress) but failed to be decoded."]
     /// ```
+    @available(*, deprecated, message: "Use decode function from `ABI.Element.EthError` instead")
     public func decodeErrorResponse(_ data: Data, errors: [String: ABI.Element.EthError]? = nil) -> [String: Any]? {
         /// If data is empty and outputs are expected it is treated as a `require(expression)` or `revert()` call with no message.
         /// In solidity `require(false)` and `revert()` calls return empty error response.
