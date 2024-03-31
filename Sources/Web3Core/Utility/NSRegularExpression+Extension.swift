@@ -19,11 +19,11 @@ public extension NSRegularExpression {
             return groupnames
         }
 
-        let m = reg.matches(in: pattern, options: .withTransparentBounds, range: pattern.fullNSRange)
+        let m = reg.matches(in: pattern, options: .withTransparentBounds, range: pattern.fullNSRange())
         for (nameIndex, g) in m.enumerated() {
             let r = pattern.range(from: g.range(at: 0))
             let gstring = String(pattern[r!])
-            let gmatch = greg.matches(in: gstring, options: [], range: gstring.fullNSRange)
+            let gmatch = greg.matches(in: gstring, options: [], range: gstring.fullNSRange())
             if gmatch.count > 0 {
                 let r2 = gstring.range(from: gmatch[0].range(at: 1))!
                 groupnames[String(gstring[r2])] = (g, gmatch[0], nameIndex)
@@ -34,7 +34,7 @@ public extension NSRegularExpression {
     }
 
     func captureGroups(string: String, options: NSRegularExpression.MatchingOptions = []) -> [String: String] {
-        captureGroups(string: string, options: options, range: string.fullNSRange)
+        captureGroups(string: string, options: options, range: string.fullNSRange())
     }
 
     func captureGroups(string: String, options: NSRegularExpression.MatchingOptions = [], range: NSRange) -> [String: String] {
