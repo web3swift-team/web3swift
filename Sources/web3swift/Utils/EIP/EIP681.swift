@@ -251,7 +251,7 @@ extension Web3 {
             guard let encoding = striped[1].removingPercentEncoding else { return nil }
             //  guard let url = URL.init(string: encoding) else { return nil }
             let matcher = try! NSRegularExpression(pattern: addressRegex, options: NSRegularExpression.Options.dotMatchesLineSeparators)
-            let match = matcher.matches(in: encoding, options: NSRegularExpression.MatchingOptions.anchored, range: encoding.fullNSRange)
+            let match = matcher.matches(in: encoding, options: NSRegularExpression.MatchingOptions.anchored, range: encoding.fullNSRange())
             guard match.count == 1 else { return nil }
             guard match[0].numberOfRanges == 5 else { return nil }
             var addressString: String?
@@ -471,7 +471,7 @@ extension Web3 {
             // TODO: try replacing this manual parsing with JSONDecoder and RawRepresentable
 
             let squareBracketRegex = try! NSRegularExpression(pattern: "(\\[*)")
-            let match = squareBracketRegex.firstMatch(in: rawValue, range: rawValue.fullNSRange)
+            let match = squareBracketRegex.firstMatch(in: rawValue, range: rawValue.fullNSRange())
 
             guard let bracketsCount = match?.range.upperBound,
                   bracketsCount > 0 else {
@@ -479,7 +479,7 @@ extension Web3 {
             }
 
             let splitRegex = try! NSRegularExpression(pattern: "(\\]){\(bracketsCount)},(\\[){\(bracketsCount)}")
-            var indices: [Int] = splitRegex.matches(in: rawValue, range: rawValue.fullNSRange)
+            var indices: [Int] = splitRegex.matches(in: rawValue, range: rawValue.fullNSRange())
                 .map { $0.range.lowerBound + bracketsCount }
             if !indices.isEmpty {
                 indices.append(rawValue.count)
@@ -517,7 +517,7 @@ extension Web3 {
 
             let elementsBoundary = try! NSRegularExpression(pattern: "\",\"")
             var indices = Array(elementsBoundary
-                .matches(in: rawValue, range: rawValue.fullNSRange)
+                .matches(in: rawValue, range: rawValue.fullNSRange())
                 .map { result in
                     result.range.lowerBound + 1
                 })

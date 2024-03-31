@@ -6,30 +6,9 @@
 import Foundation
 
 extension String {
-    var fullRange: Range<Index> {
-        return startIndex..<endIndex
-    }
 
-    public var fullNSRange: NSRange {
-        return NSRange(fullRange, in: self)
-    }
-
-    func index(of char: Character) -> Index? {
-        guard let range = range(of: String(char)) else {
-            return nil
-        }
-        return range.lowerBound
-    }
-
-    func split(intoChunksOf chunkSize: Int) -> [String] {
-        var output = [String]()
-        let splittedString = self
-            .map { $0 }
-            .split(intoChunksOf: chunkSize)
-        splittedString.forEach {
-            output.append($0.map { String($0) }.joined(separator: ""))
-        }
-        return output
+    public func fullNSRange() -> NSRange {
+        return NSRange(fullRange(), in: self)
     }
 
     public subscript (bounds: CountableClosedRange<Int>) -> String {
@@ -59,12 +38,6 @@ extension String {
         }
     }
 
-    func interpretAsBinaryData() -> Data? {
-        let padded = self.padding(toLength: ((self.count + 7) / 8) * 8, withPad: "0", startingAt: 0)
-        let byteArray = padded.split(intoChunksOf: 8).map { UInt8(strtoul($0, nil, 2)) }
-        return Data(byteArray)
-    }
-
     public func hasHexPrefix() -> Bool {
         return self.hasPrefix("0x")
     }
@@ -82,6 +55,34 @@ extension String {
             return "0x" + self
         }
         return self
+    }
+
+    internal func fullRange() -> Range<Index> {
+        return startIndex..<endIndex
+    }
+
+    func index(of char: Character) -> Index? {
+        guard let range = range(of: String(char)) else {
+            return nil
+        }
+        return range.lowerBound
+    }
+
+    func split(intoChunksOf chunkSize: Int) -> [String] {
+        var output = [String]()
+        let splittedString = self
+            .map { $0 }
+            .split(intoChunksOf: chunkSize)
+        splittedString.forEach {
+            output.append($0.map { String($0) }.joined(separator: ""))
+        }
+        return output
+    }
+
+    func interpretAsBinaryData() -> Data? {
+        let padded = self.padding(toLength: ((self.count + 7) / 8) * 8, withPad: "0", startingAt: 0)
+        let byteArray = padded.split(intoChunksOf: 8).map { UInt8(strtoul($0, nil, 2)) }
+        return Data(byteArray)
     }
 
     /// Strips leading zeroes from a hex string.
@@ -124,16 +125,9 @@ extension String {
         return from ..< to
     }
 
-    var asciiValue: Int {
-        get {
-            let s = self.unicodeScalars
-            return Int(s[s.startIndex].value)
-        }
-    }
-
     /// Strips whitespaces and newlines on both ends.
     func trim() -> String {
-        trimmingCharacters(in: .whitespacesAndNewlines)
+        trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     }
 
     public var isHex: Bool {
@@ -168,14 +162,5 @@ extension String {
         }
 
         return result
-    }
-}
-
-extension Character {
-    var asciiValue: Int {
-        get {
-            let s = String(self).unicodeScalars
-            return Int(s[s.startIndex].value)
-        }
     }
 }
