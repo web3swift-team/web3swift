@@ -127,7 +127,7 @@ extension String {
 
     /// Strips whitespaces and newlines on both ends.
     func trim() -> String {
-        trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     public var isHex: Bool {
