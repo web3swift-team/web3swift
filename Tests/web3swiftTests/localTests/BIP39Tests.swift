@@ -11,6 +11,22 @@ import XCTest
 
 final class BIP39Tests: XCTestCase {
 
+    func testAllLanguageMnemonics() throws {
+        for language in BIP39Language.allCases {
+            guard let newMnemonics = try BIP39.generateMnemonics(bitsOfEntropy: 128, language: language) else {
+                XCTFail("Failed to generate BIP39 mnemonics phrase")
+                return
+            }
+            let wordsOfNewMnemonic = newMnemonics.split(separator: language.separator).map { String($0) }
+            for word in wordsOfNewMnemonic {
+                guard language.words.contains(word) else {
+                    XCTFail("Given word is not contained in the list of words of selected language available for mnemonics generation: \(word); \(language)")
+                    return
+                }
+            }
+        }
+    }
+
     func testBIP39() throws {
         var entropy = Data.fromHex("00000000000000000000000000000000")!
         var phrase = BIP39.generateMnemonicsFromEntropy(entropy: entropy)
