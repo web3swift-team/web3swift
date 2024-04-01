@@ -21,6 +21,7 @@ xcuserdata/
 *.moved-aside
 *.xccheckout
 *.xcscmblueprint
+web3swift.xcodeproj/
 
 ## Obj-C/Swift specific
 *.hmap
@@ -40,6 +41,7 @@ Package.pins
 .build/
 .swiftpm/**
 */.swiftpm/**
+Package.resolved
 
 # CocoaPods
 #

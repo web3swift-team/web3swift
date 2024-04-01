@@ -1,0 +1,4 @@
+[codespell]
+count = True
+ignore-words-list = ans,deriver,inout,packag
+skip = *.js,*WordLists.swift,.git,Carthage,.build,build

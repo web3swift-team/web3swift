@@ -1,0 +1,61 @@
+name: "macOS 12"
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - hotfix
+    paths:
+      - Packag*.swift
+      - web3swift.podspec
+      - Cartfile
+      - Sources/**
+      - 'Tests/**'
+      - 'web3swift*/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches:
+      - master
+      - develop
+      - unstable
+      # Temporary develop-X.Y.Z branches may be added and removed from here as we release new versions
+      - develop-4.0
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_14.1.app/Contents/Developer
+
+jobs:
+  spm:
+    name: Swift Package Manager 5.7
+    runs-on: macOS-12
+    concurrency:
+      group: spm-${{ github.run_id }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v3
+      - name: Discover typos
+        run: |
+          pip3 install --upgrade pip
+          pip3 install codespell
+          codespell  # See .codespellrc for args
+      - name: SwiftLint
+        run: |
+          # 1. Make all automated fixes that are possible
+          # 2. git diff to see what (if any) automated fixes were made
+          # 3. See https://github.com/realm/SwiftLint#xcode explains why the double run
+          swiftlint --fix --quiet && git diff && swiftlint --quiet
+      - name: Resolve dependencies
+        run: swift package resolve
+      - name: Build
+        run: swift build --build-tests
+      - name: Install ganache
+        run: npm install ganache --global
+      - name: Start ganache in background
+        run: ganache &
+      - name: Wait till ganache starts
+        run: sleep 1
+      - name: Run local tests
+        run: swift test --skip-build -c debug --filter localTests
+      - name: Run remote tests
+        run: swift test --skip-build -c debug --filter remoteTests
