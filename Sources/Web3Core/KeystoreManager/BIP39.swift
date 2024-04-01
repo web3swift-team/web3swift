@@ -6,7 +6,7 @@
 import Foundation
 import CryptoSwift
 
-public enum BIP39Language {
+public enum BIP39Language: CaseIterable {
     case english
     case chinese_simplified
     case chinese_traditional
@@ -36,7 +36,12 @@ public enum BIP39Language {
             return spanishWords
         }
     }
+
     public var separator: String {
+        return String(separatorCharacter)
+    }
+
+    public var separatorCharacter: Character {
         switch self {
         case .japanese:
             return "\u{3000}"
@@ -124,7 +129,7 @@ public class BIP39 {
     public static func generateMnemonicsFromEntropy(entropy: Data, language: BIP39Language = .english) -> String? {
         guard entropy.count >= 16, entropy.count & 4 == 0 else { return nil }
         let separator = language.separator
-        let wordList = generateMnemonicsFrom(entropy: entropy)
+        let wordList = generateMnemonicsFrom(entropy: entropy, language: language)
         return wordList.joined(separator: separator)
     }
 
