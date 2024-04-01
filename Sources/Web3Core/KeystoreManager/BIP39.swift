@@ -15,6 +15,7 @@ public enum BIP39Language: CaseIterable {
     case french
     case italian
     case spanish
+    case portuguese
 
     public var words: [String] {
         switch self {
@@ -34,6 +35,8 @@ public enum BIP39Language: CaseIterable {
             return italianWords
         case .spanish:
             return spanishWords
+        case .portuguese:
+            return portugueseWords
         }
     }
 
@@ -68,6 +71,8 @@ public enum BIP39Language: CaseIterable {
             self = .italian
         case "spanish":
             self = .spanish
+        case "portuguese":
+            self = .portuguese
         default:
             return nil
         }
