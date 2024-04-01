@@ -36,7 +36,12 @@ public enum BIP39Language: CaseIterable {
             return spanishWords
         }
     }
+
     public var separator: String {
+        return String(separatorCharacter)
+    }
+
+    public var separatorCharacter: Character {
         switch self {
         case .japanese:
             return "\u{3000}"
