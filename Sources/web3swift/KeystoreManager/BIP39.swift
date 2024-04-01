@@ -17,6 +17,7 @@ public enum BIP39Language {
     case italian
     case spanish
     case portuguese
+    
     public var words: [String] {
         switch self {
         case .english:
