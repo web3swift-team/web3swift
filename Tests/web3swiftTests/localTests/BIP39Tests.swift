@@ -151,6 +151,7 @@ final class BIP39Tests: XCTestCase {
         XCTAssert(keystore1?.addresses?.first == keystore2?.addresses?.first)
     }
 
+    /// It's expected for the entropy bits count to be [128, 256] and (bits mod 32) must return 0.
     func testWrongBitsOfEntropyMustThrow() throws {
         XCTAssertThrowsError(try BIP39.generateMnemonics(entropy: 127))
         XCTAssertThrowsError(try BIP39.generateMnemonics(entropy: 255))
@@ -166,4 +167,33 @@ final class BIP39Tests: XCTestCase {
         XCTAssertFalse(try BIP39.generateMnemonics(entropy: 256).isEmpty)
     }
 
+    func testBip39CorrectWordsCount() throws {
+        XCTAssertEqual(try BIP39.generateMnemonics(entropy: 128).count, 12)
+        XCTAssertEqual(try BIP39.generateMnemonics(entropy: 160).count, 15)
+        XCTAssertEqual(try BIP39.generateMnemonics(entropy: 192).count, 18)
+        XCTAssertEqual(try BIP39.generateMnemonics(entropy: 224).count, 21)
+        XCTAssertEqual(try BIP39.generateMnemonics(entropy: 256).count, 24)
+    }
+
+    func testAllLanguageMnemonics() throws {
+        for language in BIP39Language.allCases {
+            let mnemonicPhrase = try BIP39.generateMnemonics(entropy: 128, language: language)
+            for word in mnemonicPhrase {
+                guard language.words.contains(word) else {
+                    XCTFail("Given word is not contained in the list of words of selected language available for mnemonics generation: \(word); \(language)")
+                    return
+                }
+            }
+        }
+    }
+
+    func testBip39MnemonicSeparatorUse() throws {
+        for language in BIP39Language.allCases {
+            guard let mnemonicPhrase = try BIP39.generateMnemonics(bitsOfEntropy: 128, language: language) else {
+                XCTFail("Failed to generate BIP39 mnemonics phrase with 128 bits of entropy using language: \(language)")
+                return
+            }
+            XCTAssertEqual(mnemonicPhrase.split(whereSeparator: { $0 == language.separatorCharacter }).count, 12)
+        }
+    }
 }
