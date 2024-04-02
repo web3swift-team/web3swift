@@ -148,15 +148,12 @@ extension Bridge: WKScriptMessageHandler {
         guard let body = message.body as? [String: Any], let name = body[MessageKey.action] as? String else {
             return
         }
-        if (body[MessageKey.printable] as? NSNumber)?.boolValue ?? printScriptMessageAutomatically {
-            print(body)
-        }
         guard let handler = handlers[name] else {
             guard let defaultHandler = self.defaultHandler else {
                 return
             }
             if let callbackID = (body[MessageKey.callback] as? NSNumber) {
-                defaultHandler(name, body[MessageKey.parameters] as? [String: Any]) { [weak self] (results) in
+                defaultHandler(name, body[MessageKey.parameters] as? [String: Any]) { [weak self] results in
                     guard let strongSelf = self else {
                         return
                     }
@@ -165,7 +162,7 @@ extension Bridge: WKScriptMessageHandler {
                     webView.st_dispatchBridgeEvent(Bridge.callbackEventName, parameters: ["id": callbackID], results: results, completionHandler: nil)
                 }
             } else {
-                defaultHandler(name, body[MessageKey.parameters] as? [String: Any]) { (results) in
+                defaultHandler(name, body[MessageKey.parameters] as? [String: Any]) { _ in
                     // Do Nothing
                 }
             }
@@ -173,7 +170,7 @@ extension Bridge: WKScriptMessageHandler {
         }
 
         if let callbackID = (body[MessageKey.callback] as? NSNumber) {
-            handler(body[MessageKey.parameters] as? [String: Any]) { [weak self] (results) in
+            handler(body[MessageKey.parameters] as? [String: Any]) { [weak self] results in
                 guard let strongSelf = self else {
                     return
                 }
@@ -182,7 +179,7 @@ extension Bridge: WKScriptMessageHandler {
                 webView.st_dispatchBridgeEvent(Bridge.callbackEventName, parameters: ["id": callbackID], results: results, completionHandler: nil)
             }
         } else {
-            handler(body[MessageKey.parameters] as? [String: Any]) { (results) in
+            handler(body[MessageKey.parameters] as? [String: Any]) { _ in
                 // Do Nothing
             }
         }
@@ -239,7 +236,7 @@ fileprivate extension WKWebView {
         } else {
             // When JSON Not Serializable, Invoke with Default Parameters
             switch results {
-            case .success(_):
+            case .success:
                 jsString = "(function() { var event = new CustomEvent('\(eventName)', {'detail': {'parameters': {}}}); document.dispatchEvent(event)}());"
             case .failure(let error):
                 jsString = "(function() { var event = new CustomEvent('\(eventName)', {'detail': {'error': {'code': \(error.code), 'description': '\(error.description)'}}}); document.dispatchEvent(event)}());"

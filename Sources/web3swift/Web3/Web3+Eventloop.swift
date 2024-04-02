@@ -1,4 +1,3 @@
-//  web3swift
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
@@ -6,42 +5,33 @@
 
 import Foundation
 
-extension web3.Eventloop {
+extension Web3.Eventloop {
 
     // @available(iOS 10.0, *)
     public func start(_ timeInterval: TimeInterval) {
-        if self.timer != nil {
-            self.timer!.suspend()
-            self.timer = nil
-        }
-        let queue = self.web3.requestDispatcher.queue
-        queue.async {
-            self.timer = RepeatingTimer(timeInterval: timeInterval)
-            self.timer?.eventHandler = self.runnable
-            self.timer?.resume()
-        }
+        timer?.suspend()
+        timer = RepeatingTimer(timeInterval: timeInterval)
+        timer?.eventHandler = self.runnable
+        timer?.resume()
     }
 
     public func stop() {
-        if self.timer != nil {
-            self.timer!.suspend()
-            self.timer = nil
-        }
+        timer?.suspend()
+        timer = nil
     }
 
     func runnable() {
         for prop in self.monitoredProperties {
-            let queue = prop.queue
+
             let function = prop.calledFunction
-            queue.async {
-                function(self.web3)
+            Task {
+                await function(self.web3)
             }
         }
 
         for prop in self.monitoredUserFunctions {
-            let queue = prop.queue
-            queue.async {
-                prop.functionToRun()
+            Task {
+                await prop.functionToRun()
             }
         }
     }
@@ -59,9 +49,9 @@ class RepeatingTimer {
     private lazy var timer: DispatchSourceTimer = {
         let t = DispatchSource.makeTimerSource()
         t.schedule(deadline: .now() + self.timeInterval, repeating: self.timeInterval)
-        t.setEventHandler(handler: { [weak self] in
+        t.setEventHandler { [weak self] in
             self?.eventHandler?()
-        })
+        }
         return t
     }()
 
