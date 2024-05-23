@@ -13,7 +13,9 @@ public class EIP712 {
     public typealias Address = EthereumAddress
     public typealias UInt256 = BigUInt
     public typealias UInt8 = Swift.UInt8
+    public typealias UInt96 = BigUInt
     public typealias Bytes = Data
+    public typealias BytesArray = [Data]
 }
 
 // FIXME: this type is wrong - The minimum number of optional fields is 5, and those are
@@ -56,6 +58,8 @@ public extension EIP712Hashable {
                 result = data.sha3(.keccak256)
             case is EIP712.UInt8:
                 result = ABIEncoder.encodeSingleType(type: .uint(bits: 8), value: field)!
+            case is EIP712.UInt96:
+                result = ABIEncoder.encodeSingleType(type: .uint(bits: 96), value: field)!
             case is EIP712.UInt256:
                 result = ABIEncoder.encodeSingleType(type: .uint(bits: 256), value: field)!
             case is EIP712.Address:
@@ -132,9 +136,11 @@ fileprivate extension EIP712Hashable {
             let typeName: String
             switch value {
             case is EIP712.UInt8: typeName = "uint8"
+            case is EIP712.UInt96: typeName = "uint96"
             case is EIP712.UInt256: typeName = "uint256"
             case is EIP712.Address: typeName = "address"
             case is EIP712.Bytes: typeName = "bytes"
+            case is EIP712.Bytes: typeName = "bytes[]"
             case let hashable as EIP712Hashable: typeName = hashable.name
             default: typeName = "\(type(of: value))".lowercased()
             }
