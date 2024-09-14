@@ -35,6 +35,12 @@ class UncategorizedTests: LocalTestCase {
         let output = EthereumAddress.toChecksumAddress(input)
         XCTAssert(output == "0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359", "Failed to checksum address")
     }
+    
+    func testErrorAddressChecksumAddress() throws {
+        let input = "ethereum:0xfb6916095ca1df60bb79ce92ce3ea74c37c5d359?chainId=1&action=transfer"
+        let output = EthereumAddress.toChecksumAddress(input)
+        XCTAssert(output == nil, "Failed to checksum address")
+    }
 
     func testChecksumAddressParsing() throws {
         let input = "0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359"
