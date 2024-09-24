@@ -40,7 +40,7 @@ SECP256K1_INLINE static void secp256k1_scalar_set_int(secp256k1_scalar *r, unsig
 
 SECP256K1_INLINE static unsigned int secp256k1_scalar_get_bits(const secp256k1_scalar *a, unsigned int offset, unsigned int count) {
     VERIFY_CHECK((offset + count - 1) >> 6 == offset >> 6);
-    return (uint)(a->d[offset >> 6] >> (offset & 0x3F)) & ((((uint64_t)1) << count) - 1);
+    return (unsigned int)(a->d[offset >> 6] >> (offset & 0x3F)) & ((((uint64_t)1) << count) - 1);
 }
 
 SECP256K1_INLINE static unsigned int secp256k1_scalar_get_bits_var(const secp256k1_scalar *a, unsigned int offset, unsigned int count) {
@@ -50,7 +50,7 @@ SECP256K1_INLINE static unsigned int secp256k1_scalar_get_bits_var(const secp256
         return secp256k1_scalar_get_bits(a, offset, count);
     } else {
         VERIFY_CHECK((offset >> 6) + 1 < 4);
-        return (uint)((a->d[offset >> 6] >> (offset & 0x3F)) | (a->d[(offset >> 6) + 1] << (64 - (offset & 0x3F)))) & ((((uint64_t)1) << count) - 1);
+        return (unsigned int)((a->d[offset >> 6] >> (offset & 0x3F)) | (a->d[(offset >> 6) + 1] << (64 - (offset & 0x3F)))) & ((((uint64_t)1) << count) - 1);
     }
 }
 
