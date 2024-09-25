@@ -1,4 +1,4 @@
-WEB3CORE_VERSION ||= '3.1.1'
+WEB3CORE_VERSION ||= '3.2.0'
 
 Pod::Spec.new do |spec|
     spec.name         = 'web3swift'
