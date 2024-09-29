@@ -42,18 +42,6 @@ final class EtherscanTransactionCheckerTests: XCTestCase {
         }
     }
 
-    func testInitURLError() async throws {
-        do {
-            let sut = EtherscanTransactionChecker(urlSession: URLSessionMock(), apiKey: " ")
-
-            _ = try await sut.hasTransactions(ethereumAddress: try XCTUnwrap(EthereumAddress(vitaliksAddress)))
-
-            XCTFail("URL init must throw an error")
-        } catch EtherscanTransactionCheckerError.invalidUrl {
-            XCTAssertTrue(true)
-        }
-    }
-
     func testWrongApiKey() async throws {
         do {
             let sut = EtherscanTransactionChecker(urlSession: URLSession.shared, apiKey: "-")

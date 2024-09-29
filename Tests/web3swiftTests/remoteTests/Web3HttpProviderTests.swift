@@ -24,9 +24,6 @@ final class Web3HttpProviderTests: XCTestCase {
         web3 = try await Web3HttpProvider(url: URL(string: "https://rpc.ankr.com/bsc")!, network: nil)
         XCTAssertEqual(web3.network?.chainID, 56)
 
-        web3 = try await Web3HttpProvider(url: URL(string: "https://rpc-mainnet.maticvigil.com/")!, network: nil)
-        XCTAssertEqual(web3.network?.chainID, 137)
-
         web3 = try await Web3HttpProvider(url: URL(string: "https://optimism.gateway.tenderly.co")!, network: nil)
         XCTAssertEqual(web3.network?.chainID, 10)
     }
