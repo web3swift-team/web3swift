@@ -28018,7 +28018,7 @@
       };
       CoderAddress.prototype.decode = function (data, offset) {
           if (data.length < offset + 32) {
-              errors.throwError('insufficuent data for address type', errors.INVALID_ARGUMENT, {
+              errors.throwError('insufficient data for address type', errors.INVALID_ARGUMENT, {
                   arg: this.localName,
                   coderType: 'address',
                   value: bytes_1.hexlify(data.slice(offset, offset + 32))
