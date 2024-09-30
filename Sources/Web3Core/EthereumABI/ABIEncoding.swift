@@ -219,12 +219,12 @@ public struct ABIEncoder {
     ///     - encoding has failed (e.g. type mismatch).
     public static func encodeSingleType(type: ABI.Element.ParameterType, value: Any) -> Data? {
         switch type {
-        case .uint:
+        case .uint(let bits):
             let biguint = convertToBigUInt(value)
-            return biguint == nil ? nil : biguint!.abiEncode(bits: 256)
-        case .int:
+            return biguint == nil ? nil : biguint!.abiEncode(bits: bits)
+        case .int(let bits):
             let bigint = convertToBigInt(value)
-            return bigint == nil ? nil : bigint!.abiEncode(bits: 256)
+            return bigint == nil ? nil : bigint!.abiEncode(bits: bits)
         case .address:
             if let string = value as? String {
                 guard let address = EthereumAddress(string) else { return nil }
