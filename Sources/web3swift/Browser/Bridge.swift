@@ -6,6 +6,7 @@
 //  Copyright © 2017 Samaritan. All rights reserved.
 //
 
+#if canImport(WebKit)
 import WebKit
 
 /// Bridge for WKWebView and JavaScript
@@ -245,3 +246,5 @@ fileprivate extension WKWebView {
         evaluateJavaScript(jsString, completionHandler: completionHandler)
     }
 }
+#endif
+

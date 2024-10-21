@@ -6,14 +6,14 @@ import PackageDescription
 let package = Package(
     name: "Web3swift",
     platforms: [
-        .macOS(.v10_15), .iOS(.v13)
+        .macOS(.v10_15), .iOS(.v13), .watchOS(.v6)
     ],
     products: [
         .library(name: "web3swift", targets: ["web3swift"])
     ],
     dependencies: [
-        .package(url: "https://github.com/attaswift/BigInt.git", .upToNextMinor(from: "5.3.0")),
-        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.5.1"))
+        .package(url: "https://github.com/attaswift/BigInt.git", .upToNextMajor(from: "5.3.0")),
+        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMajor(from: "1.5.1"))
     ],
     targets: [
         .target(name: "secp256k1"),

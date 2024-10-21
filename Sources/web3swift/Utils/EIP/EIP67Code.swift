@@ -4,9 +4,11 @@
 //
 
 import Foundation
-import CoreImage
 import BigInt
 import Web3Core
+
+#if canImport(CoreImage)
+import CoreImage
 
 extension Web3 {
 
@@ -135,3 +137,5 @@ extension Web3 {
         }
     }
 }
+#endif
+
