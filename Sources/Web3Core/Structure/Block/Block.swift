@@ -85,7 +85,7 @@ extension Block: Decodable {
         }
 
         self.difficulty = try container.decodeHex(BigUInt.self, forKey: .difficulty)
-        self.totalDifficulty = try? container.decodeHex(BigUInt.self, forKey: .totalDifficulty)
+        self.totalDifficulty = (try? container.decodeHex(BigUInt.self, forKey: .totalDifficulty)) ?? .zero
         self.extraData = try container.decodeHex(Data.self, forKey: .extraData)
         self.size = try container.decodeHex(BigUInt.self, forKey: .size)
         self.gasLimit = try container.decodeHex(BigUInt.self, forKey: .gasLimit)
