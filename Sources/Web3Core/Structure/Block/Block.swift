@@ -85,7 +85,12 @@ extension Block: Decodable {
         }
 
         self.difficulty = try container.decodeHex(BigUInt.self, forKey: .difficulty)
-        self.totalDifficulty = (try? container.decodeHex(BigUInt.self, forKey: .totalDifficulty)) ?? .zero
+        if (container.contains(.totalDifficulty)) {
+            // Must throw if value is set but it is invalid
+            self.totalDifficulty = try container.decodeHex(BigUInt.self, forKey: .totalDifficulty)
+        } else {
+            self.totalDifficulty = .zero
+        }
         self.extraData = try container.decodeHex(Data.self, forKey: .extraData)
         self.size = try container.decodeHex(BigUInt.self, forKey: .size)
         self.gasLimit = try container.decodeHex(BigUInt.self, forKey: .gasLimit)
