@@ -25,7 +25,7 @@ public struct Block {
     public var miner: EthereumAddress? // MARK: This is NOT optional in web3js
     public var difficulty: BigUInt
     /// by JoshKim: Removed from Ethereum official Blockschema making it optional (https://github.com/ethereum/execution-apis/commit/9e16d5e76a554c733613a2db631130166e2d8725)
-    /// If decoding of this field has failed it will be set to 0 to avoid breaking changes. Will be made optional in v4 of web3swift.
+    /// Set to 0 if not provided. Will be made optional in v4 of web3swift.
     public var totalDifficulty: BigUInt
     public var extraData: Data
     public var size: BigUInt
