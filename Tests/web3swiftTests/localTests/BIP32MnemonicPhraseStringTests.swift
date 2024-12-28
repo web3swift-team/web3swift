@@ -12,7 +12,6 @@ import XCTest
 /// This test suite is focused on testing the ability of `BIP32Keystore`
 /// to be able to parse and work with mnemonic phrase that is of type `String`.
 final class BIP32MnemonicPhraseStringTests: XCTestCase {
-
     let mnemonic = "fruit wave dwarf banana earth journey tattoo true farm silk olive fence"
 
     func testBIP32keystoreExportPrivateKey() throws {
@@ -36,11 +35,16 @@ final class BIP32MnemonicPhraseStringTests: XCTestCase {
         let keystore = try BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana")
         XCTAssertNotNil(keystore)
         let rootNode = try keystore!.serializeRootNodeToString(password: "")
-        XCTAssert(rootNode == "xprvA2KM71v838kPwE8Lfr12m9DL939TZmPStMnhoFcZkr1nBwDXSG7c3pjYbMM9SaqcofK154zNSCp7W7b4boEVstZu1J3pniLQJJq7uvodfCV")
+        XCTAssert(rootNode ==
+            "xprvA2KM71v838kPwE8Lfr12m9DL939TZmPStMnhoFcZkr1nBwDXSG7c3pjYbMM9SaqcofK154zNSCp7W7b4boEVstZu1J3pniLQJJq7uvodfCV")
     }
 
     func testBIP32keystoreCustomPathMatching() throws {
-        let keystore = try BIP32Keystore(mnemonics: mnemonic, password: "", mnemonicsPassword: "banana", prefixPath: "m/44'/60'/0'/0")
+        let keystore = try BIP32Keystore(
+            mnemonics: mnemonic,
+            password: "", mnemonicsPassword: "banana",
+            prefixPath: "m/44'/60'/0'/0"
+        )
         XCTAssertNotNil(keystore)
         let account = keystore!.addresses![0]
         let key = try keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
@@ -68,7 +72,6 @@ final class BIP32MnemonicPhraseStringTests: XCTestCase {
         let account = keystore!.addresses![1]
         let key = try keystore!.UNSAFE_getPrivateKeyData(password: "", account: account)
         XCTAssertNotNil(key)
-        print(keystore!.addressStorage.paths)
     }
 
     func testByBIP32keystoreSaveAndDerive() throws {
@@ -81,12 +84,7 @@ final class BIP32MnemonicPhraseStringTests: XCTestCase {
         let recreatedStore = BIP32Keystore(data!)
         XCTAssert(keystore?.addresses?.count == recreatedStore?.addresses?.count)
         XCTAssert(keystore?.rootPrefix == recreatedStore?.rootPrefix)
-        print(keystore!.addresses![0].address)
-        print(keystore!.addresses![1].address)
-        print(recreatedStore!.addresses![0].address)
-        print(recreatedStore!.addresses![1].address)
         XCTAssert(keystore?.addresses![0] == recreatedStore?.addresses![0])
         XCTAssert(keystore?.addresses![1] == recreatedStore?.addresses![1])
     }
-
 }

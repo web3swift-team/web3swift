@@ -7,40 +7,6 @@ import XCTest
 @testable import Web3Core
 
 final class StringBIP44Tests: XCTestCase {
-    private var invalidPaths: [String] {
-        [
-            "",
-            "m",
-            "m/",
-            "m/44",
-            "m/44'",
-            "m/44'/",
-            "m/44'/60",
-            "m/44'/60'",
-            "m/44'/60'/",
-            "m/44'/60'/0",
-            "m/44'/60'/0'",
-            "m/44'/60'/0'/",
-            "m/44'/60'/0'/0",
-            "m/44'/60'/0'/0/",
-            "/44'/60'/0'/0/0",
-            "m44'/60'/0'/0/0",
-            "m0'/60'/0'/0/0",
-            "m/'/60'/0'/0/0",
-            "m/60'/0'/0/0",
-            "m/44'/60/0'/0/0",
-            "m/44'/'/0'/0/0",
-            "m/44'/60'/0/0/0",
-            "m/44'/60'/'/0/0",
-            "m/44'/60'/0'/0",
-            "m/44'/60'/0'/0/",
-            "m/44'/60'/0'/-1/0",
-            "m/44'/60'/0'/2/0",
-            "m/44'/60.0'/0'/0/0",
-            "m/44'/60'/0.0'/0/0",
-            "m/44'/60'/0'/0/0.0"]
-    }
-
     // MARK: - accountFromPath
 
     func testInvalidPathReturnNilAccount() throws {
@@ -55,7 +21,8 @@ final class StringBIP44Tests: XCTestCase {
             .init(input: "m/44'/60'/1'/0/3", expected: 1),
             .init(input: "m/44'/60'/2'/0/2", expected: 2),
             .init(input: "m/44'/60'/3'/0/1", expected: 3),
-            .init(input: "m/44'/60'/4'/0/0", expected: 4)]
+            .init(input: "m/44'/60'/4'/0/0", expected: 4)
+        ]
         scenarios.forEach { scenario in
             XCTAssertEqual(scenario.input.accountFromPath, scenario.expected)
         }
@@ -69,7 +36,8 @@ final class StringBIP44Tests: XCTestCase {
             "m/44'/1'/0'/0/0",
             "m/44'/0'/1'/0/0",
             "m/44'/0'/0'/1/0",
-            "m/44'/0'/0'/0/1"]
+            "m/44'/0'/0'/0/1"
+        ]
         validPaths.forEach { validPath in
             XCTAssertTrue(validPath.isBip44Path)
         }
@@ -103,6 +71,41 @@ final class StringBIP44Tests: XCTestCase {
         let result = path.newPath(account: 4, addressIndex: 3)
 
         XCTAssertEqual(result, "m/44'/60'/4'/0/3")
+    }
+
+    private var invalidPaths: [String] {
+        [
+            "",
+            "m",
+            "m/",
+            "m/44",
+            "m/44'",
+            "m/44'/",
+            "m/44'/60",
+            "m/44'/60'",
+            "m/44'/60'/",
+            "m/44'/60'/0",
+            "m/44'/60'/0'",
+            "m/44'/60'/0'/",
+            "m/44'/60'/0'/0",
+            "m/44'/60'/0'/0/",
+            "/44'/60'/0'/0/0",
+            "m44'/60'/0'/0/0",
+            "m0'/60'/0'/0/0",
+            "m/'/60'/0'/0/0",
+            "m/60'/0'/0/0",
+            "m/44'/60/0'/0/0",
+            "m/44'/'/0'/0/0",
+            "m/44'/60'/0/0/0",
+            "m/44'/60'/'/0/0",
+            "m/44'/60'/0'/0",
+            "m/44'/60'/0'/0/",
+            "m/44'/60'/0'/-1/0",
+            "m/44'/60'/0'/2/0",
+            "m/44'/60.0'/0'/0/0",
+            "m/44'/60'/0.0'/0/0",
+            "m/44'/60'/0'/0/0.0"
+        ]
     }
 }
 

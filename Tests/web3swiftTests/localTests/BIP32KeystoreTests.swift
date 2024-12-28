@@ -25,7 +25,8 @@ class BIP32KeystoreTests: XCTestCase {
             password: password,
             mnemonicsPassword: "",
             language: .english,
-            prefixPath: HDNode.defaultPathMetamaskPrefix) else {
+            prefixPath: HDNode.defaultPathMetamaskPrefix
+        ) else {
             XCTFail("Keystore has not generated")
             throw NSError(domain: "0", code: 0)
         }
@@ -39,7 +40,8 @@ class BIP32KeystoreTests: XCTestCase {
             password: password,
             mnemonicsPassword: "",
             language: .english,
-            prefixPath: HDNode.defaultPathMetamaskPrefix) else {
+            prefixPath: HDNode.defaultPathMetamaskPrefix
+        ) else {
             XCTFail("Keystore has not generated")
             throw NSError(domain: "0", code: 0)
         }
