@@ -1,0 +1,51 @@
+# rules
+--enable isEmpty
+--enable redundantFileprivate
+--enable redundantReturn
+--enable redundantBackticks
+--enable redundantBreak
+--enable redundantClosure
+--enable redundantExtensionACL
+--enable organizeDeclarations
+--enable redundantFileprivate
+--enable redundantGet
+--enable redundantInit
+--enable redundantInternal
+--enable redundantLet
+--enable redundantLetError
+--enable redundantNilInit
+--enable redundantObjc
+--enable redundantOptionalBinding
+--enable redundantParens
+--enable redundantPattern
+--enable redundantStaticSelf
+--enable redundantVoidReturnType
+--disable redundantRawValues
+--disable sortImports
+--disable andOperator
+--disable wrapMultilineStatementBraces
+--disable extensionAccessControl
+
+# format options
+--indentcase true
+--trimwhitespace nonblank-lines
+--maxwidth 130
+--commas inline
+--comments indent
+--decimalgrouping 3,5
+--exponentcase lowercase
+--exponentgrouping disabled
+--extensionacl on-declarations
+--fractiongrouping disabled
+--ifdef no-indent
+--importgrouping testable-top
+--operatorfunc no-space
+--nospaceoperators ..<, ...
+--selfrequired validate
+--stripunusedargs closure-only
+--wraparguments preserve
+--wrapcollections preserve
+--wrapparameters preserve
+
+# organizeDeclarations
+--markcategories false
