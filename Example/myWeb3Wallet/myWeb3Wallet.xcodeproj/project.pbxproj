@@ -18,7 +18,7 @@
 		FA5308422721D59D002C1F06 /* myWeb3WalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308412721D59D002C1F06 /* myWeb3WalletUITests.swift */; };
 		FA5308442721D59D002C1F06 /* myWeb3WalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308432721D59D002C1F06 /* myWeb3WalletUITestsLaunchTests.swift */; };
 		FA5308512721F5BC002C1F06 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308502721F5BC002C1F06 /* SplashViewController.swift */; };
-		FA5308562721F647002C1F06 /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308552721F647002C1F06 /* WalletViewController.swift */; };
+		FA5308562721F647002C1F06 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5308552721F647002C1F06 /* AuthViewController.swift */; };
 		FAF01E912722D848002CEE01 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF01E902722D848002CEE01 /* DashboardViewController.swift */; };
 		FAF01E942722E6F1002CEE01 /* simulator_screenshot_9B13C8F6-BE7A-4919-966A-9E69A2953F31.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF01E932722E6F1002CEE01 /* simulator_screenshot_9B13C8F6-BE7A-4919-966A-9E69A2953F31.png */; };
 		FAF01E962722E713002CEE01 /* simulator_screenshot_38EB4733-C3DB-4280-BAF2-9ED97440A8AD.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF01E952722E713002CEE01 /* simulator_screenshot_38EB4733-C3DB-4280-BAF2-9ED97440A8AD.png */; };
@@ -61,13 +61,19 @@
 		FA5308412721D59D002C1F06 /* myWeb3WalletUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myWeb3WalletUITests.swift; sourceTree = "<group>"; };
 		FA5308432721D59D002C1F06 /* myWeb3WalletUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myWeb3WalletUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		FA5308502721F5BC002C1F06 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
-		FA5308552721F647002C1F06 /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
+		FA5308552721F647002C1F06 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		FAF01E902722D848002CEE01 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		FAF01E932722E6F1002CEE01 /* simulator_screenshot_9B13C8F6-BE7A-4919-966A-9E69A2953F31.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "simulator_screenshot_9B13C8F6-BE7A-4919-966A-9E69A2953F31.png"; sourceTree = "<group>"; };
 		FAF01E952722E713002CEE01 /* simulator_screenshot_38EB4733-C3DB-4280-BAF2-9ED97440A8AD.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "simulator_screenshot_38EB4733-C3DB-4280-BAF2-9ED97440A8AD.png"; sourceTree = "<group>"; };
 		FAF01E972722E72C002CEE01 /* simulator_screenshot_C6881651-9D22-410A-BDC2-4CC3FFEF4FD8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "simulator_screenshot_C6881651-9D22-410A-BDC2-4CC3FFEF4FD8.png"; sourceTree = "<group>"; };
 		FAF01E992722E73D002CEE01 /* simulator_screenshot_10F04849-E85A-41AB-8A17-D3FC394285AE.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "simulator_screenshot_10F04849-E85A-41AB-8A17-D3FC394285AE.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		59490A822D3820A5004908B6 /* Core */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Core; sourceTree = "<group>"; };
+		59490A9F2D3836D7004908B6 /* WalletViewController */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = WalletViewController; sourceTree = "<group>"; };
+		59490AA22D385847004908B6 /* SendViewController */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = SendViewController; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		FA53081A2721D59B002C1F06 /* Frameworks */ = {
@@ -129,6 +135,7 @@
 		FA53081F2721D59B002C1F06 /* myWeb3Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				59490A822D3820A5004908B6 /* Core */,
 				FAF01E922722E673002CEE01 /* ScreenShot */,
 				FA5308532721F615002C1F06 /* ViewControllers */,
 				FA5308522721F5C8002C1F06 /* Appdelegate */,
@@ -170,19 +177,21 @@
 		FA5308532721F615002C1F06 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				FA5308542721F62E002C1F06 /* WalletController */,
+				59490AA22D385847004908B6 /* SendViewController */,
+				59490A9F2D3836D7004908B6 /* WalletViewController */,
+				FA5308542721F62E002C1F06 /* AuthController */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
-		FA5308542721F62E002C1F06 /* WalletController */ = {
+		FA5308542721F62E002C1F06 /* AuthController */ = {
 			isa = PBXGroup;
 			children = (
 				FA5308502721F5BC002C1F06 /* SplashViewController.swift */,
-				FA5308552721F647002C1F06 /* WalletViewController.swift */,
+				FA5308552721F647002C1F06 /* AuthViewController.swift */,
 				FAF01E902722D848002CEE01 /* DashboardViewController.swift */,
 			);
-			path = WalletController;
+			path = AuthController;
 			sourceTree = "<group>";
 		};
 		FAF01E922722E673002CEE01 /* ScreenShot */ = {
@@ -210,6 +219,11 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				59490A822D3820A5004908B6 /* Core */,
+				59490A9F2D3836D7004908B6 /* WalletViewController */,
+				59490AA22D385847004908B6 /* SendViewController */,
 			);
 			name = myWeb3Wallet;
 			packageProductDependencies = (
@@ -342,7 +356,7 @@
 				FA5308212721D59B002C1F06 /* AppDelegate.swift in Sources */,
 				FA5308232721D59B002C1F06 /* SceneDelegate.swift in Sources */,
 				FA5308512721F5BC002C1F06 /* SplashViewController.swift in Sources */,
-				FA5308562721F647002C1F06 /* WalletViewController.swift in Sources */,
+				FA5308562721F647002C1F06 /* AuthViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

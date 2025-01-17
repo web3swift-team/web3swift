@@ -23,7 +23,7 @@ class SplashViewController: UIViewController {
     }
     @objc func moveToWalletView() {
 
-        guard let walletScreen = self.storyboard?.instantiateViewController(withIdentifier: "WalletViewController") as? WalletViewController else {
+        guard let walletScreen = self.storyboard?.instantiateViewController(withIdentifier: "WalletViewController") as? AuthViewController else {
             #if DEBUG
             printContent("Unable to get Wallet controller")
             #endif
