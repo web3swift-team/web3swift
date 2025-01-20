@@ -11,7 +11,7 @@ class WalletCell: UITableViewCell {
     var address: String = "" {
         didSet { addressLabel.text = address }
     }
-    
+
     private let addressLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
@@ -20,7 +20,7 @@ class WalletCell: UITableViewCell {
         label.textAlignment = .center
         return label
     }()
-    
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
@@ -30,7 +30,7 @@ class WalletCell: UITableViewCell {
         label.textAlignment = .center
         return label
     }()
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -39,7 +39,7 @@ class WalletCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setupViews() {
         [titleLabel, addressLabel].forEach {
             addSubview($0)
@@ -47,7 +47,7 @@ class WalletCell: UITableViewCell {
         }
         titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16).isActive = true
         titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        
+
         addressLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8).isActive = true
         addressLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
         addressLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true

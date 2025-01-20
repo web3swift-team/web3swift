@@ -16,7 +16,7 @@ struct Network {
     let networkRPC: String
     /// Path to network explorer like https://bscscan.com/
     let explorer: String?
-    
+
     /// list of tokens added in this network
     var tokens: [Token]
 }

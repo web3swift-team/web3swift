@@ -10,32 +10,32 @@ import web3swift
 import Web3Core
 
 class AuthViewController: UIViewController {
-    
+
     @IBOutlet weak var continueButton: UIButton!
     @IBOutlet weak var walletAddressLabel: UILabel!
     @IBOutlet weak var importWalletButton: UIButton!
     @IBOutlet weak var createWalletButton: UIButton!
-    
+
     var walletAddress: String? {
         didSet {
             self.walletAddressLabel.text = walletAddress
         }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.createWalletButton.layer.cornerRadius = 5.0
         self.importWalletButton.layer.cornerRadius = 5.0
     }
-    
+
     @IBAction func onClickCreateWallet(_ sender: UIButton) {
         self.createMnemonics()
-        
+
     }
     @IBAction func onClickImportWalletButton(_ sender: UIButton) {
         self.showImportAlert()
     }
-    
+
     @IBAction func onClickContinueButton(_ sender: UIButton) {
     }
 }
@@ -61,14 +61,14 @@ extension AuthViewController {
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
     }
-    
+
     fileprivate func createMnemonics() {
         guard let mnemonics = try? BIP39.generateMnemonics(bitsOfEntropy: 256, language: .english) else {
             self.showAlertMessage(title: "", message: "We are unable to create wallet", actionName: "Ok")
             return
         }
         print(mnemonics)
-        
+
         guard let keystore = try? BIP32Keystore(mnemonics: mnemonics, password: WalletManager.keystorePassword),
               let walletAddress = keystore.addresses?.first else {
             self.showAlertMessage(title: "", message: "Unable to create wallet", actionName: "Ok")
@@ -78,13 +78,13 @@ extension AuthViewController {
         let privateKey = try! keystore.UNSAFE_getPrivateKeyData(password: WalletManager.keystorePassword,
                                                                 account: walletAddress)
         print(privateKey)
-        
+
         Task {
             let walletManager = await WalletManager(keystoreManager: KeystoreManager([keystore]))
             openWallet(walletManager: walletManager)
         }
     }
-    
+
     func importWalletWith(privateKey: String) {
         let formattedKey = privateKey.trimmingCharacters(in: .whitespacesAndNewlines)
         guard let dataKey = Data.fromHex(formattedKey) else {
@@ -94,7 +94,7 @@ extension AuthViewController {
         do {
             guard let keystore = try EthereumKeystoreV3(privateKey: dataKey, password: WalletManager.keystorePassword),
                   let address = keystore.addresses?.first?.address else {
-                throw NSError()
+                throw NSError(domain: "Unknown", code: 400)
             }
             self.walletAddress = address
             Task { @MainActor in
@@ -122,7 +122,7 @@ extension AuthViewController {
             openWallet(walletManager: walletManager)
         }
     }
-    
+
     func openWallet(walletManager: WalletManager) {
         let walletVC = WalletViewController(walletManager: walletManager)
         navigationController?.setViewControllers([walletVC], animated: true)
@@ -136,5 +136,4 @@ extension UIViewController {
         alertController.addAction(action)
         self.present(alertController, animated: true)
     }
-
 }
