@@ -8,6 +8,7 @@ import Foundation
 import BigInt
 
 public struct EIP2930Envelope: EIP2718Envelope, EIP2930Compatible {
+
     public let type: TransactionType = .eip2930
 
     // common parameters for any transaction
@@ -221,7 +222,7 @@ extension EIP2930Envelope {
     }
 }
 
-public struct AccessListEntry: CustomStringConvertible, Codable {
+public struct AccessListEntry: CustomStringConvertible, Codable, Sendable {
     var address: EthereumAddress
     var storageKeys: [BigUInt]
 

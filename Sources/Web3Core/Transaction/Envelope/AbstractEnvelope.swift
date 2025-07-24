@@ -21,7 +21,7 @@ import BigInt
 */
 
 /// Enumeration for supported transaction types
-public enum TransactionType: UInt, CustomStringConvertible, CaseIterable {
+public enum TransactionType: UInt, CustomStringConvertible, CaseIterable, Sendable {
 
     /// For untyped and type 0 transactions EIP155 and older
     case legacy
@@ -62,7 +62,7 @@ public enum EncodeType {
 /// All envelopes must conform to this protocol to work with `CodableTransaction`
 /// each implementation holds all the type specific data
 /// and implements the type specific encoding/decoding
-protocol AbstractEnvelope: CustomStringConvertible { // possibly add Codable?
+protocol AbstractEnvelope: CustomStringConvertible, Sendable { // possibly add Codable?
 
     /// The type of transaction this envelope represents
     var type: TransactionType { get }
