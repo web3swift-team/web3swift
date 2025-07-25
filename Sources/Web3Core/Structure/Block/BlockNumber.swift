@@ -8,7 +8,7 @@
 import Foundation
 import BigInt
 
-public enum BlockNumber: CustomStringConvertible {
+public enum BlockNumber: CustomStringConvertible, Sendable {
 
     case pending
     /// Latest block of a chain

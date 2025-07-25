@@ -9,8 +9,8 @@
 import Foundation
 import CryptoSwift
 
-public struct EthereumAddress: Equatable {
-    public enum AddressType {
+public struct EthereumAddress: Equatable, Sendable {
+    public enum AddressType: Sendable {
         case normal
         case contractDeployment
     }

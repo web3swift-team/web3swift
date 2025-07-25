@@ -15,7 +15,7 @@ public final class ERC20BasePropertiesProvider {
     var decimals: UInt8?
 
     private let contract: Web3.Contract
-    private (set) var hasReadProperties: Bool = false
+    private(set) var hasReadProperties: Bool = false
     init(contract: Web3.Contract) {
         self.contract = contract
     }
