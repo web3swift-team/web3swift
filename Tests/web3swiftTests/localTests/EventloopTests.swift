@@ -15,7 +15,7 @@ class EventloopTests: XCTestCase {
         let expectation = self.expectation(description: "Waiting")
         func getBlockNumber(_ web3: Web3) async {
             do {
-                let blockNumber = try await web3.eth.blockNumber()
+                _ = try await web3.eth.blockNumber()
                 ticksToWait = ticksToWait - 1
                 if ticksToWait == 0 {
                     expectation.fulfill()

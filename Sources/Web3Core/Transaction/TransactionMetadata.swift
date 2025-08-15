@@ -11,7 +11,7 @@ import BigInt
 /// returned by nodes when reading a transaction
 /// from the blockchain. The data here is not
 /// part of the transaction itself
-public struct TransactionMetadata {
+public struct TransactionMetadata: Sendable {
 
     /// hash for the block that contains this transaction on chain
     public var blockHash: Data?
