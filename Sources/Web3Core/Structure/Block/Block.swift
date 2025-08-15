@@ -24,6 +24,8 @@ public struct Block {
     public var receiptsRoot: Data
     public var miner: EthereumAddress? // MARK: This is NOT optional in web3js
     public var difficulty: BigUInt
+    /// by JoshKim: Removed from Ethereum official Blockschema making it optional (https://github.com/ethereum/execution-apis/commit/9e16d5e76a554c733613a2db631130166e2d8725)
+    /// Set to 0 if not provided. Will be made optional in v4 of web3swift.
     public var totalDifficulty: BigUInt
     public var extraData: Data
     public var size: BigUInt
@@ -83,7 +85,12 @@ extension Block: Decodable {
         }
 
         self.difficulty = try container.decodeHex(BigUInt.self, forKey: .difficulty)
-        self.totalDifficulty = try container.decodeHex(BigUInt.self, forKey: .totalDifficulty)
+        if (container.contains(.totalDifficulty)) {
+            // Must throw if value is set but it is invalid
+            self.totalDifficulty = try container.decodeHex(BigUInt.self, forKey: .totalDifficulty)
+        } else {
+            self.totalDifficulty = .zero
+        }
         self.extraData = try container.decodeHex(Data.self, forKey: .extraData)
         self.size = try container.decodeHex(BigUInt.self, forKey: .size)
         self.gasLimit = try container.decodeHex(BigUInt.self, forKey: .gasLimit)
