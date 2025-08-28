@@ -63,7 +63,8 @@ public struct EthereumAddress: Equatable, Sendable {
     /// represented as `ASCII` data. Otherwise, checksummed address is returned with `0x` prefix.
     public static func toChecksumAddress(_ addr: String) -> String? {
         let address = addr.lowercased().stripHexPrefix()
-        guard let hash = address.data(using: .ascii)?.sha3(.keccak256).toHexString().stripHexPrefix() else { return nil }
+        guard address.count == 40,
+              let hash = address.data(using: .ascii)?.sha3(.keccak256).toHexString().stripHexPrefix() else { return nil }
         var ret = "0x"
 
         for (i, char) in address.enumerated() {
