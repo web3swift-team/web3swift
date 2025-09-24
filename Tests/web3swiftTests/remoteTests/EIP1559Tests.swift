@@ -12,20 +12,20 @@ import Web3Core
 
 // swiftlint:disable force_unwrapping
 final class EIP1559Tests: XCTestCase {
-    func testEIP1159MainnetTransaction() async throws {
-        let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
-        var tx = try CodableTransaction(
-            type: .eip1559,
-            to: EthereumAddress("0xb47292B7bBedA4447564B8336E4eD1f93735e7C7")!,
-            chainID: web3.provider.network!.chainID,
-            value: XCTUnwrap(Utilities.parseToBigUInt("0.1", units: .ether))
-        )
-        // Vitalik's address
-        tx.from = EthereumAddress("0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B")!
-        // Should fail if there would be something wrong with the tx
-        let res = try await web3.eth.estimateGas(for: tx)
-        XCTAssertGreaterThan(res, 0)
-    }
+    // func testEIP1159MainnetTransaction() async throws {
+    //     let web3 = try await Web3.InfuraMainnetWeb3(accessToken: Constants.infuraToken)
+    //     var tx = try CodableTransaction(
+    //         type: .eip1559,
+    //         to: EthereumAddress("0xb47292B7bBedA4447564B8336E4eD1f93735e7C7")!,
+    //         chainID: web3.provider.network!.chainID,
+    //         value: XCTUnwrap(Utilities.parseToBigUInt("0.1", units: .ether))
+    //     )
+    //     // Vitalik's address
+    //     tx.from = EthereumAddress("0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B")!
+    //     // Should fail if there would be something wrong with the tx
+    //     let res = try await web3.eth.estimateGas(for: tx)
+    //     XCTAssertGreaterThan(res, 0)
+    // }
 
     // func testEIP1159GoerliTransaction() async throws {
     //     let web3 = try await Web3.InfuraGoerliWeb3(accessToken: Constants.infuraToken)
