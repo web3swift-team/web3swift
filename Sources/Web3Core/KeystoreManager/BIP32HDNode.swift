@@ -84,7 +84,7 @@ public class HDNode {
         }
         depth = data[4..<5].bytes[0]
         parentFingerprint = data[5..<9]
-        childNumber = data[9..<13].bytes.withUnsafeBytes { $0.load(as: UInt32.self) }
+        childNumber = Array(data.dropFirst(9).prefix(4)).withUnsafeBytes { $0.load(as: UInt32.self) }
         chaincode = data[13..<45]
         if serializePrivate {
             privateKey = data[46..<78]
