@@ -17,7 +17,7 @@ import CryptoSwift
 /// Bloom filter can be calculated for any set of data. In case of Ethereum blockchain it could be a set of addresses, event topics  etc.
 ///
 /// A definition of [Bloom filter](https://en.wikipedia.org/wiki/Bloom_filter#:~:text=A%20Bloom%20filter%20is%20a,a%20member%20of%20a%20set.).
-public struct EthereumBloomFilter {
+public struct EthereumBloomFilter: Sendable {
     static let mask = BigUInt(2047)
     /// Bloom filter.
     public var bytes = Data(repeatElement(UInt8(0), count: 256))

@@ -8,7 +8,7 @@
 import Foundation
 import BigInt
 
-public struct TransactionReceipt {
+public struct TransactionReceipt: Sendable {
     public var transactionHash: Data
     public var blockHash: Data
     public var blockNumber: BigUInt
@@ -27,7 +27,7 @@ public struct TransactionReceipt {
 }
 
 extension TransactionReceipt {
-    public enum TXStatus {
+    public enum TXStatus: Sendable {
         case ok
         case failed
         case notYetProcessed
