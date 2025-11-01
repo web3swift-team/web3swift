@@ -16,7 +16,7 @@ import BigInt
 ///         - `0x000000000000000000000000d5395c132c791a7f46fa8fc27f0ab6bacd824484]`
 ///    - `transactionHash = 0x9f7bb2633abb3192d35f65e50a96f9f7ca878fa2ee7bf5d3fca489c0c60dc79a;`
 ///    - `transactionIndex = 0x99;`
-public struct EventLog: Decodable {
+public struct EventLog: Decodable, Sendable {
     public var address: EthereumAddress
     public var blockHash: Data
     public var blockNumber: BigUInt
