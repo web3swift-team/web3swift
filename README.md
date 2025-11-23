@@ -233,4 +233,4 @@ If you believe you have identified a security vulnerability with web3swift, you 
 
 ## License
 
-web3swift is available under the Apache License 2.0 license. See the [LICENSE](https://github.com/web3swift-team/web3swift/blob/master/LICENSE.md) for details.
+web3swift is available under the Apache License 2.0 license. See the [LICENSE](LICENSE.md) for details.
