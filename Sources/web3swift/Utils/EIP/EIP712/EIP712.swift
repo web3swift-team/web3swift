@@ -147,7 +147,7 @@ fileprivate extension EIP712Hashable {
 // MARK: - Gnosis Safe Transaction model
 
 /// Gnosis Safe Transaction.
-/// https://docs.gnosis-safe.io/tutorials/tutorial_tx_service_initiate_sign
+/// https://docs.safe.global/core-api/transaction-service-overview
 ///
 /// Note for web3swift developers: **DO NOT CHANGE THE ORDER OF VARIABLES**.
 ///
