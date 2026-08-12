@@ -6,6 +6,7 @@
 //  Copyright © 2017 Samaritan. All rights reserved.
 //
 
+#if canImport(WebKit)
 import WebKit
 
 /// Bridge for WKWebView and JavaScript
@@ -189,7 +190,7 @@ extension Bridge: WKScriptMessageHandler {
 public extension WKWebView {
 
     private struct STPrivateStatic {
-        fileprivate static var bridgeKey = "STPrivateStatic.bridgeKey"
+        fileprivate static var bridgeKey: UInt8 = 0
     }
 
     /// Bridge for WKWebView and JavaScript. Initialize `lazy`
@@ -245,3 +246,5 @@ fileprivate extension WKWebView {
         evaluateJavaScript(jsString, completionHandler: completionHandler)
     }
 }
+
+#endif // canImport(WebKit)

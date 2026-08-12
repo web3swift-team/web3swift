@@ -53,12 +53,15 @@ public extension Data {
      - Returns: optional `Data` object containing the generated random bytes, or `nil` if an error occurred during generation.
      */
     static func randomBytes(length: Int) -> Data? {
+#if canImport(Security)
         var entropyBytes = [UInt8](repeating: 0, count: length)
         let status = SecRandomCopyBytes(kSecRandomDefault, entropyBytes.count, &entropyBytes)
-        guard status == errSecSuccess else {
-            return nil
-        }
+        guard status == errSecSuccess else { return nil }
         return Data(entropyBytes)
+#else
+        var rng = SystemRandomNumberGenerator()
+        return Data((0..<length).map { _ in UInt8.random(in: 0...255, using: &rng) })
+#endif
     }
 
     func bitsInRange(_ startingBit: Int, _ length: Int) -> UInt64? { // return max of 8 bytes for simplicity, non-public

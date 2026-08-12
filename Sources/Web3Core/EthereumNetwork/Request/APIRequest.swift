@@ -5,6 +5,10 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 import BigInt
 
 public typealias Hash = String // 32 bytes hash of block (64 chars length without 0x)

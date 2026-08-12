@@ -1,3 +1,7 @@
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 //
 //  Async+BackwardCapability.swift
 //
@@ -6,6 +10,10 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 
 @available(iOS, obsoleted: 15.0, message: "Use the built-in API instead")
 @available(macOS, obsoleted: 12.0, message: "Use the built-in API instead")
