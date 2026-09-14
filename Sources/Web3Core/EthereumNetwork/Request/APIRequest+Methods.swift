@@ -119,6 +119,9 @@ extension APIRequest {
 
     public static func send(uRLRequest: URLRequest, with session: URLSession) async throws -> Data {
         let (data, response) = try await session.data(for: uRLRequest)
+        guard let response = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
 
         guard 200 ..< 400 ~= response.statusCode else {
             if 400 ..< 500 ~= response.statusCode {
