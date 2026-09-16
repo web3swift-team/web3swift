@@ -116,15 +116,20 @@ extension APIRequest {
         }
         return try JSONDecoder().decode(APIResponse<Result>.self, from: data)
     }
-
+    
     public static func send(uRLRequest: URLRequest, with session: URLSession) async throws -> Data {
         let (data, response) = try await session.data(for: uRLRequest)
+      
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode
+                else {
+          throw Web3Error.unknownError
+        }
 
-        guard 200 ..< 400 ~= response.statusCode else {
-            if 400 ..< 500 ~= response.statusCode {
-                throw Web3Error.clientError(code: response.statusCode)
+        guard 200 ..< 400 ~= statusCode else {
+            if 400 ..< 500 ~= statusCode {
+                throw Web3Error.clientError(code: statusCode)
             } else {
-                throw Web3Error.serverError(code: response.statusCode)
+                throw Web3Error.serverError(code: statusCode)
             }
         }
 
