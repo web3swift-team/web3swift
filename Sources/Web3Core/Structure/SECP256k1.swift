@@ -4,7 +4,8 @@
 //
 
 import Foundation
-import secp256k1
+import P256K
+import libsecp256k1
 
 public struct SECP256K1 {
     public struct UnmarshaledSignature {
@@ -339,6 +340,7 @@ extension SECP256K1 {
     }
 
     internal static func randomBytes(length: Int) -> Data? {
+#if canImport(Security)
         for _ in 0...1024 {
             var data = Data(repeating: 0, count: length)
             let result = data.withUnsafeMutableBytes { mutableRBBytes -> Int32? in
@@ -356,6 +358,17 @@ extension SECP256K1 {
             }
         }
         return nil
+#else
+        guard let fileHandle = FileHandle(forReadingAtPath: "/dev/urandom") else {
+            return nil
+        }
+        defer { fileHandle.closeFile() }
+        let data = fileHandle.readData(ofLength: length)
+        guard data.count == length else {
+            return nil
+        }
+        return data
+#endif
     }
 
     internal static func toByteArray<T>(_ value: T) -> [UInt8] {

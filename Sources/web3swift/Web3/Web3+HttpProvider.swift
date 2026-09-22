@@ -1,9 +1,17 @@
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 import BigInt
 import Web3Core
 

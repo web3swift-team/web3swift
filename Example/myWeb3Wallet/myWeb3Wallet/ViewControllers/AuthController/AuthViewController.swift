@@ -67,7 +67,6 @@ extension AuthViewController {
             self.showAlertMessage(title: "", message: "We are unable to create wallet", actionName: "Ok")
             return
         }
-        print(mnemonics)
 
         guard let keystore = try? BIP32Keystore(mnemonics: mnemonics, password: WalletManager.keystorePassword),
               let walletAddress = keystore.addresses?.first else {
@@ -77,7 +76,6 @@ extension AuthViewController {
         self.walletAddress = walletAddress.address
         let privateKey = try! keystore.UNSAFE_getPrivateKeyData(password: WalletManager.keystorePassword,
                                                                 account: walletAddress)
-        print(privateKey)
 
         Task {
             let walletManager = await WalletManager(keystoreManager: KeystoreManager([keystore]))

@@ -379,7 +379,7 @@ extension DefaultContractProtocol {
 
     public func decodeEthError(_ data: Data) -> [String: Any]? {
         guard data.count >= 4,
-              let err = errors.first(where: { $0.value.methodEncoding == data[0..<4] })?.value else {
+              let err = errors.first(where: { $0.value.selectorEncoded == data[0..<4] })?.value else {
             return nil
         }
         return err.decodeEthError(data[4...])

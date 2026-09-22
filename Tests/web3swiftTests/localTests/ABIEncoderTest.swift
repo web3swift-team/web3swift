@@ -240,4 +240,53 @@ class ABIEncoderTest: XCTestCase {
         encodedValue = ABIEncoder.encode(types: [.string], values: ["Heeäööä👅D34ɝɣ24Єͽ-.,äü+#/"])!.toHexString()
         XCTAssertEqual(encodedValue, "00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000026486565c3a4c3b6c3b6c3a4f09f9185443334c99dc9a33234d084cdbd2d2e2cc3a4c3bc2b232f0000000000000000000000000000000000000000000000000000")
     }
+
+    func testFunctionEncodingUsesSelectorEncoded() {
+        let function = ABI.Element.Function(
+            name: "setValue",
+            inputs: [
+                ABI.Element.InOut(
+                    name: "value",
+                    type: .uint(bits: 8)
+                )
+            ],
+            outputs: [],
+            constant: false,
+            payable: false
+        )
+
+        let encoded = function.encodeParameters([UInt8(42)])
+
+        XCTAssertNotNil(encoded)
+        XCTAssertEqual(encoded?.prefix(4), function.selectorEncoded)
+        XCTAssertEqual(
+            encoded?.toHexString(),
+            function.selectorEncoded.toHexString()
+                + "000000000000000000000000000000000000000000000000000000000000002a"
+        )
+    }
+
+    func testFixedWidthIntegerEncodingRejectsOutOfRangeValues() {
+        XCTAssertNil(
+            ABIEncoder.encodeSingleType(
+                type: .uint(bits: 8),
+                value: UInt16(256)
+            )
+        )
+
+        XCTAssertNil(
+            ABIEncoder.encodeSingleType(
+                type: .int(bits: 8),
+                value: Int16(128)
+            )
+        )
+
+        XCTAssertNil(
+            ABIEncoder.encodeSingleType(
+                type: .int(bits: 8),
+                value: Int16(-129)
+            )
+        )
+    }
+
 }

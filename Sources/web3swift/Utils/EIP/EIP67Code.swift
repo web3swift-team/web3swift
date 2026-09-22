@@ -1,10 +1,13 @@
+#if canImport(CoreImage)
 //
 //  Created by Alex Vlasov.
 //  Copyright © 2018 Alex Vlasov. All rights reserved.
 //
 
 import Foundation
+#if canImport(CoreImage)
 import CoreImage
+#endif
 import BigInt
 import Web3Core
 
@@ -135,3 +138,4 @@ extension Web3 {
         }
     }
 }
+#endif

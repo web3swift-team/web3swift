@@ -207,7 +207,7 @@ extension ABI.Element.Function {
     public func encodeParameters(_ parameters: [Any]) -> Data? {
         guard parameters.count == inputs.count,
               let data = ABIEncoder.encode(types: inputs, values: parameters) else { return nil }
-        return methodEncoding + data
+        return selectorEncoded + data
     }
 }
 
@@ -372,7 +372,7 @@ extension ABI.Element {
 
 extension ABI.Element.Function {
     public func decodeInputData(_ rawData: Data) -> [String: Any]? {
-        return ABIDecoder.decodeInputData(rawData, methodEncoding: methodEncoding, inputs: inputs)
+        return ABIDecoder.decodeInputData(rawData, methodEncoding: selectorEncoded, inputs: inputs)
     }
 
     /// Decodes data returned by a function call.
