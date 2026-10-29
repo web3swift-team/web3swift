@@ -82,7 +82,7 @@ public class HDNode {
         if header == HDversion.privatePrefix {
             serializePrivate = true
         }
-        depth = data[4..<5].bytes[0]
+        depth = Array(data[4..<5])[0]
         parentFingerprint = data[5..<9]
         childNumber = Array(data.dropFirst(9).prefix(4)).withUnsafeBytes { $0.load(as: UInt32.self) }
         chaincode = data[13..<45]
@@ -195,7 +195,7 @@ extension HDNode {
             let newPrivateKey = newPK.serialize().setLengthLeft(32),
             SECP256K1.verifyPrivateKey(privateKey: newPrivateKey),
             let newPublicKey = SECP256K1.privateToPublic(privateKey: newPrivateKey, compressed: true),
-            (newPublicKey.bytes[0] == 0x02 || newPublicKey.bytes[0] == 0x03),
+            (Array(newPublicKey)[0] == 0x02 || Array(newPublicKey)[0] == 0x03),
             self.depth < UInt8.max
         else { return nil }
         return createNode(chainCode: chainCode, depth: depth + 1, publicKey: newPublicKey, privateKey: newPrivateKey, childNumber: trueIndex)
@@ -226,9 +226,9 @@ extension HDNode {
             let tempKey = bn.serialize().setLengthLeft(32),
             SECP256K1.verifyPrivateKey(privateKey: tempKey),
             let pubKeyCandidate = SECP256K1.privateToPublic(privateKey: tempKey, compressed: true),
-            (pubKeyCandidate.bytes[0] == 0x02 || pubKeyCandidate.bytes[0] == 0x03),
+            (Array(pubKeyCandidate)[0] == 0x02 || Array(pubKeyCandidate)[0] == 0x03),
             let newPublicKey = SECP256K1.combineSerializedPublicKeys(keys: [self.publicKey, pubKeyCandidate], outputCompressed: true),
-            (newPublicKey.bytes[0] == 0x02 || newPublicKey.bytes[0] == 0x03),
+            (Array(newPublicKey)[0] == 0x02 || Array(newPublicKey)[0] == 0x03),
             self.depth < UInt8.max
         else { return nil }
 
