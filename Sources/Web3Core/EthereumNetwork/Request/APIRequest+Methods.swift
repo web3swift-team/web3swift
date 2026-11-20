@@ -118,7 +118,10 @@ extension APIRequest {
     }
 
     public static func send(uRLRequest: URLRequest, with session: URLSession) async throws -> Data {
-        let (data, response) = try await session.data(for: uRLRequest)
+        let (data, urlResponse) = try await session.data(for: uRLRequest)
+        guard let response = urlResponse as? HTTPURLResponse else {
+            throw Web3Error.connectionError
+        }
 
         guard 200 ..< 400 ~= response.statusCode else {
             if 400 ..< 500 ~= response.statusCode {
